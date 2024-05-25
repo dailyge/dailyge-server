@@ -10,6 +10,10 @@ public class DailygeUser {
 
     private final Long userId;
 
+    public DailygeUser(Long userId) {
+        this.userId = userId;
+    }
+
     public DailygeUser(User user) {
         this.userId = user.getId();
     }

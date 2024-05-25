@@ -56,7 +56,7 @@ public class Task extends BaseEntity {
         this.status = status;
         this.date = date;
         this.year = date.getYear();
-        this.month = date.getDayOfMonth();
+        this.month = date.getMonthValue();
         this.userId = userId;
     }
 

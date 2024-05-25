@@ -1,0 +1,26 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        mavenCentral()
+        maven { url 'https://repo.spring.io/plugin-release' }
+    }
+    resolutionStrategy {
+        eachPlugin {
+            if (requested.id.id == "org.springframework.boot") {
+                useVersion springBootVersion as String
+            }
+            if (requested.id.id == "io.spring.dependency-management") {
+                useVersion springDependencyManagementVersion as String
+            }
+        }
+    }
+}
+
+rootProject.name = "dailyge"
+include(
+    "dailyge-api",
+    "notification-api",
+    "storage:document",
+    "storage:rdb",
+    "scheduler"
+)

@@ -1,3 +1,5 @@
 dependencies {
+    // MySQL
+    runtimeOnly("mysql:mysql-connector-java:${property("mysqlVersion")}")
     api("org.springframework.boot:spring-boot-starter-data-jpa")
 }

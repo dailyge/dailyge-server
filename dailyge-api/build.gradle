@@ -1,0 +1,7 @@
+dependencies {
+    // Module
+    implementation(project(":storage:rdb"))
+
+    // SpringBoot
+    implementation("org.springframework.boot:spring-boot-starter-web")
+}

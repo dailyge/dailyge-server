@@ -2,10 +2,10 @@ plugins {
     id("java")
     id("org.springframework.boot")
     id("io.spring.dependency-management")
+    id("jacoco")
 }
 
 configurations {
-    asciidoctorExt
     compileOnly {
         extendsFrom annotationProcessor
     }
@@ -19,6 +19,7 @@ allprojects {
 }
 
 subprojects {
+    apply(plugin: "jacoco")
     apply(plugin: "java")
     apply(plugin: "java-library")
     apply(plugin: "org.springframework.boot")
@@ -42,8 +43,53 @@ subprojects {
         compileOnly("org.projectlombok:lombok:${lombokVersion}")
         annotationProcessor("org.projectlombok:lombok:${lombokVersion}")
     }
+
+    jacocoTestReport {
+        dependsOn test
+        def exclusions = extractQClass()
+        file("${rootDir}/config/jacoco/exclude-coverage.txt").eachLine {
+            exclusions.add(it)
+        }
+
+        afterEvaluate {
+            classDirectories.setFrom(files(classDirectories.files.collect {
+                fileTree(dir: it, exclude: [] + exclusions)
+            }))
+        }
+        finalizedBy jacocoTestCoverageVerification
+    }
+
+    jacocoTestCoverageVerification {
+        def exclusions = extractQClass()
+        file("${rootDir}/config/jacoco/exclude-verification.txt").eachLine {
+            exclusions.add(it)
+        }
+
+        violationRules {
+            rule {
+                enabled = true
+                element = 'CLASS'
+
+                limit {
+                    counter = 'BRANCH'
+                    value = 'COVEREDRATIO'
+                    minimum = 0.0
+                    excludes = [] + exclusions
+                }
+            }
+        }
+    }
+
+    tasks.test {
+        useJUnitPlatform()
+        finalizedBy jacocoTestReport
+    }
 }
 
-test {
-    useJUnitPlatform()
+static def extractQClass() {
+    def qClasses = []
+    for (qPattern in '*.QA'..'*.QZ') {
+        qClasses.add(qPattern + '*')
+    }
+    return qClasses
 }

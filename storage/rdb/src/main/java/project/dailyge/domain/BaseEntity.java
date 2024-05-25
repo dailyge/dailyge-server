@@ -20,6 +20,9 @@ public abstract class BaseEntity {
     @Column(name = "last_modified_at")
     private LocalDateTime lastModifiedAt;
 
+    @Column(name = "last_modified_by")
+    protected Long lastModifiedBy;
+
     @Column(name = "deleted")
     private Boolean deleted = false;
 }

@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity(name = "users")
 public class User {
 

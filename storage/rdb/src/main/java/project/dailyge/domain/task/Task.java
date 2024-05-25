@@ -73,6 +73,10 @@ public class Task extends BaseEntity {
         }
 
         LocalDate today = LocalDate.now();
+        if (date.isBefore(today)) {
+            throw new IllegalArgumentException("과거 날짜는 등록할 수 없습니다.");
+        }
+
         LocalDate afterOneYear = today.plusYears(1);
         if (date.isAfter(afterOneYear)) {
             throw new IllegalArgumentException("1년 이내의 일정을 등록해주세요.");

@@ -1,5 +1,6 @@
 package project.dailyge.app.core.task.presentation;
 
+import jakarta.validation.*;
 import lombok.*;
 import org.springframework.web.bind.annotation.*;
 import project.dailyge.app.common.auth.*;
@@ -20,7 +21,7 @@ public class TaskRegisterApi {
     @PostMapping
     public ApiResponse<TaskRegisterResponse> registerTask(
         @LoginUser DailygeUser dailygeUser,
-        @RequestBody TaskRegisterRequest request
+        @Valid @RequestBody TaskRegisterRequest request
     ) {
         Task newTask = taskFacade.save(request.toEntity(dailygeUser));
         TaskRegisterResponse payload = new TaskRegisterResponse(newTask);

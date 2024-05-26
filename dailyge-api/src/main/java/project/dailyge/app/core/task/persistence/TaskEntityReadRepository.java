@@ -1,7 +1,9 @@
 package project.dailyge.app.core.task.persistence;
 
-import project.dailyge.domain.user.*;
+import project.dailyge.domain.task.*;
+
+import java.util.*;
 
 public interface TaskEntityReadRepository {
-    User findById(Long userId);
+    Optional<Task> findById(Long taskId);
 }

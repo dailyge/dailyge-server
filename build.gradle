@@ -83,7 +83,7 @@ subprojects {
                     counter = 'BRANCH'
                     value = 'COVEREDRATIO'
                     minimum = 0.0
-                    excludes = [] + exclusions
+                    excludes = [] + exclusions as List<String>
                 }
             }
         }

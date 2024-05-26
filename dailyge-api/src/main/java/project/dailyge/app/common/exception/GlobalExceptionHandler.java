@@ -12,13 +12,13 @@ import java.util.*;
 
 @Slf4j
 @RestControllerAdvice
-public class ExceptionHandler {
+public class GlobalExceptionHandler {
 
     private static final String FIELD = "field: ";
     private static final String REJECTED_VALUE = ", rejectedValue: ";
     private static final String MESSAGE = ", message: ";
 
-    @org.springframework.web.bind.annotation.ExceptionHandler(CommonException.class)
+    @ExceptionHandler(CommonException.class)
     public ResponseEntity<ErrorResponse> resolveCommonException(CommonException exception) {
         CodeAndMessage codeAndMessage = exception.getCodeAndMessage();
         log.error("error: {}", exception.getDetailMessage());
@@ -26,7 +26,7 @@ public class ExceptionHandler {
             .body(ErrorResponse.from(codeAndMessage));
     }
 
-    @org.springframework.web.bind.annotation.ExceptionHandler(MethodArgumentNotValidException.class)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> resolveMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
         StringBuilder sb = new StringBuilder();
         if (exception != null) {

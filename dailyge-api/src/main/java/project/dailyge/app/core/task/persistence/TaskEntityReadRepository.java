@@ -5,5 +5,5 @@ import project.dailyge.domain.task.*;
 import java.util.*;
 
 public interface TaskEntityReadRepository {
-    Optional<Task> findById(Long taskId);
+    Optional<TaskJpaEntity> findById(Long taskId);
 }

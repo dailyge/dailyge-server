@@ -11,7 +11,7 @@ import java.util.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "tasks")
-public class Task extends BaseEntity {
+public class TaskJpaEntity extends BaseEntity {
 
     private static final int MAX_TITLE_LENGTH = 150;
     private static final int MAX_CONTENT_LENGTH = 2_500;
@@ -43,7 +43,7 @@ public class Task extends BaseEntity {
     @Column(name = "user_id")
     private Long userId;
 
-    public Task(
+    public TaskJpaEntity(
         String title,
         String content,
         LocalDate date,
@@ -87,7 +87,7 @@ public class Task extends BaseEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Task task = (Task) o;
+        TaskJpaEntity task = (TaskJpaEntity) o;
         return Objects.equals(id, task.id);
     }
 

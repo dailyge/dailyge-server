@@ -16,7 +16,7 @@ public class TaskReadDao implements TaskEntityReadRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Optional<Task> findById(Long taskId) {
+    public Optional<TaskJpaEntity> findById(Long taskId) {
         return Optional.ofNullable(
             queryFactory.selectFrom(task)
                 .where(task.id.eq(taskId))

@@ -19,8 +19,8 @@ public record TaskRegisterRequest(
     LocalDate date
 ) {
 
-    public Task toEntity(DailygeUser user) {
-        return new Task(
+    public TaskJpaEntity toEntity(DailygeUser user) {
+        return new TaskJpaEntity(
             title,
             content,
             date,

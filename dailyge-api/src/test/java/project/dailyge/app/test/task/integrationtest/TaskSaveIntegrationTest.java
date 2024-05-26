@@ -25,9 +25,9 @@ public class TaskSaveIntegrationTest extends IntegrationTestBase {
     @DisplayName("할 일이 저장되면, PK가 Null이 아니다.")
     void taskSaveTest() {
         User newUser = userWriteUseCase.save(new User(1L));
-        Task newTask = new Task("독서", "Kafka 완벽가이드 1~30p 읽기", now(), TODO, newUser.getId());
+        TaskJpaEntity newTask = new TaskJpaEntity("독서", "Kafka 완벽가이드 1~30p 읽기", now(), TODO, newUser.getId());
 
-        Task savedTask = taskFacade.save(newTask);
+        TaskJpaEntity savedTask = taskFacade.save(newTask);
 
         assertNotNull(savedTask.getId());
     }

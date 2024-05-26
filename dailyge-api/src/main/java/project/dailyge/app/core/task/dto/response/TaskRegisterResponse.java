@@ -11,7 +11,7 @@ public class TaskRegisterResponse {
     private TaskRegisterResponse() {
     }
 
-    public TaskRegisterResponse(Task task) {
+    public TaskRegisterResponse(TaskJpaEntity task) {
         this.taskId = task.getId();
     }
 

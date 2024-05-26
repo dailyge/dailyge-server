@@ -12,7 +12,7 @@ public class TaskWriteDao implements TaskEntityWriteRepository {
     private final TaskJpaRepository taskRepository;
 
     @Override
-    public Task save(Task task) {
+    public TaskJpaEntity save(TaskJpaEntity task) {
         return taskRepository.save(task);
     }
 }

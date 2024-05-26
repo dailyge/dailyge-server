@@ -15,7 +15,7 @@ public class TaskWriteService implements TaskWriteUseCase {
 
     @Override
     @Transactional
-    public Task save(Task task) {
+    public TaskJpaEntity save(TaskJpaEntity task) {
         return taskRepository.save(task);
     }
 }

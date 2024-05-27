@@ -38,3 +38,6 @@ out/
 ### .yml ###
 *.yml
 .DS_Store
+
+### QClass ###
+generated

@@ -3,6 +3,7 @@ package project.dailyge.app.core.task.dto.requesst;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.Length;
 import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.domain.task.TaskJpaEntity;
 import project.dailyge.domain.task.TaskStatus;
@@ -10,10 +11,12 @@ import project.dailyge.domain.task.TaskStatus;
 import java.time.LocalDate;
 
 public record TaskRegisterRequest(
+    @Length(min = 1, max = 150)
     @NotNull(message = "제목을 입력해주세요.")
     @NotBlank(message = "제목은 공백일 수 없습니다.")
     String title,
 
+    @Length(min = 1, max = 2500)
     @NotNull(message = "내용을 입력해주세요.")
     @NotBlank(message = "내용은 공백일 수 없습니다.")
     String content,

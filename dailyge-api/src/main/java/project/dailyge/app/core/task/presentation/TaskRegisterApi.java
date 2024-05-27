@@ -27,8 +27,8 @@ public class TaskRegisterApi {
         @LoginUser final DailygeUser dailygeUser,
         @Valid @RequestBody final TaskRegisterRequest request
     ) {
-        TaskJpaEntity newTask = taskFacade.save(request.toEntity(dailygeUser));
-        TaskRegisterResponse payload = new TaskRegisterResponse(newTask);
+        final TaskJpaEntity newTask = taskFacade.save(request.toEntity(dailygeUser));
+        final TaskRegisterResponse payload = new TaskRegisterResponse(newTask);
         return ApiResponse.from(CREATED, payload);
     }
 }

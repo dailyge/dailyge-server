@@ -17,7 +17,7 @@ public class TaskFacade {
 
     @Transactional
     public TaskJpaEntity save(final TaskJpaEntity task) {
-        User findUser = userReadUseCase.findById(task.getUserId());
+        final User findUser = userReadUseCase.findById(task.getUserId());
         return taskWriteUseCase.save(task);
     }
 }

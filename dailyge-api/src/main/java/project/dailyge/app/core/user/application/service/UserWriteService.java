@@ -15,7 +15,7 @@ public class UserWriteService implements UserWriteUseCase {
 
     @Override
     @Transactional
-    public User save(User user) {
+    public User save(final User user) {
         return userJpaRepository.save(user);
     }
 }

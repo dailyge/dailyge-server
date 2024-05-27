@@ -1,0 +1,6 @@
+checkstyle {
+    maxWarnings = 0
+    configFile = file("${rootDir}/lint-config/convention/study-with-me-rule.xml")
+    configProperties = ["suppressionFile": "${rootDir}/lint-config/convention/study-with-me-suppressions.xml"]
+    toolVersion = checkStyleVersion
+}

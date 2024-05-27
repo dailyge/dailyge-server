@@ -1,0 +1,7 @@
+pmd {
+    toolVersion = pmdVersion
+    pmdTest.enabled = true
+    consoleOutput = true
+    ignoreFailures = false
+    ruleSetFiles = files("${rootDir}/lint-config/pmd/swith-me-pmd-rules.xml")
+}

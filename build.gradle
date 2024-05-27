@@ -3,6 +3,8 @@ plugins {
     id("org.springframework.boot")
     id("io.spring.dependency-management")
     id("jacoco")
+    id("checkstyle")
+    id("pmd")
 }
 
 configurations {
@@ -17,6 +19,9 @@ allprojects {
         maven { url "https://repo.spring.io/release" }
     }
 }
+
+apply(from: "${rootDir}/config/lint/pmd.gradle")
+apply(from: "${rootDir}/config/lint/checkstyle.gradle")
 
 subprojects {
     apply(plugin: "jacoco")

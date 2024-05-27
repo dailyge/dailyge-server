@@ -1,14 +1,16 @@
 package project.dailyge.app.common.exception;
 
-import lombok.extern.slf4j.*;
-import org.springframework.http.*;
-import org.springframework.validation.*;
-import org.springframework.web.bind.*;
-import org.springframework.web.bind.annotation.*;
-import project.dailyge.app.common.codeandmessage.*;
-import project.dailyge.app.common.response.*;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import project.dailyge.app.common.codeandmessage.CodeAndMessage;
+import project.dailyge.app.common.codeandmessage.CommonCodeAndMessage;
+import project.dailyge.app.common.response.ErrorResponse;
 
-import java.util.*;
+import java.util.List;
 
 @Slf4j
 @RestControllerAdvice
@@ -19,7 +21,7 @@ public class GlobalExceptionHandler {
     private static final String MESSAGE = ", message: ";
 
     @ExceptionHandler(CommonException.class)
-    public ResponseEntity<ErrorResponse> resolveCommonException(CommonException exception) {
+    public ResponseEntity<ErrorResponse> resolveCommonException(final CommonException exception) {
         CodeAndMessage codeAndMessage = exception.getCodeAndMessage();
         log.error("error: {}", exception.getDetailMessage());
         return ResponseEntity.status(codeAndMessage.code())
@@ -27,7 +29,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> resolveMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
+    public ResponseEntity<ErrorResponse> resolveMethodArgumentNotValidException(final MethodArgumentNotValidException exception) {
         StringBuilder sb = new StringBuilder();
         if (exception != null) {
             Object targetObj = exception.getBindingResult().getTarget();
@@ -43,6 +45,14 @@ public class GlobalExceptionHandler {
             log.error("request: {}", targetObj);
         }
         log.error("errors: [{}]", sb);
+        CodeAndMessage codeAndMessage = CommonCodeAndMessage.INVALID_PARAMETERS;
+        return ResponseEntity.status(codeAndMessage.code())
+            .body(ErrorResponse.from(codeAndMessage));
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> resolveServerError(final Exception exception) {
+        log.error("error: {}", exception.getMessage());
         CodeAndMessage codeAndMessage = CommonCodeAndMessage.INVALID_PARAMETERS;
         return ResponseEntity.status(codeAndMessage.code())
             .body(ErrorResponse.from(codeAndMessage));

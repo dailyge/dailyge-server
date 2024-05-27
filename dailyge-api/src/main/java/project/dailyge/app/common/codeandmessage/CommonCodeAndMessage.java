@@ -11,8 +11,8 @@ public enum CommonCodeAndMessage implements CodeAndMessage {
     private final String message;
 
     CommonCodeAndMessage(
-        int code,
-        String message
+        final int code,
+        final String message
     ) {
         this.code = code;
         this.message = message;

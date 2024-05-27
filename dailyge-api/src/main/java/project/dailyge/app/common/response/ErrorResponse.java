@@ -1,7 +1,7 @@
 package project.dailyge.app.common.response;
 
-import lombok.*;
-import project.dailyge.app.common.codeandmessage.*;
+import lombok.Getter;
+import project.dailyge.app.common.codeandmessage.CodeAndMessage;
 
 @Getter
 public class ErrorResponse {
@@ -12,12 +12,12 @@ public class ErrorResponse {
     private ErrorResponse() {
     }
 
-    private ErrorResponse(CodeAndMessage codeAndMessage) {
+    private ErrorResponse(final CodeAndMessage codeAndMessage) {
         this.code = codeAndMessage.code();
         this.message = codeAndMessage.message();
     }
 
-    public static ErrorResponse from(CodeAndMessage codeAndMessage) {
+    public static ErrorResponse from(final CodeAndMessage codeAndMessage) {
         return new ErrorResponse(codeAndMessage);
     }
 }

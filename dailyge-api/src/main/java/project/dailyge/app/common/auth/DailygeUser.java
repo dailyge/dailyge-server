@@ -1,20 +1,20 @@
 package project.dailyge.app.common.auth;
 
-import lombok.*;
-import project.dailyge.domain.user.*;
+import lombok.Getter;
+import project.dailyge.domain.user.User;
 
-import java.util.*;
+import java.util.Objects;
 
 @Getter
 public class DailygeUser {
 
     private final Long userId;
 
-    public DailygeUser(Long userId) {
+    public DailygeUser(final Long userId) {
         this.userId = userId;
     }
 
-    public DailygeUser(User user) {
+    public DailygeUser(final User user) {
         this.userId = user.getId();
     }
 

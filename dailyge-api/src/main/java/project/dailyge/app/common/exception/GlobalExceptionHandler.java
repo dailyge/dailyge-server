@@ -29,7 +29,9 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> resolveMethodArgumentNotValidException(final MethodArgumentNotValidException exception) {
+    public ResponseEntity<ErrorResponse> resolveMethodArgumentNotValidException(
+        final MethodArgumentNotValidException exception
+    ) {
         StringBuilder sb = new StringBuilder();
         if (exception != null) {
             Object targetObj = exception.getBindingResult().getTarget();

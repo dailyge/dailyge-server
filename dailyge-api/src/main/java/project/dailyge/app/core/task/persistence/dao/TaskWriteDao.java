@@ -8,7 +8,7 @@ import project.dailyge.domain.task.TaskJpaRepository;
 
 @Repository
 @RequiredArgsConstructor
-public class TaskWriteDao implements TaskEntityWriteRepository {
+class TaskWriteDao implements TaskEntityWriteRepository {
 
     private final TaskJpaRepository taskRepository;
 

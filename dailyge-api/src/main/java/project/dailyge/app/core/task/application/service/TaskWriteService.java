@@ -9,7 +9,7 @@ import project.dailyge.domain.task.TaskJpaEntity;
 
 @Service
 @RequiredArgsConstructor
-public class TaskWriteService implements TaskWriteUseCase {
+class TaskWriteService implements TaskWriteUseCase {
 
     private final TaskEntityWriteRepository taskRepository;
 

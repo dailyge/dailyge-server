@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-public class TaskReadDao implements TaskEntityReadRepository {
+class TaskReadDao implements TaskEntityReadRepository {
 
     private final JPAQueryFactory queryFactory;
 

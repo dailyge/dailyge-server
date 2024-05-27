@@ -8,7 +8,7 @@ import project.dailyge.domain.user.UserJpaRepository;
 
 @Service
 @RequiredArgsConstructor
-public class UserReadService implements UserReadUseCase {
+class UserReadService implements UserReadUseCase {
 
     private final UserJpaRepository userRepository;
 

@@ -1,7 +1,7 @@
 package project.dailyge.app.core.task.dto.response;
 
-import lombok.*;
-import project.dailyge.domain.task.*;
+import lombok.Getter;
+import project.dailyge.domain.task.TaskJpaEntity;
 
 @Getter
 public class TaskRegisterResponse {

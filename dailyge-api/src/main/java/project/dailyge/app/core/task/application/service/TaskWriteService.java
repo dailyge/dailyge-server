@@ -1,11 +1,11 @@
 package project.dailyge.app.core.task.application.service;
 
-import lombok.*;
-import org.springframework.stereotype.*;
-import org.springframework.transaction.annotation.*;
-import project.dailyge.app.core.task.application.*;
-import project.dailyge.app.core.task.persistence.*;
-import project.dailyge.domain.task.*;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import project.dailyge.app.core.task.application.TaskWriteUseCase;
+import project.dailyge.app.core.task.persistence.TaskEntityWriteRepository;
+import project.dailyge.domain.task.TaskJpaEntity;
 
 @Service
 @RequiredArgsConstructor
@@ -15,7 +15,7 @@ public class TaskWriteService implements TaskWriteUseCase {
 
     @Override
     @Transactional
-    public TaskJpaEntity save(TaskJpaEntity task) {
+    public TaskJpaEntity save(final TaskJpaEntity task) {
         return taskRepository.save(task);
     }
 }

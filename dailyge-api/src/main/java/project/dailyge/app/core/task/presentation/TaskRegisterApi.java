@@ -1,15 +1,19 @@
 package project.dailyge.app.core.task.presentation;
 
-import jakarta.validation.*;
-import lombok.*;
-import org.springframework.web.bind.annotation.*;
-import project.dailyge.app.common.auth.*;
-import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.*;
-import project.dailyge.app.common.response.*;
-import project.dailyge.app.core.task.dto.requesst.*;
-import project.dailyge.app.core.task.dto.response.*;
-import project.dailyge.app.core.task.facade.*;
-import project.dailyge.domain.task.*;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import project.dailyge.app.common.auth.DailygeUser;
+import project.dailyge.app.common.auth.LoginUser;
+import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.CREATED;
+import project.dailyge.app.common.response.ApiResponse;
+import project.dailyge.app.core.task.dto.requesst.TaskRegisterRequest;
+import project.dailyge.app.core.task.dto.response.TaskRegisterResponse;
+import project.dailyge.app.core.task.facade.TaskFacade;
+import project.dailyge.domain.task.TaskJpaEntity;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,8 +24,8 @@ public class TaskRegisterApi {
 
     @PostMapping
     public ApiResponse<TaskRegisterResponse> registerTask(
-        @LoginUser DailygeUser dailygeUser,
-        @Valid @RequestBody TaskRegisterRequest request
+        @LoginUser final DailygeUser dailygeUser,
+        @Valid @RequestBody final TaskRegisterRequest request
     ) {
         TaskJpaEntity newTask = taskFacade.save(request.toEntity(dailygeUser));
         TaskRegisterResponse payload = new TaskRegisterResponse(newTask);

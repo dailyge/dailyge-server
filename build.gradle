@@ -24,7 +24,7 @@ subprojects {
     apply(plugin: "java-library")
     apply(plugin: "org.springframework.boot")
     apply(plugin: "io.spring.dependency-management")
-    apply plugin: 'application'
+    apply(plugin: "application")
 
     repositories {
         mavenCentral()
@@ -77,11 +77,11 @@ subprojects {
         violationRules {
             rule {
                 enabled = true
-                element = 'CLASS'
+                element = "CLASS"
 
                 limit {
-                    counter = 'BRANCH'
-                    value = 'COVEREDRATIO'
+                    counter = "BRANCH"
+                    value = "COVEREDRATIO"
                     minimum = 0.0
                     excludes = [] + exclusions as List<String>
                 }
@@ -97,8 +97,8 @@ subprojects {
 
 static def extractQClass() {
     def qClasses = []
-    for (qPattern in '*.QA'..'*.QZ') {
-        qClasses.add(qPattern + '*')
+    for (qPattern in "*.QA".."*.QZ") {
+        qClasses.add(qPattern + "*")
     }
     return qClasses
 }

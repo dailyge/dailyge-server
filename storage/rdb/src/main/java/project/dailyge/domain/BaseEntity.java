@@ -1,28 +1,29 @@
 package project.dailyge.domain;
 
-import jakarta.persistence.*;
-import lombok.*;
-import org.springframework.data.annotation.*;
-import org.springframework.data.jpa.repository.config.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.MappedSuperclass;
+import lombok.Getter;
+import org.springframework.data.annotation.LastModifiedDate;
 
-import java.time.*;
+import java.time.LocalDateTime;
 
 @Getter
 @MappedSuperclass
-@EnableJpaAuditing
 public abstract class BaseEntity {
 
-    @CreatedDate
     @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    protected LocalDateTime createdAt;
+
+    @Column(name = "created_by")
+    protected Long createdBy;
 
     @LastModifiedDate
     @Column(name = "last_modified_at")
-    private LocalDateTime lastModifiedAt;
+    protected LocalDateTime lastModifiedAt;
 
     @Column(name = "last_modified_by")
     protected Long lastModifiedBy;
 
     @Column(name = "deleted")
-    private Boolean deleted = false;
+    protected Boolean deleted = false;
 }

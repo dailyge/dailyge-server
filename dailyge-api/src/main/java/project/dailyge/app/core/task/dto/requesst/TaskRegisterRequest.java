@@ -1,10 +1,13 @@
 package project.dailyge.app.core.task.dto.requesst;
 
-import jakarta.validation.constraints.*;
-import project.dailyge.app.common.auth.*;
-import project.dailyge.domain.task.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import project.dailyge.app.common.auth.DailygeUser;
+import project.dailyge.domain.task.TaskJpaEntity;
+import project.dailyge.domain.task.TaskStatus;
 
-import java.time.*;
+import java.time.LocalDate;
 
 public record TaskRegisterRequest(
     @NotNull(message = "제목을 입력해주세요.")
@@ -15,6 +18,7 @@ public record TaskRegisterRequest(
     @NotBlank(message = "내용은 공백일 수 없습니다.")
     String content,
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @NotNull(message = "날짜를 입력해주세요.")
     LocalDate date
 ) {

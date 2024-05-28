@@ -1,7 +1,7 @@
 package project.dailyge.app.common.auth;
 
 import lombok.Getter;
-import project.dailyge.domain.user.User;
+import project.dailyge.domain.user.UserJpaEntity;
 
 import java.util.Objects;
 
@@ -14,7 +14,7 @@ public class DailygeUser {
         this.userId = userId;
     }
 
-    public DailygeUser(final User user) {
+    public DailygeUser(final UserJpaEntity user) {
         this.userId = user.getId();
     }
 

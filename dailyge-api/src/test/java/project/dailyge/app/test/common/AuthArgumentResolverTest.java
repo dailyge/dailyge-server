@@ -10,6 +10,7 @@ import project.dailyge.app.common.auth.*;
 import project.dailyge.app.common.configuration.web.*;
 import project.dailyge.app.common.exception.*;
 import project.dailyge.app.core.user.application.*;
+import project.dailyge.app.fixture.user.UserFixture;
 import project.dailyge.domain.user.*;
 
 @DisplayName("[UnitTest] AuthArgumentResolver 검증 단위 테스트")
@@ -33,7 +34,7 @@ class AuthArgumentResolverTest {
     @Test
     @DisplayName("사용자 ID가 존재하고, 올바르다면 인증 객체가 생성된다.")
     void shouldBeNotNullWhenUserIdIsValid() {
-        User user = new User(1L);
+        UserJpaEntity user = UserFixture.createUserJpaEntity(1L);
         when(request.getHeader("dailyge_user_id"))
             .thenReturn(user.getId().toString());
         when(userReadUseCase.findById(1L))
@@ -70,7 +71,7 @@ class AuthArgumentResolverTest {
     @DisplayName("사용자 ID가 유효하면 예외가 발생하지 않는다.")
     void shouldNotThrowExceptionWhenUserIdIsValid() {
         String validUserId = "456";
-        User expectedUser = new User(456L);
+        UserJpaEntity expectedUser = UserFixture.createUserJpaEntity(456L);
         when(request.getHeader("dailyge_user_id"))
             .thenReturn(validUserId);
         when(userReadUseCase.findById(Long.parseLong(validUserId)))

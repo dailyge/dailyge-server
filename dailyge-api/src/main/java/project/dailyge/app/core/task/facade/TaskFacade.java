@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import project.dailyge.app.core.task.application.TaskWriteUseCase;
 import project.dailyge.app.core.user.application.UserReadUseCase;
 import project.dailyge.domain.task.TaskJpaEntity;
-import project.dailyge.domain.user.User;
+import project.dailyge.domain.user.UserJpaEntity;
 
 @Component
 @RequiredArgsConstructor
@@ -17,7 +17,7 @@ public class TaskFacade {
 
     @Transactional
     public TaskJpaEntity save(final TaskJpaEntity task) {
-        final User findUser = userReadUseCase.findById(task.getUserId());
+        final UserJpaEntity findUser = userReadUseCase.findById(task.getUserId());
         return taskWriteUseCase.save(task);
     }
 }

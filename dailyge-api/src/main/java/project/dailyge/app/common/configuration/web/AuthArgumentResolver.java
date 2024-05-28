@@ -13,7 +13,7 @@ import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.INV
 import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
 import project.dailyge.app.common.exception.UnAuthorizedException;
 import project.dailyge.app.core.user.application.UserReadUseCase;
-import project.dailyge.domain.user.User;
+import project.dailyge.domain.user.UserJpaEntity;
 
 @RequiredArgsConstructor
 public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
@@ -38,7 +38,7 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
         final String userId = request.getHeader(DAILYGE_USER_ID);
         validateUserId(userId);
 
-        final User findUser = userReadUseCase.findById(Long.parseLong(userId));
+        final UserJpaEntity findUser = userReadUseCase.findById(Long.parseLong(userId));
         return new DailygeUser(findUser);
     }
 

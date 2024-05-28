@@ -35,6 +35,7 @@ public abstract class DocumentationTestBase extends DatabaseTestBase {
     private static final String SCHEMA = "www.dailyge.com";
     protected static final String IDENTIFIER = "{class_name}/{method_name}";
     protected static final String USER_ID_KEY = "dailyge_user_id";
+    protected static final String AUTHORIZATION = "Authorization";
 
     @LocalServerPort
     protected int port;

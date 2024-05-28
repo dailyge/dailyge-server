@@ -34,6 +34,10 @@ Dailyge API 문서
 
 include::{snippets}/task_jpa_entity_save_documentation_test/task_save_test/http-request.adoc[]
 
+#### Request-Header
+
+include::{snippets}/task_jpa_entity_save_documentation_test/task_save_test/request-headers.adoc[]
+
 #### Request-Fields
 
 include::{snippets}/task_jpa_entity_save_documentation_test/task_save_test/request-fields.adoc[]

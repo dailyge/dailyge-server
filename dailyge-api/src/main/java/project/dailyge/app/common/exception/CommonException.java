@@ -6,8 +6,8 @@ import project.dailyge.app.common.codeandmessage.CodeAndMessage;
 @Getter
 public class CommonException extends RuntimeException {
 
-    private final CodeAndMessage codeAndMessage;
     private String detailMessage;
+    private final CodeAndMessage codeAndMessage;
 
     public CommonException(final CodeAndMessage codeAndMessage) {
         super(codeAndMessage.message());

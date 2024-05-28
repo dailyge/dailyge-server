@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.*;
 import project.dailyge.app.common.*;
 import project.dailyge.app.core.task.facade.*;
 import project.dailyge.app.core.user.application.*;
+import project.dailyge.app.fixture.user.UserFixture;
 import project.dailyge.domain.task.*;
 import static project.dailyge.domain.task.TaskStatus.*;
 import project.dailyge.domain.user.*;
@@ -24,7 +25,7 @@ public class TaskSaveIntegrationTest extends IntegrationTestBase {
     @Test
     @DisplayName("할 일이 저장되면, PK가 Null이 아니다.")
     void taskSaveTest() {
-        User newUser = userWriteUseCase.save(new User(1L));
+        UserJpaEntity newUser = userWriteUseCase.save(UserFixture.createUserJpaEntity(1L));
         TaskJpaEntity newTask = new TaskJpaEntity("독서", "Kafka 완벽가이드 1~30p 읽기", now(), TODO, newUser.getId());
 
         TaskJpaEntity savedTask = taskFacade.save(newTask);

@@ -13,7 +13,9 @@ import project.dailyge.app.core.user.application.UserWriteUseCase;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASK_AUTHORIZATION_HEADER;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASK_CREATE_REQUEST_SNIPPET;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASK_CREATE_RESPONSE_SNIPPET;
-import project.dailyge.domain.user.User;
+
+import project.dailyge.app.fixture.user.UserFixture;
+import project.dailyge.domain.user.UserJpaEntity;
 
 @DisplayName("[DocumentationTest] 할 일 저장 문서화 테스트")
 class TaskJpaEntitySaveDocumentationTest extends DocumentationTestBase {
@@ -24,7 +26,7 @@ class TaskJpaEntitySaveDocumentationTest extends DocumentationTestBase {
     @Test
     @DisplayName("Task 등록 테스트")
     void taskSaveTest() throws Exception {
-        User newUser = userWriteUseCase.save(new User(1L));
+        UserJpaEntity newUser = userWriteUseCase.save(UserFixture.createUserJpaEntity(1L));
         TaskRegisterRequest request = new TaskRegisterRequest("주간 미팅", "Backend 팀과 Api 스펙 정의", now());
 
         given(this.specification)

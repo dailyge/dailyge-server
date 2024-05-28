@@ -1,3 +1,41 @@
+plugins {
+    id("java")
+    id("org.springframework.boot") apply false
+    id("io.spring.dependency-management")
+    id("org.asciidoctor.jvm.convert") apply false
+    id("jacoco")
+}
+
 dependencies {
+    // JPA
     api("org.springframework.boot:spring-boot-starter-data-jpa")
+
+    // MySQL
+    runtimeOnly("mysql:mysql-connector-java:${property("mysqlVersion")}")
+}
+
+def querydslDir = "src/main/generated"
+
+sourceSets {
+    main.java.srcDirs += [querydslDir]
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.getGeneratedSourceOutputDirectory().set(file(querydslDir))
+}
+
+clean.doLast {
+    file(querydslDir).deleteDir()
+}
+
+tasks.named('bootJar').configure {
+    enabled = false
+}
+
+jar {
+    enabled = true
+}
+
+bootRun {
+    enabled = false
 }

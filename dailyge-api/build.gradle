@@ -1,7 +1,61 @@
-dependencies {
-    // Module
-    implementation(project(":storage:rdb"))
+plugins {
+    id("org.asciidoctor.jvm.convert")
+}
 
-    // SpringBoot
+configurations {
+    asciidoctorExt
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation(project(":storage:rdb"))
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
+    testImplementation("org.springframework.restdocs:spring-restdocs-restassured")
+    testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
+    testImplementation("org.testcontainers:mysql:1.15.3")
+    testImplementation("org.testcontainers:testcontainers:1.15.3")
+    testImplementation("org.testcontainers:junit-jupiter:1.15.3")
+    asciidoctorExt("org.springframework.restdocs:spring-restdocs-asciidoctor")
+}
+
+springBoot {
+    mainClassName = "project.dailyge.app.DailygeApplication"
+}
+
+ext {
+    snippetsDir = file("build/generated-snippets")
+}
+
+test {
+    outputs.dir snippetsDir
+}
+asciidoctor {
+    attributes "snippets": snippetsDir
+    inputs.dir snippetsDir
+    dependsOn test
+}
+
+tasks.register("copyDocument", Copy) {
+    dependsOn asciidoctor
+    from file("build/docs/asciidoc")
+    into file("src/main/resources/static/docs")
+}
+
+build {
+    dependsOn copyDocument
+}
+
+bootJar {
+    dependsOn asciidoctor
+    from("${asciidoctor.outputDir}/html5") {
+        into "static/docs"
+    }
 }

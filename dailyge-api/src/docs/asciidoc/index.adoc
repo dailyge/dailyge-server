@@ -1,0 +1,51 @@
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+:operation-http-request-title: Request
+:operation-http-response-title: Response
+
+= 📆 Dailyge
+
+Dailyge API 문서
+
+- - -
+
+== 📝 1. 할 일(Task)
+
+[cols=6*]
+
+|===
+| 기능 | Method | 인증 | API | Success | Failure
+
+| <<1-1. 할일 등록>> | POST|O|/api/tasks | 201 | 400, 401, 403, 429, 500, 502
+|===
+
+### 1-1. 할일 등록
+
+오늘 할 일을 등록하는 API 입니다.
+
+#### Request
+
+include::{snippets}/task_jpa_entity_save_documentation_test/task_save_test/http-request.adoc[]
+
+#### Request-Header
+
+include::{snippets}/task_jpa_entity_save_documentation_test/task_save_test/request-headers.adoc[]
+
+#### Request-Fields
+
+include::{snippets}/task_jpa_entity_save_documentation_test/task_save_test/request-fields.adoc[]
+
+#### Response
+
+include::{snippets}/task_jpa_entity_save_documentation_test/task_save_test/http-response.adoc[]
+
+#### Response-Fields
+
+include::{snippets}/task_jpa_entity_save_documentation_test/task_save_test/response-fields.adoc[]

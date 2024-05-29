@@ -4,11 +4,21 @@ import jakarta.persistence.*;
 import lombok.*;
 import project.dailyge.domain.BaseEntity;
 
+import java.util.regex.Pattern;
+
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity(name = "users")
 public class UserJpaEntity extends BaseEntity {
+
+    private static final int MAX_NICKNAME_LENGTH = 20;
+    private static final int MAX_EMAIL_LENGTH = 50;
+    private static final int MAX_PROFILE_IMAGE_URL_LENGTH = 2000;
+    private static final String EMAIL_PATTERN = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\\.[a-zA-Z]{2,3}$";
+    private final static String OVER_MAX_NICKNAME_LENGTH_ERROR_MESSAGE = "입력 가능한 닉네임 길이를 초과했습니다.";
+    private final static String OVER_MAX_EMAIL_LENGTH_ERROR_MESSAGE = "입력 가능한 이메일 길이를 초과했습니다.";
+    private final static String INVALID_EMAIL_ERROR_MESSAGE = "유효하지 않는 이메일 형식입니다.";
+    private final static String OVER_MAX_PROFILE_IMAGE_URL_ERROR_MESSAGE = "입력 가능한 프로필 사진 URL 길이를 초과했습니다.";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,12 +34,59 @@ public class UserJpaEntity extends BaseEntity {
     private String profileImageUrl;
 
     public UserJpaEntity(
-        final Long id,
+        final Long userId,
         final String nickname,
         final String email
     ) {
-        this.id = id;
+        validate(nickname, email);
+        this.id = userId;
         this.nickname = nickname;
         this.email = email;
+    }
+
+    public UserJpaEntity(
+        final String nickname,
+        final String email
+    ) {
+        validate(nickname, email);
+        this.nickname = nickname;
+        this.email = email;
+    }
+
+    public UserJpaEntity(
+        final String nickname,
+        final String email,
+        final String profileImageUrl
+    ) {
+        validate(nickname, email, profileImageUrl);
+        this.nickname = nickname;
+        this.email = email;
+        this.profileImageUrl = profileImageUrl;
+    }
+
+    private void validate(
+        final String nickname,
+        final String email,
+        final String profileImageUrl
+    ) {
+        if (MAX_PROFILE_IMAGE_URL_LENGTH < profileImageUrl.length()) {
+            throw new IllegalArgumentException(OVER_MAX_PROFILE_IMAGE_URL_ERROR_MESSAGE);
+        }
+        validate(nickname, email);
+    }
+
+    private void validate(
+        final String nickname,
+        final String email
+    ) {
+        if (MAX_NICKNAME_LENGTH < nickname.length()){
+            throw new IllegalArgumentException(OVER_MAX_NICKNAME_LENGTH_ERROR_MESSAGE);
+        }
+        if (MAX_EMAIL_LENGTH < email.length()) {
+            throw new IllegalArgumentException(OVER_MAX_EMAIL_LENGTH_ERROR_MESSAGE);
+        }
+        if (!Pattern.matches(EMAIL_PATTERN, email)) {
+            throw new IllegalArgumentException(INVALID_EMAIL_ERROR_MESSAGE);
+        }
     }
 }

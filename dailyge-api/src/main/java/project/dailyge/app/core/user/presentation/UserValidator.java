@@ -8,14 +8,14 @@ import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.UN_
 @Component
 public class UserValidator {
 
-    private static final String USER_MISMATCH_MESSAGE = "사용자 정보가 일치하지 않습니다.";
+    private static final String NO_PERMISSIONS_OTHER_USER_MESSAGE = "접근할 수 없는 사용자 정보입니다.";
 
     public void validate(
         final Long loginUserId,
         final Long userId
     ) {
         if (!loginUserId.equals(userId)) {
-            throw new UnAuthorizedException(USER_MISMATCH_MESSAGE, UN_AUTHORIZED);
+            throw new UnAuthorizedException(NO_PERMISSIONS_OTHER_USER_MESSAGE, UN_AUTHORIZED);
         }
     }
 }

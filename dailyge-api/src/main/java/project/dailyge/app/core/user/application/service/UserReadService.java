@@ -24,8 +24,10 @@ class UserReadService implements UserReadUseCase {
 
     @Override
     public UserInfoResponse findUserInfoById(final Long userId) {
-        final UserJpaEntity findUser = userRepository.findById(userId)
-            .orElseThrow(() -> UserTypeException.from(USER_NOT_FOUND));
+        final UserJpaEntity findUser = userRepository.findByIdAndDeleted(userId, false);
+        if (findUser == null) {
+            throw UserTypeException.from(USER_NOT_FOUND);
+        }
         return new UserInfoResponse(findUser);
     }
 }

@@ -34,9 +34,7 @@ public sealed class UserTypeException extends BusinessException {
     }
 
     private static final class UserUnResolvedException extends UserTypeException {
-        public UserUnResolvedException(
-            final CodeAndMessage codeAndMessage
-        ) {
+        public UserUnResolvedException(final CodeAndMessage codeAndMessage) {
             super(UN_RESOLVED_MESSAGE, codeAndMessage);
         }
     }

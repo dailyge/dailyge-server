@@ -15,13 +15,15 @@ public sealed class UserTypeException extends BusinessException {
     }
 
     public static UserTypeException from(final CodeAndMessage codeAndMessage) {
-        final UserCodeAndMessage userCodeAndMessage = (UserCodeAndMessage) codeAndMessage;
-        switch (userCodeAndMessage) {
-            case USER_NOT_FOUND:
-                return new UserNotFoundException(null, codeAndMessage);
-            default:
-                return new UserUnResolvedException(codeAndMessage);
+        if (codeAndMessage instanceof UserCodeAndMessage userCodeAndMessage) {
+            switch (userCodeAndMessage) {
+                case USER_NOT_FOUND:
+                    return new UserNotFoundException(null, codeAndMessage);
+                default:
+                    break;
+            }
         }
+        return new UserUnResolvedException(codeAndMessage);
     }
 
     private static final class UserNotFoundException extends UserTypeException {

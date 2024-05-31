@@ -6,5 +6,9 @@ import project.dailyge.domain.user.UserJpaEntity;
 public interface UserReadUseCase {
     UserJpaEntity findById(Long userId);
 
+    UserJpaEntity findAuthorizedById(Long userId);
+
     UserInfoResponse findUserInfoById(Long userId);
+
+    UserJpaEntity findByEmail(String email);
 }

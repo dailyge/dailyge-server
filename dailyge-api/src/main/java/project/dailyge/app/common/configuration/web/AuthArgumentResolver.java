@@ -38,7 +38,7 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
         final String userId = request.getHeader(DAILYGE_USER_ID);
         validateUserId(userId);
 
-        final UserJpaEntity findUser = userReadUseCase.findById(Long.parseLong(userId));
+        final UserJpaEntity findUser = userReadUseCase.findAuthorizedById(Long.parseLong(userId));
         return new DailygeUser(findUser);
     }
 

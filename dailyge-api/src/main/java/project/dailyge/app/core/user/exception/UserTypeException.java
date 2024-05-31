@@ -14,20 +14,25 @@ public sealed class UserTypeException extends BusinessException {
         super(detailMessage, codeAndMessage);
     }
 
-    public static UserTypeException from(final CodeAndMessage codeAndMessage) {
-        if (codeAndMessage instanceof UserCodeAndMessage userCodeAndMessage) {
-            switch (userCodeAndMessage) {
-                case USER_NOT_FOUND:
-                    return new UserNotFoundException(null, codeAndMessage);
-                default:
-                    break;
-            }
-        }
-        return new UserUnResolvedException(codeAndMessage);
+    public static UserTypeException from(final UserCodeAndMessage codeAndMessage) {
+        return switch (codeAndMessage) {
+            case USER_NOT_FOUND -> new UserNotFoundException(null, codeAndMessage);
+            case USER_EMAIL_CONFLICT -> new UserEmailConflictException(null, codeAndMessage);
+            default -> new UserUnResolvedException(codeAndMessage);
+        };
     }
 
     private static final class UserNotFoundException extends UserTypeException {
         public UserNotFoundException(
+            final String detailMessage,
+            final CodeAndMessage codeAndMessage
+        ) {
+            super(detailMessage, codeAndMessage);
+        }
+    }
+
+    private static final class UserEmailConflictException extends UserTypeException {
+        public UserEmailConflictException(
             final String detailMessage,
             final CodeAndMessage codeAndMessage
         ) {

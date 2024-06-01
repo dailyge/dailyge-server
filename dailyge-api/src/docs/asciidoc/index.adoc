@@ -16,17 +16,20 @@ Dailyge API 문서
 
 - - -
 
-== 📝 1. 할 일(Task)
+== 📝 1. 사용자(User)
+
+== 📝 2. 할 일(Task)
 
 [cols=6*]
 
 |===
 | 기능 | Method | 인증 | API | Success | Failure
 
-| <<1-1. 할일 등록>> | POST|O|/api/tasks | 201 | 400, 401, 403, 429, 500, 502
+| <<2-1. 할 일 등록>> | POST|O|/api/tasks | 201 | 400, 401, 403, 429, 500, 502
+| <<2-2. 할 일 상세 조회>> | GET|O|/api/tasks/{taskId} | 200 | 400, 401, 403, 404, 429, 500, 502
 |===
 
-### 1-1. 할일 등록
+### 2-1. 할 일 등록
 
 오늘 할 일을 등록하는 API 입니다.
 
@@ -49,3 +52,27 @@ include::{snippets}/task_jpa_entity_save_documentation_test/task_save_test/http-
 #### Response-Fields
 
 include::{snippets}/task_jpa_entity_save_documentation_test/task_save_test/response-fields.adoc[]
+
+### 2-2. 할 일 상세 조회
+
+할 일 상세 조회 API 입니다.
+
+#### Request
+
+include::{snippets}/task_detail_search_documentation_test/when_task_exists_then_status_code_should_be200_ok/http-request.adoc[]
+
+#### Request-Header
+
+include::{snippets}/task_detail_search_documentation_test/when_task_exists_then_status_code_should_be200_ok/request-headers.adoc[]
+
+#### Path-Parameters
+
+include::{snippets}/task_detail_search_documentation_test/when_task_exists_then_status_code_should_be200_ok/path-parameters.adoc[]
+
+#### Response
+
+include::{snippets}/task_detail_search_documentation_test/when_task_exists_then_status_code_should_be200_ok/http-response.adoc[]
+
+#### Response-Fields
+
+include::{snippets}/task_detail_search_documentation_test/when_task_exists_then_status_code_should_be200_ok/response-fields.adoc[]

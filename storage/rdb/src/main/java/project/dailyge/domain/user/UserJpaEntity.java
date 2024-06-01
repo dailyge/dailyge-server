@@ -1,9 +1,17 @@
 package project.dailyge.domain.user;
 
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import project.dailyge.domain.BaseEntity;
 
+import java.time.LocalDateTime;
 import java.util.regex.Pattern;
 
 @Getter
@@ -49,6 +57,20 @@ public class UserJpaEntity extends BaseEntity {
     }
 
     public UserJpaEntity(
+        final Long userId,
+        final String nickname,
+        final String email,
+        final LocalDateTime createdAt
+    ) {
+        validate(nickname, email);
+        this.id = userId;
+        this.nickname = nickname;
+        this.email = email;
+        this.userRole = UserRole.NORMAL;
+        this.createdAt = createdAt;
+    }
+
+    public UserJpaEntity(
         final String nickname,
         final String email
     ) {
@@ -85,7 +107,7 @@ public class UserJpaEntity extends BaseEntity {
         final String nickname,
         final String email
     ) {
-        if (MAX_NICKNAME_LENGTH < nickname.length()){
+        if (MAX_NICKNAME_LENGTH < nickname.length()) {
             throw new IllegalArgumentException(OVER_MAX_NICKNAME_LENGTH_ERROR_MESSAGE);
         }
         if (MAX_EMAIL_LENGTH < email.length()) {

@@ -3,7 +3,7 @@ package project.dailyge.domain;
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
-import org.springframework.data.annotation.CreatedDate;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 public abstract class BaseEntity {
 
-    @CreatedDate
+    @CreationTimestamp
     @Column(name = "created_at")
     protected LocalDateTime createdAt;
 

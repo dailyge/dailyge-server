@@ -144,6 +144,10 @@ public class TaskJpaEntity extends BaseEntity {
         return BEYOND_ONE_YEAR_ERROR_MESSAGE;
     }
 
+    public boolean isOwner(Long userId) {
+        return this.userId.equals(userId);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

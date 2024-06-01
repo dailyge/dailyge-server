@@ -23,7 +23,6 @@ class TaskReadService implements TaskReadUseCase {
         if (!findTask.isOwner(dailygeUser.getUserId())) {
             throw new UnAuthorizedException();
         }
-        return taskRepository.findById(taskId)
-            .orElseThrow(() -> TaskTypeException.from(TASK_NOT_FOUND));
+        return findTask;
     }
 }

@@ -5,7 +5,7 @@ import project.dailyge.domain.user.UserJpaEntity;
 public final class UserFixture {
 
     private UserFixture() {
-        throw new AssertionError("올바르지 않는 생성 방식입니다.");
+        throw new AssertionError("올바른 방식으로 생성자를 호출해주세요.");
     }
 
     public static final String NICKNAME = "test";

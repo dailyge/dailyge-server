@@ -1,13 +1,16 @@
 package project.dailyge.app.common;
 
-import jakarta.annotation.*;
-import jakarta.persistence.*;
-import org.springframework.stereotype.*;
-import org.springframework.transaction.annotation.*;
-import static org.testcontainers.shaded.com.google.common.base.CaseFormat.*;
+import jakarta.annotation.PostConstruct;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityManager;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+import static org.testcontainers.shaded.com.google.common.base.CaseFormat.LOWER_UNDERSCORE;
+import static org.testcontainers.shaded.com.google.common.base.CaseFormat.UPPER_CAMEL;
 
-import java.util.*;
-import java.util.stream.*;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 public class DatabaseInitializer {

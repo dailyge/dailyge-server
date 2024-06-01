@@ -42,7 +42,7 @@ class UserReadService implements UserReadUseCase {
     }
 
     @Override
-    public UserJpaEntity findByEmail(final String email) {
+    public Optional<UserJpaEntity> findByEmail(final String email) {
         return userRepository.findByEmail(email);
     }
 }

@@ -9,6 +9,8 @@ import project.dailyge.app.core.user.dto.request.UserRegisterRequest;
 import project.dailyge.app.core.user.exception.UserTypeException;
 import project.dailyge.domain.user.UserJpaEntity;
 
+import java.util.Optional;
+
 import static project.dailyge.app.core.user.exception.UserCodeAndMessage.USER_EMAIL_CONFLICT;
 
 @Component
@@ -20,8 +22,8 @@ public class UserFacade {
 
     @Transactional(rollbackFor = Exception.class)
     public UserJpaEntity save(final UserRegisterRequest request) {
-        UserJpaEntity findUser = userReadUseCase.findByEmail(request.email());
-        if (findUser != null) {
+        Optional<UserJpaEntity> findUser = userReadUseCase.findByEmail(request.email());
+        if (findUser.isPresent()) {
             throw UserTypeException.from(USER_EMAIL_CONFLICT);
         }
         return userWriteService.save(request.toEntity());

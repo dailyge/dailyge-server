@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import project.dailyge.app.common.IntegrationTestBase;
 import project.dailyge.app.common.auth.DailygeUser;
+import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
+import project.dailyge.app.common.exception.UnAuthorizedException;
 import project.dailyge.app.core.task.application.TaskReadUseCase;
 import project.dailyge.app.core.task.exception.TaskCodeAndMessage;
 import project.dailyge.app.core.task.exception.TaskTypeException;
@@ -43,6 +45,21 @@ public class TaskSearchIntegrationTest extends IntegrationTestBase {
         final TaskJpaEntity findTask = taskReadUseCase.findById(dailygeUser, savedTask.getId());
 
         assertNotNull(findTask);
+    }
+
+    @Test
+    @DisplayName("권한이 없는 사용자가 다른 사람의 할 일을 조회하면, UnAuthorizedException이 발생한다.")
+    void whenUserIsUnAuthorizedThenIdShouldNotBeNull() {
+        final UserJpaEntity newUser = userWriteUseCase.save(createUserJpaEntity());
+        final TaskJpaEntity newTask = new TaskJpaEntity("독서", "Kafka 완벽가이드 1~30p 읽기", now(), TODO, newUser.getId());
+        final Long unAuthorizedUserId = Long.MAX_VALUE;
+        final DailygeUser dailygeUser = new DailygeUser(unAuthorizedUserId);
+
+        final TaskJpaEntity savedTask = taskFacade.save(newTask);
+
+        assertThatThrownBy(() -> taskReadUseCase.findById(dailygeUser, savedTask.getId()))
+            .isInstanceOf(UnAuthorizedException.class)
+            .hasMessage(UN_AUTHORIZED.message());
     }
 
     @Test

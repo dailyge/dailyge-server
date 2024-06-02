@@ -6,6 +6,8 @@ import project.dailyge.app.common.exception.BusinessException;
 public sealed class UserTypeException extends BusinessException {
 
     private static final String UN_RESOLVED_MESSAGE = "해결되지 못한 사용자 예외입니다.";
+    private static final String USER_NOT_EXIST_ERROR_MESSAGE = "존재하지 않는 사용자 입니다.";
+    private static final String CONFLICT_EMAIL_ERROR_MESSAGE = "이미 가입되어 있는 사용자 이메일 계정입니다";
 
     private UserTypeException(
         final String detailMessage,
@@ -16,32 +18,26 @@ public sealed class UserTypeException extends BusinessException {
 
     public static UserTypeException from(final UserCodeAndMessage codeAndMessage) {
         return switch (codeAndMessage) {
-            case USER_NOT_FOUND -> new UserNotFoundException(null, codeAndMessage);
-            case USER_EMAIL_CONFLICT -> new UserEmailConflictException(null, codeAndMessage);
+            case USER_NOT_FOUND -> new UserNotFoundException(codeAndMessage);
+            case USER_EMAIL_CONFLICT -> new UserEmailConflictException(codeAndMessage);
             default -> new UserUnResolvedException(codeAndMessage);
         };
     }
 
     private static final class UserNotFoundException extends UserTypeException {
-        public UserNotFoundException(
-            final String detailMessage,
-            final CodeAndMessage codeAndMessage
-        ) {
-            super(detailMessage, codeAndMessage);
+        public UserNotFoundException(final UserCodeAndMessage codeAndMessage) {
+            super(USER_NOT_EXIST_ERROR_MESSAGE, codeAndMessage);
         }
     }
 
     private static final class UserEmailConflictException extends UserTypeException {
-        public UserEmailConflictException(
-            final String detailMessage,
-            final CodeAndMessage codeAndMessage
-        ) {
-            super(detailMessage, codeAndMessage);
+        public UserEmailConflictException(final UserCodeAndMessage codeAndMessage) {
+            super(CONFLICT_EMAIL_ERROR_MESSAGE, codeAndMessage);
         }
     }
 
     private static final class UserUnResolvedException extends UserTypeException {
-        public UserUnResolvedException(final CodeAndMessage codeAndMessage) {
+        public UserUnResolvedException(final UserCodeAndMessage codeAndMessage) {
             super(UN_RESOLVED_MESSAGE, codeAndMessage);
         }
     }

@@ -12,6 +12,7 @@ import project.dailyge.domain.user.UserJpaRepository;
 import java.util.Optional;
 
 import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.INVALID_USER_ID;
+import static project.dailyge.app.common.exception.UnAuthorizedException.USER_NOT_FOUND_MESSAGE;
 import static project.dailyge.app.core.user.exception.UserCodeAndMessage.USER_NOT_FOUND;
 
 @Service
@@ -29,7 +30,7 @@ class UserReadService implements UserReadUseCase {
     @Override
     public UserJpaEntity findAuthorizedById(final Long userId) {
         return userRepository.findById(userId)
-            .orElseThrow(() -> new UnAuthorizedException("존재하지 않는 유저 정보입니다.", INVALID_USER_ID));
+            .orElseThrow(() -> new UnAuthorizedException(USER_NOT_FOUND_MESSAGE, INVALID_USER_ID));
     }
 
     @Override

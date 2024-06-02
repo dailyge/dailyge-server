@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import project.dailyge.app.core.user.application.UserReadUseCase;
 import project.dailyge.app.core.user.application.service.UserWriteService;
-import project.dailyge.app.core.user.dto.request.UserRegisterRequest;
 import project.dailyge.app.core.user.exception.UserTypeException;
 import project.dailyge.domain.user.UserJpaEntity;
 
@@ -21,11 +20,11 @@ public class UserFacade {
     private final UserWriteService userWriteService;
 
     @Transactional(rollbackFor = Exception.class)
-    public UserJpaEntity save(final UserRegisterRequest request) {
-        Optional<UserJpaEntity> findUser = userReadUseCase.findByEmail(request.email());
+    public UserJpaEntity save(final UserJpaEntity userJpaEntity) {
+        Optional<UserJpaEntity> findUser = userReadUseCase.findByEmail(userJpaEntity.getEmail());
         if (findUser.isPresent()) {
             throw UserTypeException.from(USER_EMAIL_CONFLICT);
         }
-        return userWriteService.save(request.toEntity());
+        return userWriteService.save(userJpaEntity);
     }
 }

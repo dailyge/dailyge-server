@@ -16,17 +16,52 @@ Dailyge API 문서
 
 - - -
 
-== 📝 1. 할 일(Task)
+== 📝 1. 사용자(User)
 
 [cols=6*]
 
 |===
 | 기능 | Method | 인증 | API | Success | Failure
 
-| <<1-1. 할일 등록>> | POST|O|/api/tasks | 201 | 400, 401, 403, 429, 500, 502
+| <<_1_1_사용자_정보_조회>> | GET|O|/api/users/{userId} | 200 | 400, 401, 403, 404, 422, 429, 500, 502
 |===
 
-### 1-1. 할일 등록
+### 1.1 사용자 정보 조회
+
+사용자 정보를 조회합니다.
+
+#### Request
+
+include::{snippets}/user_detail_search_documentation_test\when_user_exists_then_status_code_should_be200_ok\http-request.adoc[]
+
+#### Request-Header
+
+include::{snippets}/user_detail_search_documentation_test\when_user_exists_then_status_code_should_be200_ok\request-headers.adoc[]
+
+#### Path-Parameters
+
+include::{snippets}/user_detail_search_documentation_test\when_user_exists_then_status_code_should_be200_ok\path-parameters.adoc[]
+
+#### Response
+
+include::{snippets}/user_detail_search_documentation_test\when_user_exists_then_status_code_should_be200_ok\http-response.adoc[]
+
+#### Response-Fields
+
+include::{snippets}/user_detail_search_documentation_test\when_user_exists_then_status_code_should_be200_ok\response-fields.adoc[]
+
+
+== 📝 2. 할 일(Task)
+
+[cols=6*]
+
+|===
+| 기능 | Method | 인증 | API | Success | Failure
+
+| <<2-1. 할일 등록>> | POST|O|/api/tasks | 201 | 400, 401, 403, 429, 500, 502
+|===
+
+### 2-1. 할일 등록
 
 오늘 할 일을 등록하는 API 입니다.
 

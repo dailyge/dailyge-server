@@ -9,9 +9,13 @@ public final class UserFixture {
     }
 
     public static final String NICKNAME = "test";
-    public static final String EMAIL = "test@email.com";
+    public static final String EMAIL = "test@gmail.com";
 
     public static UserJpaEntity createUserJpaEntity(Long userId) {
         return new UserJpaEntity(userId, NICKNAME, EMAIL);
+    }
+
+    public static UserJpaEntity createUserJpaEntity() {
+        return new UserJpaEntity(NICKNAME, EMAIL);
     }
 }

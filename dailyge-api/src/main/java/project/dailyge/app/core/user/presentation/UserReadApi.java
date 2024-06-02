@@ -10,6 +10,7 @@ import project.dailyge.app.common.auth.LoginUser;
 import project.dailyge.app.common.response.ApiResponse;
 import project.dailyge.app.core.user.application.UserReadUseCase;
 import project.dailyge.app.core.user.dto.response.UserInfoResponse;
+import project.dailyge.domain.user.UserJpaEntity;
 
 import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.OK;
 
@@ -24,10 +25,11 @@ public class UserReadApi {
     @GetMapping(path =  "/{userId}")
     public ApiResponse<UserInfoResponse> findUserById(
         @LoginUser final DailygeUser dailygeUser,
-        @PathVariable final Long userId
+        @PathVariable(value = "userId") final Long userId
     ) {
         userVaildator.validate(dailygeUser.getUserId(), userId);
-        UserInfoResponse payload = userReadUseCase.findUserInfoById(userId);
+        final UserJpaEntity findUser = userReadUseCase.findById(userId);
+        final UserInfoResponse payload = new UserInfoResponse(findUser);
         return ApiResponse.from(OK, payload);
     }
 }

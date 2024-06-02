@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import project.dailyge.app.common.exception.UnAuthorizedException;
 import project.dailyge.app.core.user.application.UserReadUseCase;
-import project.dailyge.app.core.user.dto.response.UserInfoResponse;
 import project.dailyge.app.core.user.exception.UserTypeException;
 import project.dailyge.domain.user.UserJpaEntity;
 import project.dailyge.domain.user.UserJpaRepository;
@@ -31,15 +30,6 @@ class UserReadService implements UserReadUseCase {
     public UserJpaEntity findAuthorizedById(final Long userId) {
         return userRepository.findById(userId)
             .orElseThrow(() -> new UnAuthorizedException(USER_NOT_FOUND_MESSAGE, INVALID_USER_ID));
-    }
-
-    @Override
-    public UserInfoResponse findUserInfoById(final Long userId) {
-        final UserJpaEntity findUser = findById(userId);
-        if (findUser == null) {
-            throw UserTypeException.from(USER_NOT_FOUND);
-        }
-        return new UserInfoResponse(findUser);
     }
 
     @Override

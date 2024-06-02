@@ -1,9 +1,11 @@
 package project.dailyge.domain.user;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import project.dailyge.domain.BaseEntity;
 
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 @Getter
@@ -95,5 +97,17 @@ public class UserJpaEntity extends BaseEntity {
         if (!Pattern.matches(EMAIL_PATTERN, email)) {
             throw new IllegalArgumentException(INVALID_EMAIL_ERROR_MESSAGE);
         }
+    }
+
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserJpaEntity user = (UserJpaEntity) o;
+        return Objects.equals(id, user.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

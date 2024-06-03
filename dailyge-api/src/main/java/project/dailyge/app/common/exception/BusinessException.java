@@ -4,17 +4,17 @@ import lombok.Getter;
 import project.dailyge.app.common.codeandmessage.CodeAndMessage;
 
 @Getter
-public class CommonException extends RuntimeException {
+public class BusinessException extends RuntimeException {
 
     private String detailMessage;
     private final CodeAndMessage codeAndMessage;
 
-    public CommonException(final CodeAndMessage codeAndMessage) {
+    public BusinessException(final CodeAndMessage codeAndMessage) {
         super(codeAndMessage.message());
         this.codeAndMessage = codeAndMessage;
     }
 
-    public CommonException(
+    public BusinessException(
         final String detailMessage,
         final CodeAndMessage codeAndMessage
     ) {
@@ -22,4 +22,5 @@ public class CommonException extends RuntimeException {
         this.detailMessage = detailMessage;
         this.codeAndMessage = codeAndMessage;
     }
+
 }

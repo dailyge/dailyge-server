@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.dailyge.app.core.user.application.UserWriteUseCase;
-import project.dailyge.domain.user.User;
+import project.dailyge.domain.user.UserJpaEntity;
 import project.dailyge.domain.user.UserJpaRepository;
 
 @Service
@@ -15,7 +15,7 @@ public class UserWriteService implements UserWriteUseCase {
 
     @Override
     @Transactional
-    public User save(final User user) {
+    public UserJpaEntity save(final UserJpaEntity user) {
         return userJpaRepository.save(user);
     }
 }

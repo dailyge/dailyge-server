@@ -66,16 +66,16 @@ public class UserSearchIntegrationTest extends IntegrationTestBase {
     @DisplayName("등록된 이메일로 사용자를 조회 시, Optional 값이 존재한다.")
     void whenFindUserByExistEmailThenIsPresentTrue() {
         final UserJpaEntity saveUser = userWriteUseCase.save(UserFixture.createUserJpaEntity());
-        final Optional<UserJpaEntity> byEmail = userReadUseCase.findByEmail(saveUser.getEmail());
+        final Optional<UserJpaEntity> findUser = userReadUseCase.findByEmail(saveUser.getEmail());
 
-        Assertions.assertTrue(byEmail.isPresent());
+        Assertions.assertTrue(findUser.isPresent());
     }
 
     @Test
     @DisplayName("등록되지 않은 이메일로 사용자를 조회 시, Optional 값이 존재하지 않는다.")
     void whenFindUserByNotExistEmailThenIsPresentFalse() {
-        final Optional<UserJpaEntity> byEmail = userReadUseCase.findByEmail("notExist@gmail.com");
+        final Optional<UserJpaEntity> findUser = userReadUseCase.findByEmail("notExist@gmail.com");
 
-        Assertions.assertFalse(byEmail.isPresent());
+        Assertions.assertFalse(findUser.isPresent());
     }
 }

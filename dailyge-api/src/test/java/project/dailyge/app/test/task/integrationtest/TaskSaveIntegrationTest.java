@@ -23,12 +23,12 @@ public class TaskSaveIntegrationTest extends IntegrationTestBase {
     private UserWriteUseCase userWriteUseCase;
 
     @Test
-    @DisplayName("할 일이 저장되면, PK가 Null이 아니다.")
-    void taskSaveTest() {
-        UserJpaEntity newUser = userWriteUseCase.save(UserFixture.createUserJpaEntity(1L));
-        TaskJpaEntity newTask = new TaskJpaEntity("독서", "Kafka 완벽가이드 1~30p 읽기", now(), TODO, newUser.getId());
+    @DisplayName("할 일이 저장되면, Id가 Null이 아니다.")
+    void whenSaveTaskThenTaskIdShouldNotBeNull() {
+        final UserJpaEntity newUser = userWriteUseCase.save(UserFixture.createUserJpaEntity(1L));
+        final TaskJpaEntity newTask = new TaskJpaEntity("독서", "Kafka 완벽가이드 1~30p 읽기", now(), TODO, newUser.getId());
 
-        TaskJpaEntity savedTask = taskFacade.save(newTask);
+        final TaskJpaEntity savedTask = taskFacade.save(newTask);
 
         assertNotNull(savedTask.getId());
     }

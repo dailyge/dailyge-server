@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class UserJpaEntityTest {
 
 	private static final String NICKNAME = "nickname";
-	private static final String EMAIL = "email@domain.com";
+	private static final String EMAIL = "email@gmail.com";
 	private static final String PROFILE_IMAGE_URL = "profileImgUrl.jpg";
 
 	@Test

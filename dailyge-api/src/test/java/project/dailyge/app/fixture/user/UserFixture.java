@@ -2,6 +2,8 @@ package project.dailyge.app.fixture.user;
 
 import project.dailyge.domain.user.UserJpaEntity;
 
+import java.time.LocalDateTime;
+
 public final class UserFixture {
 
     private UserFixture() {
@@ -16,6 +18,6 @@ public final class UserFixture {
     }
 
     public static UserJpaEntity createUserJpaEntity() {
-        return new UserJpaEntity(NICKNAME, EMAIL);
+        return new UserJpaEntity(null, NICKNAME, EMAIL, LocalDateTime.now());
     }
 }

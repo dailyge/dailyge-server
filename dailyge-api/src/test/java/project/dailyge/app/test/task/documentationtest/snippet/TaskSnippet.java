@@ -42,6 +42,10 @@ public interface TaskSnippet {
         parameterWithName("taskId").description("할 일 ID")
     };
 
+    ParameterDescriptor[] TASK_DELETE_PATH_DESCRIPTOR = {
+        parameterWithName("taskId").description("할 일 ID")
+    };
+
     FieldDescriptor[] TASK_DETAIL_SEARCH_RESPONSE_FIELD_DESCRIPTOR = {
         fieldWithPath("data.id").type(NUMBER).description("할 일 ID"),
         fieldWithPath("data.title").type(STRING).description("제목"),
@@ -52,10 +56,13 @@ public interface TaskSnippet {
         fieldWithPath("message").type(STRING).description("응답 메시지")
     };
 
-
     RequestFieldsSnippet TASK_CREATE_REQUEST_SNIPPET = requestFields(TASK_CREATE_REQUEST_FIELDS);
     ResponseFieldsSnippet TASK_CREATE_RESPONSE_SNIPPET = responseFields(TASK_CREATE_RESPONSE);
 
+    // Detail Search
     PathParametersSnippet TASK_DETAIL_SEARCH_PATH_PARAMETER_SNIPPET = pathParameters(TASK_DETAIL_SEARCH_PATH_DESCRIPTOR);
     ResponseFieldsSnippet TASK_DETAIL_SEARCH_RESPONSE_SNIPPET = responseFields(TASK_DETAIL_SEARCH_RESPONSE_FIELD_DESCRIPTOR);
+
+    // Delete
+    PathParametersSnippet TASK_DELETE_PATH_PARAMETER_SNIPPET = pathParameters(TASK_DELETE_PATH_DESCRIPTOR);
 }

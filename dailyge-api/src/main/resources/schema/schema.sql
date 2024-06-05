@@ -28,6 +28,6 @@ CREATE TABLE IF NOT EXISTS users
     created_by        BIGINT                                NULL COMMENT '생성한 사람',
     last_modified_at  DATETIME(6)                           NULL COMMENT '최종 수정일',
     last_modified_by  BIGINT                                NULL COMMENT '최종 수정한 사람',
-    deleted           BIT                                   NOT NULL COMMENT '삭제 유무'
-    constraint UK_6dotkott2kjsp8vw4d0m25fb7 unique (email)
+    deleted           BIT                                   NOT NULL COMMENT '삭제 유무',
+    deleted_at        DATETIME(6)                           NULL COMMENT '삭제일'
 ) engine 'InnoDB' COMMENT '사용자';

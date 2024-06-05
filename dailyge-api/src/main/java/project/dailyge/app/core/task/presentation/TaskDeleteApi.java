@@ -20,7 +20,7 @@ public class TaskDeleteApi {
     private final TaskFacade taskFacade;
 
     @DeleteMapping(path = {"/{taskId}"})
-    public ApiResponse<TaskRegisterResponse> registerTask(
+    public ApiResponse<TaskRegisterResponse> deleteTaskById(
         @LoginUser final DailygeUser dailygeUser,
         @PathVariable(name = "taskId") final Long taskId
     ) {

@@ -36,12 +36,21 @@ class TaskValidatorUnitTest {
 
     @Test
     @DisplayName("일반 사용자일 때, 자신이 작성한 할 일이 아니라면, UnAuthorizedException이 발생한다.")
-    void whenNormalUserThenAuthExceptionShouldBeHappen() {
+    void whenNormalUserIsNotTaskOwnerThenAuthExceptionShouldBeHappen() {
         final DailygeUser dailygeUser = new DailygeUser(1L, NORMAL);
         final TaskJpaEntity newTask = new TaskJpaEntity("독서", "Kafka 완벽가이드 1~30p 읽기", now(), TODO, 300L);
 
         assertThatThrownBy(() -> validator.validateAuth(dailygeUser, newTask))
             .isInstanceOf(UnAuthorizedException.class)
             .hasMessage(UN_AUTHORIZED.message());
+    }
+
+    @Test
+    @DisplayName("일반 사용자일 때, 자신이 작성한 할 일이라면, 예외가 발생하지 않는다.")
+    void whenNormalUserIsTaskOwnerThenAuthExceptionShouldNotBeHappen() {
+        final DailygeUser dailygeUser = new DailygeUser(1L, NORMAL);
+        final TaskJpaEntity newTask = new TaskJpaEntity("독서", "Kafka 완벽가이드 1~30p 읽기", now(), TODO, dailygeUser.getUserId());
+
+        assertDoesNotThrow(() -> validator.validateAuth(dailygeUser, newTask));
     }
 }

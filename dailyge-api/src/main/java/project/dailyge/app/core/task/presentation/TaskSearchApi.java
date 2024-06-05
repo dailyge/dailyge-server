@@ -16,7 +16,7 @@ import project.dailyge.domain.task.TaskJpaEntity;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/tasks")
-public class TaskReadApi {
+public class TaskSearchApi {
 
     private final TaskReadUseCase taskReadUseCase;
 

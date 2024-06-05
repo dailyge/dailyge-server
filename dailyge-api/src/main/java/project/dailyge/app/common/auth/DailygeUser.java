@@ -1,6 +1,8 @@
 package project.dailyge.app.common.auth;
 
 import lombok.Getter;
+import project.dailyge.domain.user.Role;
+import static project.dailyge.domain.user.Role.ADMIN;
 import project.dailyge.domain.user.UserJpaEntity;
 
 import java.util.Objects;
@@ -9,13 +11,23 @@ import java.util.Objects;
 public class DailygeUser {
 
     private final Long userId;
+    private final Role role;
 
-    public DailygeUser(final Long userId) {
+    public DailygeUser(
+        final Long userId,
+        final Role role
+    ) {
         this.userId = userId;
+        this.role = role;
     }
 
     public DailygeUser(final UserJpaEntity user) {
         this.userId = user.getId();
+        this.role = user.getRole();
+    }
+
+    public boolean isAdmin() {
+        return ADMIN.equals(this.role);
     }
 
     @Override

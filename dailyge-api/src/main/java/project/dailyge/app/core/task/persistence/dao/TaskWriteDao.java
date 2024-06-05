@@ -1,19 +1,20 @@
 package project.dailyge.app.core.task.persistence.dao;
 
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import project.dailyge.app.core.task.persistence.TaskEntityWriteRepository;
 import project.dailyge.domain.task.TaskJpaEntity;
-import project.dailyge.domain.task.TaskJpaRepository;
 
 @Repository
 @RequiredArgsConstructor
 class TaskWriteDao implements TaskEntityWriteRepository {
 
-    private final TaskJpaRepository taskRepository;
+    private final EntityManager entityManager;
 
     @Override
     public TaskJpaEntity save(final TaskJpaEntity task) {
-        return taskRepository.save(task);
+        entityManager.persist(task);
+        return task;
     }
 }

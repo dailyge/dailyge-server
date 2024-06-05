@@ -18,9 +18,8 @@ public class BusinessException extends RuntimeException {
         final String detailMessage,
         final CodeAndMessage codeAndMessage
     ) {
-        super(detailMessage);
+        super(codeAndMessage.message());
         this.detailMessage = detailMessage;
         this.codeAndMessage = codeAndMessage;
     }
-
 }

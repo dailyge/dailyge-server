@@ -50,7 +50,6 @@ include::{snippets}/user_detail_search_documentation_test\when_user_exists_then_
 
 include::{snippets}/user_detail_search_documentation_test\when_user_exists_then_status_code_should_be200_ok\response-fields.adoc[]
 
-
 == 📝 2. 할 일(Task)
 
 [cols=6*]
@@ -58,10 +57,36 @@ include::{snippets}/user_detail_search_documentation_test\when_user_exists_then_
 |===
 | 기능 | Method | 인증 | API | Success | Failure
 
-| <<2-1. 할일 등록>> | POST|O|/api/tasks | 201 | 400, 401, 403, 429, 500, 502
+| <<2-1. 할일 상세 조회>> |GET | O | /api/tasks | 200 | 400, 401, 403, 429, 500, 502
+| <<2-2. 할일 등록>> | POST | O | /api/tasks | 201 | 400, 401, 403, 429, 500, 502
+| <<2-4. 할일 삭제>> | DELETE | O | /api/tasks | 201 | 400, 401, 403, 429, 500, 502
 |===
 
-### 2-1. 할일 등록
+### 2-1. 할일 상세 조회
+
+오늘 할 일 상세 조회하는 API 입니다.
+
+#### Request
+
+include::{snippets}/task_detail_search_documentation_test/when_task_exists_then_status_code_should_be200_ok/http-request.adoc[]
+
+#### Request-Header
+
+include::{snippets}/task_detail_search_documentation_test/when_task_exists_then_status_code_should_be200_ok/request-headers.adoc[]
+
+#### Request-Path-Parameters
+
+include::{snippets}/task_detail_search_documentation_test/when_task_exists_then_status_code_should_be200_ok/path-parameters.adoc[]
+
+#### Response
+
+include::{snippets}/task_detail_search_documentation_test/when_task_exists_then_status_code_should_be200_ok/http-response.adoc[]
+
+#### Response-Fields
+
+include::{snippets}/task_detail_search_documentation_test/when_task_exists_then_status_code_should_be200_ok/response-fields.adoc[]
+
+### 2-2. 할일 등록
 
 오늘 할 일을 등록하는 API 입니다.
 
@@ -84,3 +109,23 @@ include::{snippets}/task_jpa_entity_save_documentation_test/task_save_test/http-
 #### Response-Fields
 
 include::{snippets}/task_jpa_entity_save_documentation_test/task_save_test/response-fields.adoc[]
+
+### 2-4. 할일 삭제
+
+오늘 할 일을 삭제하는 API 입니다.
+
+#### Request
+
+include::{snippets}/task_delete_documentation_test/when_delete_task_then_status_code_should_be204_no_content/http-request.adoc[]
+
+#### Request-Header
+
+include::{snippets}/task_delete_documentation_test/when_delete_task_then_status_code_should_be204_no_content/request-headers.adoc[]
+
+#### Request-Path-Parameters
+
+include::{snippets}/task_delete_documentation_test/when_delete_task_then_status_code_should_be204_no_content/path-parameters.adoc[]
+
+#### Response
+
+include::{snippets}/task_delete_documentation_test/when_delete_task_then_status_code_should_be204_no_content/http-response.adoc[]

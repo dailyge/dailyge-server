@@ -106,9 +106,9 @@ public class TaskJpaEntity extends BaseEntity {
     }
 
     private void validate(
-        String title,
-        String content,
-        LocalDate date
+        final String title,
+        final String content,
+        final LocalDate date
     ) {
         if (title.length() > MAX_TITLE_LENGTH) {
             throw new IllegalArgumentException(OVER_MAX_TITLE_LENGTH_ERROR_MESSAGE);
@@ -117,12 +117,12 @@ public class TaskJpaEntity extends BaseEntity {
             throw new IllegalArgumentException(OVER_MAX_CONTENT_LENGTH_ERROR_MESSAGE);
         }
 
-        LocalDate today = LocalDate.now();
+        final LocalDate today = LocalDate.now();
         if (date.isBefore(today)) {
             throw new IllegalArgumentException(PAST_DATE_ERROR_MESSAGE);
         }
 
-        LocalDate afterOneYear = today.plusYears(1);
+        final LocalDate afterOneYear = today.plusYears(1);
         if (date.isAfter(afterOneYear)) {
             throw new IllegalArgumentException(BEYOND_ONE_YEAR_ERROR_MESSAGE);
         }
@@ -146,6 +146,10 @@ public class TaskJpaEntity extends BaseEntity {
 
     public boolean isOwner(Long userId) {
         return this.userId.equals(userId);
+    }
+
+    public void delete() {
+        this.deleted = true;
     }
 
     @Override

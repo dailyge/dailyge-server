@@ -1,6 +1,6 @@
 package project.dailyge.domain.user;
 
-public enum UserRole {
+public enum Role {
     NORMAL,
     ADMIN;
 }

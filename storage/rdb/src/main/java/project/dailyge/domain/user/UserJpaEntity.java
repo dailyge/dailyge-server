@@ -37,7 +37,7 @@ public class UserJpaEntity extends BaseEntity {
 
     @Column(name = "user_role")
     @Enumerated(EnumType.STRING)
-    private UserRole userRole;
+    private Role role;
 
     public UserJpaEntity(
         final Long userId,
@@ -48,7 +48,7 @@ public class UserJpaEntity extends BaseEntity {
         this.id = userId;
         this.nickname = nickname;
         this.email = email;
-        this.userRole = UserRole.NORMAL;
+        this.role = Role.NORMAL;
     }
 
     public UserJpaEntity(
@@ -61,7 +61,7 @@ public class UserJpaEntity extends BaseEntity {
         this.id = userId;
         this.nickname = nickname;
         this.email = email;
-        this.userRole = UserRole.NORMAL;
+        this.role = Role.NORMAL;
         this.createdAt = createdAt;
     }
 
@@ -72,7 +72,7 @@ public class UserJpaEntity extends BaseEntity {
         validate(nickname, email);
         this.nickname = nickname;
         this.email = email;
-        this.userRole = UserRole.NORMAL;
+        this.role = Role.NORMAL;
     }
 
     public UserJpaEntity(
@@ -84,7 +84,7 @@ public class UserJpaEntity extends BaseEntity {
         this.nickname = nickname;
         this.email = email;
         this.profileImageUrl = profileImageUrl;
-        this.userRole = UserRole.NORMAL;
+        this.role = Role.NORMAL;
     }
 
     private void validate(

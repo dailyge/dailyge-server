@@ -19,6 +19,7 @@ import project.dailyge.app.core.user.application.UserWriteUseCase;
 import static project.dailyge.app.fixture.user.UserFixture.createUserJpaEntity;
 import project.dailyge.domain.task.TaskJpaEntity;
 import static project.dailyge.domain.task.TaskStatus.TODO;
+import static project.dailyge.domain.user.Role.NORMAL;
 import project.dailyge.domain.user.UserJpaEntity;
 
 @DisplayName("[IntegrationTest] 할 일 조회 통합 테스트")
@@ -53,7 +54,7 @@ public class TaskSearchIntegrationTest extends IntegrationTestBase {
         final UserJpaEntity newUser = userWriteUseCase.save(createUserJpaEntity());
         final TaskJpaEntity newTask = new TaskJpaEntity("독서", "Kafka 완벽가이드 1~30p 읽기", now(), TODO, newUser.getId());
         final Long unAuthorizedUserId = Long.MAX_VALUE;
-        final DailygeUser dailygeUser = new DailygeUser(unAuthorizedUserId);
+        final DailygeUser dailygeUser = new DailygeUser(unAuthorizedUserId, NORMAL);
 
         final TaskJpaEntity savedTask = taskFacade.save(newTask);
 
@@ -66,7 +67,7 @@ public class TaskSearchIntegrationTest extends IntegrationTestBase {
     @DisplayName("할 일이 존재하지 않으면, TaskTypeException이 발생한다.")
     void whenTaskNotExistsThenIdShouldNotBeNull() {
         final Long invalidTaskId = 300_000_000L;
-        final DailygeUser invalidDailygeUser = new DailygeUser(invalidTaskId);
+        final DailygeUser invalidDailygeUser = new DailygeUser(invalidTaskId, NORMAL);
         userWriteUseCase.save(createUserJpaEntity());
 
         assertThatThrownBy(() -> taskReadUseCase.findById(invalidDailygeUser, invalidTaskId))

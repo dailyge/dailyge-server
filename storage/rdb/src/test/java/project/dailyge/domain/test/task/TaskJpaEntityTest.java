@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import project.dailyge.domain.task.TaskJpaEntity;
@@ -134,6 +135,29 @@ class TaskJpaEntityTest {
                 .build()
         ).isInstanceOf(IllegalArgumentException.class)
             .hasMessageContaining(getBeyondOneYearErrorMessage());
+    }
+
+    @Test
+    @DisplayName("할 일이 삭제되었다면, deleted 칼럼이 true가 된다.")
+    void whenDeleteTaskThenDeleteStatusShouldBeTrue() {
+        final LocalDateTime now = LocalDateTime.now();
+        final TaskJpaEntity task = TaskJpaEntity.builder()
+            .id(1L)
+            .title("프로젝트 관리")
+            .content("프로젝트 진행 상황 점검")
+            .date(LocalDate.now().plusDays(10))
+            .status(TaskStatus.TODO)
+            .userId(1L)
+            .createdAt(now)
+            .createdBy(1L)
+            .lastModifiedAt(now)
+            .lastModifiedBy(1L)
+            .deleted(false)
+            .build();
+
+        task.delete();
+
+        assertTrue(task.getDeleted());
     }
 
     @Test

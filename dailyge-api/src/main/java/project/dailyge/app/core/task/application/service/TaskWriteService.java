@@ -7,8 +7,8 @@ import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.core.task.application.TaskWriteUseCase;
 import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.TASK_NOT_FOUND;
 import project.dailyge.app.core.task.exception.TaskTypeException;
-import project.dailyge.app.core.task.persistence.TaskEntityReadRepository;
-import project.dailyge.app.core.task.persistence.TaskEntityWriteRepository;
+import project.dailyge.domain.task.TaskEntityWriteRepository;
+import project.dailyge.domain.task.TaskEntityReadRepository;
 import project.dailyge.domain.task.TaskJpaEntity;
 
 @Service

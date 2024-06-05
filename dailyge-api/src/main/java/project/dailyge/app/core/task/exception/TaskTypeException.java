@@ -9,7 +9,7 @@ public sealed class TaskTypeException extends BusinessException {
     private static final String TASK_NOT_FOUND_MESSAGE = "할 일을 찾을 수 없습니다.";
     private static final String TASK_UN_RESOLVED_MESSAGE = "해결되지 못한 할 일 예외입니다.";
 
-    public TaskTypeException(
+    private TaskTypeException(
         final String detailMessage,
         final CodeAndMessage codeAndMessage
     ) {

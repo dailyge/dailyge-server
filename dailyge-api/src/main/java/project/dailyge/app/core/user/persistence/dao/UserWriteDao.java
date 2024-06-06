@@ -19,10 +19,4 @@ public class UserWriteDao implements UserEntityWriteRepository {
         entityManager.persist(user);
         return user;
     }
-
-    @Override
-    @Transactional
-    public void delete(UserJpaEntity user) {
-        entityManager.remove(user);
-    }
 }

@@ -19,12 +19,12 @@ public class UserDeleteApi {
     private final UserWriteUseCase userWriteUseCase;
 
     @DeleteMapping(path = "/{userId}")
-    public ApiResponse userDelete(
+    public ApiResponse<Void> userDelete(
         @LoginUser DailygeUser dailygeUser,
         @PathVariable(name = "userId") Long userId
     ) {
         dailygeUser.isOwner(userId);
         userWriteUseCase.delete(userId);
-        return ApiResponse.from(CommonCodeAndMessage.OK, null);
+        return ApiResponse.from(CommonCodeAndMessage.NO_CONTENT, null);
     }
 }

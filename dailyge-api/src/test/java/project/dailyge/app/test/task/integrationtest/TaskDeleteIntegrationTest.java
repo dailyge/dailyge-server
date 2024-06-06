@@ -13,7 +13,7 @@ import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.TASK_NO
 import project.dailyge.app.core.task.exception.TaskTypeException;
 import project.dailyge.app.core.task.facade.TaskFacade;
 import project.dailyge.app.core.user.application.UserWriteUseCase;
-import static project.dailyge.app.core.user.exception.UserCodeAndMessage.USER_NOT_FOUND;
+import static project.dailyge.app.core.user.exception.UserCodeAndMessage.ACTIVE_USER_NOT_FOUND;
 import project.dailyge.app.core.user.exception.UserTypeException;
 import static project.dailyge.app.fixture.user.UserFixture.createUserJpaEntity;
 import project.dailyge.domain.task.TaskJpaEntity;
@@ -42,7 +42,7 @@ public class TaskDeleteIntegrationTest extends IntegrationTestBase {
 
         assertThatThrownBy(() -> taskFacade.delete(dailygeUser, savedTask.getId()))
             .isInstanceOf(UserTypeException.class)
-            .hasMessage(USER_NOT_FOUND.message());
+            .hasMessage(ACTIVE_USER_NOT_FOUND.message());
     }
 
     @Test

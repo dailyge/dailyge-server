@@ -16,7 +16,7 @@ public class TaskFacade {
     private final TaskWriteUseCase taskWriteUseCase;
 
     public TaskJpaEntity save(final TaskJpaEntity task) {
-        final UserJpaEntity findUser = userReadUseCase.findById(task.getUserId());
+        final UserJpaEntity findUser = userReadUseCase.findActiveById(task.getUserId());
         return taskWriteUseCase.save(task);
     }
 
@@ -24,7 +24,7 @@ public class TaskFacade {
         final DailygeUser dailygeUser,
         final Long taskId
     ) {
-        final UserJpaEntity findUser = userReadUseCase.findById(dailygeUser.getUserId());
+        final UserJpaEntity findUser = userReadUseCase.findActiveById(dailygeUser.getUserId());
         taskWriteUseCase.delete(dailygeUser, taskId);
     }
 }

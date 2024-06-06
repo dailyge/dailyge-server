@@ -20,15 +20,14 @@ public class UserDeleteDocumentationTest extends DocumentationTestBase {
     private UserWriteUseCase userWriteUseCase;
 
     @Test
-    @DisplayName("사용자 삭제 테스트")
-    void whenDeleteExistsUserThenShould200_Ok() {
+    @DisplayName("사용자를 삭제하면, 204 NO_CONTENT 응답을 받는다.")
+    void whenDeleteExistsUserThenStatusCodeShouldBe204_NO_CONTENT() {
         UserJpaEntity saveUser = userWriteUseCase.save(UserFixture.createUserJpaEntity());
 
         RestAssured.given(this.specification)
             .filter(document(IDENTIFIER,
-                    USER_AUTHORIZATION_HEADER,
-                    USER_DELETE_PATH_PARAMETER_SNIPPET,
-                    USER_DELETE_RESPONSE_SNIPPET
+                USER_AUTHORIZATION_HEADER,
+                USER_DELETE_PATH_PARAMETER_SNIPPET
             ))
             .contentType(ContentType.JSON)
             .header(AUTHORIZATION, "Token")
@@ -36,7 +35,7 @@ public class UserDeleteDocumentationTest extends DocumentationTestBase {
             .when()
             .delete("/api/users/{userId}", saveUser.getId())
             .then()
-            .statusCode(200)
+            .statusCode(204)
             .log()
             .all();
     }

@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import project.dailyge.app.common.DocumentationTestBase;
 import project.dailyge.app.core.user.application.UserReadUseCase;
-import project.dailyge.app.core.user.application.facade.UserFacade;
+import project.dailyge.app.core.user.application.UserWriteUseCase;
 import project.dailyge.app.core.user.dto.request.UserRegisterRequest;
 import project.dailyge.domain.user.UserJpaEntity;
 
@@ -18,7 +18,7 @@ import static project.dailyge.app.test.user.documentationtest.snippet.UserSnippe
 class UserDetailSearchDocumentationTest extends DocumentationTestBase {
 
     @Autowired
-    private UserFacade userFacade;
+    private UserWriteUseCase userWriteUseCase;
 
     @Autowired
     private UserReadUseCase userReadUseCase;
@@ -27,7 +27,7 @@ class UserDetailSearchDocumentationTest extends DocumentationTestBase {
     @DisplayName("사용자가 존재하면 200 OK 응답을 받는다.")
     void whenUserExistsThenStatusCodeShouldBe200_OK() {
         final UserRegisterRequest request = new UserRegisterRequest("testName", "test@gmail.com", null);
-        UserJpaEntity saveUser = userFacade.save(request.toEntity());
+        UserJpaEntity saveUser = userWriteUseCase.save(request.toEntity());
 
         given(this.specification)
             .filter(document(IDENTIFIER,

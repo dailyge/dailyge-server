@@ -25,7 +25,7 @@ public class UserReadDao implements UserEntityReadRepository {
     }
 
     @Override
-    public Optional<UserJpaEntity> findActiveById(final Long userId) {
+    public Optional<UserJpaEntity> findActiveUserById(final Long userId) {
         return Optional.ofNullable(queryFactory
             .selectFrom(userJpaEntity)
             .where(

@@ -7,7 +7,7 @@ import java.util.Optional;
 public interface UserReadUseCase {
     UserJpaEntity findById(Long userId);
 
-    UserJpaEntity findActiveById(Long userId);
+    UserJpaEntity findActiveUserById(Long userId);
 
     UserJpaEntity findAuthorizedById(Long userId);
 

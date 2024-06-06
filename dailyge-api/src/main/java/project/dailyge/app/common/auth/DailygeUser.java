@@ -5,6 +5,7 @@ import project.dailyge.app.common.exception.UnAuthorizedException;
 import project.dailyge.domain.user.Role;
 
 import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
+import static project.dailyge.app.common.exception.UnAuthorizedException.USER_NOT_MATCH_MESSAGE;
 import static project.dailyge.domain.user.Role.ADMIN;
 import project.dailyge.domain.user.UserJpaEntity;
 
@@ -12,8 +13,6 @@ import java.util.Objects;
 
 @Getter
 public class DailygeUser {
-
-    private static final String USER_NOT_MATCH_MESSAGE = "사용자 정보가 일치 하지 않습니다.";
 
     private final Long userId;
     private final Role role;

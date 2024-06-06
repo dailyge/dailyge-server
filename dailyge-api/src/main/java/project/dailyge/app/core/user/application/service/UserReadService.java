@@ -28,15 +28,14 @@ class UserReadService implements UserReadUseCase {
     }
 
     @Override
-    public UserJpaEntity findActiveById(final Long userId) {
-        final UserJpaEntity user = readRepository.findActiveById(userId)
+    public UserJpaEntity findActiveUserById(final Long userId) {
+        return readRepository.findActiveUserById(userId)
             .orElseThrow(() -> UserTypeException.from(ACTIVE_USER_NOT_FOUND));
-        return user;
     }
 
     @Override
     public UserJpaEntity findAuthorizedById(final Long userId) {
-        return readRepository.findActiveById(userId)
+        return readRepository.findActiveUserById(userId)
             .orElseThrow(() -> new UnAuthorizedException(USER_NOT_FOUND_MESSAGE, INVALID_USER_ID));
     }
 

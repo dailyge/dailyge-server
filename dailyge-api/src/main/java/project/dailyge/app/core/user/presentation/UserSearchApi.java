@@ -27,7 +27,7 @@ public class UserSearchApi {
         @PathVariable(value = "userId") final Long userId
     ) {
         dailygeUser.isOwner(userId);
-        final UserJpaEntity findUser = userReadUseCase.findActiveById(userId);
+        final UserJpaEntity findUser = userReadUseCase.findActiveUserById(userId);
         final UserInfoResponse payload = new UserInfoResponse(findUser);
         return ApiResponse.from(OK, payload);
     }

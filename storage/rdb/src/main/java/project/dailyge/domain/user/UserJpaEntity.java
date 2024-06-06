@@ -24,7 +24,7 @@ public class UserJpaEntity extends BaseEntity {
     private final static String OVER_MAX_EMAIL_LENGTH_ERROR_MESSAGE = "입력 가능한 이메일 길이를 초과했습니다.";
     private final static String INVALID_EMAIL_ERROR_MESSAGE = "유효하지 않는 이메일 형식입니다.";
     private final static String OVER_MAX_PROFILE_IMAGE_URL_ERROR_MESSAGE = "입력 가능한 프로필 사진 URL 길이를 초과했습니다.";
-    private final static String USER_HAS_ALREADY_DELETED = "이미 탈퇴한 유저입니다.";
+    private final static String USER_ALREADY_DELETED_MESSAGE = "이미 탈퇴한 유저입니다.";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -122,10 +122,30 @@ public class UserJpaEntity extends BaseEntity {
 
     public void delete() {
         if (this.deleted) {
-            throw new IllegalArgumentException(USER_HAS_ALREADY_DELETED);
+            throw new IllegalArgumentException(USER_ALREADY_DELETED_MESSAGE);
         }
         this.deleted = TRUE;
         this.deletedAt = LocalDateTime.now();
+    }
+
+    public static String getOverMaxNicknameLengthErrorMessage() {
+        return OVER_MAX_NICKNAME_LENGTH_ERROR_MESSAGE;
+    }
+
+    public static String getOverMaxEmailLengthErrorMessage() {
+        return OVER_MAX_EMAIL_LENGTH_ERROR_MESSAGE;
+    }
+
+    public static String getInvalidEmailErrorMessage() {
+        return INVALID_EMAIL_ERROR_MESSAGE;
+    }
+
+    public static String getOverMaxProfileImageUrlErrorMessage() {
+        return OVER_MAX_PROFILE_IMAGE_URL_ERROR_MESSAGE;
+    }
+
+    public static String getUserAlreadyDeletedMessage() {
+        return USER_ALREADY_DELETED_MESSAGE;
     }
 
     public boolean equals(Object o) {

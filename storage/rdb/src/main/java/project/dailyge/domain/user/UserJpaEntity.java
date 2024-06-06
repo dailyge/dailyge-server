@@ -1,12 +1,15 @@
 package project.dailyge.domain.user;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import project.dailyge.domain.BaseEntity;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.regex.Pattern;
+
+import static java.lang.Boolean.TRUE;
 
 @Getter
 @NoArgsConstructor
@@ -21,6 +24,7 @@ public class UserJpaEntity extends BaseEntity {
     private final static String OVER_MAX_EMAIL_LENGTH_ERROR_MESSAGE = "입력 가능한 이메일 길이를 초과했습니다.";
     private final static String INVALID_EMAIL_ERROR_MESSAGE = "유효하지 않는 이메일 형식입니다.";
     private final static String OVER_MAX_PROFILE_IMAGE_URL_ERROR_MESSAGE = "입력 가능한 프로필 사진 URL 길이를 초과했습니다.";
+    private final static String USER_HAS_ALREADY_DELETED = "이미 탈퇴한 유저입니다.";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +33,7 @@ public class UserJpaEntity extends BaseEntity {
     @Column(name = "nickname")
     private String nickname;
 
-    @Column(name = "email", unique = true)
+    @Column(name = "email")
     private String email;
 
     @Column(name = "profile_image_url")
@@ -38,6 +42,9 @@ public class UserJpaEntity extends BaseEntity {
     @Column(name = "user_role")
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
 
     public UserJpaEntity(
         final Long userId,
@@ -111,6 +118,14 @@ public class UserJpaEntity extends BaseEntity {
         if (!Pattern.matches(EMAIL_PATTERN, email)) {
             throw new IllegalArgumentException(INVALID_EMAIL_ERROR_MESSAGE);
         }
+    }
+
+    public void delete() {
+        if (this.deleted) {
+            throw new IllegalArgumentException(USER_HAS_ALREADY_DELETED);
+        }
+        this.deleted = TRUE;
+        this.deletedAt = LocalDateTime.now();
     }
 
     public boolean equals(Object o) {

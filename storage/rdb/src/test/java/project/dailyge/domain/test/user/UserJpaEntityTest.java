@@ -107,4 +107,13 @@ class UserJpaEntityTest {
 
 		assertEquals(user1.hashCode(), user2.hashCode());
 	}
+
+	@Test
+	@DisplayName("사용자 ID가 다르다면, 해시코드는 다른 값이다.")
+	void whenUserIdDifferentThenHashcodeShouldBeDifferent() {
+		UserJpaEntity user1 = new UserJpaEntity(1L, "test", "test@gmail.com");
+		UserJpaEntity user2 = new UserJpaEntity(2L, "test", "test@gmail.com");
+
+		assertNotEquals(user1.hashCode(), user2.hashCode());
+	}
 }

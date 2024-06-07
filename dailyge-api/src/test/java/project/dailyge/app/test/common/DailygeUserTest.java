@@ -15,7 +15,7 @@ class DailygeUserTest {
 
     @Test
     @DisplayName("권한 체크 시 관리자일 경우, True를 반환한다.")
-    void whenCheckAdminThenReturnShouldBeTrue() {
+    void whenUserRoleIsAdminThenResultShouldBeTrue() {
         final DailygeUser dailygeUser = new DailygeUser(1L, Role.ADMIN);
 
         assertTrue(dailygeUser.isAdmin());
@@ -23,7 +23,7 @@ class DailygeUserTest {
 
     @Test
     @DisplayName("권한 체크 시 관리자가 아닐 경우, False를 반환한다. ")
-    void whenCheckNotAdminThenReturnShouldBeFalse() {
+    void whenUserRoleIsNotAdminThenReturnShouldBeFalse() {
         final DailygeUser dailygeUser = new DailygeUser(1L, Role.NORMAL);
 
         assertFalse(dailygeUser.isAdmin());
@@ -31,7 +31,7 @@ class DailygeUserTest {
 
     @Test
     @DisplayName("로그인 정보와 동일한 사용자 ID를 비교할 경우, 에러가 발생하지 않는다.")
-    void whenCheckUserThenIsOwnerShouldBePass() {
+    void whenUserIdSameThenShouldBePassed() {
         final DailygeUser dailygeUser = new DailygeUser(1L, Role.NORMAL);
 
         assertDoesNotThrow(() -> dailygeUser.isOwner(1L));
@@ -39,7 +39,7 @@ class DailygeUserTest {
 
     @Test
     @DisplayName("로그인 정보와 다른 사용자 ID를 비교할 경우, UnAuthorizedException이 발생한다.")
-    void whenCheckOtherUserThenUnAuthorizedExceptionShouldBeHappen() {
+    void whenUserIdDifferentThenUnAuthorizedExceptionShouldBeHappen() {
         final DailygeUser dailygeUser = new DailygeUser(1L, Role.NORMAL);
 
         assertThatThrownBy(() -> dailygeUser.isOwner(2L))

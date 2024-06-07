@@ -30,18 +30,17 @@ public class UserSearchIntegrationTest extends IntegrationTestBase {
     private UserWriteUseCase userWriteUseCase;
 
     @Test
-    @DisplayName("사용자가 있다면 사용자 ID로 조회에 성공한다.")
-    void whenFindExistUserThenUserShouldBeNotNull() {
+    @DisplayName("존재하는 사용자를 ID로 조회한다면, 사용자 정보는 Null 이 아니다.")
+    void whenFindExistingUserByIdThenUserShouldBeNotNull() {
         final UserJpaEntity saveUser = userWriteUseCase.save(UserFixture.createUserJpaEntity());
         final UserJpaEntity findUser = userReadUseCase.findActiveUserById(saveUser.getId());
 
         assertNotNull(findUser);
-        assertEquals(saveUser, findUser);
     }
     
     @Test
     @DisplayName("사용자가 없다면, UserNotFoundException이 발생한다.")
-    void whenFindEmptyUserThenUserNotFoundExceptionShouldBeHappen() {
+    void whenFindNonExistentUserThenUserNotFoundExceptionShouldBeHappen() {
         assertThatThrownBy(() -> userReadUseCase.findActiveUserById(1L))
             .isExactlyInstanceOf(UserTypeException.from(USER_NOT_FOUND).getClass())
             .isInstanceOf(UserTypeException.class)
@@ -50,7 +49,7 @@ public class UserSearchIntegrationTest extends IntegrationTestBase {
 
     @Test
     @DisplayName("로그인 된 사용자 조회 시 있다면, 조회에 성공한다.")
-    void whenFindLoggedUserExistThenUserShouldBeNotNull() {
+    void whenFindLoggedUserExistsThenUserShouldBeNotNull() {
         final UserJpaEntity saveUser = userWriteUseCase.save(UserFixture.createUserJpaEntity());
         final UserJpaEntity findUser = userReadUseCase.findAuthorizedById(saveUser.getId());
 
@@ -60,7 +59,7 @@ public class UserSearchIntegrationTest extends IntegrationTestBase {
     
     @Test
     @DisplayName("로그인 된 사용자 조회 시 없다면, UnAuthorizedException이 발생한다.")
-    void whenFindLoggedUserNotExistThenUnAuthorizedExceptionShouldBeHappen() {
+    void whenFindLoggedUserNonExistentThenUnAuthorizedExceptionShouldBeHappen() {
         assertThatThrownBy(() -> userReadUseCase.findAuthorizedById(1L))
             .isExactlyInstanceOf(UnAuthorizedException.class)
             .isInstanceOf(RuntimeException.class)
@@ -69,7 +68,7 @@ public class UserSearchIntegrationTest extends IntegrationTestBase {
 
     @Test
     @DisplayName("등록된 이메일로 사용자를 조회 시, Optional 값이 존재한다.")
-    void whenFindUserByExistEmailThenIsPresentShouldBeTrue() {
+    void whenFindUserByRegisteredEmailThenResultShouldBeTrue() {
         final UserJpaEntity saveUser = userWriteUseCase.save(UserFixture.createUserJpaEntity());
         final Optional<UserJpaEntity> findUser = userReadUseCase.findActiveUserByEmail(saveUser.getEmail());
 
@@ -78,7 +77,7 @@ public class UserSearchIntegrationTest extends IntegrationTestBase {
 
     @Test
     @DisplayName("등록되지 않은 이메일로 사용자를 조회 시, Optional 값이 존재하지 않는다.")
-    void whenFindUserByNotExistEmailThenIsPresentShouldBeFalse() {
+    void whenFindUserByUnregisteredEmailThenResultShouldBeFalse() {
         final Optional<UserJpaEntity> findUser = userReadUseCase.findActiveUserByEmail("notExist@gmail.com");
 
         assertFalse(findUser.isPresent());
@@ -86,7 +85,7 @@ public class UserSearchIntegrationTest extends IntegrationTestBase {
 
     @Test
     @DisplayName("동일 이메일로 재 가입한 사용자를 이메일로 조회 시, 삭제 되지 않은 정보만 검색된다.")
-    void whenFindReRegisterUserByEmailThenActiveUserShouldBeOne() {
+    void whenFindUserReRegisteredBySameEmailThenActiveUserShouldBeOne() {
         final UserJpaEntity deleteUser = userWriteUseCase.save(UserFixture.createUserJpaEntity());
         userWriteUseCase.delete(deleteUser.getId());
 

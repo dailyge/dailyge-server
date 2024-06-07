@@ -20,8 +20,8 @@ public class UserDeleteDocumentationTest extends DocumentationTestBase {
     private UserWriteUseCase userWriteUseCase;
 
     @Test
-    @DisplayName("사용자를 삭제하면, 204 NO_CONTENT 응답을 받는다.")
-    void whenDeleteExistsUserThenStatusCodeShouldBe204_NO_CONTENT() {
+    @DisplayName("사용자를 삭제하는데 성공하면, 204 NO_CONTENT 응답을 받는다.")
+    void whenDeleteUserSucceedsThenStatusCodeShouldBe204_NO_CONTENT() {
         UserJpaEntity saveUser = userWriteUseCase.save(UserFixture.createUserJpaEntity());
 
         RestAssured.given(this.specification)

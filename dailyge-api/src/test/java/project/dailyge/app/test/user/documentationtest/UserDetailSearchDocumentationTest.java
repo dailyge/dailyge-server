@@ -20,8 +20,8 @@ class UserDetailSearchDocumentationTest extends DocumentationTestBase {
     private UserWriteUseCase userWriteUseCase;
 
     @Test
-    @DisplayName("사용자가 존재하면, 200 OK 응답을 받는다.")
-    void whenFindExistUserThenStatusCodeShouldBe200_OK() {
+    @DisplayName("사용자가 조회 시, 200 OK 응답을 받는다.")
+    void whenFindUserThenStatusCodeShouldBe200_OK() {
         final UserRegisterRequest request = new UserRegisterRequest("testName", "test@gmail.com", null);
         UserJpaEntity saveUser = userWriteUseCase.save(request.toEntity());
 

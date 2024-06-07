@@ -10,7 +10,8 @@ import static javax.xml.xpath.XPathEvaluationResult.XPathResultType.NUMBER;
 import static javax.xml.xpath.XPathEvaluationResult.XPathResultType.STRING;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 
@@ -33,6 +34,12 @@ public interface UserSnippet {
         fieldWithPath("message").type(STRING).description("응답 메시지")
     };
 
+    ParameterDescriptor[] USER_DELETE_PATH_DESCRIPTOR = {
+        parameterWithName("userId").description("사용자 ID")
+    };
+
     PathParametersSnippet USER_SEARCH_PATH_PARAMETER_SNIPPET = pathParameters(USER_SEARCH_PATH_DESCRIPTOR);
     ResponseFieldsSnippet USER_SEARCH_RESPONSE_SNIPPET = responseFields(USER_SEARCH_RESPONSE_FIELD_DESCRIPTOR);
+
+    PathParametersSnippet USER_DELETE_PATH_PARAMETER_SNIPPET = pathParameters(USER_DELETE_PATH_DESCRIPTOR);
 }

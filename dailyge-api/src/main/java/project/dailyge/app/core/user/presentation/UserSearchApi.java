@@ -17,18 +17,17 @@ import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.OK;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
-public class UserReadApi {
+public class UserSearchApi {
 
     private final UserReadUseCase userReadUseCase;
-    private final UserValidator userVaildator;
 
     @GetMapping(path =  "/{userId}")
     public ApiResponse<UserInfoResponse> findUserById(
         @LoginUser final DailygeUser dailygeUser,
         @PathVariable(value = "userId") final Long userId
     ) {
-        userVaildator.validate(dailygeUser.getUserId(), userId);
-        final UserJpaEntity findUser = userReadUseCase.findById(userId);
+        dailygeUser.isOwner(userId);
+        final UserJpaEntity findUser = userReadUseCase.findActiveUserById(userId);
         final UserInfoResponse payload = new UserInfoResponse(findUser);
         return ApiResponse.from(OK, payload);
     }

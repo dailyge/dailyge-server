@@ -26,7 +26,7 @@ class TaskJpaEntitySaveDocumentationTest extends DocumentationTestBase {
     @Test
     @DisplayName("Task 등록 테스트")
     void taskSaveTest() throws Exception {
-        UserJpaEntity newUser = userWriteUseCase.save(UserFixture.createUserJpaEntity(1L));
+        UserJpaEntity newUser = userWriteUseCase.save(UserFixture.createUserJpaEntity());
         TaskRegisterRequest request = new TaskRegisterRequest("주간 미팅", "Backend 팀과 Api 스펙 정의", now());
 
         given(this.specification)

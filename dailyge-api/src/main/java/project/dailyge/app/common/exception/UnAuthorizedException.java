@@ -7,7 +7,8 @@ import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.UN_
 @Getter
 public class UnAuthorizedException extends CommonException {
 
-    public static final String USER_NOT_FOUND_MESSAGE = "존재하지 않는 유저 정보입니다.";
+    public static final String USER_NOT_FOUND_MESSAGE = "존재하지 않는 사용자 정보입니다.";
+    public static final String USER_NOT_MATCH_MESSAGE = "사용자 정보가 일치 하지 않습니다.";
 
     public UnAuthorizedException(
         final String detailMessage,

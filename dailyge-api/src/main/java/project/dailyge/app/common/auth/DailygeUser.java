@@ -1,7 +1,11 @@
 package project.dailyge.app.common.auth;
 
 import lombok.Getter;
+import project.dailyge.app.common.exception.UnAuthorizedException;
 import project.dailyge.domain.user.Role;
+
+import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
+import static project.dailyge.app.common.exception.UnAuthorizedException.USER_NOT_MATCH_MESSAGE;
 import static project.dailyge.domain.user.Role.ADMIN;
 import project.dailyge.domain.user.UserJpaEntity;
 
@@ -28,6 +32,12 @@ public class DailygeUser {
 
     public boolean isAdmin() {
         return ADMIN.equals(this.role);
+    }
+
+    public void isOwner(final Long userId) {
+        if (!this.userId.equals(userId)) {
+            throw new UnAuthorizedException(USER_NOT_MATCH_MESSAGE, UN_AUTHORIZED);
+        }
     }
 
     @Override

@@ -18,6 +18,6 @@ public final class UserFixture {
     }
 
     public static UserJpaEntity createUserJpaEntity() {
-        return new UserJpaEntity(null, NICKNAME, EMAIL, LocalDateTime.now());
+        return new UserJpaEntity(NICKNAME, EMAIL);
     }
 }

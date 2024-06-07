@@ -4,18 +4,39 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.dailyge.app.core.user.application.UserWriteUseCase;
+import project.dailyge.app.core.user.exception.UserTypeException;
+import project.dailyge.domain.user.UserEntityReadRepository;
+import project.dailyge.domain.user.UserEntityWriteRepository;
 import project.dailyge.domain.user.UserJpaEntity;
-import project.dailyge.domain.user.UserJpaRepository;
+
+import java.util.Optional;
+
+import static project.dailyge.app.core.user.exception.UserCodeAndMessage.DUPLICATED_EMAIL;
+import static project.dailyge.app.core.user.exception.UserCodeAndMessage.USER_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
 public class UserWriteService implements UserWriteUseCase {
 
-    private final UserJpaRepository userJpaRepository;
+    private final UserEntityReadRepository readRepository;
+    private final UserEntityWriteRepository writeRepository;
 
     @Override
     @Transactional
     public UserJpaEntity save(final UserJpaEntity user) {
-        return userJpaRepository.save(user);
+        final Optional<UserJpaEntity> findUser = readRepository.findActiveUserByEmail(user.getEmail());
+        if (findUser.isPresent()) {
+            throw UserTypeException.from(DUPLICATED_EMAIL);
+        }
+        return writeRepository.save(user);
+    }
+
+    @Override
+    @Transactional
+    public void delete(final Long userId) {
+        final UserJpaEntity findUser = readRepository.findActiveUserById(userId)
+            .orElseThrow(() -> UserTypeException.from(USER_NOT_FOUND));
+        findUser.delete();
+        writeRepository.save(findUser);
     }
 }

@@ -21,7 +21,7 @@ public sealed class UserTypeException extends BusinessException {
         return switch (codeAndMessage) {
             case USER_NOT_FOUND -> new UserNotFoundException(USER_NOT_EXIST_ERROR_MESSAGE, codeAndMessage);
             case ACTIVE_USER_NOT_FOUND -> new UserNotFoundException(ACTIVE_USER_NOT_FOUND, codeAndMessage);
-            case USER_EMAIL_CONFLICT -> new UserEmailConflictException(codeAndMessage);
+            case DUPLICATED_EMAIL -> new DuplicatedEmailException(codeAndMessage);
             default -> new UserUnResolvedException(codeAndMessage);
         };
     }
@@ -32,8 +32,8 @@ public sealed class UserTypeException extends BusinessException {
         }
     }
 
-    private static final class UserEmailConflictException extends UserTypeException {
-        public UserEmailConflictException(final UserCodeAndMessage codeAndMessage) {
+    private static final class DuplicatedEmailException extends UserTypeException {
+        public DuplicatedEmailException(final UserCodeAndMessage codeAndMessage) {
             super(CONFLICT_EMAIL_ERROR_MESSAGE, codeAndMessage);
         }
     }

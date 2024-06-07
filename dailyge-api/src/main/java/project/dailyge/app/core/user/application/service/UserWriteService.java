@@ -11,7 +11,7 @@ import project.dailyge.domain.user.UserJpaEntity;
 
 import java.util.Optional;
 
-import static project.dailyge.app.core.user.exception.UserCodeAndMessage.USER_EMAIL_CONFLICT;
+import static project.dailyge.app.core.user.exception.UserCodeAndMessage.DUPLICATED_EMAIL;
 import static project.dailyge.app.core.user.exception.UserCodeAndMessage.USER_NOT_FOUND;
 
 @Service
@@ -26,7 +26,7 @@ public class UserWriteService implements UserWriteUseCase {
     public UserJpaEntity save(final UserJpaEntity user) {
         final Optional<UserJpaEntity> findUser = readRepository.findActiveUserByEmail(user.getEmail());
         if (findUser.isPresent()) {
-            throw UserTypeException.from(USER_EMAIL_CONFLICT);
+            throw UserTypeException.from(DUPLICATED_EMAIL);
         }
         return writeRepository.save(user);
     }

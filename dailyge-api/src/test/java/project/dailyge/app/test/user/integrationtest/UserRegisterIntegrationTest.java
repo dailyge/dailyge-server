@@ -11,7 +11,7 @@ import project.dailyge.app.core.user.exception.UserTypeException;
 import project.dailyge.domain.user.UserJpaEntity;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static project.dailyge.app.core.user.exception.UserCodeAndMessage.USER_EMAIL_CONFLICT;
+import static project.dailyge.app.core.user.exception.UserCodeAndMessage.DUPLICATED_EMAIL;
 
 @DisplayName("[IntegrationTest] 사용자 저장 통합 테스트")
 public class UserRegisterIntegrationTest extends IntegrationTestBase {
@@ -29,14 +29,14 @@ public class UserRegisterIntegrationTest extends IntegrationTestBase {
     }
     
     @Test
-    @DisplayName("사용자 등록 시 삭제되지 않은 동일한 이메일이 있을 경우, UserEmailConflictException이 발생한다.")
-    void whenUserEmailConflictThenUserEmailConflictExceptionShouldBeHappen() {
+    @DisplayName("사용자 등록 시 삭제되지 않은 동일한 이메일이 있을 경우, DuplicatedEmailException이 발생한다.")
+    void whenUserEmailDuplicatedThenDuplicatedEmailExceptionShouldBeHappen() {
         final UserRegisterRequest request = new UserRegisterRequest("testName", "test@gmail.com", null);
         userWriteUseCase.save(request.toEntity());
 
         assertThatThrownBy(() -> userWriteUseCase.save(request.toEntity()))
-            .isExactlyInstanceOf(UserTypeException.from(USER_EMAIL_CONFLICT).getClass())
+            .isExactlyInstanceOf(UserTypeException.from(DUPLICATED_EMAIL).getClass())
             .isInstanceOf(UserTypeException.class)
-            .hasMessage(USER_EMAIL_CONFLICT.message());
+            .hasMessage(DUPLICATED_EMAIL.message());
     }
 }

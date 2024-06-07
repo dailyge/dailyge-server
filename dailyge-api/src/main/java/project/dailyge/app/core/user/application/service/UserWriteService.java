@@ -34,7 +34,7 @@ public class UserWriteService implements UserWriteUseCase {
     @Override
     @Transactional
     public void delete(final Long userId) {
-        final UserJpaEntity findUser = readRepository.findById(userId)
+        final UserJpaEntity findUser = readRepository.findActiveUserById(userId)
             .orElseThrow(() -> UserTypeException.from(USER_NOT_FOUND));
         findUser.delete();
         writeRepository.save(findUser);

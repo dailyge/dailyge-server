@@ -31,5 +31,6 @@ include(
     "notification-api",
     "storage:document",
     "storage:rdb",
-    "scheduler"
+    "scheduler",
+    "support"
 )

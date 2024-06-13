@@ -1,6 +1,7 @@
 package project.dailyge.app.common.exception;
 
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -23,7 +24,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(CommonException.class)
     public ResponseEntity<ErrorResponse> resolveCommonException(final CommonException exception) {
         CodeAndMessage codeAndMessage = exception.getCodeAndMessage();
-        log.error("error: {}", exception.getDetailMessage());
+        log.error("error: {}, {}", MDC.get("requestId"), exception.getDetailMessage());
         return ResponseEntity.status(codeAndMessage.code())
             .body(ErrorResponse.from(codeAndMessage));
     }
@@ -44,9 +45,11 @@ public class GlobalExceptionHandler {
                     .append(MESSAGE)
                     .append(error.getDefaultMessage());
             }
-            log.error("request: {}", targetObj);
+            log.error("error: {}, {}", MDC.get("requestId"), targetObj);
+            CodeAndMessage codeAndMessage = CommonCodeAndMessage.INVALID_PARAMETERS;
+            return ResponseEntity.status(codeAndMessage.code())
+                .body(ErrorResponse.from(codeAndMessage));
         }
-        log.error("errors: [{}]", sb);
         CodeAndMessage codeAndMessage = CommonCodeAndMessage.INVALID_PARAMETERS;
         return ResponseEntity.status(codeAndMessage.code())
             .body(ErrorResponse.from(codeAndMessage));
@@ -54,7 +57,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler
     public ResponseEntity<ErrorResponse> resolveServerError(final Exception exception) {
-        log.error("error: {}", exception.getMessage());
+        log.error("error: {}, {}", MDC.get("requestId"), exception.getMessage());
         CodeAndMessage codeAndMessage = CommonCodeAndMessage.INVALID_PARAMETERS;
         return ResponseEntity.status(codeAndMessage.code())
             .body(ErrorResponse.from(codeAndMessage));

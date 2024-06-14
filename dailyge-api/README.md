@@ -15,6 +15,6 @@ API 모듈은 Storage 모듈에 의존하고 있습니다.
 &nbsp;&nbsp; - API: API 모듈 <br/>
 &nbsp;&nbsp; - Scheduler: 스케줄링 모듈 <br/>
 &nbsp;&nbsp; - Storage: 저장소 모듈 <br/>
-&nbsp;&nbsp; - Support: API 서버 지원 모듈 <br/>
+&nbsp;&nbsp; - Support: API 지원 모듈 <br/>
 
 <br/>

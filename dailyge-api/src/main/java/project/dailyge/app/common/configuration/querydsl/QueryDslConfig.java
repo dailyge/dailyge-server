@@ -1,4 +1,4 @@
-package project.dailyge.app.common.configuration;
+package project.dailyge.app.common.configuration.querydsl;
 
 import com.querydsl.jpa.impl.*;
 import jakarta.persistence.*;

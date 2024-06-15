@@ -1,10 +1,9 @@
 package project.dailyge.app.test.user.integrationtest;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import project.dailyge.app.common.IntegrationTestBase;
+import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.common.exception.UnAuthorizedException;
 import project.dailyge.app.core.user.application.UserReadUseCase;
 import project.dailyge.app.core.user.application.UserWriteUseCase;
@@ -21,9 +20,8 @@ import static project.dailyge.app.core.user.exception.UserCodeAndMessage.ACTIVE_
 import static project.dailyge.app.core.user.exception.UserCodeAndMessage.USER_NOT_FOUND;
 import static project.dailyge.app.fixture.user.UserFixture.EMAIL;
 
-@Disabled
 @DisplayName("[IntegrationTest] 사용자 조회 통합 테스트")
-public class UserSearchIntegrationTest extends IntegrationTestBase {
+public class UserSearchIntegrationTest extends DatabaseTestBase {
 
     @Autowired
     private UserReadUseCase userReadUseCase;

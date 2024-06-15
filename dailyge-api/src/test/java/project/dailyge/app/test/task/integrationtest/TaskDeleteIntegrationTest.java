@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import project.dailyge.app.common.IntegrationTestBase;
+import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.common.auth.DailygeUser;
 import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.TASK_NOT_FOUND;
 import project.dailyge.app.core.task.exception.TaskTypeException;
@@ -22,7 +22,7 @@ import static project.dailyge.domain.user.Role.NORMAL;
 import project.dailyge.domain.user.UserJpaEntity;
 
 @DisplayName("[IntegrationTest] 할 일 삭제 통합 테스트")
-public class TaskDeleteIntegrationTest extends IntegrationTestBase {
+public class TaskDeleteIntegrationTest extends DatabaseTestBase {
 
     @Autowired
     private TaskFacade taskFacade;

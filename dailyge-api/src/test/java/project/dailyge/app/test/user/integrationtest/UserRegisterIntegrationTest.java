@@ -2,20 +2,18 @@ package project.dailyge.app.test.user.integrationtest;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import project.dailyge.app.common.IntegrationTestBase;
+import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.core.user.application.UserWriteUseCase;
 import project.dailyge.app.core.user.dto.request.UserRegisterRequest;
 import static project.dailyge.app.core.user.exception.UserCodeAndMessage.DUPLICATED_EMAIL;
 import project.dailyge.app.core.user.exception.UserTypeException;
 import project.dailyge.domain.user.UserJpaEntity;
 
-@Disabled
 @DisplayName("[IntegrationTest] 사용자 저장 통합 테스트")
-public class UserRegisterIntegrationTest extends IntegrationTestBase {
+public class UserRegisterIntegrationTest extends DatabaseTestBase {
 
     @Autowired
     private UserWriteUseCase userWriteUseCase;

@@ -5,11 +5,8 @@ on:
     branches: [ dev ]
 
 jobs:
-  check-changes:
-    runs-on: ubuntu-latest
   build:
     runs-on: ubuntu-latest
-    needs: check-changes
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK 17
@@ -17,9 +14,25 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+      - name: Create Test Config
+        env:
+          APPLICATION_TEST_CONFIG: ${{ secrets.APPLICATION_TEST_CONFIG }}
+        run: |
+          echo "$APPLICATION_TEST_CONFIG" > dailyge-api/src/test/resources/application-test.yml
+
+      - name: Check Log
+        run: |
+          if [ -f dailyge-api/src/test/resources/application-test.yml ]; then
+            echo "File exists."
+            cat dailyge-api/src/test/resources/application-test.yml
+          else
+            echo "File does not exist."
+            exit 1
+          fi
+
       - name: Build with Gradle
         env:
-          ENV: ${{ secrets.ENV }}
+          ENV: dev
           PROD_ECR_URI: ${{ secrets.PROD_ECR_URI }}
           DEV_ECR_URI: ${{ secrets.DEV_ECR_URI }}
-        run: ./gradlew dailyge-api:build
+        run: ./gradlew dailyge-api:build --info --stacktrace

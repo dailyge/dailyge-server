@@ -5,5 +5,7 @@ import project.dailyge.domain.user.UserJpaEntity;
 public interface UserWriteUseCase {
     UserJpaEntity save(UserJpaEntity user);
 
+    UserJpaEntity upsert(UserJpaEntity user);
+
     void delete(Long user);
 }

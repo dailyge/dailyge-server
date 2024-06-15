@@ -24,6 +24,9 @@ jobs:
       - name: Build with Gradle
         env:
           ENV: dev
+          SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
           PROD_ECR_URI: ${{ secrets.PROD_ECR_URI }}
           DEV_ECR_URI: ${{ secrets.DEV_ECR_URI }}
         run: ./gradlew dailyge-api:build --info --stacktrace

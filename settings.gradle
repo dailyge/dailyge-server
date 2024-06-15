@@ -13,13 +13,16 @@ pluginManagement {
                 useVersion springDependencyManagementVersion as String
             }
             if (requested.id.id == "org.testcontainers") {
-                useVersion testContainerVersion as String
+                useVersion testcontainersVersion as String
             }
             if (requested.id.id == "com.ewerk.gradle.plugins.querydsl") {
                 useVersion ewerkVersion as String
             }
             if (requested.id.id == "org.asciidoctor.jvm.convert") {
                 useVersion jvmConvertVersion as String
+            }
+            if (requested.id.id == "com.google.cloud.tools.jib") {
+                useVersion jibVersion as String
             }
         }
     }

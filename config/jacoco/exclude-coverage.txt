@@ -1,4 +1,5 @@
-project/**/common/**
-project/**/request/**
-project/**/response/**
-project/**/dto/**
+**/common/**
+**/request/**
+**/response/**
+**/dto/**
+**/test/**

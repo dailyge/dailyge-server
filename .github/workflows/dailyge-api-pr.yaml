@@ -14,21 +14,12 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+
       - name: Create Test Config
         env:
           APPLICATION_TEST_CONFIG: ${{ secrets.APPLICATION_TEST_CONFIG }}
         run: |
           echo "$APPLICATION_TEST_CONFIG" > dailyge-api/src/test/resources/application-test.yml
-
-      - name: Check Log
-        run: |
-          if [ -f dailyge-api/src/test/resources/application-test.yml ]; then
-            echo "File exists."
-            cat dailyge-api/src/test/resources/application-test.yml
-          else
-            echo "File does not exist."
-            exit 1
-          fi
 
       - name: Build with Gradle
         env:

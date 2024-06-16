@@ -1,4 +1,4 @@
-name: Dailyge-API PR
+name: Dailyge-Api PR
 
 on:
   pull_request:
@@ -17,11 +17,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Set up JDK 17
+      - name: Set up JDK 17 with Gradle cache
         uses: actions/setup-java@v2
         with:
-          java-version: '17'
-          distribution: 'temurin'
+          java-version: "17"
+          distribution: "temurin"
+          cache: "gradle"
+      - name: Create Test Config
+        env:
+          APPLICATION_TEST_CONFIG: ${{ secrets.APPLICATION_TEST_CONFIG }}
+        run: |
+          echo "$APPLICATION_TEST_CONFIG" > dailyge-api/src/test/resources/application-test.yml
+      - name: Build with Gradle
+        run: ./gradlew dailyge-api:build --info --stacktrace
+
+  sonarqube_analysis:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-java@v2
+        with:
+          java-version: "17"
+          distribution: "temurin"
+          cache: "gradle"
 
       - name: Create Test Config
         env:
@@ -29,26 +46,32 @@ jobs:
         run: |
           echo "$APPLICATION_TEST_CONFIG" > dailyge-api/src/test/resources/application-test.yml
 
-      - name: Build with Gradle
-        run: ./gradlew dailyge-api:build --info --stacktrace
+      - name: Test
+        run: ./gradlew dailyge-api:test --info --stacktrace
 
-      - name: Notify Build Result to Slack
-        if: always()
-        uses: 8398a7/action-slack@v3
-        with:
-          fields: repo,commit,message,author
-          status: ${{ job.status }}
-          text: "${{ github.actor }} pushed to ${{ github.ref }}."
-          repo: ${{ github.repository }}
-          username: 'PR_Bot'
-          icon_emoji: ':robot_face:'
-          channel: 'deploy'
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.PR_WEBHOOK_URL }}
-
-      - name: Sonarqube Analysis
+      - name: SonarQube Analysis
         run: |
           ./gradlew sonar \
           -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
           -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} \
           -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+
+  notify_slack:
+    needs: [ build, sonarqube_analysis ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify Build Result to Slack
+        uses: 8398a7/action-slack@v3
+        with:
+          fields: repo,commit,message,author
+          status: ${{ job.status }}
+          text: |
+            *Actor:* ${{ github.actor }}
+            *Commit:* ${{ github.sha }}
+            *Sonarqube:* <${{ secrets.SONAR_HOST_URL }}|정적 분석지표>
+            *Repository:* <https://github.com/${{ github.repository }}|${{ github.repository }}>
+          username: "PR_Bot"
+          icon_emoji: ":robot_face:"
+          channel: "pr"
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.PR_WEBHOOK_URL }}

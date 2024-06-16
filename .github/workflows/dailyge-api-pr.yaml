@@ -6,6 +6,7 @@ on:
 
 env:
   ENV: dev
+  SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
   PROD_ECR_URI: ${{ secrets.PROD_ECR_URI }}
   DEV_ECR_URI: ${{ secrets.DEV_ECR_URI }}
   SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
@@ -26,7 +27,7 @@ jobs:
         run: |
           echo "${{ secrets.APPLICATION_TEST_CONFIG }}" > dailyge-api/src/test/resources/application-test.yml
       - name: Build with Gradle
-        run: ./gradlew dailyge-api:build -x test --info --stacktrace
+        run: ./gradlew dailyge-api:build --info --stacktrace
 
   static_analysis:
     runs-on: ubuntu-latest

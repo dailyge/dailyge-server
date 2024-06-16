@@ -8,7 +8,6 @@ env:
   ENV: dev
   PROD_ECR_URI: ${{ secrets.PROD_ECR_URI }}
   DEV_ECR_URI: ${{ secrets.DEV_ECR_URI }}
-  SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
   SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 

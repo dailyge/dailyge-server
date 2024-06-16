@@ -1,5 +1,7 @@
-project/**/common/**
-project/**/request/**
-project/**/response/**
-project/**/dto/**
-
+**.*Application*
+**.*Health*
+**.common.**
+**.request.**
+**.response.**
+**.dto.**
+**.test.**

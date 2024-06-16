@@ -1,21 +1,20 @@
 package project.dailyge.app.test.user.integrationtest;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import project.dailyge.app.common.IntegrationTestBase;
+import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.core.user.application.UserReadUseCase;
 import project.dailyge.app.core.user.application.UserWriteUseCase;
+import static project.dailyge.app.core.user.exception.UserCodeAndMessage.USER_NOT_FOUND;
 import project.dailyge.app.core.user.exception.UserTypeException;
 import project.dailyge.app.fixture.user.UserFixture;
 import project.dailyge.domain.user.UserJpaEntity;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static project.dailyge.app.core.user.exception.UserCodeAndMessage.USER_NOT_FOUND;
-
 @DisplayName("[IntegrationTest] 사용자 삭제 통합 테스트")
-public class UserDeleteIntegrationTest extends IntegrationTestBase {
+public class UserDeleteIntegrationTest extends DatabaseTestBase {
 
     @Autowired
     private UserReadUseCase userReadUseCase;

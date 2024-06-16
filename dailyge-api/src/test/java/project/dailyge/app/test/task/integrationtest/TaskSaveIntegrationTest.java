@@ -14,7 +14,7 @@ import static project.dailyge.domain.task.TaskStatus.*;
 import project.dailyge.domain.user.*;
 
 @DisplayName("[IntegrationTest] 할 일 저장 통합 테스트")
-public class TaskSaveIntegrationTest extends IntegrationTestBase {
+public class TaskSaveIntegrationTest extends DatabaseTestBase {
 
     @Autowired
     private TaskFacade taskFacade;

@@ -23,44 +23,18 @@ jobs:
           java-version: "17"
           distribution: "temurin"
           cache: "gradle"
+
       - name: Create Test Config
         env:
           APPLICATION_TEST_CONFIG: ${{ secrets.APPLICATION_TEST_CONFIG }}
         run: |
           echo "$APPLICATION_TEST_CONFIG" > dailyge-api/src/test/resources/application-test.yml
+
       - name: Build with Gradle
         run: ./gradlew dailyge-api:build --info --stacktrace
 
-  sonarqube_analysis:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/setup-java@v2
-        with:
-          java-version: "17"
-          distribution: "temurin"
-          cache: "gradle"
-
-      - name: Create Test Config
-        env:
-          APPLICATION_TEST_CONFIG: ${{ secrets.APPLICATION_TEST_CONFIG }}
-        run: |
-          echo "$APPLICATION_TEST_CONFIG" > dailyge-api/src/test/resources/application-test.yml
-
-      - name: Test
-        run: ./gradlew dailyge-api:test --info --stacktrace
-
-      - name: SonarQube Analysis
-        run: |
-          ./gradlew sonar \
-          -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
-          -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} \
-          -Dsonar.login=${{ secrets.SONAR_TOKEN }}
-
-  notify_slack:
-    needs: [ build, sonarqube_analysis ]
-    runs-on: ubuntu-latest
-    steps:
       - name: Notify Build Result to Slack
+        if: always()
         uses: 8398a7/action-slack@v3
         with:
           fields: repo,commit,message,author
@@ -70,8 +44,8 @@ jobs:
             *Commit:* ${{ github.sha }}
             *Sonarqube:* <${{ secrets.SONAR_HOST_URL }}|정적 분석지표>
             *Repository:* <https://github.com/${{ github.repository }}|${{ github.repository }}>
-          username: "PR_Bot"
-          icon_emoji: ":robot_face:"
-          channel: "pr"
+          username: 'PR_Bot'
+          icon_emoji: ':robot_face:'
+          channel: 'pr'
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.PR_WEBHOOK_URL }}

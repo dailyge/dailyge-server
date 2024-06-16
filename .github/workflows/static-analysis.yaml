@@ -1,0 +1,40 @@
+name: Static Analysis
+
+on:
+  pull_request:
+    branches: [ dev ]
+
+env:
+  ENV: dev
+  PROD_ECR_URI: ${{ secrets.PROD_ECR_URI }}
+  DEV_ECR_URI: ${{ secrets.DEV_ECR_URI }}
+  SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
+  SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 17 with Gradle cache
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: "gradle"
+
+      - name: Create Test Config
+        env:
+          APPLICATION_TEST_CONFIG: ${{ secrets.APPLICATION_TEST_CONFIG }}
+        run: |
+          echo "$APPLICATION_TEST_CONFIG" > dailyge-api/src/test/resources/application-test.yml
+
+      - name: Test with Gradle
+        run: ./gradlew dailyge-api:test --info --stacktrace
+
+      - name: Sonarqube Analysis
+        run: |
+          ./gradlew sonar \
+          -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
+          -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} \
+          -Dsonar.login=${{ secrets.SONAR_TOKEN }}

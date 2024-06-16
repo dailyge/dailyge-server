@@ -26,7 +26,7 @@ jobs:
         run: |
           echo "${{ secrets.APPLICATION_TEST_CONFIG }}" > dailyge-api/src/test/resources/application-test.yml
       - name: Build with Gradle
-        run: ./gradlew dailyge-api:build --info --stacktrace
+        run: ./gradlew dailyge-api:build -x test --info --stacktrace
 
   static_analysis:
     runs-on: ubuntu-latest

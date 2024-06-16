@@ -1,4 +1,4 @@
-name: Dailyge-Api PR and Static Analysis
+name: Dailyge-Api PR
 
 on:
   pull_request:
@@ -28,15 +28,32 @@ jobs:
           echo "${{ secrets.APPLICATION_TEST_CONFIG }}" > dailyge-api/src/test/resources/application-test.yml
       - name: Build with Gradle
         run: ./gradlew dailyge-api:build --info --stacktrace
+
+  static_analysis:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 17 with Gradle cache
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: "gradle"
+      - name: Create Test Config
+        run: |
+          echo "${{ secrets.APPLICATION_TEST_CONFIG }}" > dailyge-api/src/test/resources/application-test.yml
+      - name: Test
+        run: |
+          ./gradlew dailyge-api:test --info --stacktrace
       - name: Static Analysis
         run: |
-          ./gradlew sonar --info --stacktrace
-          -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }}
-          -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
+          ./gradlew sonar \
+          -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
+          -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} \
           -Dsonar.login=${{ secrets.SONAR_TOKEN }}
 
   notify_slack:
-    needs: [build]
+    needs: [build, static_analysis]
     runs-on: ubuntu-latest
     steps:
       - name: Notify Build and Analysis Result to Slack

@@ -9,8 +9,8 @@ env:
   PROD_ECR_URI: ${{ secrets.PROD_ECR_URI }}
   DEV_ECR_URI: ${{ secrets.DEV_ECR_URI }}
   SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
-  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
 jobs:
   build:
@@ -31,6 +31,20 @@ jobs:
 
       - name: Build with Gradle
         run: ./gradlew dailyge-api:build --info --stacktrace
+
+      - name: Notify Build Result to Slack
+        if: always()
+        uses: 8398a7/action-slack@v3
+        with:
+          fields: repo,commit,message,author
+          status: ${{ job.status }}
+          text: "${{ github.actor }} pushed to ${{ github.ref }}."
+          repo: ${{ github.repository }}
+          username: 'PR_Bot'
+          icon_emoji: ':robot_face:'
+          channel: 'deploy'
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.PR_WEBHOOK_URL }}
 
       - name: Sonarqube Analysis
         run: |

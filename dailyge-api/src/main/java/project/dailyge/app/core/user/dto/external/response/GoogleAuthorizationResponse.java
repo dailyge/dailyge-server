@@ -16,9 +16,6 @@ public class GoogleAuthorizationResponse {
     @JsonProperty(value = "expires_in")
     private Long expiresIn;
 
-//    @JsonProperty(value = "refresh_token")
-//    private String refreshToken;
-
     private String scope;
 
     @JsonProperty(value = "token_type")

@@ -1,22 +1,24 @@
-jib {
-    def env = System.getenv("ENV")
-    from {
-        image = "openjdk:17-jdk-slim"
-    }
-    to {
-        if (env == "prod") {
-            image = System.getenv("PROD_ECR_URI")
-        } else {
-            image = System.getenv("DEV_ECR_URI")
+def env = System.getenv("ENV")
+if (env == "dev" || env == "prod") {
+    jib {
+        from {
+            image = "openjdk:17-jdk-slim"
         }
-        credHelper = "ecr-login"
-        tags = ["latest", "${project.version}-${System.currentTimeMillis()}"]
-    }
-    container {
-        ports = ["8080"]
-        labels = [server: "dailyge-api"]
-        environment = [JAVA_OPTIONS: "-Xms512m -Xmx512m"]
-        creationTime = "USE_REST_TIMESTAMP"
-        allowInsecureRegistries = false
+        to {
+            if (env == "prod") {
+                image = System.getenv("PROD_ECR_URI")
+            } else {
+                image = System.getenv("DEV_ECR_URI")
+            }
+            credHelper = "ecr-login"
+            tags = ["latest", "${project.version}-${System.currentTimeMillis()}"]
+        }
+        container {
+            ports = ["8080"]
+            labels = [server: "dailyge-api"]
+            environment = [JAVA_OPTIONS: "-Xms512m -Xmx512m"]
+            creationTime = "USE_REST_TIMESTAMP"
+            allowInsecureRegistries = false
+        }
     }
 }

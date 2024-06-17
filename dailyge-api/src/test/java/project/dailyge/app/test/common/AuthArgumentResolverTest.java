@@ -18,13 +18,15 @@ class AuthArgumentResolverTest {
 
     private AuthArgumentResolver resolver;
     private UserReadUseCase userReadUseCase;
+    private TokenProvider tokenProvider;
     private NativeWebRequest webRequest;
     private HttpServletRequest request;
 
     @BeforeEach
     void setUp() {
         userReadUseCase = mock(UserReadUseCase.class);
-        resolver = new AuthArgumentResolver(userReadUseCase);
+        tokenProvider = mock(TokenProvider.class);
+        resolver = new AuthArgumentResolver(userReadUseCase, tokenProvider);
         request = mock(HttpServletRequest.class);
         webRequest = mock(NativeWebRequest.class);
         when(webRequest.getNativeRequest())

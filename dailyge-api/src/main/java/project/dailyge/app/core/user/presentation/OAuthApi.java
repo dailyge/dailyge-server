@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import project.dailyge.app.common.auth.DailygeToken;
 import project.dailyge.app.common.codeandmessage.CommonCodeAndMessage;
 import project.dailyge.app.common.response.ApiResponse;
-import project.dailyge.app.core.user.application.facade.UserFacade;
+import project.dailyge.app.core.user.facade.UserFacade;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 

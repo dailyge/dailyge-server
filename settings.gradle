@@ -34,7 +34,6 @@ pluginManagement {
 rootProject.name = "dailyge"
 include(
     "dailyge-api",
-    "notification-api",
     "storage:document",
     "storage:rdb",
     "scheduler",

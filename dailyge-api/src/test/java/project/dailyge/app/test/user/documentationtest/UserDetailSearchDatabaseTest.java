@@ -3,7 +3,7 @@ package project.dailyge.app.test.user.documentationtest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import project.dailyge.app.common.DocumentationTestBase;
+import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.core.user.application.UserWriteUseCase;
 import project.dailyge.app.core.user.dto.request.UserRegisterRequest;
 import project.dailyge.domain.user.UserJpaEntity;
@@ -14,7 +14,7 @@ import static org.springframework.restdocs.restassured.RestAssuredRestDocumentat
 import static project.dailyge.app.test.user.documentationtest.snippet.UserSnippet.*;
 
 @DisplayName("[DocumentationTest] 사용자 저장 문서화 테스트")
-class UserDetailSearchDocumentationTest extends DocumentationTestBase {
+class UserDetailSearchDatabaseTest extends DatabaseTestBase {
 
     @Autowired
     private UserWriteUseCase userWriteUseCase;

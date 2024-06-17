@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import project.dailyge.app.common.IntegrationTestBase;
+import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.common.auth.DailygeUser;
 import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
 import project.dailyge.app.common.exception.UnAuthorizedException;
@@ -23,7 +23,7 @@ import static project.dailyge.domain.user.Role.NORMAL;
 import project.dailyge.domain.user.UserJpaEntity;
 
 @DisplayName("[IntegrationTest] 할 일 조회 통합 테스트")
-public class TaskSearchIntegrationTest extends IntegrationTestBase {
+public class TaskSearchIntegrationTest extends DatabaseTestBase {
 
     @Autowired
     private TaskFacade taskFacade;

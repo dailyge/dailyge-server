@@ -1,20 +1,19 @@
 package project.dailyge.app.test.user.integrationtest;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import project.dailyge.app.common.IntegrationTestBase;
+import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.core.user.application.UserWriteUseCase;
 import project.dailyge.app.core.user.dto.request.UserRegisterRequest;
+import static project.dailyge.app.core.user.exception.UserCodeAndMessage.DUPLICATED_EMAIL;
 import project.dailyge.app.core.user.exception.UserTypeException;
 import project.dailyge.domain.user.UserJpaEntity;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static project.dailyge.app.core.user.exception.UserCodeAndMessage.DUPLICATED_EMAIL;
-
 @DisplayName("[IntegrationTest] 사용자 저장 통합 테스트")
-public class UserRegisterIntegrationTest extends IntegrationTestBase {
+public class UserRegisterIntegrationTest extends DatabaseTestBase {
 
     @Autowired
     private UserWriteUseCase userWriteUseCase;
@@ -27,7 +26,7 @@ public class UserRegisterIntegrationTest extends IntegrationTestBase {
 
         Assertions.assertNotNull(saveUser.getId());
     }
-    
+
     @Test
     @DisplayName("사용자 등록 시 삭제되지 않은 동일한 이메일이 있을 경우, DuplicatedEmailException이 발생한다.")
     void whenUserEmailDuplicatedThenDuplicatedEmailExceptionShouldBeHappen() {

@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.document;
-import project.dailyge.app.common.DocumentationTestBase;
+import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.core.task.dto.requesst.TaskRegisterRequest;
 import project.dailyge.app.core.task.facade.TaskFacade;
@@ -20,7 +20,7 @@ import project.dailyge.domain.task.TaskJpaEntity;
 import project.dailyge.domain.user.UserJpaEntity;
 
 @DisplayName("[DocumentationTest] 할 일 저장 문서화 테스트")
-class TaskDetailSearchDocumentationTest extends DocumentationTestBase {
+class TaskDetailSearchDocumentationTest extends DatabaseTestBase {
 
     @Autowired
     private UserWriteUseCase userWriteUseCase;

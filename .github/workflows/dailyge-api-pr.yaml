@@ -1,0 +1,72 @@
+name: Dailyge-Api PR
+
+on:
+  pull_request:
+    branches: [ dev ]
+
+env:
+  ENV: dev
+  PROD_ECR_URI: ${{ secrets.PROD_ECR_URI }}
+  DEV_ECR_URI: ${{ secrets.DEV_ECR_URI }}
+  SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
+  SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 17 with Gradle cache
+        uses: actions/setup-java@v2
+        with:
+          java-version: "17"
+          distribution: "temurin"
+          cache: "gradle"
+      - name: Create Test Config
+        run: |
+          echo "${{ secrets.APPLICATION_TEST_CONFIG }}" > dailyge-api/src/test/resources/application-test.yml
+      - name: Build with Gradle
+        run: ./gradlew dailyge-api:build --info --stacktrace
+
+  static_analysis:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 17 with Gradle cache
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: "gradle"
+      - name: Create Test Config
+        run: |
+          echo "${{ secrets.APPLICATION_TEST_CONFIG }}" > dailyge-api/src/test/resources/application-test.yml
+      - name: Test
+        run: |
+          ./gradlew dailyge-api:test --info --stacktrace
+      - name: Static Analysis
+        run: |
+          ./gradlew sonar \
+          -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
+          -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} \
+          -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+
+  notify_slack:
+    needs: [build, static_analysis]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify Build and Analysis Result to Slack
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          text: |
+            *Actor:* ${{ github.actor }}
+            *Commit:* ${{ github.sha }}
+            *Sonarqube:* <${{ secrets.SONAR_HOST_URL }}|정적 분석지표>
+            *Repository:* <https://github.com/${{ github.repository }}|${{ github.repository }}>
+          username: 'PR_Bot'
+          icon_emoji: ':robot_face:'
+          channel: 'pr'
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.PR_WEBHOOK_URL }}

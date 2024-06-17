@@ -17,8 +17,11 @@ class TaskReadService implements TaskReadUseCase {
     private final TaskEntityReadRepository taskRepository;
 
     @Override
-    public TaskJpaEntity findById(DailygeUser dailygeUser, Long taskId) {
-        TaskJpaEntity findTask = taskRepository.findById(taskId)
+    public TaskJpaEntity findById(
+        final DailygeUser dailygeUser,
+        final Long taskId
+    ) {
+        final TaskJpaEntity findTask = taskRepository.findById(taskId)
             .orElseThrow(() -> TaskTypeException.from(TASK_NOT_FOUND));
         if (!findTask.isOwner(dailygeUser.getUserId())) {
             throw new UnAuthorizedException();

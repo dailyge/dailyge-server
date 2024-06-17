@@ -13,6 +13,8 @@ repositories {
     mavenCentral()
 }
 
+apply(from: "${rootDir}/jib/dailyge-api/jib.gradle")
+
 dependencies {
     implementation(project(":storage:rdb"))
     implementation(project(":support"))
@@ -27,9 +29,9 @@ dependencies {
 
     testImplementation("org.springframework.restdocs:spring-restdocs-restassured")
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
-    testImplementation("org.testcontainers:mysql:1.15.3")
-    testImplementation("org.testcontainers:testcontainers:1.15.3")
-    testImplementation("org.testcontainers:junit-jupiter:1.15.3")
+    testImplementation("org.testcontainers:testcontainers")
+    testImplementation("org.testcontainers:junit-jupiter")
+    testImplementation("org.testcontainers:mysql")
 
     asciidoctorExt("org.springframework.restdocs:spring-restdocs-asciidoctor")
 }
@@ -45,6 +47,7 @@ ext {
 test {
     outputs.dir snippetsDir
 }
+
 asciidoctor {
     attributes "snippets": snippetsDir
     inputs.dir snippetsDir

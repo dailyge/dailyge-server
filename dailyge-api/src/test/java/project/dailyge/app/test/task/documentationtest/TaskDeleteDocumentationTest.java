@@ -19,7 +19,7 @@ import project.dailyge.domain.task.TaskJpaEntity;
 import project.dailyge.domain.user.UserJpaEntity;
 
 @DisplayName("[DocumentationTest] 할 일 삭제 문서화 테스트")
-class TaskDeleteDatabaseTest extends DatabaseTestBase {
+class TaskDeleteDocumentationTest extends DatabaseTestBase {
 
     @Autowired
     private UserWriteUseCase userWriteUseCase;

@@ -14,7 +14,7 @@ import static org.springframework.restdocs.restassured.RestAssuredRestDocumentat
 import static project.dailyge.app.test.user.documentationtest.snippet.UserSnippet.*;
 
 @DisplayName("[DocumentationTest] 사용자 저장 문서화 테스트")
-class UserDetailSearchDatabaseTest extends DatabaseTestBase {
+class UserDetailSearchDocumentationTest extends DatabaseTestBase {
 
     @Autowired
     private UserWriteUseCase userWriteUseCase;

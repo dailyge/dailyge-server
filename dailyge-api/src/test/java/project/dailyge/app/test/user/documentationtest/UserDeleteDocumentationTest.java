@@ -14,7 +14,7 @@ import static org.springframework.restdocs.restassured.RestAssuredRestDocumentat
 import static project.dailyge.app.test.user.documentationtest.snippet.UserSnippet.*;
 
 @DisplayName("[DocumentationTest] 유저 삭제 API 문서화 테스트")
-public class UserDeleteDatabaseTest extends DatabaseTestBase {
+public class UserDeleteDocumentationTest extends DatabaseTestBase {
 
     @Autowired
     private UserWriteUseCase userWriteUseCase;

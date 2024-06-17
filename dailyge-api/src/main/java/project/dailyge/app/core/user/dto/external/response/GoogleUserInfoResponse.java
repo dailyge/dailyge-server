@@ -11,11 +11,8 @@ import lombok.NoArgsConstructor;
 public class GoogleUserInfoResponse {
 
     private String id;
-
     private String name;
-
     private String email;
-
     private String picture;
 
     @JsonProperty(value = "verified_email")

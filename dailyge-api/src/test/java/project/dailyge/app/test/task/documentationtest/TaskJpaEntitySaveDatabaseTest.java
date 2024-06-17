@@ -17,15 +17,15 @@ import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippe
 import project.dailyge.app.fixture.user.UserFixture;
 import project.dailyge.domain.user.UserJpaEntity;
 
-@DisplayName("[DocumentationTest] 할 일 저장 문서화 테스트")
+@DisplayName("[DocumentationTest] 할 일 등록 문서화 테스트")
 class TaskJpaEntitySaveDatabaseTest extends DatabaseTestBase {
 
     @Autowired
     private UserWriteUseCase userWriteUseCase;
 
     @Test
-    @DisplayName("Task 등록 테스트")
-    void taskSaveTest() throws Exception {
+    @DisplayName("할 일을 등록하면 201 Created 응답을 받는다.")
+    void whenSaveTaskThenStatusCodeShouldBe_201() throws Exception {
         UserJpaEntity newUser = userWriteUseCase.save(UserFixture.createUserJpaEntity());
         TaskRegisterRequest request = new TaskRegisterRequest("주간 미팅", "Backend 팀과 Api 스펙 정의", now());
 

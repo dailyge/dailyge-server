@@ -1,4 +1,4 @@
-package project.dailyge.app.core.user.application.facade;
+package project.dailyge.app.core.user.facade;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
@@ -28,12 +28,13 @@ public class UserFacade {
         GoogleUserInfoResponse response = googleOAuthClient.getAccessToken(clientRegistration, code);
 
         UserJpaEntity user = userWriteUseCase.upsert(new UserJpaEntity(response.getName(), response.getEmail(), response.getPicture()));
-        return createToken(user);
+        DailygeToken token = createToken(user);
+        saveToken(user, token.refreshToken());
+        return token;
     }
 
     private DailygeToken createToken(UserJpaEntity user) {
         DailygeToken dailygeToken = tokenProvider.createToken(user);
-        saveToken(user, dailygeToken.refreshToken());
         return dailygeToken;
     }
 

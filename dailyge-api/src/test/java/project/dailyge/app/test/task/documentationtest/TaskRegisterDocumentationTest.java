@@ -24,7 +24,7 @@ class TaskRegisterDocumentationTest extends DatabaseTestBase {
 
     @Test
     @DisplayName("할 일을 등록하면 201 Created 응답을 받는다.")
-    void whenSaveTaskThenStatusCodeShouldBe_201() throws Exception {
+    void whenRegisterTaskThenStatusCodeShouldBe_201() throws Exception {
         final UserJpaEntity newUser = userWriteUseCase.save(UserFixture.createUserJpaEntity());
         final TaskRegisterRequest request = new TaskRegisterRequest("주간 미팅", "Backend 팀과 Api 스펙 정의", now());
 

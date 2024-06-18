@@ -7,7 +7,7 @@ import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.common.auth.DailygeToken;
 import project.dailyge.app.common.auth.TokenProvider;
 import project.dailyge.app.core.user.application.UserWriteUseCase;
-import project.dailyge.app.core.user.dto.request.UserRegisterRequest;
+import project.dailyge.app.core.user.presentation.request.UserRegisterRequest;
 import project.dailyge.domain.user.UserJpaEntity;
 
 import static io.restassured.RestAssured.given;

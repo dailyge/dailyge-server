@@ -1,31 +1,43 @@
 package project.dailyge.app.test.common;
 
-import jakarta.servlet.http.*;
-import static org.assertj.core.api.AssertionsForClassTypes.*;
-import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.*;
-import static org.mockito.Mockito.*;
-import org.springframework.web.context.request.*;
-import project.dailyge.app.common.auth.*;
-import project.dailyge.app.common.exception.*;
+import jakarta.servlet.http.HttpServletRequest;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.web.context.request.NativeWebRequest;
+import project.dailyge.app.common.auth.DailygeToken;
+import project.dailyge.app.common.auth.DailygeUser;
+import project.dailyge.app.common.auth.TokenProvider;
 import project.dailyge.app.common.configuration.web.AuthArgumentResolver;
-import project.dailyge.app.core.user.application.*;
+import project.dailyge.app.common.configuration.web.JwtProperties;
+import project.dailyge.app.core.user.application.UserReadUseCase;
+import project.dailyge.domain.user.UserJpaEntity;
+
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static project.dailyge.app.fixture.user.UserFixture.createUserJpaEntity;
-import project.dailyge.domain.user.*;
 
 @DisplayName("[UnitTest] AuthArgumentResolver 검증 단위 테스트")
 class AuthArgumentResolverTest {
 
+    private static final String SECRET_KEY = "secretKey";
+
+    private JwtProperties jwtProperties;
+    private TokenProvider tokenProvider;
     private AuthArgumentResolver resolver;
     private UserReadUseCase userReadUseCase;
-    private TokenProvider tokenProvider;
     private NativeWebRequest webRequest;
     private HttpServletRequest request;
 
     @BeforeEach
     void setUp() {
         userReadUseCase = mock(UserReadUseCase.class);
-        tokenProvider = mock(TokenProvider.class);
+        jwtProperties = new JwtProperties(SECRET_KEY, 1, 2);
+        tokenProvider = new TokenProvider(jwtProperties);
         resolver = new AuthArgumentResolver(userReadUseCase, tokenProvider);
         request = mock(HttpServletRequest.class);
         webRequest = mock(NativeWebRequest.class);
@@ -34,11 +46,12 @@ class AuthArgumentResolverTest {
     }
 
     @Test
-    @DisplayName("사용자 ID가 존재하고, 올바르다면 인증 객체가 생성된다.")
+    @DisplayName("토큰정보가 존재하고, 올바르다면 인증 객체가 생성된다.")
     void shouldBeNotNullWhenUserIdIsValid() {
-        UserJpaEntity user = createUserJpaEntity(1L);
-        when(request.getHeader("dailyge_user_id"))
-            .thenReturn(user.getId().toString());
+        final UserJpaEntity user = createUserJpaEntity(1L);
+        final DailygeToken token = tokenProvider.createToken(user);
+        when(request.getHeader(AUTHORIZATION))
+            .thenReturn(token.getAuthorizationToken());
         when(userReadUseCase.findAuthorizedById(user.getId()))
             .thenReturn(user);
 
@@ -48,25 +61,9 @@ class AuthArgumentResolverTest {
     }
 
     @Test
-    @DisplayName("사용자 ID가 null이면 UnAuthorizedException이 발생한다.")
-    void shouldThrowUnAuthorizedExceptionWhenUserIdIsNull() {
-        when(request.getHeader("dailyge_user_id"))
-            .thenReturn(null);
-
-        assertThatThrownBy(() -> resolver.resolveArgument(null, null, webRequest, null))
-            .isExactlyInstanceOf(UnAuthorizedException.class)
-            .isInstanceOf(RuntimeException.class);
-    }
-
-    @Test
-    @DisplayName("사용자 ID가 올바르지 않은 타입이면 UnAuthorizedException이 발생한다.")
-    void shouldThrowUnAuthorizedExceptionWhenUserIdIsInvalidType() {
-        when(request.getHeader("dailyge_user_id"))
-            .thenReturn("abc");
-
-        assertThatThrownBy(() -> resolver.resolveArgument(null, null, webRequest, null))
-            .isExactlyInstanceOf(UnAuthorizedException.class)
-            .isInstanceOf(RuntimeException.class);
+    @DisplayName("사용자 토큰이 없다면, 에러가 발생한다.")
+    void whenThen() {
+        //TODO - 지율
     }
 
     @Test

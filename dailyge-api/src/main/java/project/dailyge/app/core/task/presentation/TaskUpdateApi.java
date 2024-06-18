@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.common.auth.LoginUser;
-import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.NO_CONTENT;
+import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.OK;
 import project.dailyge.app.common.response.ApiResponse;
 import project.dailyge.app.core.task.application.TaskWriteUseCase;
 import project.dailyge.app.core.task.application.command.TaskUpdateCommand;
@@ -35,6 +35,6 @@ public class TaskUpdateApi {
             request.status()
         );
         taskWriteUseCase.update(dailygeUser, taskId, command);
-        return ApiResponse.from(NO_CONTENT);
+        return ApiResponse.from(OK);
     }
 }

@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -135,6 +136,32 @@ class TaskJpaEntityTest {
                 .build()
         ).isInstanceOf(IllegalArgumentException.class)
             .hasMessageContaining(getBeyondOneYearErrorMessage());
+    }
+
+    @Test
+    @DisplayName("할 일 상태를 변경하면, 내용이 반영된다.")
+    void whenUpdateTaskThenChangeShouldBeApplied() {
+        String newTitle = "Updated Title";
+        String newContent = "Updated content of the task.";
+        LocalDate today = LocalDate.now();
+        TaskStatus newStatus = TaskStatus.TODO;
+
+        TaskJpaEntity task = new TaskJpaEntity(
+            "Initial Title",
+            "Initial content of the task.",
+            LocalDate.now(),
+            TaskStatus.TODO,
+            1L
+        );
+
+        task.update(newTitle, newContent, today, newStatus);
+
+        assertEquals(newTitle, task.getTitle());
+        assertEquals(newContent, task.getContent());
+        assertEquals(today, task.getDate());
+        assertEquals(today.getYear(), task.getYear());
+        assertEquals(today.getMonthValue(), task.getMonth());
+        assertEquals(newStatus, task.getStatus());
     }
 
     @Test

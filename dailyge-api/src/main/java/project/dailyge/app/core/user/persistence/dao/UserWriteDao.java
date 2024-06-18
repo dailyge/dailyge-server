@@ -13,7 +13,7 @@ public class UserWriteDao implements UserEntityWriteRepository {
     private final EntityManager entityManager;
 
     @Override
-    public UserJpaEntity save(UserJpaEntity user) {
+    public UserJpaEntity save(final UserJpaEntity user) {
         entityManager.persist(user);
         return user;
     }

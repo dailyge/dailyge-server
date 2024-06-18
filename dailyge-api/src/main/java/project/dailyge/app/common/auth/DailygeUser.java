@@ -41,10 +41,10 @@ public class DailygeUser {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        DailygeUser that = (DailygeUser) o;
+        final DailygeUser that = (DailygeUser) o;
         return Objects.equals(userId, that.userId);
     }
 

@@ -7,9 +7,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.core.user.application.UserWriteUseCase;
-import project.dailyge.app.core.user.dto.request.UserRegisterRequest;
 import static project.dailyge.app.core.user.exception.UserCodeAndMessage.DUPLICATED_EMAIL;
 import project.dailyge.app.core.user.exception.UserTypeException;
+import project.dailyge.app.core.user.presentation.request.UserRegisterRequest;
 import project.dailyge.domain.user.UserJpaEntity;
 
 @DisplayName("[IntegrationTest] 사용자 저장 통합 테스트")

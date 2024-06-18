@@ -9,7 +9,7 @@ import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.common.auth.LoginUser;
 import project.dailyge.app.common.response.ApiResponse;
 import project.dailyge.app.core.user.application.UserReadUseCase;
-import project.dailyge.app.core.user.dto.response.UserInfoResponse;
+import project.dailyge.app.core.user.presentation.response.UserInfoResponse;
 import project.dailyge.domain.user.UserJpaEntity;
 
 import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.OK;

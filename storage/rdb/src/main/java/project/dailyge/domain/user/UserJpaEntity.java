@@ -128,6 +128,10 @@ public class UserJpaEntity extends BaseEntity {
         this.deletedAt = LocalDateTime.now();
     }
 
+    public void profileImageInit(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
+    }
+
     public static String getOverMaxNicknameLengthErrorMessage() {
         return OVER_MAX_NICKNAME_LENGTH_ERROR_MESSAGE;
     }

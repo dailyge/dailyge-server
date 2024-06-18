@@ -156,12 +156,14 @@ class TaskJpaEntityTest {
 
         task.update(newTitle, newContent, today, newStatus);
 
-        assertEquals(newTitle, task.getTitle());
-        assertEquals(newContent, task.getContent());
-        assertEquals(today, task.getDate());
-        assertEquals(today.getYear(), task.getYear());
-        assertEquals(today.getMonthValue(), task.getMonth());
-        assertEquals(newStatus, task.getStatus());
+        assertAll(
+            () -> assertEquals(newTitle, task.getTitle()),
+            () -> assertEquals(newContent, task.getContent()),
+            () -> assertEquals(today, task.getDate()),
+            () -> assertEquals(today.getYear(), task.getYear()),
+            () -> assertEquals(today.getMonthValue(), task.getMonth()),
+            () -> assertEquals(newStatus, task.getStatus())
+        );
     }
 
     @Test

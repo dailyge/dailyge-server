@@ -15,12 +15,12 @@ public record DailygeToken(
     }
 
     public String getRefreshTokenCookie() {
-        ResponseCookie cookie = ResponseCookie.from(REFRESH_TOKEN, refreshToken)
+        return ResponseCookie.from(REFRESH_TOKEN, refreshToken)
             .httpOnly(true)
             .secure(true)
             .maxAge(maxAge)
-            .build();
-        return cookie.toString();
+            .build()
+            .toString();
     }
 
     @Override

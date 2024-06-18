@@ -24,21 +24,21 @@ public class UserFacade {
     private final RedisService redisService;
 
     public DailygeToken login(final String code) throws CommonException {
-        ClientRegistration clientRegistration = clientRegistrationRepository.findByRegistrationId("google");
-        GoogleUserInfoResponse response = googleOAuthClient.getAccessToken(clientRegistration, code);
+        final ClientRegistration clientRegistration = clientRegistrationRepository.findByRegistrationId("google");
+        final GoogleUserInfoResponse response = googleOAuthClient.getAccessToken(clientRegistration, code);
 
-        UserJpaEntity user = userWriteUseCase.upsert(new UserJpaEntity(response.getName(), response.getEmail(), response.getPicture()));
-        DailygeToken token = createToken(user);
+        final UserJpaEntity user = userWriteUseCase.upsert(new UserJpaEntity(response.getName(), response.getEmail(), response.getPicture()));
+        final DailygeToken token = createToken(user);
         saveRefreshToken(user, token.refreshToken());
         return token;
     }
 
-    private DailygeToken createToken(UserJpaEntity user) {
-        DailygeToken dailygeToken = tokenProvider.createToken(user);
+    private DailygeToken createToken(final UserJpaEntity user) {
+        final DailygeToken dailygeToken = tokenProvider.createToken(user);
         return dailygeToken;
     }
 
-    private void saveRefreshToken(UserJpaEntity user, String refreshToken) {
+    private void saveRefreshToken(final UserJpaEntity user, final String refreshToken) {
         redisService.saveRefreshToken(user.getId(), refreshToken);
     }
 }

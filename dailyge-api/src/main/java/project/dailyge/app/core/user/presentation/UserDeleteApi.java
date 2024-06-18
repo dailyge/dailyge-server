@@ -20,8 +20,8 @@ public class UserDeleteApi {
 
     @DeleteMapping(path = "/{userId}")
     public ApiResponse<Void> userDelete(
-        @LoginUser DailygeUser dailygeUser,
-        @PathVariable(name = "userId") Long userId
+        @LoginUser final DailygeUser dailygeUser,
+        @PathVariable(name = "userId") final Long userId
     ) {
         dailygeUser.isOwner(userId);
         userWriteUseCase.delete(userId);

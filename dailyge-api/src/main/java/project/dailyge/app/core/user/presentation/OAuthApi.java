@@ -26,7 +26,7 @@ public class OAuthApi {
         final DailygeToken dailygeToken = userFacade.login(code);
         final HttpHeaders headers = new HttpHeaders();
         headers.add(SET_COOKIE, dailygeToken.getRefreshTokenCookie());
-        OAuthLoginResponse payload = new OAuthLoginResponse(dailygeToken.accessToken());
+        final OAuthLoginResponse payload = new OAuthLoginResponse(dailygeToken.accessToken());
         return ApiResponse.from(OK, headers, payload);
     }
 }

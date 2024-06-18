@@ -17,7 +17,7 @@ public class WebConfiguration implements WebMvcConfigurer {
     private final TokenProvider tokenProvider;
 
     @Override
-    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
+    public void addArgumentResolvers(final List<HandlerMethodArgumentResolver> resolvers) {
         resolvers.add(new AuthArgumentResolver(userReadUseCase, tokenProvider));
     }
 }

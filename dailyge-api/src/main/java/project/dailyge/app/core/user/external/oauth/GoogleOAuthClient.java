@@ -48,7 +48,7 @@ public class GoogleOAuthClient {
         return userInfoResponse.getBody();
     }
 
-    private GoogleAuthorizationResponse googleAuthorization(GoogleAuthorizationRequest request) {
+    private GoogleAuthorizationResponse googleAuthorization(final GoogleAuthorizationRequest request) {
         try {
             return restTemplate.postForObject(authorizationUrl, request, GoogleAuthorizationResponse.class);
         } catch (Exception e) {
@@ -57,10 +57,10 @@ public class GoogleOAuthClient {
         return null;
     }
 
-    private ResponseEntity<GoogleUserInfoResponse> getGoogleUserInfo(GoogleAuthorizationResponse authorizationResponse) {
+    private ResponseEntity<GoogleUserInfoResponse> getGoogleUserInfo(final GoogleAuthorizationResponse response) {
         try {
             final HttpHeaders headers = new HttpHeaders();
-            headers.set(AUTHORIZATION, BEARER + authorizationResponse.getAccessToken());
+            headers.set(AUTHORIZATION, BEARER + response.getAccessToken());
             return restTemplate.exchange(userAccessUrl, GET, new HttpEntity<>(headers), GoogleUserInfoResponse.class);
         } catch (Exception e) {
             log.error("Google OAuth2 사용자 정보 조회 예외:{}", e.getMessage());

@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.document;
 import project.dailyge.app.common.DatabaseTestBase;
-import project.dailyge.app.core.task.dto.requesst.TaskRegisterRequest;
+import project.dailyge.app.core.task.presentation.requesst.TaskRegisterRequest;
 import project.dailyge.app.core.user.application.UserWriteUseCase;
 import project.dailyge.app.fixture.user.UserFixture;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASK_AUTHORIZATION_HEADER;

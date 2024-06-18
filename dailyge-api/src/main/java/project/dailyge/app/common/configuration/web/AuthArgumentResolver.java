@@ -15,6 +15,7 @@ import project.dailyge.app.common.exception.UnAuthorizedException;
 import project.dailyge.app.core.user.application.UserReadUseCase;
 import project.dailyge.domain.user.UserJpaEntity;
 
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
 
 @RequiredArgsConstructor
@@ -37,17 +38,18 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
     ) {
         final HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
         String accessToken = getToken(request);
-        tokenProvider.isValidToken(accessToken);
+        if (tokenProvider.isValidToken(accessToken)) {
+            Long userId = tokenProvider.getUserId(accessToken);
+            validateUserId(userId);
 
-        Long userId = tokenProvider.getUserId(accessToken);
-        validateUserId(userId);
-
-        final UserJpaEntity findUser = userReadUseCase.findAuthorizedById(userId);
-        return new DailygeUser(findUser);
+            final UserJpaEntity findUser = userReadUseCase.findAuthorizedById(userId);
+            return new DailygeUser(findUser);
+        }
+        return null;
     }
 
     private String getToken(HttpServletRequest request) {
-        String accessToken = request.getHeader(HttpHeaders.AUTHORIZATION);
+        String accessToken = request.getHeader(AUTHORIZATION);
         if (accessToken != null && accessToken.startsWith("Bearer ")) {
             accessToken = accessToken.substring(7);
         }

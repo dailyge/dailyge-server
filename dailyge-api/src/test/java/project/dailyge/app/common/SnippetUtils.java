@@ -2,7 +2,7 @@ package project.dailyge.app.common;
 
 import org.springframework.restdocs.constraints.ConstraintDescriptions;
 import org.springframework.restdocs.snippet.Attributes;
-import project.dailyge.app.core.task.dto.requesst.TaskRegisterRequest;
+import project.dailyge.app.core.task.presentation.requesst.TaskRegisterRequest;
 
 import java.util.List;
 

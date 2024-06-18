@@ -6,6 +6,7 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.headerWit
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import org.springframework.restdocs.headers.RequestHeadersSnippet;
 import org.springframework.restdocs.payload.FieldDescriptor;
+import static org.springframework.restdocs.payload.JsonFieldType.NULL;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
@@ -32,8 +33,25 @@ public interface TaskSnippet {
             .attributes(getAttribute("date")),
     };
 
+    FieldDescriptor[] TASK_UPDATE_REQUEST_FIELDS = {
+        fieldWithPath("title").description("제목")
+            .attributes(getAttribute("title")),
+        fieldWithPath("content").description("내용")
+            .attributes(getAttribute("content")),
+        fieldWithPath("date").description("날짜")
+            .attributes(getAttribute("date")),
+        fieldWithPath("status").description("상태")
+            .attributes(getAttribute("status"))
+    };
+
     FieldDescriptor[] TASK_CREATE_RESPONSE = {
         fieldWithPath("data.taskId").type(NUMBER).description("할 일 ID"),
+        fieldWithPath("code").type(STRING).description("응답 코드"),
+        fieldWithPath("message").type(STRING).description("응답 메시지")
+    };
+
+    FieldDescriptor[] TASK_UPDATE_RESPONSE = {
+        fieldWithPath("data").type(NULL).description("데이터"),
         fieldWithPath("code").type(STRING).description("응답 코드"),
         fieldWithPath("message").type(STRING).description("응답 메시지")
     };
@@ -58,6 +76,9 @@ public interface TaskSnippet {
 
     RequestFieldsSnippet TASK_CREATE_REQUEST_SNIPPET = requestFields(TASK_CREATE_REQUEST_FIELDS);
     ResponseFieldsSnippet TASK_CREATE_RESPONSE_SNIPPET = responseFields(TASK_CREATE_RESPONSE);
+
+    RequestFieldsSnippet TASK_UPDATE_REQUEST_SNIPPET = requestFields(TASK_UPDATE_REQUEST_FIELDS);
+    ResponseFieldsSnippet TASK_UPDATE_RESPONSE_SNIPPET = responseFields(TASK_UPDATE_RESPONSE);
 
     // Detail Search
     PathParametersSnippet TASK_DETAIL_SEARCH_PATH_PARAMETER_SNIPPET = pathParameters(TASK_DETAIL_SEARCH_PATH_DESCRIPTOR);

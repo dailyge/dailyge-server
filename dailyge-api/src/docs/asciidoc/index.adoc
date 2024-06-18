@@ -118,23 +118,48 @@ include::{snippets}/task_detail_search_documentation_test/when_task_exists_then_
 
 #### Request
 
-include::{snippets}/task_jpa_entity_save_documentation_test/task_save_test/http-request.adoc[]
+include::{snippets}/task_register_documentation_test/when_register_task_then_status_code_should_be_201/http-request.adoc[]
 
 #### Request-Header
 
-include::{snippets}/task_jpa_entity_save_documentation_test/task_save_test/request-headers.adoc[]
+include::{snippets}/task_register_documentation_test/when_register_task_then_status_code_should_be_201/request-headers.adoc[]
 
 #### Request-Fields
 
-include::{snippets}/task_jpa_entity_save_documentation_test/task_save_test/request-fields.adoc[]
+include::{snippets}/task_register_documentation_test/when_register_task_then_status_code_should_be_201/request-fields.adoc[]
 
 #### Response
 
-include::{snippets}/task_jpa_entity_save_documentation_test/task_save_test/http-response.adoc[]
+include::{snippets}/task_register_documentation_test/when_register_task_then_status_code_should_be_201/http-response.adoc[]
 
 #### Response-Fields
 
-include::{snippets}/task_jpa_entity_save_documentation_test/task_save_test/response-fields.adoc[]
+include::{snippets}/task_register_documentation_test/when_register_task_then_status_code_should_be_201/response-fields.adoc[]
+
+### 2-3. 할일 수정
+
+오늘 할 일을 수정하는 API 입니다.
+
+#### Request
+
+include::{snippets}/task_update_documentation_test/when_update_task_then_status_code_should_be_200/http-request.adoc[]
+
+#### Request-Header
+
+include::{snippets}/task_update_documentation_test/when_update_task_then_status_code_should_be_200/request-headers.adoc[]
+
+#### Request-Fields
+
+include::{snippets}/task_update_documentation_test/when_update_task_then_status_code_should_be_200/request-fields.adoc[]
+
+#### Response
+
+include::{snippets}/task_update_documentation_test/when_update_task_then_status_code_should_be_200/http-response.adoc[]
+
+#### Response-Fields
+
+include::{snippets}/task_update_documentation_test/when_update_task_then_status_code_should_be_200/response-fields.adoc[]
+
 
 ### 2-4. 할일 삭제
 

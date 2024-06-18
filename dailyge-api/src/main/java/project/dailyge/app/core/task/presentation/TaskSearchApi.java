@@ -10,7 +10,7 @@ import project.dailyge.app.common.auth.LoginUser;
 import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.OK;
 import project.dailyge.app.common.response.ApiResponse;
 import project.dailyge.app.core.task.application.TaskReadUseCase;
-import project.dailyge.app.core.task.dto.response.TaskDetailResponse;
+import project.dailyge.app.core.task.presentation.response.TaskDetailResponse;
 import project.dailyge.domain.task.TaskJpaEntity;
 
 @RestController

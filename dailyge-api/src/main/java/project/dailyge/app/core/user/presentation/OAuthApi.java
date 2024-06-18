@@ -25,7 +25,7 @@ public class OAuthApi {
         DailygeToken dailygeToken = userFacade.oAuthLogin(code);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.set(AUTHORIZATION, "Bearer " + dailygeToken.accessToken());
+        headers.set(AUTHORIZATION, dailygeToken.getAuthorizationToken());
         headers.add(HttpHeaders.SET_COOKIE, dailygeToken.getRefreshTokenCookie());
 
         return ApiResponse.from(CommonCodeAndMessage.OK, headers,null);

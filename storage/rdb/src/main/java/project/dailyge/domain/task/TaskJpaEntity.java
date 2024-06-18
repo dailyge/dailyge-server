@@ -148,6 +148,20 @@ public class TaskJpaEntity extends BaseEntity {
         return this.userId.equals(userId);
     }
 
+    public void update(
+        final String title,
+        final String content,
+        final LocalDate date,
+        final TaskStatus status
+    ) {
+        this.title = title;
+        this.content = content;
+        this.date = date;
+        this.year = date.getYear();
+        this.month = date.getMonthValue();
+        this.status = status;
+    }
+
     public void delete() {
         this.deleted = true;
     }

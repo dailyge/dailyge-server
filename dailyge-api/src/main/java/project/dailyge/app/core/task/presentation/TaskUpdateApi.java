@@ -28,7 +28,12 @@ public class TaskUpdateApi {
         @PathVariable(name = "taskId") final Long taskId,
         @RequestBody final TaskUpdateRequest request
     ) {
-        TaskUpdateCommand command = new TaskUpdateCommand(request.title(), request.content(), request.date());
+        TaskUpdateCommand command = new TaskUpdateCommand(
+            request.title(),
+            request.content(),
+            request.date(),
+            request.status()
+        );
         taskWriteUseCase.update(dailygeUser, taskId, command);
         return ApiResponse.from(NO_CONTENT);
     }

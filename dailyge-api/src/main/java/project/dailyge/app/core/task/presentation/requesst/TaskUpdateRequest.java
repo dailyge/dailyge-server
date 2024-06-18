@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
+import project.dailyge.domain.task.TaskStatus;
 
 import java.time.LocalDate;
 
@@ -20,6 +21,9 @@ public record TaskUpdateRequest(
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     @NotNull(message = "날짜를 입력해주세요.")
-    LocalDate date
+    LocalDate date,
+
+    @NotNull(message = "할 일 상태를 입력해주세요.")
+    TaskStatus status
 ) {
 }

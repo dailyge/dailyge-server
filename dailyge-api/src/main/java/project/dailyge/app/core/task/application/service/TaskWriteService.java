@@ -36,10 +36,10 @@ class TaskWriteService implements TaskWriteUseCase {
     ) {
         final TaskJpaEntity findTask = taskReadRepository.findById(taskId)
             .orElseThrow(() -> TaskTypeException.from(TASK_NOT_FOUND));
-        if (findTask.isOwner(dailygeUser.getUserId())) {
+        if (!findTask.isOwner(dailygeUser.getUserId())) {
             throw new UnAuthorizedException();
         }
-        findTask.update(command.title(), command.content(), command.date());
+        findTask.update(command.title(), command.content(), command.date(), command.status());
     }
 
     @Override

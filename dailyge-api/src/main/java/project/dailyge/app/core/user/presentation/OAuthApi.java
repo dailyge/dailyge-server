@@ -10,8 +10,7 @@ import project.dailyge.app.common.auth.DailygeToken;
 import project.dailyge.app.common.codeandmessage.CommonCodeAndMessage;
 import project.dailyge.app.common.response.ApiResponse;
 import project.dailyge.app.core.user.facade.UserFacade;
-
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+import project.dailyge.app.core.user.presentation.response.OAuthLoginResponse;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,13 +20,13 @@ public class OAuthApi {
     private final UserFacade userFacade;
 
     @GetMapping
-    public ApiResponse<Void> oAuthLogin(@RequestParam("code") String code) {
-        DailygeToken dailygeToken = userFacade.oAuthLogin(code);
+    public ApiResponse<OAuthLoginResponse> oAuthLogin(@RequestParam("code") final String code) {
+        final DailygeToken dailygeToken = userFacade.oAuthLogin(code);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.set(AUTHORIZATION, dailygeToken.getAuthorizationToken());
+        final HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.SET_COOKIE, dailygeToken.getRefreshTokenCookie());
 
-        return ApiResponse.from(CommonCodeAndMessage.OK, headers,null);
+        OAuthLoginResponse payload = new OAuthLoginResponse(dailygeToken.accessToken());
+        return ApiResponse.from(CommonCodeAndMessage.OK, headers, payload);
     }
 }

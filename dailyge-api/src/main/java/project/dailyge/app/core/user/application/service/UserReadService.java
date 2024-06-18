@@ -19,28 +19,28 @@ import static project.dailyge.app.core.user.exception.UserCodeAndMessage.USER_NO
 @RequiredArgsConstructor
 class UserReadService implements UserReadUseCase {
 
-    private final UserEntityReadRepository readRepository;
+    private final UserEntityReadRepository userReadRepository;
 
     @Override
     public UserJpaEntity findById(final Long userId) {
-        return readRepository.findById(userId)
+        return userReadRepository.findById(userId)
             .orElseThrow(() -> UserTypeException.from(USER_NOT_FOUND));
     }
 
     @Override
     public UserJpaEntity findActiveUserById(final Long userId) {
-        return readRepository.findActiveUserById(userId)
+        return userReadRepository.findActiveUserById(userId)
             .orElseThrow(() -> UserTypeException.from(ACTIVE_USER_NOT_FOUND));
     }
 
     @Override
     public UserJpaEntity findAuthorizedById(final Long userId) {
-        return readRepository.findActiveUserById(userId)
+        return userReadRepository.findActiveUserById(userId)
             .orElseThrow(() -> new UnAuthorizedException(USER_NOT_FOUND_MESSAGE, INVALID_USER_ID));
     }
 
     @Override
     public Optional<UserJpaEntity> findActiveUserByEmail(final String email) {
-        return readRepository.findActiveUserByEmail(email);
+        return userReadRepository.findActiveUserByEmail(email);
     }
 }

@@ -18,39 +18,39 @@ import static project.dailyge.app.core.user.exception.UserCodeAndMessage.USER_NO
 @RequiredArgsConstructor
 public class UserWriteService implements UserWriteUseCase {
 
-    private final UserEntityReadRepository readRepository;
-    private final UserEntityWriteRepository writeRepository;
+    private final UserEntityReadRepository userReadRepository;
+    private final UserEntityWriteRepository userWriteRepository;
 
     @Override
     @Transactional
     public UserJpaEntity save(final UserJpaEntity user) {
-        final Optional<UserJpaEntity> findUser = readRepository.findActiveUserByEmail(user.getEmail());
+        final Optional<UserJpaEntity> findUser = userReadRepository.findActiveUserByEmail(user.getEmail());
         if (findUser.isPresent()) {
             throw UserTypeException.from(DUPLICATED_EMAIL);
         }
-        return writeRepository.save(user);
+        return userWriteRepository.save(user);
     }
 
     @Override
     @Transactional
     public UserJpaEntity upsert(final UserJpaEntity newUser) {
-        Optional<UserJpaEntity> findUser = readRepository.findActiveUserByEmail(newUser.getEmail());
+        Optional<UserJpaEntity> findUser = userReadRepository.findActiveUserByEmail(newUser.getEmail());
         if (!findUser.isPresent()) {
-            return writeRepository.save(newUser);
+            return userWriteRepository.save(newUser);
         }
         UserJpaEntity user = findUser.get();
         if (newUser.getProfileImageUrl() != null) {
             user.profileImageInit(newUser.getProfileImageUrl());
         }
-        return writeRepository.save(user);
+        return userWriteRepository.save(user);
     }
 
     @Override
     @Transactional
     public void delete(final Long userId) {
-        final UserJpaEntity findUser = readRepository.findActiveUserById(userId)
+        final UserJpaEntity findUser = userReadRepository.findActiveUserById(userId)
             .orElseThrow(() -> UserTypeException.from(USER_NOT_FOUND));
         findUser.delete();
-        writeRepository.save(findUser);
+        userWriteRepository.save(findUser);
     }
 }

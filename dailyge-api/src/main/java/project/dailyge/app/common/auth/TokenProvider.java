@@ -1,41 +1,40 @@
 package project.dailyge.app.common.auth;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Header;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import project.dailyge.app.common.configuration.web.JwtProperties;
+import project.dailyge.app.common.exception.UnAuthorizedException;
 import project.dailyge.domain.user.UserJpaEntity;
 
 import java.time.Duration;
 import java.util.Date;
 
+import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.INVALID_USER_TOKEN;
+import static project.dailyge.app.common.exception.UnAuthorizedException.INVALID_TOKEN_MESSAGE;
+
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class TokenProvider {
 
     private final JwtProperties jwtProperties;
 
-    public DailygeToken createToken(UserJpaEntity user) {
-        String accessToken = generateToken(user, jwtProperties.getAccessExpiredTime());
-        String refreshToken = generateToken(user, jwtProperties.getRefreshExpiredTime());
+    public DailygeToken createToken(final UserJpaEntity user) {
+        final String accessToken = generateToken(user, getExpiry(jwtProperties.getAccessExpiredTime()));
+        final String refreshToken = generateToken(user, getExpiry(jwtProperties.getRefreshExpiredTime()));
         return new DailygeToken(accessToken, refreshToken, jwtProperties.getRefreshExpiredTime() * 3600);
     }
 
-    private String generateToken(final UserJpaEntity user, final int expiredTime) {
-        return makeToken(getExpiry(expiredTime), user);
-    }
-
     private Date getExpiry(final int expiredTime) {
-        Date now = new Date();
+        final Date now = new Date();
         return new Date(now.getTime() + Duration.ofHours(expiredTime).toMillis());
     }
 
-    private String makeToken(
-        final Date expiry,
-        final UserJpaEntity user
+    private String generateToken(
+        final UserJpaEntity user,
+        final Date expiry
     ) {
         return Jwts.builder()
             .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
@@ -52,20 +51,39 @@ public class TokenProvider {
                 .setSigningKey(jwtProperties.getSecretKey())
                 .parseClaimsJws(token);
             return true;
+        } catch (SignatureException e) {
+            log.error("서명 검증에 실패하였습니다.: {}", e.getMessage());
+        } catch (MalformedJwtException e) {
+            log.error("JWT 형식이 올바르지 않습니다: {}", e.getMessage());
+        } catch (ExpiredJwtException e) {
+            log.error("JWT 만료 되었습니다.: {}", e.getMessage());
+        } catch (UnsupportedJwtException e) {
+            log.error("지원되지 않는 JWT 입니다.: {}", e.getMessage());
+        } catch (IllegalArgumentException e) {
+            log.error("비어있는 JWT 입니다.: {}", e.getMessage());
         } catch (Throwable e) {
-            return false;
+            log.error(e.getMessage());
         }
+        return false;
     }
 
-    public Long getUserId(String token) {
-        Claims claims = getClaims(token);
+    public Long getUserId(final String token) {
+        final Claims claims = getClaims(token);
+        if (claims == null || claims.get("id") == null) {
+            throw new UnAuthorizedException(INVALID_TOKEN_MESSAGE, INVALID_USER_TOKEN);
+        }
         return claims.get("id", Long.class);
     }
 
-    private Claims getClaims(String token) {
-        return Jwts.parser()
-            .setSigningKey(jwtProperties.getSecretKey())
-            .parseClaimsJws(token)
-            .getBody();
+    private Claims getClaims(final String token) {
+        try {
+            return Jwts.parser()
+                .setSigningKey(jwtProperties.getSecretKey())
+                .parseClaimsJws(token)
+                .getBody();
+        } catch (Throwable e) {
+            log.error(e.getMessage());
+            return null;
+        }
     }
 }

@@ -10,8 +10,8 @@ import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.common.auth.LoginUser;
 import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.CREATED;
 import project.dailyge.app.common.response.ApiResponse;
-import project.dailyge.app.core.task.dto.requesst.TaskRegisterRequest;
-import project.dailyge.app.core.task.dto.response.TaskRegisterResponse;
+import project.dailyge.app.core.task.presentation.requesst.TaskRegisterRequest;
+import project.dailyge.app.core.task.presentation.response.TaskRegisterResponse;
 import project.dailyge.app.core.task.facade.TaskFacade;
 import project.dailyge.domain.task.TaskJpaEntity;
 

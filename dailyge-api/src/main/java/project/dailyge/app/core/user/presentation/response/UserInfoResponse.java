@@ -1,4 +1,4 @@
-package project.dailyge.app.core.user.dto.response;
+package project.dailyge.app.core.user.presentation.response;
 
 import lombok.Getter;
 import project.dailyge.domain.user.UserJpaEntity;

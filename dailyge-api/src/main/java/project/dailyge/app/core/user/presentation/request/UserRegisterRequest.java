@@ -1,4 +1,4 @@
-package project.dailyge.app.core.user.dto.request;
+package project.dailyge.app.core.user.presentation.request;
 
 import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;

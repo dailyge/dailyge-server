@@ -1,4 +1,4 @@
-package project.dailyge.app.core.user.dto.external.response;
+package project.dailyge.app.core.user.presentation.response.external;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

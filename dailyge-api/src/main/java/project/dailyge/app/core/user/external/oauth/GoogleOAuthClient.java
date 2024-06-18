@@ -8,9 +8,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import project.dailyge.app.common.codeandmessage.CommonCodeAndMessage;
 import project.dailyge.app.common.exception.CommonException;
-import project.dailyge.app.core.user.dto.external.request.GoogleAuthorizationRequest;
-import project.dailyge.app.core.user.dto.external.response.GoogleAuthorizationResponse;
-import project.dailyge.app.core.user.dto.external.response.GoogleUserInfoResponse;
+import project.dailyge.app.core.user.presentation.GoogleAuthorizationRequest;
+import project.dailyge.app.core.user.presentation.response.external.GoogleAuthorizationResponse;
+import project.dailyge.app.core.user.presentation.response.external.GoogleUserInfoResponse;
 
 import static org.springframework.http.HttpMethod.GET;
 

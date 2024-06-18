@@ -3,7 +3,6 @@ package project.dailyge.app.common.configuration.web;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
-import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -21,6 +20,9 @@ import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.UN_
 @RequiredArgsConstructor
 public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
 
+    private static final String BEARER = "Bearer ";
+    private static final int TOKEN_BEGIN_INDEX = 7;
+
     private final UserReadUseCase userReadUseCase;
     private final TokenProvider tokenProvider;
 
@@ -31,15 +33,15 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public Object resolveArgument(
-        MethodParameter parameter,
-        ModelAndViewContainer mavContainer,
-        NativeWebRequest webRequest,
-        WebDataBinderFactory binderFactory
+        final MethodParameter parameter,
+        final ModelAndViewContainer mavContainer,
+        final NativeWebRequest webRequest,
+        final WebDataBinderFactory binderFactory
     ) {
         final HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
-        String accessToken = getToken(request);
+        final String accessToken = getToken(request);
         if (tokenProvider.isValidToken(accessToken)) {
-            Long userId = tokenProvider.getUserId(accessToken);
+            final Long userId = tokenProvider.getUserId(accessToken);
             validateUserId(userId);
 
             final UserJpaEntity findUser = userReadUseCase.findAuthorizedById(userId);
@@ -48,15 +50,15 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
         return null;
     }
 
-    private String getToken(HttpServletRequest request) {
-        String accessToken = request.getHeader(AUTHORIZATION);
-        if (accessToken != null && accessToken.startsWith("Bearer ")) {
-            accessToken = accessToken.substring(7);
+    private String getToken(final HttpServletRequest request) {
+        final String accessToken = request.getHeader(AUTHORIZATION);
+        if (accessToken != null && accessToken.startsWith(BEARER)) {
+            return accessToken.substring(TOKEN_BEGIN_INDEX);
         }
         return accessToken;
     }
 
-    private void validateUserId(Long userId) {
+    private void validateUserId(final Long userId) {
         if (userId == null) {
             final String detailMessage = String.format("사용자 아이디가 존재하지 않습니다. 입력된 값:%s", userId);
             throw new UnAuthorizedException(detailMessage, UN_AUTHORIZED);

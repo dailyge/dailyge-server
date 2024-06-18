@@ -20,7 +20,6 @@ public record DailygeToken(
             .secure(true)
             .maxAge(maxAge)
             .build();
-
         return cookie.toString();
     }
 

@@ -8,9 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.document;
 import project.dailyge.app.common.DatabaseTestBase;
-import project.dailyge.app.common.auth.DailygeToken;
 import project.dailyge.app.common.auth.DailygeUser;
-import project.dailyge.app.common.auth.TokenProvider;
 import project.dailyge.app.core.task.presentation.requesst.TaskRegisterRequest;
 import project.dailyge.app.core.task.facade.TaskFacade;
 import project.dailyge.app.core.user.application.UserWriteUseCase;
@@ -28,9 +26,6 @@ class TaskDetailSearchDocumentationTest extends DatabaseTestBase {
     private UserWriteUseCase userWriteUseCase;
 
     @Autowired
-    private TokenProvider tokenProvider;
-
-    @Autowired
     private TaskFacade taskFacade;
 
     @Test
@@ -38,7 +33,6 @@ class TaskDetailSearchDocumentationTest extends DatabaseTestBase {
     void whenTaskExistsThenStatusCodeShouldBe200_OK() {
         final UserJpaEntity newUser = userWriteUseCase.save(createUserJpaEntity());
         final TaskRegisterRequest request = new TaskRegisterRequest("주간 미팅", "Backend 팀과 Api 스펙 정의", now());
-        DailygeToken token = tokenProvider.createToken(newUser);
         final DailygeUser dailygeUser = new DailygeUser(newUser);
         final TaskJpaEntity newTaskId = taskFacade.save(request.toEntity(dailygeUser));
 
@@ -49,7 +43,7 @@ class TaskDetailSearchDocumentationTest extends DatabaseTestBase {
                 TASK_DETAIL_SEARCH_RESPONSE_SNIPPET
             ))
             .contentType(APPLICATION_JSON_VALUE)
-            .header(AUTHORIZATION, token.getAuthorizationToken())
+            .header(AUTHORIZATION, accessToken)
             .header(USER_ID_KEY, newUser.getId())
             .when()
             .get("/api/tasks/{taskId}", newTaskId.getId())

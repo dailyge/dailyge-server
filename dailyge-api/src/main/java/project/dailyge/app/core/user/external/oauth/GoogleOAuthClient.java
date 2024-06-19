@@ -3,18 +3,23 @@ package project.dailyge.app.core.user.external.oauth;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import project.dailyge.app.common.codeandmessage.CommonCodeAndMessage;
 import project.dailyge.app.common.exception.CommonException;
+import project.dailyge.app.common.exception.ExternalServerException;
 import project.dailyge.app.core.user.presentation.GoogleAuthorizationRequest;
 import project.dailyge.app.core.user.presentation.response.external.GoogleAuthorizationResponse;
 import project.dailyge.app.core.user.presentation.response.external.GoogleUserInfoResponse;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpStatus.OK;
+import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.BAD_GATEWAY;
+import static project.dailyge.app.common.exception.ExternalServerException.*;
 
 @Slf4j
 @Component
@@ -36,25 +41,24 @@ public class GoogleOAuthClient {
         final String code
     ) {
         final GoogleAuthorizationRequest authorizationRequest = new GoogleAuthorizationRequest(code, clientRegistration);
-        final GoogleAuthorizationResponse authorizationResponse = googleAuthorization(authorizationRequest);
+        final GoogleAuthorizationResponse authorizationResponse = getAuthorization(authorizationRequest);
         if (authorizationResponse == null) {
-            throw new CommonException(CommonCodeAndMessage.BAD_GATEWAY);
+            throw new CommonException(BAD_GATEWAY);
         }
 
         final ResponseEntity<GoogleUserInfoResponse> userInfoResponse = getGoogleUserInfo(authorizationResponse);
-        if (userInfoResponse == null || !userInfoResponse.getStatusCode().equals(HttpStatus.OK)) {
-            throw new CommonException(CommonCodeAndMessage.BAD_GATEWAY);
+        if (!userInfoResponse.getStatusCode().equals(OK)) {
+            throw new CommonException(BAD_GATEWAY);
         }
         return userInfoResponse.getBody();
     }
 
-    private GoogleAuthorizationResponse googleAuthorization(final GoogleAuthorizationRequest request) {
+    private GoogleAuthorizationResponse getAuthorization(final GoogleAuthorizationRequest request) {
         try {
             return restTemplate.postForObject(authorizationUrl, request, GoogleAuthorizationResponse.class);
-        } catch (Exception e) {
-            log.error("Google OAuth2 권한 인증 예외:{}", e.getMessage());
+        } catch (Exception ex) {
+            throw new ExternalServerException(OAUTH_AUTHORIZATION_API_ERROR_MESSAGE, BAD_GATEWAY);
         }
-        return null;
     }
 
     private ResponseEntity<GoogleUserInfoResponse> getGoogleUserInfo(final GoogleAuthorizationResponse response) {
@@ -62,9 +66,8 @@ public class GoogleOAuthClient {
             final HttpHeaders headers = new HttpHeaders();
             headers.set(AUTHORIZATION, BEARER + response.getAccessToken());
             return restTemplate.exchange(userAccessUrl, GET, new HttpEntity<>(headers), GoogleUserInfoResponse.class);
-        } catch (Exception e) {
-            log.error("Google OAuth2 사용자 정보 조회 예외:{}", e.getMessage());
+        } catch (Exception ex) {
+            throw new ExternalServerException(USER_INFO_API_ERROR_MESSAGE, BAD_GATEWAY);
         }
-        return null;
     }
 }

@@ -6,13 +6,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import project.dailyge.app.common.configuration.web.JwtProperties;
 import project.dailyge.app.common.exception.UnAuthorizedException;
-import project.dailyge.domain.user.Role;
 import project.dailyge.domain.user.UserJpaEntity;
 
 import java.time.Duration;
 import java.util.Date;
 
 import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.INVALID_USER_TOKEN;
+import static project.dailyge.app.common.exception.UnAuthorizedException.INVALID_ID_TYPE_MESSAGE;
 import static project.dailyge.app.common.exception.UnAuthorizedException.INVALID_TOKEN_MESSAGE;
 
 @Slf4j
@@ -21,8 +21,6 @@ import static project.dailyge.app.common.exception.UnAuthorizedException.INVALID
 public class TokenProvider {
 
     private static final String ID = "id";
-    private static final String NICKNAME = "nickname";
-    private static final String ROLE = "role";
 
     private final JwtProperties jwtProperties;
 
@@ -46,8 +44,6 @@ public class TokenProvider {
             .setExpiration(expiry)
             .setSubject(user.getEmail())
             .claim(ID, user.getId())
-            .claim(NICKNAME, user.getNickname())
-            .claim(ROLE, user.getRole().toString())
             .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey())
             .compact();
     }
@@ -79,23 +75,13 @@ public class TokenProvider {
         if (claims == null || claims.get(ID) == null) {
             throw new UnAuthorizedException(INVALID_TOKEN_MESSAGE, INVALID_USER_TOKEN);
         }
-        return claims.get(ID, Long.class);
-    }
-
-    public String getUserNickname(final String token) {
-        final Claims claims = getClaims(token);
-        if (claims == null || claims.get(NICKNAME) == null) {
-            throw new UnAuthorizedException(INVALID_TOKEN_MESSAGE, INVALID_USER_TOKEN);
+        try {
+            return claims.get(ID, Long.class);
+        } catch (RequiredTypeException ex) {
+            throw new UnAuthorizedException(INVALID_ID_TYPE_MESSAGE, INVALID_USER_TOKEN);
+        } catch (Exception ex) {
+            throw new UnAuthorizedException(ex.getMessage(), INVALID_USER_TOKEN);
         }
-        return claims.get(NICKNAME, String.class);
-    }
-
-    public String getUserRole(final String token) {
-        final Claims claims = getClaims(token);
-        if (claims == null || claims.get(ROLE) == null) {
-            throw new UnAuthorizedException(INVALID_TOKEN_MESSAGE, INVALID_USER_TOKEN);
-        }
-        return claims.get(ROLE, String.class);
     }
 
     private Claims getClaims(final String token) {

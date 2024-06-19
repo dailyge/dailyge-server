@@ -26,7 +26,7 @@ public class UserSearchApi {
         @LoginUser final DailygeUser dailygeUser,
         @PathVariable(value = "userId") final Long userId
     ) {
-        dailygeUser.isOwner(userId);
+        dailygeUser.validateAuth(userId);
         final UserJpaEntity findUser = userReadUseCase.findActiveUserById(userId);
         final UserInfoResponse payload = new UserInfoResponse(findUser);
         return ApiResponse.from(OK, payload);

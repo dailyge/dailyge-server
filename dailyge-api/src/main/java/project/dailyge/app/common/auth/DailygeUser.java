@@ -34,7 +34,7 @@ public class DailygeUser {
         return ADMIN.equals(this.role);
     }
 
-    public void isOwner(final Long userId) {
+    public void validateAuth(final Long userId) {
         if (!this.userId.equals(userId)) {
             throw new UnAuthorizedException(USER_NOT_MATCH_MESSAGE, UN_AUTHORIZED);
         }

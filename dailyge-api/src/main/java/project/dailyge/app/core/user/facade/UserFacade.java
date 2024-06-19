@@ -10,7 +10,7 @@ import project.dailyge.app.common.exception.CommonException;
 import project.dailyge.app.core.user.application.UserWriteUseCase;
 import project.dailyge.app.core.user.presentation.response.external.GoogleUserInfoResponse;
 import project.dailyge.app.core.user.external.oauth.GoogleOAuthClient;
-import project.dailyge.app.core.user.external.redis.service.RedisService;
+import project.dailyge.app.core.user.external.oauth.TokenManager;
 import project.dailyge.domain.user.UserJpaEntity;
 
 @Component
@@ -21,24 +21,15 @@ public class UserFacade {
     private final GoogleOAuthClient googleOAuthClient;
     private final UserWriteUseCase userWriteUseCase;
     private final TokenProvider tokenProvider;
-    private final RedisService redisService;
+    private final TokenManager tokenManager;
 
     public DailygeToken login(final String code) throws CommonException {
         final ClientRegistration clientRegistration = clientRegistrationRepository.findByRegistrationId("google");
         final GoogleUserInfoResponse response = googleOAuthClient.getAccessToken(clientRegistration, code);
-
-        final UserJpaEntity user = userWriteUseCase.upsert(new UserJpaEntity(response.getName(), response.getEmail(), response.getPicture()));
-        final DailygeToken token = createToken(user);
-        saveRefreshToken(user, token.refreshToken());
+        final UserJpaEntity user = new UserJpaEntity(response.getName(), response.getEmail(), response.getPicture());
+        final UserJpaEntity upsertUser = userWriteUseCase.upsert(user);
+        final DailygeToken token = tokenProvider.createToken(upsertUser);
+        tokenManager.saveRefreshToken(upsertUser.getId(), token.refreshToken());
         return token;
-    }
-
-    private DailygeToken createToken(final UserJpaEntity user) {
-        final DailygeToken dailygeToken = tokenProvider.createToken(user);
-        return dailygeToken;
-    }
-
-    private void saveRefreshToken(final UserJpaEntity user, final String refreshToken) {
-        redisService.saveRefreshToken(user.getId(), refreshToken);
     }
 }

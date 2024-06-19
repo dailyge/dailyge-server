@@ -7,9 +7,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.common.auth.LoginUser;
-import project.dailyge.app.common.codeandmessage.CommonCodeAndMessage;
 import project.dailyge.app.common.response.ApiResponse;
 import project.dailyge.app.core.user.application.UserWriteUseCase;
+
+import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.NO_CONTENT;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,8 +24,8 @@ public class UserDeleteApi {
         @LoginUser final DailygeUser dailygeUser,
         @PathVariable(name = "userId") final Long userId
     ) {
-        dailygeUser.isOwner(userId);
+        dailygeUser.validateAuth(userId);
         userWriteUseCase.delete(userId);
-        return ApiResponse.from(CommonCodeAndMessage.NO_CONTENT, null);
+        return ApiResponse.from(NO_CONTENT, null);
     }
 }

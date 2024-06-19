@@ -4,7 +4,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.context.request.NativeWebRequest;
 import project.dailyge.app.common.auth.DailygeToken;
 import project.dailyge.app.common.auth.DailygeUser;
@@ -14,8 +13,7 @@ import project.dailyge.app.common.configuration.web.JwtProperties;
 import project.dailyge.app.core.user.application.UserReadUseCase;
 import project.dailyge.domain.user.UserJpaEntity;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
@@ -26,7 +24,6 @@ class AuthArgumentResolverTest {
 
     private static final String SECRET_KEY = "secretKey";
 
-    private JwtProperties jwtProperties;
     private TokenProvider tokenProvider;
     private AuthArgumentResolver resolver;
     private UserReadUseCase userReadUseCase;
@@ -35,9 +32,9 @@ class AuthArgumentResolverTest {
 
     @BeforeEach
     void setUp() {
-        userReadUseCase = mock(UserReadUseCase.class);
-        jwtProperties = new JwtProperties(SECRET_KEY, 1, 2);
+        JwtProperties jwtProperties = new JwtProperties(SECRET_KEY, 1, 2);
         tokenProvider = new TokenProvider(jwtProperties);
+        userReadUseCase = mock(UserReadUseCase.class);
         resolver = new AuthArgumentResolver(userReadUseCase, tokenProvider);
         request = mock(HttpServletRequest.class);
         webRequest = mock(NativeWebRequest.class);
@@ -55,24 +52,27 @@ class AuthArgumentResolverTest {
         when(userReadUseCase.findAuthorizedById(user.getId()))
             .thenReturn(user);
 
-        DailygeUser result = (DailygeUser) resolver.resolveArgument(null, null, webRequest, null);
+        final DailygeUser result = (DailygeUser) resolver.resolveArgument(null, null, webRequest, null);
 
         assertNotNull(result);
     }
 
     @Test
-    @DisplayName("사용자 토큰이 없다면, 에러가 발생한다.")
-    void whenThen() {
-        //TODO - 지율
+    @DisplayName("토큰이 없다면, DailygeUser가 비어있다.")
+    void whenTokenIsEmptyThenDailygeUserShouldBeNull() {
+        final DailygeUser result = (DailygeUser) resolver.resolveArgument(null, null, webRequest, null);
+
+        assertNull(result);
     }
 
     @Test
     @DisplayName("사용자 ID가 유효하면 예외가 발생하지 않는다.")
     void shouldNotThrowExceptionWhenUserIdIsValid() {
-        String validUserId = "456";
-        UserJpaEntity expectedUser = createUserJpaEntity(456L);
-        when(request.getHeader("dailyge_user_id"))
-            .thenReturn(validUserId);
+        final String validUserId = "456";
+        final UserJpaEntity expectedUser = createUserJpaEntity(456L);
+        final DailygeToken token = tokenProvider.createToken(expectedUser);
+        when(request.getHeader(AUTHORIZATION))
+            .thenReturn(token.getAuthorizationToken());
         when(userReadUseCase.findAuthorizedById(Long.parseLong(validUserId)))
             .thenReturn(expectedUser);
 

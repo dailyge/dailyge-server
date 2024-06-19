@@ -35,7 +35,7 @@ public class UserWriteService implements UserWriteUseCase {
     @Transactional
     public UserJpaEntity upsert(final UserJpaEntity newUser) {
         final Optional<UserJpaEntity> findUser = userReadRepository.findActiveUserByEmail(newUser.getEmail());
-        if (!findUser.isPresent()) {
+        if (findUser.isEmpty()) {
             return userWriteRepository.save(newUser);
         }
         final UserJpaEntity user = findUser.get();

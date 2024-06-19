@@ -34,7 +34,7 @@ class DailygeUserTest {
     void whenUserIdSameThenShouldBePassed() {
         final DailygeUser dailygeUser = new DailygeUser(1L, Role.NORMAL);
 
-        assertDoesNotThrow(() -> dailygeUser.isOwner(1L));
+        assertDoesNotThrow(() -> dailygeUser.validateAuth(1L));
     }
 
     @Test
@@ -42,7 +42,7 @@ class DailygeUserTest {
     void whenUserIdDifferentThenUnAuthorizedExceptionShouldBeHappen() {
         final DailygeUser dailygeUser = new DailygeUser(1L, Role.NORMAL);
 
-        assertThatThrownBy(() -> dailygeUser.isOwner(2L))
+        assertThatThrownBy(() -> dailygeUser.validateAuth(2L))
             .isExactlyInstanceOf(UnAuthorizedException.class)
             .isInstanceOf(RuntimeException.class)
             .hasMessage(USER_NOT_MATCH_MESSAGE);

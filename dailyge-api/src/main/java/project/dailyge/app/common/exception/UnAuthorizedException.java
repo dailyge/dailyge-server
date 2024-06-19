@@ -10,6 +10,7 @@ public class UnAuthorizedException extends CommonException {
     public static final String USER_NOT_FOUND_MESSAGE = "존재하지 않는 사용자 정보입니다.";
     public static final String USER_NOT_MATCH_MESSAGE = "사용자 정보가 일치 하지 않습니다.";
     public static final String INVALID_TOKEN_MESSAGE = "올바르지 않는 사용자 토큰 정보입니다.";
+    public static final String INVALID_ID_TYPE_MESSAGE = "올바르지 않는 사용자 ID 유형입니다.";
 
     public UnAuthorizedException(
         final String detailMessage,

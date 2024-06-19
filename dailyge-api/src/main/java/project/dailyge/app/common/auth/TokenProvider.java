@@ -12,12 +12,15 @@ import java.time.Duration;
 import java.util.Date;
 
 import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.INVALID_USER_TOKEN;
+import static project.dailyge.app.common.exception.UnAuthorizedException.INVALID_ID_TYPE_MESSAGE;
 import static project.dailyge.app.common.exception.UnAuthorizedException.INVALID_TOKEN_MESSAGE;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class TokenProvider {
+
+    private static final String ID = "id";
 
     private final JwtProperties jwtProperties;
 
@@ -40,7 +43,7 @@ public class TokenProvider {
             .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
             .setExpiration(expiry)
             .setSubject(user.getEmail())
-            .claim("id", user.getId())
+            .claim(ID, user.getId())
             .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey())
             .compact();
     }
@@ -69,10 +72,16 @@ public class TokenProvider {
 
     public Long getUserId(final String token) {
         final Claims claims = getClaims(token);
-        if (claims == null || claims.get("id") == null) {
+        if (claims == null || claims.get(ID) == null) {
             throw new UnAuthorizedException(INVALID_TOKEN_MESSAGE, INVALID_USER_TOKEN);
         }
-        return claims.get("id", Long.class);
+        try {
+            return claims.get(ID, Long.class);
+        } catch (RequiredTypeException ex) {
+            throw new UnAuthorizedException(INVALID_ID_TYPE_MESSAGE, INVALID_USER_TOKEN);
+        } catch (Exception ex) {
+            throw new UnAuthorizedException(ex.getMessage(), INVALID_USER_TOKEN);
+        }
     }
 
     private Claims getClaims(final String token) {

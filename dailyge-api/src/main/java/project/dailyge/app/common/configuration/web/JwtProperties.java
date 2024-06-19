@@ -13,13 +13,17 @@ public class JwtProperties {
     @Value("${jwt.secret-key}")
     private String secretKey;
 
-    @Value("${jwt.accessExpiredTime}")
+    @Value("${jwt.access-expired-time}")
     private int accessExpiredTime;
 
-    @Value("${jwt.refreshExpiredTime}")
+    @Value("${jwt.refresh-expired-time}")
     private int refreshExpiredTime;
 
-    public JwtProperties(final String secretKey, final int accessExpiredTime, final int refreshExpiredTime) {
+    public JwtProperties(
+        final String secretKey,
+        final int accessExpiredTime,
+        final int refreshExpiredTime
+    ) {
         this.secretKey = secretKey;
         this.accessExpiredTime = accessExpiredTime;
         this.refreshExpiredTime = refreshExpiredTime;

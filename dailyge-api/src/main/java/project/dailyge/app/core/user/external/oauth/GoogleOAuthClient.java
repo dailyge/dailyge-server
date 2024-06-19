@@ -42,13 +42,9 @@ public class GoogleOAuthClient {
     ) {
         final GoogleAuthorizationRequest authorizationRequest = new GoogleAuthorizationRequest(code, clientRegistration);
         final GoogleAuthorizationResponse authorizationResponse = getAuthorization(authorizationRequest);
-        if (authorizationResponse == null) {
-            throw new CommonException(BAD_GATEWAY);
-        }
-
         final ResponseEntity<GoogleUserInfoResponse> userInfoResponse = getGoogleUserInfo(authorizationResponse);
-        if (!userInfoResponse.getStatusCode().equals(OK)) {
-            throw new CommonException(BAD_GATEWAY);
+        if (!OK.equals(userInfoResponse.getStatusCode())) {
+            throw new ExternalServerException(USER_INFO_API_ERROR_MESSAGE, BAD_GATEWAY);
         }
         return userInfoResponse.getBody();
     }
@@ -57,7 +53,7 @@ public class GoogleOAuthClient {
         try {
             return restTemplate.postForObject(authorizationUrl, request, GoogleAuthorizationResponse.class);
         } catch (Exception ex) {
-            throw new ExternalServerException(OAUTH_AUTHORIZATION_API_ERROR_MESSAGE, BAD_GATEWAY);
+            throw new ExternalServerException(ex.getMessage(), BAD_GATEWAY);
         }
     }
 
@@ -67,7 +63,7 @@ public class GoogleOAuthClient {
             headers.set(AUTHORIZATION, BEARER + response.getAccessToken());
             return restTemplate.exchange(userAccessUrl, GET, new HttpEntity<>(headers), GoogleUserInfoResponse.class);
         } catch (Exception ex) {
-            throw new ExternalServerException(USER_INFO_API_ERROR_MESSAGE, BAD_GATEWAY);
+            throw new ExternalServerException(ex.getMessage(), BAD_GATEWAY);
         }
     }
 }

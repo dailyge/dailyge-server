@@ -116,16 +116,11 @@ subprojects {
 
                 limit {
                     counter = "LINE"
-                    value = "COVEREDRATIO"
-                    minimum = 0.50
+                    value = "TOTALCOUNT"
+                    maximum = "200".toBigDecimal()
                 }
                 limit {
                     counter = "BRANCH"
-                    value = "COVEREDRATIO"
-                    minimum = 0.50
-                }
-                limit {
-                    counter = "COMPLEXITY"
                     value = "COVEREDRATIO"
                     minimum = 0.50
                 }

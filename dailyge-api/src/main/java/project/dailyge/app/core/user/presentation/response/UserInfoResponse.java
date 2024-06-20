@@ -1,7 +1,7 @@
 package project.dailyge.app.core.user.presentation.response;
 
 import lombok.Getter;
-import project.dailyge.domain.user.UserJpaEntity;
+import project.dailyge.entity.user.UserJpaEntity;
 
 @Getter
 public class UserInfoResponse {

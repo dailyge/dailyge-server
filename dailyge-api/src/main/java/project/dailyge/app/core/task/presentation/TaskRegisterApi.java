@@ -13,7 +13,7 @@ import project.dailyge.app.common.response.ApiResponse;
 import project.dailyge.app.core.task.presentation.requesst.TaskRegisterRequest;
 import project.dailyge.app.core.task.presentation.response.TaskRegisterResponse;
 import project.dailyge.app.core.task.facade.TaskFacade;
-import project.dailyge.domain.task.TaskJpaEntity;
+import project.dailyge.entity.task.TaskJpaEntity;
 
 @RestController
 @RequiredArgsConstructor

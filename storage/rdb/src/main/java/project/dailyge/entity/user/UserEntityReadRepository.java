@@ -1,4 +1,4 @@
-package project.dailyge.domain.user;
+package project.dailyge.entity.user;
 
 import java.util.Optional;
 

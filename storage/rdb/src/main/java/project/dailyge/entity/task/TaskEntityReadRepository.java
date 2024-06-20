@@ -1,6 +1,4 @@
-package project.dailyge.app.core.task.persistence;
-
-import project.dailyge.domain.task.TaskJpaEntity;
+package project.dailyge.entity.task;
 
 import java.util.Optional;
 

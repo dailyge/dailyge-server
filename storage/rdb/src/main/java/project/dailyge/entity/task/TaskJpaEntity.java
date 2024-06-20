@@ -1,4 +1,4 @@
-package project.dailyge.domain.task;
+package project.dailyge.entity.task;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,7 +10,7 @@ import jakarta.persistence.Id;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import project.dailyge.domain.BaseEntity;
+import project.dailyge.entity.BaseEntity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

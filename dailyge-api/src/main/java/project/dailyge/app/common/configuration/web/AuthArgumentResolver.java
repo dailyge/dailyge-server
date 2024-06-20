@@ -12,7 +12,7 @@ import project.dailyge.app.common.auth.LoginUser;
 import project.dailyge.app.common.auth.TokenProvider;
 import project.dailyge.app.common.exception.UnAuthorizedException;
 import project.dailyge.app.core.user.application.UserReadUseCase;
-import project.dailyge.domain.user.UserJpaEntity;
+import project.dailyge.entity.user.UserJpaEntity;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;

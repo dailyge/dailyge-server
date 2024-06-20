@@ -2,7 +2,7 @@ package project.dailyge.app.core.task.application;
 
 import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.core.task.application.command.TaskUpdateCommand;
-import project.dailyge.domain.task.TaskJpaEntity;
+import project.dailyge.entity.task.TaskJpaEntity;
 
 public interface TaskWriteUseCase {
     TaskJpaEntity save(TaskJpaEntity task);

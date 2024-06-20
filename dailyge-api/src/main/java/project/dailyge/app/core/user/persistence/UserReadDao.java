@@ -1,14 +1,14 @@
-package project.dailyge.app.core.user.persistence.dao;
+package project.dailyge.app.core.user.persistence;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import project.dailyge.domain.user.UserEntityReadRepository;
-import project.dailyge.domain.user.UserJpaEntity;
+import project.dailyge.entity.user.UserEntityReadRepository;
+import project.dailyge.entity.user.UserJpaEntity;
 
 import java.util.Optional;
 
-import static project.dailyge.domain.user.QUserJpaEntity.userJpaEntity;
+import static project.dailyge.entity.user.QUserJpaEntity.userJpaEntity;
 
 @Repository
 @RequiredArgsConstructor

@@ -11,7 +11,7 @@ import project.dailyge.app.common.auth.TokenProvider;
 import project.dailyge.app.common.configuration.web.AuthArgumentResolver;
 import project.dailyge.app.common.configuration.web.JwtProperties;
 import project.dailyge.app.core.user.application.UserReadUseCase;
-import project.dailyge.domain.user.UserJpaEntity;
+import project.dailyge.entity.user.UserJpaEntity;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;

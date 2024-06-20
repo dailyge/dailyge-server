@@ -10,7 +10,7 @@ import project.dailyge.app.core.user.application.UserWriteUseCase;
 import static project.dailyge.app.core.user.exception.UserCodeAndMessage.DUPLICATED_EMAIL;
 import project.dailyge.app.core.user.exception.UserTypeException;
 import project.dailyge.app.core.user.presentation.request.UserRegisterRequest;
-import project.dailyge.domain.user.UserJpaEntity;
+import project.dailyge.entity.user.UserJpaEntity;
 
 @DisplayName("[IntegrationTest] 사용자 저장 통합 테스트")
 public class UserRegisterIntegrationTest extends DatabaseTestBase {

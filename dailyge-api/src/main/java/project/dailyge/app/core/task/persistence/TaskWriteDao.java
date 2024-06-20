@@ -1,10 +1,10 @@
-package project.dailyge.app.core.task.persistence.dao;
+package project.dailyge.app.core.task.persistence;
 
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import project.dailyge.app.core.task.persistence.TaskEntityWriteRepository;
-import project.dailyge.domain.task.TaskJpaEntity;
+import project.dailyge.entity.task.TaskEntityWriteRepository;
+import project.dailyge.entity.task.TaskJpaEntity;
 
 @Repository
 @RequiredArgsConstructor

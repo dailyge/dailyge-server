@@ -5,8 +5,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 import project.dailyge.app.common.auth.DailygeUser;
-import project.dailyge.domain.task.TaskJpaEntity;
-import project.dailyge.domain.task.TaskStatus;
+import project.dailyge.entity.task.TaskJpaEntity;
+import project.dailyge.entity.task.TaskStatus;
 
 import java.time.LocalDate;
 

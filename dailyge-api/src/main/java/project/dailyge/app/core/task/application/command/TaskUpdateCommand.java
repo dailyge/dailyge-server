@@ -1,6 +1,6 @@
 package project.dailyge.app.core.task.application.command;
 
-import project.dailyge.domain.task.TaskStatus;
+import project.dailyge.entity.task.TaskStatus;
 
 import java.time.LocalDate;
 

@@ -3,7 +3,7 @@ package project.dailyge.app.core.task.application.service;
 import org.springframework.stereotype.Component;
 import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.common.exception.UnAuthorizedException;
-import project.dailyge.domain.task.TaskJpaEntity;
+import project.dailyge.entity.task.TaskJpaEntity;
 
 @Component
 public class TaskValidator {

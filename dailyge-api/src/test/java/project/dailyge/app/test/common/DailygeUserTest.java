@@ -4,7 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.common.exception.UnAuthorizedException;
-import project.dailyge.domain.user.Role;
+import project.dailyge.entity.user.Role;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;

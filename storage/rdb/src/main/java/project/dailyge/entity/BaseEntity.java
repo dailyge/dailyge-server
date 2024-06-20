@@ -1,4 +1,4 @@
-package project.dailyge.domain;
+package project.dailyge.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
@@ -30,5 +30,9 @@ public abstract class BaseEntity {
     protected Long lastModifiedBy;
 
     @Column(name = "deleted")
-    protected Boolean deleted = false;
+    protected boolean deleted = false;
+
+    public boolean getDeleted() {
+        return deleted;
+    }
 }

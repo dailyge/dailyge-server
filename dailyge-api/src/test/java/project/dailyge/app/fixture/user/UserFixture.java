@@ -1,8 +1,6 @@
 package project.dailyge.app.fixture.user;
 
-import project.dailyge.domain.user.UserJpaEntity;
-
-import java.time.LocalDateTime;
+import project.dailyge.entity.user.UserJpaEntity;
 
 public final class UserFixture {
 

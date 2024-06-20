@@ -16,8 +16,8 @@ import static project.dailyge.app.fixture.user.UserFixture.createUserJpaEntity;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASK_AUTHORIZATION_HEADER;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASK_DETAIL_SEARCH_PATH_PARAMETER_SNIPPET;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASK_DETAIL_SEARCH_RESPONSE_SNIPPET;
-import project.dailyge.domain.task.TaskJpaEntity;
-import project.dailyge.domain.user.UserJpaEntity;
+import project.dailyge.entity.task.TaskJpaEntity;
+import project.dailyge.entity.user.UserJpaEntity;
 
 @DisplayName("[DocumentationTest] 할 일 저장 문서화 테스트")
 class TaskDetailSearchDocumentationTest extends DatabaseTestBase {

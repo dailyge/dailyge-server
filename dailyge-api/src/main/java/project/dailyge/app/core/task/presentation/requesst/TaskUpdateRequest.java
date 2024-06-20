@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
-import project.dailyge.domain.task.TaskStatus;
+import project.dailyge.entity.task.TaskStatus;
 
 import java.time.LocalDate;
 

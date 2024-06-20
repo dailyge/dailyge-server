@@ -1,7 +1,7 @@
 package project.dailyge.app.core.task.presentation.response;
 
 import lombok.Getter;
-import project.dailyge.domain.task.TaskJpaEntity;
+import project.dailyge.entity.task.TaskJpaEntity;
 
 @Getter
 public class TaskRegisterResponse {

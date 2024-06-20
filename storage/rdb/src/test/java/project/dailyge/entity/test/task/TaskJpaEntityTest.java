@@ -1,4 +1,4 @@
-package project.dailyge.domain.test.task;
+package project.dailyge.entity.test.task;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
@@ -8,12 +8,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import project.dailyge.domain.task.TaskJpaEntity;
-import static project.dailyge.domain.task.TaskJpaEntity.getBeyondOneYearErrorMessage;
-import static project.dailyge.domain.task.TaskJpaEntity.getOverMaxContentLengthErrorMessage;
-import static project.dailyge.domain.task.TaskJpaEntity.getOverMaxTitleLengthErrorMessage;
-import static project.dailyge.domain.task.TaskJpaEntity.getPastDateErrorMessage;
-import project.dailyge.domain.task.TaskStatus;
+import project.dailyge.entity.task.TaskJpaEntity;
+import static project.dailyge.entity.task.TaskJpaEntity.getBeyondOneYearErrorMessage;
+import static project.dailyge.entity.task.TaskJpaEntity.getOverMaxContentLengthErrorMessage;
+import static project.dailyge.entity.task.TaskJpaEntity.getOverMaxTitleLengthErrorMessage;
+import static project.dailyge.entity.task.TaskJpaEntity.getPastDateErrorMessage;
+import project.dailyge.entity.task.TaskStatus;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

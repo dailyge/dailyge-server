@@ -9,9 +9,9 @@ import project.dailyge.app.common.*;
 import project.dailyge.app.core.task.facade.*;
 import project.dailyge.app.core.user.application.*;
 import project.dailyge.app.fixture.user.UserFixture;
-import project.dailyge.domain.task.*;
-import static project.dailyge.domain.task.TaskStatus.*;
-import project.dailyge.domain.user.*;
+import project.dailyge.entity.task.*;
+import static project.dailyge.entity.task.TaskStatus.*;
+import project.dailyge.entity.user.*;
 
 @DisplayName("[IntegrationTest] 할 일 저장 통합 테스트")
 public class TaskSaveIntegrationTest extends DatabaseTestBase {

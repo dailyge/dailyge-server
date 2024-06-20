@@ -19,11 +19,11 @@ import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.TASK_NO
 import project.dailyge.app.core.task.exception.TaskTypeException;
 import project.dailyge.app.core.user.application.UserWriteUseCase;
 import static project.dailyge.app.fixture.user.UserFixture.createUserJpaEntity;
-import project.dailyge.domain.task.TaskJpaEntity;
-import static project.dailyge.domain.task.TaskStatus.IN_PROGRESS;
-import static project.dailyge.domain.task.TaskStatus.TODO;
-import static project.dailyge.domain.user.Role.NORMAL;
-import project.dailyge.domain.user.UserJpaEntity;
+import project.dailyge.entity.task.TaskJpaEntity;
+import static project.dailyge.entity.task.TaskStatus.IN_PROGRESS;
+import static project.dailyge.entity.task.TaskStatus.TODO;
+import static project.dailyge.entity.user.Role.NORMAL;
+import project.dailyge.entity.user.UserJpaEntity;
 
 @DisplayName("[IntegrationTest] 할 일 수정 통합 테스트")
 public class TaskUpdateIntegrationTest extends DatabaseTestBase {

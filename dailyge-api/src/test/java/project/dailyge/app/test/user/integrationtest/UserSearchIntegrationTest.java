@@ -9,7 +9,7 @@ import project.dailyge.app.core.user.application.UserReadUseCase;
 import project.dailyge.app.core.user.application.UserWriteUseCase;
 import project.dailyge.app.core.user.exception.UserTypeException;
 import project.dailyge.app.fixture.user.UserFixture;
-import project.dailyge.domain.user.UserJpaEntity;
+import project.dailyge.entity.user.UserJpaEntity;
 
 import java.util.Optional;
 

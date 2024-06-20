@@ -20,11 +20,10 @@ public class UserJpaEntity extends BaseEntity {
     private static final int MAX_EMAIL_LENGTH = 50;
     private static final int MAX_PROFILE_IMAGE_URL_LENGTH = 2000;
     private static final String EMAIL_PATTERN = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@gmail\\.com$";
-    private static final  String OVER_MAX_NICKNAME_LENGTH_ERROR_MESSAGE = "입력 가능한 닉네임 길이를 초과했습니다.";
-    private static final String OVER_MAX_EMAIL_LENGTH_ERROR_MESSAGE = "입력 가능한 이메일 길이를 초과했습니다.";
+    private static final  String OVER_MAX_NICKNAME_LENGTH_ERROR_MESSAGE = "입력 가능한 최대 닉네임 길이를 초과했습니다.";
     private static final String INVALID_EMAIL_ERROR_MESSAGE = "유효하지 않는 이메일 형식입니다.";
-    private static final String OVER_MAX_PROFILE_IMAGE_URL_ERROR_MESSAGE = "입력 가능한 프로필 사진 URL 길이를 초과했습니다.";
-    private static final String USER_ALREADY_DELETED_MESSAGE = "이미 탈퇴한 유저입니다.";
+    private static final String OVER_MAX_PROFILE_IMAGE_URL_ERROR_MESSAGE = "입력 가능한 최대 URL 길이를 초과했습니다.";
+    private static final String USER_ALREADY_DELETED_MESSAGE = "이미 탈퇴한 사용자입니다.";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -112,9 +111,6 @@ public class UserJpaEntity extends BaseEntity {
         if (MAX_NICKNAME_LENGTH < nickname.length()) {
             throw new IllegalArgumentException(OVER_MAX_NICKNAME_LENGTH_ERROR_MESSAGE);
         }
-        if (MAX_EMAIL_LENGTH < email.length()) {
-            throw new IllegalArgumentException(OVER_MAX_EMAIL_LENGTH_ERROR_MESSAGE);
-        }
         if (!Pattern.matches(EMAIL_PATTERN, email)) {
             throw new IllegalArgumentException(INVALID_EMAIL_ERROR_MESSAGE);
         }
@@ -124,7 +120,7 @@ public class UserJpaEntity extends BaseEntity {
         if (deleted) {
             throw new IllegalArgumentException(USER_ALREADY_DELETED_MESSAGE);
         }
-        this.deleted = TRUE;
+        this.deleted = true;
         this.deletedAt = LocalDateTime.now();
     }
 
@@ -134,10 +130,6 @@ public class UserJpaEntity extends BaseEntity {
 
     public static String getOverMaxNicknameLengthErrorMessage() {
         return OVER_MAX_NICKNAME_LENGTH_ERROR_MESSAGE;
-    }
-
-    public static String getOverMaxEmailLengthErrorMessage() {
-        return OVER_MAX_EMAIL_LENGTH_ERROR_MESSAGE;
     }
 
     public static String getInvalidEmailErrorMessage() {

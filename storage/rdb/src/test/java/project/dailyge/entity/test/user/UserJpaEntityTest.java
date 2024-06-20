@@ -59,7 +59,7 @@ class UserJpaEntityTest {
 
 		assertThatThrownBy(() -> new UserJpaEntity(NICKNAME, overLengthEmail))
 			.isExactlyInstanceOf(IllegalArgumentException.class)
-			.hasMessage(getOverMaxEmailLengthErrorMessage());
+			.hasMessage(getInvalidEmailErrorMessage());
 	}
 
 	@ParameterizedTest

@@ -19,7 +19,7 @@ public class UserJpaEntity extends BaseEntity {
     private static final int MAX_NICKNAME_LENGTH = 20;
     private static final int MAX_EMAIL_LENGTH = 50;
     private static final int MAX_PROFILE_IMAGE_URL_LENGTH = 2000;
-    private static final String EMAIL_PATTERN = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@gmail\\.com$";
+    private static final String EMAIL_PATTERN = "^[0-9a-zA-Z](?:[-_.]?[0-9a-zA-Z]){0,39}@gmail\\.com$";
     private static final  String OVER_MAX_NICKNAME_LENGTH_ERROR_MESSAGE = "입력 가능한 최대 닉네임 길이를 초과했습니다.";
     private static final String INVALID_EMAIL_ERROR_MESSAGE = "유효하지 않는 이메일 형식입니다.";
     private static final String OVER_MAX_PROFILE_IMAGE_URL_ERROR_MESSAGE = "입력 가능한 최대 URL 길이를 초과했습니다.";

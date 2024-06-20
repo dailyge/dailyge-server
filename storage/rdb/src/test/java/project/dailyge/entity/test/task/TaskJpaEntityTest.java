@@ -64,6 +64,7 @@ class TaskJpaEntityTest {
             .date(futureDate)
             .status(TaskStatus.TODO)
             .userId(1L)
+            .deleted(false)
             .build())
             .doesNotThrowAnyException();
     }

@@ -77,6 +77,7 @@ jobs:
             *Commit:* ${{ github.sha }}
             *Sonarqube:* <${{ secrets.SONAR_HOST_URL }}|정적 분석지표>
             *Repository:* <https://github.com/${{ github.repository }}|${{ github.repository }}>
+            *Env:* ${{ env.ENV }}
           username: 'PR_Bot'
           icon_emoji: ':robot_face:'
           channel: 'pr'

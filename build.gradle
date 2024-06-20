@@ -141,8 +141,8 @@ subprojects {
 
 static def extractQClass() {
     def qClasses = []
-    for (qPattern in "*.QA".."*.QZ") {
-        qClasses.add(qPattern + "*")
+    for (qPattern in "QA".."QZ") {
+        qClasses.add("**/*$qPattern*")
     }
     return qClasses
 }

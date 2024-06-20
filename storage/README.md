@@ -10,7 +10,7 @@ Storage 모듈은 다른 모듈에 의존하지 않습니다.
 
 | API | Scheduler | Storage | Support |
 |:---:|:---------:|:-------:|:-------:|
-|  X  |     X     |    -    |    -    |
+|  X  |     X     |    -    |    X    |
 
 &nbsp;&nbsp; - API: API 모듈 <br/>
 &nbsp;&nbsp; - Scheduler: 스케줄링 모듈 <br/>

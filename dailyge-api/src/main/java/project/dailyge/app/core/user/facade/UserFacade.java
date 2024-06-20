@@ -15,13 +15,13 @@ import project.dailyge.entity.user.UserJpaEntity;
 @RequiredArgsConstructor
 public class UserFacade {
 
-    private final GoogleOAuthManager googleOAuthClient;
+    private final GoogleOAuthManager googleOAuthManager;
     private final UserWriteUseCase userWriteUseCase;
     private final TokenProvider tokenProvider;
     private final TokenManager tokenManager;
 
     public DailygeToken login(final String code) throws CommonException {
-        final GoogleUserInfoResponse response = googleOAuthClient.login(code);
+        final GoogleUserInfoResponse response = googleOAuthManager.login(code);
         final UserJpaEntity user = new UserJpaEntity(response.getName(), response.getEmail(), response.getPicture());
         final UserJpaEntity upsertUser = userWriteUseCase.upsert(user);
         final DailygeToken token = tokenProvider.createToken(upsertUser);

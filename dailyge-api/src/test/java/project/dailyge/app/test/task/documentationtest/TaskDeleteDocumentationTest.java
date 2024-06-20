@@ -8,8 +8,8 @@ import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.core.task.facade.TaskFacade;
 import project.dailyge.app.core.task.presentation.requesst.TaskRegisterRequest;
 import project.dailyge.app.core.user.application.UserWriteUseCase;
-import project.dailyge.domain.task.TaskJpaEntity;
-import project.dailyge.domain.user.UserJpaEntity;
+import project.dailyge.entity.task.TaskJpaEntity;
+import project.dailyge.entity.user.UserJpaEntity;
 
 import static io.restassured.RestAssured.given;
 import static java.time.LocalDate.now;

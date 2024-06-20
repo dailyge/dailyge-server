@@ -1,14 +1,14 @@
-package project.dailyge.domain.test.user;
+package project.dailyge.entity.test.user;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import project.dailyge.domain.user.UserJpaEntity;
+import project.dailyge.entity.user.UserJpaEntity;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
-import static project.dailyge.domain.user.UserJpaEntity.*;
+import static project.dailyge.entity.user.UserJpaEntity.*;
 
 @DisplayName("[UnitTest] 유저 엔티티 테스트")
 class UserJpaEntityTest {

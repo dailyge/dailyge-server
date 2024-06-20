@@ -17,9 +17,9 @@ import project.dailyge.app.fixture.user.UserFixture;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASK_AUTHORIZATION_HEADER;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASK_UPDATE_REQUEST_SNIPPET;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASK_UPDATE_RESPONSE_SNIPPET;
-import project.dailyge.domain.task.TaskJpaEntity;
-import project.dailyge.domain.task.TaskStatus;
-import project.dailyge.domain.user.UserJpaEntity;
+import project.dailyge.entity.task.TaskJpaEntity;
+import project.dailyge.entity.task.TaskStatus;
+import project.dailyge.entity.user.UserJpaEntity;
 
 @DisplayName("[DocumentationTest] 할 일 수정 문서화 테스트")
 class TaskUpdateDocumentationTest extends DatabaseTestBase {

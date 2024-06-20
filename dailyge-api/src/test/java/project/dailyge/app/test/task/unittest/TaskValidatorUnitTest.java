@@ -10,10 +10,10 @@ import project.dailyge.app.common.auth.DailygeUser;
 import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
 import project.dailyge.app.common.exception.UnAuthorizedException;
 import project.dailyge.app.core.task.application.service.TaskValidator;
-import project.dailyge.domain.task.TaskJpaEntity;
-import static project.dailyge.domain.task.TaskStatus.TODO;
-import static project.dailyge.domain.user.Role.ADMIN;
-import static project.dailyge.domain.user.Role.NORMAL;
+import project.dailyge.entity.task.TaskJpaEntity;
+import static project.dailyge.entity.task.TaskStatus.TODO;
+import static project.dailyge.entity.user.Role.ADMIN;
+import static project.dailyge.entity.user.Role.NORMAL;
 
 @DisplayName("[UnitTest] 할 일 검증 단위 테스트")
 class TaskValidatorUnitTest {

@@ -14,7 +14,7 @@ import project.dailyge.app.fixture.user.UserFixture;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASK_AUTHORIZATION_HEADER;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASK_CREATE_REQUEST_SNIPPET;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASK_CREATE_RESPONSE_SNIPPET;
-import project.dailyge.domain.user.UserJpaEntity;
+import project.dailyge.entity.user.UserJpaEntity;
 
 @DisplayName("[DocumentationTest] 할 일 등록 문서화 테스트")
 class TaskRegisterDocumentationTest extends DatabaseTestBase {

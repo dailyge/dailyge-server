@@ -31,4 +31,8 @@ public abstract class BaseEntity {
 
     @Column(name = "deleted")
     protected boolean deleted = false;
+
+    public boolean getDeleted() {
+        return deleted;
+    }
 }

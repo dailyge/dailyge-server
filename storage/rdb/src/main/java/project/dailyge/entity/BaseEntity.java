@@ -30,5 +30,5 @@ public abstract class BaseEntity {
     protected Long lastModifiedBy;
 
     @Column(name = "deleted")
-    protected Boolean deleted = false;
+    protected boolean deleted = false;
 }

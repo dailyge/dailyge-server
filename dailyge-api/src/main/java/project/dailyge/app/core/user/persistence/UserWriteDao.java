@@ -1,4 +1,4 @@
-package project.dailyge.app.core.user.persistence.dao;
+package project.dailyge.app.core.user.persistence;
 
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;

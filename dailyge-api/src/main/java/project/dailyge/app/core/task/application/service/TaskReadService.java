@@ -7,7 +7,7 @@ import project.dailyge.app.common.exception.UnAuthorizedException;
 import project.dailyge.app.core.task.application.TaskReadUseCase;
 import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.TASK_NOT_FOUND;
 import project.dailyge.app.core.task.exception.TaskTypeException;
-import project.dailyge.app.core.task.persistence.TaskEntityReadRepository;
+import project.dailyge.entity.task.TaskEntityReadRepository;
 import project.dailyge.entity.task.TaskJpaEntity;
 
 @Service

@@ -1,4 +1,4 @@
-package project.dailyge.app.core.user.persistence.dao;
+package project.dailyge.app.core.user.persistence;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;

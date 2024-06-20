@@ -8,8 +8,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @EnableJpaAuditing
 @SpringBootApplication
-@EntityScan(basePackages = {"project.dailyge.domain"})
-@EnableJpaRepositories(basePackages = {"project.dailyge.domain"})
+@EntityScan(basePackages = {"project.dailyge.entity"})
+@EnableJpaRepositories(basePackages = {"project.dailyge.entity"})
 public class DailygeApplication {
 
     public static void main(String[] args) {

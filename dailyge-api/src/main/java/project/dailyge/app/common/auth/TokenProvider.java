@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import project.dailyge.app.common.configuration.web.JwtProperties;
 import project.dailyge.app.common.exception.UnAuthorizedException;
-import project.dailyge.domain.user.UserJpaEntity;
+import project.dailyge.entity.user.UserJpaEntity;
 
 import java.time.Duration;
 import java.util.Date;

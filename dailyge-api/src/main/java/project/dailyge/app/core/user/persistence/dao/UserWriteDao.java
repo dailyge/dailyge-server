@@ -3,8 +3,8 @@ package project.dailyge.app.core.user.persistence.dao;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import project.dailyge.domain.user.UserEntityWriteRepository;
-import project.dailyge.domain.user.UserJpaEntity;
+import project.dailyge.entity.user.UserEntityWriteRepository;
+import project.dailyge.entity.user.UserJpaEntity;
 
 @Repository
 @RequiredArgsConstructor

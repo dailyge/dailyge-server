@@ -1,9 +1,9 @@
-package project.dailyge.domain.user;
+package project.dailyge.entity.user;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import project.dailyge.domain.BaseEntity;
+import project.dailyge.entity.BaseEntity;
 
 import java.time.LocalDateTime;
 import java.util.Objects;

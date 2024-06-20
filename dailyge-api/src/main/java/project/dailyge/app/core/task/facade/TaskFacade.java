@@ -5,8 +5,8 @@ import org.springframework.stereotype.Component;
 import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.core.task.application.TaskWriteUseCase;
 import project.dailyge.app.core.user.application.UserReadUseCase;
-import project.dailyge.domain.task.TaskJpaEntity;
-import project.dailyge.domain.user.UserJpaEntity;
+import project.dailyge.entity.task.TaskJpaEntity;
+import project.dailyge.entity.user.UserJpaEntity;
 
 @Component
 @RequiredArgsConstructor

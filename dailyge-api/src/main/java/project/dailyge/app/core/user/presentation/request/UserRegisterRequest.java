@@ -2,7 +2,7 @@ package project.dailyge.app.core.user.presentation.request;
 
 import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
-import project.dailyge.domain.user.UserJpaEntity;
+import project.dailyge.entity.user.UserJpaEntity;
 
 public record UserRegisterRequest(
     @Length(min = 1, max = 20)

@@ -16,6 +16,8 @@ import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.BAD
 @RequiredArgsConstructor
 public class GoogleAccessClient {
 
+    private static final String GOOGLE = "google";
+
     @Value("${oauth.google.authorization}")
     private String authorizationUrl;
 
@@ -23,7 +25,7 @@ public class GoogleAccessClient {
     private final ClientRegistrationRepository clientRegistrationRepository;
 
     public GoogleAuthorizationResponse userAccess(final String code) {
-        final ClientRegistration clientRegistration = clientRegistrationRepository.findByRegistrationId("google");
+        final ClientRegistration clientRegistration = clientRegistrationRepository.findByRegistrationId(GOOGLE);
         final GoogleAuthorizationRequest authorizationRequest = new GoogleAuthorizationRequest(code, clientRegistration);
         try {
             return restTemplate.postForObject(authorizationUrl, authorizationRequest, GoogleAuthorizationResponse.class);

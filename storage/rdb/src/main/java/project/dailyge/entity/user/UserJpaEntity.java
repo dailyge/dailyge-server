@@ -121,7 +121,7 @@ public class UserJpaEntity extends BaseEntity {
     }
 
     public void delete() {
-        if (this.deleted) {
+        if (deleted) {
             throw new IllegalArgumentException(USER_ALREADY_DELETED_MESSAGE);
         }
         this.deleted = TRUE;

@@ -11,7 +11,7 @@ import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.TASK_NO
 import project.dailyge.app.core.task.exception.TaskTypeException;
 import project.dailyge.app.core.task.persistence.TaskEntityReadRepository;
 import project.dailyge.app.core.task.persistence.TaskEntityWriteRepository;
-import project.dailyge.domain.task.TaskJpaEntity;
+import project.dailyge.entity.task.TaskJpaEntity;
 
 @Service
 @RequiredArgsConstructor

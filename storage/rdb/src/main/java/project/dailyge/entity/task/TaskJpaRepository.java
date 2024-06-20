@@ -1,4 +1,4 @@
-package project.dailyge.domain.task;
+package project.dailyge.entity.task;
 
 import org.springframework.data.jpa.repository.*;
 

@@ -2,12 +2,12 @@ package project.dailyge.app.common.auth;
 
 import lombok.Getter;
 import project.dailyge.app.common.exception.UnAuthorizedException;
-import project.dailyge.domain.user.Role;
+import project.dailyge.entity.user.Role;
 
 import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
 import static project.dailyge.app.common.exception.UnAuthorizedException.USER_NOT_MATCH_MESSAGE;
-import static project.dailyge.domain.user.Role.ADMIN;
-import project.dailyge.domain.user.UserJpaEntity;
+import static project.dailyge.entity.user.Role.ADMIN;
+import project.dailyge.entity.user.UserJpaEntity;
 
 import java.util.Objects;
 

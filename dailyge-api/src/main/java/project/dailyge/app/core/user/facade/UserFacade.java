@@ -11,7 +11,7 @@ import project.dailyge.app.core.user.application.UserWriteUseCase;
 import project.dailyge.app.core.user.presentation.response.external.GoogleUserInfoResponse;
 import project.dailyge.app.core.user.external.oauth.GoogleOAuthClient;
 import project.dailyge.app.core.user.external.oauth.TokenManager;
-import project.dailyge.domain.user.UserJpaEntity;
+import project.dailyge.entity.user.UserJpaEntity;
 
 @Component
 @RequiredArgsConstructor

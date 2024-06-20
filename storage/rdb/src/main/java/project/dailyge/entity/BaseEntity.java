@@ -1,4 +1,4 @@
-package project.dailyge.domain;
+package project.dailyge.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

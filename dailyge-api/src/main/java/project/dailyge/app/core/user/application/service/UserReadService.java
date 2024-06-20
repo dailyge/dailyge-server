@@ -5,8 +5,8 @@ import org.springframework.stereotype.Service;
 import project.dailyge.app.common.exception.UnAuthorizedException;
 import project.dailyge.app.core.user.application.UserReadUseCase;
 import project.dailyge.app.core.user.exception.UserTypeException;
-import project.dailyge.domain.user.UserEntityReadRepository;
-import project.dailyge.domain.user.UserJpaEntity;
+import project.dailyge.entity.user.UserEntityReadRepository;
+import project.dailyge.entity.user.UserJpaEntity;
 
 import java.util.Optional;
 

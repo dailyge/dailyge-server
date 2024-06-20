@@ -1,6 +1,6 @@
 package project.dailyge.app.core.user.application;
 
-import project.dailyge.domain.user.UserJpaEntity;
+import project.dailyge.entity.user.UserJpaEntity;
 
 public interface UserWriteUseCase {
     UserJpaEntity save(UserJpaEntity user);

@@ -22,7 +22,6 @@ public class TestContainerConfiguration implements AfterAllCallback, BeforeAllCa
         try {
             genericContainer = new GenericContainer<>(DockerImageName.parse(REDIS_IMAGE))
                 .withExposedPorts(REDIS_PORT);
-            genericContainer.start();
             System.setProperty("spring.data.redis.host", genericContainer.getHost());
             System.setProperty("spring.data.redis.port", String.valueOf(genericContainer.getMappedPort(REDIS_PORT)));
         } catch (Exception ex) {

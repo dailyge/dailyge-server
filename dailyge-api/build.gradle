@@ -28,6 +28,7 @@ dependencies {
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
     implementation("io.jsonwebtoken:jjwt:0.9.1")
     implementation("javax.xml.bind:jaxb-api:2.3.1")
+    implementation("com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4")
 
     testImplementation("org.springframework.restdocs:spring-restdocs-restassured")
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
@@ -47,6 +48,7 @@ ext {
 }
 
 test {
+    dependsOn("copySubmoduleConfig")
     outputs.dir snippetsDir
     dependsOn(":storage:rdb:test")
 }
@@ -74,6 +76,12 @@ bootJar {
     }
 }
 
+tasks.register("copySubmoduleConfig", Copy) {
+    from("${rootDir}/config-module/dailyge-api")
+    include("*.yml")
+    into("${rootDir}/dailyge-api/src/main/resources")
+}
+
 sonarqube {
     properties {
         property("sonar.sources", "${rootDir}/dailyge-api/src/main/java")
@@ -83,4 +91,8 @@ sonarqube {
                 "${rootDir}/dailyge-api/build/reports/jacoco/test/jacocoTestReport.xml"
         )
     }
+}
+
+tasks.named("processResources") {
+    dependsOn("copySubmoduleConfig")
 }

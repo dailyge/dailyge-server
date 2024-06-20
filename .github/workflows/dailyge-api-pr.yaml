@@ -11,40 +11,52 @@ env:
   SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
   SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  ENCRYPTOR_KEY: ${{ secrets.ENCRYPTOR_KEY }}
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+          token: ${{ secrets.SUBMODULE_TOKEN }}
+      - name: Update submodules
+        run: |
+          git submodule sync --recursive
+          git submodule update --init --recursive --remote
       - name: Set up JDK 17 with Gradle cache
         uses: actions/setup-java@v2
         with:
           java-version: "17"
           distribution: "temurin"
           cache: "gradle"
-      - name: Create Test Config
-        run: |
-          echo "${{ secrets.APPLICATION_TEST_CONFIG }}" > dailyge-api/src/test/resources/application-test.yml
       - name: Build with Gradle
+        env:
+          ENCRYPTOR_KEY: ${{ secrets.ENCRYPTOR_KEY }}
         run: ./gradlew dailyge-api:build --info --stacktrace
 
   static_analysis:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          submodules: true
+          token: ${{ secrets.SUBMODULE_TOKEN }}
+      - name: Update submodules
+        run: |
+          git submodule sync --recursive
+          git submodule update --init --recursive --remote
       - name: Set up JDK 17 with Gradle cache
         uses: actions/setup-java@v2
         with:
           java-version: '17'
           distribution: 'temurin'
           cache: "gradle"
-      - name: Create Test Config
-        run: |
-          echo "${{ secrets.APPLICATION_TEST_CONFIG }}" > dailyge-api/src/test/resources/application-test.yml
+
       - name: Test
-        run: |
-          ./gradlew dailyge-api:test --info --stacktrace
+        run: ./gradlew dailyge-api:test --info --stacktrace
+
       - name: Static Analysis
         run: |
           ./gradlew sonar \
@@ -53,7 +65,7 @@ jobs:
           -Dsonar.login=${{ secrets.SONAR_TOKEN }}
 
   notify_slack:
-    needs: [build, static_analysis]
+    needs: [ build, static_analysis ]
     runs-on: ubuntu-latest
     steps:
       - name: Notify Build and Analysis Result to Slack

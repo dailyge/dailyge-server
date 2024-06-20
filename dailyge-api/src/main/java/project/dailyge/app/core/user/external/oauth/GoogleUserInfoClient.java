@@ -34,7 +34,7 @@ public class GoogleUserInfoClient {
         try {
             final HttpHeaders headers = new HttpHeaders();
             headers.set(AUTHORIZATION, BEARER + response.getAccessToken());
-            ResponseEntity<GoogleUserInfoResponse> userInfoResponse = restTemplate.exchange(
+            final ResponseEntity<GoogleUserInfoResponse> userInfoResponse = restTemplate.exchange(
                 userAccessUrl,
                 GET,
                 new HttpEntity<>(headers),

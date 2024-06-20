@@ -25,7 +25,7 @@ public class OAuthAccessIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("인증코드를 넘기면, 정상적으로 AccessToken 을 발급 받는다.")
     void whenSendAuthenticationCodeThenAccessTokenShouldBeReceive() {
-        GoogleAuthorizationResponse response = googleAccessClient.userAccess(AUTHENTICATION_CODE);
+        final GoogleAuthorizationResponse response = googleAccessClient.userAccess(AUTHENTICATION_CODE);
 
         assertAll(
             () -> assertEquals(ACCESS_TOKEN, response.getAccessToken()),

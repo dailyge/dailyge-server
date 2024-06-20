@@ -26,8 +26,8 @@ public class OAuthUserInfoIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("인증코드를 넘기면, 정상적으로 AccessToken 을 발급 받는다.")
     void whenSendAuthenticationCodeThenAccessTokenShouldBeReceive() {
-        GoogleAuthorizationResponse response = new GoogleAuthorizationResponse(ACCESS_TOKEN, EXPIRES_IN, SCOPE, BEARER);
-        GoogleUserInfoResponse userInfo = googleUserInfoClient.getUserInfo(response);
+        final GoogleAuthorizationResponse response = new GoogleAuthorizationResponse(ACCESS_TOKEN, EXPIRES_IN, SCOPE, BEARER);
+        final GoogleUserInfoResponse userInfo = googleUserInfoClient.getUserInfo(response);
 
         assertAll(
             () -> assertEquals("1", userInfo.getId()),

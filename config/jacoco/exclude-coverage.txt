@@ -1,7 +1,11 @@
 **/*Application*
+**/*Exception*
 **/*Health*
+**/*Request*
+**/*Response*
 **/common/**
+**/command/**
+**/exception/**
 **/request/**
 **/response/**
-**/dto/**
 **/test/**

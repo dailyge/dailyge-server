@@ -33,23 +33,23 @@ Dailyge API 문서
 
 #### Request
 
-include::{snippets}/user_detail_search_documentation_test/when_user_exists_then_status_code_should_be200_ok/http-request.adoc[]
+include::{snippets}/user_detail_search_documentation_test/when_find_user_then_status_code_should_be200_ok/http-request.adoc[]
 
 #### Request-Header
 
-include::{snippets}/user_detail_search_documentation_test/when_user_exists_then_status_code_should_be200_ok/request-headers.adoc[]
+include::{snippets}/user_detail_search_documentation_test/when_find_user_then_status_code_should_be200_ok/request-headers.adoc[]
 
 #### Path-Parameters
 
-include::{snippets}/user_detail_search_documentation_test/when_user_exists_then_status_code_should_be200_ok/path-parameters.adoc[]
+include::{snippets}/user_detail_search_documentation_test/when_find_user_then_status_code_should_be200_ok/path-parameters.adoc[]
 
 #### Response
 
-include::{snippets}/user_detail_search_documentation_test/when_user_exists_then_status_code_should_be200_ok/http-response.adoc[]
+include::{snippets}/user_detail_search_documentation_test/when_find_user_then_status_code_should_be200_ok/http-response.adoc[]
 
 #### Response-Fields
 
-include::{snippets}/user_detail_search_documentation_test/when_user_exists_then_status_code_should_be200_ok/response-fields.adoc[]
+include::{snippets}/user_detail_search_documentation_test/when_find_user_then_status_code_should_be200_ok/response-fields.adoc[]
 
 ### 1-2 사용자 삭제
 
@@ -57,23 +57,19 @@ include::{snippets}/user_detail_search_documentation_test/when_user_exists_then_
 
 #### Request
 
-include::{snippets}/user_delete_documentation_test/when_delete_exists_user_then_should200__ok/http-request.adoc[]
+include::{snippets}/user_delete_documentation_test/when_delete_user_succeeds_then_status_code_should_be204_no_content/http-request.adoc[]
 
 #### Request-Header
 
-include::{snippets}/user_delete_documentation_test/when_delete_exists_user_then_should200__ok/request-headers.adoc[]
+include::{snippets}/user_delete_documentation_test/when_delete_user_succeeds_then_status_code_should_be204_no_content/request-headers.adoc[]
 
 #### Path-Parameters
 
-include::{snippets}/user_delete_documentation_test/when_delete_exists_user_then_should200__ok/path-parameters.adoc[]
+include::{snippets}/user_delete_documentation_test/when_delete_user_succeeds_then_status_code_should_be204_no_content/path-parameters.adoc[]
 
 #### Response
 
-include::{snippets}/user_delete_documentation_test/when_delete_exists_user_then_should200__ok/http-response.adoc[]
-
-#### Response-Fields
-
-include::{snippets}/user_delete_documentation_test/when_delete_exists_user_then_should200__ok/response-fields.adoc[]
+include::{snippets}/user_delete_documentation_test/when_delete_user_succeeds_then_status_code_should_be204_no_content/http-response.adoc[]
 
 
 == 📝 2. 할 일(Task)

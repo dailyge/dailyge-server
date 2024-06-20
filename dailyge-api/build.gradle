@@ -14,6 +14,7 @@ repositories {
 }
 
 apply(from: "${rootDir}/jib/dailyge-api/jib.gradle")
+tasks.build.dependsOn(":storage:rdb:test")
 
 dependencies {
     implementation(project(":storage:rdb"))
@@ -47,6 +48,7 @@ ext {
 
 test {
     outputs.dir snippetsDir
+    dependsOn(":storage:rdb:test")
 }
 
 asciidoctor {
@@ -69,5 +71,16 @@ bootJar {
     dependsOn asciidoctor
     from("${asciidoctor.outputDir}/html5") {
         into "static/docs"
+    }
+}
+
+sonarqube {
+    properties {
+        property("sonar.sources", "${rootDir}/dailyge-api/src/main/java")
+        property("sonar.tests", "${rootDir}/dailyge-api/src/test")
+        property(
+                "sonar.coverage.jacoco.xmlReportPaths",
+                "${rootDir}/dailyge-api/build/reports/jacoco/test/jacocoTestReport.xml"
+        )
     }
 }

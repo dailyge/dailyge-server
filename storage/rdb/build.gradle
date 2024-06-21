@@ -28,10 +28,6 @@ clean.doLast {
     file(querydslDir).deleteDir()
 }
 
-tasks.named('bootJar').configure {
-    enabled = false
-}
-
 jar {
     enabled = true
 }

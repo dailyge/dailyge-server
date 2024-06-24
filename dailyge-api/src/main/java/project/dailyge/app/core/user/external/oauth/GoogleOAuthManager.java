@@ -16,9 +16,7 @@ import project.dailyge.app.core.user.presentation.response.external.GoogleUserIn
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.http.HttpStatus.OK;
 import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.BAD_GATEWAY;
-import static project.dailyge.app.common.exception.ExternalServerException.USER_INFO_API_ERROR_MESSAGE;
 import static project.dailyge.app.core.user.external.oauth.OAuthClient.GOOGLE;
 
 @Component
@@ -59,9 +57,6 @@ public class GoogleOAuthManager {
                 new HttpEntity<>(headers),
                 GoogleUserInfoResponse.class
             );
-            if (!OK.equals(userInfoResponse.getStatusCode())) {
-                throw new ExternalServerException(USER_INFO_API_ERROR_MESSAGE, BAD_GATEWAY);
-            }
             return userInfoResponse.getBody();
         } catch (Exception ex) {
             throw new ExternalServerException(ex.getMessage(), BAD_GATEWAY);

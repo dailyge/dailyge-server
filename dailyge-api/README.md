@@ -1,20 +1,20 @@
-## ⛺️ API 모듈
+## ⛺️ Dailyge-Api 모듈
 
-API 모듈.
+사용자가 사용하는 서비스 Api를 제공합니다.
 
 <br/><br/><br/>
 
 ## 👪 패키지 간 의존관계
 
-API 모듈은 Storage, Support 모듈에 의존하고 있습니다.
+Dailyge-Api 모듈은 Storage, Support 모듈에 의존하고 있습니다.
 
-| API | Scheduler | Storage | Support |
-|:---:|:---------:|:-------:|:-------:|
-|  -  |     X     |    O    |    O    |
+| Admin-Api | Dailyge-Api | Storage | Support |
+|:---------:|:-----------:|:-------:|:-------:|
+|     X     |      -      |    O    |    O    |
 
-&nbsp;&nbsp; - API: API 모듈 <br/>
-&nbsp;&nbsp; - Scheduler: 스케줄링 모듈 <br/>
+&nbsp;&nbsp; - Admin-Api: 관리자 Api, 스케줄링 모듈 <br/>
+&nbsp;&nbsp; - Dailyge-Api: 사용자 서비스 Api 모듈 <br/>
 &nbsp;&nbsp; - Storage: 저장소 모듈 <br/>
-&nbsp;&nbsp; - Support: API 지원 모듈 <br/>
+&nbsp;&nbsp; - Support: Api 지원 모듈 <br/>
 
 <br/>

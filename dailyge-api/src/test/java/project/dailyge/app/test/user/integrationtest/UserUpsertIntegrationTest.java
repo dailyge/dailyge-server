@@ -14,6 +14,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static project.dailyge.app.fixture.user.UserFixture.createUserJpaEntity;
 
 @DisplayName("[IntegrationTest] 사용자 등록 및 갱신 통합 테스트")
 public class UserUpsertIntegrationTest extends DatabaseTestBase {
@@ -28,10 +29,10 @@ public class UserUpsertIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("사용자가 없다면, 새로 저장한다.")
     void whenUpsertUserByNonExistentThenUserShouldBeSave() {
-        final UserJpaEntity newUser = UserFixture.createUserJpaEntity();
+        final UserJpaEntity newUser = createUserJpaEntity();
         final Optional<UserJpaEntity> findByEmailUser = userReadUseCase.findActiveUserByEmail(newUser.getEmail());
 
-        UserJpaEntity userJpaEntity = userWriteUseCase.upsert(UserFixture.createUserJpaEntity());
+        final UserJpaEntity userJpaEntity = userWriteUseCase.upsert(createUserJpaEntity());
 
         assertFalse(findByEmailUser.isPresent());
         assertNotNull(userJpaEntity.getId());
@@ -40,7 +41,7 @@ public class UserUpsertIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("사용자가 존재한다면, 정보를 업데이트 한다.")
     void whenThen() {
-        final UserJpaEntity user = userWriteUseCase.save(UserFixture.createUserJpaEntity());
+        final UserJpaEntity user = userWriteUseCase.save(createUserJpaEntity());
         final UserJpaEntity newUser = new UserJpaEntity(user.getNickname(), user.getEmail(), TEST_URL);
 
         final UserJpaEntity updateUser = userWriteUseCase.upsert(newUser);

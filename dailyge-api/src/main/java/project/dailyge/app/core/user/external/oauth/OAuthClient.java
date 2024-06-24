@@ -2,7 +2,7 @@ package project.dailyge.app.core.user.external.oauth;
 
 public enum OAuthClient {
 
-    GOOGLE("Google");
+    GOOGLE("google");
 
     private final String code;
 

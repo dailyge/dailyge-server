@@ -32,12 +32,12 @@ public class GoogleOAuthManager {
     private final RestTemplate restTemplate;
     private final ClientRegistrationRepository clientRegistrationRepository;
 
-    public GoogleUserInfoResponse login(final String code) {
-        final GoogleAuthorizationResponse response = userAccess(code);
+    public GoogleUserInfoResponse authenticateUser(final String code) {
+        final GoogleAuthorizationResponse response = getAccessToken(code);
         return getUserInfo(response);
     }
 
-    private GoogleAuthorizationResponse userAccess(final String code) {
+    private GoogleAuthorizationResponse getAccessToken(final String code) {
         final ClientRegistration clientRegistration = clientRegistrationRepository.findByRegistrationId(GOOGLE.getCode());
         final GoogleAuthorizationRequest authorizationRequest = new GoogleAuthorizationRequest(code, clientRegistration);
         try {

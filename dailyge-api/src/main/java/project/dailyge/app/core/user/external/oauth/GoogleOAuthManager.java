@@ -25,6 +25,7 @@ public class GoogleOAuthManager {
 
     @Value("${oauth.google.authorization}")
     private String authorizationUrl;
+
     @Value("${oauth.google.user-access}")
     private String userAccessUrl;
     private static final String BEARER = "Bearer ";
@@ -32,7 +33,7 @@ public class GoogleOAuthManager {
     private final RestTemplate restTemplate;
     private final ClientRegistrationRepository clientRegistrationRepository;
 
-    public GoogleUserInfoResponse authenticateUser(final String code) {
+    public GoogleUserInfoResponse getUserInfo(final String code) {
         final GoogleAuthorizationResponse response = getAccessToken(code);
         return getUserInfo(response);
     }

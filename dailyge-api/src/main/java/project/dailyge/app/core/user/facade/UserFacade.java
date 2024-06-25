@@ -8,7 +8,7 @@ import project.dailyge.app.common.exception.CommonException;
 import project.dailyge.app.core.user.application.UserWriteUseCase;
 import project.dailyge.app.core.user.external.oauth.GoogleOAuthManager;
 import project.dailyge.app.core.user.external.oauth.TokenManager;
-import project.dailyge.app.core.user.presentation.response.external.GoogleUserInfoResponse;
+import project.dailyge.app.core.user.external.response.GoogleUserInfoResponse;
 import project.dailyge.entity.user.UserJpaEntity;
 
 @Component

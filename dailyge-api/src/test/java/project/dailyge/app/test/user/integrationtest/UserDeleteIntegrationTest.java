@@ -14,7 +14,7 @@ import project.dailyge.app.fixture.user.UserFixture;
 import project.dailyge.entity.user.UserJpaEntity;
 
 @DisplayName("[IntegrationTest] 사용자 삭제 통합 테스트")
-public class UserDeleteIntegrationTest extends DatabaseTestBase {
+class UserDeleteIntegrationTest extends DatabaseTestBase {
 
     @Autowired
     private UserReadUseCase userReadUseCase;

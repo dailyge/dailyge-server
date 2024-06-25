@@ -24,7 +24,7 @@ import static org.springframework.http.HttpStatus.BAD_GATEWAY;
 import static project.dailyge.app.fixture.user.OAuthFixture.getOAuthAccessResponseFixture;
 
 @DisplayName("[IntegrationTest] 사용자 로그인 통합 테스트")
-public class LoginIntegrationTest extends DatabaseTestBase {
+class LoginIntegrationTest extends DatabaseTestBase {
 
     private static final String AUTHENTICATION_CODE = "AuthenticationCode";
 

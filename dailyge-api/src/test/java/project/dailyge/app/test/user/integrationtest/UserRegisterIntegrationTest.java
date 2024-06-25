@@ -13,7 +13,7 @@ import project.dailyge.app.core.user.presentation.request.UserRegisterRequest;
 import project.dailyge.entity.user.UserJpaEntity;
 
 @DisplayName("[IntegrationTest] 사용자 저장 통합 테스트")
-public class UserRegisterIntegrationTest extends DatabaseTestBase {
+class UserRegisterIntegrationTest extends DatabaseTestBase {
 
     @Autowired
     private UserWriteUseCase userWriteUseCase;

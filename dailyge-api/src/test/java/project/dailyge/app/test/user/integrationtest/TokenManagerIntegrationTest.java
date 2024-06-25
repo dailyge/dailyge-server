@@ -13,7 +13,7 @@ import static project.dailyge.app.common.exception.ExternalServerException.REDIS
 import static project.dailyge.app.common.exception.ExternalServerException.REDIS_SEARCH_FAILED_MESSAGE;
 
 @DisplayName("[IntegrationTest] TokenManager 통합 테스트")
-public class TokenManagerIntegrationTest extends DatabaseTestBase {
+class TokenManagerIntegrationTest extends DatabaseTestBase {
 
     public static final String REFRESH_TOKEN = "Refresh-Token";
     @Autowired

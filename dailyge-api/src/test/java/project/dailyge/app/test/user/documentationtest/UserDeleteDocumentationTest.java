@@ -17,7 +17,7 @@ import static project.dailyge.app.test.user.documentationtest.snippet.UserSnippe
 import static project.dailyge.app.test.user.documentationtest.snippet.UserSnippet.USER_DELETE_PATH_PARAMETER_SNIPPET;
 
 @DisplayName("[DocumentationTest] 유저 삭제 API 문서화 테스트")
-public class UserDeleteDocumentationTest extends DatabaseTestBase {
+class UserDeleteDocumentationTest extends DatabaseTestBase {
 
     @Autowired
     private UserWriteUseCase userWriteUseCase;

@@ -10,7 +10,7 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import project.dailyge.app.common.exception.ExternalServerException;
-import project.dailyge.app.core.user.presentation.GoogleAuthorizationRequest;
+import project.dailyge.app.core.user.presentation.request.external.GoogleAuthorizationRequest;
 import project.dailyge.app.core.user.presentation.response.external.GoogleAuthorizationResponse;
 import project.dailyge.app.core.user.presentation.response.external.GoogleUserInfoResponse;
 

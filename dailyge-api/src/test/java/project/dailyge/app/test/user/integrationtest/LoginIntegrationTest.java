@@ -21,7 +21,7 @@ import java.util.Objects;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.springframework.http.HttpStatus.BAD_GATEWAY;
-import static project.dailyge.app.fixture.user.OAuthFixture.getOAuthAccessResponseFixture;
+import static project.dailyge.app.fixture.user.OAuthFixture.getOAuthAccessResponseBodyFixture;
 
 @DisplayName("[IntegrationTest] 사용자 로그인 통합 테스트")
 class LoginIntegrationTest extends DatabaseTestBase {
@@ -45,11 +45,11 @@ class LoginIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("로그인에 성공하면, DailygeToken을 생성한다.")
     void whenLoginSuccessThenDailygeTokenIsGenerated() throws IOException {
-        ApiResponse<OAuthLoginResponse> login = oAuthApi.login(AUTHENTICATION_CODE);
-        Long userId = tokenProvider.getUserId(Objects.requireNonNull(login.getBody()).getData().getAccessToken());
-        UserJpaEntity findUser = userReadUseCase.findActiveUserById(userId);
+        final ApiResponse<OAuthLoginResponse> login = oAuthApi.login(AUTHENTICATION_CODE);
+        final Long userId = tokenProvider.getUserId(Objects.requireNonNull(login.getBody()).getData().getAccessToken());
+        final UserJpaEntity findUser = userReadUseCase.findActiveUserById(userId);
 
-        Assertions.assertEquals(getOAuthAccessResponseFixture().get("email"), findUser.getEmail());
+        Assertions.assertEquals(getOAuthAccessResponseBodyFixture().getEmail(), findUser.getEmail());
     }
 
     @Test

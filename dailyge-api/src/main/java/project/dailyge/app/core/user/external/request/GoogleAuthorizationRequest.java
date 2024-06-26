@@ -1,4 +1,4 @@
-package project.dailyge.app.core.user.presentation;
+package project.dailyge.app.core.user.external.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

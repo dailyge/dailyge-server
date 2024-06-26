@@ -21,7 +21,7 @@ import static project.dailyge.app.core.user.exception.UserCodeAndMessage.USER_NO
 import static project.dailyge.app.fixture.user.UserFixture.EMAIL;
 
 @DisplayName("[IntegrationTest] 사용자 조회 통합 테스트")
-public class UserSearchIntegrationTest extends DatabaseTestBase {
+class UserSearchIntegrationTest extends DatabaseTestBase {
 
     @Autowired
     private UserReadUseCase userReadUseCase;

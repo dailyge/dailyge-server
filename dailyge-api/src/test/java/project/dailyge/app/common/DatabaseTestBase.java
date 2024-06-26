@@ -18,6 +18,7 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.operation.preprocess.OperationPreprocessor;
@@ -26,14 +27,17 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import org.springframework.restdocs.restassured.RestAssuredOperationPreprocessorsConfigurer;
 import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.documentationConfiguration;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 @Testcontainers
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs
 @ActiveProfiles("test")
-@ExtendWith(TestContainerConfiguration.class)
+@AutoConfigureWireMock(port = 0)
 @ExtendWith(RestDocumentationExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public abstract class DatabaseTestBase {
@@ -44,6 +48,7 @@ public abstract class DatabaseTestBase {
     protected static final String IDENTIFIER = "{class_name}/{method_name}";
     protected static final String USER_ID_KEY = "dailyge_user_id";
     protected static final String AUTHORIZATION = "Authorization";
+    private static final String REDIS_IMAGE = "redis:7.0.8-alpine";
 
     @LocalServerPort
     protected int port;
@@ -98,5 +103,14 @@ public abstract class DatabaseTestBase {
     @AfterEach
     void afterEach() {
         RestAssured.reset();
+    }
+
+    @DynamicPropertySource
+    public static void overrideProps(DynamicPropertyRegistry registry){
+        GenericContainer<?> genericContainer = new GenericContainer<>(REDIS_IMAGE)
+            .withExposedPorts(6379);
+        genericContainer.start();
+        registry.add("spring.data.redis.host", genericContainer::getHost);
+        registry.add("spring.data.redis.port", () -> String.valueOf(genericContainer.getMappedPort(6379)));
     }
 }

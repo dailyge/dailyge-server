@@ -4,6 +4,7 @@ import project.dailyge.app.common.codeandmessage.CodeAndMessage;
 
 public enum UserCodeAndMessage implements CodeAndMessage {
 
+    USER_ALREADY_LOGGED_IN(302, "이미 로그인 된 사용자입니다."),
     USER_NOT_FOUND(404, "존재하지 않는 사용자 정보 입니다."),
     ACTIVE_USER_NOT_FOUND(404, "사용자를 찾을 수 없습니다."),
     ID_NOT_FOUND(404, "사용자 ID를 찾을 수 없습니다."),

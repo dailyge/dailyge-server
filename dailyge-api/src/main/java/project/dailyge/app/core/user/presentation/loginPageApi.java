@@ -11,8 +11,8 @@ import project.dailyge.app.common.auth.LoginUser;
 import project.dailyge.app.common.response.ApiResponse;
 import project.dailyge.app.core.user.presentation.response.LoginPageUrlResponse;
 
-import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.FOUND;
 import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.OK;
+import static project.dailyge.app.core.user.exception.UserCodeAndMessage.USER_ALREADY_LOGGED_IN;
 
 @RestController
 @RequestMapping("/api/login")
@@ -29,7 +29,7 @@ public class loginPageApi {
     ) {
         if (dailygeUser != null) {
             final LoginPageUrlResponse payload = new LoginPageUrlResponse(request.getHeader("Referer"));
-            return ApiResponse.from(FOUND, payload);
+            return ApiResponse.from(USER_ALREADY_LOGGED_IN, payload);
         }
         final LoginPageUrlResponse payload = new LoginPageUrlResponse(loginUrl);
         return ApiResponse.from(OK, payload);

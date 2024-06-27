@@ -24,8 +24,8 @@ public class loginPageApi {
 
     @GetMapping
     public ApiResponse<LoginPageUrlResponse> login(
-            @LoginUser final DailygeUser dailygeUser,
-            final HttpServletRequest request
+        @LoginUser final DailygeUser dailygeUser,
+        final HttpServletRequest request
     ) {
         if (dailygeUser != null) {
             final LoginPageUrlResponse payload = new LoginPageUrlResponse(request.getHeader("Referer"));

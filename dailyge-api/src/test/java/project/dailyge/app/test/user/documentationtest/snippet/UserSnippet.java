@@ -39,7 +39,7 @@ public interface UserSnippet {
     };
 
     FieldDescriptor[] LOGIN_PAGE_FIELD_DESCRIPTOR = {
-        fieldWithPath("data.url").type(NUMBER).description("사용자 ID"),
+        fieldWithPath("data.url").type(NUMBER).description("로그인 URL"),
         fieldWithPath("code").type(NUMBER).description("응답 코드"),
         fieldWithPath("message").type(STRING).description("응답 메시지")
     };

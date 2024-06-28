@@ -11,17 +11,17 @@ import project.dailyge.app.common.auth.LoginUser;
 import project.dailyge.app.common.response.ApiResponse;
 import project.dailyge.app.core.user.presentation.response.LoginPageUrlResponse;
 
+import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.FOUND;
 import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.OK;
-import static project.dailyge.app.core.user.exception.UserCodeAndMessage.USER_ALREADY_LOGGED_IN;
 
 @RestController
 @RequestMapping("/api/login")
 @RequiredArgsConstructor
-public class loginPageApi {
+public class LoginPageApi {
 
     @Value("${oauth.google.url}")
     private String loginUrl;
-    private final static String DEFAULT_REFERER = "/";
+    private static final String DEFAULT_REFERER = "/";
 
     @GetMapping
     public ApiResponse<LoginPageUrlResponse> login(
@@ -31,7 +31,7 @@ public class loginPageApi {
         if (dailygeUser != null) {
             final LoginPageUrlResponse payload = new LoginPageUrlResponse(
                     referer != null ? referer : DEFAULT_REFERER);
-            return ApiResponse.from(USER_ALREADY_LOGGED_IN, payload);
+            return ApiResponse.from(FOUND, payload);
         }
         final LoginPageUrlResponse payload = new LoginPageUrlResponse(loginUrl);
         return ApiResponse.from(OK, payload);

@@ -20,9 +20,6 @@ import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.UN_
 @RequiredArgsConstructor
 public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
 
-    private static final String BEARER = "Bearer ";
-    private static final int TOKEN_BEGIN_INDEX = 7;
-
     private final UserReadUseCase userReadUseCase;
     private final TokenProvider tokenProvider;
 
@@ -39,23 +36,15 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
         final WebDataBinderFactory binderFactory
     ) {
         final HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
-        final String accessToken = getToken(request);
-        if (tokenProvider.isValidToken(accessToken)) {
-            final Long userId = tokenProvider.getUserId(accessToken);
-            validateUserId(userId);
+        final String authorizationHeader = request.getHeader(AUTHORIZATION);
+        final String accessToken = tokenProvider.getAccessToken(authorizationHeader);
+        tokenProvider.validateToken(accessToken);
 
-            final UserJpaEntity findUser = userReadUseCase.findAuthorizedById(userId);
-            return new DailygeUser(findUser);
-        }
-        return null;
-    }
+        final Long userId = tokenProvider.getUserId(accessToken);
+        validateUserId(userId);
 
-    private String getToken(final HttpServletRequest request) {
-        final String accessToken = request.getHeader(AUTHORIZATION);
-        if (accessToken != null && accessToken.startsWith(BEARER)) {
-            return accessToken.substring(TOKEN_BEGIN_INDEX);
-        }
-        return accessToken;
+        final UserJpaEntity findUser = userReadUseCase.findAuthorizedById(userId);
+        return new DailygeUser(findUser);
     }
 
     private void validateUserId(final Long userId) {

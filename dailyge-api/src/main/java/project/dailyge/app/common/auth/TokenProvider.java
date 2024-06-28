@@ -12,8 +12,8 @@ import java.time.Duration;
 import java.util.Date;
 
 import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.INVALID_USER_TOKEN;
-import static project.dailyge.app.common.exception.UnAuthorizedException.INVALID_ID_TYPE_MESSAGE;
-import static project.dailyge.app.common.exception.UnAuthorizedException.INVALID_TOKEN_MESSAGE;
+import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
+import static project.dailyge.app.common.exception.UnAuthorizedException.*;
 
 @Slf4j
 @Component
@@ -21,6 +21,8 @@ import static project.dailyge.app.common.exception.UnAuthorizedException.INVALID
 public class TokenProvider {
 
     private static final String ID = "id";
+    private static final String BEARER = "Bearer ";
+    private static final int TOKEN_BEGIN_INDEX = 7;
 
     private final JwtProperties jwtProperties;
 
@@ -48,26 +50,24 @@ public class TokenProvider {
             .compact();
     }
 
-    public boolean isValidToken(final String token) {
+    public void validateToken(final String token) {
         try {
             Jwts.parser()
                 .setSigningKey(jwtProperties.getSecretKey())
                 .parseClaimsJws(token);
-            return true;
+        }catch (IllegalArgumentException e) {
+            throw new UnAuthorizedException(EMPTY_TOKEN_ERROR_MESSAGE, UN_AUTHORIZED);
         } catch (SignatureException e) {
-            log.error("서명 검증에 실패하였습니다.: {}", e.getMessage());
+            throw new UnAuthorizedException(TOKEN_SIGNATURE_VERIFICATION_FAILED_ERROR_MESSAGE, UN_AUTHORIZED);
         } catch (MalformedJwtException e) {
-            log.error("JWT 형식이 올바르지 않습니다: {}", e.getMessage());
+            throw new UnAuthorizedException(TOKEN_FORMAT_INCORRECT_ERROR_MESSAGE, UN_AUTHORIZED);
         } catch (ExpiredJwtException e) {
-            log.error("JWT 만료 되었습니다.: {}", e.getMessage());
+            throw new UnAuthorizedException(EXPIRED_TOKEN_ERROR_MESSAGE, UN_AUTHORIZED);
         } catch (UnsupportedJwtException e) {
-            log.error("지원되지 않는 JWT 입니다.: {}", e.getMessage());
-        } catch (IllegalArgumentException e) {
-            log.error("비어있는 JWT 입니다.: {}", e.getMessage());
-        } catch (Throwable e) {
+            throw new UnAuthorizedException(UNSUPPORTED_TOKEN_ERROR_MESSAGE, UN_AUTHORIZED);
+        }  catch (Throwable e) {
             log.error(e.getMessage());
         }
-        return false;
     }
 
     public Long getUserId(final String token) {
@@ -94,5 +94,12 @@ public class TokenProvider {
             log.error(e.getMessage());
             return null;
         }
+    }
+
+    public String getAccessToken(final String authorizationHeader) {
+        if (authorizationHeader == null || !authorizationHeader.startsWith(BEARER)) {
+            throw new UnAuthorizedException(INVALID_TOKEN_MESSAGE, INVALID_USER_TOKEN);
+        }
+        return authorizationHeader.substring(TOKEN_BEGIN_INDEX);
     }
 }

@@ -97,9 +97,9 @@ public class TokenProvider {
     }
 
     public String getAccessToken(final String authorizationHeader) {
-        if (authorizationHeader == null || !authorizationHeader.startsWith(BEARER)) {
-            throw new UnAuthorizedException(INVALID_TOKEN_MESSAGE, INVALID_USER_TOKEN);
+        if (authorizationHeader != null && authorizationHeader.startsWith(BEARER)) {
+            return authorizationHeader.substring(TOKEN_BEGIN_INDEX);
         }
-        return authorizationHeader.substring(TOKEN_BEGIN_INDEX);
+        return authorizationHeader;
     }
 }

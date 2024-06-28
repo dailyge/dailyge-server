@@ -35,7 +35,7 @@ class TaskRegisterDocumentationTest extends DatabaseTestBase {
                 TASK_CREATE_RESPONSE_SNIPPET
             ))
             .contentType(APPLICATION_JSON_VALUE)
-            .header(AUTHORIZATION, accessToken)
+            .header(AUTHORIZATION, getAuthorizationHeader())
             .header(USER_ID_KEY, newUser.getId())
             .body(objectMapper.writeValueAsString(request))
             .when()

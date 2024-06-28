@@ -113,4 +113,8 @@ public abstract class DatabaseTestBase {
         registry.add("spring.data.redis.host", genericContainer::getHost);
         registry.add("spring.data.redis.port", () -> String.valueOf(genericContainer.getMappedPort(6379)));
     }
+
+    protected String getAuthorizationHeader() {
+        return "Bearer " + accessToken;
+    }
 }

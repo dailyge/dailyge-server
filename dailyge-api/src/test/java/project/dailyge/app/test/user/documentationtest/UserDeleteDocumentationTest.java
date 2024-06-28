@@ -31,7 +31,7 @@ class UserDeleteDocumentationTest extends DatabaseTestBase {
                 USER_DELETE_PATH_PARAMETER_SNIPPET
             ))
             .contentType(APPLICATION_JSON_VALUE)
-            .header(AUTHORIZATION, accessToken)
+            .header(AUTHORIZATION, getAuthorizationHeader())
             .when()
             .delete("/api/users/{userId}", saveUser.getId())
             .then()

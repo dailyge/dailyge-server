@@ -43,7 +43,7 @@ class TaskDeleteDocumentationTest extends DatabaseTestBase {
                 )
             )
             .contentType(APPLICATION_JSON_VALUE)
-            .header(AUTHORIZATION, accessToken)
+            .header(AUTHORIZATION, getAuthorizationHeader())
             .header(USER_ID_KEY, newUser.getId())
             .when()
             .delete("/api/tasks/{taskId}", newTaskId.getId())

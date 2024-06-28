@@ -43,7 +43,7 @@ class TaskDetailSearchDocumentationTest extends DatabaseTestBase {
                 TASK_DETAIL_SEARCH_RESPONSE_SNIPPET
             ))
             .contentType(APPLICATION_JSON_VALUE)
-            .header(AUTHORIZATION, accessToken)
+            .header(AUTHORIZATION, getAuthorizationHeader())
             .header(USER_ID_KEY, newUser.getId())
             .when()
             .get("/api/tasks/{taskId}", newTaskId.getId())

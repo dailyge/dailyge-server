@@ -10,13 +10,17 @@ import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.common.auth.TokenProvider;
 import project.dailyge.app.common.configuration.web.AuthArgumentResolver;
 import project.dailyge.app.common.configuration.web.JwtProperties;
+import project.dailyge.app.common.exception.UnAuthorizedException;
 import project.dailyge.app.core.user.application.UserReadUseCase;
 import project.dailyge.entity.user.UserJpaEntity;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+import static project.dailyge.app.common.exception.UnAuthorizedException.EMPTY_TOKEN_ERROR_MESSAGE;
 import static project.dailyge.app.fixture.user.UserFixture.createUserJpaEntity;
 
 @DisplayName("[UnitTest] AuthArgumentResolver 검증 단위 테스트")
@@ -58,11 +62,12 @@ class AuthArgumentResolverTest {
     }
 
     @Test
-    @DisplayName("토큰이 없다면, DailygeUser가 비어있다.")
-    void whenTokenIsEmptyThenDailygeUserShouldBeNull() {
-        final DailygeUser result = (DailygeUser) resolver.resolveArgument(null, null, webRequest, null);
-
-        assertNull(result);
+    @DisplayName("토큰이 없다면, UnAuthorizedException이 발생한다.")
+    void whenTokenIsEmptyThenUnAuthorizedExceptionShouldBeHappen() {
+        assertThatThrownBy(() -> resolver.resolveArgument(null, null, webRequest, null))
+            .isExactlyInstanceOf(UnAuthorizedException.class)
+            .isInstanceOf(RuntimeException.class)
+            .hasMessage(EMPTY_TOKEN_ERROR_MESSAGE);
     }
 
     @Test

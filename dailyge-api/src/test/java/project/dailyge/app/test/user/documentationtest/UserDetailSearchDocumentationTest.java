@@ -32,7 +32,7 @@ class UserDetailSearchDocumentationTest extends DatabaseTestBase {
                 USER_SEARCH_RESPONSE_SNIPPET
             ))
             .contentType(APPLICATION_JSON_VALUE)
-            .header(AUTHORIZATION, accessToken)
+            .header(AUTHORIZATION, getAuthorizationHeader())
             .when()
             .get("/api/users/{userId}", saveUser.getId())
             .then()

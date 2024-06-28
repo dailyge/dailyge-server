@@ -24,7 +24,8 @@ Dailyge API 문서
 | 기능 | Method | 인증 | API | Success | Failure
 
 | <<1-1 사용자 정보 조회>> | GET|O|/api/users/{userId} | 200 | 400, 401, 403, 404, 422, 429, 500, 502
-| <<1-2 사용자 삭제>> | GET|O|/api/users/{userId} | 200 | 400, 401, 403, 404, 429, 500, 502
+| <<1-2 사용자 삭제>> | DELETE|O|/api/users/{userId} | 200 | 400, 401, 403, 404, 429, 500, 502
+| <<1-3 로그인 페이지 조회>> | GET|O|/api/users/{userId} | 200 | 400, 401, 403, 404, 429, 500, 502
 |===
 
 ### 1-1 사용자 정보 조회
@@ -70,6 +71,22 @@ include::{snippets}/user_delete_documentation_test/when_delete_user_succeeds_the
 #### Response
 
 include::{snippets}/user_delete_documentation_test/when_delete_user_succeeds_then_status_code_should_be204_no_content/http-response.adoc[]
+
+### 1-3 로그인 페이지 조회
+
+로그인 페이지를 조회합니다.
+
+#### Request
+
+include::{snippets}/login_page_documentation_test/when_get_login_page_then_status_code_should_be200_ok/http-request.adoc[]
+
+#### Response
+
+include::{snippets}/login_page_documentation_test/when_get_login_page_then_status_code_should_be200_ok/http-response.adoc[]
+
+#### Response
+
+include::{snippets}/login_page_documentation_test/when_get_login_page_then_status_code_should_be200_ok/response-fields.adoc[]
 
 
 == 📝 2. 할 일(Task)

@@ -4,6 +4,7 @@ public enum CommonCodeAndMessage implements CodeAndMessage {
     OK(200, "OK"),
     CREATED(201, "Created"),
     NO_CONTENT(204, "No-Content"),
+    FOUND(302, "Temporarily-Redirect"),
     INVALID_PARAMETERS(400, "올바른 파라미터를 입력해주세요"),
     INVALID_USER_ID(403, "올바른 사용자 아이디가 아닙니다."),
     INVALID_USER_TOKEN(403, "유효하지 않는 사용자 토큰입니다."),

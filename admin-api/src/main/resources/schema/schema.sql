@@ -1,4 +1,4 @@
-CREATE TABLE events
+CREATE TABLE IF NOT EXISTS events
 (
     id               BIGINT AUTO_INCREMENT PRIMARY KEY NOT NULL COMMENT '이벤트 ID',
     name             VARCHAR(100)                      NOT NULL COMMENT '이벤트 명',
@@ -11,7 +11,7 @@ CREATE TABLE events
     deleted          BIT                               NOT NULL COMMENT '삭제 유무'
 ) engine 'InnoDB' COMMENT '이벤트';
 
-CREATE TABLE free_coupons
+CREATE TABLE IF NOT EXISTS free_coupons
 (
     id               BIGINT AUTO_INCREMENT PRIMARY KEY NOT NULL COMMENT '쿠폰 ID',
     description      VARCHAR(100)                      NULL COMMENT '설명',

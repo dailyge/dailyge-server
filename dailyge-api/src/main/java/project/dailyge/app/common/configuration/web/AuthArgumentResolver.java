@@ -16,6 +16,7 @@ import project.dailyge.entity.user.UserJpaEntity;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
+import static project.dailyge.app.common.exception.UnAuthorizedException.EMPTY_TOKEN_ERROR_MESSAGE;
 
 @RequiredArgsConstructor
 public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
@@ -37,6 +38,9 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
     ) {
         final HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
         final String authorizationHeader = request.getHeader(AUTHORIZATION);
+        if (authorizationHeader == null) {
+            throw new UnAuthorizedException(EMPTY_TOKEN_ERROR_MESSAGE, UN_AUTHORIZED);
+        }
         final String accessToken = tokenProvider.getAccessToken(authorizationHeader);
         tokenProvider.validateToken(accessToken);
 

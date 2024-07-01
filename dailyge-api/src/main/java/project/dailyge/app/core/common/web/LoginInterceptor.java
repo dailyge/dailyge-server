@@ -1,4 +1,4 @@
-package project.dailyge.app.common.configuration.interceptor;
+package project.dailyge.app.core.common.web;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

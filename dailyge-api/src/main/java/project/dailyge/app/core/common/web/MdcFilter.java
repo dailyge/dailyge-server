@@ -1,4 +1,4 @@
-package project.dailyge.app.core.common;
+package project.dailyge.app.core.common.web;
 
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;

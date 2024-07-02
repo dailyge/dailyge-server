@@ -5,12 +5,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.core.user.application.UserWriteUseCase;
-import project.dailyge.app.core.user.presentation.request.UserRegisterRequest;
 import project.dailyge.entity.user.UserJpaEntity;
 
 import static io.restassured.RestAssured.given;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.document;
+import static project.dailyge.app.fixture.user.UserFixture.createUserJpaEntity;
 import static project.dailyge.app.test.user.documentationtest.snippet.UserSnippet.*;
 
 @DisplayName("[DocumentationTest] 사용자 저장 문서화 테스트")
@@ -22,8 +22,7 @@ class UserDetailSearchDocumentationTest extends DatabaseTestBase {
     @Test
     @DisplayName("사용자가 조회 시, 200 OK 응답을 받는다.")
     void whenFindUserThenStatusCodeShouldBe200_OK() {
-        final UserRegisterRequest request = new UserRegisterRequest("testName", "test@gmail.com", null);
-        final UserJpaEntity saveUser = userWriteUseCase.save(request.toEntity());
+        final UserJpaEntity saveUser = userWriteUseCase.save(createUserJpaEntity());
 
         given(this.specification)
             .filter(document(IDENTIFIER,

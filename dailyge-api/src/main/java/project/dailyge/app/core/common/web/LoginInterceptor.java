@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.Optional;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Slf4j
 @Component
@@ -33,6 +34,8 @@ public class LoginInterceptor implements HandlerInterceptor {
     private static final String REFERER = "referer";
     private static final String REFRESH_TOKEN = "Refresh-Token";
     private static final String ACCESS_TOKEN = "accessToken";
+    private static final String URL = "url";
+    private static final String UTF_8 = "UTF-8";
 
     private final UserReadUseCase userReadUseCase;
     private final TokenProvider tokenProvider;
@@ -107,10 +110,10 @@ public class LoginInterceptor implements HandlerInterceptor {
     ) throws IOException {
         final HashMap<String, String> jsonBody = new HashMap<>();
         final String referer = request.getHeader(REFERER);
-        jsonBody.put("url", referer == null ? DEFAULT_REFERER : referer);
+        jsonBody.put(URL, referer == null ? DEFAULT_REFERER : referer);
         jsonBody.put(ACCESS_TOKEN, accessToken);
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
+        response.setContentType(APPLICATION_JSON_VALUE);
+        response.setCharacterEncoding(UTF_8);
         final PrintWriter writer = response.getWriter();
         final Gson gson = new Gson();
         writer.print(gson.toJson(jsonBody));

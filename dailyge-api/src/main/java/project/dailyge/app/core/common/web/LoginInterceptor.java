@@ -29,7 +29,6 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 @RequiredArgsConstructor
 public class LoginInterceptor implements HandlerInterceptor {
 
-    private static final String LOGIN_URI = "/api/login";
     private static final String DEFAULT_REFERER = "/";
     private static final String REFERER = "referer";
     private static final String REFRESH_TOKEN = "Refresh-Token";
@@ -46,9 +45,6 @@ public class LoginInterceptor implements HandlerInterceptor {
         final Object handler
     ) {
         try {
-            if (!LOGIN_URI.equals(request.getRequestURI())) {
-                return true;
-            }
             final String authorizationHeader = request.getHeader(AUTHORIZATION);
             if (authorizationHeader == null) {
                 return true;
@@ -56,13 +52,15 @@ public class LoginInterceptor implements HandlerInterceptor {
             final String accessToken = tokenProvider.getAccessToken(authorizationHeader);
             tokenProvider.validateToken(accessToken);
             final Long userId = tokenProvider.getUserId(accessToken);
-            userReadUseCase.findActiveUserById(userId);
-            setLoggedResponse(request, response, accessToken);
+            if (!userReadUseCase.isExistsUserById(userId)) {
+                return true;
+            }
+            setLoggedInResponse(request, response, accessToken);
             return false;
         } catch (ExpiredJwtException ex) {
             return refreshToken(request, response, ex);
         } catch (Exception ex) {
-            log.error("abnormal token error: {}", ex);
+            log.error("abnormal token error", ex);
             return true;
         }
     }
@@ -73,23 +71,17 @@ public class LoginInterceptor implements HandlerInterceptor {
         final ExpiredJwtException expiredJwtException
     ) {
         try {
-            Optional<Cookie> cookieStream = Arrays.stream(request.getCookies())
-                .filter(cookie -> REFRESH_TOKEN.equals(cookie.getName()))
-                .findFirst();
-            if (cookieStream.isEmpty()) {
-                return true;
-            }
-            final Cookie cookie = cookieStream.get();
-            final String refreshToken = cookie.getValue();
+            final String refreshToken = getRefreshToken(request);
+            if (refreshToken == null) return true;
             final Claims claims = expiredJwtException.getClaims();
             final Long userId = claims.get("id", Long.class);
-            userReadUseCase.findActiveUserById(userId);
-            if (!tokenManager.getRefreshTokenKey(userId).equals(refreshToken)) {
+            if (!userReadUseCase.isExistsUserById(userId) ||
+                !tokenManager.getRefreshTokenKey(userId).equals(refreshToken)) {
                 return true;
             }
             final UserJpaEntity user = userReadUseCase.findActiveUserById(userId);
             final DailygeToken token = tokenProvider.createToken(user);
-            setLoggedResponse(request, response, token.accessToken());
+            setLoggedInResponse(request, response, token.accessToken());
             return false;
         } catch (Exception ex) {
             log.error("refresh token error", ex);
@@ -97,7 +89,18 @@ public class LoginInterceptor implements HandlerInterceptor {
         }
     }
 
-    private void setLoggedResponse(
+    private static String getRefreshToken(final HttpServletRequest request) {
+        final Optional<Cookie> cookieStream = Arrays.stream(request.getCookies())
+            .filter(cookie -> REFRESH_TOKEN.equals(cookie.getName()))
+            .findFirst();
+        if (cookieStream.isEmpty()) {
+            return null;
+        }
+        final Cookie cookie = cookieStream.get();
+        return cookie.getValue();
+    }
+
+    private void setLoggedInResponse(
         final HttpServletRequest request,
         final HttpServletResponse response,
         final String accessToken

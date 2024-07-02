@@ -1,4 +1,4 @@
-package project.dailyge.app.common.configuration.web;
+package project.dailyge.app.common.auth;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

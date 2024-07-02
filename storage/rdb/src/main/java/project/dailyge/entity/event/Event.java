@@ -29,4 +29,10 @@ public class Event extends BaseEntity {
 
     @Column(name = "end_date")
     private LocalDateTime endDate;
+
+    @Column(name = "coupon_quantity")
+    private int couponQuantity;
+
+    @Column(name = "participants")
+    private long participants;
 }

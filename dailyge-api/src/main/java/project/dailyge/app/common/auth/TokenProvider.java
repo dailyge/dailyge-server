@@ -4,7 +4,6 @@ import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import project.dailyge.app.common.configuration.web.JwtProperties;
 import project.dailyge.app.common.exception.JWTAuthenticationException;
 import project.dailyge.entity.user.UserJpaEntity;
 

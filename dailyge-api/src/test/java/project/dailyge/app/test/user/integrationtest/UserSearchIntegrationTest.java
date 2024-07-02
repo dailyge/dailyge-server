@@ -33,7 +33,7 @@ class UserSearchIntegrationTest extends DatabaseTestBase {
     @DisplayName("존재하는 사용자를 ID로 조회한다면, 사용자 정보는 Null 이 아니다.")
     void whenFindExistingUserByIdThenUserShouldBeNotNull() {
         final UserJpaEntity saveUser = userWriteUseCase.save(UserFixture.createUserJpaEntity());
-        final UserJpaEntity findUser = userReadUseCase.findActiveUserById(saveUser.getId());
+        final UserJpaEntity findUser = userReadUseCase.findById(saveUser.getId());
 
         assertNotNull(findUser);
     }
@@ -41,6 +41,24 @@ class UserSearchIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("사용자가 없다면, UserNotFoundException이 발생한다.")
     void whenFindNonExistentUserThenUserNotFoundExceptionShouldBeHappen() {
+        assertThatThrownBy(() -> userReadUseCase.findById(1L))
+            .isExactlyInstanceOf(UserTypeException.from(USER_NOT_FOUND).getClass())
+            .isInstanceOf(UserTypeException.class)
+            .hasMessage(USER_NOT_FOUND.message());
+    }
+
+    @Test
+    @DisplayName("활동중인 사용자를 ID로 조회한다면, 사용자 정보는 Null 이 아니다.")
+    void whenFindActiveUserByIdThenUserShouldBeNotNull() {
+        final UserJpaEntity saveUser = userWriteUseCase.save(UserFixture.createUserJpaEntity());
+        final UserJpaEntity findUser = userReadUseCase.findActiveUserById(saveUser.getId());
+
+        assertNotNull(findUser);
+    }
+
+    @Test
+    @DisplayName("활동중인 사용자가 없다면, UserActiveNotFoundException이 발생한다.")
+    void whenFindNonActiveUserThenUserActiveNotFoundExceptionShouldBeHappen() {
         assertThatThrownBy(() -> userReadUseCase.findActiveUserById(1L))
             .isExactlyInstanceOf(UserTypeException.from(USER_NOT_FOUND).getClass())
             .isInstanceOf(UserTypeException.class)
@@ -97,6 +115,19 @@ class UserSearchIntegrationTest extends DatabaseTestBase {
             () -> assertEquals(activeUser.getId(), findUser.get().getId()),
             () -> assertNotEquals(deleteUser.getId(), findUser.get().getId())
         );
+    }
 
+    @Test
+    @DisplayName("사용자가 존재할 경우, true 를 반환한다.")
+    void whenUserExistentUserThenResultShouldBeTrue() {
+        final UserJpaEntity user = userWriteUseCase.save(UserFixture.createUserJpaEntity());
+
+        assertTrue(userReadUseCase.isExistsUserById(user.getId()));
+    }
+
+    @Test
+    @DisplayName("사용자가 존재하지 않는 경우, false 를 반환한다.")
+    void whenUserNonExistentThenResultShouldBeTrue() {
+        assertFalse(userReadUseCase.isExistsUserById(1L));
     }
 }

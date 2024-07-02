@@ -10,7 +10,7 @@ import project.dailyge.entity.BaseEntity;
 
 @Getter
 @Entity(name = "free_coupons")
-public class FreeCoupon extends BaseEntity {
+public class FreeCouponJpaEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

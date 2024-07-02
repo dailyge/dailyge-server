@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Entity(name = "events")
-public class Event extends BaseEntity {
+public class EventJpaEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

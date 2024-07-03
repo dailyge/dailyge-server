@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS events
     end_date         DATETIME(6)                       NOT NULL COMMENT '이벤트 종료일',
     coupon_quantity  INT                               NOT NULL COMMENT '쿠폰 수량',
     participants     BIGINT                            NOT NULL COMMENT '참여자 수',
+    expired_at       DATETIME                          NULL COMMENT '만료 날짜',
     created_by       BIGINT                            NOT NULL COMMENT '생성한 사람',
     created_date     DATETIME(6)                       NOT NULL COMMENT '생성 일시',
     last_modified_by BIGINT                            NULL COMMENT '최종 수정한 사람',

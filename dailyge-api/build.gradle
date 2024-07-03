@@ -48,30 +48,41 @@ ext {
     snippetsDir = file("build/generated-snippets")
 }
 
+tasks.register('prepareAsciidoc') {
+    doLast {
+        if (!snippetsDir.exists()) {
+            snippetsDir.mkdirs()
+        }
+    }
+}
+
 test {
     dependsOn("copySubmoduleConfig")
     outputs.dir snippetsDir
     dependsOn(":storage:rdb:test")
 }
 
-asciidoctor {
+tasks.named('asciidoctor') {
+    dependsOn test
+    onlyIf {
+        snippetsDir.exists() && snippetsDir.listFiles().length > 0
+    }
     attributes "snippets": snippetsDir
     inputs.dir snippetsDir
-    dependsOn test
 }
 
 tasks.register("copyDocument", Copy) {
-    dependsOn asciidoctor
+    dependsOn tasks.named('asciidoctor')
     from file("build/docs/asciidoc")
     into file("src/main/resources/static/docs")
 }
 
 build {
-    dependsOn copyDocument
+    dependsOn tasks.named('copyDocument')
 }
 
 bootJar {
-    dependsOn asciidoctor
+    dependsOn tasks.named('asciidoctor')
     from("${asciidoctor.outputDir}/html5") {
         into "static/docs"
     }

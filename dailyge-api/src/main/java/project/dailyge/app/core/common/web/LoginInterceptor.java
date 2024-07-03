@@ -33,6 +33,7 @@ public class LoginInterceptor implements HandlerInterceptor {
     private static final String ACCESS_TOKEN = "Access-Token";
     private static final String URL = "url";
     private static final String UTF_8 = "UTF-8";
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     private final UserReadUseCase userReadUseCase;
     private final TokenProvider tokenProvider;
@@ -112,7 +113,6 @@ public class LoginInterceptor implements HandlerInterceptor {
 
         response.setContentType(APPLICATION_JSON_VALUE);
         response.setCharacterEncoding(UTF_8);
-        final ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.writeValue(response.getWriter(), bodyMap);
     }
 }

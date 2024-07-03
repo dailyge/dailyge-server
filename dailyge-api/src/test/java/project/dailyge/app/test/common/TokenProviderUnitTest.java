@@ -15,19 +15,16 @@ import static org.junit.jupiter.api.Assertions.*;
 import static project.dailyge.app.common.exception.JWTAuthenticationException.*;
 
 @DisplayName("[UnitTest] TokenProvider 단위 테스트")
-public class TokenProviderUnitTest {
+class TokenProviderUnitTest {
 
-    private final String SECRET_KEY = "secretKey";
-    private final int ACCESS_EXPIRED_TIME = 1;
-    private final int REFRESH_EXPIRED_TIME = 2;
-    private static final String BEARER = "Bearer ";
+    private static final int REFRESH_EXPIRED_TIME = 2;
     private static final String ACCESS_TOKEN = "access_token";
 
     private TokenProvider tokenProvider;
 
     @BeforeEach
     void setUp() {
-        final JwtProperties jwtProperties = new JwtProperties(SECRET_KEY, ACCESS_EXPIRED_TIME, REFRESH_EXPIRED_TIME);
+        final JwtProperties jwtProperties = new JwtProperties("secretKey", 1, REFRESH_EXPIRED_TIME);
         tokenProvider = new TokenProvider(jwtProperties);
     }
 
@@ -57,7 +54,7 @@ public class TokenProviderUnitTest {
     @Test
     @DisplayName("authorizationHeader 가 존재하면, AccessToken 을 반환한다.")
     void whenAuthorizationHeaderExistsThenResultShouldBeAccessToken() {
-        final String authorizationHeader = BEARER + ACCESS_TOKEN;
+        final String authorizationHeader = "Bearer " + ACCESS_TOKEN;
         final String accessToken = tokenProvider.getAccessToken(authorizationHeader);
 
         assertEquals(ACCESS_TOKEN, accessToken);

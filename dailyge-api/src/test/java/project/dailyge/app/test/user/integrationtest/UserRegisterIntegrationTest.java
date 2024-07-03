@@ -30,7 +30,7 @@ class UserRegisterIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("사용자 등록 시 삭제되지 않은 동일한 이메일이 있을 경우, DuplicatedEmailException이 발생한다.")
     void whenUserEmailDuplicatedThenDuplicatedEmailExceptionShouldBeHappen() {
-        UserJpaEntity user = userWriteUseCase.save(createUserJpaEntity());
+        final UserJpaEntity user = userWriteUseCase.save(createUserJpaEntity());
 
         assertThatThrownBy(() -> userWriteUseCase.save(user))
             .isExactlyInstanceOf(UserTypeException.from(DUPLICATED_EMAIL).getClass())

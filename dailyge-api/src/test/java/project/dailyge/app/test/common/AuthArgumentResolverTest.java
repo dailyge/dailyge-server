@@ -26,8 +26,6 @@ import static project.dailyge.app.fixture.user.UserFixture.createUserJpaEntity;
 @DisplayName("[UnitTest] AuthArgumentResolver 검증 단위 테스트")
 class AuthArgumentResolverTest {
 
-    private static final String SECRET_KEY = "secretKey";
-
     private TokenProvider tokenProvider;
     private AuthArgumentResolver resolver;
     private UserReadUseCase userReadUseCase;
@@ -36,7 +34,7 @@ class AuthArgumentResolverTest {
 
     @BeforeEach
     void setUp() {
-        JwtProperties jwtProperties = new JwtProperties(SECRET_KEY, 1, 2);
+        final JwtProperties jwtProperties = new JwtProperties("secretKey", 1, 2);
         tokenProvider = new TokenProvider(jwtProperties);
         userReadUseCase = mock(UserReadUseCase.class);
         resolver = new AuthArgumentResolver(userReadUseCase, tokenProvider);

@@ -36,6 +36,7 @@ CREATE TABLE IF NOT EXISTS free_coupons
     issuer_id        BIGINT                            NOT NULL COMMENT '발행자 ID',
     user_id          BIGINT                            NOT NULL COMMENT '사용자 ID',
     event_id         BIGINT                            NOT NULL COMMENT '이벤트 ID',
+    coupon_issuance  BOOLEAN                           NOT NULL COMMENT '쿠폰 발급 유무',
     created_by       BIGINT                            NULL COMMENT '생성한 사람',
     created_date     DATETIME(6)                       NOT NULL COMMENT '생성 일시',
     last_modified_by BIGINT                            NULL COMMENT '최종 수정한 사람',

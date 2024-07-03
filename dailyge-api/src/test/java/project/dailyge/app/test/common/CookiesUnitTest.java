@@ -16,7 +16,7 @@ class CookiesUnitTest {
 
     @Test
     @DisplayName("존재하는 쿠키의 값을 꺼내면, 쿠키 값이 반환한다.")
-    void whenExistsCookieThenResultShouldBeExists() {
+    void whenExistsCookieThenResultShouldBeNotNull() {
         final Cookie[] cookie = new Cookie[1];
         cookie[0] = new Cookie(KEY, VALUE);
         final Cookies cookies = new Cookies(cookie);
@@ -26,7 +26,7 @@ class CookiesUnitTest {
 
     @Test
     @DisplayName("존재하지 않은 쿠키의 값을 꺼내면, Null을 반환한다.")
-    void whenThen() {
+    void whenNonExistsCookieThenResultShouldBeNull() {
         final Cookie[] cookie = new Cookie[1];
         cookie[0] = new Cookie(KEY, VALUE);
         final Cookies cookies = new Cookies(cookie);

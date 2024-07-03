@@ -7,15 +7,20 @@ import java.util.Map;
 
 public final class Cookies {
 
-    private final Map<String, String> cookieMap = new HashMap<>();
+    private final Map<String, Cookie> cookieMap = new HashMap<>();
 
     public Cookies(final Cookie[] cookies) {
         for (Cookie cookie : cookies) {
-            cookieMap.put(cookie.getName(), cookie.getValue());
+            cookieMap.put(cookie.getName(), cookie);
         }
     }
 
     public String getValueByKey(final String key) {
-        return cookieMap.get(key);
+        final Cookie cookie = cookieMap.get(key);
+        if (cookie == null) {
+            return null;
+        }
+        final String value = cookie.getValue();
+        return value == null ? "" : value;
     }
 }

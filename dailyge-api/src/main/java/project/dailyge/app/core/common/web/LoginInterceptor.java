@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
@@ -52,12 +53,14 @@ public class LoginInterceptor implements HandlerInterceptor {
             if (authorizationHeader == null) {
                 return true;
             }
+
             final String accessToken = tokenProvider.getAccessToken(authorizationHeader);
             tokenProvider.validateToken(accessToken);
             final Long userId = tokenProvider.getUserId(accessToken);
             if (!userReadUseCase.isExistsUserById(userId)) {
                 return true;
             }
+
             setLoggedInResponse(request, response, accessToken);
             return false;
         } catch (ExpiredJwtException ex) {
@@ -76,14 +79,17 @@ public class LoginInterceptor implements HandlerInterceptor {
         try {
             final String refreshToken = getRefreshToken(request);
             if (refreshToken == null) return true;
+
             final Claims claims = expiredJwtException.getClaims();
             final Long userId = claims.get("id", Long.class);
             if (!userReadUseCase.isExistsUserById(userId) ||
                 !tokenManager.getRefreshTokenKey(userId).equals(refreshToken)) {
                 return true;
             }
+
             final UserJpaEntity user = userReadUseCase.findActiveUserById(userId);
             final DailygeToken token = tokenProvider.createToken(user);
+
             setLoggedInResponse(request, response, token.accessToken());
             return false;
         } catch (Exception ex) {
@@ -92,7 +98,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         }
     }
 
-    private static String getRefreshToken(final HttpServletRequest request) {
+    private String getRefreshToken(final HttpServletRequest request) {
         final Optional<Cookie> cookieStream = Arrays.stream(request.getCookies())
             .filter(cookie -> REFRESH_TOKEN.equals(cookie.getName()))
             .findFirst();
@@ -108,14 +114,15 @@ public class LoginInterceptor implements HandlerInterceptor {
         final HttpServletResponse response,
         final String accessToken
     ) throws IOException {
-        final HashMap<String, String> jsonBody = new HashMap<>();
+        final Map<String, String> bodyMap = new HashMap<>();
         final String referer = request.getHeader(REFERER);
-        jsonBody.put(URL, referer == null ? DEFAULT_REFERER : referer);
-        jsonBody.put(ACCESS_TOKEN, accessToken);
+        bodyMap.put(URL, referer == null ? DEFAULT_REFERER : referer);
+        bodyMap.put(ACCESS_TOKEN, accessToken);
+
         response.setContentType(APPLICATION_JSON_VALUE);
         response.setCharacterEncoding(UTF_8);
         final PrintWriter writer = response.getWriter();
         final Gson gson = new Gson();
-        writer.print(gson.toJson(jsonBody));
+        writer.print(gson.toJson(bodyMap));
     }
 }

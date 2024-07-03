@@ -106,9 +106,9 @@ class LoginInterceptorUnitTest {
         final DailygeToken expiredToken = expiredTokenProvider.createToken(user);
         final Cookie[] cookies = new Cookie[1];
         cookies[0] = new Cookie("Refresh-Token", null);
+
         when(request.getCookies())
             .thenReturn(cookies);
-
         when(request.getHeader(AUTHORIZATION))
             .thenReturn(expiredToken.getAuthorizationToken());
 

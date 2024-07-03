@@ -1,6 +1,6 @@
 package project.dailyge.app.core.common.web;
 
-import com.nimbusds.jose.shaded.gson.Gson;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,7 +16,6 @@ import project.dailyge.app.core.user.external.oauth.TokenManager;
 import project.dailyge.entity.user.UserJpaEntity;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -114,8 +113,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 
         response.setContentType(APPLICATION_JSON_VALUE);
         response.setCharacterEncoding(UTF_8);
-        final PrintWriter writer = response.getWriter();
-        final Gson gson = new Gson();
-        writer.print(gson.toJson(bodyMap));
+        final ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.writeValue(response.getWriter(), bodyMap);
     }
 }

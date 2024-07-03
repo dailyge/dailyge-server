@@ -8,6 +8,8 @@ import jakarta.persistence.Id;
 import lombok.Getter;
 import project.dailyge.entity.BaseEntity;
 
+import java.time.LocalDate;
+
 @Getter
 @Entity(name = "free_coupons")
 public class FreeCouponJpaEntity extends BaseEntity {
@@ -21,6 +23,9 @@ public class FreeCouponJpaEntity extends BaseEntity {
 
     @Column(name = "serial_number")
     private String serialNumber;
+
+    @Column(name = "expired_at")
+    private LocalDate expiredAt;
 
     @Column(name = "issuer_id")
     private Long issuerId;

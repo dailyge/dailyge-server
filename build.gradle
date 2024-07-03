@@ -83,51 +83,51 @@ subprojects {
     }
 
     jacocoTestReport {
-        dependsOn test
         reports {
             xml.required = true
             html.required = true
             csv.required = false
         }
-
-        def exclusions = extractQClass()
-        file("${rootDir}/config/jacoco/exclude-coverage.txt").eachLine {
-            exclusions.add(it)
-        }
-
         afterEvaluate {
+            def exclusions = extractQClass()
+            file("${rootDir}/config/jacoco/exclude-coverage.txt").eachLine {
+                exclusions.add(it)
+            }
             classDirectories.setFrom(files(classDirectories.files.collect {
                 fileTree(dir: it, exclude: exclusions)
             }))
         }
-        finalizedBy jacocoTestCoverageVerification
     }
 
     jacocoTestCoverageVerification {
-        def exclusions = extractQClass()
-        file("${rootDir}/config/jacoco/exclude-verification.txt").eachLine {
-            exclusions.add(it)
-        }
+        afterEvaluate {
+            def exclusions = extractQClass()
+            file("${rootDir}/config/jacoco/exclude-verification.txt").eachLine {
+                exclusions.add(it)
+            }
+            classDirectories.setFrom(files(classDirectories.files.collect {
+                fileTree(dir: it, exclude: exclusions)
+            }))
 
-        violationRules {
-            rule {
-                enabled = true
-                element = "CLASS"
+            violationRules {
+                rule {
+                    enabled = true
+                    element = "CLASS"
 
-                limit {
-                    counter = "LINE"
-                    value = "TOTALCOUNT"
-                    maximum = "200".toBigDecimal()
-                }
-                limit {
-                    counter = "BRANCH"
-                    value = "COVEREDRATIO"
-                    minimum = 0.00
+                    limit {
+                        counter = "LINE"
+                        value = "TOTALCOUNT"
+                        maximum = "200".toBigDecimal()
+                    }
+                    limit {
+                        counter = "BRANCH"
+                        value = "COVEREDRATIO"
+                        minimum = 0.60
+                    }
                 }
             }
         }
     }
-
     tasks.test {
         useJUnitPlatform()
         finalizedBy jacocoTestReport

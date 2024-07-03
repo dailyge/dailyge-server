@@ -1,8 +1,8 @@
 **.*Application*
 **.*Health*
 **.common.**
-**..command.**
-**..exception.**
-**..request.**
+**.command.**
+**.exception.**
+**.request.**
 **.response.**
 **.test.**

@@ -3,7 +3,6 @@ package project.dailyge.app.core.common.web;
 import com.nimbusds.jose.shaded.gson.Gson;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -18,10 +17,8 @@ import project.dailyge.entity.user.UserJpaEntity;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -78,7 +75,9 @@ public class LoginInterceptor implements HandlerInterceptor {
     ) {
         try {
             final String refreshToken = getRefreshToken(request);
-            if (refreshToken == null) return true;
+            if (refreshToken == null) {
+                return true;
+            }
 
             final Claims claims = expiredJwtException.getClaims();
             final Long userId = claims.get("id", Long.class);
@@ -99,14 +98,8 @@ public class LoginInterceptor implements HandlerInterceptor {
     }
 
     private String getRefreshToken(final HttpServletRequest request) {
-        final Optional<Cookie> cookieStream = Arrays.stream(request.getCookies())
-            .filter(cookie -> REFRESH_TOKEN.equals(cookie.getName()))
-            .findFirst();
-        if (cookieStream.isEmpty()) {
-            return null;
-        }
-        final Cookie cookie = cookieStream.get();
-        return cookie.getValue();
+        final Cookies cookies = new Cookies(request.getCookies());
+        return cookies.getValueByKey(REFRESH_TOKEN);
     }
 
     private void setLoggedInResponse(

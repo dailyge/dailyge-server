@@ -5,12 +5,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import project.dailyge.app.common.exception.JWTAuthenticationException;
+import project.dailyge.app.common.exception.UnAuthorizedException;
 import project.dailyge.entity.user.UserJpaEntity;
 
 import java.time.Duration;
 import java.util.Date;
 
-import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.INVALID_USER_TOKEN;
+import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.*;
 import static project.dailyge.app.common.exception.JWTAuthenticationException.*;
 
 @Slf4j
@@ -39,13 +40,19 @@ public class TokenProvider {
         final UserJpaEntity user,
         final Date expiry
     ) {
-        return Jwts.builder()
-            .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
-            .setExpiration(expiry)
-            .setSubject(user.getEmail())
-            .claim(ID, user.getId())
-            .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey())
-            .compact();
+        try {
+            return Jwts.builder()
+                .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
+                .setExpiration(expiry)
+                .setSubject(user.getEmail())
+                .claim(ID, user.getId())
+                .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey())
+                .compact();
+        } catch (IllegalArgumentException ex) {
+            throw new UnAuthorizedException(ex.getMessage(), INVALID_PARAMETERS);
+        } catch (Exception ex) {
+            throw new UnAuthorizedException(ex.getMessage(), INTERNAL_SERVER_ERROR);
+        }
     }
 
     public void validateToken(final String token) {
@@ -84,8 +91,8 @@ public class TokenProvider {
                 .setSigningKey(jwtProperties.getSecretKey())
                 .parseClaimsJws(token)
                 .getBody();
-        } catch (Throwable e) {
-            log.error(e.getMessage());
+        } catch (Exception ex) {
+            log.error(ex.getMessage());
             return null;
         }
     }

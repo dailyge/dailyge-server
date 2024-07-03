@@ -1,0 +1,32 @@
+name: Dailyge-Api Build
+
+on:
+  pull_request:
+    branches: [ dev ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+          token: ${{ secrets.SUBMODULE_TOKEN }}
+
+      - name: Update submodules
+        run: |
+          git submodule sync --recursive
+          git submodule update --init --recursive --remote
+
+      - name: Set up JDK 17 with Gradle cache
+        uses: actions/setup-java@v2
+        with:
+          java-version: "17"
+          distribution: "temurin"
+          cache: "gradle"
+
+      - name: Build with Gradle
+        env:
+          ENCRYPTOR_KEY: ${{ secrets.ENCRYPTOR_KEY }}
+        run: ./gradlew dailyge-api:build --info --stacktrace
+

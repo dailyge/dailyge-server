@@ -51,7 +51,6 @@ public class LoginInterceptor implements HandlerInterceptor {
             }
 
             final String accessToken = tokenProvider.getAccessToken(authorizationHeader);
-            tokenProvider.validateToken(accessToken);
             final Long userId = tokenProvider.getUserId(accessToken);
             if (!userReadUseCase.existsById(userId)) {
                 return true;

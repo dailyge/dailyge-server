@@ -55,34 +55,12 @@ public class TokenProvider {
         }
     }
 
-    public void validateToken(final String token) {
-        try {
-            Jwts.parser()
-                .setSigningKey(jwtProperties.getSecretKey())
-                .parseClaimsJws(token);
-        }catch (IllegalArgumentException ex) {
-            throw new JWTAuthenticationException(EMPTY_TOKEN_ERROR_MESSAGE, INVALID_USER_TOKEN);
-        } catch (SignatureException ex) {
-            throw new JWTAuthenticationException(TOKEN_SIGNATURE_VERIFICATION_FAILED_ERROR_MESSAGE, INVALID_USER_TOKEN);
-        } catch (MalformedJwtException ex) {
-            throw new JWTAuthenticationException(TOKEN_FORMAT_INCORRECT_ERROR_MESSAGE, INVALID_USER_TOKEN);
-        } catch (UnsupportedJwtException ex) {
-            throw new JWTAuthenticationException(UNSUPPORTED_TOKEN_ERROR_MESSAGE, INVALID_USER_TOKEN);
-        }
-    }
-
     public Long getUserId(final String token) {
         final Claims claims = getClaims(token);
         if (claims == null || claims.get(ID) == null) {
             throw new JWTAuthenticationException(INVALID_TOKEN_MESSAGE, INVALID_USER_TOKEN);
         }
-        try {
-            return claims.get(ID, Long.class);
-        } catch (RequiredTypeException ex) {
-            throw new JWTAuthenticationException(INVALID_ID_TYPE_MESSAGE, INVALID_USER_TOKEN);
-        } catch (Exception ex) {
-            throw new JWTAuthenticationException(ex.getMessage(), INVALID_USER_TOKEN);
-        }
+        return claims.get(ID, Long.class);
     }
 
     private Claims getClaims(final String token) {
@@ -91,9 +69,16 @@ public class TokenProvider {
                 .setSigningKey(jwtProperties.getSecretKey())
                 .parseClaimsJws(token)
                 .getBody();
-        } catch (Exception ex) {
-            log.error(ex.getMessage());
-            return null;
+        } catch (IllegalArgumentException ex) {
+            throw new JWTAuthenticationException(EMPTY_TOKEN_ERROR_MESSAGE, INVALID_USER_TOKEN);
+        } catch (SignatureException ex) {
+            throw new JWTAuthenticationException(TOKEN_SIGNATURE_VERIFICATION_FAILED_ERROR_MESSAGE, INVALID_USER_TOKEN);
+        } catch (MalformedJwtException ex) {
+            throw new JWTAuthenticationException(TOKEN_FORMAT_INCORRECT_ERROR_MESSAGE, INVALID_USER_TOKEN);
+        } catch (UnsupportedJwtException ex) {
+            throw new JWTAuthenticationException(UNSUPPORTED_TOKEN_ERROR_MESSAGE, INVALID_USER_TOKEN);
+        } catch (RequiredTypeException ex) {
+            throw new JWTAuthenticationException(INVALID_ID_TYPE_MESSAGE, INVALID_USER_TOKEN);
         }
     }
 

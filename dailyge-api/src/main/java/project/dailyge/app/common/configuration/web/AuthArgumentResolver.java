@@ -46,22 +46,16 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
         }
         final String accessToken = tokenProvider.getAccessToken(authorizationHeader);
         try {
-            tokenProvider.validateToken(accessToken);
+            final Long userId = tokenProvider.getUserId(accessToken);
+            if (userId == null) {
+                final String detailMessage = String.format("사용자 아이디가 존재하지 않습니다. 입력된 값:%s", userId);
+                throw new UnAuthorizedException(detailMessage, UN_AUTHORIZED);
+            }
+            final UserJpaEntity findUser = userReadUseCase.findAuthorizedById(userId);
+
+            return new DailygeUser(findUser);
         } catch (ExpiredJwtException e) {
             throw new JWTAuthenticationException(EXPIRED_TOKEN_ERROR_MESSAGE, UN_AUTHORIZED);
-        }
-
-        final Long userId = tokenProvider.getUserId(accessToken);
-        validateUserId(userId);
-
-        final UserJpaEntity findUser = userReadUseCase.findAuthorizedById(userId);
-        return new DailygeUser(findUser);
-    }
-
-    private void validateUserId(final Long userId) {
-        if (userId == null) {
-            final String detailMessage = String.format("사용자 아이디가 존재하지 않습니다. 입력된 값:%s", userId);
-            throw new UnAuthorizedException(detailMessage, UN_AUTHORIZED);
         }
     }
 }

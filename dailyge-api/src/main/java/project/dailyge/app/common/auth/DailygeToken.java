@@ -8,7 +8,7 @@ public record DailygeToken(
     int maxAge
 ) {
     private static final String BEARER =  "Bearer ";
-    private static final String REFRESH_TOKEN =  "refreshToken";
+    private static final String REFRESH_TOKEN =  "Refresh-Token";
 
     public String getAuthorizationToken() {
         return BEARER + accessToken;

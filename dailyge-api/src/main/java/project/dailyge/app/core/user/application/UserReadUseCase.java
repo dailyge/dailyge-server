@@ -12,4 +12,6 @@ public interface UserReadUseCase {
     UserJpaEntity findAuthorizedById(Long userId);
 
     Optional<UserJpaEntity> findActiveUserByEmail(String email);
+
+    boolean existsById(Long userId);
 }

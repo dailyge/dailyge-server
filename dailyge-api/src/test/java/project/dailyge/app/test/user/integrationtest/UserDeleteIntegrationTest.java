@@ -25,9 +25,9 @@ class UserDeleteIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("존재하는 사용자를 삭제하면, deleted true로 논리삭제 된다.")
     void whenDeleteAnExistingUserThenUserShouldDeletedBeTrue() {
-        UserJpaEntity saveUser = userWriteUseCase.save(UserFixture.createUserJpaEntity());
+        final UserJpaEntity saveUser = userWriteUseCase.save(UserFixture.createUserJpaEntity());
         userWriteUseCase.delete(saveUser.getId());
-        UserJpaEntity findUser = userReadUseCase.findById(saveUser.getId());
+        final UserJpaEntity findUser = userReadUseCase.findById(saveUser.getId());
 
         assertTrue(findUser.getDeleted());
     }
@@ -35,7 +35,7 @@ class UserDeleteIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("이미 삭제된 사용자를 삭제하면, IllegalArgumentException이 발생한다.")
     void whenDeleteAlreadyDeletedUserThenIllegalArgumentExceptionShouldBeHappen() {
-        UserJpaEntity saveUser = userWriteUseCase.save(UserFixture.createUserJpaEntity());
+        final UserJpaEntity saveUser = userWriteUseCase.save(UserFixture.createUserJpaEntity());
         userWriteUseCase.delete(saveUser.getId());
 
         assertThatThrownBy(() -> userWriteUseCase.delete(saveUser.getId()))

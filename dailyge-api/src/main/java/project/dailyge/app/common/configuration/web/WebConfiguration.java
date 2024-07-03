@@ -6,7 +6,7 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import project.dailyge.app.common.auth.TokenProvider;
-import project.dailyge.app.common.configuration.interceptor.LoginInterceptor;
+import project.dailyge.app.core.common.web.LoginInterceptor;
 import project.dailyge.app.core.user.application.UserReadUseCase;
 
 import java.util.List;
@@ -26,6 +26,6 @@ public class WebConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(loginInterceptor);
+        registry.addInterceptor(loginInterceptor).addPathPatterns("/api/login");
     }
 }

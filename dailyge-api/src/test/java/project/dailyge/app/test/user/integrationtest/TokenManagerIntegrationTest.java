@@ -16,6 +16,7 @@ import static project.dailyge.app.common.exception.ExternalServerException.REDIS
 class TokenManagerIntegrationTest extends DatabaseTestBase {
 
     public static final String REFRESH_TOKEN = "Refresh-Token";
+
     @Autowired
     private TokenManager tokenManager;
 
@@ -24,7 +25,7 @@ class TokenManagerIntegrationTest extends DatabaseTestBase {
     void whenSavingRefreshTokenThenRefreshTokenShouldBeExists() {
         tokenManager.saveRefreshToken(1L, REFRESH_TOKEN);
 
-        String refreshTokenKey = tokenManager.getRefreshTokenKey(1L);
+        final String refreshTokenKey = tokenManager.getRefreshTokenKey(1L);
 
         Assertions.assertEquals(REFRESH_TOKEN, refreshTokenKey);
     }

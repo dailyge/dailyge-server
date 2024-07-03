@@ -1,5 +1,6 @@
 package project.dailyge.app.common.configuration.web;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
@@ -10,12 +11,15 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.common.auth.LoginUser;
 import project.dailyge.app.common.auth.TokenProvider;
+import project.dailyge.app.common.exception.JWTAuthenticationException;
 import project.dailyge.app.common.exception.UnAuthorizedException;
 import project.dailyge.app.core.user.application.UserReadUseCase;
 import project.dailyge.entity.user.UserJpaEntity;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
+import static project.dailyge.app.common.exception.JWTAuthenticationException.EMPTY_TOKEN_ERROR_MESSAGE;
+import static project.dailyge.app.common.exception.JWTAuthenticationException.EXPIRED_TOKEN_ERROR_MESSAGE;
 
 @RequiredArgsConstructor
 public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
@@ -37,8 +41,15 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
     ) {
         final HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
         final String authorizationHeader = request.getHeader(AUTHORIZATION);
+        if (authorizationHeader == null) {
+            throw new UnAuthorizedException(EMPTY_TOKEN_ERROR_MESSAGE, UN_AUTHORIZED);
+        }
         final String accessToken = tokenProvider.getAccessToken(authorizationHeader);
-        tokenProvider.validateToken(accessToken);
+        try {
+            tokenProvider.validateToken(accessToken);
+        } catch (ExpiredJwtException e) {
+            throw new JWTAuthenticationException(EXPIRED_TOKEN_ERROR_MESSAGE, UN_AUTHORIZED);
+        }
 
         final Long userId = tokenProvider.getUserId(accessToken);
         validateUserId(userId);

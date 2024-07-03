@@ -9,7 +9,7 @@ import project.dailyge.app.common.auth.DailygeToken;
 import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.common.auth.TokenProvider;
 import project.dailyge.app.common.configuration.web.AuthArgumentResolver;
-import project.dailyge.app.common.configuration.web.JwtProperties;
+import project.dailyge.app.common.auth.JwtProperties;
 import project.dailyge.app.common.exception.UnAuthorizedException;
 import project.dailyge.app.core.user.application.UserReadUseCase;
 import project.dailyge.entity.user.UserJpaEntity;
@@ -20,13 +20,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
-import static project.dailyge.app.common.exception.UnAuthorizedException.EMPTY_TOKEN_ERROR_MESSAGE;
+import static project.dailyge.app.common.exception.JWTAuthenticationException.EMPTY_TOKEN_ERROR_MESSAGE;
 import static project.dailyge.app.fixture.user.UserFixture.createUserJpaEntity;
 
 @DisplayName("[UnitTest] AuthArgumentResolver 검증 단위 테스트")
 class AuthArgumentResolverTest {
-
-    private static final String SECRET_KEY = "secretKey";
 
     private TokenProvider tokenProvider;
     private AuthArgumentResolver resolver;
@@ -36,7 +34,7 @@ class AuthArgumentResolverTest {
 
     @BeforeEach
     void setUp() {
-        JwtProperties jwtProperties = new JwtProperties(SECRET_KEY, 1, 2);
+        final JwtProperties jwtProperties = new JwtProperties("secretKey", 1, 2);
         tokenProvider = new TokenProvider(jwtProperties);
         userReadUseCase = mock(UserReadUseCase.class);
         resolver = new AuthArgumentResolver(userReadUseCase, tokenProvider);

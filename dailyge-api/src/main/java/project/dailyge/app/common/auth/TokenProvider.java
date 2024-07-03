@@ -4,16 +4,14 @@ import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import project.dailyge.app.common.configuration.web.JwtProperties;
-import project.dailyge.app.common.exception.UnAuthorizedException;
+import project.dailyge.app.common.exception.JWTAuthenticationException;
 import project.dailyge.entity.user.UserJpaEntity;
 
 import java.time.Duration;
 import java.util.Date;
 
 import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.INVALID_USER_TOKEN;
-import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
-import static project.dailyge.app.common.exception.UnAuthorizedException.*;
+import static project.dailyge.app.common.exception.JWTAuthenticationException.*;
 
 @Slf4j
 @Component
@@ -55,32 +53,28 @@ public class TokenProvider {
             Jwts.parser()
                 .setSigningKey(jwtProperties.getSecretKey())
                 .parseClaimsJws(token);
-        }catch (IllegalArgumentException e) {
-            throw new UnAuthorizedException(EMPTY_TOKEN_ERROR_MESSAGE, UN_AUTHORIZED);
-        } catch (SignatureException e) {
-            throw new UnAuthorizedException(TOKEN_SIGNATURE_VERIFICATION_FAILED_ERROR_MESSAGE, UN_AUTHORIZED);
-        } catch (MalformedJwtException e) {
-            throw new UnAuthorizedException(TOKEN_FORMAT_INCORRECT_ERROR_MESSAGE, UN_AUTHORIZED);
-        } catch (ExpiredJwtException e) {
-            throw new UnAuthorizedException(EXPIRED_TOKEN_ERROR_MESSAGE, UN_AUTHORIZED);
-        } catch (UnsupportedJwtException e) {
-            throw new UnAuthorizedException(UNSUPPORTED_TOKEN_ERROR_MESSAGE, UN_AUTHORIZED);
-        }  catch (Throwable e) {
-            log.error(e.getMessage());
+        }catch (IllegalArgumentException ex) {
+            throw new JWTAuthenticationException(EMPTY_TOKEN_ERROR_MESSAGE, INVALID_USER_TOKEN);
+        } catch (SignatureException ex) {
+            throw new JWTAuthenticationException(TOKEN_SIGNATURE_VERIFICATION_FAILED_ERROR_MESSAGE, INVALID_USER_TOKEN);
+        } catch (MalformedJwtException ex) {
+            throw new JWTAuthenticationException(TOKEN_FORMAT_INCORRECT_ERROR_MESSAGE, INVALID_USER_TOKEN);
+        } catch (UnsupportedJwtException ex) {
+            throw new JWTAuthenticationException(UNSUPPORTED_TOKEN_ERROR_MESSAGE, INVALID_USER_TOKEN);
         }
     }
 
     public Long getUserId(final String token) {
         final Claims claims = getClaims(token);
         if (claims == null || claims.get(ID) == null) {
-            throw new UnAuthorizedException(INVALID_TOKEN_MESSAGE, INVALID_USER_TOKEN);
+            throw new JWTAuthenticationException(INVALID_TOKEN_MESSAGE, INVALID_USER_TOKEN);
         }
         try {
             return claims.get(ID, Long.class);
         } catch (RequiredTypeException ex) {
-            throw new UnAuthorizedException(INVALID_ID_TYPE_MESSAGE, INVALID_USER_TOKEN);
+            throw new JWTAuthenticationException(INVALID_ID_TYPE_MESSAGE, INVALID_USER_TOKEN);
         } catch (Exception ex) {
-            throw new UnAuthorizedException(ex.getMessage(), INVALID_USER_TOKEN);
+            throw new JWTAuthenticationException(ex.getMessage(), INVALID_USER_TOKEN);
         }
     }
 
@@ -97,9 +91,9 @@ public class TokenProvider {
     }
 
     public String getAccessToken(final String authorizationHeader) {
-        if (authorizationHeader != null && authorizationHeader.startsWith(BEARER)) {
-            return authorizationHeader.substring(TOKEN_BEGIN_INDEX);
+        if (authorizationHeader == null || !authorizationHeader.startsWith(BEARER)) {
+            throw new JWTAuthenticationException(INVALID_TOKEN_MESSAGE, INVALID_USER_TOKEN);
         }
-        return authorizationHeader;
+        return authorizationHeader.substring(TOKEN_BEGIN_INDEX);
     }
 }

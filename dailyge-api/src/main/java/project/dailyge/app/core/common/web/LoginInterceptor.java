@@ -34,7 +34,7 @@ public class LoginInterceptor implements HandlerInterceptor {
     private static final String DEFAULT_REFERER = "/";
     private static final String REFERER = "referer";
     private static final String REFRESH_TOKEN = "Refresh-Token";
-    private static final String ACCESS_TOKEN = "accessToken";
+    private static final String ACCESS_TOKEN = "Access-Token";
     private static final String URL = "url";
     private static final String UTF_8 = "UTF-8";
 
@@ -50,14 +50,14 @@ public class LoginInterceptor implements HandlerInterceptor {
     ) {
         try {
             final String authorizationHeader = request.getHeader(AUTHORIZATION);
-            if (authorizationHeader == null) {
+            if (authorizationHeader == null || authorizationHeader.isBlank()) {
                 return true;
             }
 
             final String accessToken = tokenProvider.getAccessToken(authorizationHeader);
             tokenProvider.validateToken(accessToken);
             final Long userId = tokenProvider.getUserId(accessToken);
-            if (!userReadUseCase.isExistsUserById(userId)) {
+            if (!userReadUseCase.existsById(userId)) {
                 return true;
             }
 
@@ -82,7 +82,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 
             final Claims claims = expiredJwtException.getClaims();
             final Long userId = claims.get("id", Long.class);
-            if (!userReadUseCase.isExistsUserById(userId) ||
+            if (!userReadUseCase.existsById(userId) ||
                 !tokenManager.getRefreshTokenKey(userId).equals(refreshToken)) {
                 return true;
             }

@@ -13,5 +13,5 @@ public interface UserReadUseCase {
 
     Optional<UserJpaEntity> findActiveUserByEmail(String email);
 
-    boolean isExistsUserById(Long userId);
+    boolean existsById(Long userId);
 }

@@ -122,12 +122,12 @@ class UserSearchIntegrationTest extends DatabaseTestBase {
     void whenUserExistentUserThenResultShouldBeTrue() {
         final UserJpaEntity user = userWriteUseCase.save(UserFixture.createUserJpaEntity());
 
-        assertTrue(userReadUseCase.isExistsUserById(user.getId()));
+        assertTrue(userReadUseCase.existsById(user.getId()));
     }
 
     @Test
     @DisplayName("사용자가 존재하지 않는 경우, false 를 반환한다.")
     void whenUserNonExistentThenResultShouldBeTrue() {
-        assertFalse(userReadUseCase.isExistsUserById(1L));
+        assertFalse(userReadUseCase.existsById(1L));
     }
 }

@@ -33,6 +33,9 @@ public class EventJpaEntity extends BaseEntity {
     @Column(name = "coupon_quantity")
     private int couponQuantity;
 
+    @Column(name = "coupon_issuance")
+    private boolean couponIssuance = false;
+
     @Column(name = "participants")
     private long participants;
 }

@@ -1,0 +1,58 @@
+name: Dailyge-Api CI/CD
+
+on:
+  pull_request:
+    branches: [ dev, main ]
+    paths:
+      - "dailyge-api/**"
+      - ".github/workflows/**"
+
+env:
+  ENV: dev
+  PROD_ECR_URI: ${{ secrets.PROD_ECR_URI }}
+  DEV_ECR_URI: ${{ secrets.DEV_ECR_URI }}
+  SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
+  SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  ENCRYPTOR_KEY: ${{ secrets.ENCRYPTOR_KEY }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+          token: ${{ secrets.SUBMODULE_TOKEN }}
+
+      - name: Update submodules
+        run: |
+          git submodule sync --recursive
+          git submodule update --init --recursive --remote
+
+      - name: Set up JDK 17 with Gradle cache
+        uses: actions/setup-java@v2
+        with:
+          java-version: "17"
+          distribution: "temurin"
+          cache: "gradle"
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Login to ECR
+        uses: aws-actions/amazon-ecr-login@v1
+        with:
+          region: ${{ secrets.AWS_REGION }}
+
+      - name: Push Docker image to ECR with Jib
+        id: build-image
+        env:
+          ENV: dev
+          DEV_ECR_URI: ${{ secrets.DEV_ECR_URI }}
+          PROD_ECR_URI: ${{ secrets.PROD_ECR_URI }}
+        run: ./gradlew dailyge-api:jib -PskipJib=false

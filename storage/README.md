@@ -1,6 +1,10 @@
 ## ⛺️ Storage 모듈
 
-저장소에 대한 모듈 입니다.
+저장소에 대한 모듈 입니다. Document, Memory, RDB 모듈을 포함하고 있습니다.
+
+1. Document: 문서화 데이터베이스(MongoDB)
+2. Memory: 메모리 데이터베이스(Redis)
+3. RDB: 관계형 데이터베이스(MySQL)
 
 <br/><br/><br/>
 

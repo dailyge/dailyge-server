@@ -27,17 +27,10 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequiredArgsConstructor
 public class LoginInterceptor implements HandlerInterceptor {
 
-    private static final String DEFAULT_REFERER = "/";
-    private static final String REFERER = "referer";
-    private static final String REFRESH_TOKEN = "Refresh-Token";
-    private static final String ACCESS_TOKEN = "Access-Token";
-    private static final String URL = "url";
-    private static final String UTF_8 = "UTF-8";
-    private static final ObjectMapper objectMapper = new ObjectMapper();
-
     private final UserReadUseCase userReadUseCase;
     private final TokenProvider tokenProvider;
     private final TokenManager tokenManager;
+    private final ObjectMapper objectMapper;
 
     @Override
     public boolean preHandle(
@@ -98,7 +91,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     private String getRefreshToken(final HttpServletRequest request) {
         final Cookies cookies = new Cookies(request.getCookies());
-        return cookies.getValueByKey(REFRESH_TOKEN);
+        return cookies.getValueByKey("Refresh-Token");
     }
 
     private void setLoggedInResponse(
@@ -107,12 +100,12 @@ public class LoginInterceptor implements HandlerInterceptor {
         final String accessToken
     ) throws IOException {
         final Map<String, String> bodyMap = new HashMap<>();
-        final String referer = request.getHeader(REFERER);
-        bodyMap.put(URL, referer == null ? DEFAULT_REFERER : referer);
-        bodyMap.put(ACCESS_TOKEN, accessToken);
+        final String referer = request.getHeader("referer");
+        bodyMap.put("url", referer == null ? "/" : referer);
+        bodyMap.put("Access-Token", accessToken);
 
         response.setContentType(APPLICATION_JSON_VALUE);
-        response.setCharacterEncoding(UTF_8);
+        response.setCharacterEncoding("UTF-8");
         objectMapper.writeValue(response.getWriter(), bodyMap);
     }
 }

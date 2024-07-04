@@ -1,5 +1,6 @@
 package project.dailyge.app.test.common;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import org.json.JSONException;
@@ -42,7 +43,8 @@ class LoginInterceptorUnitTest {
         tokenProvider = new TokenProvider(jwtProperties);
         userReadUseCase = mock(UserReadUseCase.class);
         tokenManager = mock(TokenManager.class);
-        loginInterceptor = new LoginInterceptor(userReadUseCase, tokenProvider, tokenManager);
+        final ObjectMapper objectMapper = new ObjectMapper();
+        loginInterceptor = new LoginInterceptor(userReadUseCase, tokenProvider, tokenManager, objectMapper);
         request = mock(HttpServletRequest.class);
         response = new MockHttpServletResponse();
     }

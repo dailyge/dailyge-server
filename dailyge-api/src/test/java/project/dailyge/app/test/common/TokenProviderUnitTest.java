@@ -36,8 +36,8 @@ class TokenProviderUnitTest {
 
         assertAll(
             () ->  assertNotNull(token),
-            () ->  assertDoesNotThrow(() -> tokenProvider.validateToken(token.accessToken())),
-            () ->  assertDoesNotThrow(() -> tokenProvider.validateToken(token.refreshToken())),
+            () ->  assertDoesNotThrow(() -> tokenProvider.getUserId(token.accessToken())),
+            () ->  assertDoesNotThrow(() -> tokenProvider.getUserId(token.refreshToken())),
             () ->  assertEquals(REFRESH_EXPIRED_TIME * 3600, token.maxAge())
         );
     }
@@ -63,7 +63,7 @@ class TokenProviderUnitTest {
     @Test
     @DisplayName("빈 토큰을 검증하면, JWTAuthenticationException 가 발생한다.")
     void whenEmptyTokenThenJWTAuthenticationExceptionShouldBeHappen() {
-        assertThatThrownBy(() -> tokenProvider.validateToken(null))
+        assertThatThrownBy(() -> tokenProvider.getUserId(null))
             .isExactlyInstanceOf(JWTAuthenticationException.class)
             .isInstanceOf(RuntimeException.class)
             .hasMessage(EMPTY_TOKEN_ERROR_MESSAGE);
@@ -72,7 +72,7 @@ class TokenProviderUnitTest {
     @Test
     @DisplayName("서명이 다른 토큰으로 검증하면, JWTAuthenticationException 가 발생한다.")
     void whenDifferentSignatureThenJWTAuthenticationExceptionShouldBeHappen() {
-        assertThatThrownBy(() -> tokenProvider.validateToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.test.test"))
+        assertThatThrownBy(() -> tokenProvider.getUserId("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.test.test"))
             .isExactlyInstanceOf(JWTAuthenticationException.class)
             .isInstanceOf(RuntimeException.class)
             .hasMessage(TOKEN_SIGNATURE_VERIFICATION_FAILED_ERROR_MESSAGE);
@@ -81,7 +81,7 @@ class TokenProviderUnitTest {
     @Test
     @DisplayName("토큰 형식이 올바르지 않는다면, JWTAuthenticationException 가 발생한다.")
     void whenTokenFormatIncorrectThenJWTAuthenticationExceptionShouldBeHappen() {
-        assertThatThrownBy(() -> tokenProvider.validateToken("test"))
+        assertThatThrownBy(() -> tokenProvider.getUserId("test"))
             .isExactlyInstanceOf(JWTAuthenticationException.class)
             .isInstanceOf(RuntimeException.class)
             .hasMessage(TOKEN_FORMAT_INCORRECT_ERROR_MESSAGE);
@@ -90,7 +90,7 @@ class TokenProviderUnitTest {
     @Test
     @DisplayName("지원되지 않는 형식의 JWT 일 경우, JWTAuthenticationException 가 발생한다.")
     void whenUnsupportedTokenThenJWTAuthenticationExceptionShouldBeHappen() {
-        assertThatThrownBy(() -> tokenProvider.validateToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.test."))
+        assertThatThrownBy(() -> tokenProvider.getUserId("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.test."))
             .isExactlyInstanceOf(JWTAuthenticationException.class)
             .isInstanceOf(RuntimeException.class)
             .hasMessage(UNSUPPORTED_TOKEN_ERROR_MESSAGE);

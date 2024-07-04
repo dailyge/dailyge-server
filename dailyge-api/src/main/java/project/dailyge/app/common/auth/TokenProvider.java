@@ -5,12 +5,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import project.dailyge.app.common.exception.JWTAuthenticationException;
+import project.dailyge.app.common.exception.UnAuthorizedException;
 import project.dailyge.entity.user.UserJpaEntity;
 
 import java.time.Duration;
 import java.util.Date;
 
-import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.INVALID_USER_TOKEN;
+import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.*;
 import static project.dailyge.app.common.exception.JWTAuthenticationException.*;
 
 @Slf4j
@@ -39,28 +40,18 @@ public class TokenProvider {
         final UserJpaEntity user,
         final Date expiry
     ) {
-        return Jwts.builder()
-            .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
-            .setExpiration(expiry)
-            .setSubject(user.getEmail())
-            .claim(ID, user.getId())
-            .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey())
-            .compact();
-    }
-
-    public void validateToken(final String token) {
         try {
-            Jwts.parser()
-                .setSigningKey(jwtProperties.getSecretKey())
-                .parseClaimsJws(token);
-        }catch (IllegalArgumentException ex) {
-            throw new JWTAuthenticationException(EMPTY_TOKEN_ERROR_MESSAGE, INVALID_USER_TOKEN);
-        } catch (SignatureException ex) {
-            throw new JWTAuthenticationException(TOKEN_SIGNATURE_VERIFICATION_FAILED_ERROR_MESSAGE, INVALID_USER_TOKEN);
-        } catch (MalformedJwtException ex) {
-            throw new JWTAuthenticationException(TOKEN_FORMAT_INCORRECT_ERROR_MESSAGE, INVALID_USER_TOKEN);
-        } catch (UnsupportedJwtException ex) {
-            throw new JWTAuthenticationException(UNSUPPORTED_TOKEN_ERROR_MESSAGE, INVALID_USER_TOKEN);
+            return Jwts.builder()
+                .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
+                .setExpiration(expiry)
+                .setSubject(user.getEmail())
+                .claim(ID, user.getId())
+                .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey())
+                .compact();
+        } catch (IllegalArgumentException ex) {
+            throw new UnAuthorizedException(ex.getMessage(), INVALID_PARAMETERS);
+        } catch (Exception ex) {
+            throw new UnAuthorizedException(ex.getMessage(), INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -69,13 +60,7 @@ public class TokenProvider {
         if (claims == null || claims.get(ID) == null) {
             throw new JWTAuthenticationException(INVALID_TOKEN_MESSAGE, INVALID_USER_TOKEN);
         }
-        try {
-            return claims.get(ID, Long.class);
-        } catch (RequiredTypeException ex) {
-            throw new JWTAuthenticationException(INVALID_ID_TYPE_MESSAGE, INVALID_USER_TOKEN);
-        } catch (Exception ex) {
-            throw new JWTAuthenticationException(ex.getMessage(), INVALID_USER_TOKEN);
-        }
+        return claims.get(ID, Long.class);
     }
 
     private Claims getClaims(final String token) {
@@ -84,9 +69,16 @@ public class TokenProvider {
                 .setSigningKey(jwtProperties.getSecretKey())
                 .parseClaimsJws(token)
                 .getBody();
-        } catch (Throwable e) {
-            log.error(e.getMessage());
-            return null;
+        } catch (IllegalArgumentException ex) {
+            throw new JWTAuthenticationException(EMPTY_TOKEN_ERROR_MESSAGE, INVALID_USER_TOKEN);
+        } catch (SignatureException ex) {
+            throw new JWTAuthenticationException(TOKEN_SIGNATURE_VERIFICATION_FAILED_ERROR_MESSAGE, INVALID_USER_TOKEN);
+        } catch (MalformedJwtException ex) {
+            throw new JWTAuthenticationException(TOKEN_FORMAT_INCORRECT_ERROR_MESSAGE, INVALID_USER_TOKEN);
+        } catch (UnsupportedJwtException ex) {
+            throw new JWTAuthenticationException(UNSUPPORTED_TOKEN_ERROR_MESSAGE, INVALID_USER_TOKEN);
+        } catch (RequiredTypeException ex) {
+            throw new JWTAuthenticationException(INVALID_ID_TYPE_MESSAGE, INVALID_USER_TOKEN);
         }
     }
 

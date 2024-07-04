@@ -1,9 +1,8 @@
 package project.dailyge.app.core.common.web;
 
-import com.nimbusds.jose.shaded.gson.Gson;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -17,11 +16,8 @@ import project.dailyge.app.core.user.external.oauth.TokenManager;
 import project.dailyge.entity.user.UserJpaEntity;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -31,16 +27,10 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequiredArgsConstructor
 public class LoginInterceptor implements HandlerInterceptor {
 
-    private static final String DEFAULT_REFERER = "/";
-    private static final String REFERER = "referer";
-    private static final String REFRESH_TOKEN = "Refresh-Token";
-    private static final String ACCESS_TOKEN = "Access-Token";
-    private static final String URL = "url";
-    private static final String UTF_8 = "UTF-8";
-
     private final UserReadUseCase userReadUseCase;
     private final TokenProvider tokenProvider;
     private final TokenManager tokenManager;
+    private final ObjectMapper objectMapper;
 
     @Override
     public boolean preHandle(
@@ -55,7 +45,6 @@ public class LoginInterceptor implements HandlerInterceptor {
             }
 
             final String accessToken = tokenProvider.getAccessToken(authorizationHeader);
-            tokenProvider.validateToken(accessToken);
             final Long userId = tokenProvider.getUserId(accessToken);
             if (!userReadUseCase.existsById(userId)) {
                 return true;
@@ -78,7 +67,9 @@ public class LoginInterceptor implements HandlerInterceptor {
     ) {
         try {
             final String refreshToken = getRefreshToken(request);
-            if (refreshToken == null) return true;
+            if (refreshToken == null) {
+                return true;
+            }
 
             final Claims claims = expiredJwtException.getClaims();
             final Long userId = claims.get("id", Long.class);
@@ -99,14 +90,8 @@ public class LoginInterceptor implements HandlerInterceptor {
     }
 
     private String getRefreshToken(final HttpServletRequest request) {
-        final Optional<Cookie> cookieStream = Arrays.stream(request.getCookies())
-            .filter(cookie -> REFRESH_TOKEN.equals(cookie.getName()))
-            .findFirst();
-        if (cookieStream.isEmpty()) {
-            return null;
-        }
-        final Cookie cookie = cookieStream.get();
-        return cookie.getValue();
+        final Cookies cookies = new Cookies(request.getCookies());
+        return cookies.getValueByKey("Refresh-Token");
     }
 
     private void setLoggedInResponse(
@@ -115,14 +100,12 @@ public class LoginInterceptor implements HandlerInterceptor {
         final String accessToken
     ) throws IOException {
         final Map<String, String> bodyMap = new HashMap<>();
-        final String referer = request.getHeader(REFERER);
-        bodyMap.put(URL, referer == null ? DEFAULT_REFERER : referer);
-        bodyMap.put(ACCESS_TOKEN, accessToken);
+        final String referer = request.getHeader("referer");
+        bodyMap.put("url", referer == null ? "/" : referer);
+        bodyMap.put("Access-Token", accessToken);
 
         response.setContentType(APPLICATION_JSON_VALUE);
-        response.setCharacterEncoding(UTF_8);
-        final PrintWriter writer = response.getWriter();
-        final Gson gson = new Gson();
-        writer.print(gson.toJson(bodyMap));
+        response.setCharacterEncoding("UTF-8");
+        objectMapper.writeValue(response.getWriter(), bodyMap);
     }
 }

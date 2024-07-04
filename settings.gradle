@@ -37,5 +37,6 @@ include(
     "dailyge-api",
     "storage:document",
     "storage:rdb",
+    "storage:memory",
     "support"
 )

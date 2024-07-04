@@ -1,17 +1,20 @@
 package project.dailyge.app.test.user.documentationtest.snippet;
 
+import org.springframework.restdocs.cookies.ResponseCookiesSnippet;
 import org.springframework.restdocs.headers.RequestHeadersSnippet;
 import org.springframework.restdocs.payload.FieldDescriptor;
+import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.restdocs.request.ParameterDescriptor;
 import org.springframework.restdocs.request.PathParametersSnippet;
 
 import static javax.xml.xpath.XPathEvaluationResult.XPathResultType.NUMBER;
 import static javax.xml.xpath.XPathEvaluationResult.XPathResultType.STRING;
+import static org.springframework.restdocs.cookies.CookieDocumentation.cookieWithName;
+import static org.springframework.restdocs.cookies.CookieDocumentation.responseCookies;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 
@@ -43,6 +46,14 @@ public interface UserSnippet {
         fieldWithPath("code").type(NUMBER).description("응답 코드"),
         fieldWithPath("message").type(STRING).description("응답 메시지")
     };
+
+    RequestFieldsSnippet LOGOUT_REQUEST_SNIPPET = requestFields(
+        fieldWithPath("userId").type(NUMBER).description("사용자 ID")
+    );
+
+    ResponseCookiesSnippet LOGOUT_RESPONSE_COOKIE_SNIPPET = responseCookies(
+        cookieWithName("Refresh-Token").description("리프레시 토큰")
+    );
 
     // Search
     PathParametersSnippet USER_SEARCH_PATH_PARAMETER_SNIPPET = pathParameters(USER_SEARCH_PATH_DESCRIPTOR);

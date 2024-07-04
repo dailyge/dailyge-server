@@ -3,6 +3,9 @@ name: Dailyge-Api Build
 on:
   pull_request:
     branches: [ dev ]
+    paths:
+      - "dailyge-api/**"
+      - ".github/workflows/**"
 
 env:
   ENV: dev
@@ -34,4 +37,4 @@ jobs:
       - name: Build with Gradle
         env:
           ENCRYPTOR_KEY: ${{ secrets.ENCRYPTOR_KEY }}
-        run: ./gradlew dailyge-api:prepareAsciidoc dailyge-api:build -x test --info --stacktrace
+        run: ./gradlew dailyge-api:build -x test --info --stacktrace

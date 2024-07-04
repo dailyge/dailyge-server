@@ -7,6 +7,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.web.bind.annotation.*;
 import project.dailyge.app.common.auth.DailygeToken;
+import project.dailyge.app.common.auth.DailygeUser;
+import project.dailyge.app.common.auth.LoginUser;
 import project.dailyge.app.common.response.ApiResponse;
 import project.dailyge.app.core.user.facade.UserFacade;
 import project.dailyge.app.core.user.presentation.request.LogoutRequest;
@@ -42,7 +44,11 @@ public class LoginApi {
     }
 
     @PostMapping(path = "/logout")
-    public ApiResponse<Void> logout(@Valid @RequestBody final LogoutRequest request) {
+    public ApiResponse<Void> logout(
+        @LoginUser final DailygeUser dailygeUser,
+        @Valid @RequestBody final LogoutRequest request
+    ) {
+        dailygeUser.validateAuth(request.userId());
         userFacade.logout(request.userId());
         final HttpHeaders headers = new HttpHeaders();
         final ResponseCookie expiredRefreshTokenCookie = ResponseCookie.from("Refresh-Token")

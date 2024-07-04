@@ -25,7 +25,7 @@ class TokenManagerIntegrationTest extends DatabaseTestBase {
     void whenSavingRefreshTokenThenRefreshTokenShouldBeExists() {
         tokenManager.saveRefreshToken(1L, REFRESH_TOKEN);
 
-        final String refreshTokenKey = tokenManager.getRefreshTokenKey(1L);
+        final String refreshTokenKey = tokenManager.getRefreshToken(1L);
 
         Assertions.assertEquals(REFRESH_TOKEN, refreshTokenKey);
     }
@@ -51,7 +51,7 @@ class TokenManagerIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("검색 시 ID가 null 이면, 토큰을 검색하는데 실패한다.")
     void whenSearchRefreshTokenWithIdIsNullThenExternalServerExceptionShouldBeHappen() {
-        assertThatThrownBy(() -> tokenManager.getRefreshTokenKey(null))
+        assertThatThrownBy(() -> tokenManager.getRefreshToken(null))
             .isExactlyInstanceOf(UserTypeException.from(EMPTY_USER_ID).getClass())
             .isInstanceOf(RuntimeException.class)
             .hasMessage(EMPTY_USER_ID.message());

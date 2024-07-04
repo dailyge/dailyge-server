@@ -5,8 +5,8 @@ import project.dailyge.app.common.codeandmessage.CodeAndMessage;
 public class ExternalServerException extends CommonException {
 
     public ExternalServerException(
-        String detailMessage,
-        CodeAndMessage codeAndMessage
+        final String detailMessage,
+        final CodeAndMessage codeAndMessage
     ) {
         super(detailMessage, codeAndMessage);
     }

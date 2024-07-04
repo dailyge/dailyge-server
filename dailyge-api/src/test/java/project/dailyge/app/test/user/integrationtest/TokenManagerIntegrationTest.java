@@ -10,6 +10,7 @@ import project.dailyge.app.core.user.exception.UserTypeException;
 import project.dailyge.app.core.user.external.oauth.TokenManager;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.*;
 import static project.dailyge.app.core.user.exception.UserCodeAndMessage.EMPTY_USER_ID;
 
 @DisplayName("[IntegrationTest] TokenManager 통합 테스트")
@@ -55,5 +56,19 @@ class TokenManagerIntegrationTest extends DatabaseTestBase {
             .isExactlyInstanceOf(UserTypeException.from(EMPTY_USER_ID).getClass())
             .isInstanceOf(RuntimeException.class)
             .hasMessage(EMPTY_USER_ID.message());
+    }
+
+    @Test
+    @DisplayName("리프레시 토큰을 삭제하면, 삭제된 리프레시 토큰을 반환한다.")
+    void whenDeleteRefreshTokenThenResultShouldBeDeletedRefreshToken() {
+        tokenManager.saveRefreshToken(1L, REFRESH_TOKEN);
+
+        assertEquals(REFRESH_TOKEN, tokenManager.deleteRefreshToken(1L));
+    }
+
+    @Test
+    @DisplayName("로그인 되어있지 않는 사용자 ID로 삭제하면, NULL 을 반환한다.")
+    void whenDeleteByNotLoggedInUserThenResultShouldBeNull() {
+        assertNull(tokenManager.deleteRefreshToken(1L));
     }
 }

@@ -13,7 +13,7 @@ public enum CommonCodeAndMessage implements CodeAndMessage {
     INTERNAL_SERVER_ERROR(500, "서버 내부 오류입니다."),
     BAD_GATEWAY(502, "외부 서버와 통신하는 과정에서 오류가 발생했습니다."),
     SERVICE_UNAVAILABLE(503, "외부 서버가 응답할 수 없는 상태입니다."),
-    GATEWAY_TIMEOUT(504, "외부 서버와 통신하는 과정 응답시간이 초과되었습니다.");
+    GATEWAY_TIMEOUT(504, "외부 서버의 응답시간이 초과되었습니다.");
 
     private final int code;
     private final String message;

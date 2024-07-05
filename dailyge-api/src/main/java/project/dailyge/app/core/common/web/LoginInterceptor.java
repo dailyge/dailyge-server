@@ -74,7 +74,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             final Claims claims = expiredJwtException.getClaims();
             final Long userId = claims.get("id", Long.class);
             if (!userReadUseCase.existsById(userId) ||
-                !tokenManager.getRefreshTokenKey(userId).equals(refreshToken)) {
+                !tokenManager.getRefreshToken(userId).equals(refreshToken)) {
                 return true;
             }
 

@@ -40,12 +40,31 @@ public class TokenManager {
         }
     }
 
-    public String getRefreshTokenKey(final Long userId) {
+    public String getRefreshToken(final Long userId) {
         if (userId == null) {
             throw UserTypeException.from(EMPTY_USER_ID);
         }
         try {
             return redisTemplate.opsForValue().get(String.format("user:refreshToken:%s", userId));
+        } catch (RedisConnectionFailureException ex) {
+            throw new ExternalServerException(ex.getMessage(), SERVICE_UNAVAILABLE);
+        } catch (TimeoutException ex) {
+            throw new ExternalServerException(ex.getMessage(), GATEWAY_TIMEOUT);
+        } catch (IllegalArgumentException ex) {
+            throw new ExternalServerException(ex.getMessage(), BAD_REQUEST);
+        } catch (SerializationException ex) {
+            throw new ExternalServerException(ex.getMessage(), INTERNAL_SERVER_ERROR);
+        } catch (Exception ex) {
+            throw new ExternalServerException(ex.getMessage(), BAD_GATEWAY);
+        }
+    }
+
+    public void deleteRefreshToken(final Long userId) {
+        if (userId == null) {
+            throw UserTypeException.from(EMPTY_USER_ID);
+        }
+        try {
+            redisTemplate.delete(String.format("user:refreshToken:%s", userId));
         } catch (RedisConnectionFailureException ex) {
             throw new ExternalServerException(ex.getMessage(), SERVICE_UNAVAILABLE);
         } catch (TimeoutException ex) {

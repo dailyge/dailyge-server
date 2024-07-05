@@ -1,6 +1,5 @@
 package project.dailyge.app.test.user.documentationtest;
 
-import io.restassured.RestAssured;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +8,7 @@ import project.dailyge.app.core.user.application.UserWriteUseCase;
 import project.dailyge.app.fixture.user.UserFixture;
 import project.dailyge.entity.user.UserJpaEntity;
 
+import static io.restassured.RestAssured.given;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.document;
 import static project.dailyge.app.test.user.documentationtest.snippet.UserSnippet.USER_AUTHORIZATION_HEADER;
@@ -25,7 +25,7 @@ class UserDeleteDocumentationTest extends DatabaseTestBase {
     void whenDeleteUserSucceedsThenStatusCodeShouldBe204_NO_CONTENT() {
         final UserJpaEntity saveUser = userWriteUseCase.save(UserFixture.createUserJpaEntity());
 
-        RestAssured.given(this.specification)
+        given(this.specification)
             .filter(document(IDENTIFIER,
                 USER_AUTHORIZATION_HEADER,
                 USER_DELETE_PATH_PARAMETER_SNIPPET

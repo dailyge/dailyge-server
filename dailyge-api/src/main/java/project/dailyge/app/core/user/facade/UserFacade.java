@@ -28,4 +28,10 @@ public class UserFacade {
         tokenManager.saveRefreshToken(upsertUser.getId(), token.refreshToken());
         return token;
     }
+
+    public void logout(final Long userId) {
+        if (userId != null) {
+            tokenManager.deleteRefreshToken(userId);
+        }
+    }
 }

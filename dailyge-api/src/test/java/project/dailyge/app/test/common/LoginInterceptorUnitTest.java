@@ -88,7 +88,7 @@ class LoginInterceptorUnitTest {
             .thenReturn(true);
         when(userReadUseCase.findActiveUserById(user.getId()))
             .thenReturn(user);
-        when(tokenManager.getRefreshTokenKey(user.getId()))
+        when(tokenManager.getRefreshToken(user.getId()))
             .thenReturn(token.refreshToken());
 
         final boolean result = loginInterceptor.preHandle(request, response, null);

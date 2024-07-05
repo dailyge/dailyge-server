@@ -11,7 +11,7 @@ import project.dailyge.app.common.auth.TokenProvider;
 import project.dailyge.app.common.exception.ExternalServerException;
 import project.dailyge.app.common.response.ApiResponse;
 import project.dailyge.app.core.user.application.UserReadUseCase;
-import project.dailyge.app.core.user.presentation.OAuthApi;
+import project.dailyge.app.core.user.presentation.LoginApi;
 import project.dailyge.app.core.user.presentation.response.OAuthLoginResponse;
 import project.dailyge.entity.user.UserJpaEntity;
 
@@ -29,7 +29,7 @@ class LoginIntegrationTest extends DatabaseTestBase {
     private static final String AUTHENTICATION_CODE = "AuthenticationCode";
 
     @Autowired
-    private OAuthApi oAuthApi;
+    private LoginApi loginApi;
 
     @Autowired
     private UserReadUseCase userReadUseCase;
@@ -45,7 +45,7 @@ class LoginIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("로그인에 성공하면, DailygeToken을 생성한다.")
     void whenLoginSuccessThenDailygeTokenIsGenerated() throws IOException {
-        final ApiResponse<OAuthLoginResponse> login = oAuthApi.login(AUTHENTICATION_CODE);
+        final ApiResponse<OAuthLoginResponse> login = loginApi.oAuthLogin(AUTHENTICATION_CODE);
         final Long userId = tokenProvider.getUserId(Objects.requireNonNull(login.getBody()).getData().getAccessToken());
         final UserJpaEntity findUser = userReadUseCase.findActiveUserById(userId);
 
@@ -61,7 +61,7 @@ class LoginIntegrationTest extends DatabaseTestBase {
                 .withStatusMessage(BAD_GATEWAY.getReasonPhrase())
                 .withBody(BAD_GATEWAY.getReasonPhrase())));
 
-        assertThatThrownBy(() -> oAuthApi.login(AUTHENTICATION_CODE))
+        assertThatThrownBy(() -> loginApi.oAuthLogin(AUTHENTICATION_CODE))
             .isExactlyInstanceOf(ExternalServerException.class)
             .isInstanceOf(RuntimeException.class)
             .hasMessage(BAD_GATEWAY.value() + " " + BAD_GATEWAY.getReasonPhrase() + ": \"" + BAD_GATEWAY.getReasonPhrase() + "\"");
@@ -76,7 +76,7 @@ class LoginIntegrationTest extends DatabaseTestBase {
                 .withStatusMessage(BAD_GATEWAY.getReasonPhrase())
                 .withBody(BAD_GATEWAY.getReasonPhrase())));
 
-        assertThatThrownBy(() -> oAuthApi.login(AUTHENTICATION_CODE))
+        assertThatThrownBy(() -> loginApi.oAuthLogin(AUTHENTICATION_CODE))
             .isExactlyInstanceOf(ExternalServerException.class)
             .isInstanceOf(RuntimeException.class)
             .hasMessage(BAD_GATEWAY.value() + " " + BAD_GATEWAY.getReasonPhrase() + ": \"" + BAD_GATEWAY.getReasonPhrase() + "\"");

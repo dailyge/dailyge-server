@@ -59,12 +59,12 @@ public class TokenManager {
         }
     }
 
-    public String deleteRefreshToken(final Long userId) {
+    public void deleteRefreshToken(final Long userId) {
         if (userId == null) {
             throw UserTypeException.from(EMPTY_USER_ID);
         }
         try {
-            return redisTemplate.opsForValue().getAndDelete(String.format("user:refreshToken:%s", userId));
+            redisTemplate.delete(String.format("user:refreshToken:%s", userId));
         } catch (RedisConnectionFailureException ex) {
             throw new ExternalServerException(ex.getMessage(), SERVICE_UNAVAILABLE);
         } catch (TimeoutException ex) {

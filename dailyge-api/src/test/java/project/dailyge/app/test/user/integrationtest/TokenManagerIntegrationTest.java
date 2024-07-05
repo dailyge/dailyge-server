@@ -59,16 +59,17 @@ class TokenManagerIntegrationTest extends DatabaseTestBase {
     }
 
     @Test
-    @DisplayName("리프레시 토큰을 삭제하면, 삭제된 리프레시 토큰을 반환한다.")
-    void whenDeleteRefreshTokenThenResultShouldBeDeletedRefreshToken() {
+    @DisplayName("리프레시 토큰을 삭제하면, 정삭적으로 삭제 된다.")
+    void whenDeleteRefreshTokenThenRefreshTokenShouldBeNull() {
         tokenManager.saveRefreshToken(1L, REFRESH_TOKEN);
+        tokenManager.deleteRefreshToken(1L);
 
-        assertEquals(REFRESH_TOKEN, tokenManager.deleteRefreshToken(1L));
+        assertNull(tokenManager.getRefreshToken(1L));
     }
 
     @Test
-    @DisplayName("로그인 되어있지 않는 사용자 ID로 삭제하면, NULL 을 반환한다.")
-    void whenDeleteByNotLoggedInUserThenResultShouldBeNull() {
-        assertNull(tokenManager.deleteRefreshToken(1L));
+    @DisplayName("로그인 되어있지 않는 사용자 ID로 삭제하여도, 에러가 발생하지 않는다.")
+    void whenDeleteByNotLoggedInUserThenDoesNotThrowException() {
+        assertDoesNotThrow(() -> tokenManager.deleteRefreshToken(1L));
     }
 }

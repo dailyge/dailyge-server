@@ -95,10 +95,6 @@ include::{snippets}/login_page_documentation_test/when_get_login_page_then_statu
 
 include::{snippets}/logout_documentation_test/when_logout_then_status_code_should_be200_ok/curl-request.adoc[]
 
-#### Request-Fields
-
-include::{snippets}/logout_documentation_test/when_logout_then_status_code_should_be200_ok/request-fields.adoc[]
-
 #### Response
 
 include::{snippets}/logout_documentation_test/when_logout_then_status_code_should_be200_ok/http-response.adoc[]

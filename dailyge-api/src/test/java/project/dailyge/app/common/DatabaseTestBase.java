@@ -44,11 +44,16 @@ public abstract class DatabaseTestBase {
 
     @Value("${jwt.access-token}")
     protected String accessToken;
+
     private static final String SCHEMA = "www.dailyge.com";
     protected static final String IDENTIFIER = "{class_name}/{method_name}";
     protected static final String USER_ID_KEY = "dailyge_user_id";
     protected static final String AUTHORIZATION = "Authorization";
     private static final String REDIS_IMAGE = "redis:7.0.8-alpine";
+    private static final String MONGO_IMAGE = "mongo:5.0";
+
+    private static GenericContainer<?> redisContainer;
+    private static GenericContainer<?> mongoContainer;
 
     @LocalServerPort
     protected int port;
@@ -106,12 +111,26 @@ public abstract class DatabaseTestBase {
     }
 
     @DynamicPropertySource
-    public static void overrideProps(DynamicPropertyRegistry registry){
-        GenericContainer<?> genericContainer = new GenericContainer<>(REDIS_IMAGE)
+    public static void overrideProps(final DynamicPropertyRegistry registry) {
+        redisContainer = new GenericContainer<>(REDIS_IMAGE)
             .withExposedPorts(6379);
-        genericContainer.start();
-        registry.add("spring.data.redis.host", genericContainer::getHost);
-        registry.add("spring.data.redis.port", () -> String.valueOf(genericContainer.getMappedPort(6379)));
+        mongoContainer = new GenericContainer<>(MONGO_IMAGE)
+            .withExposedPorts(27017);
+
+        redisContainer.start();
+        mongoContainer.start();
+
+        registry.add("spring.data.redis.host", redisContainer::getHost);
+        registry.add("spring.data.redis.port", () -> String.valueOf(redisContainer.getMappedPort(6379)));
+
+        String mongoConnectionString = String.format(
+            "mongodb://%s:%s@%s:%d/dailyge",
+            "username",
+            "password",
+            mongoContainer.getHost(),
+            mongoContainer.getMappedPort(27017)
+        );
+        registry.add("spring.data.mongodb.connection.connectionString", () -> mongoConnectionString);
     }
 
     protected String getAuthorizationHeader() {

@@ -36,6 +36,7 @@ dependencies {
     testImplementation("org.testcontainers:testcontainers")
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.testcontainers:mysql")
+    testImplementation("org.testcontainers:mongodb")
     testImplementation("org.springframework.cloud:spring-cloud-contract-wiremock")
 
     asciidoctorExt("org.springframework.restdocs:spring-restdocs-asciidoctor")

@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import java.time.LocalDateTime;
 
 @Getter
-public class DocumentBaseEntity {
+public abstract class DocumentBaseEntity {
 
     @CreatedDate
     @Field(name = "created_at")
@@ -26,4 +26,12 @@ public class DocumentBaseEntity {
 
     @Field(name = "deleted")
     protected boolean deleted = false;
+
+    public void initOperatingColumns(final Long userId) {
+        final LocalDateTime now = LocalDateTime.now();
+        this.createdAt = now;
+        this.createdBy = userId;
+        this.lastModifiedAt = now;
+        this.lastModifiedBy = userId;
+    }
 }

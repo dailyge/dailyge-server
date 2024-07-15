@@ -1,22 +1,21 @@
 package project.dailyge.app.core.task.presentation.response;
 
 import lombok.Getter;
-import project.dailyge.entity.task.TaskJpaEntity;
 
 @Getter
 public class TaskRegisterResponse {
 
-    private Long taskId;
+    private String taskId;
 
     private TaskRegisterResponse() {
     }
 
-    public TaskRegisterResponse(final TaskJpaEntity task) {
-        this.taskId = task.getId();
+    public TaskRegisterResponse(final String taskId) {
+        this.taskId = taskId;
     }
 
     @Override
     public String toString() {
-        return String.format("taskId: %s", taskId);
+        return String.format("taskDocumentId: %s", taskId);
     }
 }

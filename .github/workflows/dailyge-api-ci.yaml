@@ -111,7 +111,7 @@ jobs:
             echo "Test report does not exist."
           fi
 
-      - name: Notify Build and Analysis Result to Slack (Failure)
+      - name: Notify Result to Slack (Failure)
         if: failure()
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.PR_WEBHOOK_URL }}
@@ -124,7 +124,7 @@ jobs:
                -F token=${{ env.SLACK_BOT_TOKEN }} \
                https://slack.com/api/files.upload
 
-      - name: Notify Build and Analysis Result to Slack (Success)
+      - name: Notify Result to Slack (Success)
         if: success()
         uses: 8398a7/action-slack@v3
         with:

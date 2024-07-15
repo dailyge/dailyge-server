@@ -40,6 +40,7 @@ public class TaskSaveIntegrationTest extends DatabaseTestBase {
     private TaskDocumentReadRepository monthlyTaskReadRepository;
 
     @Test
+    @Order(1)
     @DisplayName("할 일이 저장되면, Id가 Null이 아니다.")
     void whenSaveTaskThenTaskIdShouldNotBeNull() {
         final UserJpaEntity newUser = userWriteUseCase.save(UserFixture.createUserJpaEntity());
@@ -59,7 +60,7 @@ public class TaskSaveIntegrationTest extends DatabaseTestBase {
     }
 
     @Test
-    @Order(1)
+    @Order(2)
     @DisplayName("연간 일정표를 생성하면 12개(January-December)의 월간 일정표가 생성된다.")
     void whenCreateMonthlyTasksThenResultShould12() {
         final UserJpaEntity newUser = userWriteUseCase.save(UserFixture.createUserJpaEntity());
@@ -72,7 +73,7 @@ public class TaskSaveIntegrationTest extends DatabaseTestBase {
     }
 
     @Test
-    @Order(2)
+    @Order(3)
     @DisplayName("멀티 쓰레드 환경에서도, Redisson 분산락으로 인해 동시성이 보장된다.")
     void whenMultiThreadTryToCreateMonthlyTasksThenResultShouldBeSafe() throws InterruptedException {
         final CountDownLatch countDownLatch = new CountDownLatch(100);

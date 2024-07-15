@@ -22,12 +22,6 @@ public class TaskValidator {
 
     private final TaskDocumentReadRepository taskDocumentReadRepository;
 
-    public void validateAuth(final DailygeUser dailygeUser) {
-        if (!dailygeUser.isAdmin()) {
-            throw new UnAuthorizedException();
-        }
-    }
-
     public void validateAuth(
         final DailygeUser dailygeUser,
         final TaskJpaEntity findTask

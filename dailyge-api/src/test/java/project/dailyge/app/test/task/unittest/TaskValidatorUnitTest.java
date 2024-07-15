@@ -6,23 +6,29 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.common.auth.DailygeUser;
 import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
 import project.dailyge.app.common.exception.UnAuthorizedException;
 import project.dailyge.app.core.task.application.service.TaskValidator;
+import project.dailyge.document.task.TaskDocumentReadRepository;
 import project.dailyge.entity.task.TaskJpaEntity;
 import static project.dailyge.entity.task.TaskStatus.TODO;
 import static project.dailyge.entity.user.Role.ADMIN;
 import static project.dailyge.entity.user.Role.NORMAL;
 
 @DisplayName("[UnitTest] 할 일 검증 단위 테스트")
-class TaskValidatorUnitTest {
+class TaskValidatorUnitTest extends DatabaseTestBase {
 
     private TaskValidator validator;
 
+    @Autowired
+    private TaskDocumentReadRepository taskReadRepository;
+
     @BeforeEach
     void setUp() {
-        validator = new TaskValidator();
+        validator = new TaskValidator(taskReadRepository);
     }
 
     @Test

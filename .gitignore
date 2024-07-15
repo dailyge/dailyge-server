@@ -35,7 +35,9 @@ out/
 ### VS Code ###
 .vscode/
 
-### .yml ###
+### env ###
+http-client.private.env.json
+.run
 *.yml
 .DS_Store
 

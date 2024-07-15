@@ -34,6 +34,7 @@ jobs:
       - name: Build with Gradle
         env:
           ENCRYPTOR_KEY: ${{ secrets.ENCRYPTOR_KEY }}
+          GRADLE_OPTS: "--add-opens=java.base/java.time=ALL-UNNAMED"
         run: ./gradlew dailyge-api:build --info --stacktrace
 
   static_analysis:

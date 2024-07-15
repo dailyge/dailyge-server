@@ -24,7 +24,14 @@ public interface TaskSnippet {
         headerWithName("Authorization").description("인증 토큰").optional()
     );
 
+    FieldDescriptor[] MONTHLY_TASK_CREATE_REQUEST_FIELDS = {
+        fieldWithPath("date").description("날짜")
+            .attributes(getAttribute("date")),
+    };
+
     FieldDescriptor[] TASK_CREATE_REQUEST_FIELDS = {
+        fieldWithPath("monthlyTaskId").description("월간 일정표 ID")
+            .attributes(getAttribute("monthlyTaskId")),
         fieldWithPath("title").description("제목")
             .attributes(getAttribute("title")),
         fieldWithPath("content").description("내용")
@@ -44,8 +51,14 @@ public interface TaskSnippet {
             .attributes(getAttribute("status"))
     };
 
+    FieldDescriptor[] MONTHLY_TASK_CREATE_RESPONSE = {
+        fieldWithPath("data").type(NULL).description("데이터"),
+        fieldWithPath("code").type(STRING).description("응답 코드"),
+        fieldWithPath("message").type(STRING).description("응답 메시지")
+    };
+
     FieldDescriptor[] TASK_CREATE_RESPONSE = {
-        fieldWithPath("data.taskId").type(NUMBER).description("할 일 ID"),
+        fieldWithPath("data.taskId").type(STRING).description("할 일 ID"),
         fieldWithPath("code").type(STRING).description("응답 코드"),
         fieldWithPath("message").type(STRING).description("응답 메시지")
     };
@@ -74,7 +87,9 @@ public interface TaskSnippet {
         fieldWithPath("message").type(STRING).description("응답 메시지")
     };
 
+    RequestFieldsSnippet MONTHLY_TASK_CREATE_REQUEST_SNIPPET = requestFields(MONTHLY_TASK_CREATE_REQUEST_FIELDS);
     RequestFieldsSnippet TASK_CREATE_REQUEST_SNIPPET = requestFields(TASK_CREATE_REQUEST_FIELDS);
+    ResponseFieldsSnippet MONTHLY_TASK_CREATE_RESPONSE_SNIPPET = responseFields(MONTHLY_TASK_CREATE_RESPONSE);
     ResponseFieldsSnippet TASK_CREATE_RESPONSE_SNIPPET = responseFields(TASK_CREATE_RESPONSE);
 
     RequestFieldsSnippet TASK_UPDATE_REQUEST_SNIPPET = requestFields(TASK_UPDATE_REQUEST_FIELDS);

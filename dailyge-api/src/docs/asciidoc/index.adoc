@@ -12,7 +12,17 @@ endif::[]
 
 = 📆 Dailyge
 
-Dailyge API 문서
+link:https://www.dailyge.com[Dailyge] API 문서 입니다. 각 API에 대한 상세 정보는 왼쪽 목차를 **클릭** 하면 확인할 수 있습니다. +
+
+image::url.jpg[이미지, width=1920, height=500]
+
+[TIP]
+📆 서비스 icon:info-circle[] link:https://www.dailyge.com[Dailyge]
+
+[NOTE]
+====
+📧 문의 사항 mailto:helper@dailyge.com[helper@dailyge.com]
+====
 
 - - -
 
@@ -111,7 +121,8 @@ include::{snippets}/logout_documentation_test/when_logout_then_status_code_shoul
 | 기능 | Method | 인증 | API | Success | Failure
 
 | <<2-1. 할일 상세 조회>> |GET | O | /api/tasks | 200 | 400, 401, 403, 429, 500, 502
-| <<2-2. 할일 등록>> | POST | O | /api/tasks | 201 | 400, 401, 403, 429, 500, 502
+| <<2-2. 월간 일정표 생성>> | POST | O | /api/tasks | 201 | 400, 401, 403, 429, 500, 502
+| <<2-3. 할일 등록>> | POST | O | /api/tasks | 201 | 400, 401, 403, 429, 500, 502
 | <<2-4. 할일 삭제>> | DELETE | O | /api/tasks | 201 | 400, 401, 403, 429, 500, 502
 |===
 
@@ -139,7 +150,31 @@ include::{snippets}/task_detail_search_documentation_test/when_task_exists_then_
 
 include::{snippets}/task_detail_search_documentation_test/when_task_exists_then_status_code_should_be200_ok/response-fields.adoc[]
 
-### 2-2. 할일 등록
+### 2-2. 월간 일정표 생성
+
+월간 일정표를 생성하는 API 입니다.
+
+#### Request
+
+include::{snippets}/monthly_tasks_register_documentation_test/when_create_monthly_tasks_then_response_should_be201/http-request.adoc[]
+
+#### Request-Header
+
+include::{snippets}/monthly_tasks_register_documentation_test/when_create_monthly_tasks_then_response_should_be201/request-headers.adoc[]
+
+#### Request-Fields
+
+include::{snippets}/monthly_tasks_register_documentation_test/when_create_monthly_tasks_then_response_should_be201/request-fields.adoc[]
+
+#### Response
+
+include::{snippets}/monthly_tasks_register_documentation_test/when_create_monthly_tasks_then_response_should_be201/http-response.adoc[]
+
+#### Response-Fields
+
+include::{snippets}/monthly_tasks_register_documentation_test/when_create_monthly_tasks_then_response_should_be201/response-fields.adoc[]
+
+### 2-3. 할일 등록
 
 오늘 할 일을 등록하는 API 입니다.
 

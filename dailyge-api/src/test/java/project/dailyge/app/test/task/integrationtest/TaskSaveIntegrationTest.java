@@ -6,7 +6,10 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.common.auth.DailygeUser;
@@ -23,6 +26,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayName("[IntegrationTest] 할 일 저장 통합 테스트")
 public class TaskSaveIntegrationTest extends DatabaseTestBase {
 
@@ -55,6 +59,7 @@ public class TaskSaveIntegrationTest extends DatabaseTestBase {
     }
 
     @Test
+    @Order(1)
     @DisplayName("연간 일정표를 생성하면 12개(January-December)의 월간 일정표가 생성된다.")
     void whenCreateMonthlyTasksThenResultShould12() {
         final UserJpaEntity newUser = userWriteUseCase.save(UserFixture.createUserJpaEntity());
@@ -67,6 +72,7 @@ public class TaskSaveIntegrationTest extends DatabaseTestBase {
     }
 
     @Test
+    @Order(2)
     @DisplayName("멀티 쓰레드 환경에서도, Redisson 분산락으로 인해 동시성이 보장된다.")
     void whenMultiThreadTryToCreateMonthlyTasksThenResultShouldBeSafe() throws InterruptedException {
         final CountDownLatch countDownLatch = new CountDownLatch(100);

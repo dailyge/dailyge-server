@@ -55,7 +55,7 @@ public class TaskSaveIntegrationTest extends DatabaseTestBase {
     }
 
     @Test
-    @DisplayName("연간 일정표를 생성하면 12개(January-December)의 원간 일정표가 생성된다.")
+    @DisplayName("연간 일정표를 생성하면 12개(January-December)의 월간 일정표가 생성된다.")
     void whenCreateMonthlyTasksThenResultShould12() {
         final UserJpaEntity newUser = userWriteUseCase.save(UserFixture.createUserJpaEntity());
         final DailygeUser dailygeUser = new DailygeUser(newUser);

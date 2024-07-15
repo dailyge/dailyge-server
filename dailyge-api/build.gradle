@@ -31,7 +31,7 @@ dependencies {
     implementation("io.jsonwebtoken:jjwt:0.9.1")
     implementation("javax.xml.bind:jaxb-api:2.3.1")
     implementation("com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4")
-    implementation("io.netty:netty-resolver-dns-native-macos:4.x.y:osx-x86_64")
+    implementation("io.netty:netty-resolver-dns-native-macos:4.1.68.Final")
 
     testImplementation("org.springframework.restdocs:spring-restdocs-restassured")
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")

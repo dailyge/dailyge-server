@@ -1,4 +1,4 @@
-package project.dailyge.app.common.configuration.redis;
+package project.dailyge.configuration;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

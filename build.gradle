@@ -23,6 +23,13 @@ allprojects {
         mavenCentral()
         maven { url "https://repo.spring.io/release" }
     }
+    gradle.projectsEvaluated {
+        tasks.withType(JavaCompile).tap {
+            configureEach {
+                options.compilerArgs
+            }
+        }
+    }
 }
 
 sonarqube {
@@ -129,6 +136,9 @@ subprojects {
         }
     }
     tasks.test {
+        jvmArgs '--add-opens', 'java.base/java.time=ALL-UNNAMED',
+                '--add-opens', 'java.base/java.lang=ALL-UNNAMED',
+                '--add-opens', 'java.base/java.util=ALL-UNNAMED'
         useJUnitPlatform()
         finalizedBy jacocoTestReport
     }

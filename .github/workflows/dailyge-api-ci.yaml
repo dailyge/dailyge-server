@@ -1,4 +1,4 @@
-name: Dailyge-Api PR
+name: Dailyge-Api Dev CI
 
 on:
   pull_request:
@@ -21,20 +21,31 @@ jobs:
         with:
           submodules: true
           token: ${{ secrets.SUBMODULE_TOKEN }}
+
       - name: Update submodules
         run: |
           git submodule sync --recursive
           git submodule update --init --recursive --remote
+
       - name: Set up JDK 17 with Gradle cache
         uses: actions/setup-java@v2
         with:
           java-version: "17"
           distribution: "temurin"
           cache: "gradle"
+
       - name: Build with Gradle
         env:
           ENCRYPTOR_KEY: ${{ secrets.ENCRYPTOR_KEY }}
+          GRADLE_OPTS: "--add-opens=java.base/java.time=ALL-UNNAMED"
         run: ./gradlew dailyge-api:build --info --stacktrace
+
+      - name: Upload Test Results
+        if: failure()
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-results
+          path: dailyge-api/build/reports/tests/test/index.html
 
   static_analysis:
     runs-on: ubuntu-latest
@@ -43,10 +54,12 @@ jobs:
         with:
           submodules: true
           token: ${{ secrets.SUBMODULE_TOKEN }}
+
       - name: Update submodules
         run: |
           git submodule sync --recursive
           git submodule update --init --recursive --remote
+
       - name: Set up JDK 17 with Gradle cache
         uses: actions/setup-java@v2
         with:
@@ -55,6 +68,8 @@ jobs:
           cache: "gradle"
 
       - name: Test
+        env:
+          GRADLE_OPTS: "--add-opens=java.base/java.time=ALL-UNNAMED"
         run: ./gradlew dailyge-api:test --info --stacktrace
 
       - name: Static Analysis
@@ -68,7 +83,27 @@ jobs:
     needs: [ build, static_analysis ]
     runs-on: ubuntu-latest
     steps:
-      - name: Notify Build and Analysis Result to Slack
+      - name: Download Test Results
+        if: always()
+        uses: actions/download-artifact@v2
+        with:
+          name: test-results
+          path: ./test-results
+
+      - name: Notify Build and Analysis Result to Slack (Failure)
+        if: failure()
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.PR_WEBHOOK_URL }}
+          SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL }}
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        run: |
+          curl -F file=@./test-results/dailyge-api/build/reports/tests/test/index.html \
+               -F channels=${{ env.SLACK_CHANNEL }} \
+               -F token=${{ env.SLACK_BOT_TOKEN }} \
+               https://slack.com/api/files.upload
+
+      - name: Notify Build and Analysis Result to Slack (Success)
+        if: success()
         uses: 8398a7/action-slack@v3
         with:
           status: ${{ job.status }}

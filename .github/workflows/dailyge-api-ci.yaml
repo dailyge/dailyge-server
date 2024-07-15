@@ -41,14 +41,19 @@ jobs:
         run: ./gradlew dailyge-api:build --info --stacktrace
 
       - name: Upload Test Results
-        if: failure()
+        if: failure() || success()
         uses: actions/upload-artifact@v2
         with:
           name: test-results
           path: dailyge-api/build/reports/tests/test/index.html
 
+      - name: Display Test Report Content
+        if: failure()
+        run: cat dailyge-api/build/reports/tests/test/index.html
+
   static_analysis:
     runs-on: ubuntu-latest
+    needs: build
     steps:
       - uses: actions/checkout@v2
         with:
@@ -80,8 +85,9 @@ jobs:
           -Dsonar.login=${{ secrets.SONAR_TOKEN }}
 
   notify_slack:
-    needs: [ build, static_analysis ]
     runs-on: ubuntu-latest
+    needs: [ build, static_analysis ]
+    if: always()
     steps:
       - name: Download Test Results
         if: always()
@@ -90,6 +96,21 @@ jobs:
           name: test-results
           path: ./test-results
 
+      - name: List Downloaded Files
+        if: failure() || success()
+        run: |
+          echo "Listing downloaded files:"
+          ls -R ./test-results
+
+      - name: Check if Test Report Exists
+        if: failure() || success()
+        run: |
+          if [ -f ./test-results/dailyge-api/build/reports/tests/test/index.html ]; then
+            echo "Test report exists."
+          else
+            echo "Test report does not exist."
+          fi
+
       - name: Notify Build and Analysis Result to Slack (Failure)
         if: failure()
         env:
@@ -97,6 +118,7 @@ jobs:
           SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL }}
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
         run: |
+          echo "Uploading to Slack..."
           curl -F file=@./test-results/dailyge-api/build/reports/tests/test/index.html \
                -F channels=${{ env.SLACK_CHANNEL }} \
                -F token=${{ env.SLACK_BOT_TOKEN }} \

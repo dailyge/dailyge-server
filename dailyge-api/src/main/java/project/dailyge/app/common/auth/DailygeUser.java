@@ -1,11 +1,10 @@
 package project.dailyge.app.common.auth;
 
 import lombok.Getter;
-import project.dailyge.app.common.exception.UnAuthorizedException;
-import project.dailyge.entity.user.Role;
-
 import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
+import project.dailyge.app.common.exception.UnAuthorizedException;
 import static project.dailyge.app.common.exception.UnAuthorizedException.USER_NOT_MATCH_MESSAGE;
+import project.dailyge.entity.user.Role;
 import static project.dailyge.entity.user.Role.ADMIN;
 import project.dailyge.entity.user.UserJpaEntity;
 
@@ -30,6 +29,10 @@ public class DailygeUser {
         this.role = user.getRole();
     }
 
+    public Long getId() {
+        return userId;
+    }
+
     public boolean isAdmin() {
         return ADMIN.equals(this.role);
     }
@@ -41,10 +44,14 @@ public class DailygeUser {
     }
 
     @Override
-    public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        final DailygeUser that = (DailygeUser) o;
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        final DailygeUser that = (DailygeUser) obj;
         return Objects.equals(userId, that.userId);
     }
 

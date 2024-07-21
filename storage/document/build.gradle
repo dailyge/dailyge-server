@@ -1,5 +1,6 @@
 dependencies {
     api("org.springframework.boot:spring-boot-starter-data-mongodb")
+    implementation("com.fasterxml.uuid:java-uuid-generator:4.0")
 }
 
 jar {

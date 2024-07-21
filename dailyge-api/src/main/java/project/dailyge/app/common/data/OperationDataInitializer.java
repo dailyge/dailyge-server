@@ -82,7 +82,11 @@ public class OperationDataInitializer {
 
     public void initData() {
         if (isEnv(LOCAL) || isEnv(DEV)) {
-            userWriteUseCase.save(new UserJpaEntity(nickname, email));
+            try {
+                userWriteUseCase.save(new UserJpaEntity(nickname, email));
+            } catch (Exception ex) {
+                log.error("Data initialization failed: {}", ex.getMessage());
+            }
         }
     }
 
@@ -98,6 +102,9 @@ public class OperationDataInitializer {
     }
 
     private boolean isEnv(final String env) {
-        return LOCAL.equals(env);
+        if (LOCAL.equals(env)) {
+            return true;
+        }
+        return DEV.equals(env);
     }
 }

@@ -44,7 +44,7 @@ public class TaskFacade {
         final DailygeUser dailygeUser,
         final TaskCreateCommand command
     ) {
-        return taskWriteUseCase.save(command.toDocument(dailygeUser));
+        return taskWriteUseCase.save(dailygeUser, command);
     }
 
     public void delete(

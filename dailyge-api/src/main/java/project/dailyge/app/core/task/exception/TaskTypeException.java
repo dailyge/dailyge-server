@@ -1,121 +1,89 @@
 package project.dailyge.app.core.task.exception;
 
+import lombok.Getter;
 import project.dailyge.app.common.codeandmessage.CodeAndMessage;
 import project.dailyge.app.common.exception.BusinessException;
 import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.MONTHLY_TASK_EXISTS;
 import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.MONTHLY_TASK_NOT_EXISTS;
 import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.TASK_NOT_FOUND;
+import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.TASK_UN_RESOLVED_EXCEPTION;
 import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.TOO_MANY_TASKS;
 
+import java.util.HashMap;
+import java.util.Map;
+
+@Getter
 public sealed class TaskTypeException extends BusinessException {
 
-    private static final String TASK_NOT_FOUND_MESSAGE = "할 일을 찾을 수 없습니다.";
-    private static final String TASK_UN_RESOLVED_MESSAGE = "해결되지 못한 할 일 예외입니다.";
+    private static final Map<CodeAndMessage, TaskTypeException> factory = new HashMap<>();
 
-    private TaskTypeException(
-        final String detailMessage,
-        final CodeAndMessage codeAndMessage
-    ) {
-        super(detailMessage, codeAndMessage);
+    private TaskTypeException(final CodeAndMessage codeAndMessage) {
+        super(codeAndMessage);
+    }
+
+    static {
+        factory.put(TOO_MANY_TASKS, new TooManyTasksException(TOO_MANY_TASKS));
+        factory.put(MONTHLY_TASK_NOT_EXISTS, new MonthlyPlanNotExistsException(MONTHLY_TASK_NOT_EXISTS));
+        factory.put(TASK_NOT_FOUND, new TaskNotFoundException(TASK_NOT_FOUND));
+        factory.put(MONTHLY_TASK_EXISTS, new MonthlyPlanExistsException(MONTHLY_TASK_EXISTS));
+        factory.put(TASK_UN_RESOLVED_EXCEPTION, new TaskUnResolvedException(TASK_UN_RESOLVED_EXCEPTION));
     }
 
     public static TaskTypeException from(final TaskCodeAndMessage codeAndMessage) {
-        if (MONTHLY_TASK_EXISTS.equals(codeAndMessage)) {
-            throw new YearPlanExistsException(codeAndMessage);
-        }
-        if (TOO_MANY_TASKS.equals(codeAndMessage)) {
-            throw new TooManyTasksException(codeAndMessage);
-        }
-        if (MONTHLY_TASK_NOT_EXISTS.equals(codeAndMessage)) {
-            throw new YearPlanNotExistsException(codeAndMessage);
-        }
-        if (TASK_NOT_FOUND.equals(codeAndMessage)) {
-            throw new TaskNotFoundException(codeAndMessage);
-        }
-        return new TaskUnResolvedException(codeAndMessage);
+        return getException(codeAndMessage);
     }
 
     public static TaskTypeException from(
         final String detailMessage,
         final TaskCodeAndMessage codeAndMessage
     ) {
-        if (MONTHLY_TASK_EXISTS.equals(codeAndMessage)) {
-            throw new YearPlanExistsException(detailMessage, codeAndMessage);
+        final TaskTypeException taskTypeException = getException(codeAndMessage);
+        if (detailMessage != null) {
+            taskTypeException.addDetailMessage(detailMessage);
         }
-        if (TOO_MANY_TASKS.equals(codeAndMessage)) {
-            throw new TooManyTasksException(detailMessage, codeAndMessage);
-        }
-        if (MONTHLY_TASK_NOT_EXISTS.equals(codeAndMessage)) {
-            throw new YearPlanNotExistsException(detailMessage, codeAndMessage);
-        }
-        if (TASK_NOT_FOUND.equals(codeAndMessage)) {
-            throw new TaskNotFoundException(detailMessage, codeAndMessage);
-        }
-        return new TaskUnResolvedException(detailMessage, codeAndMessage);
+        return taskTypeException;
     }
 
-    private static final class YearPlanExistsException extends TaskTypeException {
-        private YearPlanExistsException(final CodeAndMessage codeAndMessage) {
-            super("", codeAndMessage);
+    private static TaskTypeException getException(final CodeAndMessage codeAndMessage) {
+        final TaskTypeException findTaskTypeException = factory.get(codeAndMessage);
+        if (findTaskTypeException != null) {
+            return findTaskTypeException;
         }
+        return factory.get(TASK_UN_RESOLVED_EXCEPTION);
+    }
 
-        private YearPlanExistsException(
-            final String detailMessage,
-            final CodeAndMessage codeAndMessage
-        ) {
-            super(detailMessage, codeAndMessage);
+    @Override
+    protected void addDetailMessage(final String detailMessage) {
+        super.addDetailMessage(detailMessage);
+    }
+
+    private static final class MonthlyPlanExistsException extends TaskTypeException {
+        private MonthlyPlanExistsException(final CodeAndMessage codeAndMessage) {
+            super(codeAndMessage);
         }
     }
 
     private static final class TooManyTasksException extends TaskTypeException {
         private TooManyTasksException(final CodeAndMessage codeAndMessage) {
-            super("", codeAndMessage);
-        }
-
-        private TooManyTasksException(
-            final String detailMessage,
-            final CodeAndMessage codeAndMessage
-        ) {
-            super(detailMessage, codeAndMessage);
+            super(codeAndMessage);
         }
     }
 
-    private static final class YearPlanNotExistsException extends TaskTypeException {
-        private YearPlanNotExistsException(final CodeAndMessage codeAndMessage) {
-            super("", codeAndMessage);
-        }
-
-        private YearPlanNotExistsException(
-            final String detailMessage,
-            final CodeAndMessage codeAndMessage
-        ) {
-            super(detailMessage, codeAndMessage);
+    private static final class MonthlyPlanNotExistsException extends TaskTypeException {
+        private MonthlyPlanNotExistsException(final CodeAndMessage codeAndMessage) {
+            super(codeAndMessage);
         }
     }
 
     private static final class TaskNotFoundException extends TaskTypeException {
         private TaskNotFoundException(final CodeAndMessage codeAndMessage) {
-            super(TASK_NOT_FOUND_MESSAGE, codeAndMessage);
-        }
-
-        private TaskNotFoundException(
-            final String detailMessage,
-            final CodeAndMessage codeAndMessage
-        ) {
-            super(detailMessage, codeAndMessage);
+            super(codeAndMessage);
         }
     }
 
     private static final class TaskUnResolvedException extends TaskTypeException {
         private TaskUnResolvedException(final CodeAndMessage codeAndMessage) {
-            super(TASK_UN_RESOLVED_MESSAGE, codeAndMessage);
-        }
-
-        private TaskUnResolvedException(
-            final String detailMessage,
-            final CodeAndMessage codeAndMessage
-        ) {
-            super(detailMessage, codeAndMessage);
+            super(codeAndMessage);
         }
     }
 }

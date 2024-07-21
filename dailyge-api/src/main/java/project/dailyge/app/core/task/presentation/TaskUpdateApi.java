@@ -1,5 +1,6 @@
 package project.dailyge.app.core.task.presentation;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -10,31 +11,39 @@ import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.common.auth.LoginUser;
 import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.OK;
 import project.dailyge.app.common.response.ApiResponse;
+import project.dailyge.app.core.common.validation.UuidFormat;
 import project.dailyge.app.core.task.application.TaskWriteUseCase;
+import project.dailyge.app.core.task.application.command.TaskStatusUpdateCommand;
 import project.dailyge.app.core.task.application.command.TaskUpdateCommand;
+import project.dailyge.app.core.task.presentation.requesst.TaskStatusUpdateRequest;
 import project.dailyge.app.core.task.presentation.requesst.TaskUpdateRequest;
-import project.dailyge.app.core.task.presentation.response.TaskRegisterResponse;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/tasks")
+@RequestMapping(path = {"/api/tasks"})
 public class TaskUpdateApi {
 
     private final TaskWriteUseCase taskWriteUseCase;
 
     @PutMapping(path = {"/{taskId}"})
-    public ApiResponse<TaskRegisterResponse> update(
+    public ApiResponse<Void> update(
         @LoginUser final DailygeUser dailygeUser,
-        @PathVariable(name = "taskId") final Long taskId,
-        @RequestBody final TaskUpdateRequest request
+        @UuidFormat @PathVariable(name = "taskId") final String taskId,
+        @Valid @RequestBody final TaskUpdateRequest request
     ) {
-        TaskUpdateCommand command = new TaskUpdateCommand(
-            request.title(),
-            request.content(),
-            request.date(),
-            request.status()
-        );
+        final TaskUpdateCommand command = request.toCommand();
         taskWriteUseCase.update(dailygeUser, taskId, command);
+        return ApiResponse.from(OK);
+    }
+
+    @PutMapping(path = {"/{taskId}/status"})
+    public ApiResponse<Void> updateStatus(
+        @LoginUser final DailygeUser dailygeUser,
+        @PathVariable(name = "taskId") final String taskId,
+        @Valid @RequestBody final TaskStatusUpdateRequest request
+    ) {
+        final TaskStatusUpdateCommand command = request.toCommand();
+        taskWriteUseCase.updateStatus(dailygeUser, taskId, command);
         return ApiResponse.from(OK);
     }
 }

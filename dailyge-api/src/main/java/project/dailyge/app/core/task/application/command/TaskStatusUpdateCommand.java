@@ -2,13 +2,8 @@ package project.dailyge.app.core.task.application.command;
 
 import project.dailyge.entity.task.TaskStatus;
 
-import java.time.LocalDate;
-
-public record TaskUpdateCommand(
+public record TaskStatusUpdateCommand(
     String monthlyTaskId,
-    String title,
-    String content,
-    LocalDate date,
     TaskStatus status
 ) {
 

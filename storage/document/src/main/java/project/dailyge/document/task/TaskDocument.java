@@ -2,7 +2,9 @@ package project.dailyge.document.task;
 
 import static java.util.Locale.KOREA;
 import lombok.Getter;
+import org.springframework.data.mongodb.core.mapping.Field;
 import project.dailyge.document.DocumentBaseEntity;
+import static project.dailyge.document.common.UuidGenerator.createTimeBasedUUID;
 
 import java.time.LocalDate;
 import java.time.temporal.WeekFields;
@@ -30,7 +32,6 @@ public class TaskDocument extends DocumentBaseEntity {
     }
 
     public TaskDocument(
-        final String _id,
         final String monthlyTaskId,
         final String title,
         final String content,
@@ -38,7 +39,7 @@ public class TaskDocument extends DocumentBaseEntity {
         final String status,
         final Long userId
     ) {
-        this._id = _id;
+        this._id = createTimeBasedUUID();
         this.monthlyTaskId = monthlyTaskId;
         this.title = title;
         this.content = content;
@@ -49,6 +50,10 @@ public class TaskDocument extends DocumentBaseEntity {
         this.status = status;
         this.userId = userId;
         initOperatingColumns(userId);
+    }
+
+    public String getId() {
+        return _id;
     }
 
     public LocalDate getLocalDate() {

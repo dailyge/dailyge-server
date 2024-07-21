@@ -1,7 +1,5 @@
 package project.dailyge.document.task;
 
-import org.bson.types.ObjectId;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +32,6 @@ public final class MonthlyTaskDocuments {
         final int year,
         final int month
     ) {
-        return MonthlyTaskDocument.createMonthlyDocument(new ObjectId().toHexString(), userId, year, month);
+        return MonthlyTaskDocument.createMonthlyDocument(userId, year, month);
     }
 }

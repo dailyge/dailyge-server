@@ -18,7 +18,7 @@ import project.dailyge.app.core.task.presentation.response.TaskRegisterResponse;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/api")
-public class TaskRegisterApi {
+public class TaskCreateApi {
 
     private final TaskFacade taskFacade;
 

@@ -19,12 +19,11 @@ import project.dailyge.document.task.MonthlyTaskDocument;
 import project.dailyge.entity.task.TaskJpaEntity;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = {"/api"})
-public class TaskSearchApi {
+public class TaskReadApi {
 
     private final TaskReadUseCase taskReadUseCase;
 

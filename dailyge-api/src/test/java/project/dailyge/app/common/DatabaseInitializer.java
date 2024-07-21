@@ -31,6 +31,7 @@ public class DatabaseInitializer {
     private static final String SET_FOREIGN_KEY_CHECKS_TRUE = "SET FOREIGN_KEY_CHECKS = 1";
 
     private final Set<String> tableNames;
+    private static final Set<String> excludeTables = Set.of("databasechangelog", "databasechangeloglock");
     private final Set<String> collectionNames;
     private final EntityManager entityManager;
     private final MongoTemplate mongoTemplate;
@@ -58,6 +59,7 @@ public class DatabaseInitializer {
             .map(toLowerCase())
             .collect(Collectors.toSet());
         this.tableNames.addAll(tableNames);
+        this.tableNames.removeAll(excludeTables);
     }
 
     @NotNull

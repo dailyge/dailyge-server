@@ -21,6 +21,14 @@ public class GlobalExceptionHandler {
     private static final String REJECTED_VALUE = ", rejectedValue: ";
     private static final String MESSAGE = ", message: ";
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorResponse> resolveIllegalArgumentException(final IllegalArgumentException exception) {
+        final CodeAndMessage codeAndMessage = CommonCodeAndMessage.BAD_REQUEST;
+        log.error("error: {}, {}", MDC.get("requestId"), exception.getMessage());
+        return ResponseEntity.status(codeAndMessage.code())
+            .body(ErrorResponse.from(codeAndMessage));
+    }
+
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ErrorResponse> resolveBusinessException(final BusinessException exception) {
         final CodeAndMessage codeAndMessage = exception.getCodeAndMessage();

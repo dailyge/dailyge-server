@@ -22,4 +22,8 @@ public class BusinessException extends RuntimeException {
         this.detailMessage = detailMessage;
         this.codeAndMessage = codeAndMessage;
     }
+
+    protected void addDetailMessage(final String detailMessage) {
+        this.detailMessage = detailMessage;
+    }
 }

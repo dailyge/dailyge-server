@@ -48,7 +48,6 @@ class TaskRegisterDocumentationTest extends DatabaseTestBase {
             ))
             .contentType(APPLICATION_JSON_VALUE)
             .header(AUTHORIZATION, getAuthorizationHeader())
-            .header(USER_ID_KEY, newUser.getId())
             .body(objectMapper.writeValueAsString(request))
             .when()
             .post("/api/tasks")

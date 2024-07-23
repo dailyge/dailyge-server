@@ -27,17 +27,32 @@ pluginManagement {
             if (requested.id.id == "org.sonarqube") {
                 useVersion sonarQubeVersion as String
             }
+            if (requested.id.id == "com.epages.restdocs-api-spec") {
+                useVersion restdocsApiSpecVersion as String
+            }
+            if (requested.id.id == "com.epages.restdocs-api-spec") {
+                useVersion restdocsApiSpecVersion as String
+            }
+            if (requested.id.id == "com.epages:restdocs-api-spec-mockmvc") {
+                useVersion restdocsApiSpecVersion as String
+            }
+            if (requested.id.id == "org.liquibase.gradle") {
+                useVersion(liquibaseVersion)
+            }
+            if (requested.id.id == "org.liquibase:liquibase-core") {
+                useVersion(liquibaseCoreVersion)
+            }
         }
     }
 }
 
 rootProject.name = "dailyge"
 include(
-    "admin-api",
-    "dailyge-api",
-    "storage:common",
-    "storage:document",
-    "storage:rdb",
-    "storage:memory",
-    "support"
+        "admin-api",
+        "dailyge-api",
+        "storage:common",
+        "storage:document",
+        "storage:rdb",
+        "storage:memory",
+        "support"
 )

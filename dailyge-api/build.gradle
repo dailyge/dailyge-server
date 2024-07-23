@@ -1,5 +1,7 @@
 plugins {
     id("org.asciidoctor.jvm.convert")
+    id("com.epages.restdocs-api-spec")
+    id("org.liquibase.gradle")
 }
 
 configurations {
@@ -7,10 +9,6 @@ configurations {
     compileOnly {
         extendsFrom annotationProcessor
     }
-}
-
-repositories {
-    mavenCentral()
 }
 
 apply(from: "${rootDir}/jib/dailyge-api/jib.gradle")
@@ -28,13 +26,16 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
+
     implementation("io.jsonwebtoken:jjwt:0.9.1")
     implementation("javax.xml.bind:jaxb-api:2.3.1")
     implementation("com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4")
-    implementation("io.netty:netty-resolver-dns-native-macos:4.1.68.Final")
+    implementation("org.liquibase:liquibase-core")
 
     testImplementation("org.springframework.restdocs:spring-restdocs-restassured")
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
+    testImplementation("com.epages:restdocs-api-spec-mockmvc:${restdocsApiSpecVersion}")
+    testImplementation("com.epages:restdocs-api-spec-restassured:${restdocsApiSpecVersion}")
     testImplementation("org.testcontainers:testcontainers")
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.testcontainers:mysql")
@@ -71,6 +72,7 @@ tasks.register("copyDocument", Copy) {
 
 build {
     dependsOn copyDocument
+    dependsOn(':dailyge-api:openapi3')
 }
 
 bootJar {
@@ -99,4 +101,13 @@ sonarqube {
 
 tasks.named("processResources") {
     dependsOn("copySubmoduleConfig")
+}
+
+openapi3 {
+    def env = System.getenv("ENV")
+    setServer(env != null && env == 'prod' ? "https://api.dailyge.com" : "https://api-dev.dailyge.com")
+    title = "Dailyge Api"
+    description = "Dailyge Api 문서 입니다."
+    version = "1.0.0"
+    format = "json"
 }

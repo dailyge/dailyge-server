@@ -7,6 +7,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import project.dailyge.app.common.auth.DailygeToken;
@@ -18,9 +20,6 @@ import project.dailyge.entity.user.UserJpaEntity;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Slf4j
 @Component
@@ -40,7 +39,10 @@ public class LoginInterceptor implements HandlerInterceptor {
     ) {
         try {
             final String authorizationHeader = request.getHeader(AUTHORIZATION);
-            if (authorizationHeader == null || authorizationHeader.isBlank()) {
+            if (authorizationHeader == null) {
+                return true;
+            }
+            if (authorizationHeader.isBlank()) {
                 return true;
             }
 
@@ -73,8 +75,10 @@ public class LoginInterceptor implements HandlerInterceptor {
 
             final Claims claims = expiredJwtException.getClaims();
             final Long userId = claims.get("id", Long.class);
-            if (!userReadUseCase.existsById(userId) ||
-                !tokenManager.getRefreshToken(userId).equals(refreshToken)) {
+            if (!userReadUseCase.existsById(userId)) {
+                return true;
+            }
+            if (!tokenManager.getRefreshToken(userId).equals(refreshToken)) {
                 return true;
             }
 

@@ -16,10 +16,6 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import org.springframework.restdocs.restassured.RestAssuredOperationPreprocessorsConfigurer;
 import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.documentationConfiguration;
 
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-
 public final class RestAssureConfig {
 
     private RestAssureConfig() {
@@ -42,36 +38,28 @@ public final class RestAssureConfig {
         final RestDocumentationContextProvider restDocumentation,
         final int port
     ) {
-        final String schema;
         final String env = System.getenv("ENV");
+        final String scheme = "https";
+        final String host;
         if (env != null && env.equals("prod")) {
-            schema = "api.dailyge.com";
+            host = "api.dailyge.com";
         } else {
-            schema = "api-dev.dailyge.com";
+            host = "api-dev.dailyge.com";
         }
+
         final OperationPreprocessor operationPreprocessor = modifyUris()
-            .host(schema)
+            .scheme(scheme)
+            .host(host)
             .removePort();
 
         final RestAssuredOperationPreprocessorsConfigurer restDocumentationFilter =
             documentationConfiguration(restDocumentation)
                 .operationPreprocessors()
                 .withRequestDefaults(operationPreprocessor, prettyPrint())
-                .withResponseDefaults(prettyPrint());
-
+                .withResponseDefaults(operationPreprocessor, prettyPrint());
         return new RequestSpecBuilder()
             .setPort(port)
             .addFilter(restDocumentationFilter)
             .build();
-    }
-
-    public static void test() throws NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
-//        RestAssured.baseURI = "https://your-secure-api.com";
-//
-//        RestAssured.config = RestAssured.config().sslConfig(
-//            io.restassured.config.SSLConfig.sslConfig()
-//                .trustStore("path/to/your_truststore.jks", "your_password")
-//        );
-        RestAssured.baseURI = "https://www.dailyge.com";
     }
 }

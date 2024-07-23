@@ -1,18 +1,31 @@
 package project.dailyge.app.common.auth;
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Header;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.RequiredTypeException;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.SignatureException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
+import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.INVALID_PARAMETERS;
+import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.INVALID_USER_TOKEN;
 import project.dailyge.app.common.exception.JWTAuthenticationException;
+import static project.dailyge.app.common.exception.JWTAuthenticationException.EMPTY_TOKEN_ERROR_MESSAGE;
+import static project.dailyge.app.common.exception.JWTAuthenticationException.INVALID_ID_TYPE_MESSAGE;
+import static project.dailyge.app.common.exception.JWTAuthenticationException.INVALID_TOKEN_MESSAGE;
+import static project.dailyge.app.common.exception.JWTAuthenticationException.TOKEN_FORMAT_INCORRECT_ERROR_MESSAGE;
+import static project.dailyge.app.common.exception.JWTAuthenticationException.TOKEN_SIGNATURE_VERIFICATION_FAILED_ERROR_MESSAGE;
+import static project.dailyge.app.common.exception.JWTAuthenticationException.UNSUPPORTED_TOKEN_ERROR_MESSAGE;
 import project.dailyge.app.common.exception.UnAuthorizedException;
 import project.dailyge.entity.user.UserJpaEntity;
 
 import java.time.Duration;
 import java.util.Date;
-
-import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.*;
-import static project.dailyge.app.common.exception.JWTAuthenticationException.*;
 
 @Slf4j
 @Component

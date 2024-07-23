@@ -9,8 +9,8 @@ public final class Cookies {
 
     private final Map<String, Cookie> cookieMap = new HashMap<>();
 
-    public Cookies(final Cookie[] cookies) {
-        for (Cookie cookie : cookies) {
+    public Cookies(final Cookie... cookies) {
+        for (final Cookie cookie : cookies) {
             cookieMap.put(cookie.getName(), cookie);
         }
     }

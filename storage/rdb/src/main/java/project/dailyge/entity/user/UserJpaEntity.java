@@ -84,6 +84,17 @@ public class UserJpaEntity extends BaseEntity {
     public UserJpaEntity(
         final String nickname,
         final String email,
+        final Role role
+    ) {
+        validate(nickname, email);
+        this.nickname = nickname;
+        this.email = email;
+        this.role = role;
+    }
+
+    public UserJpaEntity(
+        final String nickname,
+        final String email,
         final String profileImageUrl
     ) {
         validate(nickname, email, profileImageUrl);

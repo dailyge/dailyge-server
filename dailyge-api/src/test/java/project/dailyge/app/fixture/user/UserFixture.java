@@ -1,5 +1,6 @@
 package project.dailyge.app.fixture.user;
 
+import static project.dailyge.entity.user.Role.ADMIN;
 import project.dailyge.entity.user.UserJpaEntity;
 
 public final class UserFixture {
@@ -17,5 +18,16 @@ public final class UserFixture {
 
     public static UserJpaEntity createUserJpaEntity() {
         return new UserJpaEntity(NICKNAME, EMAIL);
+    }
+
+    public static UserJpaEntity createAdminUser() {
+        return new UserJpaEntity(NICKNAME, EMAIL, ADMIN);
+    }
+
+    public static UserJpaEntity createAdminUser(
+        final String nickname,
+        final String email
+    ) {
+        return new UserJpaEntity(nickname, email, ADMIN);
     }
 }

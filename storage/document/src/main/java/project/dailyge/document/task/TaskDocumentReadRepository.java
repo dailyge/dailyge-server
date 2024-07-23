@@ -4,9 +4,15 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 public interface TaskDocumentReadRepository {
-    Optional<MonthlyTaskDocument> findMonthlyDocumentByUserId(Long userId, LocalDate date);
+    Optional<MonthlyTaskDocument> findMonthlyTaskById(final String monthlyTaskId);
 
-    boolean existsYearPlanByUserId(Long userId, LocalDate date);
+    Optional<TaskDocument> findTaskDocumentByIds(String monthlyTaskId, String taskId);
+
+    Optional<TaskActivity> findTaskDocumentByIds(Long userId, String monthlyTaskId, String taskId);
+
+    Optional<MonthlyTaskDocument> findMonthlyDocumentByUserIdAndDate(Long userId, LocalDate date);
+
+    boolean existsMonthlyPlanByUserIdAndDate(Long userId, LocalDate date);
 
     long countMonthlyTask(Long userId, LocalDate date);
 

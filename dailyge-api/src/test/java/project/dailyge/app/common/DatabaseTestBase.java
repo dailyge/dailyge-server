@@ -22,6 +22,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import project.dailyge.app.DailygeApplication;
 import static project.dailyge.app.common.RestAssureConfig.initObjectMapper;
 import static project.dailyge.app.common.RestAssureConfig.initSpecificationConfig;
+import project.dailyge.app.common.auth.DailygeUser;
+import project.dailyge.app.core.user.application.UserWriteUseCase;
+import project.dailyge.entity.user.UserJpaEntity;
+
+import java.time.LocalDate;
 
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs
@@ -47,26 +52,32 @@ public abstract class DatabaseTestBase {
     @Autowired
     private DatabaseInitializer databaseInitialization;
 
+    @Autowired
+    protected UserWriteUseCase userWriteUseCase;
+
     protected RequestSpecification specification;
     protected ObjectMapper objectMapper;
+    protected UserJpaEntity newUser;
+    protected DailygeUser dailygeUser;
+    protected LocalDate now;
 
     protected DatabaseTestBase() {
         this.objectMapper = initObjectMapper();
     }
 
     @DynamicPropertySource
-    public synchronized static void overrideProps(final DynamicPropertyRegistry registry) {
+    public static void overrideProps(final DynamicPropertyRegistry registry) {
         TestContainerConfig.overrideProps(registry);
     }
 
     @BeforeEach
-    synchronized void setUp(final RestDocumentationContextProvider restDocumentation) {
+    void setUp(final RestDocumentationContextProvider restDocumentation) {
         databaseInitialization.initData();
         this.specification = initSpecificationConfig(restDocumentation, port);
     }
 
     @AfterEach
-    synchronized void afterEach() {
+    void afterEach() {
         RestAssured.reset();
     }
 

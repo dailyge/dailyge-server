@@ -1,10 +1,10 @@
 package project.dailyge.document.task;
 
 import lombok.Getter;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import project.dailyge.document.DocumentBaseEntity;
+import static project.dailyge.document.common.UuidGenerator.createTimeBasedUUID;
 
 import java.util.List;
 
@@ -12,7 +12,6 @@ import java.util.List;
 @Document(collection = "monthly_tasks")
 public class MonthlyTaskDocument extends DocumentBaseEntity {
 
-    @Id
     @Field(name = "_id")
     private String id;
 
@@ -35,24 +34,30 @@ public class MonthlyTaskDocument extends DocumentBaseEntity {
     }
 
     private MonthlyTaskDocument(
-        final String _id,
         final Long userId,
         final int year,
         final int month
     ) {
-        this.id = _id;
+        this.id = createTimeBasedUUID();
         this.userId = userId;
         this.year = year;
         this.month = month;
         initOperatingColumns(userId);
     }
 
+    public boolean isOwner(final Long userId) {
+        return this.userId.equals(userId);
+    }
+
     public static MonthlyTaskDocument createMonthlyDocument(
-        final String _id,
         final Long userId,
         final int year,
         final int month
     ) {
-        return new MonthlyTaskDocument(_id, userId, year, month);
+        return new MonthlyTaskDocument(userId, year, month);
+    }
+
+    public boolean hasTasks() {
+        return tasks != null && !tasks.isEmpty();
     }
 }

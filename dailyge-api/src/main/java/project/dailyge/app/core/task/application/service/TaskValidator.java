@@ -10,6 +10,7 @@ import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.MONTHLY
 import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.TOO_MANY_TASKS;
 import project.dailyge.app.core.task.exception.TaskTypeException;
 import project.dailyge.document.task.MonthlyTaskDocument;
+import project.dailyge.document.task.TaskActivity;
 import project.dailyge.document.task.TaskDocumentReadRepository;
 import project.dailyge.entity.task.TaskJpaEntity;
 
@@ -34,8 +35,32 @@ public class TaskValidator {
         }
     }
 
-    public void validateYearPlan(final Long userId) {
-        final boolean yearPlanExists = taskDocumentReadRepository.existsYearPlanByUserId(userId, now());
+    public void validateAuth(
+        final DailygeUser dailygeUser,
+        final TaskActivity taskActivity
+    ) {
+        if (dailygeUser.isAdmin()) {
+            return;
+        }
+        if (!taskActivity.isOwner(dailygeUser.getUserId())) {
+            throw new UnAuthorizedException();
+        }
+    }
+
+    public void validateAuth(
+        final DailygeUser dailygeUser,
+        final MonthlyTaskDocument task
+    ) {
+        if (dailygeUser.isAdmin()) {
+            return;
+        }
+        if (!task.isOwner(dailygeUser.getUserId())) {
+            throw new UnAuthorizedException();
+        }
+    }
+
+    public void validateMonthlyPlan(final Long userId) {
+        final boolean yearPlanExists = taskDocumentReadRepository.existsMonthlyPlanByUserIdAndDate(userId, now());
         if (yearPlanExists) {
             throw TaskTypeException.from(MONTHLY_TASK_EXISTS);
         }
@@ -50,7 +75,7 @@ public class TaskValidator {
             throw TaskTypeException.from(TOO_MANY_TASKS);
         }
 
-        final Optional<MonthlyTaskDocument> findMonthlyTask = taskDocumentReadRepository.findMonthlyDocumentByUserId(userId, now());
+        final Optional<MonthlyTaskDocument> findMonthlyTask = taskDocumentReadRepository.findMonthlyDocumentByUserIdAndDate(userId, now());
         if (findMonthlyTask.isEmpty()) {
             throw TaskTypeException.from(MONTHLY_TASK_NOT_EXISTS);
         }

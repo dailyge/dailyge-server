@@ -1,5 +1,10 @@
 package project.dailyge.app.test.common;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -7,12 +12,12 @@ import project.dailyge.app.common.auth.DailygeToken;
 import project.dailyge.app.common.auth.JwtProperties;
 import project.dailyge.app.common.auth.TokenProvider;
 import project.dailyge.app.common.exception.JWTAuthenticationException;
+import static project.dailyge.app.common.exception.JWTAuthenticationException.EMPTY_TOKEN_ERROR_MESSAGE;
+import static project.dailyge.app.common.exception.JWTAuthenticationException.TOKEN_FORMAT_INCORRECT_ERROR_MESSAGE;
+import static project.dailyge.app.common.exception.JWTAuthenticationException.TOKEN_SIGNATURE_VERIFICATION_FAILED_ERROR_MESSAGE;
+import static project.dailyge.app.common.exception.JWTAuthenticationException.UNSUPPORTED_TOKEN_ERROR_MESSAGE;
 import project.dailyge.app.fixture.user.UserFixture;
 import project.dailyge.entity.user.UserJpaEntity;
-
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
-import static project.dailyge.app.common.exception.JWTAuthenticationException.*;
 
 @DisplayName("[UnitTest] TokenProvider 단위 테스트")
 class TokenProviderUnitTest {
@@ -35,13 +40,13 @@ class TokenProviderUnitTest {
         final DailygeToken token = tokenProvider.createToken(user);
 
         assertAll(
-            () ->  assertNotNull(token),
-            () ->  assertDoesNotThrow(() -> tokenProvider.getUserId(token.accessToken())),
-            () ->  assertDoesNotThrow(() -> tokenProvider.getUserId(token.refreshToken())),
-            () ->  assertEquals(REFRESH_EXPIRED_TIME * 3600, token.maxAge())
+            () -> assertNotNull(token),
+            () -> assertDoesNotThrow(() -> tokenProvider.getUserId(token.accessToken())),
+            () -> assertDoesNotThrow(() -> tokenProvider.getUserId(token.refreshToken())),
+            () -> assertEquals(REFRESH_EXPIRED_TIME * 3600, token.maxAge())
         );
     }
-    
+
     @Test
     @DisplayName("사용자 토큰이 올바르다면, 사용자 ID를 얻는다.")
     void whenUserTokenCorrectThenUserIdShouldBeNotNull() {

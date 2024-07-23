@@ -45,7 +45,7 @@ class LoginIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("로그인에 성공하면, DailygeToken을 생성한다.")
     void whenLoginSuccessThenDailygeTokenIsGenerated() throws IOException {
-        final ApiResponse<OAuthLoginResponse> login = loginApi.oAuthLogin(AUTHENTICATION_CODE);
+        final ApiResponse<OAuthLoginResponse> login = loginApi.login(AUTHENTICATION_CODE);
         final Long userId = tokenProvider.getUserId(Objects.requireNonNull(login.getBody()).getData().getAccessToken());
         final UserJpaEntity findUser = userReadUseCase.findActiveUserById(userId);
 
@@ -61,7 +61,7 @@ class LoginIntegrationTest extends DatabaseTestBase {
                 .withStatusMessage(BAD_GATEWAY.getReasonPhrase())
                 .withBody(BAD_GATEWAY.getReasonPhrase())));
 
-        assertThatThrownBy(() -> loginApi.oAuthLogin(AUTHENTICATION_CODE))
+        assertThatThrownBy(() -> loginApi.login(AUTHENTICATION_CODE))
             .isExactlyInstanceOf(ExternalServerException.class)
             .isInstanceOf(RuntimeException.class)
             .hasMessage(BAD_GATEWAY.value() + " " + BAD_GATEWAY.getReasonPhrase() + ": \"" + BAD_GATEWAY.getReasonPhrase() + "\"");
@@ -76,7 +76,7 @@ class LoginIntegrationTest extends DatabaseTestBase {
                 .withStatusMessage(BAD_GATEWAY.getReasonPhrase())
                 .withBody(BAD_GATEWAY.getReasonPhrase())));
 
-        assertThatThrownBy(() -> loginApi.oAuthLogin(AUTHENTICATION_CODE))
+        assertThatThrownBy(() -> loginApi.login(AUTHENTICATION_CODE))
             .isExactlyInstanceOf(ExternalServerException.class)
             .isInstanceOf(RuntimeException.class)
             .hasMessage(BAD_GATEWAY.value() + " " + BAD_GATEWAY.getReasonPhrase() + ": \"" + BAD_GATEWAY.getReasonPhrase() + "\"");

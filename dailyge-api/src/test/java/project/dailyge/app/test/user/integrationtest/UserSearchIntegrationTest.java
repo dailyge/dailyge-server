@@ -1,24 +1,28 @@
 package project.dailyge.app.test.user.integrationtest;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.common.exception.UnAuthorizedException;
+import static project.dailyge.app.common.exception.UnAuthorizedException.USER_NOT_FOUND_MESSAGE;
 import project.dailyge.app.core.user.application.UserReadUseCase;
 import project.dailyge.app.core.user.application.UserWriteUseCase;
+import static project.dailyge.app.core.user.exception.UserCodeAndMessage.ACTIVE_USER_NOT_FOUND;
+import static project.dailyge.app.core.user.exception.UserCodeAndMessage.USER_NOT_FOUND;
 import project.dailyge.app.core.user.exception.UserTypeException;
 import project.dailyge.app.fixture.user.UserFixture;
+import static project.dailyge.app.fixture.user.UserFixture.EMAIL;
 import project.dailyge.entity.user.UserJpaEntity;
 
 import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
-import static project.dailyge.app.common.exception.UnAuthorizedException.USER_NOT_FOUND_MESSAGE;
-import static project.dailyge.app.core.user.exception.UserCodeAndMessage.ACTIVE_USER_NOT_FOUND;
-import static project.dailyge.app.core.user.exception.UserCodeAndMessage.USER_NOT_FOUND;
-import static project.dailyge.app.fixture.user.UserFixture.EMAIL;
 
 @DisplayName("[IntegrationTest] 사용자 조회 통합 테스트")
 class UserSearchIntegrationTest extends DatabaseTestBase {
@@ -37,7 +41,7 @@ class UserSearchIntegrationTest extends DatabaseTestBase {
 
         assertNotNull(findUser);
     }
-    
+
     @Test
     @DisplayName("사용자가 없다면, UserNotFoundException이 발생한다.")
     void whenFindNonExistentUserThenUserNotFoundExceptionShouldBeHappen() {
@@ -74,7 +78,7 @@ class UserSearchIntegrationTest extends DatabaseTestBase {
         assertNotNull(findUser);
         assertEquals(saveUser, findUser);
     }
-    
+
     @Test
     @DisplayName("로그인 된 사용자 조회 시 없다면, UnAuthorizedException이 발생한다.")
     void whenFindLoggedUserNonExistentThenUnAuthorizedExceptionShouldBeHappen() {

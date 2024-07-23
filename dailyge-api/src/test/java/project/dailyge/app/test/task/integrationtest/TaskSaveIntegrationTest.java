@@ -1,7 +1,6 @@
 package project.dailyge.app.test.task.integrationtest;
 
 
-import static java.time.LocalDate.now;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -17,6 +16,7 @@ import project.dailyge.app.core.task.application.command.TaskCreateCommand;
 import project.dailyge.app.core.task.facade.TaskFacade;
 import project.dailyge.app.core.user.application.UserWriteUseCase;
 import project.dailyge.app.fixture.user.UserFixture;
+import static project.dailyge.app.test.task.fixture.TaskCommandFixture.createTaskCreationCommand;
 import project.dailyge.document.task.MonthlyTaskDocument;
 import project.dailyge.document.task.TaskDocumentReadRepository;
 import project.dailyge.entity.user.UserJpaEntity;
@@ -28,7 +28,7 @@ import java.util.concurrent.Executors;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayName("[IntegrationTest] 할 일 저장 통합 테스트")
-public class TaskSaveIntegrationTest extends DatabaseTestBase {
+class TaskSaveIntegrationTest extends DatabaseTestBase {
 
     @Autowired
     private TaskFacade taskFacade;
@@ -47,13 +47,8 @@ public class TaskSaveIntegrationTest extends DatabaseTestBase {
         final DailygeUser dailygeUser = new DailygeUser(newUser);
         final LocalDate now = LocalDate.now();
         taskFacade.createMonthlyTasks(dailygeUser, now);
-        final MonthlyTaskDocument findMonthlyTask = monthlyTaskReadRepository.findMonthlyDocumentByUserId(dailygeUser.getUserId(), now).get();
-        final TaskCreateCommand command = new TaskCreateCommand(
-            findMonthlyTask.getId(),
-            "독서",
-            "Kafka 완벽가이드 1~30p 읽기",
-            now()
-        );
+        final MonthlyTaskDocument findMonthlyTask = monthlyTaskReadRepository.findMonthlyDocumentByUserIdAndDate(dailygeUser.getUserId(), now).get();
+        final TaskCreateCommand command = createTaskCreationCommand(findMonthlyTask.getId());
 
         final String newTaskId = taskFacade.save(dailygeUser, command);
         assertNotNull(newTaskId);

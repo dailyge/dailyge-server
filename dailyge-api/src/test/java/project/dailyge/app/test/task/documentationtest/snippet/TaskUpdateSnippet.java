@@ -102,7 +102,7 @@ public final class TaskUpdateSnippet implements TaskSnippet {
                 .summary(TASK_STATUS_UPDATE_SUMMARY)
                 .privateResource(false)
                 .deprecated(false)
-                .description(TASK_UPDATE_DESCRIPTION),
+                .description(TASK_STATUS_UPDATE_DESCRIPTION),
             preprocessRequest(prettyPrint()),
             preprocessResponse(prettyPrint()),
             snippets -> {
@@ -132,7 +132,7 @@ public final class TaskUpdateSnippet implements TaskSnippet {
                 .summary(TASK_STATUS_UPDATE_SUMMARY)
                 .privateResource(false)
                 .deprecated(false)
-                .description(TASK_UPDATE_DESCRIPTION),
+                .description(TASK_STATUS_UPDATE_DESCRIPTION),
             preprocessRequest(prettyPrint()),
             preprocessResponse(prettyPrint()),
             snippets -> {

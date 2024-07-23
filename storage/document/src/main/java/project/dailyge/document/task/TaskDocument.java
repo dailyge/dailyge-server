@@ -14,15 +14,34 @@ public class TaskDocument extends DocumentBaseEntity {
 
     private static final WeekFields weekFields = WeekFields.of(KOREA);
 
+    @Field(name = "_id")
     private String _id;
+
+    @Field(name = "monthly_task_id")
     private String monthlyTaskId;
+
+    @Field(name = "title")
     private String title;
+
+    @Field(name = "content")
     private String content;
+
+    @Field(name = "year")
     private int year;
+
+    @Field(name = "month")
     private int month;
+
+    @Field(name = "day")
     private int day;
+
+    @Field(name = "week_of_month")
     private int weekOfMonth;
+
+    @Field(name = "status")
     private String status;
+
+    @Field(name = "user_id")
     private Long userId;
 
     /**

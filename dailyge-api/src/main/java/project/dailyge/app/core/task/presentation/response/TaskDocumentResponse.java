@@ -19,7 +19,7 @@ public class TaskDocumentResponse {
     private final LocalDateTime createdAt;
     private final LocalDateTime lastModifiedAt;
 
-    public TaskDocumentResponse(final TaskDocument taskDocument) {
+    private TaskDocumentResponse(final TaskDocument taskDocument) {
         this.id = taskDocument.getId();
         this.monthlyTaskId = taskDocument.getMonthlyTaskId();
         this.title = taskDocument.getTitle();
@@ -30,5 +30,9 @@ public class TaskDocumentResponse {
         this.userId = taskDocument.getUserId();
         this.createdAt = taskDocument.getCreatedAt();
         this.lastModifiedAt = taskDocument.getLastModifiedAt();
+    }
+
+    public static TaskDocumentResponse from(final TaskDocument taskDocument) {
+        return new TaskDocumentResponse(taskDocument);
     }
 }

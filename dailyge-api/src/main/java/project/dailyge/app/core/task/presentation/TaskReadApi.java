@@ -14,11 +14,15 @@ import project.dailyge.app.core.common.validation.UuidFormat;
 import project.dailyge.app.core.task.application.TaskReadUseCase;
 import project.dailyge.app.core.task.presentation.response.MonthlyTaskIdResponse;
 import project.dailyge.app.core.task.presentation.response.MonthlyTaskResponse;
-import project.dailyge.app.core.task.presentation.response.TaskDetailResponse;
+import project.dailyge.app.core.task.presentation.response.TaskDocumentResponse;
+import project.dailyge.app.core.task.presentation.response.TaskStatusResponse;
 import project.dailyge.document.task.MonthlyTaskDocument;
-import project.dailyge.entity.task.TaskJpaEntity;
+import project.dailyge.document.task.TaskDocument;
+import project.dailyge.entity.task.TaskStatus;
 
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,13 +31,23 @@ public class TaskReadApi {
 
     private final TaskReadUseCase taskReadUseCase;
 
-    @GetMapping(path = {"/monthly-tasks"})
-    public ApiResponse<MonthlyTaskIdResponse> findMonthlyTaskByUserIdAndDate(
+    @GetMapping(path = {"/monthly-tasks/id"})
+    public ApiResponse<MonthlyTaskIdResponse> findMonthlyTaskIdByUserIdAndDate(
         @LoginUser final DailygeUser dailygeUser,
         @RequestParam(value = "date") final LocalDate date
     ) {
         final MonthlyTaskDocument findMonthlyTask = taskReadUseCase.findMonthlyTaskByUserIdAndDate(dailygeUser, date);
         final MonthlyTaskIdResponse payload = new MonthlyTaskIdResponse(findMonthlyTask);
+        return ApiResponse.from(OK, payload);
+    }
+
+    @GetMapping(path = {"/monthly-tasks"})
+    public ApiResponse<MonthlyTaskResponse> findMonthlyTaskByUserIdAndDate(
+        @LoginUser final DailygeUser dailygeUser,
+        @RequestParam(value = "date") final LocalDate date
+    ) {
+        final MonthlyTaskDocument findMonthlyTask = taskReadUseCase.findMonthlyTaskByUserIdAndDate(dailygeUser, date);
+        final MonthlyTaskResponse payload = MonthlyTaskResponse.from(findMonthlyTask);
         return ApiResponse.from(OK, payload);
     }
 
@@ -43,17 +57,26 @@ public class TaskReadApi {
         @UuidFormat @PathVariable(value = "monthlyTaskId") final String monthlyTaskId
     ) {
         final MonthlyTaskDocument findMonthlyTask = taskReadUseCase.findMonthlyTaskById(dailygeUser, monthlyTaskId);
-        final MonthlyTaskResponse payload = new MonthlyTaskResponse(findMonthlyTask);
+        final MonthlyTaskResponse payload = MonthlyTaskResponse.from(findMonthlyTask);
         return ApiResponse.from(OK, payload);
     }
 
     @GetMapping(path = {"/tasks/{taskId}"})
-    public ApiResponse<TaskDetailResponse> findTaskById(
+    public ApiResponse<TaskDocumentResponse> findTaskById(
         @LoginUser final DailygeUser dailygeUser,
-        @PathVariable(value = "taskId") final Long taskId
+        @UuidFormat @PathVariable(value = "taskId") final String taskId,
+        @RequestParam(name = "date") final LocalDate date
     ) {
-        final TaskJpaEntity findTask = taskReadUseCase.findById(dailygeUser, taskId);
-        final TaskDetailResponse payload = new TaskDetailResponse(findTask);
+        final TaskDocument findTask = taskReadUseCase.findByIdAndDate(dailygeUser, taskId, date);
+        final TaskDocumentResponse payload = TaskDocumentResponse.from(findTask);
+        return ApiResponse.from(OK, payload);
+    }
+
+    @GetMapping(path = {"/tasks/status"})
+    public ApiResponse<List<TaskStatusResponse>> findTaskStatus(@LoginUser final DailygeUser dailygeUser) {
+        final List<TaskStatusResponse> payload = Arrays.stream(TaskStatus.values())
+            .map(TaskStatusResponse::from)
+            .toList();
         return ApiResponse.from(OK, payload);
     }
 }

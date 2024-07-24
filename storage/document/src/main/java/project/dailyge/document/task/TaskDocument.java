@@ -15,7 +15,7 @@ public class TaskDocument extends DocumentBaseEntity {
     private static final WeekFields weekFields = WeekFields.of(KOREA);
 
     @Field(name = "_id")
-    private String _id;
+    private String id;
 
     @Field(name = "monthly_task_id")
     private String monthlyTaskId;
@@ -58,7 +58,7 @@ public class TaskDocument extends DocumentBaseEntity {
         final String status,
         final Long userId
     ) {
-        this._id = createTimeBasedUUID();
+        this.id = createTimeBasedUUID();
         this.monthlyTaskId = monthlyTaskId;
         this.title = title;
         this.content = content;
@@ -71,15 +71,15 @@ public class TaskDocument extends DocumentBaseEntity {
         initOperatingColumns(userId);
     }
 
-    public String getId() {
-        return _id;
-    }
-
     public LocalDate getLocalDate() {
         return LocalDate.of(year, month, day);
     }
 
     private int getWeekOfMonth(final LocalDate date) {
         return date.get(weekFields.weekOfMonth());
+    }
+
+    public boolean isOwner(final Long userId) {
+        return this.userId.equals(userId);
     }
 }

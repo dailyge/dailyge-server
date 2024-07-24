@@ -85,7 +85,6 @@ class MonthlyTaskReadDocumentationTest extends DatabaseTestBase {
     void whenMonthlyTaskExistsWithIdThenStatusCodeShouldBe_200_OK_Swagger() {
         final TaskRegisterRequest request = createTaskRegisterRequest(monthlyTaskDocument.getId(), now);
         taskFacade.save(dailygeUser, request.toCommand());
-
         final RestDocumentationFilter filter = createMonthlyTaskDetailSearchWithIdFilter(
             createIdentifier("MonthlyTaskDetailSearch", 200)
         );

@@ -47,7 +47,7 @@ class TaskUpdateIntegrationTest extends DatabaseTestBase {
     @BeforeEach
     void setUp() {
         newUser = userWriteUseCase.save(createUserJpaEntity());
-        dailygeUser = new DailygeUser(newUser);
+        dailygeUser = new DailygeUser(newUser.getId(), newUser.getRole());
         now = LocalDate.now();
         taskFacade.createMonthlyTasks(dailygeUser, now);
         findMonthlyTask = taskReadRepository.findMonthlyDocumentByUserIdAndDate(dailygeUser.getUserId(), now).get();
@@ -91,7 +91,7 @@ class TaskUpdateIntegrationTest extends DatabaseTestBase {
     @DisplayName("관리자가 Task를 수정하면 권한 예외가 발생하지 않는다.")
     void whenAdminUpdateTaskThenExceptionShouldNotBeHappen() {
         final UserJpaEntity newUser = userWriteUseCase.save(createAdminUser("dailyge", "dailyge2024@gmail.com"));
-        final DailygeUser dailygeUser = new DailygeUser(newUser);
+        final DailygeUser dailygeUser = new DailygeUser(newUser.getId(), newUser.getRole());
         final LocalDate now = LocalDate.now();
         taskFacade.createMonthlyTasks(dailygeUser, now);
 

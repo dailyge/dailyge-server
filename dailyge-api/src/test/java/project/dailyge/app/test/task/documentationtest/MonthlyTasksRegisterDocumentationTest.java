@@ -34,8 +34,7 @@ class MonthlyTasksRegisterDocumentationTest extends DatabaseTestBase {
     @Test
     @DisplayName("월간 일정표를 생성하면 201 Created 응답을 받는다.")
     void whenCreateMonthlyTasksThenResponseShouldBe201_RestDocs() throws JsonProcessingException {
-        final UserJpaEntity newUser = userWriteUseCase.save(createUserJpaEntity());
-        final DailygeUser dailygeUser = new DailygeUser(newUser);
+        userWriteUseCase.save(createUserJpaEntity());
         final LocalDate now = LocalDate.now();
         final MonthlyTasksRegisterRequest request = new MonthlyTasksRegisterRequest(now);
 
@@ -58,8 +57,7 @@ class MonthlyTasksRegisterDocumentationTest extends DatabaseTestBase {
     @Test
     @DisplayName("월간 일정표를 생성하면 201 Created 응답을 받는다.")
     void whenCreateMonthlyTasksThenResponseShouldBe201_Swagger() throws JsonProcessingException {
-        final UserJpaEntity newUser = userWriteUseCase.save(createUserJpaEntity());
-        final DailygeUser dailygeUser = new DailygeUser(newUser);
+        userWriteUseCase.save(createUserJpaEntity());
         final LocalDate now = LocalDate.now();
         final MonthlyTasksRegisterRequest request = new MonthlyTasksRegisterRequest(now);
         final RestDocumentationFilter filter = createMonthlyTasksFilter(
@@ -81,8 +79,7 @@ class MonthlyTasksRegisterDocumentationTest extends DatabaseTestBase {
     @Test
     @DisplayName("월간 일정표를 생성할 때, 날짜를 입력하지 않으면 400 Bad Request 응답을 받는다.")
     void whenCreateMonthlyTasksMissDateThenResponseShouldBe400_Swagger() throws JsonProcessingException {
-        final UserJpaEntity newUser = userWriteUseCase.save(createUserJpaEntity());
-        final DailygeUser dailygeUser = new DailygeUser(newUser);
+        userWriteUseCase.save(createUserJpaEntity());
         final MonthlyTasksRegisterRequest request = new MonthlyTasksRegisterRequest(null);
         final RestDocumentationFilter filter = createMonthlyTasksErrorFilter(
             createIdentifier("MonthlyTaskCreate", 400), MonthlyTasksRegisterRequest.class.getSimpleName(), responseSchema
@@ -104,7 +101,7 @@ class MonthlyTasksRegisterDocumentationTest extends DatabaseTestBase {
     @DisplayName("월간 일정표를 생성할 때, 월간 일정표가 이미 존재한다면, 409 Conflict 응답을 받는다.")
     void whenCreateExistsMonthlyTasksDateThenResponseShouldBe409_Swagger() throws JsonProcessingException {
         final UserJpaEntity newUser = userWriteUseCase.save(createUserJpaEntity());
-        final DailygeUser dailygeUser = new DailygeUser(newUser);
+        final DailygeUser dailygeUser = new DailygeUser(newUser.getId(), newUser.getRole());
         final LocalDate now = LocalDate.now();
         final MonthlyTasksRegisterRequest request = new MonthlyTasksRegisterRequest(now);
         final RestDocumentationFilter filter = createMonthlyTasksErrorFilter(

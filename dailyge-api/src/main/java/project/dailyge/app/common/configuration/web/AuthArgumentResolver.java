@@ -51,7 +51,7 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
                 throw new UnAuthorizedException();
             }
             final UserJpaEntity findUser = userReadUseCase.findAuthorizedUserById(userId);
-            return new DailygeUser(findUser);
+            return new DailygeUser(findUser.getId(), findUser.getRole());
         } catch (ExpiredJwtException ex) {
             throw new JWTAuthenticationException(ex.getMessage(), UN_AUTHORIZED);
         }

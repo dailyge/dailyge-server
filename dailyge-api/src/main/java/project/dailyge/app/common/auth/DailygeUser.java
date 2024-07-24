@@ -24,11 +24,6 @@ public class DailygeUser {
         this.role = role;
     }
 
-    public DailygeUser(final UserJpaEntity user) {
-        this.userId = user.getId();
-        this.role = user.getRole();
-    }
-
     public Long getId() {
         return userId;
     }

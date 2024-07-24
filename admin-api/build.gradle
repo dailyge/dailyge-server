@@ -18,6 +18,9 @@ dependencies {
     implementation(project(":storage:memory"))
     implementation(project(":support"))
 
+    testImplementation project(":storage:rdb")
+    testImplementation project(":storage:document")
+
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")

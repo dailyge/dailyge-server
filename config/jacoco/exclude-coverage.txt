@@ -10,8 +10,5 @@
 **/exception/**
 **/request/**
 **/response/**
-**/test/**
-**/storage/common/**
 **/support/**
-**/src/test/**
 

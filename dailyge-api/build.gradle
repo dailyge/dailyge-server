@@ -65,6 +65,9 @@ asciidoctor {
     onlyIf { test.state.executed && test.state.failure == null }
 }
 
+tasks.build.dependsOn(":storage:rdb:test")
+tasks.build.dependsOn(":storage:document:test")
+
 tasks.register("copyDocument", Copy) {
     dependsOn asciidoctor
     from file("build/docs/asciidoc")
@@ -92,6 +95,7 @@ tasks.register("copySubmoduleConfig", Copy) {
 
 tasks.named("processResources") {
     dependsOn("copySubmoduleConfig")
+    dependsOn(":storage:rdb:compileTestJava")
 }
 
 openapi3 {

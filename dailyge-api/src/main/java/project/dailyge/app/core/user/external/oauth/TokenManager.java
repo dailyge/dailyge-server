@@ -2,7 +2,6 @@ package project.dailyge.app.core.user.external.oauth;
 
 import io.netty.handler.timeout.TimeoutException;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.type.SerializationException;
 import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -33,8 +32,6 @@ public class TokenManager {
             throw new ExternalServerException(ex.getMessage(), SERVICE_UNAVAILABLE);
         } catch (TimeoutException ex) {
             throw new ExternalServerException(ex.getMessage(), GATEWAY_TIMEOUT);
-        } catch (SerializationException ex) {
-            throw new ExternalServerException(ex.getMessage(), INTERNAL_SERVER_ERROR);
         } catch (Exception ex) {
             throw new ExternalServerException(ex.getMessage(), BAD_GATEWAY);
         }
@@ -52,8 +49,6 @@ public class TokenManager {
             throw new ExternalServerException(ex.getMessage(), GATEWAY_TIMEOUT);
         } catch (IllegalArgumentException ex) {
             throw new ExternalServerException(ex.getMessage(), BAD_REQUEST);
-        } catch (SerializationException ex) {
-            throw new ExternalServerException(ex.getMessage(), INTERNAL_SERVER_ERROR);
         } catch (Exception ex) {
             throw new ExternalServerException(ex.getMessage(), BAD_GATEWAY);
         }
@@ -71,8 +66,6 @@ public class TokenManager {
             throw new ExternalServerException(ex.getMessage(), GATEWAY_TIMEOUT);
         } catch (IllegalArgumentException ex) {
             throw new ExternalServerException(ex.getMessage(), BAD_REQUEST);
-        } catch (SerializationException ex) {
-            throw new ExternalServerException(ex.getMessage(), INTERNAL_SERVER_ERROR);
         } catch (Exception ex) {
             throw new ExternalServerException(ex.getMessage(), BAD_GATEWAY);
         }

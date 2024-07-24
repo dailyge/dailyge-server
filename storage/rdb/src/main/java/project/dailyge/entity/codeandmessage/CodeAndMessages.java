@@ -34,6 +34,9 @@ public final class CodeAndMessages {
     }
 
     public void updateAll(final List<CodeAndMessageJpaEntity> codeAndMessages) {
+        if (codeAndMessages == null) {
+            return;
+        }
         if (this.codeAndMessages.isEmpty()) {
             this.codeAndMessages.addAll(codeAndMessages);
             return;
@@ -49,6 +52,13 @@ public final class CodeAndMessages {
         final CodeAndMessageJpaEntity source,
         final CodeAndMessageJpaEntity target
     ) {
+        if (source == null || target == null) {
+            return;
+        }
         source.update(target);
+    }
+
+    public boolean isEmpty() {
+        return codeAndMessages.isEmpty();
     }
 }

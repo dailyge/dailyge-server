@@ -23,7 +23,7 @@ public final class RestAssureConfig {
     }
 
     public static ObjectMapper initObjectMapper() {
-        ObjectMapper objectMapper = new ObjectMapper()
+        final ObjectMapper objectMapper = new ObjectMapper()
             .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
         objectMapper.registerModule(new JavaTimeModule());
         objectMapper.setSerializationInclusion(JsonInclude.Include.ALWAYS);

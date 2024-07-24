@@ -25,10 +25,9 @@ class CodeAndMessageDao implements CodeAndMessageEntityReadRepository, CodeAndMe
     }
 
     @Override
-    public List<CodeAndMessageJpaEntity> saveAll(final List<CodeAndMessageJpaEntity> codeAndMessages) {
+    public void saveAll(final List<CodeAndMessageJpaEntity> codeAndMessages) {
         for (final CodeAndMessageJpaEntity entity : codeAndMessages) {
             entityManager.persist(entity);
         }
-        return codeAndMessages;
     }
 }

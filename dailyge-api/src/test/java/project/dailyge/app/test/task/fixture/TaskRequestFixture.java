@@ -1,5 +1,6 @@
 package project.dailyge.app.test.task.fixture;
 
+import project.dailyge.app.core.task.presentation.requesst.TaskRegisterRequest;
 import project.dailyge.app.core.task.presentation.requesst.TaskStatusUpdateRequest;
 import project.dailyge.app.core.task.presentation.requesst.TaskUpdateRequest;
 import project.dailyge.entity.task.TaskStatus;
@@ -12,6 +13,18 @@ public final class TaskRequestFixture {
 
     private TaskRequestFixture() {
         throw new AssertionError("올바른 방식으로 생성자를 호출해주세요.");
+    }
+
+    public static TaskRegisterRequest createTaskRegisterRequest(
+        final String monthlyTaskId,
+        final LocalDate now
+    ) {
+        return new TaskRegisterRequest(
+            monthlyTaskId,
+            "주간 미팅",
+            "Backend 팀과 Api 스펙 정의",
+            now
+        );
     }
 
     public static TaskUpdateRequest createTaskUpdateRequest(

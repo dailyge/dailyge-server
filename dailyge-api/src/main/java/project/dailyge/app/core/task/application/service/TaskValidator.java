@@ -6,11 +6,12 @@ import org.springframework.stereotype.Component;
 import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.common.exception.UnAuthorizedException;
 import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.MONTHLY_TASK_EXISTS;
-import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.MONTHLY_TASK_NOT_EXISTS;
+import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.MONTHLY_TASK_NOT_FOUND;
 import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.TOO_MANY_TASKS;
 import project.dailyge.app.core.task.exception.TaskTypeException;
 import project.dailyge.document.task.MonthlyTaskDocument;
 import project.dailyge.document.task.TaskActivity;
+import project.dailyge.document.task.TaskDocument;
 import project.dailyge.document.task.TaskDocumentReadRepository;
 import project.dailyge.entity.task.TaskJpaEntity;
 
@@ -59,6 +60,18 @@ public class TaskValidator {
         }
     }
 
+    public void validateAuth(
+        final DailygeUser dailygeUser,
+        final TaskDocument task
+    ) {
+        if (dailygeUser.isAdmin()) {
+            return;
+        }
+        if (!task.isOwner(dailygeUser.getUserId())) {
+            throw new UnAuthorizedException();
+        }
+    }
+
     public void validateMonthlyPlan(final Long userId) {
         final boolean yearPlanExists = taskDocumentReadRepository.existsMonthlyPlanByUserIdAndDate(userId, now());
         if (yearPlanExists) {
@@ -77,7 +90,7 @@ public class TaskValidator {
 
         final Optional<MonthlyTaskDocument> findMonthlyTask = taskDocumentReadRepository.findMonthlyDocumentByUserIdAndDate(userId, now());
         if (findMonthlyTask.isEmpty()) {
-            throw TaskTypeException.from(MONTHLY_TASK_NOT_EXISTS);
+            throw TaskTypeException.from(MONTHLY_TASK_NOT_FOUND);
         }
     }
 }

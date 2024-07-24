@@ -4,11 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.core.task.application.TaskReadUseCase;
+import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.MONTHLY_TASK_NOT_FOUND;
 import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.TASK_NOT_FOUND;
 import project.dailyge.app.core.task.exception.TaskTypeException;
 import project.dailyge.document.task.MonthlyTaskDocument;
+import project.dailyge.document.task.TaskDocument;
 import project.dailyge.document.task.TaskDocumentReadRepository;
-import project.dailyge.entity.task.TaskJpaEntity;
 
 import java.time.LocalDate;
 
@@ -20,16 +21,14 @@ class TaskReadService implements TaskReadUseCase {
     private final TaskDocumentReadRepository taskReadRepository;
 
     @Override
-    public TaskJpaEntity findById(
+    public MonthlyTaskDocument findMonthlyTaskByUserIdAndDate(
         final DailygeUser dailygeUser,
-        final Long taskId
+        final LocalDate date
     ) {
-//        final TaskJpaEntity findTask = taskRepository.findById(taskId)
-//            .orElseThrow(() -> TaskTypeException.from(TASK_NOT_FOUND));
-//        if (!findTask.isOwner(dailygeUser.getUserId())) {
-//            throw new UnAuthorizedException();
-//        }
-        return null;
+        final MonthlyTaskDocument findTask = taskReadRepository.findMonthlyDocumentByUserIdAndDate(dailygeUser.getId(), date)
+            .orElseThrow(() -> TaskTypeException.from(MONTHLY_TASK_NOT_FOUND));
+        validator.validateAuth(dailygeUser, findTask);
+        return findTask;
     }
 
     @Override
@@ -38,19 +37,21 @@ class TaskReadService implements TaskReadUseCase {
         final String monthlyTaskId
     ) {
         final MonthlyTaskDocument findTask = taskReadRepository.findMonthlyTaskById(monthlyTaskId)
-            .orElseThrow(() -> TaskTypeException.from(TASK_NOT_FOUND));
+            .orElseThrow(() -> TaskTypeException.from(MONTHLY_TASK_NOT_FOUND));
         validator.validateAuth(dailygeUser, findTask);
         return findTask;
     }
 
     @Override
-    public MonthlyTaskDocument findMonthlyTaskByUserIdAndDate(
+    public TaskDocument findByIdAndDate(
         final DailygeUser dailygeUser,
+        final String taskId,
         final LocalDate date
     ) {
-        final MonthlyTaskDocument findTask = taskReadRepository.findMonthlyDocumentByUserIdAndDate(dailygeUser.getId(), date)
-            .orElseThrow(() -> TaskTypeException.from(TASK_NOT_FOUND));
-        validator.validateAuth(dailygeUser, findTask);
-        return findTask;
+        final TaskDocument findTaskDocument = taskReadRepository.findTaskDocumentByIdsAndDate(
+            dailygeUser.getId(), taskId, date
+        ).orElseThrow(() -> TaskTypeException.from(TASK_NOT_FOUND));
+        validator.validateAuth(dailygeUser, findTaskDocument);
+        return findTaskDocument;
     }
 }

@@ -61,11 +61,34 @@ class TaskReadDao implements TaskEntityReadRepository, TaskDocumentReadRepositor
      */
     @Override
     public Optional<MonthlyTaskDocument> findMonthlyTaskById(final String monthlyTaskId) {
-        final MongoCollection<Document> collection = mongoTemplate.getCollection(MONTHLY_TASKS_DOCUMENT);
+        final MongoCollection<Document> collection = getMonthlyTaskDocumentMongoCollection();
         final Document doc = collection.find(Filters.eq(ID, monthlyTaskId)).first();
+        if (doc == null) {
+            return Optional.empty();
+        }
         return Optional.ofNullable(
             mongoTemplate.getConverter().read(MonthlyTaskDocument.class, doc)
         );
+    }
+
+    @Override
+    public Optional<TaskDocument> findTaskDocumentByIdsAndDate(
+        final Long userId,
+        final String taskId,
+        final LocalDate date
+    ) {
+        final MongoCollection<Document> collection = getMonthlyTaskDocumentMongoCollection();
+        final Document document = collection.aggregate(Arrays.asList(
+            Aggregates.match(Filters.eq(USER_ID, userId)),
+            Aggregates.unwind("$tasks"),
+            Aggregates.match(Filters.eq("tasks._id", taskId)),
+            Aggregates.project(Projections.fields(Projections.excludeId(), Projections.include(TASKS)))
+        )).first();
+        if (document != null && document.get(TASKS) != null) {
+            final Document task = (Document) document.get(TASKS);
+            return Optional.of(mongoTemplate.getConverter().read(TaskDocument.class, task));
+        }
+        return Optional.empty();
     }
 
     @Override
@@ -73,8 +96,7 @@ class TaskReadDao implements TaskEntityReadRepository, TaskDocumentReadRepositor
         final String monthlyTaskId,
         final String taskId
     ) {
-        final MongoCollection<Document> collection = mongoTemplate.getCollection(MONTHLY_TASKS_DOCUMENT);
-
+        final MongoCollection<Document> collection = getMonthlyTaskDocumentMongoCollection();
         final Document document = collection.aggregate(Arrays.asList(
             Aggregates.match(Filters.eq(ID, monthlyTaskId)),
             Aggregates.unwind("$tasks"),
@@ -191,5 +213,9 @@ class TaskReadDao implements TaskEntityReadRepository, TaskDocumentReadRepositor
         );
         final TaskCount taskCount = results.getUniqueMappedResult();
         return taskCount != null ? taskCount.getCount() : 0;
+    }
+
+    private MongoCollection<Document> getMonthlyTaskDocumentMongoCollection() {
+        return mongoTemplate.getCollection(MONTHLY_TASKS_DOCUMENT);
     }
 }

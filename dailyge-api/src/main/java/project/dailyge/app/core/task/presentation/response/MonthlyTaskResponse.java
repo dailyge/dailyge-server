@@ -32,12 +32,16 @@ public class MonthlyTaskResponse {
         this.lastModifiedAt = monthlyTaskDocument.getLastModifiedAt();
     }
 
+    public static MonthlyTaskResponse from(final MonthlyTaskDocument monthlyTaskDocument) {
+        return new MonthlyTaskResponse(monthlyTaskDocument);
+    }
+
     private static List<TaskDocumentResponse> convert(final MonthlyTaskDocument monthlyTaskDocument) {
         if (!monthlyTaskDocument.hasTasks()) {
             return Collections.emptyList();
         }
         return monthlyTaskDocument.getTasks().stream()
-            .map(TaskDocumentResponse::new)
+            .map(TaskDocumentResponse::from)
             .collect(Collectors.toList());
     }
 }

@@ -5,7 +5,7 @@ def port = env == 'prod' ? '8080' : '8081'
 def profile = env == 'prod' ? 'prod' : 'dev'
 def label = "admin-${profile}-api"
 
-if ((env == "dev" || env == "prod") && (skipJib != null && !skipJib)) {
+if (env != null && (env == "dev" || env == "prod") && (skipJib != null && !skipJib)) {
     jib {
         from {
             image = 'openjdk:17-jdk-slim'

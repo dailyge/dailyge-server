@@ -12,7 +12,6 @@ configurations {
 }
 
 apply(from: "${rootDir}/jib/dailyge-api/jib.gradle")
-tasks.build.dependsOn(":storage:rdb:test")
 
 dependencies {
     implementation(project(":storage:common"))
@@ -64,6 +63,9 @@ asciidoctor {
     dependsOn test
 }
 
+tasks.build.dependsOn(":storage:rdb:test")
+tasks.build.dependsOn(":storage:document:test")
+
 tasks.register("copyDocument", Copy) {
     dependsOn asciidoctor
     from file("build/docs/asciidoc")
@@ -101,6 +103,7 @@ sonarqube {
 
 tasks.named("processResources") {
     dependsOn("copySubmoduleConfig")
+    dependsOn(":storage:rdb:compileTestJava")
 }
 
 openapi3 {

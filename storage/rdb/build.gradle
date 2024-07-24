@@ -43,3 +43,13 @@ sonarqube {
         property("sonar.coverage.jacoco.xmlReportPaths", "${projectDir}/reports/jacoco/test/jacocoTestReport.xml")
     }
 }
+
+tasks.named("checkstyleMain") {
+    dependsOn("compileTestJava")
+}
+
+project(":storage:rdb") {
+    tasks.named("pmdMain") {
+        dependsOn "compileTestJava"
+    }
+}

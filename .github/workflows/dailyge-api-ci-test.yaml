@@ -37,6 +37,16 @@ jobs:
           distribution: 'temurin'
           cache: "gradle"
 
+      - name: Cache Gradle files
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches/modules-2/files-2.1
+            ~/.gradle/wrapper/dists
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
       - name: Execute Test
         id: test
         run: ./gradlew dailyge-api:test --info --stacktrace -PskipJib=true

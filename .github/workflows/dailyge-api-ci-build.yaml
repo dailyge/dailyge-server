@@ -28,14 +28,25 @@ jobs:
         run: |
           git submodule sync --recursive
           git submodule update --init --recursive --remote
-      - name: Set up JDK 17 with Gradle cache
+
+      - name: Cache Gradle files
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches/modules-2/files-2.1
+            ~/.gradle/wrapper/dists
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Set up JDK 17 with Gradle
         uses: actions/setup-java@v2
         with:
           java-version: "17"
           distribution: "temurin"
           cache: "gradle"
-      - name: Build with Gradle
+
+      - name: Build with Gradle Without Test
         env:
           ENCRYPTOR_KEY: ${{ secrets.ENCRYPTOR_KEY }}
         run: ./gradlew dailyge-api:build -x test --info --stacktrace
-

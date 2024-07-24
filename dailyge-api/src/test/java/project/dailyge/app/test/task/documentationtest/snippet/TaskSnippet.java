@@ -15,8 +15,11 @@ import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.restdocs.request.ParameterDescriptor;
 import org.springframework.restdocs.request.PathParametersSnippet;
+import org.springframework.restdocs.request.QueryParametersSnippet;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
+import static org.springframework.restdocs.snippet.Attributes.key;
 import static project.dailyge.app.common.SnippetUtils.getAttribute;
 import project.dailyge.app.core.task.presentation.requesst.TaskRegisterRequest;
 import project.dailyge.app.core.task.presentation.requesst.TaskStatusUpdateRequest;
@@ -73,48 +76,97 @@ public interface TaskSnippet {
 
     FieldDescriptor[] MONTHLY_TASK_CREATE_RESPONSE = {
         fieldWithPath("data").type(NULL).description("데이터"),
-        fieldWithPath("code").type(STRING).description("응답 코드"),
+        fieldWithPath("code").type(NUMBER).description("응답 코드"),
         fieldWithPath("message").type(STRING).description("응답 메시지")
     };
 
     FieldDescriptor[] TASK_CREATE_RESPONSE = {
-        fieldWithPath("data.taskId").type(STRING).description("할 일 ID"),
-        fieldWithPath("code").type(STRING).description("응답 코드"),
+        fieldWithPath("data.taskId").type(STRING).description("Task ID"),
+        fieldWithPath("code").type(NUMBER).description("응답 코드"),
         fieldWithPath("message").type(STRING).description("응답 메시지")
     };
 
     FieldDescriptor[] TASK_UPDATE_RESPONSE_FIELD_DESCRIPTOR = {
         fieldWithPath("data").type(NULL).description("데이터"),
-        fieldWithPath("code").type(STRING).description("응답 코드"),
+        fieldWithPath("code").type(NUMBER).description("응답 코드"),
         fieldWithPath("message").type(STRING).description("응답 메시지")
     };
 
     FieldDescriptor[] TASK_STATUS_UPDATE_RESPONSE = {
         fieldWithPath("data").type(NULL).description("데이터"),
-        fieldWithPath("code").type(STRING).description("응답 코드"),
+        fieldWithPath("code").type(NUMBER).description("응답 코드"),
         fieldWithPath("message").type(STRING).description("응답 메시지")
     };
 
-    ParameterDescriptor[] TASK_PATH_PARAMETER_DESCRIPTORS = {
-        parameterWithName("taskId").description("할 일 ID")
+    ParameterDescriptor[] MONTHLY_TASK_PATH_PARAMETER_DESCRIPTORS = {
+        parameterWithName("monthlyTaskId").description("월간 일정표 ID")
+    };
+
+    ParameterDescriptor[] DATE_QUERY_PARAMETER_DESCRIPTORS = {
+        parameterWithName("date").description("날짜").attributes(
+            key("constraints").value("- Must be not null.")
+        )
+    };
+
+    ParameterDescriptor[] TASK_ID_PATH_PARAMETER_DESCRIPTORS = {
+        parameterWithName("taskId").description("Task ID")
     };
 
     ParameterDescriptor[] TASK_DELETE_PATH_DESCRIPTOR = {
-        parameterWithName("taskId").description("할 일 ID")
+        parameterWithName("taskId").description("Task ID")
+    };
+
+    FieldDescriptor[] MONTHLY_TASK_ID_READ_RESPONSE_FIELD_DESCRIPTOR = {
+        fieldWithPath("data.monthlyTaskId").type(STRING).description("월간 일정표 ID"),
+        fieldWithPath("code").type(NUMBER).description("응답 코드"),
+        fieldWithPath("message").type(STRING).description("응답 메시지")
+    };
+
+    FieldDescriptor[] MONTHLY_TASK_READ_RESPONSE_FIELD_DESCRIPTOR = {
+        fieldWithPath("data.id").type(STRING).description("월간 일정표 ID"),
+        fieldWithPath("data.userId").type(NUMBER).description("사용자 ID"),
+        fieldWithPath("data.year").type(NUMBER).description("년"),
+        fieldWithPath("data.month").type(NUMBER).description("월"),
+        fieldWithPath("data.createdAt").type(STRING).description("등록일"),
+        fieldWithPath("data.lastModifiedAt").type(STRING).description("최종 수정일"),
+        fieldWithPath("data.tasks.[].id").type(STRING).description("Task ID"),
+        fieldWithPath("data.tasks.[].monthlyTaskId").type(STRING).description("월간 일정표 ID"),
+        fieldWithPath("data.tasks.[].title").type(STRING).description("제목"),
+        fieldWithPath("data.tasks.[].content").type(STRING).description("내용"),
+        fieldWithPath("data.tasks.[].day").type(NUMBER).description("날짜"),
+        fieldWithPath("data.tasks.[].weekOfMonth").type(NUMBER).description("주 차"),
+        fieldWithPath("data.tasks.[].status").type(STRING).description("상태"),
+        fieldWithPath("data.tasks.[].userId").type(NUMBER).description("사용자 ID"),
+        fieldWithPath("data.tasks.[].createdAt").type(STRING).description("등록일"),
+        fieldWithPath("data.tasks.[].lastModifiedAt").type(STRING).description("최종 수정일"),
+        fieldWithPath("code").type(NUMBER).description("응답 코드"),
+        fieldWithPath("message").type(STRING).description("응답 메시지")
     };
 
     FieldDescriptor[] TASK_DETAIL_SEARCH_RESPONSE_FIELD_DESCRIPTOR = {
-        fieldWithPath("data.id").type(NUMBER).description("할 일 ID"),
+        fieldWithPath("data.id").type(STRING).description("Task ID"),
+        fieldWithPath("data.monthlyTaskId").type(STRING).description("Task ID"),
         fieldWithPath("data.title").type(STRING).description("제목"),
         fieldWithPath("data.content").type(STRING).description("내용"),
-        fieldWithPath("data.date").type(STRING).description("날짜"),
+        fieldWithPath("data.day").type(NUMBER).description("날짜"),
+        fieldWithPath("data.weekOfMonth").type(NUMBER).description("주 차"),
         fieldWithPath("data.status").type(STRING).description("상태"),
-        fieldWithPath("code").type(STRING).description("응답 코드"),
+        fieldWithPath("data.userId").type(NUMBER).description("사용자 ID"),
+        fieldWithPath("data.createdAt").type(STRING).description("등록일"),
+        fieldWithPath("data.lastModifiedAt").type(STRING).description("최종 수정일"),
+        fieldWithPath("code").type(NUMBER).description("응답 코드"),
+        fieldWithPath("message").type(STRING).description("응답 메시지")
+    };
+
+    FieldDescriptor[] TASK_STATUS_LIST_READ_RESPONSE_FIELD_DESCRIPTOR = {
+        fieldWithPath("data.[].kr").type(STRING).description("Task 상태(국문)"),
+        fieldWithPath("data.[].en").type(STRING).description("Task 상태(영문)"),
+        fieldWithPath("code").type(NUMBER).description("응답 코드"),
         fieldWithPath("message").type(STRING).description("응답 메시지")
     };
 
     FieldDescriptor[] ERROR_RESPONSE = {
-        fieldWithPath("code").type(STRING).description("응답 코드"),
+        fieldWithPath("code").type(NUMBER).description("응답 코드"),
         fieldWithPath("message").type(STRING).description("응답 메시지")
     };
 
@@ -129,11 +181,16 @@ public interface TaskSnippet {
     ResponseFieldsSnippet TASK_STATUS_UPDATE_RESPONSE_SNIPPET = responseFields(TASK_STATUS_UPDATE_RESPONSE);
 
     // Detail Search
-    PathParametersSnippet TASK_PATH_PARAMETER_SNIPPET = pathParameters(TASK_PATH_PARAMETER_DESCRIPTORS);
+    PathParametersSnippet TASK_PATH_PARAMETER_SNIPPET = pathParameters(TASK_ID_PATH_PARAMETER_DESCRIPTORS);
+    PathParametersSnippet MONTHLY_TASK_PATH_PARAMETER_SNIPPET = pathParameters(MONTHLY_TASK_PATH_PARAMETER_DESCRIPTORS);
+    QueryParametersSnippet TASK_DATE_REQUEST_PARAMETER_SNIPPET = queryParameters(DATE_QUERY_PARAMETER_DESCRIPTORS);
+    QueryParametersSnippet MONTHLY_TASK_DATE_QUERY_PARAMETER_SNIPPET = queryParameters(DATE_QUERY_PARAMETER_DESCRIPTORS);
+    ResponseFieldsSnippet MONTHLY_TASK_ID_READ_RESPONSE_SNIPPET = responseFields(MONTHLY_TASK_ID_READ_RESPONSE_FIELD_DESCRIPTOR);
+    ResponseFieldsSnippet MONTHLY_TASK_READ_RESPONSE_SNIPPET = responseFields(MONTHLY_TASK_READ_RESPONSE_FIELD_DESCRIPTOR);
     ResponseFieldsSnippet TASK_DETAIL_SEARCH_RESPONSE_SNIPPET = responseFields(TASK_DETAIL_SEARCH_RESPONSE_FIELD_DESCRIPTOR);
 
-    // Delete
-    PathParametersSnippet TASK_DELETE_PATH_PARAMETER_SNIPPET = pathParameters(TASK_DELETE_PATH_DESCRIPTOR);
+    // TaskStatusRead Response Snippet
+    ResponseFieldsSnippet TASK_STATUS_READ_RESPONSE_FIELD_SNIPPET = responseFields(TASK_STATUS_LIST_READ_RESPONSE_FIELD_DESCRIPTOR);
 
     static String createIdentifier(
         final String name,

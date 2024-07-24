@@ -61,6 +61,7 @@ asciidoctor {
     attributes "snippets": snippetsDir
     inputs.dir snippetsDir
     dependsOn test
+    onlyIf { test.state.executed && test.state.failure == null }
 }
 
 tasks.build.dependsOn(":storage:rdb:test")
@@ -70,6 +71,7 @@ tasks.register("copyDocument", Copy) {
     dependsOn asciidoctor
     from file("build/docs/asciidoc")
     into file("src/main/resources/static/docs")
+    onlyIf { test.state.executed && test.state.failure == null }
 }
 
 build {

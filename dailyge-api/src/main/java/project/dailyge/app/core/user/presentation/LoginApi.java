@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import project.dailyge.app.common.auth.DailygeToken;
 import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.common.auth.LoginUser;
-import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.OK;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.OK;
 import project.dailyge.app.common.response.ApiResponse;
 import project.dailyge.app.core.user.facade.UserFacade;
 import project.dailyge.app.core.user.presentation.response.LoginPageUrlResponse;

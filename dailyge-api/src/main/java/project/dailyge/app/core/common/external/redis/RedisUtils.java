@@ -2,8 +2,8 @@ package project.dailyge.app.core.common.external.redis;
 
 import org.redisson.api.RedissonClient;
 import org.redisson.client.RedisException;
-import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.BAD_GATEWAY;
-import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.BAD_REQUEST;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_GATEWAY;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_REQUEST;
 import project.dailyge.app.common.exception.ExternalServerException;
 import project.dailyge.app.common.exception.InvalidParameterException;
 import project.dailyge.lock.Lock;

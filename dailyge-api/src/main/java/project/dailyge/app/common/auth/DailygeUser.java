@@ -1,7 +1,7 @@
 package project.dailyge.app.common.auth;
 
 import lombok.Getter;
-import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
 import project.dailyge.app.common.exception.UnAuthorizedException;
 import static project.dailyge.app.common.exception.UnAuthorizedException.USER_NOT_MATCH_MESSAGE;
 import project.dailyge.entity.user.Role;

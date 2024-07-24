@@ -10,7 +10,7 @@ import project.dailyge.app.common.auth.LoginUser;
 import project.dailyge.app.common.response.ApiResponse;
 import project.dailyge.app.core.user.application.UserWriteUseCase;
 
-import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.NO_CONTENT;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.NO_CONTENT;
 
 @RestController
 @RequiredArgsConstructor

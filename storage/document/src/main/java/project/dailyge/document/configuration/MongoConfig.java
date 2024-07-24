@@ -115,8 +115,8 @@ public class MongoConfig {
         final MongoDatabaseFactory mongoDatabaseFactory,
         final MongoMappingContext mongoMappingContext
     ) {
-        DbRefResolver dbRefResolver = new DefaultDbRefResolver(mongoDatabaseFactory);
-        MappingMongoConverter converter = new MappingMongoConverter(dbRefResolver, mongoMappingContext);
+        final DbRefResolver dbRefResolver = new DefaultDbRefResolver(mongoDatabaseFactory);
+        final MappingMongoConverter converter = new MappingMongoConverter(dbRefResolver, mongoMappingContext);
         converter.setTypeMapper(new DefaultMongoTypeMapper(null));
         return converter;
     }

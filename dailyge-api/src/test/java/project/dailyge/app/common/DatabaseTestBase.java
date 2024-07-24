@@ -24,6 +24,7 @@ import static project.dailyge.app.common.RestAssureConfig.initObjectMapper;
 import static project.dailyge.app.common.RestAssureConfig.initSpecificationConfig;
 import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.core.user.application.UserWriteUseCase;
+import static project.dailyge.entity.user.Role.NORMAL;
 import project.dailyge.entity.user.UserJpaEntity;
 
 import java.time.LocalDate;
@@ -59,6 +60,7 @@ public abstract class DatabaseTestBase {
     protected ObjectMapper objectMapper;
     protected UserJpaEntity newUser;
     protected DailygeUser dailygeUser;
+    protected final DailygeUser invalidUser = new DailygeUser(Long.MAX_VALUE, NORMAL);
     protected LocalDate now;
 
     protected DatabaseTestBase() {

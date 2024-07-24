@@ -11,9 +11,4 @@ public final class UuidGenerator {
     public static String createTimeBasedUUID() {
         return Generators.timeBasedGenerator().generate().toString();
     }
-
-    public static void main(String[] args) {
-        Generators.timeBasedGenerator().generate().toString();
-        System.out.println(Generators.timeBasedGenerator().generate().toString());
-    }
 }

@@ -1,6 +1,7 @@
 **/*Application*
 **/*Exception*
 **/*Health*
+**/*CommonApi*
 **/*Request*
 **/*Response*
 **/common/**

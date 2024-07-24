@@ -167,23 +167,23 @@ include::{snippets}/task_read_documentation_test/when_task_exists_then_status_co
 
 #### Request
 
-include::{snippets}/task_read_documentation_test/when_monthly_task_exists_with_id_then_status_code_should_be_200_ok__rest_docs/http-request.adoc[]
+include::{snippets}/monthly_task_read_documentation_test/when_monthly_task_exists_with_id_then_status_code_should_be_200_ok__rest_docs/http-request.adoc[]
 
 #### Request-Header
 
-include::{snippets}/task_read_documentation_test/when_monthly_task_exists_with_id_then_status_code_should_be_200_ok__rest_docs/request-headers.adoc[]
+include::{snippets}/monthly_task_read_documentation_test/when_monthly_task_exists_with_id_then_status_code_should_be_200_ok__rest_docs/request-headers.adoc[]
 
 #### Request-Path-Parameters
 
-include::{snippets}/task_read_documentation_test/when_monthly_task_exists_with_id_then_status_code_should_be_200_ok__rest_docs/path-parameters.adoc[]
+include::{snippets}/monthly_task_read_documentation_test/when_monthly_task_exists_with_id_then_status_code_should_be_200_ok__rest_docs/path-parameters.adoc[]
 
 #### Response
 
-include::{snippets}/task_read_documentation_test/when_monthly_task_exists_with_id_then_status_code_should_be_200_ok__rest_docs/http-response.adoc[]
+include::{snippets}/monthly_task_read_documentation_test/when_monthly_task_exists_with_id_then_status_code_should_be_200_ok__rest_docs/http-response.adoc[]
 
 #### Response-Fields
 
-include::{snippets}/task_read_documentation_test/when_monthly_task_exists_with_id_then_status_code_should_be_200_ok__rest_docs/response-fields.adoc[]
+include::{snippets}/monthly_task_read_documentation_test/when_monthly_task_exists_with_id_then_status_code_should_be_200_ok__rest_docs/response-fields.adoc[]
 
 ### 2-3. 월간 일정표 조회(2)
 
@@ -191,23 +191,23 @@ include::{snippets}/task_read_documentation_test/when_monthly_task_exists_with_i
 
 #### Request
 
-include::{snippets}/task_read_documentation_test/when_monthly_task_exists_with_user_id_and_date_then_status_code_should_be200_ok__rest_docs/http-request.adoc[]
+include::{snippets}/monthly_task_read_documentation_test/when_monthly_task_exists_with_user_id_and_date_then_status_code_should_be200_ok__rest_docs/http-request.adoc[]
 
 #### Request-Header
 
-include::{snippets}/task_read_documentation_test/when_monthly_task_exists_with_user_id_and_date_then_status_code_should_be200_ok__rest_docs/request-headers.adoc[]
+include::{snippets}/monthly_task_read_documentation_test/when_monthly_task_exists_with_user_id_and_date_then_status_code_should_be200_ok__rest_docs/request-headers.adoc[]
 
 #### Query-Parameters
 
-include::{snippets}/task_read_documentation_test/when_monthly_task_exists_with_user_id_and_date_then_status_code_should_be200_ok__rest_docs/query-parameters.adoc[]
+include::{snippets}/monthly_task_read_documentation_test/when_monthly_task_exists_with_user_id_and_date_then_status_code_should_be200_ok__rest_docs/query-parameters.adoc[]
 
 #### Response
 
-include::{snippets}/task_read_documentation_test/when_monthly_task_exists_with_user_id_and_date_then_status_code_should_be200_ok__rest_docs/http-response.adoc[]
+include::{snippets}/monthly_task_read_documentation_test/when_monthly_task_exists_with_user_id_and_date_then_status_code_should_be200_ok__rest_docs/http-response.adoc[]
 
 #### Response-Fields
 
-include::{snippets}/task_read_documentation_test/when_monthly_task_exists_with_user_id_and_date_then_status_code_should_be200_ok__rest_docs/response-fields.adoc[]
+include::{snippets}/monthly_task_read_documentation_test/when_monthly_task_exists_with_user_id_and_date_then_status_code_should_be200_ok__rest_docs/response-fields.adoc[]
 
 ### 2-4. 월간 일정표 ID 조회
 
@@ -215,23 +215,23 @@ include::{snippets}/task_read_documentation_test/when_monthly_task_exists_with_u
 
 #### Request
 
-include::{snippets}/task_read_documentation_test/when_monthly_task_exists_with_user_id_and_date_then_status_code_should_be200_ok/http-request.adoc[]
+include::{snippets}/monthly_task_read_documentation_test/when_monthly_task_id_exists_with_user_id_and_date_then_status_code_should_be200_ok__rest_docs/http-request.adoc[]
 
 #### Request-Header
 
-include::{snippets}/task_read_documentation_test/when_monthly_task_exists_with_user_id_and_date_then_status_code_should_be200_ok/request-headers.adoc[]
+include::{snippets}/monthly_task_read_documentation_test/when_monthly_task_id_exists_with_user_id_and_date_then_status_code_should_be200_ok__rest_docs/request-headers.adoc[]
 
 #### Query-Parameters
 
-include::{snippets}/task_read_documentation_test/when_monthly_task_exists_with_user_id_and_date_then_status_code_should_be200_ok/query-parameters.adoc[]
+include::{snippets}/monthly_task_read_documentation_test/when_monthly_task_id_exists_with_user_id_and_date_then_status_code_should_be200_ok__rest_docs/query-parameters.adoc[]
 
 #### Response
 
-include::{snippets}/task_read_documentation_test/when_monthly_task_exists_with_user_id_and_date_then_status_code_should_be200_ok/http-response.adoc[]
+include::{snippets}/monthly_task_read_documentation_test/when_monthly_task_id_exists_with_user_id_and_date_then_status_code_should_be200_ok__rest_docs/http-response.adoc[]
 
 #### Response-Fields
 
-include::{snippets}/task_read_documentation_test/when_monthly_task_exists_with_user_id_and_date_then_status_code_should_be200_ok/response-fields.adoc[]
+include::{snippets}/monthly_task_read_documentation_test/when_monthly_task_id_exists_with_user_id_and_date_then_status_code_should_be200_ok__rest_docs/response-fields.adoc[]
 
 ### 2-5. Task 상태 목록 조회
 
@@ -239,19 +239,19 @@ Task 상태 목록을 조회하는 API 입니다.
 
 #### Request
 
-include::{snippets}/task_read_documentation_test/when_read_task_status_result_should_be_200_ok/http-request.adoc[]
+include::{snippets}/task_read_documentation_test/when_read_task_status_result_should_be_200_ok__rest_docs/http-request.adoc[]
 
 #### Request-Header
 
-include::{snippets}/task_read_documentation_test/when_read_task_status_result_should_be_200_ok/request-headers.adoc[]
+include::{snippets}/task_read_documentation_test/when_read_task_status_result_should_be_200_ok__rest_docs/request-headers.adoc[]
 
 #### Response
 
-include::{snippets}/task_read_documentation_test/when_read_task_status_result_should_be_200_ok/http-response.adoc[]
+include::{snippets}/task_read_documentation_test/when_read_task_status_result_should_be_200_ok__rest_docs/http-response.adoc[]
 
 #### Response-Fields
 
-include::{snippets}/task_read_documentation_test/when_read_task_status_result_should_be_200_ok/response-fields.adoc[]
+include::{snippets}/task_read_documentation_test/when_read_task_status_result_should_be_200_ok__rest_docs/response-fields.adoc[]
 
 ### 2-6. 월간 일정표 생성
 

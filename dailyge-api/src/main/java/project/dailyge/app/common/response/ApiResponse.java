@@ -3,7 +3,8 @@ package project.dailyge.app.common.response;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import project.dailyge.app.common.codeandmessage.CodeAndMessage;
+import project.dailyge.app.codeandmessage.CodeAndMessage;
+import project.dailyge.app.response.Payload;
 
 public class ApiResponse<T> extends ResponseEntity<Payload<T>> {
 

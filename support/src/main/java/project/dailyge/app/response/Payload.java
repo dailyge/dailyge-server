@@ -1,7 +1,7 @@
-package project.dailyge.app.common.response;
+package project.dailyge.app.response;
 
 import lombok.Getter;
-import project.dailyge.app.common.codeandmessage.CodeAndMessage;
+import project.dailyge.app.codeandmessage.CodeAndMessage;
 
 @Getter
 public class Payload<T> {

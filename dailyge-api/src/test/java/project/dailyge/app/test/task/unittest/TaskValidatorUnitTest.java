@@ -13,7 +13,7 @@ import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.UN_
 import project.dailyge.app.common.exception.UnAuthorizedException;
 import project.dailyge.app.core.task.application.service.TaskValidator;
 import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.MONTHLY_TASK_EXISTS;
-import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.MONTHLY_TASK_NOT_EXISTS;
+import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.MONTHLY_TASK_NOT_FOUND;
 import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.TOO_MANY_TASKS;
 import project.dailyge.app.core.task.exception.TaskTypeException;
 import project.dailyge.document.task.MonthlyTaskDocument;
@@ -121,8 +121,8 @@ class TaskValidatorUnitTest {
 
         assertThatThrownBy(() -> validator.validateTaskCreation(dailygeUser.getId(), now))
             .isInstanceOf(RuntimeException.class)
-            .isExactlyInstanceOf(TaskTypeException.from(MONTHLY_TASK_NOT_EXISTS).getClass())
-            .hasMessage(MONTHLY_TASK_NOT_EXISTS.message());
+            .isExactlyInstanceOf(TaskTypeException.from(MONTHLY_TASK_NOT_FOUND).getClass())
+            .hasMessage(MONTHLY_TASK_NOT_FOUND.message());
     }
 
     @Test

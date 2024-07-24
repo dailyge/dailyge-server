@@ -103,7 +103,7 @@ class TaskReadDocumentationTest extends DatabaseTestBase {
     @DisplayName("[Swagger] 올바르지 않은 TaskId라면 400 Bad Request 응답을 받는다.")
     void whenInvalidTaskIdThenStatusCodeShouldBe_400_Swagger() {
         final TaskRegisterRequest request = createTaskRegisterRequest(monthlyTaskDocument.getId(), now);
-        final String newTaskId = taskFacade.save(dailygeUser, request.toCommand());
+        taskFacade.save(dailygeUser, request.toCommand());
         final RestDocumentationFilter filter = createTaskDetailSearchFilter(createIdentifier("TaskDetailSearch", 400));
 
         given(this.specification)
@@ -123,7 +123,7 @@ class TaskReadDocumentationTest extends DatabaseTestBase {
     @DisplayName("[Swagger] Task가 존재하지 않는다면 404 NotFound 응답을 받는다.")
     void whenTaskNotExistsThenStatusCodeShouldBe_404_Swagger() {
         final TaskRegisterRequest request = createTaskRegisterRequest(monthlyTaskDocument.getId(), now);
-        final String newTaskId = taskFacade.save(dailygeUser, request.toCommand());
+        taskFacade.save(dailygeUser, request.toCommand());
         final RestDocumentationFilter filter = createTaskDetailSearchFilter(createIdentifier("TaskDetailSearch", 404));
 
         given(this.specification)

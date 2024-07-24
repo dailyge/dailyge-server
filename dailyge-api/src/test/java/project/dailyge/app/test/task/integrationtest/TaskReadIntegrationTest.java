@@ -25,7 +25,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 @DisplayName("[IntegrationTest] 할 일 조회 통합 테스트")
-public class TaskReadIntegrationTest extends DatabaseTestBase {
+class TaskReadIntegrationTest extends DatabaseTestBase {
 
     private MonthlyTaskDocument monthlyTask;
     private TaskCreateCommand taskCreateCommand;

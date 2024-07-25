@@ -48,7 +48,8 @@ jobs:
 
       - name: Execute Static Analysis
         id: static_analysis
-        run: ./gradlew admin-api:test sonar -PskipJib=true --info --stacktrace --no-daemon
+        run: |
+          ./gradlew admin-api:test sonarqube -PskipJib=true --info --stacktrace --no-daemon
 
   notify_slack:
     runs-on: ubuntu-latest

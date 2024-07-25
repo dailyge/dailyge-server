@@ -49,7 +49,7 @@ jobs:
       - name: Execute Static Analysis
         id: static_analysis
         run: |
-          ./gradlew dailyge-api:test sonar -PskipJib=true --info --stacktrace --no-daemon
+          ./gradlew dailyge-api:test sonarqube -PskipJib=true --info --stacktrace --no-daemon
         env:
           GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

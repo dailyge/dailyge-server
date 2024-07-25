@@ -4,8 +4,8 @@ plugins {
     id("jacoco")
     id("checkstyle")
     id("org.sonarqube")
-    id("com.google.cloud.tools.jib") apply false
     id("org.springframework.boot") apply false
+    id("com.google.cloud.tools.jib") apply false
     id("io.spring.dependency-management") apply false
 }
 
@@ -139,6 +139,7 @@ subprojects {
     tasks.test {
         useJUnitPlatform()
         finalizedBy jacocoTestReport
+        jvmArgs "--add-opens=java.base/java.time=ALL-UNNAMED"
     }
 
     sonarqube {

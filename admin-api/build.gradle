@@ -111,11 +111,3 @@ openapi3 {
     version = "1.0.0"
     format = "json"
 }
-
-jar {
-    enabled = true
-}
-
-bootJar {
-    enabled = false
-}

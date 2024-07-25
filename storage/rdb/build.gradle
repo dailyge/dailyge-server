@@ -28,14 +28,6 @@ clean.doLast {
     file(querydslDir).deleteDir()
 }
 
-jar {
-    enabled = true
-}
-
-bootJar {
-    enabled = false
-}
-
 sonarqube {
     properties {
         property("sonar.sources", "${projectDir}/src/main/java")
@@ -52,4 +44,12 @@ project(":storage:rdb") {
     tasks.named("pmdMain") {
         dependsOn "compileTestJava"
     }
+}
+
+jar {
+    enabled = true
+}
+
+bootJar {
+    enabled = false
 }

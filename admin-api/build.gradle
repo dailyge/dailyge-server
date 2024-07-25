@@ -11,8 +11,6 @@ configurations {
     }
 }
 
-apply(from: "${rootDir}/jib/admin-api/jib.gradle")
-
 dependencies {
     implementation(project(":storage:common"))
     implementation(project(":storage:document"))

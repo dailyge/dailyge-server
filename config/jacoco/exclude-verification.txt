@@ -1,4 +1,5 @@
 **.*Application*
+**.*Config*
 **.*CommonApi*
 **.*Health*
 **.common.**

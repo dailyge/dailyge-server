@@ -1,4 +1,5 @@
 **/*Application*
+**/*Config*
 **/*Exception*
 **/*Health*
 **/*CommonApi*

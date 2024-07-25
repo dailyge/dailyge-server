@@ -55,9 +55,10 @@ jobs:
         id: static_analysis
         run: |
           ./gradlew sonar \
-          -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
-          -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} \
-          -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+          -Dsonar.host.url=${{ env.SONAR_HOST_URL }} \
+          -Dsonar.projectKey=${{ env.SONAR_PROJECT_KEY }} \
+          -Dsonar.login=${{ env.SONAR_TOKEN }} \
+          -PskipJib=true
 
   notify_slack:
     runs-on: ubuntu-latest
@@ -118,7 +119,4 @@ jobs:
             *Sonarqube:* <${{ secrets.SONAR_HOST_URL }}|정적 분석지표>
             *Description:* PR 채널을 확인해주세요.
           username: "PR_Bot"
-          icon_emoji: ":robot_face:"
-          channel: "pr"
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.PR_WEBHOOK_URL }}
+

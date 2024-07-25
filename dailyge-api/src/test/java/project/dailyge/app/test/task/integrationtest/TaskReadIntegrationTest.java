@@ -15,7 +15,7 @@ import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.MONTHLY
 import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.TASK_NOT_FOUND;
 import project.dailyge.app.core.task.exception.TaskTypeException;
 import project.dailyge.app.core.task.facade.TaskFacade;
-import static project.dailyge.app.fixture.user.UserFixture.createUserJpaEntity;
+import static project.dailyge.app.test.user.fixture.UserFixture.createUserJpaEntity;
 import static project.dailyge.app.test.task.fixture.TaskCommandFixture.createTaskCreationCommand;
 import project.dailyge.document.task.MonthlyTaskDocument;
 import project.dailyge.document.task.TaskDocument;

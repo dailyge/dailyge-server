@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.core.user.application.UserWriteUseCase;
 import static project.dailyge.app.core.user.exception.UserCodeAndMessage.DUPLICATED_EMAIL;
-import static project.dailyge.app.fixture.user.UserFixture.createUserJpaEntity;
+import static project.dailyge.app.test.user.fixture.UserFixture.createUserJpaEntity;
 
 import project.dailyge.app.core.user.exception.UserTypeException;
 import project.dailyge.entity.user.UserJpaEntity;

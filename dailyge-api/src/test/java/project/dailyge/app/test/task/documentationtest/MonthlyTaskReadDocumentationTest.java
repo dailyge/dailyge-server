@@ -14,7 +14,7 @@ import project.dailyge.app.core.task.application.TaskReadUseCase;
 import project.dailyge.app.core.task.facade.TaskFacade;
 import project.dailyge.app.core.task.presentation.requesst.TaskRegisterRequest;
 import project.dailyge.app.core.user.application.UserWriteUseCase;
-import static project.dailyge.app.fixture.user.UserFixture.createUserJpaEntity;
+import static project.dailyge.app.test.user.fixture.UserFixture.createUserJpaEntity;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskReadSnippet.createMonthlyTaskDetailSearchWithIdFilter;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskReadSnippet.createMonthlyTaskDetailSearchWithUserIdAndDateFilter;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskReadSnippet.createMonthlyTaskIdSearchFilter;

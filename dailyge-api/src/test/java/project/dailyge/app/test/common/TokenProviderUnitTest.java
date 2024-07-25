@@ -16,7 +16,7 @@ import static project.dailyge.app.common.exception.JWTAuthenticationException.EM
 import static project.dailyge.app.common.exception.JWTAuthenticationException.TOKEN_FORMAT_INCORRECT_ERROR_MESSAGE;
 import static project.dailyge.app.common.exception.JWTAuthenticationException.TOKEN_SIGNATURE_VERIFICATION_FAILED_ERROR_MESSAGE;
 import static project.dailyge.app.common.exception.JWTAuthenticationException.UNSUPPORTED_TOKEN_ERROR_MESSAGE;
-import project.dailyge.app.fixture.user.UserFixture;
+import project.dailyge.app.test.user.fixture.UserFixture;
 import project.dailyge.entity.user.UserJpaEntity;
 
 @DisplayName("[UnitTest] TokenProvider 단위 테스트")

@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.core.user.application.UserWriteUseCase;
-import project.dailyge.app.fixture.user.UserFixture;
+import project.dailyge.app.test.user.fixture.UserFixture;
 import project.dailyge.entity.user.UserJpaEntity;
 
 import static io.restassured.RestAssured.given;

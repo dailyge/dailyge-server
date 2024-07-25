@@ -21,7 +21,7 @@ import java.util.Objects;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.springframework.http.HttpStatus.BAD_GATEWAY;
-import static project.dailyge.app.fixture.user.OAuthFixture.getOAuthAccessResponseBodyFixture;
+import static project.dailyge.app.test.user.fixture.OAuthFixture.getOAuthAccessResponseBodyFixture;
 
 @DisplayName("[IntegrationTest] 사용자 로그인 통합 테스트")
 class LoginIntegrationTest extends DatabaseTestBase {

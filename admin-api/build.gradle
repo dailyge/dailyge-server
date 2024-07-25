@@ -2,6 +2,7 @@ plugins {
     id("org.asciidoctor.jvm.convert")
     id("com.epages.restdocs-api-spec")
     id("org.liquibase.gradle")
+    id "org.sonarqube"
 }
 
 configurations {
@@ -87,17 +88,6 @@ tasks.register("copySubmoduleConfig", Copy) {
     into("${rootDir}/admin-api/src/main/resources")
 }
 
-sonarqube {
-    properties {
-        property("sonar.sources", "${rootDir}/admin-api/src/main/java")
-        property("sonar.tests", "${rootDir}/admin-api/src/test")
-        property(
-                "sonar.coverage.jacoco.xmlReportPaths",
-                "${rootDir}/admin-api/build/reports/jacoco/test/jacocoTestReport.xml"
-        )
-    }
-}
-
 tasks.named("processResources") {
     dependsOn(":admin-api:copySubmoduleConfig")
     dependsOn(":storage:rdb:compileTestJava")
@@ -110,4 +100,16 @@ openapi3 {
     description = "Dailyge Admin Api 문서 입니다."
     version = "1.0.0"
     format = "json"
+}
+
+sonarqube {
+    properties {
+        property("sonar.projectKey", System.getenv("SONAR_ADMIN_API_PROJECT_KEY"))
+        property("sonar.login", System.getenv("SONAR_ADMIN_API_TOKEN"))
+        property("sonar.sources", "${projectDir}/src/main/java")
+        if (file("${projectDir}/src/test/java").exists()) {
+            property("sonar.tests", "${projectDir}/src/test/java")
+            property("sonar.coverage.jacoco.xmlReportPaths", "${buildDir}/reports/jacoco/test/jacocoTestReport.xml")
+        }
+    }
 }

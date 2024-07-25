@@ -28,13 +28,13 @@ clean.doLast {
     file(querydslDir).deleteDir()
 }
 
-sonarqube {
-    properties {
-        property("sonar.sources", "${projectDir}/src/main/java")
-        property("sonar.tests", "${projectDir}/src/test")
-        property("sonar.coverage.jacoco.xmlReportPaths", "${projectDir}/reports/jacoco/test/jacocoTestReport.xml")
-    }
-}
+//sonarqube {
+//    properties {
+//        property("sonar.sources", "${projectDir}/src/main/java")
+//        property("sonar.tests", "${projectDir}/src/test")
+//        property("sonar.coverage.jacoco.xmlReportPaths", "${projectDir}/reports/jacoco/test/jacocoTestReport.xml")
+//    }
+//}
 
 tasks.named("checkstyleMain") {
     dependsOn("compileTestJava")

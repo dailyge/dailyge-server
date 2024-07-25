@@ -1,7 +1,7 @@
 plugins {
+    id("org.liquibase.gradle")
     id("org.asciidoctor.jvm.convert")
     id("com.epages.restdocs-api-spec")
-    id("org.liquibase.gradle")
 }
 
 configurations {
@@ -88,14 +88,6 @@ tasks.register("copySubmoduleConfig", Copy) {
     from("${rootDir}/config-module/dailyge-api")
     include("*.yml")
     into("${rootDir}/dailyge-api/src/main/resources")
-}
-
-sonarqube {
-    properties {
-        property("sonar.sources", "${rootDir}/dailyge-api/src/main/java")
-        property("sonar.tests", "${rootDir}/dailyge-api/src/test")
-        property("sonar.coverage.jacoco.xmlReportPaths", "${rootDir}/dailyge-api/build/reports/jacoco/test/jacocoTestReport.xml")
-    }
 }
 
 tasks.named("processResources") {

@@ -11,9 +11,9 @@ env:
   ENV: dev
   PROD_ECR_URI: ${{ secrets.PROD_ECR_URI }}
   DEV_ECR_URI: ${{ secrets.DEV_ECR_URI }}
-  SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
+  SONAR_PROJECT_KEY: ${{ secrets.SONAR_DAILYGE_API_PROJECT_KEY }}
   SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  SONAR_TOKEN: ${{ secrets.SONAR_DAILYGE_API_TOKEN }}
   ENCRYPTOR_KEY: ${{ secrets.ENCRYPTOR_KEY }}
 
 jobs:

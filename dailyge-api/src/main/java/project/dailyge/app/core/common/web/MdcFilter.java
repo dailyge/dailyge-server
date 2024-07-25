@@ -16,11 +16,11 @@ public class MdcFilter implements Filter {
 
     @Override
     public void doFilter(
-        ServletRequest servletRequest,
-        ServletResponse servletResponse,
-        FilterChain filterChain
+        final ServletRequest servletRequest,
+        final ServletResponse servletResponse,
+        final FilterChain filterChain
     ) throws IOException, ServletException {
-        String requestId = UUID.randomUUID().toString();
+        final String requestId = UUID.randomUUID().toString();
         try {
             MDC.put("requestId", requestId);
             filterChain.doFilter(servletRequest, servletResponse);

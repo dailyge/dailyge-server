@@ -10,7 +10,7 @@ import project.dailyge.entity.user.UserJpaEntity;
 import static io.restassured.RestAssured.given;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.document;
-import static project.dailyge.app.fixture.user.UserFixture.createUserJpaEntity;
+import static project.dailyge.app.test.user.fixture.UserFixture.createUserJpaEntity;
 import static project.dailyge.app.test.user.documentationtest.snippet.UserSnippet.*;
 
 @DisplayName("[DocumentationTest] 사용자 저장 문서화 테스트")

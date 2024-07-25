@@ -15,7 +15,7 @@
 //import static java.time.LocalDate.now;
 //import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 //import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.document;
-//import static project.dailyge.app.fixture.user.UserFixture.createUserJpaEntity;
+//import static project.dailyge.app.test.user.fixture.UserFixture.createUserJpaEntity;
 //import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASK_AUTHORIZATION_HEADER;
 //import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASK_DELETE_PATH_PARAMETER_SNIPPET;
 //

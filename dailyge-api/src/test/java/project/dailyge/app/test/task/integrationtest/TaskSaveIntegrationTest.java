@@ -15,7 +15,7 @@ import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.core.task.application.command.TaskCreateCommand;
 import project.dailyge.app.core.task.facade.TaskFacade;
 import project.dailyge.app.core.user.application.UserWriteUseCase;
-import project.dailyge.app.fixture.user.UserFixture;
+import project.dailyge.app.test.user.fixture.UserFixture;
 import static project.dailyge.app.test.task.fixture.TaskCommandFixture.createTaskCreationCommand;
 import project.dailyge.document.task.MonthlyTaskDocument;
 import project.dailyge.document.task.TaskDocumentReadRepository;

@@ -18,8 +18,8 @@ import project.dailyge.app.core.user.application.UserWriteUseCase;
 import static project.dailyge.app.core.user.exception.UserCodeAndMessage.ACTIVE_USER_NOT_FOUND;
 import static project.dailyge.app.core.user.exception.UserCodeAndMessage.USER_NOT_FOUND;
 import project.dailyge.app.core.user.exception.UserTypeException;
-import project.dailyge.app.fixture.user.UserFixture;
-import static project.dailyge.app.fixture.user.UserFixture.EMAIL;
+import project.dailyge.app.test.user.fixture.UserFixture;
+import static project.dailyge.app.test.user.fixture.UserFixture.EMAIL;
 import project.dailyge.entity.user.UserJpaEntity;
 
 import java.util.Optional;

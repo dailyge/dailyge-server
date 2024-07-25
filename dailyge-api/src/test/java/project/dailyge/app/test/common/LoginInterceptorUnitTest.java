@@ -15,7 +15,7 @@ import project.dailyge.app.common.auth.TokenProvider;
 import project.dailyge.app.core.common.web.LoginInterceptor;
 import project.dailyge.app.core.user.application.UserReadUseCase;
 import project.dailyge.app.core.user.external.oauth.TokenManager;
-import project.dailyge.app.fixture.user.UserFixture;
+import project.dailyge.app.test.user.fixture.UserFixture;
 import project.dailyge.entity.user.UserJpaEntity;
 
 import java.io.UnsupportedEncodingException;

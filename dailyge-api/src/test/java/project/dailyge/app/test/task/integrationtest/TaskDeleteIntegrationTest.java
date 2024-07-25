@@ -3,16 +3,11 @@ package project.dailyge.app.test.task.integrationtest;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import project.dailyge.app.common.DatabaseTestBase;
-import project.dailyge.app.common.auth.DailygeUser;
-import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.TASK_NOT_FOUND;
-import project.dailyge.app.core.task.exception.TaskTypeException;
 import project.dailyge.app.core.task.facade.TaskFacade;
 import project.dailyge.app.core.user.application.UserWriteUseCase;
-import static project.dailyge.app.fixture.user.UserFixture.createUserJpaEntity;
-import project.dailyge.entity.user.UserJpaEntity;
+import static project.dailyge.app.test.user.fixture.UserFixture.createUserJpaEntity;
 
 @DisplayName("[IntegrationTest] 할 일 삭제 통합 테스트")
 public class TaskDeleteIntegrationTest extends DatabaseTestBase {

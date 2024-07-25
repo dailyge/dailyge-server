@@ -1,4 +1,4 @@
-package project.dailyge.app.fixture.user;
+package project.dailyge.app.test.user.fixture;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

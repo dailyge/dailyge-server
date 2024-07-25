@@ -1,4 +1,4 @@
-package project.dailyge.app.fixture.user;
+package project.dailyge.app.test.user.fixture;
 
 import static project.dailyge.entity.user.Role.ADMIN;
 import project.dailyge.entity.user.UserJpaEntity;

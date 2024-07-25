@@ -1,8 +1,8 @@
-package project.dailyge.app.fixture.user;
+package project.dailyge.app.test.user.fixture;
 
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
-import project.dailyge.app.fixture.user.OAuthUserInfoJson.Response;
-import project.dailyge.app.fixture.user.OAuthUserInfoJson.ResponseBody;
+import project.dailyge.app.test.user.fixture.OAuthUserInfoJson.Response;
+import project.dailyge.app.test.user.fixture.OAuthUserInfoJson.ResponseBody;
 
 import java.io.File;
 import java.io.IOException;

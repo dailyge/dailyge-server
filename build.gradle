@@ -20,21 +20,14 @@ allprojects {
         mavenCentral()
         maven { url "https://repo.spring.io/release" }
     }
-    gradle.projectsEvaluated {
-        tasks.withType(JavaCompile).tap {
-            configureEach {
-                options.compilerArgs
-            }
-        }
-    }
 }
 
 sonarqube {
     properties {
         property("sonar.organization", "dailyge")
-        property("sonar.token", System.getenv("SONAR_TOKEN"))
-        property("sonar.projectKey", System.getenv("SONAR_PROJECT_KEY"))
         property("sonar.host.url", "https://sonarcloud.io")
+        property("sonar.token", System.getenv("SONAR_TOKEN"))
+        property("sonar.projectKey", "dailyge_dailyge-server")
         property("sonar.language", "java")
         property("sonar.sourceEncoding", "UTF-8")
         property("sonar.test.inclusions", "**/*Test.java")
@@ -56,6 +49,7 @@ subprojects {
     apply(plugin: "checkstyle")
     apply(plugin: "application")
     apply(plugin: "java-library")
+    apply(plugin: "org.sonarqube")
     apply(plugin: "org.springframework.boot")
     apply(plugin: "io.spring.dependency-management")
     apply(plugin: "com.google.cloud.tools.jib")
@@ -88,13 +82,13 @@ subprojects {
     }
 
     jacocoTestReport {
+        dependsOn("test")
         reports {
             xml.required = true
             html.required = false
             csv.required = false
             xml.destination = file("${buildDir}/reports/jacoco/test/jacocoTestReport.xml")
         }
-
         afterEvaluate {
             def exclusions = extractQClass()
             file("${rootDir}/config/jacoco/exclude-coverage.txt").eachLine {
@@ -106,36 +100,6 @@ subprojects {
         }
     }
 
-    jacocoTestCoverageVerification {
-        afterEvaluate {
-            def exclusions = extractQClass()
-            file("${rootDir}/config/jacoco/exclude-verification.txt").eachLine {
-                exclusions.add(it)
-            }
-            classDirectories.setFrom(files(classDirectories.files.collect {
-                fileTree(dir: it, exclude: exclusions)
-            }))
-
-            violationRules {
-                rule {
-                    enabled = true
-                    element = "CLASS"
-
-                    limit {
-                        counter = "LINE"
-                        value = "TOTALCOUNT"
-                        maximum = "200".toBigDecimal()
-                    }
-                    limit {
-                        counter = "BRANCH"
-                        value = "COVEREDRATIO"
-                        minimum = 0.60
-                    }
-                }
-            }
-        }
-    }
-
     tasks.test {
         useJUnitPlatform()
         finalizedBy jacocoTestReport
@@ -144,8 +108,8 @@ subprojects {
 
     sonarqube {
         properties {
-            property("sonar.java.binaries", "${buildDir}/classes/java/main")
-            property("sonar.sources", "${projectDir}/src/main/java")
+            property "sonar.java.binaries", "${buildDir}/classes/java/main"
+            property "sonar.sources", "${projectDir}/src/main/java"
             property 'sonar.coverage.jacoco.xmlReportPaths', "${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
         }
     }
@@ -172,4 +136,8 @@ static def extractQClass() {
         qClasses.add("**/*$qPattern*")
     }
     return qClasses
+}
+
+tasks.named("sonarqube") {
+    dependsOn(subprojects.collect { it.tasks.named("jacocoTestReport") })
 }

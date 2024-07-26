@@ -25,7 +25,7 @@ public sealed class UserTypeException extends BusinessException {
     }
 
     public static UserTypeException from(final UserCodeAndMessage codeAndMessage) {
-        UserTypeException userTypeException = exceptionMap.get(codeAndMessage);
+        final UserTypeException userTypeException = exceptionMap.get(codeAndMessage);
         if (userTypeException == null) {
             return new UserUnResolvedException(codeAndMessage);
         }

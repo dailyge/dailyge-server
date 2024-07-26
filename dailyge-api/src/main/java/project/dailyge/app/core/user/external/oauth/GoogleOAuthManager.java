@@ -16,7 +16,7 @@ import project.dailyge.app.core.user.external.response.GoogleUserInfoResponse;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpMethod.GET;
-import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.BAD_GATEWAY;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_GATEWAY;
 import static project.dailyge.app.core.user.external.oauth.OAuthClient.GOOGLE;
 
 @Component

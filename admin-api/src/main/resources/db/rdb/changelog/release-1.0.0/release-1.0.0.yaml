@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - changeSet:
+      id: v1.0.0/schema/admin-base-schema.sql
+      author: jun
+      context: dev
+      labels: dev
+      comment: Create admin base-schema.
+      sqlFile:
+        path: schema.sql
+        relativeToChangelogFile: true

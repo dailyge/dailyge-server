@@ -1,6 +1,8 @@
 **/*Application*
+**/*Config*
 **/*Exception*
 **/*Health*
+**/*CommonApi*
 **/*Request*
 **/*Response*
 **/common/**
@@ -9,3 +11,7 @@
 **/request/**
 **/response/**
 **/test/**
+**/storage/common/**
+**/support/**
+**/src/test/**
+

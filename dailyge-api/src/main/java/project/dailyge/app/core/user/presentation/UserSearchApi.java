@@ -12,7 +12,7 @@ import project.dailyge.app.core.user.application.UserReadUseCase;
 import project.dailyge.app.core.user.presentation.response.UserInfoResponse;
 import project.dailyge.entity.user.UserJpaEntity;
 
-import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.OK;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.OK;
 
 @RestController
 @RequiredArgsConstructor

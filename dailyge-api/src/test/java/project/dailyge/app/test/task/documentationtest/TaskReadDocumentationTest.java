@@ -46,7 +46,7 @@ class TaskReadDocumentationTest extends DatabaseTestBase {
     @BeforeEach
     void setUp() {
         newUser = userWriteUseCase.save(createUserJpaEntity());
-        dailygeUser = new DailygeUser(newUser);
+        dailygeUser = new DailygeUser(newUser.getId(), newUser.getRole());
         now = LocalDate.now();
 
         taskFacade.createMonthlyTasks(dailygeUser, now);

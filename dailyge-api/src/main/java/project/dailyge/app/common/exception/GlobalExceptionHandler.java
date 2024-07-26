@@ -7,9 +7,9 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import project.dailyge.app.common.codeandmessage.CodeAndMessage;
-import project.dailyge.app.common.codeandmessage.CommonCodeAndMessage;
-import project.dailyge.app.common.response.ErrorResponse;
+import project.dailyge.app.codeandmessage.CodeAndMessage;
+import project.dailyge.app.codeandmessage.CommonCodeAndMessage;
+import project.dailyge.app.response.ErrorResponse;
 
 import java.util.List;
 
@@ -39,7 +39,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(CommonException.class)
     public ResponseEntity<ErrorResponse> resolveCommonException(final CommonException exception) {
-        CodeAndMessage codeAndMessage = exception.getCodeAndMessage();
+        final CodeAndMessage codeAndMessage = exception.getCodeAndMessage();
         log.error("error: {}, {}", MDC.get("requestId"), exception.getDetailMessage());
         return ResponseEntity.status(codeAndMessage.code())
             .body(ErrorResponse.from(codeAndMessage));
@@ -49,7 +49,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> resolveMethodArgumentNotValidException(
         final MethodArgumentNotValidException exception
     ) {
-        StringBuilder sb = new StringBuilder();
+        final StringBuilder sb = new StringBuilder();
         if (exception != null) {
             Object targetObj = exception.getBindingResult().getTarget();
             List<FieldError> allErrors = exception.getBindingResult().getFieldErrors();
@@ -62,11 +62,11 @@ public class GlobalExceptionHandler {
                     .append(error.getDefaultMessage());
             }
             log.error("error: {}, {}", MDC.get("requestId"), targetObj);
-            CodeAndMessage codeAndMessage = CommonCodeAndMessage.INVALID_PARAMETERS;
+            final CodeAndMessage codeAndMessage = CommonCodeAndMessage.INVALID_PARAMETERS;
             return ResponseEntity.status(codeAndMessage.code())
                 .body(ErrorResponse.from(codeAndMessage));
         }
-        CodeAndMessage codeAndMessage = CommonCodeAndMessage.INVALID_PARAMETERS;
+        final CodeAndMessage codeAndMessage = CommonCodeAndMessage.INVALID_PARAMETERS;
         return ResponseEntity.status(codeAndMessage.code())
             .body(ErrorResponse.from(codeAndMessage));
     }
@@ -74,7 +74,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler
     public ResponseEntity<ErrorResponse> resolveServerError(final Exception exception) {
         log.error("error: {}, {}", MDC.get("requestId"), exception.getMessage());
-        CodeAndMessage codeAndMessage = CommonCodeAndMessage.INVALID_PARAMETERS;
+        final CodeAndMessage codeAndMessage = CommonCodeAndMessage.INVALID_PARAMETERS;
         return ResponseEntity.status(codeAndMessage.code())
             .body(ErrorResponse.from(codeAndMessage));
     }

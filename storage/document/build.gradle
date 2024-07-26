@@ -3,6 +3,24 @@ dependencies {
     implementation("com.fasterxml.uuid:java-uuid-generator:4.0")
 }
 
+//sonarqube {
+//    properties {
+//        property("sonar.sources", "${projectDir}/src/main/java")
+//        property("sonar.tests", "${projectDir}/src/test")
+//        property("sonar.coverage.jacoco.xmlReportPaths", "${projectDir}/reports/jacoco/test/jacocoTestReport.xml")
+//    }
+//}
+
+tasks.named("checkstyleMain") {
+    dependsOn("compileTestJava")
+}
+
+project(":storage:rdb") {
+    tasks.named("pmdMain") {
+        dependsOn "compileTestJava"
+    }
+}
+
 jar {
     enabled = true
 }

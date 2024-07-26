@@ -167,10 +167,14 @@ public class TaskJpaEntity extends BaseEntity {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        TaskJpaEntity task = (TaskJpaEntity) o;
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        final TaskJpaEntity task = (TaskJpaEntity) obj;
         return Objects.equals(id, task.id);
     }
 

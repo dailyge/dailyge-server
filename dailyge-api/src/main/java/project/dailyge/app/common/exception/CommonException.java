@@ -1,7 +1,7 @@
 package project.dailyge.app.common.exception;
 
 import lombok.Getter;
-import project.dailyge.app.common.codeandmessage.CodeAndMessage;
+import project.dailyge.app.codeandmessage.CodeAndMessage;
 
 @Getter
 public class CommonException extends RuntimeException {

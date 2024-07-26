@@ -1,6 +1,6 @@
 # Dailyge
 
-
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=dailyge_dailyge-server&metric=coverage)](https://sonarcloud.io/summary/new_code?id=dailyge_dailyge-server)
 
 <br/><br/><br/><br/>
 

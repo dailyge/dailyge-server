@@ -1,27 +1,27 @@
 def env = System.getenv("ENV")
-def ECR_URI = null
-if (env == "prod") {
-    ECR_URI = System.getenv("PROD_ECR_URI")
-} else {
-    ECR_URI = System.getenv("DEV_ECR_URI")
-}
+def skipJib = project.hasProperty("skipJib") ? project.property("skipJib").toBoolean() : false
+def ecrUri = System.getenv(env == 'prod' ? "PROD_ECR_URI" : "DEV_ECR_URI")
+def port = env == 'prod' ? '8080' : '8081'
+def profile = env == 'prod' ? 'prod' : 'dev'
+def label = "dailyge-${profile}-api"
 
-if (env == "dev" || env == "prod") {
+if (env != null && (env == "dev" || env == "prod") && (skipJib != null && !skipJib)) {
     jib {
         from {
-            image = "openjdk:17-jdk-slim"
+            image = 'openjdk:17-jdk-slim'
         }
         to {
-            image = ECR_URI
-            credHelper = "ecr-login"
-            tags = ["latest", "${project.version}-${System.currentTimeMillis()}"]
+            image = ecrUri
+            credHelper = 'ecr-login'
+            tags = ['latest']
         }
         container {
-            ports = ["8080"]
-            labels = [server: "dailyge-api"]
-            environment = [JAVA_OPTIONS: "-Xms512m -Xmx512m"]
-            creationTime = "USE_REST_TIMESTAMP"
-            allowInsecureRegistries = false
+            ports = [port]
+            labels = [server: label]
+            jvmFlags = ["-Dspring.profiles.active=${profile}", "-Dfile.encoding=UTF-8"]
+            environment = ['JAVA_OPTIONS': '-Xms128m -Xmx128m']
+            creationTime = 'USE_CURRENT_TIMESTAMP'
+            allowInsecureRegistries = true
         }
     }
 }

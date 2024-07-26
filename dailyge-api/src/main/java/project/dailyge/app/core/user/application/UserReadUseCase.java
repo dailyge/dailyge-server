@@ -9,7 +9,7 @@ public interface UserReadUseCase {
 
     UserJpaEntity findActiveUserById(Long userId);
 
-    UserJpaEntity findAuthorizedById(Long userId);
+    UserJpaEntity findAuthorizedUserById(Long userId);
 
     Optional<UserJpaEntity> findActiveUserByEmail(String email);
 

@@ -19,7 +19,6 @@ import project.dailyge.entity.user.UserJpaEntity;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
 import static project.dailyge.app.common.exception.JWTAuthenticationException.EMPTY_TOKEN_ERROR_MESSAGE;
-import static project.dailyge.app.common.exception.JWTAuthenticationException.EXPIRED_TOKEN_ERROR_MESSAGE;
 import static project.dailyge.app.common.exception.UnAuthorizedException.USER_NOT_FOUND_MESSAGE;
 
 @RequiredArgsConstructor
@@ -51,10 +50,10 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
             if (userId == null) {
                 throw new UnAuthorizedException(USER_NOT_FOUND_MESSAGE, UN_AUTHORIZED);
             }
-            final UserJpaEntity findUser = userReadUseCase.findAuthorizedById(userId);
+            final UserJpaEntity findUser = userReadUseCase.findAuthorizedUserById(userId);
             return new DailygeUser(findUser);
         } catch (ExpiredJwtException ex) {
-            throw new JWTAuthenticationException(EXPIRED_TOKEN_ERROR_MESSAGE, UN_AUTHORIZED);
+            throw new JWTAuthenticationException(ex.getMessage(), UN_AUTHORIZED);
         }
     }
 }

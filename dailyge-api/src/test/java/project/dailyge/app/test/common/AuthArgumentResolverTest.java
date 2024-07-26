@@ -51,7 +51,7 @@ class AuthArgumentResolverTest {
         final DailygeToken token = tokenProvider.createToken(user);
         when(request.getHeader(AUTHORIZATION))
             .thenReturn(token.getAuthorizationToken());
-        when(userReadUseCase.findAuthorizedById(user.getId()))
+        when(userReadUseCase.findAuthorizedUserById(user.getId()))
             .thenReturn(user);
 
         final DailygeUser result = (DailygeUser) resolver.resolveArgument(null, null, webRequest, null);
@@ -76,7 +76,7 @@ class AuthArgumentResolverTest {
         final DailygeToken token = tokenProvider.createToken(expectedUser);
         when(request.getHeader(AUTHORIZATION))
             .thenReturn(token.getAuthorizationToken());
-        when(userReadUseCase.findAuthorizedById(Long.parseLong(validUserId)))
+        when(userReadUseCase.findAuthorizedUserById(Long.parseLong(validUserId)))
             .thenReturn(expectedUser);
 
         assertDoesNotThrow(

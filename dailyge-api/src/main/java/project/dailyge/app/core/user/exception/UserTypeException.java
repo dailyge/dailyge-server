@@ -2,47 +2,49 @@ package project.dailyge.app.core.user.exception;
 
 import project.dailyge.app.common.codeandmessage.CodeAndMessage;
 import project.dailyge.app.common.exception.BusinessException;
+import java.util.HashMap;
+import java.util.Map;
+import static project.dailyge.app.core.user.exception.UserCodeAndMessage.DUPLICATED_EMAIL;
+import static project.dailyge.app.core.user.exception.UserCodeAndMessage.EMPTY_USER_ID;
+import static project.dailyge.app.core.user.exception.UserCodeAndMessage.USER_NOT_FOUND;
 
 public sealed class UserTypeException extends BusinessException {
 
-    private static final String UN_RESOLVED_MESSAGE = "해결되지 못한 사용자 예외입니다.";
-    private static final String USER_NOT_EXIST_ERROR_MESSAGE = "존재하지 않는 사용자 입니다.";
-    private static final String CONFLICT_EMAIL_ERROR_MESSAGE = "이미 가입되어 있는 사용자 이메일 계정입니다";
-    private static final String ACTIVE_USER_NOT_FOUND = "삭제되지 않은 사용자 정보를 찾을 수 없습니다.";
-    private static final String EMPTY_USER_ID = "사용자 ID가 존재하지 않습니다.";
+    private static final Map<UserCodeAndMessage, UserTypeException> exceptionMap = new HashMap<>();
 
-    private UserTypeException(
-        final String detailMessage,
-        final CodeAndMessage codeAndMessage
-    ) {
-        super(detailMessage, codeAndMessage);
+    private UserTypeException(final CodeAndMessage codeAndMessage) {
+        super(codeAndMessage);
+    }
+
+    static {
+        exceptionMap.put(USER_NOT_FOUND, new UserNotFoundException(USER_NOT_FOUND));
+        exceptionMap.put(EMPTY_USER_ID, new UserNotFoundException(EMPTY_USER_ID));
+        exceptionMap.put(DUPLICATED_EMAIL, new DuplicatedEmailException(DUPLICATED_EMAIL));
     }
 
     public static UserTypeException from(final UserCodeAndMessage codeAndMessage) {
-        return switch (codeAndMessage) {
-            case USER_NOT_FOUND -> new UserNotFoundException(USER_NOT_EXIST_ERROR_MESSAGE, codeAndMessage);
-            case ACTIVE_USER_NOT_FOUND -> new UserNotFoundException(ACTIVE_USER_NOT_FOUND, codeAndMessage);
-            case EMPTY_USER_ID -> new UserNotFoundException(EMPTY_USER_ID, codeAndMessage);
-            case DUPLICATED_EMAIL -> new DuplicatedEmailException(codeAndMessage);
-            default -> new UserUnResolvedException(codeAndMessage);
-        };
+        final UserTypeException userTypeException = exceptionMap.get(codeAndMessage);
+        if (userTypeException == null) {
+            return new UserUnResolvedException(codeAndMessage);
+        }
+        return userTypeException;
     }
 
     private static final class UserNotFoundException extends UserTypeException {
-        public UserNotFoundException(final String detailMessage, final UserCodeAndMessage codeAndMessage) {
-            super(detailMessage, codeAndMessage);
+        public UserNotFoundException(final UserCodeAndMessage codeAndMessage) {
+            super(codeAndMessage);
         }
     }
 
     private static final class DuplicatedEmailException extends UserTypeException {
         public DuplicatedEmailException(final UserCodeAndMessage codeAndMessage) {
-            super(CONFLICT_EMAIL_ERROR_MESSAGE, codeAndMessage);
+            super(codeAndMessage);
         }
     }
 
     private static final class UserUnResolvedException extends UserTypeException {
         public UserUnResolvedException(final UserCodeAndMessage codeAndMessage) {
-            super(UN_RESOLVED_MESSAGE, codeAndMessage);
+            super(codeAndMessage);
         }
     }
 }

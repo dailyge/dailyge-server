@@ -12,7 +12,6 @@ import java.util.Optional;
 
 import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.INVALID_USER_ID;
 import static project.dailyge.app.common.exception.UnAuthorizedException.USER_NOT_FOUND_MESSAGE;
-import static project.dailyge.app.core.user.exception.UserCodeAndMessage.ACTIVE_USER_NOT_FOUND;
 import static project.dailyge.app.core.user.exception.UserCodeAndMessage.USER_NOT_FOUND;
 
 @Service
@@ -30,11 +29,11 @@ class UserReadService implements UserReadUseCase {
     @Override
     public UserJpaEntity findActiveUserById(final Long userId) {
         return userReadRepository.findActiveUserById(userId)
-            .orElseThrow(() -> UserTypeException.from(ACTIVE_USER_NOT_FOUND));
+            .orElseThrow(() -> UserTypeException.from(USER_NOT_FOUND));
     }
 
     @Override
-    public UserJpaEntity findAuthorizedById(final Long userId) {
+    public UserJpaEntity findAuthorizedUserById(final Long userId) {
         return userReadRepository.findActiveUserById(userId)
             .orElseThrow(() -> new UnAuthorizedException(USER_NOT_FOUND_MESSAGE, INVALID_USER_ID));
     }

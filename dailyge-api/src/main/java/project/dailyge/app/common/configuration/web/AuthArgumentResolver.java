@@ -19,7 +19,7 @@ import project.dailyge.entity.user.UserJpaEntity;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
 import static project.dailyge.app.common.exception.JWTAuthenticationException.EMPTY_TOKEN_ERROR_MESSAGE;
-import static project.dailyge.app.common.exception.JWTAuthenticationException.EXPIRED_TOKEN_ERROR_MESSAGE;
+import static project.dailyge.app.common.exception.UnAuthorizedException.USER_NOT_FOUND_MESSAGE;
 
 @RequiredArgsConstructor
 public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
@@ -48,14 +48,12 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
         try {
             final Long userId = tokenProvider.getUserId(accessToken);
             if (userId == null) {
-                final String detailMessage = String.format("사용자 아이디가 존재하지 않습니다. 입력된 값:%s", userId);
-                throw new UnAuthorizedException(detailMessage, UN_AUTHORIZED);
+                throw new UnAuthorizedException();
             }
-            final UserJpaEntity findUser = userReadUseCase.findAuthorizedById(userId);
-
+            final UserJpaEntity findUser = userReadUseCase.findAuthorizedUserById(userId);
             return new DailygeUser(findUser);
-        } catch (ExpiredJwtException e) {
-            throw new JWTAuthenticationException(EXPIRED_TOKEN_ERROR_MESSAGE, UN_AUTHORIZED);
+        } catch (ExpiredJwtException ex) {
+            throw new JWTAuthenticationException(ex.getMessage(), UN_AUTHORIZED);
         }
     }
 }

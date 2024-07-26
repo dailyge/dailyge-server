@@ -48,7 +48,7 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
         try {
             final Long userId = tokenProvider.getUserId(accessToken);
             if (userId == null) {
-                throw new UnAuthorizedException(USER_NOT_FOUND_MESSAGE, UN_AUTHORIZED);
+                throw new UnAuthorizedException();
             }
             final UserJpaEntity findUser = userReadUseCase.findAuthorizedUserById(userId);
             return new DailygeUser(findUser);

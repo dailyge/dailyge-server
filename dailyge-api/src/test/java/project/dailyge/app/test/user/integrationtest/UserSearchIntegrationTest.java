@@ -15,7 +15,6 @@ import project.dailyge.app.common.exception.UnAuthorizedException;
 import static project.dailyge.app.common.exception.UnAuthorizedException.USER_NOT_FOUND_MESSAGE;
 import project.dailyge.app.core.user.application.UserReadUseCase;
 import project.dailyge.app.core.user.application.UserWriteUseCase;
-import static project.dailyge.app.core.user.exception.UserCodeAndMessage.ACTIVE_USER_NOT_FOUND;
 import static project.dailyge.app.core.user.exception.UserCodeAndMessage.USER_NOT_FOUND;
 import project.dailyge.app.core.user.exception.UserTypeException;
 import project.dailyge.app.test.user.fixture.UserFixture;
@@ -66,7 +65,7 @@ class UserSearchIntegrationTest extends DatabaseTestBase {
         assertThatThrownBy(() -> userReadUseCase.findActiveUserById(1L))
             .isExactlyInstanceOf(UserTypeException.from(USER_NOT_FOUND).getClass())
             .isInstanceOf(UserTypeException.class)
-            .hasMessage(ACTIVE_USER_NOT_FOUND.message());
+            .hasMessage(USER_NOT_FOUND.message());
     }
 
     @Test

@@ -11,21 +11,21 @@ import io.jsonwebtoken.UnsupportedJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
-import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_PARAMETERS;
-import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_USER_TOKEN;
-import project.dailyge.app.common.exception.JWTAuthenticationException;
-import static project.dailyge.app.common.exception.JWTAuthenticationException.EMPTY_TOKEN_ERROR_MESSAGE;
-import static project.dailyge.app.common.exception.JWTAuthenticationException.INVALID_ID_TYPE_MESSAGE;
-import static project.dailyge.app.common.exception.JWTAuthenticationException.INVALID_TOKEN_MESSAGE;
-import static project.dailyge.app.common.exception.JWTAuthenticationException.TOKEN_FORMAT_INCORRECT_ERROR_MESSAGE;
-import static project.dailyge.app.common.exception.JWTAuthenticationException.TOKEN_SIGNATURE_VERIFICATION_FAILED_ERROR_MESSAGE;
-import static project.dailyge.app.common.exception.JWTAuthenticationException.UNSUPPORTED_TOKEN_ERROR_MESSAGE;
 import project.dailyge.app.common.exception.UnAuthorizedException;
 import project.dailyge.entity.user.UserJpaEntity;
 
+import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
+import java.security.SecureRandom;
 import java.time.Duration;
+import java.util.Base64;
 import java.util.Date;
+
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_PARAMETERS;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_USER_TOKEN;
 
 @Slf4j
 @Component
@@ -35,8 +35,11 @@ public class TokenProvider {
     private static final String ID = "id";
     private static final String BEARER = "Bearer ";
     private static final int TOKEN_BEGIN_INDEX = 7;
-
+    private static final SecureRandom secureRandom = new SecureRandom();
+    private static final int ARRAY_START_INDEX = 0;
+    private static final int IV_SIZE = 16;
     private final JwtProperties jwtProperties;
+    private final SecretKeyManager secretKeyManager;
 
     public DailygeToken createToken(final UserJpaEntity user) {
         final String accessToken = generateToken(user, getExpiry(jwtProperties.getAccessExpiredTime()));
@@ -58,7 +61,7 @@ public class TokenProvider {
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
                 .setExpiration(expiry)
                 .setSubject(user.getEmail())
-                .claim(ID, user.getId())
+                .claim(ID, encryptUserId(user.getId()))
                 .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey())
                 .compact();
         } catch (IllegalArgumentException ex) {
@@ -70,10 +73,14 @@ public class TokenProvider {
 
     public Long getUserId(final String token) {
         final Claims claims = getClaims(token);
-        if (claims == null || claims.get(ID) == null) {
-            throw new JWTAuthenticationException(INVALID_TOKEN_MESSAGE, INVALID_USER_TOKEN);
+        if (claims == null) {
+            throw new UnAuthorizedException(INVALID_USER_TOKEN);
         }
-        return claims.get(ID, Long.class);
+        if (claims.get(ID) == null) {
+            throw new UnAuthorizedException(INVALID_USER_TOKEN);
+        }
+        final String encryptUserId = claims.get(ID, String.class);
+        return decryptUserId(encryptUserId);
     }
 
     private Claims getClaims(final String token) {
@@ -82,23 +89,78 @@ public class TokenProvider {
                 .setSigningKey(jwtProperties.getSecretKey())
                 .parseClaimsJws(token)
                 .getBody();
-        } catch (IllegalArgumentException ex) {
-            throw new JWTAuthenticationException(EMPTY_TOKEN_ERROR_MESSAGE, INVALID_USER_TOKEN);
-        } catch (SignatureException ex) {
-            throw new JWTAuthenticationException(TOKEN_SIGNATURE_VERIFICATION_FAILED_ERROR_MESSAGE, INVALID_USER_TOKEN);
-        } catch (MalformedJwtException ex) {
-            throw new JWTAuthenticationException(TOKEN_FORMAT_INCORRECT_ERROR_MESSAGE, INVALID_USER_TOKEN);
-        } catch (UnsupportedJwtException ex) {
-            throw new JWTAuthenticationException(UNSUPPORTED_TOKEN_ERROR_MESSAGE, INVALID_USER_TOKEN);
-        } catch (RequiredTypeException ex) {
-            throw new JWTAuthenticationException(INVALID_ID_TYPE_MESSAGE, INVALID_USER_TOKEN);
+        } catch (
+            IllegalArgumentException |
+            SignatureException |
+            MalformedJwtException |
+            UnsupportedJwtException |
+            RequiredTypeException ex
+        ) {
+            throw new UnAuthorizedException(ex.getMessage(), INVALID_USER_TOKEN);
         }
     }
 
     public String getAccessToken(final String authorizationHeader) {
-        if (authorizationHeader == null || !authorizationHeader.startsWith(BEARER)) {
-            throw new JWTAuthenticationException(INVALID_TOKEN_MESSAGE, INVALID_USER_TOKEN);
+        if (authorizationHeader == null) {
+            throw new UnAuthorizedException(INVALID_USER_TOKEN);
+        }
+        if (!authorizationHeader.startsWith(BEARER)) {
+            throw new UnAuthorizedException(INVALID_USER_TOKEN);
         }
         return authorizationHeader.substring(TOKEN_BEGIN_INDEX);
+    }
+
+    public String encryptUserId(final Long userId) {
+        try {
+            final byte[] iv = new byte[IV_SIZE];
+            secureRandom.nextBytes(iv);
+            final byte[] encryptedUserId = applyCipher(
+                iv,
+                Cipher.ENCRYPT_MODE,
+                userId.toString().getBytes(StandardCharsets.UTF_8)
+            );
+
+            final byte[] encryptedUserIdWithIv = new byte[iv.length + encryptedUserId.length];
+            System.arraycopy(iv, ARRAY_START_INDEX, encryptedUserIdWithIv, ARRAY_START_INDEX, iv.length);
+            System.arraycopy(encryptedUserId, ARRAY_START_INDEX, encryptedUserIdWithIv, iv.length, encryptedUserId.length);
+
+            return Base64.getEncoder().encodeToString(encryptedUserIdWithIv);
+        } catch (Exception ex) {
+            throw new UnAuthorizedException(ex.getMessage(), INVALID_USER_TOKEN);
+        }
+    }
+
+    public Long decryptUserId(final String encryptedUserIdWithIv) {
+        try {
+            final byte[] encryptedWithIv = Base64.getDecoder().decode(encryptedUserIdWithIv);
+
+            final byte[] iv = new byte[IV_SIZE];
+            final byte[] encryptedUserId = new byte[encryptedWithIv.length - iv.length];
+            System.arraycopy(encryptedWithIv, ARRAY_START_INDEX, iv, ARRAY_START_INDEX, iv.length);
+            System.arraycopy(encryptedWithIv, iv.length, encryptedUserId, ARRAY_START_INDEX, encryptedUserId.length);
+
+            final byte[] decrypted = applyCipher(iv, Cipher.DECRYPT_MODE, encryptedUserId);
+
+            final String decryptId = new String(decrypted, StandardCharsets.UTF_8);
+            return Long.parseLong(decryptId);
+        } catch (Exception ex) {
+            throw new UnAuthorizedException(ex.getMessage(), INVALID_USER_TOKEN);
+        }
+    }
+
+    private byte[] applyCipher(
+        final byte[] iv,
+        final int operationMode,
+        final byte[] cipherTarget
+    ) {
+        try {
+            final IvParameterSpec ivParameterSpec = new IvParameterSpec(iv);
+            final SecretKeySpec secretKeySpec = secretKeyManager.getSecretKeySpec();
+            final Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+            cipher.init(operationMode, secretKeySpec, ivParameterSpec);
+            return cipher.doFinal(cipherTarget);
+        } catch (Exception ex) {
+            throw new UnAuthorizedException(ex.getMessage(), INVALID_USER_TOKEN);
+        }
     }
 }

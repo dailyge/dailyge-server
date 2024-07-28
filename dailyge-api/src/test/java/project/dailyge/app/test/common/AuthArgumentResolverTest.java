@@ -7,9 +7,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.web.context.request.NativeWebRequest;
 import project.dailyge.app.common.auth.DailygeToken;
 import project.dailyge.app.common.auth.DailygeUser;
+import project.dailyge.app.common.auth.JwtProperties;
+import project.dailyge.app.common.auth.SecretKeyManager;
 import project.dailyge.app.common.auth.TokenProvider;
 import project.dailyge.app.common.configuration.web.AuthArgumentResolver;
-import project.dailyge.app.common.auth.JwtProperties;
 import project.dailyge.app.common.exception.UnAuthorizedException;
 import project.dailyge.app.core.user.application.UserReadUseCase;
 import project.dailyge.entity.user.UserJpaEntity;
@@ -20,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
-import static project.dailyge.app.common.exception.JWTAuthenticationException.EMPTY_TOKEN_ERROR_MESSAGE;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_USER_TOKEN;
 import static project.dailyge.app.test.user.fixture.UserFixture.createUserJpaEntity;
 
 @DisplayName("[UnitTest] AuthArgumentResolver 검증 단위 테스트")
@@ -34,8 +35,15 @@ class AuthArgumentResolverTest {
 
     @BeforeEach
     void setUp() {
-        final JwtProperties jwtProperties = new JwtProperties("secretKey", 1, 2);
-        tokenProvider = new TokenProvider(jwtProperties);
+        final JwtProperties jwtProperties = new JwtProperties(
+            "secretKey",
+            "payloadSecretKey",
+            "salt",
+            1,
+            2
+        );
+        final SecretKeyManager secretKeyManager = new SecretKeyManager(jwtProperties);
+        tokenProvider = new TokenProvider(jwtProperties, secretKeyManager);
         userReadUseCase = mock(UserReadUseCase.class);
         resolver = new AuthArgumentResolver(userReadUseCase, tokenProvider);
         request = mock(HttpServletRequest.class);
@@ -65,18 +73,18 @@ class AuthArgumentResolverTest {
         assertThatThrownBy(() -> resolver.resolveArgument(null, null, webRequest, null))
             .isExactlyInstanceOf(UnAuthorizedException.class)
             .isInstanceOf(RuntimeException.class)
-            .hasMessage(EMPTY_TOKEN_ERROR_MESSAGE);
+            .hasMessage(INVALID_USER_TOKEN.message());
     }
 
     @Test
     @DisplayName("사용자 ID가 유효하면 예외가 발생하지 않는다.")
     void shouldNotThrowExceptionWhenUserIdIsValid() {
-        final String validUserId = "456";
-        final UserJpaEntity expectedUser = createUserJpaEntity(456L);
+        final Long validUserId = 456L;
+        final UserJpaEntity expectedUser = createUserJpaEntity(validUserId);
         final DailygeToken token = tokenProvider.createToken(expectedUser);
         when(request.getHeader(AUTHORIZATION))
             .thenReturn(token.getAuthorizationToken());
-        when(userReadUseCase.findAuthorizedUserById(Long.parseLong(validUserId)))
+        when(userReadUseCase.findAuthorizedUserById(validUserId))
             .thenReturn(expectedUser);
 
         assertDoesNotThrow(

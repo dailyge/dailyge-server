@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockHttpServletResponse;
 import project.dailyge.app.common.auth.DailygeToken;
 import project.dailyge.app.common.auth.JwtProperties;
+import project.dailyge.app.common.auth.SecretKeyManager;
 import project.dailyge.app.common.auth.TokenProvider;
 import project.dailyge.app.core.common.web.LoginInterceptor;
 import project.dailyge.app.core.user.application.UserReadUseCase;
@@ -29,6 +30,9 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 class LoginInterceptorUnitTest {
 
     private static final String SECRET_KEY = "secretKey";
+    private static final String PAYLOAD_SECRET_KEY = "payloadSecretKey";
+    private static final String SALT = "salt";
+    private static JwtProperties expiredJwtProperties;
 
     private LoginInterceptor loginInterceptor;
     private TokenProvider tokenProvider;
@@ -36,11 +40,14 @@ class LoginInterceptorUnitTest {
     private UserReadUseCase userReadUseCase;
     private HttpServletRequest request;
     private MockHttpServletResponse response;
+    private SecretKeyManager secretKeyManager;
 
     @BeforeEach
     void setUp() {
-        final JwtProperties jwtProperties = new JwtProperties(SECRET_KEY, 1, 2);
-        tokenProvider = new TokenProvider(jwtProperties);
+        final JwtProperties jwtProperties = new JwtProperties(SECRET_KEY, PAYLOAD_SECRET_KEY, SALT, 1, 2);
+        expiredJwtProperties = new JwtProperties(SECRET_KEY, PAYLOAD_SECRET_KEY, SALT, 0, 0);
+        secretKeyManager = new SecretKeyManager(jwtProperties);
+        tokenProvider = new TokenProvider(jwtProperties, secretKeyManager);
         userReadUseCase = mock(UserReadUseCase.class);
         tokenManager = mock(TokenManager.class);
         final ObjectMapper objectMapper = new ObjectMapper();
@@ -74,8 +81,7 @@ class LoginInterceptorUnitTest {
     void whenSuccessRefreshForExpiredUserThenResultShouldBeFalse() throws UnsupportedEncodingException, JSONException {
         final UserJpaEntity user = UserFixture.createUserJpaEntity(1L);
         final DailygeToken token = tokenProvider.createToken(user);
-        final JwtProperties expiredJwtProperties = new JwtProperties(SECRET_KEY, 0, 0);
-        final TokenProvider expiredTokenProvider = new TokenProvider(expiredJwtProperties);
+        final TokenProvider expiredTokenProvider = new TokenProvider(expiredJwtProperties, secretKeyManager);
         final DailygeToken expiredToken = expiredTokenProvider.createToken(user);
         final Cookie[] cookies = new Cookie[1];
         cookies[0] = new Cookie("Refresh-Token", token.refreshToken());
@@ -102,8 +108,7 @@ class LoginInterceptorUnitTest {
     @Test
     @DisplayName("토큰 기간이 만료된 사용자는 재갱신 실패 시, true 를 반환한다.")
     void whenFailedRefreshForExpiredUserThenResultShouldBeTrue() {
-        final JwtProperties expiredJwtProperties = new JwtProperties(SECRET_KEY, 0, 0);
-        final TokenProvider expiredTokenProvider = new TokenProvider(expiredJwtProperties);
+        final TokenProvider expiredTokenProvider = new TokenProvider(expiredJwtProperties, secretKeyManager);
         final UserJpaEntity user = UserFixture.createUserJpaEntity(1L);
         final DailygeToken expiredToken = expiredTokenProvider.createToken(user);
         final Cookie[] cookies = new Cookie[1];

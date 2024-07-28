@@ -35,7 +35,7 @@ public record TaskUpdateRequest(
 
     public TaskUpdateCommand toCommand() {
         return new TaskUpdateCommand(
-            monthlyTaskId.toString(),
+            monthlyTaskId,
             title,
             content,
             date,

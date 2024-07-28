@@ -33,7 +33,7 @@ class TaskRegisterDocumentationTest extends DatabaseTestBase {
     @DisplayName("할 일을 등록하면 201 Created 응답을 받는다.")
     void whenRegisterTaskThenStatusCodeShouldBe_201_RestDocs() throws Exception {
         final UserJpaEntity newUser = userWriteUseCase.save(createUserJpaEntity());
-        final DailygeUser dailygeUser = new DailygeUser(newUser);
+        final DailygeUser dailygeUser = new DailygeUser(newUser.getId(), newUser.getRole());
         taskFacade.createMonthlyTasks(dailygeUser, LocalDate.now());
         final LocalDate now = LocalDate.now();
         final MonthlyTaskDocument findMonthlyTask = monthlyTaskReadRepository.findMonthlyDocumentByUserIdAndDate(dailygeUser.getUserId(), now).get();

@@ -1,7 +1,7 @@
 package project.dailyge.app.core.task.exception;
 
 import lombok.Getter;
-import project.dailyge.app.common.codeandmessage.CodeAndMessage;
+import project.dailyge.app.codeandmessage.CodeAndMessage;
 
 @Getter
 public enum TaskCodeAndMessage implements CodeAndMessage {

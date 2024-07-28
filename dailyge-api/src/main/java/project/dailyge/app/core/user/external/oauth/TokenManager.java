@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import project.dailyge.app.common.exception.ExternalServerException;
 import project.dailyge.app.core.user.exception.UserTypeException;
 
-import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.*;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.*;
 import static project.dailyge.app.core.user.exception.UserCodeAndMessage.EMPTY_USER_ID;
 
 @Service

@@ -16,4 +16,3 @@ public class LiquibaseConfig {
         return moduleConfig;
     }
 }
-

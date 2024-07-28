@@ -17,7 +17,7 @@ import project.dailyge.app.core.user.application.UserReadUseCase;
 import project.dailyge.entity.user.UserJpaEntity;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
-import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
 import static project.dailyge.app.common.exception.JWTAuthenticationException.EMPTY_TOKEN_ERROR_MESSAGE;
 
 @RequiredArgsConstructor
@@ -50,7 +50,7 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
                 throw new UnAuthorizedException();
             }
             final UserJpaEntity findUser = userReadUseCase.findAuthorizedUserById(userId);
-            return new DailygeUser(findUser);
+            return new DailygeUser(findUser.getId(), findUser.getRole());
         } catch (ExpiredJwtException ex) {
             throw new JWTAuthenticationException(ex.getMessage(), UN_AUTHORIZED);
         }

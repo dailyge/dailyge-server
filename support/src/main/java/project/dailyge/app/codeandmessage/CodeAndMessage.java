@@ -1,4 +1,4 @@
-package project.dailyge.app.common.codeandmessage;
+package project.dailyge.app.codeandmessage;
 
 public interface CodeAndMessage {
     int code();

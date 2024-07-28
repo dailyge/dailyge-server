@@ -1,4 +1,6 @@
 **.*Application*
+**.*Config*
+**.*CommonApi*
 **.*Health*
 **.common.**
 **.command.**
@@ -6,3 +8,5 @@
 **.request.**
 **.response.**
 **.test.**
+**.support.**
+

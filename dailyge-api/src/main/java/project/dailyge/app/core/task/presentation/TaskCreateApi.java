@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.common.auth.LoginUser;
-import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.CREATED;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.CREATED;
 import project.dailyge.app.common.response.ApiResponse;
 import project.dailyge.app.core.task.facade.TaskFacade;
 import project.dailyge.app.core.task.presentation.requesst.MonthlyTasksRegisterRequest;

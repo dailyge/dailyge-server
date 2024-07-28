@@ -46,6 +46,10 @@ pluginManagement {
     }
 }
 
+gradle.projectsLoaded {
+    gradle.startParameter.maxWorkerCount = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
+}
+
 rootProject.name = "dailyge"
 include(
         "admin-api",

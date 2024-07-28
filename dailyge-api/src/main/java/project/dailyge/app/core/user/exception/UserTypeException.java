@@ -1,6 +1,6 @@
 package project.dailyge.app.core.user.exception;
 
-import project.dailyge.app.common.codeandmessage.CodeAndMessage;
+import project.dailyge.app.codeandmessage.CodeAndMessage;
 import project.dailyge.app.common.exception.BusinessException;
 import java.util.HashMap;
 import java.util.Map;

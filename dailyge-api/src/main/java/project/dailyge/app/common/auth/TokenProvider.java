@@ -28,9 +28,9 @@ import java.time.Duration;
 import java.util.Base64;
 import java.util.Date;
 
-import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
-import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.INVALID_PARAMETERS;
-import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.INVALID_USER_TOKEN;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_PARAMETERS;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_USER_TOKEN;
 import static project.dailyge.app.common.exception.JWTAuthenticationException.*;
 
 @Slf4j

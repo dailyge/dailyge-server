@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import project.dailyge.app.common.auth.DailygeUser;
-import static project.dailyge.app.common.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
 import project.dailyge.app.common.exception.UnAuthorizedException;
 import project.dailyge.app.core.task.application.service.TaskValidator;
 import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.MONTHLY_TASK_EXISTS;

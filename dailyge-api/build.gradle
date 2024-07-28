@@ -1,7 +1,7 @@
 plugins {
+    id("org.liquibase.gradle")
     id("org.asciidoctor.jvm.convert")
     id("com.epages.restdocs-api-spec")
-    id("org.liquibase.gradle")
 }
 
 configurations {
@@ -12,7 +12,6 @@ configurations {
 }
 
 apply(from: "${rootDir}/jib/dailyge-api/jib.gradle")
-tasks.build.dependsOn(":storage:rdb:test")
 
 dependencies {
     implementation(project(":storage:common"))
@@ -56,18 +55,24 @@ test {
     dependsOn("copySubmoduleConfig")
     outputs.dir snippetsDir
     dependsOn(":storage:rdb:test")
+    dependsOn(":storage:document:test")
 }
 
 asciidoctor {
     attributes "snippets": snippetsDir
     inputs.dir snippetsDir
     dependsOn test
+    onlyIf { test.state.executed && test.state.failure == null }
 }
+
+tasks.build.dependsOn(":storage:rdb:test")
+tasks.build.dependsOn(":storage:document:test")
 
 tasks.register("copyDocument", Copy) {
     dependsOn asciidoctor
     from file("build/docs/asciidoc")
     into file("src/main/resources/static/docs")
+    onlyIf { test.state.executed && test.state.failure == null }
 }
 
 build {
@@ -88,19 +93,9 @@ tasks.register("copySubmoduleConfig", Copy) {
     into("${rootDir}/dailyge-api/src/main/resources")
 }
 
-sonarqube {
-    properties {
-        property("sonar.sources", "${rootDir}/dailyge-api/src/main/java")
-        property("sonar.tests", "${rootDir}/dailyge-api/src/test")
-        property(
-                "sonar.coverage.jacoco.xmlReportPaths",
-                "${rootDir}/dailyge-api/build/reports/jacoco/test/jacocoTestReport.xml"
-        )
-    }
-}
-
 tasks.named("processResources") {
     dependsOn("copySubmoduleConfig")
+    dependsOn(":storage:rdb:compileTestJava")
 }
 
 openapi3 {

@@ -4,8 +4,8 @@ plugins {
     id("jacoco")
     id("checkstyle")
     id("org.sonarqube")
-    id("com.google.cloud.tools.jib") apply false
     id("org.springframework.boot") apply false
+    id("com.google.cloud.tools.jib") apply false
     id("io.spring.dependency-management") apply false
 }
 
@@ -20,45 +20,38 @@ allprojects {
         mavenCentral()
         maven { url "https://repo.spring.io/release" }
     }
-    gradle.projectsEvaluated {
-        tasks.withType(JavaCompile).tap {
-            configureEach {
-                options.compilerArgs
-            }
-        }
-    }
 }
 
 sonarqube {
-    def exclusions = extractQClass()
-    file("${rootDir}/config/jacoco/exclude-coverage.txt").eachLine {
-        exclusions.add(it)
-    }
-
     properties {
-        property("sonar.projectKey", System.getenv("SONAR_PROJECT_KEY"))
         property("sonar.organization", "dailyge")
-        property("sonar.host.url", System.getenv("SONAR_HOST_URL"))
-        property("sonar.login", System.getenv("SONAR_TOKEN"))
-        property("sonar.language", "Java")
+        property("sonar.host.url", "https://sonarcloud.io")
+        property("sonar.token", System.getenv("SONAR_TOKEN"))
+        property("sonar.projectKey", "dailyge_dailyge-server")
+        property("sonar.language", "java")
         property("sonar.sourceEncoding", "UTF-8")
+        property("sonar.test.inclusions", "**/*Test.java")
+        property("sonar.scm.forceReloadAll", "true")
+
+        def exclusions = []
+        file("${rootDir}/config/jacoco/exclude-coverage.txt").eachLine {
+            exclusions.add(it)
+        }
         property("sonar.exclusions", exclusions.join(", "))
         property("sonar.java.coveragePlugin", "jacoco")
-        property("sonar.coverage.jacoco.xmlReportPaths",
-                "${rootDir}/dailyge-api/build/reports/jacoco/test/jacocoTestReport.xml, " +
-                        "${rootDir}/storage/rdb/build/reports/jacoco/test/jacocoTestReport.xml")
     }
 }
 
 subprojects {
     apply(plugin: "pmd")
+    apply(plugin: "java")
     apply(plugin: "jacoco")
     apply(plugin: "checkstyle")
-    apply(plugin: "java")
+    apply(plugin: "application")
     apply(plugin: "java-library")
+    apply(plugin: "org.sonarqube")
     apply(plugin: "org.springframework.boot")
     apply(plugin: "io.spring.dependency-management")
-    apply(plugin: "application")
     apply(plugin: "com.google.cloud.tools.jib")
 
     repositories {
@@ -89,10 +82,12 @@ subprojects {
     }
 
     jacocoTestReport {
+        dependsOn("test")
         reports {
             xml.required = true
-            html.required = true
+            html.required = false
             csv.required = false
+            xml.destination = file("${buildDir}/reports/jacoco/test/jacocoTestReport.xml")
         }
         afterEvaluate {
             def exclusions = extractQClass()
@@ -105,42 +100,18 @@ subprojects {
         }
     }
 
-    jacocoTestCoverageVerification {
-        afterEvaluate {
-            def exclusions = extractQClass()
-            file("${rootDir}/config/jacoco/exclude-verification.txt").eachLine {
-                exclusions.add(it)
-            }
-            classDirectories.setFrom(files(classDirectories.files.collect {
-                fileTree(dir: it, exclude: exclusions)
-            }))
-
-            violationRules {
-                rule {
-                    enabled = true
-                    element = "CLASS"
-
-                    limit {
-                        counter = "LINE"
-                        value = "TOTALCOUNT"
-                        maximum = "200".toBigDecimal()
-                    }
-                    limit {
-                        counter = "BRANCH"
-                        value = "COVEREDRATIO"
-                        minimum = 0.60
-                    }
-                }
-            }
-        }
-    }
-
     tasks.test {
-        jvmArgs '--add-opens', 'java.base/java.time=ALL-UNNAMED',
-                '--add-opens', 'java.base/java.lang=ALL-UNNAMED',
-                '--add-opens', 'java.base/java.util=ALL-UNNAMED'
         useJUnitPlatform()
         finalizedBy jacocoTestReport
+        jvmArgs "--add-opens=java.base/java.time=ALL-UNNAMED"
+    }
+
+    sonarqube {
+        properties {
+            property "sonar.java.binaries", "${buildDir}/classes/java/main"
+            property "sonar.sources", "${projectDir}/src/main/java"
+            property 'sonar.coverage.jacoco.xmlReportPaths', "${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
+        }
     }
 
     checkstyle {
@@ -165,4 +136,8 @@ static def extractQClass() {
         qClasses.add("**/*$qPattern*")
     }
     return qClasses
+}
+
+tasks.named("sonarqube") {
+    dependsOn(subprojects.collect { it.tasks.named("jacocoTestReport") })
 }

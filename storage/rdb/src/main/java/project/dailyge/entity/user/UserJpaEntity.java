@@ -1,6 +1,12 @@
 package project.dailyge.entity.user;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import project.dailyge.entity.BaseEntity;
@@ -8,8 +14,6 @@ import project.dailyge.entity.BaseEntity;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.regex.Pattern;
-
-import static java.lang.Boolean.TRUE;
 
 @Getter
 @NoArgsConstructor
@@ -20,7 +24,7 @@ public class UserJpaEntity extends BaseEntity {
     private static final int MAX_EMAIL_LENGTH = 50;
     private static final int MAX_PROFILE_IMAGE_URL_LENGTH = 2000;
     private static final String EMAIL_PATTERN = "^[0-9a-zA-Z](?:[-_.]?[0-9a-zA-Z]){0,39}@gmail\\.com$";
-    private static final  String OVER_MAX_NICKNAME_LENGTH_ERROR_MESSAGE = "입력 가능한 최대 닉네임 길이를 초과했습니다.";
+    private static final String OVER_MAX_NICKNAME_LENGTH_ERROR_MESSAGE = "입력 가능한 최대 닉네임 길이를 초과했습니다.";
     private static final String INVALID_EMAIL_ERROR_MESSAGE = "유효하지 않는 이메일 형식입니다.";
     private static final String OVER_MAX_PROFILE_IMAGE_URL_ERROR_MESSAGE = "입력 가능한 최대 URL 길이를 초과했습니다.";
     private static final String USER_ALREADY_DELETED_MESSAGE = "이미 탈퇴한 사용자입니다.";
@@ -155,10 +159,15 @@ public class UserJpaEntity extends BaseEntity {
         return USER_ALREADY_DELETED_MESSAGE;
     }
 
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        UserJpaEntity user = (UserJpaEntity) o;
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        final UserJpaEntity user = (UserJpaEntity) obj;
         return Objects.equals(id, user.id);
     }
 

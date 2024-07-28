@@ -34,7 +34,13 @@ class AuthArgumentResolverTest {
 
     @BeforeEach
     void setUp() {
-        final JwtProperties jwtProperties = new JwtProperties("secretKey", 1, 2);
+        final JwtProperties jwtProperties = new JwtProperties(
+            "secretKey",
+            "payloadSecretKey",
+            "salt",
+            1,
+            2
+        );
         tokenProvider = new TokenProvider(jwtProperties);
         userReadUseCase = mock(UserReadUseCase.class);
         resolver = new AuthArgumentResolver(userReadUseCase, tokenProvider);
@@ -71,12 +77,12 @@ class AuthArgumentResolverTest {
     @Test
     @DisplayName("사용자 ID가 유효하면 예외가 발생하지 않는다.")
     void shouldNotThrowExceptionWhenUserIdIsValid() {
-        final String validUserId = "456";
-        final UserJpaEntity expectedUser = createUserJpaEntity(456L);
+        final Long validUserId = 456L;
+        final UserJpaEntity expectedUser = createUserJpaEntity(validUserId);
         final DailygeToken token = tokenProvider.createToken(expectedUser);
         when(request.getHeader(AUTHORIZATION))
             .thenReturn(token.getAuthorizationToken());
-        when(userReadUseCase.findAuthorizedUserById(Long.parseLong(validUserId)))
+        when(userReadUseCase.findAuthorizedUserById(validUserId))
             .thenReturn(expectedUser);
 
         assertDoesNotThrow(

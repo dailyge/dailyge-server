@@ -65,7 +65,7 @@ class UserJpaEntityTest {
 	@ParameterizedTest
 	@DisplayName("이메일 규격에 맞지 않을 경우 IllegalArgumentException이 발생한다.")
 	@ValueSource(strings = {"email.domain.com", "email@damain,com", "email@domain@domain.com"})
-	void whenNotCompliantEmailThenIllegalArgumentExceptionShouldBeHappen(String notCompliantEmail){
+	void whenNotCompliantEmailThenIllegalArgumentExceptionShouldBeHappen(final String notCompliantEmail){
 		assertThatThrownBy(() -> new UserJpaEntity(NICKNAME, notCompliantEmail))
 			.isExactlyInstanceOf(IllegalArgumentException.class)
 			.hasMessage(UserJpaEntity.getInvalidEmailErrorMessage());

@@ -112,7 +112,7 @@ class TokenProviderUnitTest {
     @ParameterizedTest
     @DisplayName("사용자 ID를 암호화 하면, 정상적으로 암호화 된다.")
     @ValueSource(longs = {1L, 100L, 2231234124L})
-    void whenEncryptUserIdThenUserIdShouldBeEncrypted(Long userId) {
+    void whenEncryptUserIdThenUserIdShouldBeEncrypted(final Long userId) {
         final String encryptedUserId = tokenProvider.encryptUserId(userId);
 
         assertEquals(44, encryptedUserId.length());

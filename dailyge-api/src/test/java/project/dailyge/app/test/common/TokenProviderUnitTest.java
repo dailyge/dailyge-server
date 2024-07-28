@@ -8,6 +8,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import project.dailyge.app.common.auth.DailygeToken;
 import project.dailyge.app.common.auth.JwtProperties;
 import project.dailyge.app.common.auth.TokenProvider;
@@ -29,7 +31,13 @@ class TokenProviderUnitTest {
 
     @BeforeEach
     void setUp() {
-        final JwtProperties jwtProperties = new JwtProperties("secretKey", 1, REFRESH_EXPIRED_TIME);
+        final JwtProperties jwtProperties = new JwtProperties(
+            "secretKey",
+            "payloadSecretKey",
+            "salt",
+            1,
+            REFRESH_EXPIRED_TIME
+        );
         tokenProvider = new TokenProvider(jwtProperties);
     }
 
@@ -99,5 +107,25 @@ class TokenProviderUnitTest {
             .isExactlyInstanceOf(JWTAuthenticationException.class)
             .isInstanceOf(RuntimeException.class)
             .hasMessage(UNSUPPORTED_TOKEN_ERROR_MESSAGE);
+    }
+
+    @ParameterizedTest
+    @DisplayName("사용자 ID를 암호화 하면, 정상적으로 암호화 된다.")
+    @ValueSource(longs = {1L, 100L, 2231234124L})
+    void whenEncryptUserIdThenUserIdShouldBeEncrypted(Long userId) {
+        final String encryptedUserId = tokenProvider.encryptUserId(userId);
+
+        assertEquals(44, encryptedUserId.length());
+    }
+
+    @Test
+    @DisplayName("암호화 된 사용자 ID를 디코딩하면, 정상적으로 사용자 ID를 얻을 수 있다.")
+    void whenDecodeTheEncryptedUserIDThenResultShouldBeUserId() {
+        final Long userId = 1L;
+        final String encryptedUserId = tokenProvider.encryptUserId(userId);
+
+        final Long decryptUserId = tokenProvider.decryptUserId(encryptedUserId);
+
+        assertEquals(userId, decryptUserId);
     }
 }

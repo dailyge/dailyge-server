@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
-import software.amazon.awssdk.http.urlconnection.UrlConnectionHttpClient;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.sqs.SqsClient;
 
@@ -27,7 +26,6 @@ public class AmazonSqsConfiguration {
         final StaticCredentialsProvider provider = StaticCredentialsProvider.create(awsBasicCredentials);
         return SqsClient.builder()
             .credentialsProvider(provider)
-            .httpClient(UrlConnectionHttpClient.builder().build())
             .region(Region.of(region))
             .build();
     }

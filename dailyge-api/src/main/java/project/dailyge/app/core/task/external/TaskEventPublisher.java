@@ -3,6 +3,7 @@ package project.dailyge.app.core.task.external;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import project.dailyge.entity.common.EventPublisher;
 import project.dailyge.entity.task.TaskEvent;
@@ -15,6 +16,9 @@ import software.amazon.awssdk.services.sns.model.PublishResponse;
 @RequiredArgsConstructor
 public class TaskEventPublisher implements EventPublisher<TaskEvent> {
 
+    @Value("application.amazon.sns.topic-arn")
+    private String topicArn;
+
     private final SnsClient snsClient;
     private final ObjectMapper objectMapper;
 
@@ -23,14 +27,12 @@ public class TaskEventPublisher implements EventPublisher<TaskEvent> {
         try {
             log.info(event.toString());
             PublishRequest request = PublishRequest.builder()
-                .topicArn("arn:aws:sns:ap-northeast-2:563951805858:alarm")
+                .topicArn(topicArn)
                 .message(objectMapper.writeValueAsString(event))
                 .build();
 
             PublishResponse response = snsClient.publish(request);
         } catch (Exception ex) {
-            System.out.println("EXCEPTION");
-            System.out.println(ex.getMessage());
         }
     }
 }

@@ -7,6 +7,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import project.dailyge.app.common.auth.DailygeToken;
 import project.dailyge.app.common.auth.JwtProperties;
+import project.dailyge.app.common.auth.SecretKeyManager;
 import project.dailyge.app.common.auth.TokenProvider;
 import project.dailyge.app.common.exception.UnAuthorizedException;
 import project.dailyge.app.test.user.fixture.UserFixture;
@@ -35,7 +36,8 @@ class TokenProviderUnitTest {
             1,
             REFRESH_EXPIRED_TIME
         );
-        tokenProvider = new TokenProvider(jwtProperties);
+        final SecretKeyManager secretKeyManager = new SecretKeyManager(jwtProperties);
+        tokenProvider = new TokenProvider(jwtProperties, secretKeyManager);
     }
 
     @Test
@@ -112,7 +114,7 @@ class TokenProviderUnitTest {
     }
 
     @Test
-    @DisplayName("암호화 된 사용자 ID를 디코딩하면, 정상적으로 사용자 ID를 얻을 수 있다.")
+    @DisplayName("암호화 된 사용자 ID를 Decrypt 하면, 정상적으로 사용자 ID를 얻을 수 있다.")
     void whenDecodeTheEncryptedUserIDThenResultShouldBeUserId() {
         final Long userId = 1L;
         final String encryptedUserId = tokenProvider.encryptUserId(userId);
@@ -120,5 +122,15 @@ class TokenProviderUnitTest {
         final Long decryptUserId = tokenProvider.decryptUserId(encryptedUserId);
 
         assertEquals(userId, decryptUserId);
+    }
+
+    @Test
+    @DisplayName("비정상적인 페이로드가 올 경우, UnAuthorizedException 이 발생한다.")
+    void whenAbnormalPayloadThenUnAuthorizedExceptionShouldBeHappen() {
+        final String abnormalPayload = "jwtAbnormalPayloadData";
+
+        assertThatThrownBy(() -> tokenProvider.decryptUserId(abnormalPayload))
+            .isExactlyInstanceOf(UnAuthorizedException.class)
+            .isInstanceOf(RuntimeException.class);
     }
 }

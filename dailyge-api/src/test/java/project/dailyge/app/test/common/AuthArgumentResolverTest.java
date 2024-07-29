@@ -8,6 +8,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 import project.dailyge.app.common.auth.DailygeToken;
 import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.common.auth.JwtProperties;
+import project.dailyge.app.common.auth.SecretKeyManager;
 import project.dailyge.app.common.auth.TokenProvider;
 import project.dailyge.app.common.configuration.web.AuthArgumentResolver;
 import project.dailyge.app.common.exception.UnAuthorizedException;
@@ -41,7 +42,8 @@ class AuthArgumentResolverTest {
             1,
             2
         );
-        tokenProvider = new TokenProvider(jwtProperties);
+        final SecretKeyManager secretKeyManager = new SecretKeyManager(jwtProperties);
+        tokenProvider = new TokenProvider(jwtProperties, secretKeyManager);
         userReadUseCase = mock(UserReadUseCase.class);
         resolver = new AuthArgumentResolver(userReadUseCase, tokenProvider);
         request = mock(HttpServletRequest.class);

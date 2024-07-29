@@ -15,14 +15,10 @@ import project.dailyge.app.common.exception.UnAuthorizedException;
 import project.dailyge.entity.user.UserJpaEntity;
 
 import javax.crypto.Cipher;
-import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
-import java.security.spec.KeySpec;
 import java.time.Duration;
 import java.util.Base64;
 import java.util.Date;
@@ -43,6 +39,7 @@ public class TokenProvider {
     private static final int ARRAY_START_INDEX = 0;
     private static final int IV_SIZE = 16;
     private final JwtProperties jwtProperties;
+    private final SecretKeyManager secretKeyManager;
 
     public DailygeToken createToken(final UserJpaEntity user) {
         final String accessToken = generateToken(user, getExpiry(jwtProperties.getAccessExpiredTime()));
@@ -153,22 +150,14 @@ public class TokenProvider {
 
     private byte[] applyCipher(
         final byte[] iv,
-        final int decryptMode,
+        final int operationMode,
         final byte[] cipherTarget
     ) {
         try {
             final IvParameterSpec ivParameterSpec = new IvParameterSpec(iv);
-            final SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
-            final KeySpec spec = new PBEKeySpec(
-                jwtProperties.getPayloadSecretKey().toCharArray(),
-                jwtProperties.getSalt().getBytes(),
-                65536,
-                256
-            );
-            final SecretKey secretKey = factory.generateSecret(spec);
-            final SecretKeySpec secretKeySpec = new SecretKeySpec(secretKey.getEncoded(), "AES");
+            final SecretKeySpec secretKeySpec = secretKeyManager.getSecretKeySpec();
             final Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-            cipher.init(decryptMode, secretKeySpec, ivParameterSpec);
+            cipher.init(operationMode, secretKeySpec, ivParameterSpec);
             return cipher.doFinal(cipherTarget);
         } catch (Exception ex) {
             throw new UnAuthorizedException(ex.getMessage(), INVALID_USER_TOKEN);

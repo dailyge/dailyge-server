@@ -27,7 +27,7 @@ class TaskDocumentUnitTest {
     }
 
     @Test
-    @DisplayName("LocalDate는 내부 필드값을 통ㅎ애 조합할 수 있다.")
+    @DisplayName("LocalDate는 내부 필드값을 통해 조합할 수 있다.")
     void whenGetLocalDateThenResultShouldBeSameOfYearAndMonthAndDay() {
         final TaskDocument document = new TaskDocument(
             Generators.timeBasedGenerator().generate().toString(),

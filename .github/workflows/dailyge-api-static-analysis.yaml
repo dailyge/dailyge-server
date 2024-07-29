@@ -5,6 +5,8 @@ on:
     branches: [ dev, main ]
     paths:
       - dailyge-api/**
+      - storage/**
+      - support/**
 
 env:
   ENV: dev

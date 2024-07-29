@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.OK;
 import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.common.auth.LoginUser;
-import project.dailyge.app.common.codeandmessage.CodeAndMessageConfig;
+import project.dailyge.app.core.codeandmessage.CodeAndMessageConfig;
 import project.dailyge.app.common.response.ApiResponse;
 import project.dailyge.entity.codeandmessage.CodeAndMessageEntityWriteService;
 import project.dailyge.entity.codeandmessage.CodeAndMessages;

@@ -16,7 +16,7 @@ public final class CodeAndMessageUtils {
         throw new AssertionError("올바른 방식으로 생성자를 호출해주세요.");
     }
 
-    public static Map<String, List<CodeAndMessageResponse>> convertToMap(List<CodeAndMessageJpaEntity> findCodeAndMessages) {
+    public static Map<String, List<CodeAndMessageResponse>> convertToMap(final List<CodeAndMessageJpaEntity> findCodeAndMessages) {
         return findCodeAndMessages.stream()
             .collect(groupingBy(CodeAndMessageJpaEntity::getDomain, mapping(convertToResponse(), toList())));
     }

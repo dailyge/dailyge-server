@@ -1,4 +1,4 @@
-package project.dailyge.app.common.codeandmessage;
+package project.dailyge.app.core.codeandmessage;
 
 import org.springframework.stereotype.Component;
 import project.dailyge.app.codeandmessage.CodeAndMessage;

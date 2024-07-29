@@ -1,9 +1,12 @@
 package project.dailyge.document.task;
 
+import lombok.Getter;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 public final class MonthlyTaskDocuments {
 
     private static final int START = 1;

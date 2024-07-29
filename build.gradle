@@ -32,7 +32,6 @@ sonarqube {
         property("sonar.sourceEncoding", "UTF-8")
         property("sonar.test.inclusions", "**/*Test.java")
         property("sonar.scm.forceReloadAll", "true")
-
         def exclusions = []
         file("${rootDir}/config/jacoco/exclude-coverage.txt").eachLine {
             exclusions.add(it)
@@ -50,9 +49,10 @@ subprojects {
     apply(plugin: "application")
     apply(plugin: "java-library")
     apply(plugin: "org.sonarqube")
+    apply(plugin: "java-test-fixtures")
     apply(plugin: "org.springframework.boot")
-    apply(plugin: "io.spring.dependency-management")
     apply(plugin: "com.google.cloud.tools.jib")
+    apply(plugin: "io.spring.dependency-management")
 
     repositories {
         mavenCentral()
@@ -87,7 +87,7 @@ subprojects {
             xml.required = true
             html.required = false
             csv.required = false
-            xml.destination = file("${buildDir}/reports/jacoco/test/jacocoTestReport.xml")
+            xml.destination file("${buildDir}/reports/jacoco/test/jacocoTestReport.xml")
         }
         afterEvaluate {
             def exclusions = extractQClass()
@@ -108,9 +108,12 @@ subprojects {
 
     sonarqube {
         properties {
-            property "sonar.java.binaries", "${buildDir}/classes/java/main"
-            property "sonar.sources", "${projectDir}/src/main/java"
-            property 'sonar.coverage.jacoco.xmlReportPaths', "${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
+            property("sonar.java.binaries", "${buildDir}/classes/java/main")
+            property("sonar.sources", "src/main/java")
+            if (file("${projectDir}/src/test/java").exists()) {
+                property "sonar.tests", "src/test/java"
+            }
+            property("sonar.coverage.jacoco.xmlReportPaths", "${buildDir}/reports/jacoco/test/jacocoTestReport.xml")
         }
     }
 
@@ -136,8 +139,4 @@ static def extractQClass() {
         qClasses.add("**/*$qPattern*")
     }
     return qClasses
-}
-
-tasks.named("sonarqube") {
-    dependsOn(subprojects.collect { it.tasks.named("jacocoTestReport") })
 }

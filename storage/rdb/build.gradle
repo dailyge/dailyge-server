@@ -1,9 +1,8 @@
 plugins {
-    id("java")
-    id("org.springframework.boot") apply false
+    id("java-test-fixtures")
     id("io.spring.dependency-management")
+    id("org.springframework.boot") apply false
     id("org.asciidoctor.jvm.convert") apply false
-    id("jacoco")
 }
 
 dependencies {
@@ -12,6 +11,10 @@ dependencies {
 
     // MySQL
     runtimeOnly("mysql:mysql-connector-java:${property("mysqlVersion")}")
+}
+
+tasks.named("processResources") {
+    dependsOn "compileJava", "compileTestJava", "compileTestFixturesJava"
 }
 
 def querydslDir = "src/main/generated"
@@ -27,14 +30,6 @@ tasks.withType(JavaCompile).configureEach {
 clean.doLast {
     file(querydslDir).deleteDir()
 }
-
-//sonarqube {
-//    properties {
-//        property("sonar.sources", "${projectDir}/src/main/java")
-//        property("sonar.tests", "${projectDir}/src/test")
-//        property("sonar.coverage.jacoco.xmlReportPaths", "${projectDir}/reports/jacoco/test/jacocoTestReport.xml")
-//    }
-//}
 
 tasks.named("checkstyleMain") {
     dependsOn("compileTestJava")

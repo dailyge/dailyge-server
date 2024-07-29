@@ -1,6 +1,5 @@
 package project.dailyge.app.core.common.web;
 
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,12 +17,10 @@ public class CodeAndMessageDao implements CodeAndMessageEntityReadRepository, Co
     private final EntityManager entityManager;
 
     @Override
-    public List<CodeAndMessageJpaEntity> saveAll(final List<CodeAndMessageJpaEntity> codeAndMessages) {
+    public void saveAll(final List<CodeAndMessageJpaEntity> codeAndMessages) {
         for (final CodeAndMessageJpaEntity entity : codeAndMessages) {
             entityManager.persist(entity);
         }
-        return entityManager.createQuery(SELECT_ALL, CodeAndMessageJpaEntity.class)
-            .getResultList();
     }
 
     @Override

@@ -20,7 +20,7 @@ class JasyptConfigurationUnitTest {
     @Test
     @DisplayName("암호화를 한 후, 복호화를 하면 결과가 동일하다.")
     void whenDecryptAfterEncryptThenResultShouldBeSameOfOriginal() {
-        final String name = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjMyNTAzNjI3MjI2LCJzdWIiOiJiZWF0bWVqeUBnbWFpbC5jb20iLCJpZCI6Ilo3aS9OY20vUzZYMllrSEVTZUh6Nmt3OS9SR3o1bVNXeVIxTUdMaThRM0E9In0.CNnb-MB1et01QASmZiqdlzUjPVQLrHOkr4pqUQZ1XAU";
+        final String name = "Dailyge";
         final StringEncryptor encryptor = jasyptConfiguration.stringEncryptor();
         final String encryptName = encryptor.encrypt(name);
 

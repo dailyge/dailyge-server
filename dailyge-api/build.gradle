@@ -103,6 +103,10 @@ tasks.named("processResources") {
     dependsOn(":storage:rdb:compileTestJava")
 }
 
+tasks.withType(JavaCompile).configureEach {
+    outputs.cacheIf { true }
+}
+
 openapi3 {
     def env = System.getenv("ENV")
     setServer(env != null && env == 'prod' ? "https://api.dailyge.com" : "https://api-dev.dailyge.com")

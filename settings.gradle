@@ -50,6 +50,13 @@ gradle.projectsLoaded {
     gradle.startParameter.maxWorkerCount = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
 }
 
+buildCache {
+    local {
+        enabled = true
+        directory = "${rootProject.projectDir}/.gradle/build-cache"
+    }
+}
+
 rootProject.name = "dailyge"
 include(
         "admin-api",

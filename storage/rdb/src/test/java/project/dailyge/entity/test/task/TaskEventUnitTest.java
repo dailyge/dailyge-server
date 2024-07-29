@@ -118,7 +118,7 @@ class TaskEventUnitTest {
             + "\"createdAt\":\"" + taskEvent.getCreatedAt() + "\""
             + "}";
 
-        assertThat(taskEvent.toString()).isEqualTo(expectedString);
+        assertThat(taskEvent.toString()).hasToString(expectedString);
     }
 
     @Test
@@ -131,7 +131,7 @@ class TaskEventUnitTest {
         final TaskEvent taskEvent1 = TaskEvent.createEvent(publisher, eventId, eventType);
         final TaskEvent taskEvent2 = TaskEvent.createEvent(publisher, eventId, eventType);
 
-        assertThat(taskEvent1.hashCode()).isEqualTo(taskEvent2.hashCode());
+        assertThat(taskEvent1.hashCode()).hasSameHashCodeAs(taskEvent2.hashCode());
     }
 
     @Test

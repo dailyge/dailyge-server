@@ -39,6 +39,7 @@ dependencies {
     testImplementation("com.epages:restdocs-api-spec-mockmvc:${restdocsApiSpecVersion}")
     testImplementation("com.epages:restdocs-api-spec-restassured:${restdocsApiSpecVersion}")
     testImplementation("org.testcontainers:testcontainers")
+    testImplementation("org.testcontainers:localstack")
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.testcontainers:mysql")
 

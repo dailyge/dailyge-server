@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.dailyge.app.common.auth.DailygeUser;
-import project.dailyge.app.core.common.external.EventPublisher;
+import project.dailyge.entity.common.EventPublisher;
 import project.dailyge.app.core.task.application.TaskWriteUseCase;
 import project.dailyge.app.core.task.application.command.TaskCreateCommand;
 import project.dailyge.app.core.task.application.command.TaskStatusUpdateCommand;
@@ -17,8 +17,8 @@ import project.dailyge.document.task.TaskActivity;
 import project.dailyge.document.task.TaskDocument;
 import project.dailyge.document.task.TaskDocumentReadRepository;
 import project.dailyge.document.task.TaskDocumentWriteRepository;
-import project.dailyge.entity.common.Event;
 import static project.dailyge.entity.common.EventType.CREATE;
+import project.dailyge.entity.task.TaskEvent;
 import static project.dailyge.entity.task.TaskEvent.createEvent;
 
 import java.time.LocalDate;
@@ -28,7 +28,7 @@ import java.util.List;
 @RequiredArgsConstructor
 class TaskWriteService implements TaskWriteUseCase {
 
-    private final EventPublisher eventPublisher;
+    private final EventPublisher<TaskEvent> eventPublisher;
     private final TaskValidator validator;
     private final TaskDocumentReadRepository taskReadRepository;
     private final TaskDocumentWriteRepository taskWriteRepository;
@@ -52,7 +52,7 @@ class TaskWriteService implements TaskWriteUseCase {
         validator.validateTaskCreation(newTask.getUserId(), newTask.getLocalDate());
         final String newTaskId = taskWriteRepository.save(newTask, newTask.getLocalDate());
 
-        final Event event = createEvent(newTask.getUserId(), null, CREATE);
+        final TaskEvent event = createEvent(newTask.getUserId(), null, CREATE);
         eventPublisher.publishExternalEvent(event);
         return newTaskId;
     }

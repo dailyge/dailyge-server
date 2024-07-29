@@ -1,36 +1,35 @@
 package project.dailyge.entity.task;
 
+import static java.time.LocalDateTime.now;
 import lombok.Getter;
 import project.dailyge.entity.common.Event;
 import project.dailyge.entity.common.EventType;
-
-import java.util.Arrays;
-import java.util.List;
 
 @Getter
 public class TaskEvent extends Event {
 
     private static final String DOMAIN = "task";
-    private static final List<EventType> eventTypes = Arrays.stream(EventType.values())
-        .toList();
+    private String eventId;
+    private EventType eventType;
 
-    private final String eventId;
-    private final EventType eventType;
+    private TaskEvent() {
+    }
 
-    public TaskEvent(
+    private TaskEvent(
         final Long publisher,
         final String domain,
         final String eventId,
         final EventType eventType
     ) {
-        validate(publisher, domain, eventId, eventType);
+//        validate(publisher, domain, eventId, eventType);
         this.publisher = publisher;
         this.domain = domain;
         this.eventId = eventId;
         this.eventType = eventType;
+        this.createdAt = now();
     }
 
-    public static Event createEvent(
+    public static TaskEvent createEvent(
         final Long publisher,
         final String domain,
         final String eventId,
@@ -39,7 +38,7 @@ public class TaskEvent extends Event {
         return new TaskEvent(publisher, domain, eventId, eventType);
     }
 
-    public static Event createEvent(
+    public static TaskEvent createEvent(
         final Long publisher,
         final String eventId,
         final EventType eventType
@@ -62,9 +61,6 @@ public class TaskEvent extends Event {
         if (eventId == null || eventId.isBlank()) {
 
         }
-        if (!eventTypes.contains(eventType)) {
-
-        }
     }
 
     public TaskEvent(
@@ -77,5 +73,16 @@ public class TaskEvent extends Event {
         this.domain = DOMAIN;
         this.eventId = eventId;
         this.eventType = eventType;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+            "\"eventId\":\"" + eventId + "\"," +
+            "\"eventType\":\"" + eventType + "\"," +
+            "\"publisher\":\"" + publisher + "\"," +
+            "\"domain\":\"" + domain + "\"," +
+            "\"createdAt\":\"" + createdAt + "\"" +
+            "}";
     }
 }

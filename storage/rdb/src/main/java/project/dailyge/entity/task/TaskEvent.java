@@ -21,7 +21,6 @@ public class TaskEvent extends Event {
         final String eventId,
         final EventType eventType
     ) {
-//        validate(publisher, domain, eventId, eventType);
         this.publisher = publisher;
         this.domain = domain;
         this.eventId = eventId;
@@ -77,12 +76,12 @@ public class TaskEvent extends Event {
 
     @Override
     public String toString() {
-        return "{" +
-            "\"eventId\":\"" + eventId + "\"," +
-            "\"eventType\":\"" + eventType + "\"," +
-            "\"publisher\":\"" + publisher + "\"," +
-            "\"domain\":\"" + domain + "\"," +
-            "\"createdAt\":\"" + createdAt + "\"" +
-            "}";
+        return "{"
+            + "\"eventId\":\"" + eventId + "\","
+            + "\"eventType\":\"" + eventType + "\","
+            + "\"publisher\":\"" + publisher + "\","
+            + "\"domain\":\"" + domain + "\","
+            + "\"createdAt\":\"" + createdAt + "\""
+            + "}";
     }
 }

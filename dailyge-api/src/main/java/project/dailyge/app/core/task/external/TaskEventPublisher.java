@@ -26,12 +26,12 @@ public class TaskEventPublisher implements EventPublisher<TaskEvent> {
     public void publishExternalEvent(final TaskEvent event) {
         try {
             log.info(event.toString());
-            PublishRequest request = PublishRequest.builder()
+            final PublishRequest request = PublishRequest.builder()
                 .topicArn(topicArn)
                 .message(objectMapper.writeValueAsString(event))
                 .build();
 
-            PublishResponse response = snsClient.publish(request);
+            final PublishResponse response = snsClient.publish(request);
         } catch (Exception ex) {
         }
     }

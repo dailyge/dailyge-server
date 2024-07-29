@@ -1,10 +1,12 @@
 package project.dailyge.entity.test.task;
 
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import project.dailyge.entity.common.EventType;
@@ -102,7 +104,7 @@ class TaskEventUnitTest {
     }
 
     @Test
-    @DisplayName("toString 메서드는 올바른 JSON 문자열을 반환한다.")
+    @DisplayName("toString 메서드는 정의한 형식대로 JSON 문자열을 반환한다.")
     void whenToStringThenReturnJsonString() {
         final Long publisher = 1L;
         final String eventId = "event123";
@@ -182,5 +184,42 @@ class TaskEventUnitTest {
             () -> assertEquals(originalDomain, taskEvent.getDomain()),
             () -> assertEquals(originalCreatedAt, taskEvent.getCreatedAt())
         );
+    }
+
+    @Test
+    @DisplayName("동일한 객체를 비교할 때 true를 반환한다.")
+    void whenSameInstanceThenEqualsIsTrue() {
+        final TaskEvent taskEvent = TaskEvent.createEvent(1L, "event123", EventType.CREATE);
+        assertThat(taskEvent).isEqualTo(taskEvent);
+    }
+
+    @Test
+    @DisplayName("다른 타입의 객체를 비교할 때 false를 반환한다.")
+    void whenDifferentClassThenEqualsIsFalse() {
+        final TaskEvent taskEvent = TaskEvent.createEvent(1L, "event123", EventType.CREATE);
+        assertThat(taskEvent).isNotEqualTo(new Object());
+    }
+
+    @Test
+    @DisplayName("null과 비교할 때 false를 반환한다.")
+    void whenCompareWithNullThenEqualsIsFalse() {
+        final TaskEvent taskEvent = TaskEvent.createEvent(1L, "event123", EventType.CREATE);
+        assertThat(taskEvent).isNotEqualTo(null);
+    }
+
+    @Test
+    @DisplayName("eventId가 동일한 다른 TaskEvent와 비교할 때 true를 반환한다.")
+    void whenSameEventIdThenEqualsIsTrue() {
+        final TaskEvent taskEvent1 = TaskEvent.createEvent(1L, "event123", EventType.CREATE);
+        final TaskEvent taskEvent2 = TaskEvent.createEvent(2L, "event123", EventType.UPDATE);
+        assertEquals(taskEvent1, taskEvent2);
+    }
+
+    @Test
+    @DisplayName("eventId가 다른 TaskEvent와 비교할 때 false를 반환한다.")
+    void whenDifferentEventIdThenEqualsIsFalse() {
+        final TaskEvent taskEvent1 = TaskEvent.createEvent(1L, "event123", EventType.CREATE);
+        final TaskEvent taskEvent2 = TaskEvent.createEvent(2L, "event124", EventType.UPDATE);
+        assertNotEquals(taskEvent1, taskEvent2);
     }
 }

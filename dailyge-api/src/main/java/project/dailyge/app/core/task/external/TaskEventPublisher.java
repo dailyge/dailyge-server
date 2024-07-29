@@ -16,7 +16,7 @@ import software.amazon.awssdk.services.sns.model.PublishResponse;
 @RequiredArgsConstructor
 public class TaskEventPublisher implements EventPublisher<TaskEvent> {
 
-    @Value("application.amazon.sns.topic-arn")
+    @Value("${application.amazon.sns.topic-arn}")
     private String topicArn;
 
     private final SnsClient snsClient;

@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 
 @Getter
 public abstract class Event {
+
     protected Long publisher;
     protected String domain;
     protected LocalDateTime createdAt;

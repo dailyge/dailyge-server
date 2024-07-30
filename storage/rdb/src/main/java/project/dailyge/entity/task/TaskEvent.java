@@ -1,23 +1,26 @@
 package project.dailyge.entity.task;
 
+import static java.time.LocalDateTime.now;
 import lombok.Getter;
 import project.dailyge.entity.common.Event;
 import project.dailyge.entity.common.EventType;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.Objects;
 
 @Getter
 public class TaskEvent extends Event {
 
     private static final String DOMAIN = "task";
-    private static final List<EventType> eventTypes = Arrays.stream(EventType.values())
-        .toList();
+    private String eventId;
+    private EventType eventType;
 
-    private final String eventId;
-    private final EventType eventType;
+    /**
+     * 직렬화를 위한 생성자로 외부에서 호출하지 말 것.
+     */
+    private TaskEvent() {
+    }
 
-    public TaskEvent(
+    private TaskEvent(
         final Long publisher,
         final String domain,
         final String eventId,
@@ -28,9 +31,10 @@ public class TaskEvent extends Event {
         this.domain = domain;
         this.eventId = eventId;
         this.eventType = eventType;
+        this.createdAt = now();
     }
 
-    public static Event createEvent(
+    public static TaskEvent createEvent(
         final Long publisher,
         final String domain,
         final String eventId,
@@ -39,7 +43,7 @@ public class TaskEvent extends Event {
         return new TaskEvent(publisher, domain, eventId, eventType);
     }
 
-    public static Event createEvent(
+    public static TaskEvent createEvent(
         final Long publisher,
         final String eventId,
         final EventType eventType
@@ -54,28 +58,48 @@ public class TaskEvent extends Event {
         final EventType eventType
     ) {
         if (publisher == null) {
-
+            final String message = String.format("올바른 publisherId를 입력해주세요:%d", publisher);
+            throw new IllegalArgumentException(message);
         }
         if (!DOMAIN.equals(domain)) {
-
+            final String message = String.format("올바른 도메인을 입력해주세요:%s", domain);
+            throw new IllegalArgumentException(message);
         }
         if (eventId == null || eventId.isBlank()) {
-
+            final String message = String.format("올바른 eventId를 입력해주세요:%s", eventId);
+            throw new IllegalArgumentException(message);
         }
-        if (!eventTypes.contains(eventType)) {
-
+        if (eventType == null) {
+            final String message = String.format("올바른 eventType을 입력해주세요:%s", eventType);
+            throw new IllegalArgumentException(message);
         }
     }
 
-    public TaskEvent(
-        final Long publisher,
-        final String eventId,
-        final EventType eventType
-    ) {
-        validate(publisher, DOMAIN, eventId, eventType);
-        this.publisher = publisher;
-        this.domain = DOMAIN;
-        this.eventId = eventId;
-        this.eventType = eventType;
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        final TaskEvent taskEvent = (TaskEvent) obj;
+        return Objects.equals(eventId, taskEvent.eventId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(eventId);
+    }
+
+    @Override
+    public String toString() {
+        return "{"
+            + "\"eventId\":\"" + eventId + "\","
+            + "\"eventType\":\"" + eventType + "\","
+            + "\"publisher\":\"" + publisher + "\","
+            + "\"domain\":\"" + domain + "\","
+            + "\"createdAt\":\"" + createdAt + "\""
+            + "}";
     }
 }

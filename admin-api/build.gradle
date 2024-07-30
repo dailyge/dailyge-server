@@ -30,11 +30,16 @@ dependencies {
     implementation("com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4")
     implementation("org.liquibase:liquibase-core")
 
+    implementation("software.amazon.awssdk:sns")
+    implementation(platform("io.awspring.cloud:spring-cloud-aws-dependencies:${property("awsSpringCloudVersion")}"))
+    implementation("io.awspring.cloud:spring-cloud-aws-starter-sqs")
+
     testImplementation("org.springframework.restdocs:spring-restdocs-restassured")
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
     testImplementation("com.epages:restdocs-api-spec-mockmvc:${restdocsApiSpecVersion}")
     testImplementation("com.epages:restdocs-api-spec-restassured:${restdocsApiSpecVersion}")
     testImplementation("org.testcontainers:testcontainers")
+    testImplementation("org.testcontainers:localstack")
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.testcontainers:mysql")
 
@@ -74,7 +79,7 @@ tasks.register("copyDocument", Copy) {
 
 build {
     dependsOn copyDocument
-    dependsOn(':admin-api:openapi3')
+    dependsOn(":admin-api:openapi3")
 }
 
 bootJar {
@@ -95,9 +100,13 @@ tasks.named("processResources") {
     dependsOn(":storage:rdb:compileTestJava")
 }
 
+tasks.withType(JavaCompile).configureEach {
+    outputs.cacheIf { true }
+}
+
 openapi3 {
     def env = System.getenv("ENV")
-    setServer(env != null && env == 'prod' ? "https://api.dailyge.com" : "https://api-dev.dailyge.com")
+    setServer(env != null && env == "prod" ? "https://api.dailyge.com" : "https://api-dev.dailyge.com")
     title = "Dailyge Admin Api"
     description = "Dailyge Admin Api 문서 입니다."
     version = "1.0.0"

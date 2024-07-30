@@ -43,15 +43,16 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', 'gradle.properties', 'settings.gradle', 'build.gradle', '**/build.gradle') }}
           restore-keys: |
+            ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
             ${{ runner.os }}-gradle-
 
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./gradlew build sonar -PskipJib=true --info --stacktrace --no-daemon
+        run: ./gradlew test sonar -PskipJib=true --info --stacktrace --no-daemon
 
   notify_slack:
     runs-on: ubuntu-latest

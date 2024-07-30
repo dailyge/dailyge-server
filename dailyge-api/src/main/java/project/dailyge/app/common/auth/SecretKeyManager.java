@@ -1,6 +1,5 @@
 package project.dailyge.app.common.auth;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import project.dailyge.app.common.exception.UnAuthorizedException;
 
@@ -10,31 +9,30 @@ import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.spec.KeySpec;
 
-import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_USER_TOKEN;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
 
 @Component
-@RequiredArgsConstructor
 public class SecretKeyManager {
 
     private SecretKeySpec secretKeySpec;
-    private final JwtProperties jwtProperties;
+
+    public SecretKeyManager(final JwtProperties jwtProperties) {
+        try {
+            final SecretKeyFactory secretKeyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
+            final KeySpec spec = new PBEKeySpec(
+                jwtProperties.getPayloadSecretKeyChars(),
+                jwtProperties.getSaltBytes(),
+                65536,
+                256
+            );
+            final SecretKey secretKey = secretKeyFactory.generateSecret(spec);
+            secretKeySpec = new SecretKeySpec(secretKey.getEncoded(), "AES");
+        } catch (Exception ex) {
+            throw new UnAuthorizedException(ex.getMessage(), INTERNAL_SERVER_ERROR);
+        }
+    }
 
     public SecretKeySpec getSecretKeySpec() {
-        if (secretKeySpec == null) {
-            try {
-                final SecretKeyFactory secretKeyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
-                final KeySpec spec = new PBEKeySpec(
-                    jwtProperties.getPayloadSecretKeyChars(),
-                    jwtProperties.getSaltBytes(),
-                    65536,
-                    256
-                );
-                final SecretKey secretKey = secretKeyFactory.generateSecret(spec);
-                secretKeySpec = new SecretKeySpec(secretKey.getEncoded(), "AES");
-            } catch (Exception ex) {
-                throw new UnAuthorizedException(INVALID_USER_TOKEN);
-            }
-        }
         return secretKeySpec;
     }
 }

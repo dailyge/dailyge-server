@@ -21,22 +21,18 @@ public class SecretKeyManager {
 
     public SecretKeySpec getSecretKeySpec() {
         if (secretKeySpec == null) {
-            synchronized (SecretKeyManager.class) {
-                if (secretKeySpec == null) {
-                    try {
-                        final SecretKeyFactory secretKeyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
-                        final KeySpec spec = new PBEKeySpec(
-                            jwtProperties.getPayloadSecretKey().toCharArray(),
-                            jwtProperties.getSalt().getBytes(),
-                            65536,
-                            256
-                        );
-                        final SecretKey secretKey = secretKeyFactory.generateSecret(spec);
-                        secretKeySpec = new SecretKeySpec(secretKey.getEncoded(), "AES");
-                    } catch (Exception ex) {
-                        throw new UnAuthorizedException(INVALID_USER_TOKEN);
-                    }
-                }
+            try {
+                final SecretKeyFactory secretKeyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
+                final KeySpec spec = new PBEKeySpec(
+                    jwtProperties.getPayloadSecretKeyChars(),
+                    jwtProperties.getSaltBytes(),
+                    65536,
+                    256
+                );
+                final SecretKey secretKey = secretKeyFactory.generateSecret(spec);
+                secretKeySpec = new SecretKeySpec(secretKey.getEncoded(), "AES");
+            } catch (Exception ex) {
+                throw new UnAuthorizedException(INVALID_USER_TOKEN);
             }
         }
         return secretKeySpec;

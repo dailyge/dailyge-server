@@ -38,4 +38,12 @@ public class JwtProperties {
         this.accessExpiredTime = accessExpiredTime;
         this.refreshExpiredTime = refreshExpiredTime;
     }
+
+    public char[] getPayloadSecretKeyChars() {
+        return payloadSecretKey.toCharArray();
+    }
+
+    public byte[] getSaltBytes() {
+        return salt.getBytes();
+    }
 }

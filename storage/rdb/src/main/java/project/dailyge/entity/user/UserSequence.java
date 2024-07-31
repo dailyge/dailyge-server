@@ -16,7 +16,7 @@ public class UserSequence {
     private Long id;
 
     @Column(name = "executed")
-    private Boolean executed;
+    private boolean executed;
 
     protected UserSequence() {
         this.executed = false;

@@ -15,6 +15,12 @@ CREATE TABLE IF NOT EXISTS tasks
     deleted          BIT                                  NOT NULL COMMENT '삭제 유무'
 ) engine 'InnoDB' COMMENT '할 일';
 
+CREATE TABLE IF NOT EXISTS user_sequence
+(
+    id       BIGINT PRIMARY KEY AUTO_INCREMENT NOT NULL NOT NULL COMMENT '사용자 PK',
+    executed BIT                               NOT NULL DEFAULT FALSE COMMENT '처리 여부'
+) ENGINE InnoDB COMMENT '사용자 채번 테이블';
+
 CREATE TABLE IF NOT EXISTS users
 (
     id                BIGINT AUTO_INCREMENT PRIMARY KEY NOT NULL COMMENT '사용자 ID',

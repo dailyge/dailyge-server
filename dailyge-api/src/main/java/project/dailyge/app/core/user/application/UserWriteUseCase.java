@@ -8,4 +8,6 @@ public interface UserWriteUseCase {
     UserJpaEntity upsert(UserJpaEntity user);
 
     void delete(Long user);
+
+    Long getSequence();
 }

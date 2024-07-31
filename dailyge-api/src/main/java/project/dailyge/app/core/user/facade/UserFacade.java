@@ -23,6 +23,7 @@ public class UserFacade {
     public DailygeToken login(final String code) throws CommonException {
         final GoogleUserInfoResponse response = googleOAuthManager.getUserInfo(code);
         final UserJpaEntity user = new UserJpaEntity(response.getName(), response.getEmail(), response.getPicture());
+        final Long newSequence = userWriteUseCase.getSequence();
         final UserJpaEntity upsertUser = userWriteUseCase.upsert(user);
         final DailygeToken token = tokenProvider.createToken(upsertUser);
         tokenManager.saveRefreshToken(upsertUser.getId(), token.refreshToken());

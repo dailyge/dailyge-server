@@ -21,7 +21,7 @@ class UserSequenceTest {
         assertAll(
             () -> assertNotNull(userSequence),
             () -> assertNull(userSequence.getId()),
-            () -> assertFalse(userSequence.getExecuted())
+            () -> assertFalse(userSequence.isExecuted())
         );
     }
 
@@ -34,7 +34,7 @@ class UserSequenceTest {
 
         assertAll(
             () -> assertEquals(id, userSequence.getId()),
-            () -> assertEquals(executed, userSequence.getExecuted())
+            () -> assertEquals(executed, userSequence.isExecuted())
         );
     }
 
@@ -44,15 +44,15 @@ class UserSequenceTest {
         final UserSequence userSequence = UserSequence.createNewSequence();
         userSequence.changeExecuted();
 
-        assertTrue(userSequence.getExecuted());
+        assertTrue(userSequence.isExecuted());
     }
 
     @Test
-    @DisplayName("UserSequence 상태를 변경하면, 변경된 상태가 반영된다.")
+    @DisplayName("UserSequence 상태가 True이면, 상태가 변경되지 않는다.")
     void whenStatusIsTrueThenAndChangeThenResultShouldBeTrue() {
         final UserSequence userSequence = new UserSequence(1L, true);
         userSequence.changeExecuted();
 
-        assertTrue(userSequence.getExecuted());
+        assertTrue(userSequence.isExecuted());
     }
 }

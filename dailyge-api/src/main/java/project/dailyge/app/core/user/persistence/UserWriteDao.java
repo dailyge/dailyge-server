@@ -8,6 +8,8 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.DATA_ACCESS_EXCEPTION;
+import project.dailyge.app.common.exception.DaoException;
 import project.dailyge.entity.user.UserEntityWriteRepository;
 import project.dailyge.entity.user.UserJpaEntity;
 
@@ -44,7 +46,7 @@ public class UserWriteDao implements UserEntityWriteRepository {
             jdbcTemplate.update(connection -> connection.prepareStatement(sql, new String[]{"id"}), keyHolder);
             return Objects.requireNonNull(keyHolder.getKey()).longValue();
         } catch (DataAccessException ex) {
-            throw new RuntimeException("Exception");
+            throw new DaoException(ex.getMessage(), DATA_ACCESS_EXCEPTION);
         }
     }
 }

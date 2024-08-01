@@ -36,4 +36,4 @@ public enum CommonCodeAndMessage implements CodeAndMessage {
     public String message() {
         return message;
     }
-    }
+}

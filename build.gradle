@@ -38,6 +38,7 @@ sonarqube {
         }
         property("sonar.exclusions", exclusions.join(", "))
         property("sonar.java.coveragePlugin", "jacoco")
+        property("sonar.branch.name", "dev")
     }
 }
 

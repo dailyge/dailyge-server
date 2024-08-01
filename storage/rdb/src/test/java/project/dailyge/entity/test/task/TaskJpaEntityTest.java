@@ -42,7 +42,7 @@ class TaskJpaEntityTest {
     @DisplayName("올바른 인자가 들어오면 할 일이 생성된다.")
     void taskCreateTest() {
         final LocalDateTime now = LocalDateTime.now();
-        final TaskJpaEntity task = TaskJpaEntity.builder()
+        final TaskJpaEntity newTask = TaskJpaEntity.builder()
             .id(1L)
             .title("프로젝트 관리")
             .content("프로젝트 진행 상황 점검")
@@ -57,17 +57,17 @@ class TaskJpaEntityTest {
             .build();
 
         assertAll(
-            () -> assertThat(task.getId()).isEqualTo(1L),
-            () -> assertThat(task.getTitle()).isEqualTo("프로젝트 관리"),
-            () -> assertThat(task.getContent()).isEqualTo("프로젝트 진행 상황 점검"),
-            () -> assertThat(task.getDate()).isEqualTo(LocalDate.now().plusDays(10)),
-            () -> assertThat(task.getStatus()).isEqualTo(TaskStatus.TODO),
-            () -> assertThat(task.getUserId()).isEqualTo(1L),
-            () -> assertThat(task.getCreatedAt()).isEqualTo(now),
-            () -> assertThat(task.getCreatedBy()).isEqualTo(1L),
-            () -> assertThat(task.getLastModifiedAt()).isEqualTo(now),
-            () -> assertThat(task.getLastModifiedBy()).isEqualTo(1L),
-            () -> assertThat(task.getDeleted()).isFalse()
+            () -> assertThat(newTask.getId()).isEqualTo(1L),
+            () -> assertThat(newTask.getTitle()).isEqualTo("프로젝트 관리"),
+            () -> assertThat(newTask.getContent()).isEqualTo("프로젝트 진행 상황 점검"),
+            () -> assertThat(newTask.getDate()).isEqualTo(LocalDate.now().plusDays(10)),
+            () -> assertThat(newTask.getStatus()).isEqualTo(TaskStatus.TODO),
+            () -> assertThat(newTask.getUserId()).isEqualTo(1L),
+            () -> assertThat(newTask.getCreatedAt()).isEqualTo(now),
+            () -> assertThat(newTask.getCreatedBy()).isEqualTo(1L),
+            () -> assertThat(newTask.getLastModifiedAt()).isEqualTo(now),
+            () -> assertThat(newTask.getLastModifiedBy()).isEqualTo(1L),
+            () -> assertThat(newTask.getDeleted()).isFalse()
         );
     }
 
@@ -159,12 +159,12 @@ class TaskJpaEntityTest {
     @Test
     @DisplayName("할 일 상태를 변경하면, 내용이 반영된다.")
     void whenUpdateTaskThenChangeShouldBeApplied() {
-        String newTitle = "Updated Title";
-        String newContent = "Updated content of the task.";
-        LocalDate today = LocalDate.now();
-        TaskStatus newStatus = TaskStatus.TODO;
+        final String newTitle = "Updated Title";
+        final String newContent = "Updated content of the task.";
+        final LocalDate today = LocalDate.now();
+        final TaskStatus newStatus = TaskStatus.TODO;
 
-        TaskJpaEntity task = new TaskJpaEntity(
+        final TaskJpaEntity newTask = new TaskJpaEntity(
             "Initial Title",
             "Initial content of the task.",
             LocalDate.now(),
@@ -172,15 +172,15 @@ class TaskJpaEntityTest {
             1L
         );
 
-        task.update(newTitle, newContent, today, newStatus);
+        newTask.update(newTitle, newContent, today, newStatus);
 
         assertAll(
-            () -> assertEquals(newTitle, task.getTitle()),
-            () -> assertEquals(newContent, task.getContent()),
-            () -> assertEquals(today, task.getDate()),
-            () -> assertEquals(today.getYear(), task.getYear()),
-            () -> assertEquals(today.getMonthValue(), task.getMonth()),
-            () -> assertEquals(newStatus, task.getStatus())
+            () -> assertEquals(newTitle, newTask.getTitle()),
+            () -> assertEquals(newContent, newTask.getContent()),
+            () -> assertEquals(today, newTask.getDate()),
+            () -> assertEquals(today.getYear(), newTask.getYear()),
+            () -> assertEquals(today.getMonthValue(), newTask.getMonth()),
+            () -> assertEquals(newStatus, newTask.getStatus())
         );
     }
 
@@ -188,7 +188,7 @@ class TaskJpaEntityTest {
     @DisplayName("할 일이 삭제되었다면, deleted 칼럼이 true가 된다.")
     void whenDeleteTaskThenDeleteStatusShouldBeTrue() {
         final LocalDateTime now = LocalDateTime.now();
-        final TaskJpaEntity task = TaskJpaEntity.builder()
+        final TaskJpaEntity newTask = TaskJpaEntity.builder()
             .id(1L)
             .title("프로젝트 관리")
             .content("프로젝트 진행 상황 점검")
@@ -202,15 +202,15 @@ class TaskJpaEntityTest {
             .deleted(false)
             .build();
 
-        task.delete();
+        newTask.delete();
 
-        assertTrue(task.getDeleted());
+        assertTrue(newTask.getDeleted());
     }
 
     @Test
     @DisplayName("ID가 같다면 같은 객체로 여긴다.")
     void whenIdIsSameThenInstanceAreSameObj() {
-        final TaskJpaEntity task = TaskJpaEntity.builder()
+        final TaskJpaEntity newTask = TaskJpaEntity.builder()
             .id(1L)
             .title("제목")
             .content("내용")
@@ -224,13 +224,13 @@ class TaskJpaEntityTest {
             .deleted(false)
             .build();
 
-        assertThat(task).isEqualTo(task);
+        assertThat(newTask).isEqualTo(newTask);
     }
 
     @Test
     @DisplayName("ID가 다르면 다른 객체로 여긴다.")
     void whenIdIsDifferentThenInstancesAreDifferent() {
-        final TaskJpaEntity task = TaskJpaEntity.builder()
+        final TaskJpaEntity newTask = TaskJpaEntity.builder()
             .id(1L)
             .title("제목")
             .content("내용")
@@ -258,13 +258,13 @@ class TaskJpaEntityTest {
             .deleted(false)
             .build();
 
-        assertThat(task).isNotEqualTo(differentTask);
+        assertThat(newTask).isNotEqualTo(differentTask);
     }
 
     @Test
     @DisplayName("ID가 같다면 해시코드가 동일하다.")
     void whenIdIsSameThenHashcodeIsSame() {
-        final TaskJpaEntity task = TaskJpaEntity.builder()
+        final TaskJpaEntity newTask = TaskJpaEntity.builder()
             .id(1L)
             .title("제목")
             .content("내용")
@@ -277,8 +277,8 @@ class TaskJpaEntityTest {
             .lastModifiedBy(1L)
             .deleted(false)
             .build();
-        final int hashCode1 = task.hashCode();
-        final int hashCode2 = task.hashCode();
+        final int hashCode1 = newTask.hashCode();
+        final int hashCode2 = newTask.hashCode();
         assertThat(hashCode1).isEqualTo(hashCode2);
     }
 }

@@ -9,7 +9,6 @@ import project.dailyge.app.core.user.application.UserWriteUseCase;
 import project.dailyge.app.core.user.external.oauth.GoogleOAuthManager;
 import project.dailyge.app.core.user.external.oauth.TokenManager;
 import project.dailyge.app.core.user.external.response.GoogleUserInfoResponse;
-import project.dailyge.entity.user.UserJpaEntity;
 
 @Component
 @RequiredArgsConstructor
@@ -22,11 +21,9 @@ public class UserFacade {
 
     public DailygeToken login(final String code) throws CommonException {
         final GoogleUserInfoResponse response = googleOAuthManager.getUserInfo(code);
-        final UserJpaEntity user = new UserJpaEntity(response.getName(), response.getEmail(), response.getPicture());
-        final Long newSequence = userWriteUseCase.getSequence();
-        final UserJpaEntity upsertUser = userWriteUseCase.upsert(user);
-        final DailygeToken token = tokenProvider.createToken(upsertUser);
-        tokenManager.saveRefreshToken(upsertUser.getId(), token.refreshToken());
+        final Long newUserSequence = userWriteUseCase.getSequence();
+        final DailygeToken token = tokenProvider.createToken(newUserSequence, response.getEmail());
+        tokenManager.saveRefreshToken(newUserSequence, token.refreshToken());
         return token;
     }
 

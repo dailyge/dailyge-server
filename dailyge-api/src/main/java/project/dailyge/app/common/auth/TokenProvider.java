@@ -18,7 +18,6 @@ import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_S
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_PARAMETERS;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_USER_TOKEN;
 import project.dailyge.app.common.exception.UnAuthorizedException;
-import project.dailyge.entity.user.UserJpaEntity;
 
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
@@ -40,9 +39,12 @@ public class TokenProvider {
     private final JwtProperties jwtProperties;
     private final SecretKeyManager secretKeyManager;
 
-    public DailygeToken createToken(final UserJpaEntity user) {
-        final String accessToken = generateToken(user, getExpiry(jwtProperties.getAccessExpiredTime()));
-        final String refreshToken = generateToken(user, getExpiry(jwtProperties.getRefreshExpiredTime()));
+    public DailygeToken createToken(
+        final Long userId,
+        final String userEmail
+    ) {
+        final String accessToken = generateToken(userId, userEmail, getExpiry(jwtProperties.getAccessExpiredTime()));
+        final String refreshToken = generateToken(userId, userEmail, getExpiry(jwtProperties.getRefreshExpiredTime()));
         return new DailygeToken(accessToken, refreshToken, jwtProperties.getRefreshExpiredTime() * 3600);
     }
 
@@ -52,15 +54,16 @@ public class TokenProvider {
     }
 
     private String generateToken(
-        final UserJpaEntity user,
+        final Long userId,
+        final String userEmail,
         final Date expiry
     ) {
         try {
             return Jwts.builder()
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
                 .setExpiration(expiry)
-                .setSubject(user.getEmail())
-                .claim(ID, encryptUserId(user.getId()))
+                .setSubject(userEmail)
+                .claim(ID, encryptUserId(userId))
                 .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey())
                 .compact();
         } catch (IllegalArgumentException ex) {

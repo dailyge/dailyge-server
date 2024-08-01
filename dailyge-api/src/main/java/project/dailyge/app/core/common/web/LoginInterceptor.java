@@ -84,7 +84,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             }
 
             final UserJpaEntity user = userReadUseCase.findActiveUserById(userId);
-            final DailygeToken token = tokenProvider.createToken(user);
+            final DailygeToken token = tokenProvider.createToken(user.getId(), user.getEmail());
 
             setLoggedInResponse(request, response, token.accessToken());
             return false;

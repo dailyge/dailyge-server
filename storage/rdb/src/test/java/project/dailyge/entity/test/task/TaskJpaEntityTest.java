@@ -210,6 +210,20 @@ class TaskJpaEntityTest {
     @Test
     @DisplayName("ID가 같다면 같은 객체로 여긴다.")
     void whenIdIsSameThenInstanceAreSameObj() {
+        final TaskJpaEntity expectedTask = TaskJpaEntity.builder()
+            .id(1L)
+            .title("제목")
+            .content("내용")
+            .date(LocalDate.now().plusDays(10))
+            .status(TaskStatus.TODO)
+            .userId(1L)
+            .createdAt(LocalDateTime.now())
+            .createdBy(1L)
+            .lastModifiedAt(LocalDateTime.now())
+            .lastModifiedBy(1L)
+            .deleted(false)
+            .build();
+
         final TaskJpaEntity newTask = TaskJpaEntity.builder()
             .id(1L)
             .title("제목")
@@ -224,7 +238,7 @@ class TaskJpaEntityTest {
             .deleted(false)
             .build();
 
-        assertThat(newTask).isEqualTo(newTask);
+        assertThat(newTask).isEqualTo(expectedTask);
     }
 
     @Test
@@ -277,8 +291,9 @@ class TaskJpaEntityTest {
             .lastModifiedBy(1L)
             .deleted(false)
             .build();
-        final int hashCode1 = newTask.hashCode();
-        final int hashCode2 = newTask.hashCode();
-        assertThat(hashCode1).isEqualTo(hashCode2);
+        final int expected = newTask.hashCode();
+        final int hashcode = newTask.hashCode();
+
+        assertThat(expected).isEqualTo(hashcode);
     }
 }

@@ -4,4 +4,6 @@ public interface UserEntityWriteRepository {
     UserJpaEntity save(UserJpaEntity user);
 
     void delete(UserJpaEntity user);
+
+    Long getSequence();
 }

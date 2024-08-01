@@ -4,15 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.dailyge.app.core.user.application.UserWriteUseCase;
+import static project.dailyge.app.core.user.exception.UserCodeAndMessage.DUPLICATED_EMAIL;
+import static project.dailyge.app.core.user.exception.UserCodeAndMessage.USER_NOT_FOUND;
 import project.dailyge.app.core.user.exception.UserTypeException;
 import project.dailyge.entity.user.UserEntityReadRepository;
 import project.dailyge.entity.user.UserEntityWriteRepository;
 import project.dailyge.entity.user.UserJpaEntity;
 
 import java.util.Optional;
-
-import static project.dailyge.app.core.user.exception.UserCodeAndMessage.DUPLICATED_EMAIL;
-import static project.dailyge.app.core.user.exception.UserCodeAndMessage.USER_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
@@ -52,5 +51,10 @@ public class UserWriteService implements UserWriteUseCase {
             .orElseThrow(() -> UserTypeException.from(USER_NOT_FOUND));
         findUser.delete();
         userWriteRepository.save(findUser);
+    }
+
+    @Override
+    public Long getSequence() {
+        return userWriteRepository.getSequence();
     }
 }

@@ -12,6 +12,13 @@ CREATE TABLE IF NOT EXISTS code_and_message
     deleted          BIT                               NOT NULL DEFAULT 0 COMMENT '삭제 여부'
 ) ENGINE = InnoDB COMMENT '코드와 메시지';
 
+DROP TABLE IF EXISTS user_sequence;
+CREATE TABLE IF NOT EXISTS user_sequence
+(
+    id       BIGINT PRIMARY KEY AUTO_INCREMENT NOT NULL COMMENT '사용자 PK',
+    executed BIT                               NOT NULL DEFAULT FALSE COMMENT '처리 여부'
+) ENGINE InnoDB COMMENT '사용자 채번 테이블';
+
 DROP TABLE IF EXISTS tasks;
 CREATE TABLE IF NOT EXISTS tasks
 (

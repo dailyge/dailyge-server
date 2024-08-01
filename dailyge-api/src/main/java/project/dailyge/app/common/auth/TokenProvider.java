@@ -120,9 +120,9 @@ public class TokenProvider {
                 userId.toString().getBytes(StandardCharsets.UTF_8)
             );
 
-            final byte[] encryptedUserIdWithIv = new byte[iv.length + encryptedUserId.length];
-            System.arraycopy(iv, ARRAY_START_INDEX, encryptedUserIdWithIv, ARRAY_START_INDEX, iv.length);
-            System.arraycopy(encryptedUserId, ARRAY_START_INDEX, encryptedUserIdWithIv, iv.length, encryptedUserId.length);
+            final byte[] encryptedUserIdWithIv = new byte[IV_SIZE + encryptedUserId.length];
+            System.arraycopy(iv, ARRAY_START_INDEX, encryptedUserIdWithIv, ARRAY_START_INDEX, IV_SIZE);
+            System.arraycopy(encryptedUserId, ARRAY_START_INDEX, encryptedUserIdWithIv, IV_SIZE, encryptedUserId.length);
 
             return Base64.getEncoder().encodeToString(encryptedUserIdWithIv);
         } catch (Exception ex) {
@@ -135,9 +135,9 @@ public class TokenProvider {
             final byte[] encryptedWithIv = Base64.getDecoder().decode(encryptedUserIdWithIv);
 
             final byte[] iv = new byte[IV_SIZE];
-            final byte[] encryptedUserId = new byte[encryptedWithIv.length - iv.length];
-            System.arraycopy(encryptedWithIv, ARRAY_START_INDEX, iv, ARRAY_START_INDEX, iv.length);
-            System.arraycopy(encryptedWithIv, iv.length, encryptedUserId, ARRAY_START_INDEX, encryptedUserId.length);
+            final byte[] encryptedUserId = new byte[encryptedWithIv.length - IV_SIZE];
+            System.arraycopy(encryptedWithIv, ARRAY_START_INDEX, iv, ARRAY_START_INDEX, IV_SIZE);
+            System.arraycopy(encryptedWithIv, IV_SIZE, encryptedUserId, ARRAY_START_INDEX, encryptedUserId.length);
 
             final byte[] decrypted = applyCipher(iv, Cipher.DECRYPT_MODE, encryptedUserId);
 

@@ -11,7 +11,7 @@ import java.security.spec.KeySpec;
 @Component
 public class SecretKeyManager {
 
-    private SecretKeySpec secretKeySpec;
+    private final SecretKeySpec secretKeySpec;
 
     public SecretKeyManager(final JwtProperties jwtProperties) {
         try {

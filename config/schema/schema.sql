@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS code_and_message
 DROP TABLE IF EXISTS user_sequence;
 CREATE TABLE IF NOT EXISTS user_sequence
 (
-    id       BIGINT PRIMARY KEY AUTO_INCREMENT NOT NULL NOT NULL COMMENT '사용자 PK',
+    id       BIGINT PRIMARY KEY AUTO_INCREMENT NOT NULL COMMENT '사용자 PK',
     executed BIT                               NOT NULL DEFAULT FALSE COMMENT '처리 여부'
 ) ENGINE InnoDB COMMENT '사용자 채번 테이블';
 

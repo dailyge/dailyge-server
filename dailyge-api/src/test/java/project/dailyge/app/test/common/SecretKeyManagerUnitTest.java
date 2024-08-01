@@ -44,7 +44,7 @@ class SecretKeyManagerUnitTest {
         final KeySpec spec = new PBEKeySpec(
             jwtProperties.getPayloadSecretKeyChars(),
             jwtProperties.getSaltBytes(),
-            65536,
+            600000,
             256
         );
         final SecretKey secretKey = secretKeyFactory.generateSecret(spec);

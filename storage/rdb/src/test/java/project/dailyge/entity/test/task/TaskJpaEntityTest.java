@@ -6,13 +6,10 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import project.dailyge.entity.task.TaskJpaEntity;
-import static project.dailyge.entity.task.TaskJpaEntity.getBeyondOneYearErrorMessage;
-import static project.dailyge.entity.task.TaskJpaEntity.getOverMaxContentLengthErrorMessage;
-import static project.dailyge.entity.task.TaskJpaEntity.getOverMaxTitleLengthErrorMessage;
-import static project.dailyge.entity.task.TaskJpaEntity.getPastDateErrorMessage;
 import project.dailyge.entity.task.TaskStatus;
 
 import java.time.LocalDate;
@@ -20,6 +17,26 @@ import java.time.LocalDateTime;
 
 @DisplayName("[UnitTest] 할 일 엔티티 테스트")
 class TaskJpaEntityTest {
+
+    private TaskJpaEntity task;
+
+    @BeforeEach
+    void setUp() {
+        final LocalDateTime now = LocalDateTime.now();
+        task = TaskJpaEntity.builder()
+            .id(1L)
+            .title("프로젝트 관리")
+            .content("프로젝트 진행 상황 점검")
+            .date(LocalDate.now().plusDays(10))
+            .status(TaskStatus.TODO)
+            .userId(1L)
+            .createdAt(now)
+            .createdBy(1L)
+            .lastModifiedAt(now)
+            .lastModifiedBy(1L)
+            .deleted(false)
+            .build();
+    }
 
     @Test
     @DisplayName("올바른 인자가 들어오면 할 일이 생성된다.")
@@ -84,7 +101,7 @@ class TaskJpaEntityTest {
                 .userId(1L)
                 .build()
         ).isInstanceOf(IllegalArgumentException.class)
-            .hasMessage(getOverMaxTitleLengthErrorMessage());
+            .hasMessage(task.getOverMaxTitleLengthErrorMessage());
     }
 
     @Test
@@ -102,7 +119,7 @@ class TaskJpaEntityTest {
                 .userId(1L)
                 .build()
         ).isInstanceOf(IllegalArgumentException.class)
-            .hasMessageContaining(getOverMaxContentLengthErrorMessage());
+            .hasMessageContaining(task.getOverMaxContentLengthErrorMessage());
     }
 
     @Test
@@ -119,7 +136,7 @@ class TaskJpaEntityTest {
                 .userId(1L)
                 .build()
         ).isInstanceOf(IllegalArgumentException.class)
-            .hasMessageContaining(getPastDateErrorMessage());
+            .hasMessageContaining(task.getPastDateErrorMessage());
     }
 
     @Test
@@ -136,7 +153,7 @@ class TaskJpaEntityTest {
                 .userId(1L)
                 .build()
         ).isInstanceOf(IllegalArgumentException.class)
-            .hasMessageContaining(getBeyondOneYearErrorMessage());
+            .hasMessageContaining(task.getBeyondOneYearErrorMessage());
     }
 
     @Test

@@ -88,12 +88,11 @@ public class TokenProvider {
                 .setSigningKey(jwtProperties.getSecretKey())
                 .parseClaimsJws(token)
                 .getBody();
-        } catch (
-            IllegalArgumentException
-            | SignatureException
-            | MalformedJwtException
-            | UnsupportedJwtException
-            | RequiredTypeException ex
+        } catch (IllegalArgumentException
+                 | SignatureException
+                 | MalformedJwtException
+                 | UnsupportedJwtException
+                 | RequiredTypeException ex
         ) {
             throw new UnAuthorizedException(ex.getMessage(), INVALID_USER_TOKEN);
         }

@@ -1,23 +1,23 @@
 package project.dailyge.app.test.common;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+import project.dailyge.app.common.auth.DailygeToken;
+import project.dailyge.app.common.auth.JwtProperties;
+import project.dailyge.app.common.auth.SecretKeyManager;
+import project.dailyge.app.common.auth.TokenProvider;
+import project.dailyge.app.common.exception.UnAuthorizedException;
+import project.dailyge.app.test.user.fixture.UserFixture;
+import project.dailyge.entity.user.UserJpaEntity;
+
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import project.dailyge.app.common.auth.DailygeToken;
-import project.dailyge.app.common.auth.JwtProperties;
-import project.dailyge.app.common.auth.TokenProvider;
-import project.dailyge.app.common.exception.JWTAuthenticationException;
-import static project.dailyge.app.common.exception.JWTAuthenticationException.EMPTY_TOKEN_ERROR_MESSAGE;
-import static project.dailyge.app.common.exception.JWTAuthenticationException.TOKEN_FORMAT_INCORRECT_ERROR_MESSAGE;
-import static project.dailyge.app.common.exception.JWTAuthenticationException.TOKEN_SIGNATURE_VERIFICATION_FAILED_ERROR_MESSAGE;
-import static project.dailyge.app.common.exception.JWTAuthenticationException.UNSUPPORTED_TOKEN_ERROR_MESSAGE;
-import project.dailyge.app.test.user.fixture.UserFixture;
-import project.dailyge.entity.user.UserJpaEntity;
 
 @DisplayName("[UnitTest] TokenProvider 단위 테스트")
 class TokenProviderUnitTest {
@@ -29,8 +29,15 @@ class TokenProviderUnitTest {
 
     @BeforeEach
     void setUp() {
-        final JwtProperties jwtProperties = new JwtProperties("secretKey", 1, REFRESH_EXPIRED_TIME);
-        tokenProvider = new TokenProvider(jwtProperties);
+        final JwtProperties jwtProperties = new JwtProperties(
+            "secretKey",
+            "payloadSecretKey",
+            "salt",
+            1,
+            REFRESH_EXPIRED_TIME
+        );
+        final SecretKeyManager secretKeyManager = new SecretKeyManager(jwtProperties);
+        tokenProvider = new TokenProvider(jwtProperties, secretKeyManager);
     }
 
     @Test
@@ -66,38 +73,64 @@ class TokenProviderUnitTest {
     }
 
     @Test
-    @DisplayName("빈 토큰을 검증하면, JWTAuthenticationException 가 발생한다.")
-    void whenEmptyTokenThenJWTAuthenticationExceptionShouldBeHappen() {
+    @DisplayName("빈 토큰을 검증하면, UnAuthorizedException 가 발생한다.")
+    void whenEmptyTokenThenUnAuthorizedExceptionShouldBeHappen() {
         assertThatThrownBy(() -> tokenProvider.getUserId(null))
-            .isExactlyInstanceOf(JWTAuthenticationException.class)
-            .isInstanceOf(RuntimeException.class)
-            .hasMessage(EMPTY_TOKEN_ERROR_MESSAGE);
+            .isExactlyInstanceOf(UnAuthorizedException.class)
+            .isInstanceOf(RuntimeException.class);
     }
 
     @Test
-    @DisplayName("서명이 다른 토큰으로 검증하면, JWTAuthenticationException 가 발생한다.")
-    void whenDifferentSignatureThenJWTAuthenticationExceptionShouldBeHappen() {
+    @DisplayName("서명이 다른 토큰으로 검증하면, UnAuthorizedException 가 발생한다.")
+    void whenDifferentSignatureThenUnAuthorizedExceptionShouldBeHappen() {
         assertThatThrownBy(() -> tokenProvider.getUserId("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.test.test"))
-            .isExactlyInstanceOf(JWTAuthenticationException.class)
-            .isInstanceOf(RuntimeException.class)
-            .hasMessage(TOKEN_SIGNATURE_VERIFICATION_FAILED_ERROR_MESSAGE);
+            .isExactlyInstanceOf(UnAuthorizedException.class)
+            .isInstanceOf(RuntimeException.class);
     }
 
     @Test
-    @DisplayName("토큰 형식이 올바르지 않는다면, JWTAuthenticationException 가 발생한다.")
-    void whenTokenFormatIncorrectThenJWTAuthenticationExceptionShouldBeHappen() {
+    @DisplayName("토큰 형식이 올바르지 않는다면, UnAuthorizedException 가 발생한다.")
+    void whenTokenFormatIncorrectThenUnAuthorizedExceptionShouldBeHappen() {
         assertThatThrownBy(() -> tokenProvider.getUserId("test"))
-            .isExactlyInstanceOf(JWTAuthenticationException.class)
-            .isInstanceOf(RuntimeException.class)
-            .hasMessage(TOKEN_FORMAT_INCORRECT_ERROR_MESSAGE);
+            .isExactlyInstanceOf(UnAuthorizedException.class)
+            .isInstanceOf(RuntimeException.class);
     }
 
     @Test
-    @DisplayName("지원되지 않는 형식의 JWT 일 경우, JWTAuthenticationException 가 발생한다.")
-    void whenUnsupportedTokenThenJWTAuthenticationExceptionShouldBeHappen() {
+    @DisplayName("지원되지 않는 형식의 JWT 일 경우, UnAuthorizedException 가 발생한다.")
+    void whenUnsupportedTokenThenUnAuthorizedExceptionShouldBeHappen() {
         assertThatThrownBy(() -> tokenProvider.getUserId("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.test."))
-            .isExactlyInstanceOf(JWTAuthenticationException.class)
-            .isInstanceOf(RuntimeException.class)
-            .hasMessage(UNSUPPORTED_TOKEN_ERROR_MESSAGE);
+            .isExactlyInstanceOf(UnAuthorizedException.class)
+            .isInstanceOf(RuntimeException.class);
+    }
+
+    @ParameterizedTest
+    @DisplayName("사용자 ID를 암호화 하면, 정상적으로 암호화 된다.")
+    @ValueSource(longs = {1L, 100L, 2231234124L})
+    void whenEncryptUserIdThenUserIdShouldBeEncrypted(final Long userId) {
+        final String encryptedUserId = tokenProvider.encryptUserId(userId);
+
+        assertEquals(44, encryptedUserId.length());
+    }
+
+    @Test
+    @DisplayName("암호화 된 사용자 ID를 Decrypt 하면, 정상적으로 사용자 ID를 얻을 수 있다.")
+    void whenDecodeTheEncryptedUserIDThenResultShouldBeUserId() {
+        final Long userId = 1L;
+        final String encryptedUserId = tokenProvider.encryptUserId(userId);
+
+        final Long decryptUserId = tokenProvider.decryptUserId(encryptedUserId);
+
+        assertEquals(userId, decryptUserId);
+    }
+
+    @Test
+    @DisplayName("비정상적인 페이로드가 올 경우, UnAuthorizedException 이 발생한다.")
+    void whenAbnormalPayloadThenUnAuthorizedExceptionShouldBeHappen() {
+        final String abnormalPayload = "jwtAbnormalPayloadData";
+
+        assertThatThrownBy(() -> tokenProvider.decryptUserId(abnormalPayload))
+            .isExactlyInstanceOf(UnAuthorizedException.class)
+            .isInstanceOf(RuntimeException.class);
     }
 }

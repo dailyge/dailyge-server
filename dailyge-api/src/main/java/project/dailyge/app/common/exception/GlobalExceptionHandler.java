@@ -29,6 +29,14 @@ public class GlobalExceptionHandler {
             .body(ErrorResponse.from(codeAndMessage));
     }
 
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<ErrorResponse> resolveIllegalStateException(final IllegalStateException exception) {
+        final CodeAndMessage codeAndMessage = CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
+        log.error("error: {}, {}", MDC.get("requestId"), exception.getMessage());
+        return ResponseEntity.status(codeAndMessage.code())
+            .body(ErrorResponse.from(codeAndMessage));
+    }
+
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ErrorResponse> resolveBusinessException(final BusinessException exception) {
         final CodeAndMessage codeAndMessage = exception.getCodeAndMessage();

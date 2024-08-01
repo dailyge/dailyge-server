@@ -74,7 +74,8 @@ public class LoginInterceptor implements HandlerInterceptor {
             }
 
             final Claims claims = expiredJwtException.getClaims();
-            final Long userId = claims.get("id", Long.class);
+            final String encryptedUserId = claims.get("id", String.class);
+            final Long userId = tokenProvider.decryptUserId(encryptedUserId);
             if (!userReadUseCase.existsById(userId)) {
                 return true;
             }

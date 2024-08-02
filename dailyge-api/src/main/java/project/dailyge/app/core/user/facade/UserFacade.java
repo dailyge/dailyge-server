@@ -42,7 +42,7 @@ public class UserFacade {
         final Optional<UserJpaEntity> findUserByEmail,
         final GoogleUserInfoResponse response
     ) {
-        UserCache userCache;
+        final UserCache userCache;
         if (findUserByEmail.isEmpty()) {
             final Long newUserSequence = userWriteUseCase.getSequence();
             userCache = new UserCache(newUserSequence, response.getName(), response.getEmail(), response.getPicture());

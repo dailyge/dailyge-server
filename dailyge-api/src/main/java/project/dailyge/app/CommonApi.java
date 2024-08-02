@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.OK;
 import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.common.auth.LoginUser;
-import project.dailyge.app.core.codeandmessage.CodeAndMessageConfig;
 import project.dailyge.app.common.response.ApiResponse;
+import project.dailyge.app.core.codeandmessage.CodeAndMessageConfig;
 import project.dailyge.entity.codeandmessage.CodeAndMessageEntityWriteService;
 import project.dailyge.entity.codeandmessage.CodeAndMessages;
 
@@ -21,7 +21,7 @@ public class CommonApi {
     private final CodeAndMessageEntityWriteService codeAndMessageWriteService;
     private final CodeAndMessageConfig codeAndMessageConfig;
 
-    @GetMapping
+    @GetMapping(path = {"/health-check"})
     public ApiResponse<String> healthCheck() {
         return ApiResponse.from(OK);
     }

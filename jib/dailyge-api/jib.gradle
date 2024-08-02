@@ -13,7 +13,7 @@ if (env != null && (env == "dev" || env == "prod")) {
     label = "dailyge-${profile}-api"
 }
 
-if (env != null && (skipJib != null && !skipJib)) {
+if (env != null && (skipJib != null && skipJib == "false")) {
     jib {
         from {
             image = 'openjdk:17-jdk-slim'
@@ -26,8 +26,15 @@ if (env != null && (skipJib != null && !skipJib)) {
         container {
             ports = [port]
             labels = [server: label]
-            jvmFlags = ["-Dspring.profiles.active=${profile}", "-Dfile.encoding=UTF-8"]
-            environment = ['JAVA_OPTIONS': '-Xms256m -Xmx256m']
+            jvmFlags = [
+                    "-Dspring.profiles.active=${profile}",
+                    "-Dfile.encoding=UTF-8",
+                    "--add-opens=java.base/java.time=ALL-UNNAMED"
+            ]
+            environment = [
+                    'JAVA_OPTIONS' : '-Xms256m -Xmx256m',
+                    'ENCRYPTOR_KEY': System.getenv("ENCRYPTOR_KEY")
+            ]
             creationTime = 'USE_CURRENT_TIMESTAMP'
             allowInsecureRegistries = true
         }

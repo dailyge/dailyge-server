@@ -16,7 +16,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @DisplayName("[UnitTest] 할 일 엔티티 테스트")
-class TaskJpaEntityTest {
+class TaskJpaEntityUnitTest {
 
     private TaskJpaEntity task;
 

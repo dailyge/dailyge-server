@@ -16,7 +16,7 @@ import static project.dailyge.entity.user.UserJpaEntity.getOverMaxNicknameLength
 import static project.dailyge.entity.user.UserJpaEntity.getOverMaxProfileImageUrlErrorMessage;
 
 @DisplayName("[UnitTest] 유저 엔티티 테스트")
-class UserJpaEntityTest {
+class UserJpaEntityUnitTest {
 
     private static final String NICKNAME = "nickname";
     private static final String EMAIL = "email@gmail.com";

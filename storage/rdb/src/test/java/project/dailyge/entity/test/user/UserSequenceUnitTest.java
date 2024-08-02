@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import project.dailyge.entity.user.UserSequence;
 
 @DisplayName("[UnitTest] UserSequence 단위 테스트")
-class UserSequenceTest {
+class UserSequenceUnitTest {
 
     @Test
     @DisplayName("UserSequence 생성 시, 기본값이 설정된 UserSequence 인스턴스가 생성된다.")

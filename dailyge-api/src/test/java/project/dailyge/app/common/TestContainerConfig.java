@@ -45,6 +45,7 @@ public final class TestContainerConfig {
         .withReuse(true)
         .waitingFor(forListeningPort())
         .withLabel("reuse.UUID", UUID.randomUUID().toString())
+        .withCommand("redis-server", "--requirepass", "dailyge")
         .withCreateContainerCmdModifier(cmd -> requireNonNull(cmd.getHostConfig())
             .withCpuCount(1L)
             .withMemory(2147483648L));

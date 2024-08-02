@@ -26,6 +26,11 @@ public class CommonApi {
         return ApiResponse.from(OK);
     }
 
+    @GetMapping(path = {"/health-check/v2"})
+    public ApiResponse<String> healthCheckV2() {
+        return ApiResponse.from(OK);
+    }
+
     // TODO. 추후 권한 점검 추가.
     @PostMapping(path = {"/status"})
     public ApiResponse<Void> saveAll(@LoginUser final DailygeUser dailygeUser) {

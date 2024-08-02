@@ -15,7 +15,7 @@ public class UserCacheUnitTest {
         final Long id = 1L;
         final String nickname = "test";
         final String email = "test@gmail.com";
-        final String profileImage = "test@gmail.com";
+        final String profileImage = "profile.jpg";
         final UserCache userCache = new UserCache(id, nickname, email, profileImage);
 
         assertAll(

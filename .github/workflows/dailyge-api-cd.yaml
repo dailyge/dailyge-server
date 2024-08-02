@@ -1,0 +1,87 @@
+name: Dailyge Deploy
+
+on:
+  pull_request:
+    branches: [ dev, main ]
+    paths:
+      - dailyge-api/**
+      - storage/**
+      - support/**
+
+env:
+  ENV: ${{ github.event.pull_request.base.ref == 'dev' && 'dev' || github.event.pull_request.base.ref == 'main' && 'prod' }}
+  SKIP_JIB: false
+  SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
+  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  ENCRYPTOR_KEY: ${{ secrets.ENCRYPTOR_KEY }}
+
+  AWS_REGION: ap-northeast-2
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set environment-specific variables
+        run: |
+          if [ "${{ env.ENV }}" == "dev" ]; then
+            echo "ECR_URI=${{ secrets.DEV_ECR_URI }}" >> $GITHUB_ENV
+          elif [ "${{ env.ENV }}" == "prod" ]; then
+            echo "ECR_URI=${{ secrets.PROD_ECR_URI }}" >> $GITHUB_ENV
+          fi
+          
+          echo "CONTAINER_NAME=dailyge-${{ env.ENV }}-container" >> $GITHUB_ENV
+          echo "TASK_DEFINITION_NAME=dailyge-api-${{ env.ENV }}" >> $GITHUB_ENV
+          echo "SERVICE_NAME=dailyge-api-${{ env.ENV }}-service" >> $GITHUB_ENV
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v1
+        with:
+          region: ${{ env.AWS_REGION }}
+
+      - name: Build and push Docker image to ECR with Jib
+        id: build-image
+        run: |
+          export IMAGE_TAG=$(git rev-parse --short HEAD)
+          ./gradlew dailyge-api:jib -Djib.to.image=${{ env.ECR_URI }}:$IMAGE_TAG
+          echo "::set-output name=imageTag::$IMAGE_TAG"
+        env:
+          ENABLE_JIB: true
+
+      - name: Download ECS task definition JSON file
+        run: |
+          aws ecs describe-task-definition \
+            --task-definition ${{ env.TASK_DEFINITION_NAME }} \
+            --query "taskDefinition" \
+            --output json > task-definition.json
+
+      - name: Fill in the new image ID in the ECS task definition
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: task-definition.json
+          container-name: ${{ env.CONTAINER_NAME }}
+          image: ${{ env.ECR_URI }}:${{ steps.build-image.outputs.imageTag }}
+
+      - name: Deploy ECS task definition
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: ${{ env.SERVICE_NAME }}
+          cluster: dailyge-api
+          wait-for-service-stability: true

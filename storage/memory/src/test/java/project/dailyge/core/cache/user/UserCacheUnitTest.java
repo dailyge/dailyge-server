@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("[UnitTest] UserCache 단위 테스트")
-public class UserCacheUnitTest {
+class UserCacheUnitTest {
 
     @Test
     @DisplayName("사용자 Cache 를 생성하면, 정상적으로 Cache 가 생성된다.")

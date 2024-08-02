@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("[UnitTest] UserCacheEvent 단위 테스트")
-public class UserCacheEventUnitTest {
+class UserCacheEventUnitTest {
 
     @Test
     @DisplayName("UserCacheEvent 를 생성하면, 정상적으로 생성된다.")

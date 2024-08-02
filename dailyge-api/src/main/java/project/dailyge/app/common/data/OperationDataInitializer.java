@@ -28,12 +28,11 @@ import java.util.Set;
 
 @Slf4j
 @Component
-@Profile("!test")
+@Profile("local")
 @RequiredArgsConstructor
 public class OperationDataInitializer {
 
     private static final String LOCAL = "local";
-    private static final String DEV = "dev";
 
     @Value("${env}")
     private String env;
@@ -53,7 +52,7 @@ public class OperationDataInitializer {
     @PostConstruct
     public void init() {
         log.info(env);
-        if (isEnv(LOCAL) || isEnv(DEV)) {
+        if (isEnv(LOCAL)) {
             initSchema();
             initCollection();
             initData();
@@ -61,7 +60,7 @@ public class OperationDataInitializer {
     }
 
     public void initSchema() {
-        if (isEnv(LOCAL) || isEnv(DEV)) {
+        if (isEnv(LOCAL)) {
             final Path rootPath = Paths.get("").toAbsolutePath();
             final Path sqlFilePath = rootPath.resolve("config/schema/schema.sql");
             try (Connection connection = dataSource.getConnection()) {
@@ -81,7 +80,7 @@ public class OperationDataInitializer {
     }
 
     public void initData() {
-        if (isEnv(LOCAL) || isEnv(DEV)) {
+        if (isEnv(LOCAL)) {
             try {
                 userWriteUseCase.save(new UserJpaEntity(nickname, email));
             } catch (Exception ex) {
@@ -93,7 +92,7 @@ public class OperationDataInitializer {
     @PreDestroy
     @Transactional
     public void clearData() {
-        if (isEnv(LOCAL) || isEnv(DEV)) {
+        if (isEnv(LOCAL)) {
             jdbcTemplate.execute("TRUNCATE users");
             for (final String collectionName : this.collectionNames) {
                 mongoTemplate.remove(new Query(), collectionName);
@@ -102,9 +101,6 @@ public class OperationDataInitializer {
     }
 
     private boolean isEnv(final String env) {
-        if (LOCAL.equals(env)) {
-            return true;
-        }
-        return DEV.equals(env);
+        return LOCAL.equals(env);
     }
 }

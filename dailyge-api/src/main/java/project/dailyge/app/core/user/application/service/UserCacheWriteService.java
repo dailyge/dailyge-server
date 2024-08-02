@@ -2,7 +2,7 @@ package project.dailyge.app.core.user.application.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import project.dailyge.app.core.user.application.UserCacheWriteUseCase;
+import project.dailyge.core.cache.user.UserCacheWriteUseCase;
 import project.dailyge.core.cache.user.UserCache;
 import project.dailyge.core.cache.user.UserCacheWriteRepository;
 

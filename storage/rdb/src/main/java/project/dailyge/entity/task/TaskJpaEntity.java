@@ -128,19 +128,19 @@ public class TaskJpaEntity extends BaseEntity {
         }
     }
 
-    public static String getOverMaxTitleLengthErrorMessage() {
+    public String getOverMaxTitleLengthErrorMessage() {
         return OVER_MAX_TITLE_LENGTH_ERROR_MESSAGE;
     }
 
-    public static String getOverMaxContentLengthErrorMessage() {
+    public String getOverMaxContentLengthErrorMessage() {
         return OVER_MAX_CONTENT_LENGTH_ERROR_MESSAGE;
     }
 
-    public static String getPastDateErrorMessage() {
+    public String getPastDateErrorMessage() {
         return PAST_DATE_ERROR_MESSAGE;
     }
 
-    public static String getBeyondOneYearErrorMessage() {
+    public String getBeyondOneYearErrorMessage() {
         return BEYOND_ONE_YEAR_ERROR_MESSAGE;
     }
 

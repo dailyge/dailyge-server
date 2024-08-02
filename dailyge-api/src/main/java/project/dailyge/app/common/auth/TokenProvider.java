@@ -8,24 +8,23 @@ import io.jsonwebtoken.RequiredTypeException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
-import project.dailyge.app.common.exception.UnAuthorizedException;
-import project.dailyge.entity.user.UserJpaEntity;
-
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_PARAMETERS;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_USER_TOKEN;
+import project.dailyge.app.common.exception.UnAuthorizedException;
+import project.dailyge.entity.user.UserJpaEntity;
+
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.time.Duration;
 import java.util.Base64;
 import java.util.Date;
-
-import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
-import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_PARAMETERS;
-import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_USER_TOKEN;
 
 @Slf4j
 @Component
@@ -89,12 +88,11 @@ public class TokenProvider {
                 .setSigningKey(jwtProperties.getSecretKey())
                 .parseClaimsJws(token)
                 .getBody();
-        } catch (
-            IllegalArgumentException |
-            SignatureException |
-            MalformedJwtException |
-            UnsupportedJwtException |
-            RequiredTypeException ex
+        } catch (IllegalArgumentException
+                 | SignatureException
+                 | MalformedJwtException
+                 | UnsupportedJwtException
+                 | RequiredTypeException ex
         ) {
             throw new UnAuthorizedException(ex.getMessage(), INVALID_USER_TOKEN);
         }

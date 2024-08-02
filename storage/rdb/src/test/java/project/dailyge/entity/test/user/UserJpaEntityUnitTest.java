@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 @DisplayName("[UnitTest] UserJPAEntity 단위 테스트")
-class UserJpaEntityTest {
+class UserJpaEntityUnitTest {
 
     private static final String NICKNAME = "nickname";
     private static final String EMAIL = "email@gmail.com";
@@ -88,7 +88,7 @@ class UserJpaEntityTest {
             .isExactlyInstanceOf(IllegalArgumentException.class)
             .hasMessage(user.getOverMaxProfileImageUrlErrorMessage());
     }
-    
+
     @Test
     @DisplayName("이미 삭제 된 사용자를 삭제할 경우, IllegalArgumentException이 발생한다.")
     void whenDeleteAnAlreadyDeletedUserThenIllegalArgumentExceptionShouldBeHappen() {

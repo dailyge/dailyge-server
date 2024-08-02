@@ -10,15 +10,19 @@ import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.common.auth.TokenProvider;
 import project.dailyge.app.common.exception.ExternalServerException;
 import project.dailyge.app.common.response.ApiResponse;
-import project.dailyge.app.core.user.application.UserReadUseCase;
 import project.dailyge.app.core.user.presentation.LoginApi;
 import project.dailyge.app.core.user.presentation.response.OAuthLoginResponse;
-import project.dailyge.entity.user.UserJpaEntity;
+import project.dailyge.core.cache.user.UserCache;
+import project.dailyge.core.cache.user.UserCacheReadRepository;
 
 import java.io.IOException;
 import java.util.Objects;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.get;
+import static com.github.tomakehurst.wiremock.client.WireMock.post;
+import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.springframework.http.HttpStatus.BAD_GATEWAY;
 import static project.dailyge.app.test.user.fixture.OAuthFixture.getOAuthAccessResponseBodyFixture;
@@ -32,7 +36,7 @@ class LoginIntegrationTest extends DatabaseTestBase {
     private LoginApi loginApi;
 
     @Autowired
-    private UserReadUseCase userReadUseCase;
+    private UserCacheReadRepository userCacheReadRepository;
 
     @Autowired
     private TokenProvider tokenProvider;
@@ -47,7 +51,7 @@ class LoginIntegrationTest extends DatabaseTestBase {
     void whenLoginSuccessThenDailygeTokenIsGenerated() throws IOException {
         final ApiResponse<OAuthLoginResponse> login = loginApi.login(AUTHENTICATION_CODE);
         final Long userId = tokenProvider.getUserId(Objects.requireNonNull(login.getBody()).getData().getAccessToken());
-        final UserJpaEntity findUser = userReadUseCase.findActiveUserById(userId);
+        final UserCache findUser = userCacheReadRepository.findById(userId);
 
         Assertions.assertEquals(getOAuthAccessResponseBodyFixture().getEmail(), findUser.getEmail());
     }

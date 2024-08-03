@@ -1,32 +1,36 @@
 package project.dailyge.entity.test.user;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+import project.dailyge.entity.user.UserJpaEntity;
+
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
-import project.dailyge.entity.user.UserJpaEntity;
-import static project.dailyge.entity.user.UserJpaEntity.getInvalidEmailErrorMessage;
-import static project.dailyge.entity.user.UserJpaEntity.getOverMaxNicknameLengthErrorMessage;
-import static project.dailyge.entity.user.UserJpaEntity.getOverMaxProfileImageUrlErrorMessage;
 
-@DisplayName("[UnitTest] 유저 엔티티 테스트")
+@DisplayName("[UnitTest] UserJPAEntity 단위 테스트")
 class UserJpaEntityTest {
 
     private static final String NICKNAME = "nickname";
     private static final String EMAIL = "email@gmail.com";
     private static final String PROFILE_IMAGE_URL = "profileImgUrl.jpg";
 
+    private UserJpaEntity user;
+
+    @BeforeEach
+    void setUp() {
+        user = new UserJpaEntity(NICKNAME, EMAIL, PROFILE_IMAGE_URL);
+    }
+
     @Test
     @DisplayName("사용자 생성 시, 정상적으로 사용자 인스턴스가 생성된다.")
     void whenUserCreateThenUserShouldBeNotNull() {
-        final UserJpaEntity user = new UserJpaEntity(NICKNAME, EMAIL, PROFILE_IMAGE_URL);
-
         assertAll(
             () -> assertNotNull(user),
             () -> assertEquals(NICKNAME, user.getNickname()),
@@ -38,12 +42,11 @@ class UserJpaEntityTest {
     @Test
     @DisplayName("사용자 생성 시 프로필 이미지를 넣지 않아도, 정상적으로 사용자 인스턴스가 생성된다.")
     void whenUserCreateByEmptyImageUrlThenUserShouldBeNotNull() {
-        final UserJpaEntity user = new UserJpaEntity(NICKNAME, EMAIL);
-
+        final UserJpaEntity userWithoutProfile = new UserJpaEntity(NICKNAME, EMAIL);
         assertAll(
-            () -> assertEquals(NICKNAME, user.getNickname()),
-            () -> assertEquals(EMAIL, user.getEmail()),
-            () -> assertNull(user.getProfileImageUrl())
+            () -> assertEquals(NICKNAME, userWithoutProfile.getNickname()),
+            () -> assertEquals(EMAIL, userWithoutProfile.getEmail()),
+            () -> assertNull(userWithoutProfile.getProfileImageUrl())
         );
     }
 
@@ -54,7 +57,7 @@ class UserJpaEntityTest {
 
         assertThatThrownBy(() -> new UserJpaEntity(overLengthNickname, EMAIL))
             .isExactlyInstanceOf(IllegalArgumentException.class)
-            .hasMessage(getOverMaxNicknameLengthErrorMessage());
+            .hasMessage(user.getOverMaxNicknameLengthErrorMessage());
     }
 
     @Test
@@ -64,7 +67,7 @@ class UserJpaEntityTest {
 
         assertThatThrownBy(() -> new UserJpaEntity(NICKNAME, overLengthEmail))
             .isExactlyInstanceOf(IllegalArgumentException.class)
-            .hasMessage(getInvalidEmailErrorMessage());
+            .hasMessage(user.getInvalidEmailErrorMessage());
     }
 
     @ParameterizedTest
@@ -73,7 +76,7 @@ class UserJpaEntityTest {
     void whenNotCompliantEmailThenIllegalArgumentExceptionShouldBeHappen(final String notCompliantEmail) {
         assertThatThrownBy(() -> new UserJpaEntity(NICKNAME, notCompliantEmail))
             .isExactlyInstanceOf(IllegalArgumentException.class)
-            .hasMessage(UserJpaEntity.getInvalidEmailErrorMessage());
+            .hasMessage(user.getInvalidEmailErrorMessage());
     }
 
     @Test
@@ -83,42 +86,52 @@ class UserJpaEntityTest {
 
         assertThatThrownBy(() -> new UserJpaEntity(NICKNAME, EMAIL, overLengthProfileImageUrl))
             .isExactlyInstanceOf(IllegalArgumentException.class)
-            .hasMessage(getOverMaxProfileImageUrlErrorMessage());
+            .hasMessage(user.getOverMaxProfileImageUrlErrorMessage());
+    }
+    
+    @Test
+    @DisplayName("이미 삭제 된 사용자를 삭제할 경우, IllegalArgumentException이 발생한다.")
+    void whenDeleteAnAlreadyDeletedUserThenIllegalArgumentExceptionShouldBeHappen() {
+        user.delete();
+
+        assertThatThrownBy(() -> user.delete())
+            .isExactlyInstanceOf(IllegalArgumentException.class)
+            .hasMessage(user.getUserAlreadyDeletedMessage());
     }
 
     @Test
     @DisplayName("사용자 ID가 같다면, 동일한 객체이다.")
     void whenUserIdSameThenInstanceShouldBeSame() {
-        final UserJpaEntity user1 = new UserJpaEntity(1L, "test", "test@gmail.com");
-        final UserJpaEntity user2 = new UserJpaEntity(1L, "test", "test@gmail.com");
+        final UserJpaEntity userWithId1 = new UserJpaEntity(1L, NICKNAME, EMAIL);
+        final UserJpaEntity anotherUserWithId1 = new UserJpaEntity(1L, NICKNAME, EMAIL);
 
-        assertEquals(user1, user2);
+        assertEquals(userWithId1, anotherUserWithId1);
     }
 
     @Test
     @DisplayName("사용자 ID가 다르다면, 다른 객체이다.")
     void whenUserIdDifferentThenInstanceShouldBeDifferent() {
-        final UserJpaEntity user1 = new UserJpaEntity(1L, "test", "test@gmail.com");
-        final UserJpaEntity user2 = new UserJpaEntity(2L, "test", "test@gmail.com");
+        final UserJpaEntity userWithId1 = new UserJpaEntity(1L, NICKNAME, EMAIL);
+        final UserJpaEntity userWithId2 = new UserJpaEntity(2L, NICKNAME, EMAIL);
 
-        assertNotEquals(user1, user2);
+        assertNotEquals(userWithId1, userWithId2);
     }
 
     @Test
     @DisplayName("사용자 ID가 같다면, 해시코드가 동일하다.")
     void whenUserIdSameThenHashcodeShouldBeSame() {
-        final UserJpaEntity user1 = new UserJpaEntity(1L, "test", "test@gmail.com");
-        final UserJpaEntity user2 = new UserJpaEntity(1L, "test", "test@gmail.com");
+        final UserJpaEntity userWithId1 = new UserJpaEntity(1L, NICKNAME, EMAIL);
+        final UserJpaEntity anotherUserWithId1 = new UserJpaEntity(1L, NICKNAME, EMAIL);
 
-        assertEquals(user1.hashCode(), user2.hashCode());
+        assertEquals(userWithId1.hashCode(), anotherUserWithId1.hashCode());
     }
 
     @Test
     @DisplayName("사용자 ID가 다르다면, 해시코드는 다른 값이다.")
     void whenUserIdDifferentThenHashcodeShouldBeDifferent() {
-        final UserJpaEntity user1 = new UserJpaEntity(1L, "test", "test@gmail.com");
-        final UserJpaEntity user2 = new UserJpaEntity(2L, "test", "test@gmail.com");
+        final UserJpaEntity userWithId1 = new UserJpaEntity(1L, NICKNAME, EMAIL);
+        final UserJpaEntity userWithId2 = new UserJpaEntity(2L, NICKNAME, EMAIL);
 
-        assertNotEquals(user1.hashCode(), user2.hashCode());
+        assertNotEquals(userWithId1.hashCode(), userWithId2.hashCode());
     }
 }

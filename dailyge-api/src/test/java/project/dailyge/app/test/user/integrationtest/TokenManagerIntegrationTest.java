@@ -41,7 +41,7 @@ class TokenManagerIntegrationTest extends DatabaseTestBase {
     }
 
     @Test
-    @DisplayName("저장 시 ID가 null 이면, 토큰을 저장하는데 실패한다.")
+    @DisplayName("저장 시 토큰정보가 null이면, 토큰을 저장하는데 실패한다.")
     void whenSavingRefreshTokenIsNullThenExternalServerExceptionShouldBeHappen() {
         assertThatThrownBy(() -> tokenManager.saveRefreshToken(1L, null))
             .isExactlyInstanceOf(ExternalServerException.class)

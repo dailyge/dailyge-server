@@ -143,19 +143,19 @@ public class UserJpaEntity extends BaseEntity {
         this.profileImageUrl = profileImageUrl;
     }
 
-    public static String getOverMaxNicknameLengthErrorMessage() {
+    public String getOverMaxNicknameLengthErrorMessage() {
         return OVER_MAX_NICKNAME_LENGTH_ERROR_MESSAGE;
     }
 
-    public static String getInvalidEmailErrorMessage() {
+    public String getInvalidEmailErrorMessage() {
         return INVALID_EMAIL_ERROR_MESSAGE;
     }
 
-    public static String getOverMaxProfileImageUrlErrorMessage() {
+    public String getOverMaxProfileImageUrlErrorMessage() {
         return OVER_MAX_PROFILE_IMAGE_URL_ERROR_MESSAGE;
     }
 
-    public static String getUserAlreadyDeletedMessage() {
+    public String getUserAlreadyDeletedMessage() {
         return USER_ALREADY_DELETED_MESSAGE;
     }
 

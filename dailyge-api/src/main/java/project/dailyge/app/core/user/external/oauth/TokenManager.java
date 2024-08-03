@@ -3,19 +3,22 @@ package project.dailyge.app.core.user.external.oauth;
 import io.netty.handler.timeout.TimeoutException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.RedisConnectionFailureException;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import project.dailyge.app.common.exception.ExternalServerException;
 import project.dailyge.app.core.user.exception.UserTypeException;
 
-import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.*;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_GATEWAY;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_REQUEST;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.GATEWAY_TIMEOUT;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.SERVICE_UNAVAILABLE;
 import static project.dailyge.app.core.user.exception.UserCodeAndMessage.EMPTY_USER_ID;
 
 @Service
 @RequiredArgsConstructor
 public class TokenManager {
 
-    private final RedisTemplate<String, String> redisTemplate;
+    private final StringRedisTemplate redisTemplate;
 
     public void saveRefreshToken(
         final Long userId,

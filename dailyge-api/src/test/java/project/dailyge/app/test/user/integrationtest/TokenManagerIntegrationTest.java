@@ -1,11 +1,11 @@
 package project.dailyge.app.test.user.integrationtest;
 
+import io.lettuce.core.RedisConnectionException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.common.exception.ExternalServerException;
@@ -50,7 +50,7 @@ class TokenManagerIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("레디스 예외가 발생하면, ExternalServerException이 발생한다.")
     void whenThrowRedisExceptionThenExternalServerExceptionShouldBeHappen() {
-        when(mockStringRedisTemplate.opsForValue()).thenThrow(RedisConnectionFailureException.class);
+        when(mockStringRedisTemplate.opsForValue()).thenThrow(RedisConnectionException.class);
 
         assertThatThrownBy(() -> mockTokenManager.saveRefreshToken(1L, REFRESH_TOKEN))
             .isExactlyInstanceOf(ExternalServerException.class)

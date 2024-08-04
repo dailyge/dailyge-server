@@ -1,7 +1,7 @@
 package project.dailyge.app.core.user.external.oauth;
 
+import io.lettuce.core.RedisException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import project.dailyge.app.common.exception.ExternalServerException;
@@ -43,7 +43,7 @@ public class TokenManager {
     private String executeRedisCommand(final Supplier<String> command) {
         try {
             return command.get();
-        } catch (DataAccessException ex) {
+        } catch (RedisException ex) {
             throw new ExternalServerException(ex.getMessage(), BAD_GATEWAY);
         } catch (Exception ex) {
             throw new ExternalServerException(ex.getMessage(), INTERNAL_SERVER_ERROR);

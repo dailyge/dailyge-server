@@ -1,25 +1,41 @@
 package project.dailyge.app.test.user.integrationtest;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.RedisConnectionFailureException;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.common.exception.ExternalServerException;
-import project.dailyge.app.core.user.exception.UserTypeException;
 import project.dailyge.app.core.user.external.oauth.TokenManager;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
-import static project.dailyge.app.core.user.exception.UserCodeAndMessage.EMPTY_USER_ID;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_GATEWAY;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
 
 @DisplayName("[IntegrationTest] TokenManager 통합 테스트")
 class TokenManagerIntegrationTest extends DatabaseTestBase {
 
     public static final String REFRESH_TOKEN = "Refresh-Token";
+    public static final String CODE_AND_MESSAGE = "codeAndMessage";
 
     @Autowired
     private TokenManager tokenManager;
+
+    private TokenManager mockTokenManager;
+    private StringRedisTemplate mockStringRedisTemplate;
+
+    @BeforeEach
+    void setUp() {
+        mockStringRedisTemplate = mock(StringRedisTemplate.class);
+        mockTokenManager = new TokenManager(mockStringRedisTemplate);
+    }
 
     @Test
     @DisplayName("리프레시 토큰을 저장하는데 성공한다.")
@@ -32,30 +48,25 @@ class TokenManagerIntegrationTest extends DatabaseTestBase {
     }
 
     @Test
-    @DisplayName("저장 시 ID가 null 이면, 토큰을 저장하는데 실패한다.")
-    void whenSavingRefreshTokenWithIdIsNullThenExternalServerExceptionShouldBeHappen() {
-        assertThatThrownBy(() -> tokenManager.saveRefreshToken(null, REFRESH_TOKEN))
-            .isExactlyInstanceOf(UserTypeException.from(EMPTY_USER_ID).getClass())
-            .isInstanceOf(RuntimeException.class)
-            .hasMessage(EMPTY_USER_ID.message());
-    }
+    @DisplayName("레디스 예외가 발생하면, ExternalServerException이 발생한다.")
+    void whenThrowRedisExceptionThenExternalServerExceptionShouldBeHappen() {
+        when(mockStringRedisTemplate.opsForValue()).thenThrow(RedisConnectionFailureException.class);
 
-    @Test
-    @DisplayName("저장 시 토큰정보가 null이면, 토큰을 저장하는데 실패한다.")
-    void whenSavingRefreshTokenIsNullThenExternalServerExceptionShouldBeHappen() {
-        assertThatThrownBy(() -> tokenManager.saveRefreshToken(1L, null))
+        assertThatThrownBy(() -> mockTokenManager.saveRefreshToken(1L, REFRESH_TOKEN))
             .isExactlyInstanceOf(ExternalServerException.class)
-            .isInstanceOf(RuntimeException.class)
-            .hasMessage("Value must not be null");
+            .extracting(CODE_AND_MESSAGE)
+            .isEqualTo(BAD_GATEWAY);
     }
 
     @Test
-    @DisplayName("검색 시 ID가 null 이면, 토큰을 검색하는데 실패한다.")
-    void whenSearchRefreshTokenWithIdIsNullThenExternalServerExceptionShouldBeHappen() {
-        assertThatThrownBy(() -> tokenManager.getRefreshToken(null))
-            .isExactlyInstanceOf(UserTypeException.from(EMPTY_USER_ID).getClass())
-            .isInstanceOf(RuntimeException.class)
-            .hasMessage(EMPTY_USER_ID.message());
+    @DisplayName("예상치 못한 예외가 발생하면, ExternalServerException이 발생한다.")
+    void whenThrowUnexpectedExceptionThenExternalServerExceptionShouldBeHappen() {
+        when(mockStringRedisTemplate.opsForValue()).thenThrow(RuntimeException.class);
+
+        assertThatThrownBy(() -> mockTokenManager.saveRefreshToken(1L, REFRESH_TOKEN))
+            .isExactlyInstanceOf(ExternalServerException.class)
+            .extracting(CODE_AND_MESSAGE)
+            .isEqualTo(INTERNAL_SERVER_ERROR);
     }
 
     @Test

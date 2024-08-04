@@ -12,7 +12,6 @@ import project.dailyge.app.common.configuration.web.CorsFilter;
 
 import java.io.IOException;
 
-import static jakarta.servlet.http.HttpServletResponse.SC_OK;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -26,6 +25,7 @@ import static org.springframework.http.HttpHeaders.ACCESS_CONTROL_MAX_AGE;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.HttpHeaders.ORIGIN;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.OK;
 
 @DisplayName("[UnitTest] CorsFilter 단위 테스트")
 class CorsFilterUnitTest {
@@ -68,7 +68,7 @@ class CorsFilterUnitTest {
 
         corsFilter.doFilter(request, response, filterChain);
 
-        verify(response).setStatus(SC_OK);
+        verify(response).setStatus(OK.code());
         verify(filterChain, never()).doFilter(request, response);
     }
 }

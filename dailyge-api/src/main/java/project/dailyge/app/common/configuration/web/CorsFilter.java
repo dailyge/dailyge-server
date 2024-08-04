@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
-import static jakarta.servlet.http.HttpServletResponse.SC_OK;
 import static org.springframework.http.HttpHeaders.ACCEPT;
 import static org.springframework.http.HttpHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS;
 import static org.springframework.http.HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS;
@@ -24,6 +23,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.HttpHeaders.ORIGIN;
 import static org.springframework.http.HttpMethod.OPTIONS;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.OK;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -46,7 +46,7 @@ public class CorsFilter implements Filter {
             String.join(", ", ORIGIN, CONTENT_TYPE, ACCEPT, AUTHORIZATION, "X-Requested-With"));
 
         if (OPTIONS.name().equalsIgnoreCase(request.getMethod())) {
-            response.setStatus(SC_OK);
+            response.setStatus(OK.code());
             return;
         }
         filterChain.doFilter(servletRequest, servletResponse);

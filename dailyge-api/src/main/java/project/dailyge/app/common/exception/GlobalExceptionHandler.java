@@ -3,87 +3,84 @@ package project.dailyge.app.common.exception;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import project.dailyge.app.codeandmessage.CodeAndMessage;
-import project.dailyge.app.codeandmessage.CommonCodeAndMessage;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_REQUEST;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_PARAMETERS;
 import project.dailyge.app.response.ErrorResponse;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    private static final String FIELD = "field: ";
-    private static final String REJECTED_VALUE = ", rejectedValue: ";
-    private static final String MESSAGE = ", message: ";
+    private static final String TRACE_ID = "traceId";
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResponse> resolveIllegalArgumentException(final IllegalArgumentException exception) {
-        final CodeAndMessage codeAndMessage = CommonCodeAndMessage.BAD_REQUEST;
-        log.error("error: {}, {}", MDC.get("requestId"), exception.getMessage());
+        final CodeAndMessage codeAndMessage = BAD_REQUEST;
+        writeLog(codeAndMessage, exception);
         return ResponseEntity.status(codeAndMessage.code())
             .body(ErrorResponse.from(codeAndMessage));
     }
 
     @ExceptionHandler(IllegalStateException.class)
     public ResponseEntity<ErrorResponse> resolveIllegalStateException(final IllegalStateException exception) {
-        final CodeAndMessage codeAndMessage = CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
-        log.error("error: {}, {}", MDC.get("requestId"), exception.getMessage());
+        final CodeAndMessage codeAndMessage = INTERNAL_SERVER_ERROR;
+        writeLog(codeAndMessage, exception);
         return ResponseEntity.status(codeAndMessage.code())
             .body(ErrorResponse.from(codeAndMessage));
     }
 
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ErrorResponse> resolveBusinessException(final BusinessException exception) {
-        final CodeAndMessage codeAndMessage = exception.getCodeAndMessage();
-        log.error("error: {}, {}", MDC.get("requestId"), exception.getMessage());
-        return ResponseEntity.status(codeAndMessage.code())
-            .body(ErrorResponse.from(codeAndMessage));
+        writeLog(exception.getCodeAndMessage(), exception);
+        return ResponseEntity.status(exception.getCode())
+            .body(ErrorResponse.from(exception.getCodeAndMessage()));
     }
 
     @ExceptionHandler(CommonException.class)
     public ResponseEntity<ErrorResponse> resolveCommonException(final CommonException exception) {
-        final CodeAndMessage codeAndMessage = exception.getCodeAndMessage();
-        log.error("error: {}, {}", MDC.get("requestId"), exception.getDetailMessage());
-        return ResponseEntity.status(codeAndMessage.code())
-            .body(ErrorResponse.from(codeAndMessage));
+        writeLog(exception.getCodeAndMessage(), exception);
+        return ResponseEntity.status(exception.getCode())
+            .body(ErrorResponse.from(exception.getCodeAndMessage()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> resolveMethodArgumentNotValidException(
         final MethodArgumentNotValidException exception
     ) {
-        final StringBuilder sb = new StringBuilder();
-        if (exception != null) {
-            Object targetObj = exception.getBindingResult().getTarget();
-            List<FieldError> allErrors = exception.getBindingResult().getFieldErrors();
-            for (FieldError error : allErrors) {
-                sb.append(FIELD)
-                    .append(error.getField())
-                    .append(REJECTED_VALUE)
-                    .append(error.getRejectedValue())
-                    .append(MESSAGE)
-                    .append(error.getDefaultMessage());
-            }
-            log.error("error: {}, {}", MDC.get("requestId"), targetObj);
-            final CodeAndMessage codeAndMessage = CommonCodeAndMessage.INVALID_PARAMETERS;
-            return ResponseEntity.status(codeAndMessage.code())
-                .body(ErrorResponse.from(codeAndMessage));
-        }
-        final CodeAndMessage codeAndMessage = CommonCodeAndMessage.INVALID_PARAMETERS;
-        return ResponseEntity.status(codeAndMessage.code())
-            .body(ErrorResponse.from(codeAndMessage));
+        writeLog(BAD_REQUEST, exception);
+        return ResponseEntity.status(INVALID_PARAMETERS.code())
+            .body(ErrorResponse.from(INVALID_PARAMETERS));
     }
 
     @ExceptionHandler
     public ResponseEntity<ErrorResponse> resolveServerError(final Exception exception) {
-        log.error("error: {}, {}", MDC.get("requestId"), exception.getMessage());
-        final CodeAndMessage codeAndMessage = CommonCodeAndMessage.INVALID_PARAMETERS;
-        return ResponseEntity.status(codeAndMessage.code())
-            .body(ErrorResponse.from(codeAndMessage));
+        writeLog(INTERNAL_SERVER_ERROR, exception);
+        return ResponseEntity.status(INTERNAL_SERVER_ERROR.code())
+            .body(ErrorResponse.from(INTERNAL_SERVER_ERROR));
+    }
+
+    private void writeLog(
+        final CodeAndMessage codeAndMessage,
+        final Exception exception
+    ) {
+        final int code = codeAndMessage.code();
+        final String message = codeAndMessage.message();
+        final String detailMessage = exception.getMessage();
+        final LocalDateTime time = LocalDateTime.now();
+        log.error(
+            "{\"traceId\": \"{}\", \"code\": \"{}\", \"message\": \"{}\", \"detailMessage\": \"{}\", \"time\": \"{}\"}",
+            MDC.get(TRACE_ID),
+            code,
+            message,
+            detailMessage,
+            time
+        );
     }
 }

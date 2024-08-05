@@ -46,8 +46,8 @@ class CorsFilterUnitTest {
     }
 
     @Test
-    @DisplayName("클라이언트 요청 시, Cors관련 설정을 한다.")
-    void whenClientRequestReceiveThenCorsSettingShouldBeHappen() throws ServletException, IOException {
+    @DisplayName("클라이언트가 요청했을 때, 서버가 세팅한 응답이 내려온다.")
+    void whenClientRequestThenResultShouldBeCorsServerSetting() throws ServletException, IOException {
         when(request.getHeader(ORIGIN)).thenReturn(CLIENT_URL);
 
         corsFilter.doFilter(request, response, filterChain);

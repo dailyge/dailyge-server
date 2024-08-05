@@ -25,6 +25,7 @@ import java.time.temporal.ChronoUnit;
 public class MdcFilter implements Filter {
 
     private static final String SERVER = "dailyge-api";
+    private static final String PATH = "path";
     private static final String DAILYGE_USER = "dailyge-user";
     private static final String ENTRANCE_LAYER = "ENTRANCE";
     private static final String TRACE_ID = "traceId";
@@ -39,12 +40,16 @@ public class MdcFilter implements Filter {
     ) throws IOException, ServletException {
         final String traceId = randomUUID().toString();
         final String userIp = getClientIpAddress((HttpServletRequest) servletRequest);
+        final HttpServletRequest request = ((HttpServletRequest) servletRequest);
+        final String path = request.getRequestURI();
+        final String method = request.getMethod();
         final LocalDateTime startTime = LocalDateTime.now();
 
         try {
             MDC.put(TRACE_ID, traceId);
             MDC.put(IP, userIp);
-            final String longMessage = createGuestLogMessage(SERVER, traceId, userIp, ENTRANCE_LAYER, startTime, 0, null, null);
+            MDC.put(PATH, path);
+            final String longMessage = createGuestLogMessage(SERVER, path, method, traceId, userIp, ENTRANCE_LAYER, startTime, 0, null, null);
             log.info(longMessage);
             filterChain.doFilter(servletRequest, servletResponse);
         } finally {
@@ -53,10 +58,10 @@ public class MdcFilter implements Filter {
             final DailygeUser dailygeUser = getDailygeUser(servletRequest);
             final String longMessage;
             if (dailygeUser != null) {
-                longMessage = createLogMessage(SERVER, traceId, userIp, ENTRANCE_LAYER, dailygeUser.toString(), endTime, duration, null, null);
+                longMessage = createLogMessage(SERVER, path, method, traceId, userIp, ENTRANCE_LAYER, dailygeUser.toString(), endTime, duration, null, null);
                 servletRequest.removeAttribute(DAILYGE_USER);
             } else {
-                longMessage = createLogMessage(SERVER, traceId, userIp, ENTRANCE_LAYER, endTime, duration, null, null);
+                longMessage = createLogMessage(SERVER, path, method, traceId, userIp, ENTRANCE_LAYER, endTime, duration, null, null);
             }
             log.info(longMessage);
             MDC.clear();

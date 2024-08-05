@@ -56,15 +56,18 @@ public class LoggingAspect {
         final ProceedingJoinPoint joinPoint,
         final String layer
     ) throws Throwable {
+        final HttpServletRequest request = getRequest();
         final String traceId = MDC.get(TRACE_ID);
         final LocalDateTime startTime = LocalDateTime.now();
         final String args = Arrays.toString(joinPoint.getArgs());
         final String beforeLog = LogUtils.createLogMessage(
             SERVER,
+            getPath(request),
+            request.getMethod(),
             traceId,
             getIp(),
             layer,
-            getDailygeUserAsString(),
+            getDailygeUserAsString(request),
             startTime,
             0,
             args,
@@ -77,10 +80,12 @@ public class LoggingAspect {
         long duration = ChronoUnit.MILLIS.between(startTime, endTime);
         final String afterLog = LogUtils.createLogMessage(
             SERVER,
+            getPath(request),
+            request.getMethod(),
             traceId,
             getIp(),
             layer,
-            getDailygeUserAsString(),
+            getDailygeUserAsString(request),
             endTime,
             duration,
             args,
@@ -94,13 +99,20 @@ public class LoggingAspect {
         return MDC.get(IP);
     }
 
-    private String getDailygeUserAsString() {
-        final HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+    private String getDailygeUserAsString(final HttpServletRequest request) {
         final Object dailyObj = request.getAttribute("dailyge-user");
         if (dailyObj != null) {
             final DailygeUser dailygeUser = (DailygeUser) dailyObj;
             return dailygeUser.toString();
         }
         return getGuest();
+    }
+
+    private HttpServletRequest getRequest() {
+        return ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+    }
+
+    private String getPath(final HttpServletRequest request) {
+        return request.getRequestURI();
     }
 }

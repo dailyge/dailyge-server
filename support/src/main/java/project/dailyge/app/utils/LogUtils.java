@@ -10,6 +10,8 @@ public final class LogUtils {
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
     private static final String GUEST = "{ \"userId\":null, \"role\":\"GUEST\" }";
     private static final String EMPTY_STRING = "null";
+    private static final String LOG_FORMAT = "{\"server\":\"%s\", \"path\":\"%s\", \"method\":\"%s\", \"traceId\":\"%s\", " +
+        "\"ip\":\"%s\", \"layer\":\"%s\", \"visitor\":\"%s\", \"time\":\"%s\", \"duration\":\"%dms\", \"context\":{\"args\":%s, \"result\":%s}}";
 
     private LogUtils() {
         throw new AssertionError("올바른 방식으로 생성자를 호출해주세요.");
@@ -17,6 +19,8 @@ public final class LogUtils {
 
     public static String createLogMessage(
         final String server,
+        final String path,
+        final String method,
         final String traceId,
         final String ipAddress,
         final String layer,
@@ -31,8 +35,10 @@ public final class LogUtils {
         final String resultString = (result != null) ? result.toString() : EMPTY_STRING;
 
         return String.format(
-            "{\"server\":\"%s\", \"traceId\":\"%s\", \"ip\":\"%s\", \"layer\":\"%s\", \"visitor\":\"%s\", \"time\":\"%s\", \"duration\":\"%dms\", \"context\":{\"args\":%s, \"result\":%s}}",
+            LOG_FORMAT,
             server,
+            path,
+            method,
             traceId,
             ipAddress,
             layer,
@@ -46,6 +52,8 @@ public final class LogUtils {
 
     public static String createLogMessage(
         final String server,
+        final String path,
+        final String method,
         final String ipAddress,
         final String layer,
         final String visitor,
@@ -59,8 +67,10 @@ public final class LogUtils {
         final String resultString = (result != null) ? result.toString() : EMPTY_STRING;
 
         return String.format(
-            "{\"server\":\"%s\", \"traceId\":\"%s\", \"ip\":\"%s\", \"layer\":\"%s\", \"visitor\":\"%s\", \"time\":\"%s\", \"duration\":\"%dms\", \"context\":{\"args\":%s, \"result\":%s}}",
+            LOG_FORMAT,
             server,
+            method,
+            path,
             createTraceId(),
             ipAddress,
             layer,
@@ -74,6 +84,8 @@ public final class LogUtils {
 
     public static String createGuestLogMessage(
         final String server,
+        final String path,
+        final String method,
         final String traceId,
         final String ipAddress,
         final String layer,
@@ -87,8 +99,10 @@ public final class LogUtils {
         final String resultString = (result != null) ? result.toString() : EMPTY_STRING;
 
         return String.format(
-            "{\"server\":\"%s\", \"traceId\":\"%s\", \"ip\":\"%s\", \"layer\":\"%s\", \"visitor\":\"%s\", \"time\":\"%s\", \"duration\":\"%dms\", \"context\":{\"args\":%s, \"result\":%s}}",
+            LOG_FORMAT,
             server,
+            path,
+            method,
             traceId,
             ipAddress,
             layer,

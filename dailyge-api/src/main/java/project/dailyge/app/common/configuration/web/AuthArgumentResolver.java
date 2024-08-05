@@ -4,20 +4,19 @@ import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_USER_TOKEN;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
 import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.common.auth.LoginUser;
 import project.dailyge.app.common.auth.TokenProvider;
 import project.dailyge.app.common.exception.UnAuthorizedException;
 import project.dailyge.app.core.user.application.UserReadUseCase;
 import project.dailyge.entity.user.UserJpaEntity;
-
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
-import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_USER_TOKEN;
-import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
 
 @RequiredArgsConstructor
 public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
@@ -46,7 +45,9 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
                 throw new UnAuthorizedException();
             }
             final UserJpaEntity findUser = userReadUseCase.findAuthorizedUserById(userId);
-            return new DailygeUser(findUser.getId(), findUser.getRole());
+            final DailygeUser dailygeUser = new DailygeUser(findUser.getId(), findUser.getRole());
+            request.setAttribute("dailyge-user", dailygeUser);
+            return dailygeUser;
         } catch (ExpiredJwtException ex) {
             throw new UnAuthorizedException(ex.getMessage(), INVALID_USER_TOKEN);
         } catch (Exception ex) {

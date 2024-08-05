@@ -3,19 +3,19 @@ package project.dailyge.app.core.task.presentation.response;
 import lombok.Getter;
 
 @Getter
-public class TaskRegisterResponse {
+public class TaskCreateResponse {
 
     private String taskId;
 
-    private TaskRegisterResponse() {
+    private TaskCreateResponse() {
     }
 
-    public TaskRegisterResponse(final String taskId) {
+    public TaskCreateResponse(final String taskId) {
         this.taskId = taskId;
     }
 
     @Override
     public String toString() {
-        return String.format("taskDocumentId: %s", taskId);
+        return String.format("{\"taskId\":\"%s\"}", taskId);
     }
 }

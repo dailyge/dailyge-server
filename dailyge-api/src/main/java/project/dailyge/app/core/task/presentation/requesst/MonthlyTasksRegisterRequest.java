@@ -10,4 +10,8 @@ public record MonthlyTasksRegisterRequest(
     @JsonFormat(pattern = "yyyy-MM-dd")
     LocalDate date
 ) {
+    @Override
+    public String toString() {
+        return String.format("{\"date\":\"%s\"}", date);
+    }
 }

@@ -8,7 +8,7 @@ import project.dailyge.app.core.task.application.command.TaskCreateCommand;
 
 import java.time.LocalDate;
 
-public record TaskRegisterRequest(
+public record TaskCreateRequest(
     @NotNull(message = "monthlyTaskId를 입력해 주세요.")
     @NotBlank(message = "monthlyTaskId는 공백일 수 없습니다.")
     String monthlyTaskId,
@@ -39,6 +39,9 @@ public record TaskRegisterRequest(
 
     @Override
     public String toString() {
-        return String.format("{title: %s, content: %s, date: %s}", title, content, date);
+        return String.format(
+            "{\"monthlyTaskId\":\"%s\",\"title\":\"%s\",\"content\":\"%s\",\"date\":\"%s\"}",
+            monthlyTaskId, title, content, date
+        );
     }
 }

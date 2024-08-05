@@ -44,4 +44,12 @@ public class MonthlyTaskResponse {
             .map(TaskDocumentResponse::from)
             .collect(Collectors.toList());
     }
+
+    @Override
+    public String toString() {
+        return String.format(
+            "{\"id\":\"%s\",\"userId\":%d,\"year\":%d,\"month\":%d,\"tasks\":%s,\"createdAt\":\"%s\",\"lastModifiedAt\":\"%s\"}",
+            id, userId, year, month, tasks, createdAt, lastModifiedAt
+        );
+    }
 }

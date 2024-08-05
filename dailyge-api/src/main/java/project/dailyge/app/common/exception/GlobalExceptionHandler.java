@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import project.dailyge.app.codeandmessage.CodeAndMessage;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_REQUEST;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
@@ -22,6 +24,16 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResponse> resolveIllegalArgumentException(final IllegalArgumentException exception) {
+        final CodeAndMessage codeAndMessage = BAD_REQUEST;
+        writeLog(codeAndMessage, exception);
+        return ResponseEntity.status(codeAndMessage.code())
+            .body(ErrorResponse.from(codeAndMessage));
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ErrorResponse> resolveMethodArgumentTypeMismatchException(
+        final MethodArgumentTypeMismatchException exception
+    ) {
         final CodeAndMessage codeAndMessage = BAD_REQUEST;
         writeLog(codeAndMessage, exception);
         return ResponseEntity.status(codeAndMessage.code())
@@ -54,7 +66,16 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> resolveMethodArgumentNotValidException(
         final MethodArgumentNotValidException exception
     ) {
-        writeLog(BAD_REQUEST, exception);
+        writeLog(INVALID_PARAMETERS, exception);
+        return ResponseEntity.status(INVALID_PARAMETERS.code())
+            .body(ErrorResponse.from(INVALID_PARAMETERS));
+    }
+
+    @ExceptionHandler(HandlerMethodValidationException.class)
+    public ResponseEntity<ErrorResponse> resolveHandlerMethodValidationException(
+        final HandlerMethodValidationException exception
+    ) {
+        writeLog(INVALID_PARAMETERS, exception);
         return ResponseEntity.status(INVALID_PARAMETERS.code())
             .body(ErrorResponse.from(INVALID_PARAMETERS));
     }

@@ -9,7 +9,7 @@ import static org.springframework.restdocs.restassured.RestAssuredRestDocumentat
 import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.core.task.facade.TaskFacade;
-import project.dailyge.app.core.task.presentation.requesst.TaskRegisterRequest;
+import project.dailyge.app.core.task.presentation.requesst.TaskCreateRequest;
 import static project.dailyge.app.test.user.fixture.UserFixture.createUserJpaEntity;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASK_AUTHORIZATION_HEADER;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASK_CREATE_REQUEST_SNIPPET;
@@ -37,7 +37,7 @@ class TaskRegisterDocumentationTest extends DatabaseTestBase {
         taskFacade.createMonthlyTasks(dailygeUser, LocalDate.now());
         final LocalDate now = LocalDate.now();
         final MonthlyTaskDocument findMonthlyTask = monthlyTaskReadRepository.findMonthlyDocumentByUserIdAndDate(dailygeUser.getUserId(), now).get();
-        final TaskRegisterRequest request = new TaskRegisterRequest(findMonthlyTask.getId(), "주간 미팅", "Backend 팀과 Api 스펙 정의", now);
+        final TaskCreateRequest request = new TaskCreateRequest(findMonthlyTask.getId(), "주간 미팅", "Backend 팀과 Api 스펙 정의", now);
 
         given(this.specification)
             .relaxedHTTPSValidation()

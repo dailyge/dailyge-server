@@ -12,7 +12,7 @@ import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.core.task.application.TaskReadUseCase;
 import project.dailyge.app.core.task.facade.TaskFacade;
-import project.dailyge.app.core.task.presentation.requesst.TaskRegisterRequest;
+import project.dailyge.app.core.task.presentation.requesst.TaskCreateRequest;
 import project.dailyge.app.core.user.application.UserWriteUseCase;
 import static project.dailyge.app.test.user.fixture.UserFixture.createUserJpaEntity;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskReadSnippet.createMonthlyTaskDetailSearchWithIdFilter;
@@ -61,7 +61,7 @@ class MonthlyTaskReadDocumentationTest extends DatabaseTestBase {
     @Test
     @DisplayName("[RestDocs] 월간 일정표가 존재할 때, ID로 조회하면 200 OK 응답을 받는다.")
     void whenMonthlyTaskExistsWithIdThenStatusCodeShouldBe_200_OK_RestDocs() {
-        final TaskRegisterRequest request = createTaskRegisterRequest(monthlyTaskDocument.getId(), now);
+        final TaskCreateRequest request = createTaskRegisterRequest(monthlyTaskDocument.getId(), now);
         taskFacade.save(dailygeUser, request.toCommand());
 
         given(this.specification)
@@ -83,7 +83,7 @@ class MonthlyTaskReadDocumentationTest extends DatabaseTestBase {
     @Test
     @DisplayName("[Swagger] 월간 일정표가 존재할 때, ID로 조회하면 200 OK 응답을 받는다.")
     void whenMonthlyTaskExistsWithIdThenStatusCodeShouldBe_200_OK_Swagger() {
-        final TaskRegisterRequest request = createTaskRegisterRequest(monthlyTaskDocument.getId(), now);
+        final TaskCreateRequest request = createTaskRegisterRequest(monthlyTaskDocument.getId(), now);
         taskFacade.save(dailygeUser, request.toCommand());
         final RestDocumentationFilter filter = createMonthlyTaskDetailSearchWithIdFilter(
             createIdentifier("MonthlyTaskDetailSearch", 200)
@@ -104,7 +104,7 @@ class MonthlyTaskReadDocumentationTest extends DatabaseTestBase {
     @Test
     @DisplayName("[Swagger] 올바르지 않은 Task ID로 조회하면 400 Bad Request 응답을 받는다.")
     void whenMonthlyTaskExistsWithIdThenStatusCodeShouldBe_400_Bad_Request_Swagger() {
-        final TaskRegisterRequest request = createTaskRegisterRequest(monthlyTaskDocument.getId(), now);
+        final TaskCreateRequest request = createTaskRegisterRequest(monthlyTaskDocument.getId(), now);
         taskFacade.save(dailygeUser, request.toCommand());
         final RestDocumentationFilter filter = createMonthlyTaskDetailSearchWithIdFilter(
             createIdentifier("MonthlyTaskDetailSearch", 400)
@@ -125,7 +125,7 @@ class MonthlyTaskReadDocumentationTest extends DatabaseTestBase {
     @Test
     @DisplayName("[Swagger] 월간 일정표가 존재하지 않으면 404 Not Found 응답을 받는다.")
     void whenMonthlyTaskNotExistsWithIdThenStatusCodeShouldBe_404_Not_Found_Swagger() {
-        final TaskRegisterRequest request = createTaskRegisterRequest(monthlyTaskDocument.getId(), now);
+        final TaskCreateRequest request = createTaskRegisterRequest(monthlyTaskDocument.getId(), now);
         taskFacade.save(dailygeUser, request.toCommand());
         final RestDocumentationFilter filter = createMonthlyTaskDetailSearchWithIdFilter(
             createIdentifier("MonthlyTaskDetailSearch", 404)
@@ -150,7 +150,7 @@ class MonthlyTaskReadDocumentationTest extends DatabaseTestBase {
     @Test
     @DisplayName("사용자 ID와 날짜로 조회했을 때, 월간 일정표가 존재하면 200 OK 응답을 받는다.")
     void whenMonthlyTaskExistsWithUserIdAndDateThenStatusCodeShouldBe200_OK_RestDocs() {
-        final TaskRegisterRequest request = createTaskRegisterRequest(monthlyTaskDocument.getId(), now);
+        final TaskCreateRequest request = createTaskRegisterRequest(monthlyTaskDocument.getId(), now);
         taskFacade.save(dailygeUser, request.toCommand());
 
         given(this.specification)
@@ -173,7 +173,7 @@ class MonthlyTaskReadDocumentationTest extends DatabaseTestBase {
     @Test
     @DisplayName("사용자 ID와 날짜로 조회했을 때, 월간 일정표가 존재하면 200 OK 응답을 받는다.")
     void whenMonthlyTaskExistsWithUserIdAndDateThenStatusCodeShouldBe200_OK_Swagger() {
-        final TaskRegisterRequest request = createTaskRegisterRequest(monthlyTaskDocument.getId(), now);
+        final TaskCreateRequest request = createTaskRegisterRequest(monthlyTaskDocument.getId(), now);
         taskFacade.save(dailygeUser, request.toCommand());
         final RestDocumentationFilter filter = createMonthlyTaskDetailSearchWithUserIdAndDateFilter(
             createIdentifier("MonthlyTaskSearch-V2", 200)
@@ -195,7 +195,7 @@ class MonthlyTaskReadDocumentationTest extends DatabaseTestBase {
     @Test
     @DisplayName("[Swagger] 올바르지 않은 파라미터로 월간 일정표를 조회하면 400 Bad Request 응답을 받는다.")
     void whenInvalidMonthlyTaskSearchWithUserIdAndDateThenStatusCodeShouldBe_400_Bad_Request_Swagger() {
-        final TaskRegisterRequest request = createTaskRegisterRequest(monthlyTaskDocument.getId(), now);
+        final TaskCreateRequest request = createTaskRegisterRequest(monthlyTaskDocument.getId(), now);
         taskFacade.save(dailygeUser, request.toCommand());
         final RestDocumentationFilter filter = createMonthlyTaskDetailSearchWithUserIdAndDateFilter(
             createIdentifier("MonthlyTaskDetailSearch-V2", 400)
@@ -217,7 +217,7 @@ class MonthlyTaskReadDocumentationTest extends DatabaseTestBase {
     @Test
     @DisplayName("[Swagger] 사용자 아이디와 날짜로 월간 일정표를 조회했을 때, 월간 일정표가 존재하지 않으면 404 Not Found 응답을 받는다.")
     void whenInvalidMonthlyTaskNotExistsWithUserIdAndDateThenStatusCodeShouldBe_404_Not_Found_Swagger() {
-        final TaskRegisterRequest request = createTaskRegisterRequest(monthlyTaskDocument.getId(), now);
+        final TaskCreateRequest request = createTaskRegisterRequest(monthlyTaskDocument.getId(), now);
         taskFacade.save(dailygeUser, request.toCommand());
         final RestDocumentationFilter filter = createMonthlyTaskDetailSearchWithUserIdAndDateFilter(
             createIdentifier("MonthlyTaskDetailSearch-V2", 404)
@@ -243,7 +243,7 @@ class MonthlyTaskReadDocumentationTest extends DatabaseTestBase {
     @Test
     @DisplayName("월간 일정표ID가 존재하면 200 OK 응답을 받는다.")
     void whenMonthlyTaskIdExistsWithUserIdAndDateThenStatusCodeShouldBe200_OK_RestDocs() {
-        final TaskRegisterRequest request = createTaskRegisterRequest(monthlyTaskDocument.getId(), now);
+        final TaskCreateRequest request = createTaskRegisterRequest(monthlyTaskDocument.getId(), now);
         taskFacade.save(dailygeUser, request.toCommand());
 
         given(this.specification)
@@ -266,7 +266,7 @@ class MonthlyTaskReadDocumentationTest extends DatabaseTestBase {
     @Test
     @DisplayName("사용자 ID와 날짜로 월간 일정표를 조회할 때, 월간 일정표 ID가 존재하면 200 OK 응답을 받는다.")
     void whenMonthlyTaskIdExistsWithUserIdAndDateThenStatusCodeShouldBe200_OK_Swagger() {
-        final TaskRegisterRequest request = createTaskRegisterRequest(monthlyTaskDocument.getId(), now);
+        final TaskCreateRequest request = createTaskRegisterRequest(monthlyTaskDocument.getId(), now);
         taskFacade.save(dailygeUser, request.toCommand());
         final RestDocumentationFilter filter = createMonthlyTaskIdSearchFilter(createIdentifier("MonthlyTaskIdSearch", 200));
 
@@ -286,7 +286,7 @@ class MonthlyTaskReadDocumentationTest extends DatabaseTestBase {
     @Test
     @DisplayName("사용자 ID와 날짜로 월간 일정표를 조회할 때, 월간 일정표가 존재하지 않으면 404 NotFound 응답을 받는다.")
     void whenMonthlyTaskIdNotExistsWithUserIdAndDateThenStatusCodeShouldBe_404_NotFound_Swagger() {
-        final TaskRegisterRequest request = createTaskRegisterRequest(monthlyTaskDocument.getId(), now);
+        final TaskCreateRequest request = createTaskRegisterRequest(monthlyTaskDocument.getId(), now);
         taskFacade.save(dailygeUser, request.toCommand());
         final RestDocumentationFilter filter = createMonthlyTaskIdSearchFilter(createIdentifier("MonthlyTaskIdSearch", 404));
         final LocalDate future = LocalDate.of(2300, 7, 10);

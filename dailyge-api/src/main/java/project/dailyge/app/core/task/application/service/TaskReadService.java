@@ -1,7 +1,7 @@
 package project.dailyge.app.core.task.application.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import project.dailyge.app.common.annotation.Application;
 import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.core.task.application.TaskReadUseCase;
 import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.MONTHLY_TASK_NOT_FOUND;
@@ -13,7 +13,7 @@ import project.dailyge.document.task.TaskDocumentReadRepository;
 
 import java.time.LocalDate;
 
-@Service
+@Application
 @RequiredArgsConstructor
 class TaskReadService implements TaskReadUseCase {
 

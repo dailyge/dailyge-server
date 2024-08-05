@@ -9,17 +9,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.OK;
+import project.dailyge.app.common.annotation.Presentation;
 import project.dailyge.app.common.auth.DailygeToken;
 import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.common.auth.LoginUser;
-import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.OK;
 import project.dailyge.app.common.response.ApiResponse;
 import project.dailyge.app.core.user.facade.UserFacade;
 import project.dailyge.app.core.user.presentation.response.LoginPageUrlResponse;
 import project.dailyge.app.core.user.presentation.response.OAuthLoginResponse;
 
-@RestController
+@Presentation
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class LoginApi {

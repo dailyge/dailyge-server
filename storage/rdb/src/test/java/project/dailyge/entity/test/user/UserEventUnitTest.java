@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static project.dailyge.entity.common.EventType.CREATE;
 
 @DisplayName("[UnitTest] UserEvent 단위 테스트")
-public class UserEventUnitTest {
+class UserEventUnitTest {
 
     private static final long PUBLISHER = 1L;
     private static final String EVENT_ID = "eventId";

@@ -43,8 +43,6 @@ class TaskSaveIntegrationTest extends DatabaseTestBase {
     @Order(1)
     @DisplayName("할 일이 저장되면, Id가 Null이 아니다.")
     void whenSaveTaskThenTaskIdShouldNotBeNull() {
-        final UserJpaEntity newUser = userWriteUseCase.save(UserFixture.createUserJpaEntity());
-        final DailygeUser dailygeUser = new DailygeUser(newUser.getId(), newUser.getRole());
         final LocalDate now = LocalDate.now();
         taskFacade.createMonthlyTasks(dailygeUser, now);
         final MonthlyTaskDocument findMonthlyTask = monthlyTaskReadRepository.findMonthlyDocumentByUserIdAndDate(dailygeUser.getUserId(), now).get();
@@ -58,8 +56,6 @@ class TaskSaveIntegrationTest extends DatabaseTestBase {
     @Order(2)
     @DisplayName("연간 일정표를 생성하면 12개(January-December)의 월간 일정표가 생성된다.")
     void whenCreateMonthlyTasksThenResultShould12() {
-        final UserJpaEntity newUser = userWriteUseCase.save(UserFixture.createUserJpaEntity());
-        final DailygeUser dailygeUser = new DailygeUser(newUser.getId(), newUser.getRole());
         final LocalDate date = LocalDate.now();
         taskFacade.createMonthlyTasks(dailygeUser, date);
 
@@ -72,8 +68,6 @@ class TaskSaveIntegrationTest extends DatabaseTestBase {
     @DisplayName("멀티 쓰레드 환경에서도, Redisson 분산락으로 인해 동시성이 보장된다.")
     void whenMultiThreadTryToCreateMonthlyTasksThenResultShouldBeSafe() throws InterruptedException {
         final CountDownLatch countDownLatch = new CountDownLatch(100);
-        final UserJpaEntity newUser = userWriteUseCase.save(UserFixture.createUserJpaEntity());
-        final DailygeUser dailygeUser = new DailygeUser(newUser.getId(), newUser.getRole());
         final LocalDate date = LocalDate.now();
         taskFacade.createMonthlyTasks(dailygeUser, date);
 

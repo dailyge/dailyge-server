@@ -9,12 +9,9 @@ import static org.springframework.restdocs.restassured.RestAssuredRestDocumentat
 import org.springframework.restdocs.restassured.RestDocumentationFilter;
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 import project.dailyge.app.common.DatabaseTestBase;
-import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.core.task.application.TaskReadUseCase;
 import project.dailyge.app.core.task.facade.TaskFacade;
 import project.dailyge.app.core.task.presentation.requesst.TaskCreateRequest;
-import project.dailyge.app.core.user.application.UserWriteUseCase;
-import static project.dailyge.app.test.user.fixture.UserFixture.createUserJpaEntity;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskReadSnippet.createMonthlyTaskDetailSearchWithIdFilter;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskReadSnippet.createMonthlyTaskDetailSearchWithUserIdAndDateFilter;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskReadSnippet.createMonthlyTaskIdSearchFilter;
@@ -41,15 +38,9 @@ class MonthlyTaskReadDocumentationTest extends DatabaseTestBase {
     @Autowired
     private TaskReadUseCase taskReadUseCase;
 
-    @Autowired
-    private UserWriteUseCase userWriteUseCase;
-
     @BeforeEach
     void setUp() {
-        newUser = userWriteUseCase.save(createUserJpaEntity());
-        dailygeUser = new DailygeUser(newUser.getId(), newUser.getRole());
         now = LocalDate.now();
-
         taskFacade.createMonthlyTasks(dailygeUser, now);
         monthlyTaskDocument = taskReadUseCase.findMonthlyTaskByUserIdAndDate(dailygeUser, now);
     }

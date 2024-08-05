@@ -43,8 +43,8 @@ class TokenProviderUnitTest {
     @Test
     @DisplayName("사용자 토큰을 생성하면, 토큰이 정상적으로 생성된다.")
     void whenCreateUserTokenThenResultShouldBeNotNull() {
-        final UserJpaEntity user = UserFixture.createUserJpaEntity(1L);
-        final DailygeToken token = tokenProvider.createToken(user.getId(), user.getEmail());
+        final UserJpaEntity user = UserFixture.createUser(1L);
+        final DailygeToken token = tokenProvider.createToken(user);
 
         assertAll(
             () -> assertNotNull(token),
@@ -57,8 +57,8 @@ class TokenProviderUnitTest {
     @Test
     @DisplayName("사용자 토큰이 올바르다면, 사용자 ID를 얻는다.")
     void whenUserTokenCorrectThenUserIdShouldBeNotNull() {
-        final UserJpaEntity user = UserFixture.createUserJpaEntity(1L);
-        final DailygeToken token = tokenProvider.createToken(user.getId(), user.getEmail());
+        final UserJpaEntity user = UserFixture.createUser(1L);
+        final DailygeToken token = tokenProvider.createToken(user);
 
         assertEquals(user.getId(), tokenProvider.getUserId(token.accessToken()));
     }

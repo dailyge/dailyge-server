@@ -15,7 +15,6 @@ import project.dailyge.app.core.task.facade.TaskFacade;
 import project.dailyge.app.core.task.presentation.requesst.TaskCreateRequest;
 import project.dailyge.app.core.task.presentation.requesst.TaskStatusUpdateRequest;
 import project.dailyge.app.core.task.presentation.requesst.TaskUpdateRequest;
-import static project.dailyge.app.test.user.fixture.UserFixture.createUserJpaEntity;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASK_AUTHORIZATION_HEADER;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASK_PATH_PARAMETER_SNIPPET;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASK_STATUS_UPDATE_REQUEST_SNIPPET;
@@ -51,10 +50,7 @@ class TaskUpdateDocumentationTest extends DatabaseTestBase {
 
     @BeforeEach
     void setUp() {
-        newUser = userWriteUseCase.save(createUserJpaEntity());
-        dailygeUser = new DailygeUser(newUser.getId(), newUser.getRole());
         now = LocalDate.now();
-
         taskFacade.createMonthlyTasks(dailygeUser, now);
         monthlyTaskDocument = taskReadUseCase.findMonthlyTaskByUserIdAndDate(dailygeUser, now);
     }

@@ -17,14 +17,9 @@ import static project.dailyge.app.test.user.documentationtest.snippet.UserSnippe
 @DisplayName("[DocumentationTest] 유저 삭제 API 문서화 테스트")
 class UserDeleteDocumentationTest extends DatabaseTestBase {
 
-    @Autowired
-    private UserWriteUseCase userWriteUseCase;
-
     @Test
     @DisplayName("사용자를 삭제하는데 성공하면, 204 NO_CONTENT 응답을 받는다.")
     void whenDeleteUserSucceedsThenStatusCodeShouldBe204_NO_CONTENT() {
-        final UserJpaEntity saveUser = userWriteUseCase.save(UserFixture.createUserJpaEntity());
-
         given(this.specification)
             .filter(document(IDENTIFIER,
                 USER_AUTHORIZATION_HEADER,
@@ -33,7 +28,7 @@ class UserDeleteDocumentationTest extends DatabaseTestBase {
             .contentType(APPLICATION_JSON_VALUE)
             .header(AUTHORIZATION, getAuthorizationHeader())
             .when()
-            .delete("/api/users/{userId}", saveUser.getId())
+            .delete("/api/users/{userId}", dailygeUser.getId())
             .then()
             .statusCode(204)
             .log()

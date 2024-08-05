@@ -15,8 +15,8 @@ import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.MONTHLY
 import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.TASK_NOT_FOUND;
 import project.dailyge.app.core.task.exception.TaskTypeException;
 import project.dailyge.app.core.task.facade.TaskFacade;
-import static project.dailyge.app.test.user.fixture.UserFixture.createUserJpaEntity;
 import static project.dailyge.app.test.task.fixture.TaskCommandFixture.createTaskCreationCommand;
+import static project.dailyge.app.test.user.fixture.UserFixture.createUser;
 import project.dailyge.document.task.MonthlyTaskDocument;
 import project.dailyge.document.task.TaskDocument;
 import project.dailyge.document.task.TaskDocumentReadRepository;
@@ -41,8 +41,6 @@ class TaskReadIntegrationTest extends DatabaseTestBase {
 
     @BeforeEach
     void setUp() {
-        newUser = userWriteUseCase.save(createUserJpaEntity());
-        dailygeUser = new DailygeUser(newUser.getId(), newUser.getRole());
         now = LocalDate.now();
         taskFacade.createMonthlyTasks(dailygeUser, now);
         monthlyTask = taskReadRepository.findMonthlyDocumentByUserIdAndDate(dailygeUser.getUserId(), now).get();

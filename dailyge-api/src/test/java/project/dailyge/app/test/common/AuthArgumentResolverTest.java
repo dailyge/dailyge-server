@@ -13,6 +13,7 @@ import project.dailyge.app.common.auth.TokenProvider;
 import project.dailyge.app.common.configuration.web.AuthArgumentResolver;
 import project.dailyge.app.common.exception.UnAuthorizedException;
 import project.dailyge.app.core.user.application.UserReadUseCase;
+import project.dailyge.app.test.user.fixture.UserFixture;
 import project.dailyge.entity.user.UserJpaEntity;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -22,7 +23,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_USER_TOKEN;
-import static project.dailyge.app.test.user.fixture.UserFixture.createUserJpaEntity;
 
 @DisplayName("[UnitTest] AuthArgumentResolver 검증 단위 테스트")
 class AuthArgumentResolverTest {
@@ -55,8 +55,8 @@ class AuthArgumentResolverTest {
     @Test
     @DisplayName("토큰정보가 존재하고, 올바르다면 인증 객체가 생성된다.")
     void shouldBeNotNullWhenUserIdIsValid() {
-        final UserJpaEntity user = createUserJpaEntity(1L);
-        final DailygeToken token = tokenProvider.createToken(user.getId(), user.getEmail());
+        final UserJpaEntity user = UserFixture.createUser(1L);
+        final DailygeToken token = tokenProvider.createToken(user);
         when(request.getHeader(AUTHORIZATION))
             .thenReturn(token.getAuthorizationToken());
         when(userReadUseCase.findAuthorizedUserById(user.getId()))
@@ -80,8 +80,8 @@ class AuthArgumentResolverTest {
     @DisplayName("사용자 ID가 유효하면 예외가 발생하지 않는다.")
     void shouldNotThrowExceptionWhenUserIdIsValid() {
         final Long validUserId = 456L;
-        final UserJpaEntity expectedUser = createUserJpaEntity(validUserId);
-        final DailygeToken token = tokenProvider.createToken(validUserId, expectedUser.getEmail());
+        final UserJpaEntity expectedUser = UserFixture.createUser(validUserId);
+        final DailygeToken token = tokenProvider.createToken(expectedUser);
         when(request.getHeader(AUTHORIZATION))
             .thenReturn(token.getAuthorizationToken());
         when(userReadUseCase.findAuthorizedUserById(validUserId))

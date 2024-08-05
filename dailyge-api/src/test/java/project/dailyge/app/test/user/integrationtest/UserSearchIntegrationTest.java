@@ -17,8 +17,8 @@ import project.dailyge.app.core.user.application.UserReadUseCase;
 import project.dailyge.app.core.user.application.UserWriteUseCase;
 import static project.dailyge.app.core.user.exception.UserCodeAndMessage.USER_NOT_FOUND;
 import project.dailyge.app.core.user.exception.UserTypeException;
-import project.dailyge.app.test.user.fixture.UserFixture;
 import static project.dailyge.app.test.user.fixture.UserFixture.EMAIL;
+import static project.dailyge.app.test.user.fixture.UserFixture.createUser;
 import project.dailyge.entity.user.UserJpaEntity;
 
 import java.util.Optional;
@@ -35,8 +35,8 @@ class UserSearchIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("존재하는 사용자를 ID로 조회한다면, 사용자 정보는 Null 이 아니다.")
     void whenFindExistingUserByIdThenUserShouldBeNotNull() {
-        final UserJpaEntity saveUser = userWriteUseCase.save(UserFixture.createUserJpaEntity());
-        final UserJpaEntity findUser = userReadUseCase.findById(saveUser.getId());
+        final UserJpaEntity user = userWriteUseCase.save(createUser("dailyges", "dailyges@gmail.com"));
+        final UserJpaEntity findUser = userReadUseCase.findById(user.getId());
 
         assertNotNull(findUser);
     }
@@ -44,7 +44,7 @@ class UserSearchIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("사용자가 없다면, UserNotFoundException이 발생한다.")
     void whenFindNonExistentUserThenUserNotFoundExceptionShouldBeHappen() {
-        assertThatThrownBy(() -> userReadUseCase.findById(1L))
+        assertThatThrownBy(() -> userReadUseCase.findById(Long.MAX_VALUE))
             .isExactlyInstanceOf(UserTypeException.from(USER_NOT_FOUND).getClass())
             .isInstanceOf(UserTypeException.class)
             .hasMessage(USER_NOT_FOUND.message());
@@ -53,7 +53,7 @@ class UserSearchIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("활동중인 사용자를 ID로 조회한다면, 사용자 정보는 Null 이 아니다.")
     void whenFindActiveUserByIdThenUserShouldBeNotNull() {
-        final UserJpaEntity saveUser = userWriteUseCase.save(UserFixture.createUserJpaEntity());
+        final UserJpaEntity saveUser = userWriteUseCase.save(createUser("dailyges", "dailyges@gmail.com"));
         final UserJpaEntity findUser = userReadUseCase.findActiveUserById(saveUser.getId());
 
         assertNotNull(findUser);
@@ -62,7 +62,7 @@ class UserSearchIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("활동중인 사용자가 없다면, UserActiveNotFoundException이 발생한다.")
     void whenFindNonActiveUserThenUserActiveNotFoundExceptionShouldBeHappen() {
-        assertThatThrownBy(() -> userReadUseCase.findActiveUserById(1L))
+        assertThatThrownBy(() -> userReadUseCase.findActiveUserById(Long.MAX_VALUE))
             .isExactlyInstanceOf(UserTypeException.from(USER_NOT_FOUND).getClass())
             .isInstanceOf(UserTypeException.class)
             .hasMessage(USER_NOT_FOUND.message());
@@ -71,17 +71,17 @@ class UserSearchIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("로그인 된 사용자 조회 시 있다면, 조회에 성공한다.")
     void whenFindLoggedUserExistsThenUserShouldBeNotNull() {
-        final UserJpaEntity saveUser = userWriteUseCase.save(UserFixture.createUserJpaEntity());
-        final UserJpaEntity findUser = userReadUseCase.findAuthorizedUserById(saveUser.getId());
+        final UserJpaEntity loginUser = userWriteUseCase.save(createUser("dailyges", "dailyges@gmail.com"));
+        final UserJpaEntity findUser = userReadUseCase.findAuthorizedUserById(loginUser.getId());
 
         assertNotNull(findUser);
-        assertEquals(saveUser, findUser);
+        assertEquals(loginUser, findUser);
     }
 
     @Test
     @DisplayName("로그인 된 사용자 조회 시 없다면, UnAuthorizedException이 발생한다.")
     void whenFindLoggedUserNonExistentThenUnAuthorizedExceptionShouldBeHappen() {
-        assertThatThrownBy(() -> userReadUseCase.findAuthorizedUserById(1L))
+        assertThatThrownBy(() -> userReadUseCase.findAuthorizedUserById(Long.MAX_VALUE))
             .isExactlyInstanceOf(UnAuthorizedException.class)
             .isInstanceOf(RuntimeException.class)
             .hasMessage(USER_NOT_FOUND_MESSAGE);
@@ -90,8 +90,8 @@ class UserSearchIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("등록된 이메일로 사용자를 조회 시, Optional 값이 존재한다.")
     void whenFindUserByRegisteredEmailThenResultShouldBeTrue() {
-        final UserJpaEntity saveUser = userWriteUseCase.save(UserFixture.createUserJpaEntity());
-        final Optional<UserJpaEntity> findUser = userReadUseCase.findActiveUserByEmail(saveUser.getEmail());
+        final UserJpaEntity user = userWriteUseCase.save(createUser("dailyges", "dailyges@gmail.com"));
+        final Optional<UserJpaEntity> findUser = userReadUseCase.findActiveUserByEmail(user.getEmail());
 
         assertTrue(findUser.isPresent());
     }
@@ -104,13 +104,12 @@ class UserSearchIntegrationTest extends DatabaseTestBase {
         assertFalse(findUser.isPresent());
     }
 
-    @Test
     @DisplayName("동일 이메일로 재 가입한 사용자를 이메일로 조회 시, 삭제 되지 않은 정보만 검색된다.")
     void whenFindUserReRegisteredBySameEmailThenActiveUserShouldBeOne() {
-        final UserJpaEntity deleteUser = userWriteUseCase.save(UserFixture.createUserJpaEntity());
+        final UserJpaEntity deleteUser = userWriteUseCase.save(createUser("dailyges", "dailyges@gmail.com"));
         userWriteUseCase.delete(deleteUser.getId());
 
-        final UserJpaEntity activeUser = userWriteUseCase.save(UserFixture.createUserJpaEntity());
+        final UserJpaEntity activeUser = userWriteUseCase.save(createUser("dailyges", "dailyges@gmail.com"));
         final Optional<UserJpaEntity> findUser = userReadUseCase.findActiveUserByEmail(EMAIL);
 
         assertAll(
@@ -123,7 +122,7 @@ class UserSearchIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("사용자가 존재할 경우, true 를 반환한다.")
     void whenUserExistentUserThenResultShouldBeTrue() {
-        final UserJpaEntity user = userWriteUseCase.save(UserFixture.createUserJpaEntity());
+        final UserJpaEntity user = userWriteUseCase.save(createUser("dailyges", "dailyges@gmail.com"));
 
         assertTrue(userReadUseCase.existsById(user.getId()));
     }
@@ -131,6 +130,6 @@ class UserSearchIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("사용자가 존재하지 않는 경우, false 를 반환한다.")
     void whenUserNonExistentThenResultShouldBeTrue() {
-        assertFalse(userReadUseCase.existsById(1L));
+        assertFalse(userReadUseCase.existsById(Long.MAX_VALUE));
     }
 }

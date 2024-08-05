@@ -8,7 +8,7 @@ import project.dailyge.core.cache.user.UserCacheWriteRepository;
 
 @Service
 @RequiredArgsConstructor
-class UserCacheWriteService implements UserCacheWriteUseCase {
+public class UserCacheWriteService implements UserCacheWriteUseCase {
 
     private final UserCacheWriteRepository userWriteRepository;
 

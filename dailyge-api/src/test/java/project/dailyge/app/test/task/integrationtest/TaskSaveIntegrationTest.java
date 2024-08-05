@@ -11,15 +11,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import project.dailyge.app.common.DatabaseTestBase;
-import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.core.task.application.command.TaskCreateCommand;
 import project.dailyge.app.core.task.facade.TaskFacade;
-import project.dailyge.app.core.user.application.UserWriteUseCase;
-import project.dailyge.app.test.user.fixture.UserFixture;
 import static project.dailyge.app.test.task.fixture.TaskCommandFixture.createTaskCreationCommand;
 import project.dailyge.document.task.MonthlyTaskDocument;
 import project.dailyge.document.task.TaskDocumentReadRepository;
-import project.dailyge.entity.user.UserJpaEntity;
 
 import java.time.LocalDate;
 import java.util.concurrent.CountDownLatch;
@@ -32,9 +28,6 @@ class TaskSaveIntegrationTest extends DatabaseTestBase {
 
     @Autowired
     private TaskFacade taskFacade;
-
-    @Autowired
-    private UserWriteUseCase userWriteUseCase;
 
     @Autowired
     private TaskDocumentReadRepository monthlyTaskReadRepository;

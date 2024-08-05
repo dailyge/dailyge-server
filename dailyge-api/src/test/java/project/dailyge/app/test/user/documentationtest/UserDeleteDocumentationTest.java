@@ -1,16 +1,11 @@
 package project.dailyge.app.test.user.documentationtest;
 
+import static io.restassured.RestAssured.given;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import project.dailyge.app.common.DatabaseTestBase;
-import project.dailyge.app.core.user.application.UserWriteUseCase;
-import project.dailyge.app.test.user.fixture.UserFixture;
-import project.dailyge.entity.user.UserJpaEntity;
-
-import static io.restassured.RestAssured.given;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.document;
+import project.dailyge.app.common.DatabaseTestBase;
 import static project.dailyge.app.test.user.documentationtest.snippet.UserSnippet.USER_AUTHORIZATION_HEADER;
 import static project.dailyge.app.test.user.documentationtest.snippet.UserSnippet.USER_DELETE_PATH_PARAMETER_SNIPPET;
 

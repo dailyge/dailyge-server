@@ -9,7 +9,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.document;
 import org.springframework.restdocs.restassured.RestDocumentationFilter;
 import project.dailyge.app.common.DatabaseTestBase;
-import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.core.task.application.TaskReadUseCase;
 import project.dailyge.app.core.task.facade.TaskFacade;
 import project.dailyge.app.core.task.presentation.requesst.TaskCreateRequest;
@@ -231,7 +230,7 @@ class TaskUpdateDocumentationTest extends DatabaseTestBase {
         final TaskCreateRequest taskCreateRequest = new TaskCreateRequest(
             monthlyTaskDocument.getId(), "주간 미팅", "Backend 팀과 Api 스펙 정의", now
         );
-        final String newTaskId = taskFacade.save(dailygeUser, taskCreateRequest.toCommand());
+        taskFacade.save(dailygeUser, taskCreateRequest.toCommand());
         final String invalidUUID = "abcd-15";
         final TaskStatusUpdateRequest request = createTaskStatusUpdateRequest(monthlyTaskDocument.getId());
         final RestDocumentationFilter filter = createTaskStatusUpdateErrorFilter(

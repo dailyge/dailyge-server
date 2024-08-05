@@ -11,8 +11,6 @@ import java.util.Objects;
 public class TaskEvent extends Event {
 
     private static final String DOMAIN = "task";
-    private String eventId;
-    private EventType eventType;
 
     /**
      * 직렬화를 위한 생성자로 외부에서 호출하지 말 것.

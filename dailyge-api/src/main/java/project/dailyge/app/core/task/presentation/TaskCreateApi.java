@@ -11,7 +11,7 @@ import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.common.auth.LoginUser;
 import project.dailyge.app.common.response.ApiResponse;
 import project.dailyge.app.core.task.facade.TaskFacade;
-import project.dailyge.app.core.task.presentation.requesst.MonthlyTasksRegisterRequest;
+import project.dailyge.app.core.task.presentation.requesst.MonthlyTasksCreateRequest;
 import project.dailyge.app.core.task.presentation.requesst.TaskCreateRequest;
 import project.dailyge.app.core.task.presentation.response.TaskCreateResponse;
 
@@ -25,7 +25,7 @@ public class TaskCreateApi {
     @PostMapping(path = {"/monthly-tasks"})
     public ApiResponse<Void> createMonthlyTasks(
         @LoginUser final DailygeUser dailygeUser,
-        @Valid @RequestBody final MonthlyTasksRegisterRequest request
+        @Valid @RequestBody final MonthlyTasksCreateRequest request
     ) {
         taskFacade.createMonthlyTasks(dailygeUser, request.date());
         return ApiResponse.from(CREATED);

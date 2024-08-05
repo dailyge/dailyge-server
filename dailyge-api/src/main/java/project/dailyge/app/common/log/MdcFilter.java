@@ -25,7 +25,6 @@ import java.time.temporal.ChronoUnit;
 public class MdcFilter implements Filter {
 
     private static final String SERVER = "dailyge-api";
-    private static final String PATH = "path";
     private static final String DAILYGE_USER = "dailyge-user";
     private static final String ENTRANCE_LAYER = "ENTRANCE";
     private static final String TRACE_ID = "traceId";
@@ -48,7 +47,6 @@ public class MdcFilter implements Filter {
         try {
             MDC.put(TRACE_ID, traceId);
             MDC.put(IP, userIp);
-            MDC.put(PATH, path);
             final String longMessage = createGuestLogMessage(SERVER, path, method, traceId, userIp, ENTRANCE_LAYER, startTime, 0, null, null);
             log.info(longMessage);
             filterChain.doFilter(servletRequest, servletResponse);

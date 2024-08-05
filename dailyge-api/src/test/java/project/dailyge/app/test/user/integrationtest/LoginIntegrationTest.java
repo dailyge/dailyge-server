@@ -12,7 +12,7 @@ import project.dailyge.app.common.exception.ExternalServerException;
 import project.dailyge.app.common.response.ApiResponse;
 import project.dailyge.app.core.user.presentation.LoginApi;
 import project.dailyge.app.core.user.presentation.response.OAuthLoginResponse;
-import project.dailyge.core.cache.user.UserCacheEvent;
+import project.dailyge.entity.user.UserEvent;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
@@ -50,11 +50,11 @@ class LoginIntegrationTest extends DatabaseTestBase {
     }
 
     @Test
-    @DisplayName("로그인 성공 시 사용자 정보가 Cache 에 저장되도록, 이벤트가 발행된다.")
+    @DisplayName("로그인 성공 시 사용자 정보가 저장되도록, 이벤트가 발행된다.")
     void whenLoginSuccessThenCacheSaveEventShouldBeHappen() {
         loginApi.login(AUTHENTICATION_CODE);
 
-        final long count = applicationEvents.stream(UserCacheEvent.class).count();
+        final long count = applicationEvents.stream(UserEvent.class).count();
         assertEquals(1, count);
     }
 

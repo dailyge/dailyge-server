@@ -6,16 +6,18 @@ import org.springframework.stereotype.Component;
 import project.dailyge.app.common.auth.DailygeToken;
 import project.dailyge.app.common.auth.TokenProvider;
 import project.dailyge.app.common.exception.CommonException;
-import project.dailyge.core.cache.user.UserCacheEvent;
 import project.dailyge.app.core.user.application.UserReadUseCase;
 import project.dailyge.app.core.user.application.UserWriteUseCase;
 import project.dailyge.app.core.user.external.oauth.GoogleOAuthManager;
 import project.dailyge.app.core.user.external.oauth.TokenManager;
 import project.dailyge.app.core.user.external.response.GoogleUserInfoResponse;
-import project.dailyge.core.cache.user.UserCache;
+import project.dailyge.entity.common.EventType;
+import project.dailyge.entity.user.UserEvent;
 import project.dailyge.entity.user.UserJpaEntity;
 
 import java.util.Optional;
+
+import static project.dailyge.document.common.UuidGenerator.createTimeBasedUUID;
 
 @Component
 @RequiredArgsConstructor
@@ -31,28 +33,28 @@ public class UserFacade {
     public DailygeToken login(final String code) throws CommonException {
         final GoogleUserInfoResponse response = googleOAuthManager.getUserInfo(code);
         final Optional<UserJpaEntity> findUserByEmail = userReadUseCase.findActiveUserByEmail(response.getEmail());
-        final UserCache userCache = publishUserSave(findUserByEmail, response);
+        final Long userId = eventPublish(findUserByEmail, response);
 
-        final DailygeToken token = tokenProvider.createToken(userCache.getId(), response.getEmail());
-        tokenManager.saveRefreshToken(userCache.getId(), token.refreshToken());
+        final DailygeToken token = tokenProvider.createToken(userId, response.getEmail());
+        tokenManager.saveRefreshToken(userId, token.refreshToken());
         return token;
     }
 
-    private UserCache publishUserSave(
+    private Long eventPublish(
         final Optional<UserJpaEntity> findUserByEmail,
         final GoogleUserInfoResponse response
     ) {
-        final UserCache userCache;
-        if (findUserByEmail.isEmpty()) {
-            final Long newUserSequence = userWriteUseCase.getSequence();
-            userCache = new UserCache(newUserSequence, response.getName(), response.getEmail(), response.getPicture());
-            // TODO - 여기에 추후 메시지큐 전송 로직 추가 예정.
-        } else {
-            final UserJpaEntity user = findUserByEmail.get();
-            userCache = new UserCache(user.getId(), user.getNickname(), user.getEmail(), user.getProfileImageUrl());
-        }
-        publisher.publishEvent(new UserCacheEvent(userCache));
-        return userCache;
+        final Long userId = findUserByEmail.isEmpty() ? userWriteUseCase.getSequence() : findUserByEmail.get().getId();
+        final UserEvent event = UserEvent.createEvent(
+            userId,
+            createTimeBasedUUID(),
+            EventType.CREATE,
+            response.getName(),
+            response.getEmail(),
+            response.getPicture()
+        );
+        publisher.publishEvent(event);
+        return userId;
     }
 
     public void logout(final Long userId) {

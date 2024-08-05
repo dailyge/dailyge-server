@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
@@ -27,6 +28,7 @@ import java.util.Set;
 
 @Slf4j
 @Component
+@Profile({"local", "dev"})
 @RequiredArgsConstructor
 public class OperationDataInitializer implements CommandLineRunner {
 
@@ -50,7 +52,7 @@ public class OperationDataInitializer implements CommandLineRunner {
 
     @Override
     @Transactional
-    public void run(String... args) {
+    public void run(final String... args) {
         log.info(env);
         if (isEnv(LOCAL) || isEnv(DEV)) {
             initSchema();

@@ -110,11 +110,21 @@ class TaskEventUnitTest {
 
         final TaskEvent taskEvent = TaskEvent.createEvent(publisher, eventId, eventType);
 
-        final String expectedString = "{\"publisher\":\"" + publisher + "\"," +
-            "\"domain\":\"" + taskEvent.getDomain() + "\"," +
-            "\"eventId\":\"" + eventId + "\"," +
-            "\"eventType\":\"" + eventType + "\"," +
-            "\"createdAt\":\"" + taskEvent.getCreatedAt() + "\"}";
+        final String expectedString = "{\"publisher\":\""
+            + publisher
+            + "\","
+            + "\"domain\":\""
+            + taskEvent.getDomain()
+            + "\","
+            + "\"eventId\":\""
+            + eventId
+            + "\","
+            + "\"eventType\":\""
+            + eventType
+            + "\","
+            + "\"createdAt\":\""
+            + taskEvent.getCreatedAt()
+            + "\"}";
 
         assertThat(taskEvent.toString()).hasToString(expectedString);
     }

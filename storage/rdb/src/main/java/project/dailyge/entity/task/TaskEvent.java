@@ -92,10 +92,9 @@ public class TaskEvent extends Event {
 
     @Override
     public String toString() {
-        return "{\"publisher\":\"" + publisher + "\"," +
-            "\"domain\":\"" + domain + "\"," +
-            "\"eventId\":\"" + eventId + "\"," +
-            "\"eventType\":\"" + eventType + "\"," +
-            "\"createdAt\":\"" + createdAt + "\"}";
+        return String.format(
+            "{\"publisher\":\"%s\",\"domain\":\"%s\",\"eventId\":\"%s\",\"eventType\":\"%s\",\"createdAt\":\"%s\"}",
+            publisher, domain, eventId, eventType, createdAt
+        );
     }
 }

@@ -30,4 +30,15 @@ public class UserCacheReadDao implements UserCacheReadRepository {
             throw new ExternalServerException(ex.getMessage(), INTERNAL_SERVER_ERROR);
         }
     }
+
+    @Override
+    public boolean existsById(Long userId) {
+        try {
+            return redisTemplate.hasKey(String.format("user:cache:%s", userId));
+        } catch (RedisException ex) {
+            throw new ExternalServerException(ex.getMessage(), BAD_GATEWAY);
+        } catch (Exception ex) {
+            throw new ExternalServerException(ex.getMessage(), INTERNAL_SERVER_ERROR);
+        }
+    }
 }

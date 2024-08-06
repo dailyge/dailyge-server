@@ -139,6 +139,10 @@ public class UserJpaEntity extends BaseEntity {
         this.deletedAt = LocalDateTime.now();
     }
 
+    public String getRoleToString() {
+        return role.name();
+    }
+
     public void profileImageInit(String profileImageUrl) {
         this.profileImageUrl = profileImageUrl;
     }

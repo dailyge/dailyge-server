@@ -17,7 +17,13 @@ public class UserEventHandler {
     @Async
     @EventListener
     public void onUserEvent(final UserEvent event) {
-        final UserCache userCache = new UserCache(event.getPublisher(), event.getNickname(), event.getEmail(), event.getProfileImageUrl());
+        final UserCache userCache = new UserCache(
+            event.getPublisher(),
+            event.getNickname(),
+            event.getEmail(),
+            event.getProfileImageUrl(),
+            event.getRole()
+        );
         userCacheWriteUseCase.save(userCache);
     }
 }

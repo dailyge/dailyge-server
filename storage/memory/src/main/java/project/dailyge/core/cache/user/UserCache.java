@@ -11,6 +11,7 @@ public class UserCache {
     private String nickname;
     private String email;
     private String profileImageUrl;
+    private String role;
 
     private UserCache() {
     }
@@ -19,12 +20,14 @@ public class UserCache {
         final Long id,
         final String nickname,
         final String email,
-        final String profileImageUrl
+        final String profileImageUrl,
+        final String role
     ) {
         this.id = id;
         this.nickname = nickname;
         this.email = email;
         this.profileImageUrl = profileImageUrl;
+        this.role = role;
     }
 
     @Override

@@ -5,17 +5,17 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.CREATED;
+import project.dailyge.app.common.annotation.Presentation;
 import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.common.auth.LoginUser;
-import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.CREATED;
 import project.dailyge.app.common.response.ApiResponse;
 import project.dailyge.app.core.task.facade.TaskFacade;
-import project.dailyge.app.core.task.presentation.requesst.MonthlyTasksRegisterRequest;
-import project.dailyge.app.core.task.presentation.requesst.TaskRegisterRequest;
-import project.dailyge.app.core.task.presentation.response.TaskRegisterResponse;
+import project.dailyge.app.core.task.presentation.requesst.MonthlyTasksCreateRequest;
+import project.dailyge.app.core.task.presentation.requesst.TaskCreateRequest;
+import project.dailyge.app.core.task.presentation.response.TaskCreateResponse;
 
-@RestController
+@Presentation
 @RequiredArgsConstructor
 @RequestMapping(path = "/api")
 public class TaskCreateApi {
@@ -25,19 +25,19 @@ public class TaskCreateApi {
     @PostMapping(path = {"/monthly-tasks"})
     public ApiResponse<Void> createMonthlyTasks(
         @LoginUser final DailygeUser dailygeUser,
-        @Valid @RequestBody final MonthlyTasksRegisterRequest request
+        @Valid @RequestBody final MonthlyTasksCreateRequest request
     ) {
         taskFacade.createMonthlyTasks(dailygeUser, request.date());
         return ApiResponse.from(CREATED);
     }
 
     @PostMapping(path = {"/tasks"})
-    public ApiResponse<TaskRegisterResponse> registerTask(
+    public ApiResponse<TaskCreateResponse> registerTask(
         @LoginUser final DailygeUser dailygeUser,
-        @Valid @RequestBody final TaskRegisterRequest request
+        @Valid @RequestBody final TaskCreateRequest request
     ) {
         final String newTaskId = taskFacade.save(dailygeUser, request.toCommand());
-        final TaskRegisterResponse payload = new TaskRegisterResponse(newTaskId);
+        final TaskCreateResponse payload = new TaskCreateResponse(newTaskId);
         return ApiResponse.from(CREATED, payload);
     }
 }

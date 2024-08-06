@@ -1,6 +1,7 @@
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("io.micrometer:micrometer-registry-prometheus")
+    implementation("com.fasterxml.uuid:java-uuid-generator:4.0")
 }
 
 jar {

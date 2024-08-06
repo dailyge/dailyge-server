@@ -1,8 +1,8 @@
 package project.dailyge.app.core.task.application.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import project.dailyge.app.common.annotation.Application;
 import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.core.task.application.TaskWriteUseCase;
 import project.dailyge.app.core.task.application.command.TaskCreateCommand;
@@ -25,7 +25,7 @@ import static project.dailyge.entity.task.TaskEvent.createEvent;
 import java.time.LocalDate;
 import java.util.List;
 
-@Service
+@Application
 @RequiredArgsConstructor
 class TaskWriteService implements TaskWriteUseCase {
 

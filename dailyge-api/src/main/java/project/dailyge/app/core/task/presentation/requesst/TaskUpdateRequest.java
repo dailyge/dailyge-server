@@ -8,7 +8,6 @@ import project.dailyge.app.core.task.application.command.TaskUpdateCommand;
 import project.dailyge.entity.task.TaskStatus;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 public record TaskUpdateRequest(
     @NotNull(message = "monthlyId를 입력해 주세요.")
@@ -40,6 +39,14 @@ public record TaskUpdateRequest(
             content,
             date,
             status
+        );
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+            "{\"monthlyTaskId\":\"%s\",\"title\":\"%s\",\"content\":\"%s\",\"date\":\"%s\",\"status\":\"%s\"}",
+            monthlyTaskId, title, content, date, status
         );
     }
 }

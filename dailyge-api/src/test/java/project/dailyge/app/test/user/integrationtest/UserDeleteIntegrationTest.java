@@ -10,7 +10,7 @@ import project.dailyge.app.core.user.application.UserReadUseCase;
 import project.dailyge.app.core.user.application.UserWriteUseCase;
 import static project.dailyge.app.core.user.exception.UserCodeAndMessage.USER_NOT_FOUND;
 import project.dailyge.app.core.user.exception.UserTypeException;
-import project.dailyge.app.test.user.fixture.UserFixture;
+import static project.dailyge.app.test.user.fixture.UserFixture.createUser;
 import project.dailyge.entity.user.UserJpaEntity;
 
 @DisplayName("[IntegrationTest] 사용자 삭제 통합 테스트")
@@ -25,9 +25,8 @@ class UserDeleteIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("존재하는 사용자를 삭제하면, deleted true로 논리삭제 된다.")
     void whenDeleteAnExistingUserThenUserShouldDeletedBeTrue() {
-        final UserJpaEntity saveUser = userWriteUseCase.save(UserFixture.createUserJpaEntity());
-        userWriteUseCase.delete(saveUser.getId());
-        final UserJpaEntity findUser = userReadUseCase.findById(saveUser.getId());
+        userWriteUseCase.delete(dailygeUser.getId());
+        final UserJpaEntity findUser = userReadUseCase.findById(dailygeUser.getId());
 
         assertTrue(findUser.getDeleted());
     }
@@ -35,7 +34,7 @@ class UserDeleteIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("이미 삭제된 사용자를 삭제하면, IllegalArgumentException이 발생한다.")
     void whenDeleteAlreadyDeletedUserThenIllegalArgumentExceptionShouldBeHappen() {
-        final UserJpaEntity saveUser = userWriteUseCase.save(UserFixture.createUserJpaEntity());
+        final UserJpaEntity saveUser = userWriteUseCase.save(createUser("dailyges", "dailyge@gmail.com"));
         userWriteUseCase.delete(saveUser.getId());
 
         assertThatThrownBy(() -> userWriteUseCase.delete(saveUser.getId()))

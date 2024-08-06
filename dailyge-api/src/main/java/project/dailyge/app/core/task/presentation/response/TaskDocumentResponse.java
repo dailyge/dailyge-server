@@ -35,4 +35,13 @@ public class TaskDocumentResponse {
     public static TaskDocumentResponse from(final TaskDocument taskDocument) {
         return new TaskDocumentResponse(taskDocument);
     }
+
+    @Override
+    public String toString() {
+        return String.format(
+            "{\"id\":\"%s\",\"monthlyTaskId\":\"%s\",\"title\":\"%s\",\"content\":\"%s\",\"day\":%d,\"weekOfMonth\":%d,"
+                + "\"status\":\"%s\",\"userId\":%d,\"createdAt\":\"%s\",\"lastModifiedAt\":\"%s\"}",
+            id, monthlyTaskId, title, content, day, weekOfMonth, status, userId, createdAt, lastModifiedAt
+        );
+    }
 }

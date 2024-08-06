@@ -17,4 +17,9 @@ public record TaskStatusUpdateRequest(
     public TaskStatusUpdateCommand toCommand() {
         return new TaskStatusUpdateCommand(monthlyTaskId, status);
     }
+
+    @Override
+    public String toString() {
+        return String.format("{\"monthlyTaskId\":\"%s\",\"status\":\"%s\"}", monthlyTaskId, status);
+    }
 }

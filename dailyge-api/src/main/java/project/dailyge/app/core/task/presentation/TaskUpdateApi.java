@@ -6,10 +6,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.OK;
+import project.dailyge.app.common.annotation.Presentation;
 import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.common.auth.LoginUser;
-import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.OK;
 import project.dailyge.app.common.response.ApiResponse;
 import project.dailyge.app.core.common.validation.UuidFormat;
 import project.dailyge.app.core.task.application.TaskWriteUseCase;
@@ -18,7 +18,7 @@ import project.dailyge.app.core.task.application.command.TaskUpdateCommand;
 import project.dailyge.app.core.task.presentation.requesst.TaskStatusUpdateRequest;
 import project.dailyge.app.core.task.presentation.requesst.TaskUpdateRequest;
 
-@RestController
+@Presentation
 @RequiredArgsConstructor
 @RequestMapping(path = {"/api/tasks"})
 public class TaskUpdateApi {

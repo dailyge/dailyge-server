@@ -17,4 +17,12 @@ public class TaskStatusResponse {
     public static TaskStatusResponse from(final TaskStatus status) {
         return new TaskStatusResponse(status);
     }
+
+    @Override
+    public String toString() {
+        return String.format(
+            "{\"kr\":\"%s\",\"en\":\"%s\"}",
+            kr, en
+        );
+    }
 }

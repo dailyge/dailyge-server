@@ -22,4 +22,8 @@ public class CommonException extends RuntimeException {
         this.detailMessage = detailMessage;
         this.codeAndMessage = codeAndMessage;
     }
+
+    public int getCode() {
+        return codeAndMessage.code();
+    }
 }

@@ -21,7 +21,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.pathPara
 import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.restdocs.snippet.Attributes.key;
 import static project.dailyge.app.common.SnippetUtils.getAttribute;
-import project.dailyge.app.core.task.presentation.requesst.TaskRegisterRequest;
+import project.dailyge.app.core.task.presentation.requesst.TaskCreateRequest;
 import project.dailyge.app.core.task.presentation.requesst.TaskStatusUpdateRequest;
 import project.dailyge.app.core.task.presentation.requesst.TaskUpdateRequest;
 
@@ -40,18 +40,18 @@ public interface TaskSnippet {
 
     FieldDescriptor[] MONTHLY_TASK_CREATE_REQUEST_FIELDS = {
         fieldWithPath("date").description("날짜")
-            .attributes(getAttribute(TaskRegisterRequest.class, "date")),
+            .attributes(getAttribute(TaskCreateRequest.class, "date")),
     };
 
     FieldDescriptor[] TASK_CREATE_REQUEST_FIELDS = {
         fieldWithPath("monthlyTaskId").description("월간 일정표 ID")
-            .attributes(getAttribute(TaskRegisterRequest.class, "monthlyTaskId")),
+            .attributes(getAttribute(TaskCreateRequest.class, "monthlyTaskId")),
         fieldWithPath("title").description("제목")
-            .attributes(getAttribute(TaskRegisterRequest.class, "title")),
+            .attributes(getAttribute(TaskCreateRequest.class, "title")),
         fieldWithPath("content").description("내용")
-            .attributes(getAttribute(TaskRegisterRequest.class, "content")),
+            .attributes(getAttribute(TaskCreateRequest.class, "content")),
         fieldWithPath("date").description("날짜")
-            .attributes(getAttribute(TaskRegisterRequest.class, "date")),
+            .attributes(getAttribute(TaskCreateRequest.class, "date")),
     };
 
     FieldDescriptor[] TASK_UPDATE_REQUEST_FIELDS = {

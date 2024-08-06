@@ -10,12 +10,10 @@ import static org.springframework.restdocs.restassured.RestAssuredRestDocumentat
 import org.springframework.restdocs.restassured.RestDocumentationFilter;
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 import project.dailyge.app.common.DatabaseTestBase;
-import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.core.task.application.TaskReadUseCase;
 import project.dailyge.app.core.task.facade.TaskFacade;
-import project.dailyge.app.core.task.presentation.requesst.TaskRegisterRequest;
+import project.dailyge.app.core.task.presentation.requesst.TaskCreateRequest;
 import project.dailyge.app.core.user.application.UserWriteUseCase;
-import static project.dailyge.app.test.user.fixture.UserFixture.createUserJpaEntity;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskReadSnippet.createTaskDetailSearchFilter;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskReadSnippet.createTaskStatusesReadFilter;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASK_AUTHORIZATION_HEADER;
@@ -40,15 +38,9 @@ class TaskReadDocumentationTest extends DatabaseTestBase {
     @Autowired
     private TaskReadUseCase taskReadUseCase;
 
-    @Autowired
-    private UserWriteUseCase userWriteUseCase;
-
     @BeforeEach
     void setUp() {
-        newUser = userWriteUseCase.save(createUserJpaEntity());
-        dailygeUser = new DailygeUser(newUser.getId(), newUser.getRole());
         now = LocalDate.now();
-
         taskFacade.createMonthlyTasks(dailygeUser, now);
         monthlyTaskDocument = taskReadUseCase.findMonthlyTaskByUserIdAndDate(dailygeUser, now);
     }
@@ -59,7 +51,7 @@ class TaskReadDocumentationTest extends DatabaseTestBase {
     @Test
     @DisplayName("[RestDocs] Task가 존재하면 200 OK 응답을 받는다.")
     void whenTaskExistsThenStatusCodeShouldBe200_OK_RestDocs() {
-        final TaskRegisterRequest request = createTaskRegisterRequest(monthlyTaskDocument.getId(), now);
+        final TaskCreateRequest request = createTaskRegisterRequest(monthlyTaskDocument.getId(), now);
         final String newTaskId = taskFacade.save(dailygeUser, request.toCommand());
 
         given(this.specification)
@@ -83,7 +75,7 @@ class TaskReadDocumentationTest extends DatabaseTestBase {
     @Test
     @DisplayName("[Swagger] Task가 존재하면 200 OK 응답을 받는다.")
     void whenTaskExistsThenStatusCodeShouldBe200_OK_Swagger() {
-        final TaskRegisterRequest request = createTaskRegisterRequest(monthlyTaskDocument.getId(), now);
+        final TaskCreateRequest request = createTaskRegisterRequest(monthlyTaskDocument.getId(), now);
         final String newTaskId = taskFacade.save(dailygeUser, request.toCommand());
         final RestDocumentationFilter filter = createTaskDetailSearchFilter(createIdentifier("TaskDetailSearch", 200));
         given(this.specification)
@@ -102,7 +94,7 @@ class TaskReadDocumentationTest extends DatabaseTestBase {
     @Test
     @DisplayName("[Swagger] 올바르지 않은 TaskId라면 400 Bad Request 응답을 받는다.")
     void whenInvalidTaskIdThenStatusCodeShouldBe_400_Swagger() {
-        final TaskRegisterRequest request = createTaskRegisterRequest(monthlyTaskDocument.getId(), now);
+        final TaskCreateRequest request = createTaskRegisterRequest(monthlyTaskDocument.getId(), now);
         taskFacade.save(dailygeUser, request.toCommand());
         final RestDocumentationFilter filter = createTaskDetailSearchFilter(createIdentifier("TaskDetailSearch", 400));
 
@@ -122,7 +114,7 @@ class TaskReadDocumentationTest extends DatabaseTestBase {
     @Test
     @DisplayName("[Swagger] Task가 존재하지 않는다면 404 NotFound 응답을 받는다.")
     void whenTaskNotExistsThenStatusCodeShouldBe_404_Swagger() {
-        final TaskRegisterRequest request = createTaskRegisterRequest(monthlyTaskDocument.getId(), now);
+        final TaskCreateRequest request = createTaskRegisterRequest(monthlyTaskDocument.getId(), now);
         taskFacade.save(dailygeUser, request.toCommand());
         final RestDocumentationFilter filter = createTaskDetailSearchFilter(createIdentifier("TaskDetailSearch", 404));
 

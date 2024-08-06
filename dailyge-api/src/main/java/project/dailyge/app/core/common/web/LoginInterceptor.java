@@ -7,26 +7,27 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import project.dailyge.app.common.auth.DailygeToken;
 import project.dailyge.app.common.auth.TokenProvider;
-import project.dailyge.app.core.user.application.UserReadUseCase;
 import project.dailyge.app.core.user.external.oauth.TokenManager;
-import project.dailyge.entity.user.UserJpaEntity;
+import project.dailyge.core.cache.user.UserCache;
+import project.dailyge.core.cache.user.UserCacheReadUseCase;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class LoginInterceptor implements HandlerInterceptor {
 
-    private final UserReadUseCase userReadUseCase;
+    private final UserCacheReadUseCase userCacheReadUseCase;
     private final TokenProvider tokenProvider;
     private final TokenManager tokenManager;
     private final ObjectMapper objectMapper;
@@ -48,7 +49,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 
             final String accessToken = tokenProvider.getAccessToken(authorizationHeader);
             final Long userId = tokenProvider.getUserId(accessToken);
-            if (!userReadUseCase.existsById(userId)) {
+            if (!userCacheReadUseCase.existsById(userId)) {
                 return true;
             }
 
@@ -76,15 +77,15 @@ public class LoginInterceptor implements HandlerInterceptor {
             final Claims claims = expiredJwtException.getClaims();
             final String encryptedUserId = claims.get("id", String.class);
             final Long userId = tokenProvider.decryptUserId(encryptedUserId);
-            if (!userReadUseCase.existsById(userId)) {
+            if (!userCacheReadUseCase.existsById(userId)) {
                 return true;
             }
             if (!tokenManager.getRefreshToken(userId).equals(refreshToken)) {
                 return true;
             }
 
-            final UserJpaEntity user = userReadUseCase.findActiveUserById(userId);
-            final DailygeToken token = tokenProvider.createToken(user.getId(), user.getEmail());
+            final UserCache userCache = userCacheReadUseCase.findById(userId);
+            final DailygeToken token = tokenProvider.createToken(userCache.getId(), userCache.getEmail());
 
             setLoggedInResponse(request, response, token.accessToken());
             return false;

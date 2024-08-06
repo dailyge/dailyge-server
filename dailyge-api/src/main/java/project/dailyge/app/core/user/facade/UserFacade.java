@@ -11,13 +11,15 @@ import project.dailyge.app.core.user.application.UserWriteUseCase;
 import project.dailyge.app.core.user.external.oauth.GoogleOAuthManager;
 import project.dailyge.app.core.user.external.oauth.TokenManager;
 import project.dailyge.app.core.user.external.response.GoogleUserInfoResponse;
-import static project.dailyge.document.common.UuidGenerator.createTimeBasedUUID;
-import static project.dailyge.entity.common.EventType.CREATE;
 import project.dailyge.entity.user.UserEvent;
-import static project.dailyge.entity.user.UserEvent.createEvent;
 import project.dailyge.entity.user.UserJpaEntity;
 
 import java.util.Optional;
+
+import static project.dailyge.document.common.UuidGenerator.createTimeBasedUUID;
+import static project.dailyge.entity.common.EventType.CREATE;
+import static project.dailyge.entity.user.Role.NORMAL;
+import static project.dailyge.entity.user.UserEvent.createEvent;
 
 @Facade
 @RequiredArgsConstructor
@@ -44,14 +46,24 @@ public class UserFacade {
         final Optional<UserJpaEntity> findUserByEmail,
         final GoogleUserInfoResponse response
     ) {
-        final Long userId = findUserByEmail.isEmpty() ? userWriteUseCase.getSequence() : findUserByEmail.get().getId();
+        final Long userId;
+        final String role;
+        if (findUserByEmail.isPresent()) {
+            final UserJpaEntity user = findUserByEmail.get();
+            userId = user.getId();
+            role = user.getRoleToString();
+        } else {
+            userId = userWriteUseCase.getSequence();
+            role = NORMAL.name();
+        }
         final UserEvent event = createEvent(
             userId,
             createTimeBasedUUID(),
             CREATE,
             response.getName(),
             response.getEmail(),
-            response.getPicture()
+            response.getPicture(),
+            role
         );
         publisher.publishEvent(event);
         return userId;

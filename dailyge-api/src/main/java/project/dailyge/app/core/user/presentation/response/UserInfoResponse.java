@@ -1,7 +1,7 @@
 package project.dailyge.app.core.user.presentation.response;
 
 import lombok.Getter;
-import project.dailyge.entity.user.UserJpaEntity;
+import project.dailyge.core.cache.user.UserCache;
 
 @Getter
 public class UserInfoResponse {
@@ -11,7 +11,7 @@ public class UserInfoResponse {
     private final String email;
     private final String profileImageUrl;
 
-    public UserInfoResponse(final UserJpaEntity user) {
+    public UserInfoResponse(final UserCache user) {
         this.userId = user.getId();
         this.nickname = user.getNickname();
         this.email = user.getEmail();

@@ -77,7 +77,7 @@ public class LoggingAspect {
 
         final Object result = joinPoint.proceed();
         final LocalDateTime endTime = LocalDateTime.now();
-        long duration = ChronoUnit.MILLIS.between(startTime, endTime);
+        final long duration = ChronoUnit.MILLIS.between(startTime, endTime);
         final String afterLog = LogUtils.createLogMessage(
             SERVER,
             getPath(request),

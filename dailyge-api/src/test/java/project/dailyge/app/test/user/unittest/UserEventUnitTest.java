@@ -12,6 +12,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static project.dailyge.entity.common.EventType.CREATE;
+import static project.dailyge.entity.user.Role.NORMAL;
 
 @DisplayName("[UnitTest] UserEvent 단위 테스트")
 class UserEventUnitTest {
@@ -28,14 +29,16 @@ class UserEventUnitTest {
             CREATE,
             "nickname",
             "dailyge@gmail.com",
-            "user.jpg"
+            "user.jpg",
+            NORMAL.name()
         );
-        userEventHandler.onUserEvent(userEvent);
+        userEventHandler.listenEvent(userEvent);
         final UserCache userCache = new UserCache(
             userEvent.getPublisher(),
             userEvent.getNickname(),
             userEvent.getEmail(),
-            userEvent.getProfileImageUrl()
+            userEvent.getProfileImageUrl(),
+            NORMAL.name()
         );
         verify(userCacheWriteDao, times(1)).save(userCache);
     }

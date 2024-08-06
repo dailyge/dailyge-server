@@ -8,14 +8,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import project.dailyge.app.common.DatabaseTestBase;
-import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.core.task.application.TaskReadUseCase;
 import project.dailyge.app.core.task.application.command.TaskCreateCommand;
 import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.MONTHLY_TASK_NOT_FOUND;
 import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.TASK_NOT_FOUND;
 import project.dailyge.app.core.task.exception.TaskTypeException;
 import project.dailyge.app.core.task.facade.TaskFacade;
-import static project.dailyge.app.test.user.fixture.UserFixture.createUserJpaEntity;
 import static project.dailyge.app.test.task.fixture.TaskCommandFixture.createTaskCreationCommand;
 import project.dailyge.document.task.MonthlyTaskDocument;
 import project.dailyge.document.task.TaskDocument;
@@ -41,8 +39,6 @@ class TaskReadIntegrationTest extends DatabaseTestBase {
 
     @BeforeEach
     void setUp() {
-        newUser = userWriteUseCase.save(createUserJpaEntity());
-        dailygeUser = new DailygeUser(newUser.getId(), newUser.getRole());
         now = LocalDate.now();
         taskFacade.createMonthlyTasks(dailygeUser, now);
         monthlyTask = taskReadRepository.findMonthlyDocumentByUserIdAndDate(dailygeUser.getUserId(), now).get();

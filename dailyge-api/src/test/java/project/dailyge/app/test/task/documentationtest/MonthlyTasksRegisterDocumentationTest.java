@@ -11,15 +11,13 @@ import org.springframework.restdocs.restassured.RestDocumentationFilter;
 import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.core.task.facade.TaskFacade;
-import project.dailyge.app.core.task.presentation.requesst.MonthlyTasksRegisterRequest;
-import static project.dailyge.app.test.user.fixture.UserFixture.createUserJpaEntity;
+import project.dailyge.app.core.task.presentation.requesst.MonthlyTasksCreateRequest;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskCreateSnippet.createMonthlyTasksErrorFilter;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskCreateSnippet.createMonthlyTasksFilter;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.MONTHLY_TASK_CREATE_REQUEST_SNIPPET;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.MONTHLY_TASK_CREATE_RESPONSE_SNIPPET;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASK_AUTHORIZATION_HEADER;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.createIdentifier;
-import project.dailyge.entity.user.UserJpaEntity;
 
 import java.time.LocalDate;
 
@@ -34,9 +32,8 @@ class MonthlyTasksRegisterDocumentationTest extends DatabaseTestBase {
     @Test
     @DisplayName("월간 일정표를 생성하면 201 Created 응답을 받는다.")
     void whenCreateMonthlyTasksThenResponseShouldBe201_RestDocs() throws JsonProcessingException {
-        userWriteUseCase.save(createUserJpaEntity());
         final LocalDate now = LocalDate.now();
-        final MonthlyTasksRegisterRequest request = new MonthlyTasksRegisterRequest(now);
+        final MonthlyTasksCreateRequest request = new MonthlyTasksCreateRequest(now);
 
         given(this.specification)
             .relaxedHTTPSValidation()
@@ -57,11 +54,10 @@ class MonthlyTasksRegisterDocumentationTest extends DatabaseTestBase {
     @Test
     @DisplayName("월간 일정표를 생성하면 201 Created 응답을 받는다.")
     void whenCreateMonthlyTasksThenResponseShouldBe201_Swagger() throws JsonProcessingException {
-        userWriteUseCase.save(createUserJpaEntity());
         final LocalDate now = LocalDate.now();
-        final MonthlyTasksRegisterRequest request = new MonthlyTasksRegisterRequest(now);
+        final MonthlyTasksCreateRequest request = new MonthlyTasksCreateRequest(now);
         final RestDocumentationFilter filter = createMonthlyTasksFilter(
-            createIdentifier("MonthlyTaskCreate", 201), MonthlyTasksRegisterRequest.class.getSimpleName(), responseSchema
+            createIdentifier("MonthlyTaskCreate", 201), MonthlyTasksCreateRequest.class.getSimpleName(), responseSchema
         );
 
         given(this.specification)
@@ -79,10 +75,9 @@ class MonthlyTasksRegisterDocumentationTest extends DatabaseTestBase {
     @Test
     @DisplayName("월간 일정표를 생성할 때, 날짜를 입력하지 않으면 400 Bad Request 응답을 받는다.")
     void whenCreateMonthlyTasksMissDateThenResponseShouldBe400_Swagger() throws JsonProcessingException {
-        userWriteUseCase.save(createUserJpaEntity());
-        final MonthlyTasksRegisterRequest request = new MonthlyTasksRegisterRequest(null);
+        final MonthlyTasksCreateRequest request = new MonthlyTasksCreateRequest(null);
         final RestDocumentationFilter filter = createMonthlyTasksErrorFilter(
-            createIdentifier("MonthlyTaskCreate", 400), MonthlyTasksRegisterRequest.class.getSimpleName(), responseSchema
+            createIdentifier("MonthlyTaskCreate", 400), MonthlyTasksCreateRequest.class.getSimpleName(), responseSchema
         );
 
         given(this.specification)
@@ -100,12 +95,11 @@ class MonthlyTasksRegisterDocumentationTest extends DatabaseTestBase {
     @Test
     @DisplayName("월간 일정표를 생성할 때, 월간 일정표가 이미 존재한다면, 409 Conflict 응답을 받는다.")
     void whenCreateExistsMonthlyTasksDateThenResponseShouldBe409_Swagger() throws JsonProcessingException {
-        final UserJpaEntity newUser = userWriteUseCase.save(createUserJpaEntity());
         final DailygeUser dailygeUser = new DailygeUser(newUser.getId(), newUser.getRole());
         final LocalDate now = LocalDate.now();
-        final MonthlyTasksRegisterRequest request = new MonthlyTasksRegisterRequest(now);
+        final MonthlyTasksCreateRequest request = new MonthlyTasksCreateRequest(now);
         final RestDocumentationFilter filter = createMonthlyTasksErrorFilter(
-            createIdentifier("MonthlyTaskCreate", 409), MonthlyTasksRegisterRequest.class.getSimpleName(), responseSchema
+            createIdentifier("MonthlyTaskCreate", 409), MonthlyTasksCreateRequest.class.getSimpleName(), responseSchema
         );
         taskFacade.createMonthlyTasks(dailygeUser, now);
 

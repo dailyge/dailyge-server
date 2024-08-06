@@ -12,12 +12,19 @@ public final class UserFixture {
     public static final String NICKNAME = "test";
     public static final String EMAIL = "test@gmail.com";
 
-    public static UserJpaEntity createUserJpaEntity(Long userId) {
+    public static UserJpaEntity createUser(final Long userId) {
         return new UserJpaEntity(userId, NICKNAME, EMAIL);
     }
 
-    public static UserJpaEntity createUserJpaEntity() {
+    public static UserJpaEntity createUser() {
         return new UserJpaEntity(NICKNAME, EMAIL);
+    }
+
+    public static UserJpaEntity createUser(
+        final String nickname,
+        final String email
+    ) {
+        return new UserJpaEntity(nickname, email);
     }
 
     public static UserJpaEntity createAdminUser() {

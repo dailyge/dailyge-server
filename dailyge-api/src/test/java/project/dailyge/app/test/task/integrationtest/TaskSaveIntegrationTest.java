@@ -11,15 +11,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import project.dailyge.app.common.DatabaseTestBase;
-import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.core.task.application.command.TaskCreateCommand;
 import project.dailyge.app.core.task.facade.TaskFacade;
-import project.dailyge.app.core.user.application.UserWriteUseCase;
-import project.dailyge.app.test.user.fixture.UserFixture;
 import static project.dailyge.app.test.task.fixture.TaskCommandFixture.createTaskCreationCommand;
 import project.dailyge.document.task.MonthlyTaskDocument;
 import project.dailyge.document.task.TaskDocumentReadRepository;
-import project.dailyge.entity.user.UserJpaEntity;
 
 import java.time.LocalDate;
 import java.util.concurrent.CountDownLatch;
@@ -34,17 +30,12 @@ class TaskSaveIntegrationTest extends DatabaseTestBase {
     private TaskFacade taskFacade;
 
     @Autowired
-    private UserWriteUseCase userWriteUseCase;
-
-    @Autowired
     private TaskDocumentReadRepository monthlyTaskReadRepository;
 
     @Test
     @Order(1)
     @DisplayName("할 일이 저장되면, Id가 Null이 아니다.")
     void whenSaveTaskThenTaskIdShouldNotBeNull() {
-        final UserJpaEntity newUser = userWriteUseCase.save(UserFixture.createUserJpaEntity());
-        final DailygeUser dailygeUser = new DailygeUser(newUser.getId(), newUser.getRole());
         final LocalDate now = LocalDate.now();
         taskFacade.createMonthlyTasks(dailygeUser, now);
         final MonthlyTaskDocument findMonthlyTask = monthlyTaskReadRepository.findMonthlyDocumentByUserIdAndDate(dailygeUser.getUserId(), now).get();
@@ -58,8 +49,6 @@ class TaskSaveIntegrationTest extends DatabaseTestBase {
     @Order(2)
     @DisplayName("연간 일정표를 생성하면 12개(January-December)의 월간 일정표가 생성된다.")
     void whenCreateMonthlyTasksThenResultShould12() {
-        final UserJpaEntity newUser = userWriteUseCase.save(UserFixture.createUserJpaEntity());
-        final DailygeUser dailygeUser = new DailygeUser(newUser.getId(), newUser.getRole());
         final LocalDate date = LocalDate.now();
         taskFacade.createMonthlyTasks(dailygeUser, date);
 
@@ -72,8 +61,6 @@ class TaskSaveIntegrationTest extends DatabaseTestBase {
     @DisplayName("멀티 쓰레드 환경에서도, Redisson 분산락으로 인해 동시성이 보장된다.")
     void whenMultiThreadTryToCreateMonthlyTasksThenResultShouldBeSafe() throws InterruptedException {
         final CountDownLatch countDownLatch = new CountDownLatch(100);
-        final UserJpaEntity newUser = userWriteUseCase.save(UserFixture.createUserJpaEntity());
-        final DailygeUser dailygeUser = new DailygeUser(newUser.getId(), newUser.getRole());
         final LocalDate date = LocalDate.now();
         taskFacade.createMonthlyTasks(dailygeUser, date);
 

@@ -17,10 +17,9 @@ import project.dailyge.app.core.task.application.command.TaskUpdateCommand;
 import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.TASK_NOT_FOUND;
 import project.dailyge.app.core.task.exception.TaskTypeException;
 import project.dailyge.app.core.task.facade.TaskFacade;
-import static project.dailyge.app.test.user.fixture.UserFixture.createAdminUser;
-import static project.dailyge.app.test.user.fixture.UserFixture.createUserJpaEntity;
 import static project.dailyge.app.test.task.fixture.TaskCommandFixture.createTaskCreationCommand;
 import static project.dailyge.app.test.task.fixture.TaskCommandFixture.createTaskUpdateCommand;
+import static project.dailyge.app.test.user.fixture.UserFixture.createAdminUser;
 import project.dailyge.document.task.MonthlyTaskDocument;
 import project.dailyge.document.task.TaskDocument;
 import project.dailyge.document.task.TaskDocumentReadRepository;
@@ -46,8 +45,6 @@ class TaskUpdateIntegrationTest extends DatabaseTestBase {
 
     @BeforeEach
     void setUp() {
-        newUser = userWriteUseCase.save(createUserJpaEntity());
-        dailygeUser = new DailygeUser(newUser.getId(), newUser.getRole());
         now = LocalDate.now();
         taskFacade.createMonthlyTasks(dailygeUser, now);
         findMonthlyTask = taskReadRepository.findMonthlyDocumentByUserIdAndDate(dailygeUser.getUserId(), now).get();
@@ -90,7 +87,7 @@ class TaskUpdateIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("관리자가 Task를 수정하면 권한 예외가 발생하지 않는다.")
     void whenAdminUpdateTaskThenExceptionShouldNotBeHappen() {
-        final UserJpaEntity newUser = userWriteUseCase.save(createAdminUser("dailyge", "dailyge2024@gmail.com"));
+        final UserJpaEntity newUser = persist(createAdminUser("dailyge", "dailyge2024@gmail.com"));
         final DailygeUser dailygeUser = new DailygeUser(newUser.getId(), newUser.getRole());
         final LocalDate now = LocalDate.now();
         taskFacade.createMonthlyTasks(dailygeUser, now);

@@ -14,4 +14,9 @@ public class MonthlyTaskIdResponse {
     public MonthlyTaskIdResponse(final MonthlyTaskDocument monthlyTaskDocument) {
         this.monthlyTaskId = monthlyTaskDocument.getId();
     }
+
+    @Override
+    public String toString() {
+        return String.format("{\"monthlyTaskId\":\"%s\"}", monthlyTaskId);
+    }
 }

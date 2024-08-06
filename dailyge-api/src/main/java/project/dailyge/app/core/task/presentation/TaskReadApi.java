@@ -5,10 +5,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.OK;
+import project.dailyge.app.common.annotation.Presentation;
 import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.common.auth.LoginUser;
-import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.OK;
 import project.dailyge.app.common.response.ApiResponse;
 import project.dailyge.app.core.common.validation.UuidFormat;
 import project.dailyge.app.core.task.application.TaskReadUseCase;
@@ -24,7 +24,7 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
-@RestController
+@Presentation
 @RequiredArgsConstructor
 @RequestMapping(path = {"/api"})
 public class TaskReadApi {

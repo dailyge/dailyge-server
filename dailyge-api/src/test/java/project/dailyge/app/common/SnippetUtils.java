@@ -2,7 +2,7 @@ package project.dailyge.app.common;
 
 import org.springframework.restdocs.constraints.ConstraintDescriptions;
 import org.springframework.restdocs.snippet.Attributes;
-import project.dailyge.app.core.task.presentation.requesst.TaskRegisterRequest;
+import project.dailyge.app.core.task.presentation.requesst.TaskCreateRequest;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ public interface SnippetUtils {
 
     static Attributes.Attribute getAttribute(final String field) {
         final StringBuilder sb = new StringBuilder();
-        final ConstraintDescriptions constraints = new ConstraintDescriptions(TaskRegisterRequest.class);
+        final ConstraintDescriptions constraints = new ConstraintDescriptions(TaskCreateRequest.class);
 
         final List<String> fieldConstraints = constraints.descriptionsForProperty(field);
         for (String constraint : fieldConstraints) {

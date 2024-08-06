@@ -1,8 +1,8 @@
 package project.dailyge.app.core.user.application.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import project.dailyge.app.common.annotation.Application;
 import project.dailyge.app.core.user.application.UserWriteUseCase;
 import static project.dailyge.app.core.user.exception.UserCodeAndMessage.DUPLICATED_EMAIL;
 import static project.dailyge.app.core.user.exception.UserCodeAndMessage.USER_NOT_FOUND;
@@ -13,7 +13,7 @@ import project.dailyge.entity.user.UserJpaEntity;
 
 import java.util.Optional;
 
-@Service
+@Application
 @RequiredArgsConstructor
 public class UserWriteService implements UserWriteUseCase {
 

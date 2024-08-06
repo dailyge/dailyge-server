@@ -5,9 +5,13 @@ import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 
-public record MonthlyTasksRegisterRequest(
+public record MonthlyTasksCreateRequest(
     @NotNull
     @JsonFormat(pattern = "yyyy-MM-dd")
     LocalDate date
 ) {
+    @Override
+    public String toString() {
+        return String.format("{\"date\":\"%s\"}", date);
+    }
 }

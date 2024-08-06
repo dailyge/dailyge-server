@@ -1,73 +1,52 @@
 package project.dailyge.app.core.user.external.oauth;
 
-import io.netty.handler.timeout.TimeoutException;
+import io.lettuce.core.RedisException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.RedisConnectionFailureException;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import project.dailyge.app.common.exception.ExternalServerException;
-import project.dailyge.app.core.user.exception.UserTypeException;
 
-import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.*;
-import static project.dailyge.app.core.user.exception.UserCodeAndMessage.EMPTY_USER_ID;
+import java.util.function.Supplier;
+
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_GATEWAY;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
 
 @Service
 @RequiredArgsConstructor
 public class TokenManager {
 
-    private final RedisTemplate<String, String> redisTemplate;
+    private final StringRedisTemplate redisTemplate;
 
     public void saveRefreshToken(
         final Long userId,
         final String refreshToken
     ) {
-        if (userId == null) {
-            throw UserTypeException.from(EMPTY_USER_ID);
-        }
-        try {
+        executeRedisCommand(() -> {
             redisTemplate.opsForValue().set(String.format("user:refreshToken:%s", userId), refreshToken);
-        } catch (IllegalArgumentException ex) {
-            throw new ExternalServerException(ex.getMessage(), BAD_REQUEST);
-        } catch (RedisConnectionFailureException ex) {
-            throw new ExternalServerException(ex.getMessage(), SERVICE_UNAVAILABLE);
-        } catch (TimeoutException ex) {
-            throw new ExternalServerException(ex.getMessage(), GATEWAY_TIMEOUT);
-        } catch (Exception ex) {
-            throw new ExternalServerException(ex.getMessage(), BAD_GATEWAY);
-        }
+            return null;
+        });
     }
 
     public String getRefreshToken(final Long userId) {
-        if (userId == null) {
-            throw UserTypeException.from(EMPTY_USER_ID);
-        }
-        try {
-            return redisTemplate.opsForValue().get(String.format("user:refreshToken:%s", userId));
-        } catch (RedisConnectionFailureException ex) {
-            throw new ExternalServerException(ex.getMessage(), SERVICE_UNAVAILABLE);
-        } catch (TimeoutException ex) {
-            throw new ExternalServerException(ex.getMessage(), GATEWAY_TIMEOUT);
-        } catch (IllegalArgumentException ex) {
-            throw new ExternalServerException(ex.getMessage(), BAD_REQUEST);
-        } catch (Exception ex) {
-            throw new ExternalServerException(ex.getMessage(), BAD_GATEWAY);
-        }
+        return executeRedisCommand(() ->
+            redisTemplate.opsForValue().get(String.format("user:refreshToken:%s", userId))
+        );
     }
 
     public void deleteRefreshToken(final Long userId) {
-        if (userId == null) {
-            throw UserTypeException.from(EMPTY_USER_ID);
-        }
-        try {
+        executeRedisCommand(() -> {
             redisTemplate.delete(String.format("user:refreshToken:%s", userId));
-        } catch (RedisConnectionFailureException ex) {
-            throw new ExternalServerException(ex.getMessage(), SERVICE_UNAVAILABLE);
-        } catch (TimeoutException ex) {
-            throw new ExternalServerException(ex.getMessage(), GATEWAY_TIMEOUT);
-        } catch (IllegalArgumentException ex) {
-            throw new ExternalServerException(ex.getMessage(), BAD_REQUEST);
-        } catch (Exception ex) {
+            return null;
+        });
+    }
+
+    private String executeRedisCommand(final Supplier<String> command) {
+        try {
+            return command.get();
+        } catch (RedisException ex) {
             throw new ExternalServerException(ex.getMessage(), BAD_GATEWAY);
+        } catch (Exception ex) {
+            throw new ExternalServerException(ex.getMessage(), INTERNAL_SERVER_ERROR);
         }
     }
 }

@@ -56,7 +56,7 @@ class AuthArgumentResolverTest {
     @DisplayName("토큰정보가 존재하고, 올바르다면 인증 객체가 생성된다.")
     void shouldBeNotNullWhenUserIdIsValid() {
         final UserJpaEntity user = createUserJpaEntity(1L);
-        final DailygeToken token = tokenProvider.createToken(user);
+        final DailygeToken token = tokenProvider.createToken(user.getId(), user.getEmail());
         when(request.getHeader(AUTHORIZATION))
             .thenReturn(token.getAuthorizationToken());
         when(userReadUseCase.findAuthorizedUserById(user.getId()))
@@ -81,7 +81,7 @@ class AuthArgumentResolverTest {
     void shouldNotThrowExceptionWhenUserIdIsValid() {
         final Long validUserId = 456L;
         final UserJpaEntity expectedUser = createUserJpaEntity(validUserId);
-        final DailygeToken token = tokenProvider.createToken(expectedUser);
+        final DailygeToken token = tokenProvider.createToken(validUserId, expectedUser.getEmail());
         when(request.getHeader(AUTHORIZATION))
             .thenReturn(token.getAuthorizationToken());
         when(userReadUseCase.findAuthorizedUserById(validUserId))

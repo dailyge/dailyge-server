@@ -17,7 +17,7 @@ import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.OK;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
-public class UserSearchApi {
+public class UserReadApi {
 
     private final UserReadUseCase userReadUseCase;
 

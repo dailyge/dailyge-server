@@ -9,5 +9,7 @@ public abstract class Event {
 
     protected Long publisher;
     protected String domain;
+    protected String eventId;
+    protected EventType eventType;
     protected LocalDateTime createdAt;
 }

@@ -41,7 +41,7 @@ class LoginIntegrationTest extends DatabaseTestBase {
     }
 
     @Test
-    @DisplayName("로그인 성공 시, 응답에 DailygeToken 가 비어있지 않는다.")
+    @DisplayName("로그인 성공 시, 응답에 DailygeToken이 비어있지 않는다.")
     void whenLoginSuccessThenDailygeTokenShouldBeNotNull() {
         final ApiResponse<OAuthLoginResponse> response = loginApi.login(AUTHENTICATION_CODE);
 

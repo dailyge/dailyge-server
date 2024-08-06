@@ -25,7 +25,7 @@ import static project.dailyge.app.test.user.fixture.UserFixture.EMAIL;
 import static project.dailyge.app.test.user.fixture.UserFixture.createUser;
 
 @DisplayName("[IntegrationTest] 사용자 조회 통합 테스트")
-class UserSearchIntegrationTest extends DatabaseTestBase {
+class UserReadIntegrationTest extends DatabaseTestBase {
 
     @Autowired
     private UserReadUseCase userReadUseCase;

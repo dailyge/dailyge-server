@@ -1,5 +1,10 @@
 package project.dailyge.app.test.common;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,12 +17,6 @@ import project.dailyge.app.common.auth.TokenProvider;
 import project.dailyge.app.common.exception.UnAuthorizedException;
 import project.dailyge.app.test.user.fixture.UserFixture;
 import project.dailyge.entity.user.UserJpaEntity;
-
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @DisplayName("[UnitTest] TokenProvider 단위 테스트")
 class TokenProviderUnitTest {
@@ -44,7 +43,7 @@ class TokenProviderUnitTest {
     @DisplayName("사용자 토큰을 생성하면, 토큰이 정상적으로 생성된다.")
     void whenCreateUserTokenThenResultShouldBeNotNull() {
         final UserJpaEntity user = UserFixture.createUser(1L);
-        final DailygeToken token = tokenProvider.createToken(user);
+        final DailygeToken token = tokenProvider.createToken(user.getId(), user.getEmail());
 
         assertAll(
             () -> assertNotNull(token),
@@ -58,7 +57,7 @@ class TokenProviderUnitTest {
     @DisplayName("사용자 토큰이 올바르다면, 사용자 ID를 얻는다.")
     void whenUserTokenCorrectThenUserIdShouldBeNotNull() {
         final UserJpaEntity user = UserFixture.createUser(1L);
-        final DailygeToken token = tokenProvider.createToken(user);
+        final DailygeToken token = tokenProvider.createToken(user.getId(), user.getEmail());
 
         assertEquals(user.getId(), tokenProvider.getUserId(token.accessToken()));
     }

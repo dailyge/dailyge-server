@@ -25,7 +25,7 @@ public class UserFacade {
         final UserJpaEntity user = new UserJpaEntity(response.getName(), response.getEmail(), response.getPicture());
         final Long newSequence = userWriteUseCase.getSequence();
         final UserJpaEntity upsertUser = userWriteUseCase.upsert(user);
-        final DailygeToken token = tokenProvider.createToken(upsertUser);
+        final DailygeToken token = tokenProvider.createToken(upsertUser.getId(), user.getEmail());
         tokenManager.saveRefreshToken(upsertUser.getId(), token.refreshToken());
         return token;
     }

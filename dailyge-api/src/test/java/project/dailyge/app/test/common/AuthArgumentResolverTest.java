@@ -1,10 +1,17 @@
 package project.dailyge.app.test.common;
 
 import jakarta.servlet.http.HttpServletRequest;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import org.springframework.web.context.request.NativeWebRequest;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_USER_TOKEN;
 import project.dailyge.app.common.auth.DailygeToken;
 import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.common.auth.JwtProperties;
@@ -15,14 +22,6 @@ import project.dailyge.app.common.exception.UnAuthorizedException;
 import project.dailyge.app.core.user.application.UserReadUseCase;
 import project.dailyge.app.test.user.fixture.UserFixture;
 import project.dailyge.entity.user.UserJpaEntity;
-
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
-import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_USER_TOKEN;
 
 @DisplayName("[UnitTest] AuthArgumentResolver 검증 단위 테스트")
 class AuthArgumentResolverTest {
@@ -56,7 +55,7 @@ class AuthArgumentResolverTest {
     @DisplayName("토큰정보가 존재하고, 올바르다면 인증 객체가 생성된다.")
     void shouldBeNotNullWhenUserIdIsValid() {
         final UserJpaEntity user = UserFixture.createUser(1L);
-        final DailygeToken token = tokenProvider.createToken(user);
+        final DailygeToken token = tokenProvider.createToken(user.getId(), user.getEmail());
         when(request.getHeader(AUTHORIZATION))
             .thenReturn(token.getAuthorizationToken());
         when(userReadUseCase.findAuthorizedUserById(user.getId()))
@@ -81,7 +80,7 @@ class AuthArgumentResolverTest {
     void shouldNotThrowExceptionWhenUserIdIsValid() {
         final Long validUserId = 456L;
         final UserJpaEntity expectedUser = UserFixture.createUser(validUserId);
-        final DailygeToken token = tokenProvider.createToken(expectedUser);
+        final DailygeToken token = tokenProvider.createToken(expectedUser.getId(), expectedUser.getEmail());
         when(request.getHeader(AUTHORIZATION))
             .thenReturn(token.getAuthorizationToken());
         when(userReadUseCase.findAuthorizedUserById(validUserId))

@@ -20,9 +20,11 @@ import project.dailyge.app.common.auth.JwtProperties;
 import project.dailyge.app.common.auth.SecretKeyManager;
 import project.dailyge.app.common.auth.TokenProvider;
 import project.dailyge.app.core.common.web.LoginInterceptor;
-import project.dailyge.app.core.user.application.UserReadUseCase;
 import project.dailyge.app.core.user.external.oauth.TokenManager;
 import static project.dailyge.app.test.user.fixture.UserFixture.createUser;
+
+import project.dailyge.core.cache.user.UserCache;
+import project.dailyge.core.cache.user.UserCacheReadUseCase;
 import project.dailyge.entity.user.UserJpaEntity;
 
 import java.io.UnsupportedEncodingException;
@@ -38,7 +40,7 @@ class LoginInterceptorUnitTest {
     private LoginInterceptor loginInterceptor;
     private TokenProvider tokenProvider;
     private TokenManager tokenManager;
-    private UserReadUseCase userReadUseCase;
+    private UserCacheReadUseCase userCacheReadUseCase;
     private HttpServletRequest request;
     private MockHttpServletResponse response;
     private SecretKeyManager secretKeyManager;
@@ -49,10 +51,10 @@ class LoginInterceptorUnitTest {
         expiredJwtProperties = new JwtProperties(SECRET_KEY, PAYLOAD_SECRET_KEY, SALT, 0, 0);
         secretKeyManager = new SecretKeyManager(jwtProperties);
         tokenProvider = new TokenProvider(jwtProperties, secretKeyManager);
-        userReadUseCase = mock(UserReadUseCase.class);
+        userCacheReadUseCase = mock(UserCacheReadUseCase.class);
         tokenManager = mock(TokenManager.class);
         final ObjectMapper objectMapper = new ObjectMapper();
-        loginInterceptor = new LoginInterceptor(userReadUseCase, tokenProvider, tokenManager, objectMapper);
+        loginInterceptor = new LoginInterceptor(userCacheReadUseCase, tokenProvider, tokenManager, objectMapper);
         request = mock(HttpServletRequest.class);
         response = new MockHttpServletResponse();
     }
@@ -71,7 +73,7 @@ class LoginInterceptorUnitTest {
 
         when(request.getHeader(AUTHORIZATION))
             .thenReturn(token.getAuthorizationToken());
-        when(userReadUseCase.existsById(user.getId()))
+        when(userCacheReadUseCase.existsById(user.getId()))
             .thenReturn(true);
 
         assertFalse(loginInterceptor.preHandle(request, response, null));
@@ -91,10 +93,16 @@ class LoginInterceptorUnitTest {
             .thenReturn(cookies);
         when(request.getHeader(AUTHORIZATION))
             .thenReturn(expiredToken.getAuthorizationToken());
-        when(userReadUseCase.existsById(user.getId()))
+        when(userCacheReadUseCase.existsById(user.getId()))
             .thenReturn(true);
-        when(userReadUseCase.findActiveUserById(user.getId()))
-            .thenReturn(user);
+        when(userCacheReadUseCase.findById(user.getId()))
+            .thenReturn(new UserCache(
+                user.getId(),
+                user.getNickname(),
+                user.getEmail(),
+                user.getProfileImageUrl(),
+                user.getRoleToString()
+            ));
         when(tokenManager.getRefreshToken(user.getId()))
             .thenReturn(token.refreshToken());
 

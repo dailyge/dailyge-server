@@ -10,6 +10,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static project.dailyge.entity.common.EventType.CREATE;
+import static project.dailyge.entity.user.Role.NORMAL;
 
 @DisplayName("[UnitTest] UserEvent 단위 테스트")
 class UserEventUnitTest {
@@ -24,7 +25,15 @@ class UserEventUnitTest {
 
     @BeforeEach
     void setUp() {
-        userEvent = UserEvent.createEvent(PUBLISHER, EVENT_ID, CREATE, NICKNAME, EMAIL, PROFILE_IMAGE_URL);
+        userEvent = UserEvent.createEvent(
+            PUBLISHER,
+            EVENT_ID,
+            CREATE,
+            NICKNAME,
+            EMAIL,
+            PROFILE_IMAGE_URL,
+            NORMAL.name()
+        );
     }
 
     @Test
@@ -44,24 +53,45 @@ class UserEventUnitTest {
     @Test
     @DisplayName("publisher가 비어있을 경우, IllegalArgumentException이 발생한다.")
     void whenPublisherIsNullThenIllegalArgumentExceptionShouldBeHappen() {
-        assertThatThrownBy(() -> UserEvent.createEvent(null, EVENT_ID, CREATE, NICKNAME, EMAIL, PROFILE_IMAGE_URL))
-            .isInstanceOf(IllegalArgumentException.class)
+        assertThatThrownBy(() -> UserEvent.createEvent(
+            null,
+            EVENT_ID,
+            CREATE,
+            NICKNAME,
+            EMAIL,
+            PROFILE_IMAGE_URL,
+            NORMAL.name())
+        ).isInstanceOf(IllegalArgumentException.class)
             .hasMessage(userEvent.getInvalidPublisherIdErrorMessage());
     }
 
     @Test
     @DisplayName("eventId가 비어있을 경우, IllegalArgumentException이 발생한다.")
     void whenEventIdIsNullThenIllegalArgumentExceptionShouldBeHappen() {
-        assertThatThrownBy(() -> UserEvent.createEvent(PUBLISHER, null, CREATE, NICKNAME, EMAIL, PROFILE_IMAGE_URL))
-            .isInstanceOf(IllegalArgumentException.class)
+        assertThatThrownBy(() -> UserEvent.createEvent(
+            PUBLISHER,
+            null,
+            CREATE,
+            NICKNAME,
+            EMAIL,
+            PROFILE_IMAGE_URL,
+            NORMAL.name())
+        ).isInstanceOf(IllegalArgumentException.class)
             .hasMessage(userEvent.getInvalidEventIdErrorMessage());
     }
 
     @Test
     @DisplayName("eventType이 비어있을 경우, IllegalArgumentException이 발생한다.")
     void whenEventTypeIsNullThenIllegalArgumentExceptionShouldBeHappen() {
-        assertThatThrownBy(() -> UserEvent.createEvent(PUBLISHER, EVENT_ID, null, NICKNAME, EMAIL, PROFILE_IMAGE_URL))
-            .isInstanceOf(IllegalArgumentException.class)
+        assertThatThrownBy(() -> UserEvent.createEvent(
+            PUBLISHER,
+            EVENT_ID,
+            null,
+            NICKNAME,
+            EMAIL,
+            PROFILE_IMAGE_URL,
+            NORMAL.name())
+        ).isInstanceOf(IllegalArgumentException.class)
             .hasMessage(userEvent.getInvalidEventTypeErrorMessage());
     }
 

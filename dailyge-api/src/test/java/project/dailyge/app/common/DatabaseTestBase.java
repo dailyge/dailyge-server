@@ -27,6 +27,9 @@ import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.core.user.application.UserWriteUseCase;
 import static project.dailyge.app.test.user.fixture.UserFixture.createUser;
 import static project.dailyge.entity.user.Role.NORMAL;
+
+import project.dailyge.core.cache.user.UserCache;
+import project.dailyge.core.cache.user.UserCacheWriteUseCase;
 import project.dailyge.entity.user.UserJpaEntity;
 
 import java.time.LocalDate;
@@ -57,6 +60,9 @@ public abstract class DatabaseTestBase {
 
     @Autowired
     private UserWriteUseCase userWriteUseCase;
+
+    @Autowired
+    private UserCacheWriteUseCase userCacheWriteUseCase;
 
     protected RequestSpecification specification;
     protected ObjectMapper objectMapper;
@@ -95,6 +101,14 @@ public abstract class DatabaseTestBase {
     protected UserJpaEntity persist(final UserJpaEntity user) {
         userWriteUseCase.save(user);
         newUser = user;
+        final UserCache userCache = new UserCache(
+            user.getId(),
+            user.getNickname(),
+            user.getEmail(),
+            user.getProfileImageUrl(),
+            user.getRoleToString()
+        );
+        userCacheWriteUseCase.save(userCache);
         dailygeUser = new DailygeUser(user.getId(), user.getRole());
         return user;
     }

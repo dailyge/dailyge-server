@@ -24,12 +24,18 @@ import java.time.temporal.ChronoUnit;
 @Component
 public class MdcFilter implements Filter {
 
+    private static final String[] IP_HEADERS = {
+        "X-Forwarded-For", "Proxy-Client-IP", "WL-Proxy-Client-IP", "HTTP_CLIENT_IP", "HTTP_X_FORWARDED_FOR"
+    };
+    private static final String DELIMITER = ",";
     private static final String SERVER = "dailyge-api";
     private static final String DAILYGE_USER = "dailyge-user";
     private static final String ENTRANCE_LAYER = "ENTRANCE";
     private static final String TRACE_ID = "traceId";
     private static final String IP = "ip";
     private static final String UN_KNOWN = "unknown";
+
+    private static final int ORIGIN = 0;
 
     @Override
     public void doFilter(
@@ -81,22 +87,16 @@ public class MdcFilter implements Filter {
     }
 
     private String getClientIpAddress(final HttpServletRequest request) {
-        String ip = request.getHeader("X-Forwarded-For");
-        if (ip == null || ip.isEmpty() || UN_KNOWN.equalsIgnoreCase(ip)) {
-            ip = request.getHeader("Proxy-Client-IP");
+        for (final String header : IP_HEADERS) {
+            final String ips = request.getHeader(header);
+            if (ips != null && !ips.isEmpty() && !UN_KNOWN.equalsIgnoreCase(ips)) {
+                try {
+                    return ips.split(DELIMITER)[ORIGIN];
+                } catch (Exception ex) {
+                    return UN_KNOWN;
+                }
+            }
         }
-        if (ip == null || ip.isEmpty() || UN_KNOWN.equalsIgnoreCase(ip)) {
-            ip = request.getHeader("WL-Proxy-Client-IP");
-        }
-        if (ip == null || ip.isEmpty() || UN_KNOWN.equalsIgnoreCase(ip)) {
-            ip = request.getHeader("HTTP_CLIENT_IP");
-        }
-        if (ip == null || ip.isEmpty() || UN_KNOWN.equalsIgnoreCase(ip)) {
-            ip = request.getHeader("HTTP_X_FORWARDED_FOR");
-        }
-        if (ip == null || ip.isEmpty() || UN_KNOWN.equalsIgnoreCase(ip)) {
-            ip = request.getRemoteAddr();
-        }
-        return ip;
+        return request.getRemoteAddr();
     }
 }

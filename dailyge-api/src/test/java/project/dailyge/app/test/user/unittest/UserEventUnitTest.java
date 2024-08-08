@@ -2,15 +2,16 @@ package project.dailyge.app.test.user.unittest;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import project.dailyge.app.core.user.application.service.UserCacheWriteService;
 import project.dailyge.app.core.user.facade.UserEventHandler;
 import project.dailyge.app.core.user.persistence.UserCacheWriteDao;
 import project.dailyge.core.cache.user.UserCache;
-import static project.dailyge.entity.common.EventType.CREATE;
 import project.dailyge.entity.user.UserEvent;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static project.dailyge.entity.common.EventType.CREATE;
 
 @DisplayName("[UnitTest] UserEvent 통합 테스트")
 class UserEventIntegrationTest {

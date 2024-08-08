@@ -2,6 +2,7 @@ package project.dailyge.app.test.user.documentationtest;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.restdocs.restassured.RestDocumentationFilter;
 import project.dailyge.app.common.DatabaseTestBase;
 
 import static io.restassured.RestAssured.given;
@@ -38,8 +39,10 @@ class UserReadDocumentationTest extends DatabaseTestBase {
     @Test
     @DisplayName("[Swagger] User 정보 조회 시, 200 OK 응답을 받는다.")
     void whenFindUserThenStatusCodeShouldBe_200_OK_Swagger() {
+        final RestDocumentationFilter filter = createUserSearchFilter(createIdentifier("UserSearch", 200));
+
         given(this.specification)
-            .filter(createUserSearchFilter(createIdentifier("UserSearch", 200)))
+            .filter(filter)
             .contentType(APPLICATION_JSON_VALUE)
             .header(AUTHORIZATION, getAuthorizationHeader())
             .when()
@@ -53,8 +56,10 @@ class UserReadDocumentationTest extends DatabaseTestBase {
     @Test
     @DisplayName("[Swagger] 다른 사용자 정보를 조회하면, 403 UnAuthorized 응답을 받는다.")
     void whenFindOtherUserThenStatusCodeShouldBe_403_UnAuthorized_Swagger() {
+        final RestDocumentationFilter filter = createUserSearchFilter(createIdentifier("UserSearch", 403));
+
         given(this.specification)
-            .filter(createUserSearchFilter(createIdentifier("UserSearch", 403)))
+            .filter(filter)
             .contentType(APPLICATION_JSON_VALUE)
             .header(AUTHORIZATION, getAuthorizationHeader())
             .when()
@@ -67,9 +72,11 @@ class UserReadDocumentationTest extends DatabaseTestBase {
 
     @Test
     @DisplayName("[Swagger] 로그인 정보가 올바르지 않을 경우, 403 UnAuthorized 응답을 받는다.")
-    void whenThen() {
+    void whenLoginInfoIsIncorrectThenStatusCodeShouldBe_403_UnAuthorized_Swagger() {
+        final RestDocumentationFilter filter = createUserSearchFilter(createIdentifier("UserSearch", 403));
+
         given(this.specification)
-            .filter(createUserSearchFilter(createIdentifier("UserSearch", 403)))
+            .filter(filter)
             .contentType(APPLICATION_JSON_VALUE)
             .header(AUTHORIZATION, "ABCD")
             .when()

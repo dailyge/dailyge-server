@@ -4,8 +4,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.restdocs.restassured.RestDocumentationFilter;
 import project.dailyge.app.common.DatabaseTestBase;
-import project.dailyge.app.test.user.documentationtest.snippet.LogoutSnippet;
-import project.dailyge.app.test.user.documentationtest.snippet.UserSnippet;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.containsString;
@@ -20,7 +18,7 @@ class LogoutDocumentationTest extends DatabaseTestBase {
 
     @Test
     @DisplayName("[RestDocs] 로그아웃을 하면, 200 OK 응답을 받는다.")
-    void whenLogoutThenStatusCodeShouldBe200_OK_RestDocs() {
+    void whenLogoutThenStatusCodeShouldBe_200_OK_RestDocs() {
         given(this.specification)
             .filter(document(IDENTIFIER,
                 LOGOUT_RESPONSE_COOKIE_SNIPPET
@@ -41,7 +39,7 @@ class LogoutDocumentationTest extends DatabaseTestBase {
 
     @Test
     @DisplayName("[Swagger] 로그아웃을 하면, 200 OK 응답을 받는다.")
-    void whenLogoutThenStatusCodeShouldBe200_OK_Swagger() {
+    void whenLogoutThenStatusCodeShouldBe_200_OK_Swagger() {
         final RestDocumentationFilter filter = createLogoutFilter(createIdentifier("Logout", 200));
 
         given(this.specification)

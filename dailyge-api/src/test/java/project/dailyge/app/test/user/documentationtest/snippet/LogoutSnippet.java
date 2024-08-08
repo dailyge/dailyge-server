@@ -17,13 +17,15 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.response
 public final class LogoutSnippet implements UserSnippet {
 
     private static final String LOGOUT_SUMMARY = "로그아웃 API";
-
     private static final String LOGOUT_DESCRIPTION = "로그아웃하는 API 입니다.";
 
     private LogoutSnippet() {
         throw new AssertionError("올바른 방식으로 생성자를 호출해주세요.");
     }
 
+    /**
+     * Logout 문서
+     */
     public static RestDocumentationFilter createLogoutFilter(final String identifier) {
         return document(
             identifier,

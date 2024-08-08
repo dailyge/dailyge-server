@@ -17,7 +17,6 @@ import static org.springframework.restdocs.request.RequestDocumentation.pathPara
 public final class UserReadSnippet implements UserSnippet {
 
     private static final String USER_DETAIL_SEARCH_SUMMARY = "User 조회 API";
-
     private static final String USER_DETAIL_SEARCH_DESCRIPTION = "User 정보를 조회하는 API 입니다.";
 
     private UserReadSnippet() {

@@ -13,8 +13,8 @@ import static project.dailyge.app.test.user.documentationtest.snippet.UserSnippe
 class LoginPageDocumentationTest extends DatabaseTestBase {
 
     @Test
-    @DisplayName("로그인 페이지를 요청하면, 200 OK 응답을 받는다")
-    void whenGetLoginPageThenStatusCodeShouldBe200_OK() {
+    @DisplayName("[RestDocs] 로그인 페이지를 요청하면, 200 OK 응답을 받는다")
+    void whenGetLoginPageThenStatusCodeShouldBe_200_OK_RestDocs() {
         given(this.specification)
             .filter(document(IDENTIFIER,
                 LOGIN_PAGE_RESPONSE_SNIPPET

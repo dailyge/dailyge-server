@@ -16,7 +16,7 @@ public class UserEventHandler {
 
     @Async
     @EventListener
-    public void onUserEvent(final UserEvent event) {
+    public void listenEvent(final UserEvent event) {
         final UserCache userCache = new UserCache(
             event.getPublisher(),
             event.getNickname(),

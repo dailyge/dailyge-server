@@ -88,7 +88,7 @@ class UserReadIntegrationTest extends DatabaseTestBase {
     }
 
     @Test
-    @DisplayName("미 가입 이메일로 조회 시, 값이 존재하지 않는다.")
+    @DisplayName("존재하지 않은 이메일로 조회 시, 값이 나오지 않는다.")
     void whenFindUserByUnregisteredEmailThenResultShouldBeFalse() {
         final Optional<UserJpaEntity> findUser = userReadUseCase.findActiveUserByEmail("notExist@gmail.com");
 

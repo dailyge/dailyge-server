@@ -32,7 +32,7 @@ public class UserEventIntegrationTest {
             "user.jpg",
             NORMAL.name()
         );
-        userEventHandler.onUserEvent(userEvent);
+        userEventHandler.listenEvent(userEvent);
         final UserCache userCache = new UserCache(
             userEvent.getPublisher(),
             userEvent.getNickname(),

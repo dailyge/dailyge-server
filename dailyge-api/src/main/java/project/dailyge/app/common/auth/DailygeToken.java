@@ -17,6 +17,7 @@ public record DailygeToken(
     public String getRefreshTokenCookie() {
         return ResponseCookie.from(REFRESH_TOKEN, refreshToken)
             .httpOnly(true)
+            .path("/")
             .secure(true)
             .maxAge(maxAge)
             .build()

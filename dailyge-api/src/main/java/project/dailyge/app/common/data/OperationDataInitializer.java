@@ -27,7 +27,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Slf4j
-@Component
+// @Component
 @Profile({"local", "dev"})
 @RequiredArgsConstructor
 public class OperationDataInitializer implements CommandLineRunner {

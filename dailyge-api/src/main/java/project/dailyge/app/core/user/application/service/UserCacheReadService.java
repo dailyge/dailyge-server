@@ -18,7 +18,7 @@ class UserCacheReadService implements UserCacheReadUseCase {
     }
 
     @Override
-    public boolean existsById(Long userId) {
+    public boolean existsById(final Long userId) {
         return userCacheReadRepository.existsById(userId);
     }
 }

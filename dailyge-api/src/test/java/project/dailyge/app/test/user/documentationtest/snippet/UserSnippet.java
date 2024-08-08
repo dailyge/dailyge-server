@@ -1,5 +1,6 @@
 package project.dailyge.app.test.user.documentationtest.snippet;
 
+import org.springframework.restdocs.cookies.CookieDescriptor;
 import org.springframework.restdocs.cookies.ResponseCookiesSnippet;
 import org.springframework.restdocs.headers.HeaderDescriptor;
 import org.springframework.restdocs.headers.RequestHeadersSnippet;
@@ -51,8 +52,12 @@ public interface UserSnippet {
         fieldWithPath("message").type(STRING).description("응답 메시지")
     };
 
-    ResponseCookiesSnippet LOGOUT_RESPONSE_COOKIE_SNIPPET = responseCookies(
+    CookieDescriptor[] LOGOUT_RESPONSE_COOKIE_DESCRIPTOR = {
         cookieWithName("Refresh-Token").description("리프레시 토큰")
+    };
+
+    ResponseCookiesSnippet LOGOUT_RESPONSE_COOKIE_SNIPPET = responseCookies(
+        LOGOUT_RESPONSE_COOKIE_DESCRIPTOR
     );
 
     FieldDescriptor[] RESPONSE_STATUS = {

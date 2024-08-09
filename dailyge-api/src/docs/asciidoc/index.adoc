@@ -147,11 +147,11 @@ include::{snippets}/task_read_documentation_test/when_task_exists_then_status_co
 
 #### Query-Parameters
 
-include::{snippets}/task_read_documentation_test/when_task_exists_then_status_code_should_be200_ok__rest_docs/path-parameters.adoc[]
+include::{snippets}/task_read_documentation_test/when_task_exists_then_status_code_should_be200_ok__rest_docs/query-parameters.adoc[]
 
 #### Request-Path-Parameters
 
-include::{snippets}/task_read_documentation_test/when_task_exists_then_status_code_should_be200_ok__rest_docs/query-parameters.adoc[]
+include::{snippets}/task_read_documentation_test/when_task_exists_then_status_code_should_be200_ok__rest_docs/path-parameters.adoc[]
 
 #### Response
 

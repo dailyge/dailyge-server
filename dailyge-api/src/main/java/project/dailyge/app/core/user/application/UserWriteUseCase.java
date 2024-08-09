@@ -7,7 +7,7 @@ public interface UserWriteUseCase {
 
     UserJpaEntity upsert(UserJpaEntity user);
 
-    void delete(Long user);
+    void delete(Long userId);
 
     Long getSequence();
 }

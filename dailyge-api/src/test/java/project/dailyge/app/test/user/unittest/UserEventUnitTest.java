@@ -13,8 +13,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static project.dailyge.entity.common.EventType.CREATE;
 
-@DisplayName("[UnitTest] UserEvent 통합 테스트")
-class UserEventIntegrationTest {
+@DisplayName("[UnitTest] UserEvent 단위 테스트")
+class UserEventUnitTest {
 
     @Test
     @DisplayName("userEvent를 받아 실행하면, UserCache가 저장된다.")

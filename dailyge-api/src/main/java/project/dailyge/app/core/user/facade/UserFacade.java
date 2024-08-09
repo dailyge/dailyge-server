@@ -32,7 +32,7 @@ public class UserFacade {
     private final UserReadUseCase userReadUseCase;
     private final TokenProvider tokenProvider;
     private final TokenManager tokenManager;
-    private final ApplicationEventPublisher publisher;
+    private final ApplicationEventPublisher eventPublisher;
     private final UserCacheWriteUseCase userCacheWriteUseCase;
 
     public DailygeToken login(final String code) throws CommonException {
@@ -40,7 +40,7 @@ public class UserFacade {
         final Optional<UserJpaEntity> findUserByEmail = userReadUseCase.findActiveUserByEmail(response.getEmail());
         final Long userId = saveCache(findUserByEmail, response);
         final UserEvent userEvent = createEvent(userId, createTimeBasedUUID(), CREATE);
-        publisher.publishEvent(userEvent);
+        eventPublisher.publishEvent(userEvent);
 
         final DailygeToken token = tokenProvider.createToken(userId, response.getEmail());
         tokenManager.saveRefreshToken(userId, token.refreshToken());

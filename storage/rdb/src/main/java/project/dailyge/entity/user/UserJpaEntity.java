@@ -50,25 +50,25 @@ public class UserJpaEntity extends BaseEntity {
     private LocalDateTime deletedAt;
 
     public UserJpaEntity(
-        final Long userId,
+        final Long id,
         final String nickname,
         final String email
     ) {
         validate(nickname, email);
-        this.id = userId;
+        this.id = id;
         this.nickname = nickname;
         this.email = email;
         this.role = Role.NORMAL;
     }
 
     public UserJpaEntity(
-        final Long userId,
+        final Long id,
         final String nickname,
         final String email,
         final LocalDateTime createdAt
     ) {
         validate(nickname, email);
-        this.id = userId;
+        this.id = id;
         this.nickname = nickname;
         this.email = email;
         this.role = Role.NORMAL;

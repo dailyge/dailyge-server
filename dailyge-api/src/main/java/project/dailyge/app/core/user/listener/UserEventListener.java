@@ -1,4 +1,4 @@
-package project.dailyge.app.core.user.facade;
+package project.dailyge.app.core.user.listener;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
@@ -12,7 +12,7 @@ import project.dailyge.entity.user.UserJpaEntity;
 
 @Component
 @RequiredArgsConstructor
-public class UserEventHandler {
+public class UserEventListener {
 
     private final UserWriteUseCase userWriteUseCase;
     private final UserCacheReadUseCase userCacheReadUseCase;

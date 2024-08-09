@@ -1,6 +1,22 @@
 package project.dailyge.app.test.user.integrationtest;
 
 import com.github.tomakehurst.wiremock.client.WireMock;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.event.ApplicationEvents;
+import org.springframework.test.context.event.RecordApplicationEvents;
+import project.dailyge.app.common.DatabaseTestBase;
+import project.dailyge.app.common.auth.TokenProvider;
+import project.dailyge.app.common.exception.ExternalServerException;
+import project.dailyge.app.common.response.ApiResponse;
+import project.dailyge.app.core.user.presentation.LoginApi;
+import project.dailyge.app.core.user.presentation.response.OAuthLoginResponse;
+import project.dailyge.core.cache.user.UserCache;
+import project.dailyge.core.cache.user.UserCacheReadUseCase;
+import project.dailyge.entity.user.UserEvent;
+
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.post;
@@ -9,19 +25,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import static org.springframework.http.HttpStatus.BAD_GATEWAY;
-import org.springframework.test.context.event.ApplicationEvents;
-import org.springframework.test.context.event.RecordApplicationEvents;
-import project.dailyge.app.common.DatabaseTestBase;
-import project.dailyge.app.common.exception.ExternalServerException;
-import project.dailyge.app.common.response.ApiResponse;
-import project.dailyge.app.core.user.presentation.LoginApi;
-import project.dailyge.app.core.user.presentation.response.OAuthLoginResponse;
-import project.dailyge.entity.user.UserEvent;
 
 @RecordApplicationEvents
 @DisplayName("[IntegrationTest] 사용자 로그인 통합 테스트")
@@ -35,6 +39,12 @@ class LoginIntegrationTest extends DatabaseTestBase {
     @Autowired
     private ApplicationEvents applicationEvents;
 
+    @Autowired
+    private UserCacheReadUseCase userCacheReadUseCase;
+
+    @Autowired
+    private TokenProvider tokenProvider;
+
     @BeforeEach
     void setUp() {
         WireMock.reset();
@@ -46,6 +56,18 @@ class LoginIntegrationTest extends DatabaseTestBase {
         final ApiResponse<OAuthLoginResponse> response = loginApi.login(AUTHENTICATION_CODE);
 
         assertNotNull(response.getBody().getData().getAccessToken());
+    }
+
+    @Test
+    @DisplayName("로그인 성공 시, Cache에 사용자 정보가 저장된다.")
+    void whenLoginSuccessThenUserCacheShouldBeSaved() {
+        final ApiResponse<OAuthLoginResponse> response = loginApi.login(AUTHENTICATION_CODE);
+        final String responseAccessToken = response.getBody().getData().getAccessToken();
+        final Long userId = tokenProvider.getUserId(responseAccessToken);
+
+        final UserCache userCache = userCacheReadUseCase.findById(userId);
+
+        assertNotNull(userCache);
     }
 
     @Test

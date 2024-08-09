@@ -3,23 +3,21 @@ package project.dailyge.app.core.user.presentation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
+import static org.springframework.http.HttpHeaders.SET_COOKIE;
 import org.springframework.http.ResponseCookie;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.OK;
 import project.dailyge.app.common.annotation.Presentation;
 import project.dailyge.app.common.auth.DailygeToken;
 import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.common.auth.LoginUser;
 import project.dailyge.app.common.response.ApiResponse;
 import project.dailyge.app.core.user.facade.UserFacade;
-import project.dailyge.app.core.user.presentation.request.OAuthLoginRequest;
 import project.dailyge.app.core.user.presentation.response.LoginPageUrlResponse;
 import project.dailyge.app.core.user.presentation.response.OAuthLoginResponse;
-
-import static org.springframework.http.HttpHeaders.SET_COOKIE;
-import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.OK;
 
 @Presentation
 @RequestMapping("/api")
@@ -37,9 +35,9 @@ public class LoginApi {
         return ApiResponse.from(OK, payload);
     }
 
-    @PostMapping(path = "/oauth2")
-    public ApiResponse<OAuthLoginResponse> login(@RequestBody final OAuthLoginRequest request) {
-        final DailygeToken dailygeToken = userFacade.login(request.code());
+    @GetMapping(path = "/oauth2")
+    public ApiResponse<OAuthLoginResponse> login(@RequestParam("code") final String code) {
+        final DailygeToken dailygeToken = userFacade.login(code);
         final HttpHeaders headers = new HttpHeaders();
         headers.add(SET_COOKIE, dailygeToken.getRefreshTokenCookie());
         final OAuthLoginResponse payload = new OAuthLoginResponse(dailygeToken.accessToken());
@@ -52,7 +50,6 @@ public class LoginApi {
         final HttpHeaders headers = new HttpHeaders();
         final ResponseCookie expiredRefreshTokenCookie = ResponseCookie.from("Refresh-Token")
             .value(null)
-            .path("/")
             .maxAge(0L)
             .build();
         headers.add(SET_COOKIE, expiredRefreshTokenCookie.toString());

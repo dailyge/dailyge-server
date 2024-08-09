@@ -20,7 +20,6 @@ import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.common.exception.ExternalServerException;
 import project.dailyge.app.common.response.ApiResponse;
 import project.dailyge.app.core.user.presentation.LoginApi;
-import project.dailyge.app.core.user.presentation.request.OAuthLoginRequest;
 import project.dailyge.app.core.user.presentation.response.OAuthLoginResponse;
 import project.dailyge.entity.user.UserEvent;
 
@@ -44,8 +43,7 @@ class LoginIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("로그인 성공 시, 응답에 DailygeToken 가 비어있지 않는다.")
     void whenLoginSuccessThenDailygeTokenShouldBeNotNull() {
-        final OAuthLoginRequest request = new OAuthLoginRequest(AUTHENTICATION_CODE);
-        final ApiResponse<OAuthLoginResponse> response = loginApi.login(request);
+        final ApiResponse<OAuthLoginResponse> response = loginApi.login(AUTHENTICATION_CODE);
 
         assertNotNull(response.getBody().getData().getAccessToken());
     }
@@ -53,8 +51,7 @@ class LoginIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("로그인 성공 시 사용자 정보가 저장되도록, 이벤트가 발행된다.")
     void whenLoginSuccessThenCacheSaveEventShouldBeHappen() {
-        final OAuthLoginRequest request = new OAuthLoginRequest(AUTHENTICATION_CODE);
-        loginApi.login(request);
+        loginApi.login(AUTHENTICATION_CODE);
 
         final long count = applicationEvents.stream(UserEvent.class).count();
         assertEquals(1, count);
@@ -68,9 +65,8 @@ class LoginIntegrationTest extends DatabaseTestBase {
                 .withStatus(BAD_GATEWAY.value())
                 .withStatusMessage(BAD_GATEWAY.getReasonPhrase())
                 .withBody(BAD_GATEWAY.getReasonPhrase())));
-        final OAuthLoginRequest request = new OAuthLoginRequest(AUTHENTICATION_CODE);
 
-        assertThatThrownBy(() -> loginApi.login(request))
+        assertThatThrownBy(() -> loginApi.login(AUTHENTICATION_CODE))
             .isExactlyInstanceOf(ExternalServerException.class)
             .isInstanceOf(RuntimeException.class)
             .hasMessage(BAD_GATEWAY.value() + " " + BAD_GATEWAY.getReasonPhrase() + ": \"" + BAD_GATEWAY.getReasonPhrase() + "\"");
@@ -84,9 +80,8 @@ class LoginIntegrationTest extends DatabaseTestBase {
                 .withStatus(BAD_GATEWAY.value())
                 .withStatusMessage(BAD_GATEWAY.getReasonPhrase())
                 .withBody(BAD_GATEWAY.getReasonPhrase())));
-        final OAuthLoginRequest request = new OAuthLoginRequest(AUTHENTICATION_CODE);
 
-        assertThatThrownBy(() -> loginApi.login(request))
+        assertThatThrownBy(() -> loginApi.login(AUTHENTICATION_CODE))
             .isExactlyInstanceOf(ExternalServerException.class)
             .isInstanceOf(RuntimeException.class)
             .hasMessage(BAD_GATEWAY.value() + " " + BAD_GATEWAY.getReasonPhrase() + ": \"" + BAD_GATEWAY.getReasonPhrase() + "\"");

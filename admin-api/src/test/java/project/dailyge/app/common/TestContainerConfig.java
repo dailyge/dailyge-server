@@ -5,16 +5,8 @@ import org.junit.jupiter.api.AfterAll;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.containers.localstack.LocalStackContainer;
 import static org.testcontainers.containers.wait.strategy.Wait.forListeningPort;
 import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.utility.DockerImageName;
-import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
-import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
-import software.amazon.awssdk.regions.Region;
-import software.amazon.awssdk.services.sqs.SqsClient;
-import software.amazon.awssdk.services.sqs.model.CreateQueueRequest;
-import software.amazon.awssdk.services.sqs.model.CreateQueueResponse;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -64,19 +56,12 @@ public final class TestContainerConfig {
                 .withMemory(2147483648L);
         });
 
-    @Container
-    private static final LocalStackContainer localStackContainer = new LocalStackContainer(DockerImageName.parse(LOCAL_STACK_IMAGE))
-        .withServices(LocalStackContainer.Service.SNS, LocalStackContainer.Service.SQS)
-        .withEnv("AWS_DEFAULT_REGION", DEFAULT_REGION)
-        .withExposedPorts(4566);
-
     @DynamicPropertySource
     public static void overrideProps(final DynamicPropertyRegistry registry) {
         try {
             final CompletableFuture<Void> redisPropertiesSetup = runAsync(() -> initMemoryDbProperties(registry));
             final CompletableFuture<Void> mongoPropertiesSetup = runAsync(() -> initDocumentDbProperties(registry));
-            final CompletableFuture<Void> localStackPropertiesSetup = runAsync(() -> initLocalStack(registry));
-            CompletableFuture.allOf(redisPropertiesSetup, mongoPropertiesSetup, localStackPropertiesSetup).join();
+            CompletableFuture.allOf(redisPropertiesSetup, mongoPropertiesSetup).join();
         } catch (Exception ex) {
             throw new RuntimeException("Error initializing containers.", ex);
         }
@@ -99,26 +84,6 @@ public final class TestContainerConfig {
         System.setProperty("mongodb.container.host", mongoContainer.getHost());
         System.setProperty("mongodb.container.connectionString", mongoConnectionString);
         registry.add("spring.data.mongodb.uri", () -> mongoConnectionString);
-    }
-
-    private static void initLocalStack(final DynamicPropertyRegistry registry) {
-        localStackContainer.start();
-
-        final SqsClient sqsClient = SqsClient.builder()
-            .endpointOverride(localStackContainer.getEndpointOverride(LocalStackContainer.Service.SQS))
-            .credentialsProvider(StaticCredentialsProvider.create(
-                AwsBasicCredentials.create(localStackContainer.getAccessKey(), localStackContainer.getSecretKey())))
-            .region(Region.of(DEFAULT_REGION))
-            .build();
-        final CreateQueueResponse createQueueResponse = sqsClient.createQueue(CreateQueueRequest.builder()
-            .queueName("dailyge-event-queue")
-            .build());
-        final String queueUrl = createQueueResponse.queueUrl();
-
-        registry.add("spring.cloud.aws.region.static", () -> DEFAULT_REGION);
-        registry.add("spring.cloud.aws.credentials.access-key", localStackContainer::getAccessKey);
-        registry.add("spring.cloud.aws.credentials.secret-key", localStackContainer::getSecretKey);
-        registry.add("application.amazon.sqs.queue-url", () -> queueUrl);
     }
 
     @AfterAll

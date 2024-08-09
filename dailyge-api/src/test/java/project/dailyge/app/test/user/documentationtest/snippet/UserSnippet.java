@@ -1,6 +1,8 @@
 package project.dailyge.app.test.user.documentationtest.snippet;
 
+import org.springframework.restdocs.cookies.CookieDescriptor;
 import org.springframework.restdocs.cookies.ResponseCookiesSnippet;
+import org.springframework.restdocs.headers.HeaderDescriptor;
 import org.springframework.restdocs.headers.RequestHeadersSnippet;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
@@ -18,6 +20,10 @@ import static org.springframework.restdocs.request.RequestDocumentation.paramete
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 
 public interface UserSnippet {
+
+    String TAG = "User";
+
+    HeaderDescriptor HEADER_DESCRIPTOR = headerWithName("Authorization").description("인증 토큰").optional();
 
     RequestHeadersSnippet USER_AUTHORIZATION_HEADER = requestHeaders(
         headerWithName("Authorization").description("인증 토큰").optional()
@@ -46,9 +52,18 @@ public interface UserSnippet {
         fieldWithPath("message").type(STRING).description("응답 메시지")
     };
 
-    ResponseCookiesSnippet LOGOUT_RESPONSE_COOKIE_SNIPPET = responseCookies(
+    CookieDescriptor[] LOGOUT_RESPONSE_COOKIE_DESCRIPTOR = {
         cookieWithName("Refresh-Token").description("리프레시 토큰")
+    };
+
+    ResponseCookiesSnippet LOGOUT_RESPONSE_COOKIE_SNIPPET = responseCookies(
+        LOGOUT_RESPONSE_COOKIE_DESCRIPTOR
     );
+
+    FieldDescriptor[] RESPONSE_STATUS = {
+        fieldWithPath("code").type(NUMBER).description("응답 코드"),
+        fieldWithPath("message").type(STRING).description("응답 메시지")
+    };
 
     // Search
     PathParametersSnippet USER_SEARCH_PATH_PARAMETER_SNIPPET = pathParameters(USER_SEARCH_PATH_DESCRIPTOR);
@@ -59,4 +74,11 @@ public interface UserSnippet {
 
     // Login
     ResponseFieldsSnippet LOGIN_PAGE_RESPONSE_SNIPPET = responseFields(LOGIN_PAGE_FIELD_DESCRIPTOR);
+
+    static String createIdentifier(
+        final String name,
+        final int code
+    ) {
+        return String.format("%s/%d", name, code);
+    }
 }

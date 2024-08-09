@@ -51,9 +51,12 @@ public class ApiResponse<T> extends ResponseEntity<Payload<T>> {
     public String toString() {
         final String payloadStr = (getBody() != null) ? getBody().toString() : "null";
         final String headerStr = getHeaders().toString();
-        return "{\"status\":" + getStatusCodeValue() +
-            ", \"headers\":" + headerStr +
-            ", \"body\":" + payloadStr +
-            "}";
+        return "{\"status\":"
+            + getStatusCodeValue()
+            + ", \"headers\":"
+            + headerStr
+            + ", \"body\":"
+            + payloadStr
+            + "}";
     }
 }

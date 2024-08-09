@@ -10,6 +10,7 @@ on:
 
 env:
   ENV: dev
+  SKIP_JIB: true
   SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   ENCRYPTOR_KEY: ${{ secrets.ENCRYPTOR_KEY }}

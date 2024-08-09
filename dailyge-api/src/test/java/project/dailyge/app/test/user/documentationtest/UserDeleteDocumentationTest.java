@@ -57,9 +57,9 @@ class UserDeleteDocumentationTest extends DatabaseTestBase {
     }
 
     @Test
-    @DisplayName("[Swagger] 이미 삭제되었다면, 403 UnAuthorized 응답을 받는다.")
-    void whenUserAlreadyDeletedThenStatusCodeShouldBe_403_UnAuthorized_Swagger() {
-        final RestDocumentationFilter filter = createUserDeleteFilter(createIdentifier("UserDelete", 403));
+    @DisplayName("[Swagger] 이미 삭제되었다면, 404 NOT FOUND 응답을 받는다.")
+    void whenUserAlreadyDeletedThenStatusCodeShouldBe_404_NotFound_Swagger() {
+        final RestDocumentationFilter filter = createUserDeleteFilter(createIdentifier("UserDelete", 404));
         userWriteUseCase.delete(newUser.getId());
 
         given(this.specification)
@@ -69,7 +69,7 @@ class UserDeleteDocumentationTest extends DatabaseTestBase {
             .when()
             .delete("/api/users/{userId}", newUser.getId())
             .then()
-            .statusCode(403)
+            .statusCode(404)
             .log()
             .all();
     }

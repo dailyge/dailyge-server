@@ -11,6 +11,8 @@ import project.dailyge.app.core.user.application.UserWriteUseCase;
 import project.dailyge.app.core.user.external.oauth.GoogleOAuthManager;
 import project.dailyge.app.core.user.external.oauth.TokenManager;
 import project.dailyge.app.core.user.external.response.GoogleUserInfoResponse;
+import project.dailyge.core.cache.user.UserCache;
+import project.dailyge.core.cache.user.UserCacheWriteUseCase;
 import project.dailyge.entity.user.UserEvent;
 import project.dailyge.entity.user.UserJpaEntity;
 
@@ -31,42 +33,42 @@ public class UserFacade {
     private final TokenProvider tokenProvider;
     private final TokenManager tokenManager;
     private final ApplicationEventPublisher publisher;
+    private final UserCacheWriteUseCase userCacheWriteUseCase;
 
     public DailygeToken login(final String code) throws CommonException {
         final GoogleUserInfoResponse response = googleOAuthManager.getUserInfo(code);
         final Optional<UserJpaEntity> findUserByEmail = userReadUseCase.findActiveUserByEmail(response.getEmail());
-        final Long userId = publishEvent(findUserByEmail, response);
+        final Long userId = saveCache(findUserByEmail, response);
+        final UserEvent userEvent = createEvent(userId, createTimeBasedUUID(), CREATE);
+        publisher.publishEvent(userEvent);
 
         final DailygeToken token = tokenProvider.createToken(userId, response.getEmail());
         tokenManager.saveRefreshToken(userId, token.refreshToken());
         return token;
     }
 
-    private Long publishEvent(
-        final Optional<UserJpaEntity> findUserByEmail,
-        final GoogleUserInfoResponse response
-    ) {
-        final Long userId;
-        final String role;
+    private Long saveCache(Optional<UserJpaEntity> findUserByEmail, GoogleUserInfoResponse response) {
+        final UserCache userCache;
         if (findUserByEmail.isPresent()) {
             final UserJpaEntity user = findUserByEmail.get();
-            userId = user.getId();
-            role = user.getRoleToString();
+            userCache = new UserCache(
+                user.getId(),
+                user.getNickname(),
+                user.getEmail(),
+                user.getProfileImageUrl(),
+                user.getRoleToString()
+            );
         } else {
-            userId = userWriteUseCase.getSequence();
-            role = NORMAL.name();
+            userCache = new UserCache(
+                userWriteUseCase.getSequence(),
+                response.getName(),
+                response.getEmail(),
+                response.getPicture(),
+                NORMAL.name()
+            );
         }
-        final UserEvent event = createEvent(
-            userId,
-            createTimeBasedUUID(),
-            CREATE,
-            response.getName(),
-            response.getEmail(),
-            response.getPicture(),
-            role
-        );
-        publisher.publishEvent(event);
-        return userId;
+        userCacheWriteUseCase.save(userCache);
+        return userCache.getId();
     }
 
     public void logout(final Long userId) {

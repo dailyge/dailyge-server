@@ -47,7 +47,10 @@ public class UserFacade {
         return token;
     }
 
-    private Long saveCache(Optional<UserJpaEntity> findUserByEmail, GoogleUserInfoResponse response) {
+    private Long saveCache(
+        final Optional<UserJpaEntity> findUserByEmail,
+        final GoogleUserInfoResponse response
+    ) {
         final UserCache userCache;
         if (findUserByEmail.isPresent()) {
             final UserJpaEntity user = findUserByEmail.get();

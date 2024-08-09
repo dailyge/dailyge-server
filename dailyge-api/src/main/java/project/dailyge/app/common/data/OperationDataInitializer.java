@@ -27,13 +27,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Slf4j
-@Component
+// @Component
 @Profile({"local", "dev"})
 @RequiredArgsConstructor
 public class OperationDataInitializer implements CommandLineRunner {
 
     private static final String LOCAL = "local";
-    private static final String DEV = "dev";
 
     @Value("${env}")
     private String env;
@@ -54,7 +53,7 @@ public class OperationDataInitializer implements CommandLineRunner {
     @Transactional
     public void run(final String... args) {
         log.info(env);
-        if (isEnv(LOCAL) || isEnv(DEV)) {
+        if (isEnv(LOCAL)) {
             initSchema();
             initCollection();
             initData();
@@ -62,7 +61,7 @@ public class OperationDataInitializer implements CommandLineRunner {
     }
 
     public void initSchema() {
-        if (isEnv(LOCAL) || isEnv(DEV)) {
+        if (isEnv(LOCAL)) {
             final Path rootPath = Paths.get("").toAbsolutePath();
             final Path sqlFilePath = rootPath.resolve("config/schema/schema.sql");
             try (Connection connection = dataSource.getConnection()) {
@@ -82,7 +81,7 @@ public class OperationDataInitializer implements CommandLineRunner {
     }
 
     public void initData() {
-        if (isEnv(LOCAL) || isEnv(DEV)) {
+        if (isEnv(LOCAL)) {
             try {
                 entityManager.persist(new UserJpaEntity(nickname, email));
             } catch (Exception ex) {
@@ -94,7 +93,7 @@ public class OperationDataInitializer implements CommandLineRunner {
     @PreDestroy
     @Transactional
     public void clearData() {
-        if (isEnv(LOCAL) || isEnv(DEV)) {
+        if (isEnv(LOCAL)) {
             jdbcTemplate.execute("TRUNCATE users");
             for (final String collectionName : this.collectionNames) {
                 mongoTemplate.remove(new Query(), collectionName);
@@ -103,9 +102,6 @@ public class OperationDataInitializer implements CommandLineRunner {
     }
 
     private boolean isEnv(final String env) {
-        if (LOCAL.equals(env)) {
-            return true;
-        }
-        return DEV.equals(env);
+        return LOCAL.equals(env);
     }
 }

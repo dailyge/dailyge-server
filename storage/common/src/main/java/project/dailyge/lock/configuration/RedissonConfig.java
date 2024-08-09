@@ -19,6 +19,9 @@ public class RedissonConfig {
     @Value("${spring.data.redis.port}")
     private int redisPort;
 
+    @Value("${spring.data.redis.password}")
+    private String password;
+
     @Value("${spring.data.redis.connectionPoolSize}")
     private int connectionPoolSize;
 
@@ -32,6 +35,9 @@ public class RedissonConfig {
             .setAddress(REDISSON_HOST_PREFIX + redisHost + DELIMITER + redisPort)
             .setConnectionPoolSize(connectionPoolSize)
             .setConnectionMinimumIdleSize(minConnectionDleSize);
+        if (password != null && !password.isEmpty()) {
+            config.useSingleServer().setPassword(password);
+        }
         return Redisson.create(config);
     }
 }

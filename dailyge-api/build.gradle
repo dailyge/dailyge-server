@@ -107,6 +107,11 @@ tasks.withType(JavaCompile).configureEach {
     outputs.cacheIf { true }
 }
 
+tasks.named("jib").configure {
+    dependsOn("copySubmoduleConfig")
+    enabled = true
+}
+
 openapi3 {
     def env = System.getenv("ENV")
     setServer(env != null && env == 'prod' ? "https://api.dailyge.com" : "https://api-dev.dailyge.com")

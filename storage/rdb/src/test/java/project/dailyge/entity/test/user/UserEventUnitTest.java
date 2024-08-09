@@ -10,16 +10,12 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static project.dailyge.entity.common.EventType.CREATE;
-import static project.dailyge.entity.user.Role.NORMAL;
 
 @DisplayName("[UnitTest] UserEvent 단위 테스트")
 class UserEventUnitTest {
 
     private static final long PUBLISHER = 1L;
     private static final String EVENT_ID = "eventId";
-    private static final String NICKNAME = "nickname";
-    private static final String EMAIL = "dailyge@gmail.com";
-    private static final String PROFILE_IMAGE_URL = "user.jpg";
 
     private UserEvent userEvent;
 
@@ -28,11 +24,7 @@ class UserEventUnitTest {
         userEvent = UserEvent.createEvent(
             PUBLISHER,
             EVENT_ID,
-            CREATE,
-            NICKNAME,
-            EMAIL,
-            PROFILE_IMAGE_URL,
-            NORMAL.name()
+            CREATE
         );
     }
 
@@ -43,9 +35,6 @@ class UserEventUnitTest {
             () -> assertEquals(PUBLISHER, userEvent.getPublisher()),
             () -> assertEquals(EVENT_ID, userEvent.getEventId()),
             () -> assertEquals(CREATE, userEvent.getEventType()),
-            () -> assertEquals(NICKNAME, userEvent.getNickname()),
-            () -> assertEquals(EMAIL, userEvent.getEmail()),
-            () -> assertEquals(PROFILE_IMAGE_URL, userEvent.getProfileImageUrl()),
             () -> assertEquals("user", userEvent.getDomain())
         );
     }
@@ -56,12 +45,8 @@ class UserEventUnitTest {
         assertThatThrownBy(() -> UserEvent.createEvent(
             null,
             EVENT_ID,
-            CREATE,
-            NICKNAME,
-            EMAIL,
-            PROFILE_IMAGE_URL,
-            NORMAL.name())
-        ).isInstanceOf(IllegalArgumentException.class)
+            CREATE
+        )).isInstanceOf(IllegalArgumentException.class)
             .hasMessage(userEvent.getInvalidPublisherIdErrorMessage());
     }
 
@@ -71,12 +56,8 @@ class UserEventUnitTest {
         assertThatThrownBy(() -> UserEvent.createEvent(
             PUBLISHER,
             null,
-            CREATE,
-            NICKNAME,
-            EMAIL,
-            PROFILE_IMAGE_URL,
-            NORMAL.name())
-        ).isInstanceOf(IllegalArgumentException.class)
+            CREATE
+        )).isInstanceOf(IllegalArgumentException.class)
             .hasMessage(userEvent.getInvalidEventIdErrorMessage());
     }
 
@@ -86,28 +67,18 @@ class UserEventUnitTest {
         assertThatThrownBy(() -> UserEvent.createEvent(
             PUBLISHER,
             EVENT_ID,
-            null,
-            NICKNAME,
-            EMAIL,
-            PROFILE_IMAGE_URL,
-            NORMAL.name())
-        ).isInstanceOf(IllegalArgumentException.class)
+            null
+        )).isInstanceOf(IllegalArgumentException.class)
             .hasMessage(userEvent.getInvalidEventTypeErrorMessage());
     }
 
     @Test
     @DisplayName("toString 메서드는 정의한 형식대로 JSON 문자열을 반환한다.")
     void whenToStringThenReturnJsonString() {
-        final String expectedString = "{"
-            + "\"publisher\":\"" + PUBLISHER + "\","
-            + "\"eventId\":\"" + EVENT_ID + "\","
-            + "\"eventType\":\"" + CREATE + "\","
-            + "\"nickname\":\"" + NICKNAME + "\","
-            + "\"email\":\"" + EMAIL + "\","
-            + "\"profileImageUrl\":\"" + PROFILE_IMAGE_URL + "\","
-            + "\"domain\":\"" + "user" + "\","
-            + "\"createdAt\":\"" + userEvent.getCreatedAt() + "\""
-            + "}";
+        final String expectedString = String.format(
+            "{\"publisher\":\"%s\",\"domain\":\"%s\",\"eventId\":\"%s\",\"eventType\":\"%s\",\"createdAt\":\"%s\"}",
+            PUBLISHER, "user", EVENT_ID, CREATE, userEvent.getCreatedAt()
+        );
 
         assertThat(userEvent.toString()).hasToString(expectedString);
     }

@@ -8,4 +8,6 @@ public interface UserEntityReadRepository {
     Optional<UserJpaEntity> findActiveUserById(Long userId);
 
     Optional<UserJpaEntity> findActiveUserByEmail(String email);
+
+    Long findUserIdByEmail(String email);
 }

@@ -34,7 +34,8 @@ public class UserCacheReadDao implements UserCacheReadRepository {
     @Override
     public boolean existsById(final Long userId) {
         try {
-            return redisTemplate.hasKey(String.format("user:cache:%s", userId));
+            final Boolean hasKey = redisTemplate.hasKey(String.format("user:cache:%s", userId));
+            return Boolean.TRUE.equals(hasKey);
         } catch (RedisException ex) {
             throw new ExternalServerException(ex.getMessage(), BAD_GATEWAY);
         } catch (Exception ex) {

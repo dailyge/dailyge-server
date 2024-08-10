@@ -14,8 +14,8 @@ import project.dailyge.entity.user.UserJpaEntity;
 @RequiredArgsConstructor
 public class UserEventListener {
 
-    private final UserWriteUseCase userWriteUseCase;
     private final UserCacheReadUseCase userCacheReadUseCase;
+    private final UserWriteUseCase userWriteUseCase;
 
     @Async
     @EventListener

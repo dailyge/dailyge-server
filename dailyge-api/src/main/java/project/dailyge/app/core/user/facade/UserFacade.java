@@ -26,13 +26,13 @@ import static project.dailyge.entity.user.UserEvent.createEvent;
 public class UserFacade {
 
     private final GoogleOAuthManager googleOAuthManager;
-    private final UserWriteUseCase userWriteUseCase;
     private final UserReadUseCase userReadUseCase;
+    private final UserWriteUseCase userWriteUseCase;
     private final TokenProvider tokenProvider;
     private final TokenManager tokenManager;
     private final ApplicationEventPublisher eventPublisher;
-    private final UserCacheWriteUseCase userCacheWriteUseCase;
     private final UserCacheReadUseCase userCacheReadUseCase;
+    private final UserCacheWriteUseCase userCacheWriteUseCase;
 
     public DailygeToken login(final String code) throws CommonException {
         final GoogleUserInfoResponse response = googleOAuthManager.getUserInfo(code);

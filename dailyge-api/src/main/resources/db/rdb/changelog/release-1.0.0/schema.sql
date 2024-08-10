@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS user_sequence
 
 CREATE TABLE IF NOT EXISTS users
 (
-    id                BIGINT AUTO_INCREMENT PRIMARY KEY NOT NULL COMMENT '사용자 ID',
+    id                BIGINT                PRIMARY KEY NOT NULL COMMENT '사용자 ID',
     email             VARCHAR(50)                       NOT NULL COMMENT '이메일',
     nickname          VARCHAR(20)                       NOT NULL COMMENT '닉네임',
     profile_image_url VARCHAR(2000)                     NULL COMMENT '사용자 이미지',

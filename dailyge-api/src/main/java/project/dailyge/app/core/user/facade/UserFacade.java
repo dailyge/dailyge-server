@@ -13,10 +13,9 @@ import project.dailyge.app.core.user.external.oauth.TokenManager;
 import project.dailyge.app.core.user.external.response.GoogleUserInfoResponse;
 import project.dailyge.core.cache.user.UserCache;
 import project.dailyge.core.cache.user.UserCacheWriteUseCase;
+import project.dailyge.entity.user.Role;
 import project.dailyge.entity.user.UserEvent;
 import project.dailyge.entity.user.UserJpaEntity;
-
-import java.util.Optional;
 
 import static project.dailyge.document.common.UuidGenerator.createTimeBasedUUID;
 import static project.dailyge.entity.common.EventType.CREATE;
@@ -37,30 +36,22 @@ public class UserFacade {
 
     public DailygeToken login(final String code) throws CommonException {
         final GoogleUserInfoResponse response = googleOAuthManager.getUserInfo(code);
-        final Optional<UserJpaEntity> findUserByEmail = userReadUseCase.findActiveUserByEmail(response.getEmail());
-        final Long userId = saveCache(findUserByEmail, response);
+        final Long findUserId = userReadUseCase.findUserIdByEmail(response.getEmail());
+        final Long userId = saveCache(findUserId, response);
         final UserEvent userEvent = createEvent(userId, createTimeBasedUUID(), CREATE);
         eventPublisher.publishEvent(userEvent);
+
+
 
         final DailygeToken token = tokenProvider.createToken(userId, response.getEmail());
         tokenManager.saveRefreshToken(userId, token.refreshToken());
         return token;
     }
 
-    private Long saveCache(
-        final Optional<UserJpaEntity> findUserByEmail,
-        final GoogleUserInfoResponse response
-    ) {
+    private Long saveCache(Long userId, GoogleUserInfoResponse response) {
         final UserCache userCache;
-        if (findUserByEmail.isPresent()) {
-            final UserJpaEntity user = findUserByEmail.get();
-            userCache = new UserCache(
-                user.getId(),
-                user.getNickname(),
-                user.getEmail(),
-                user.getProfileImageUrl(),
-                user.getRoleToString()
-            );
+        if (userId != null) {
+            // 캐시 있는지 확인하고 갱신하기
         } else {
             userCache = new UserCache(
                 userWriteUseCase.getSequence(),

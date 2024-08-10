@@ -43,6 +43,11 @@ class UserReadService implements UserReadUseCase {
     }
 
     @Override
+    public Long findUserIdByEmail(final String email) {
+        return userReadRepository.findUserIdByEmail(email);
+    }
+
+    @Override
     public boolean existsById(final Long userId) {
         final Optional<UserJpaEntity> user = userReadRepository.findActiveUserById(userId);
         return user.isPresent();

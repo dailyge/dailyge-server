@@ -12,8 +12,10 @@ import project.dailyge.app.core.user.external.oauth.GoogleOAuthManager;
 import project.dailyge.app.core.user.external.oauth.TokenManager;
 import project.dailyge.app.core.user.external.response.GoogleUserInfoResponse;
 import project.dailyge.core.cache.user.UserCache;
+import project.dailyge.core.cache.user.UserCacheReadUseCase;
 import project.dailyge.core.cache.user.UserCacheWriteUseCase;
 import project.dailyge.entity.user.UserEvent;
+import project.dailyge.entity.user.UserJpaEntity;
 import static project.dailyge.document.common.UuidGenerator.createTimeBasedUUID;
 import static project.dailyge.entity.common.EventType.CREATE;
 import static project.dailyge.entity.user.Role.NORMAL;
@@ -30,38 +32,66 @@ public class UserFacade {
     private final TokenManager tokenManager;
     private final ApplicationEventPublisher eventPublisher;
     private final UserCacheWriteUseCase userCacheWriteUseCase;
+    private final UserCacheReadUseCase userCacheReadUseCase;
 
     public DailygeToken login(final String code) throws CommonException {
         final GoogleUserInfoResponse response = googleOAuthManager.getUserInfo(code);
-        final Long findUserId = userReadUseCase.findUserIdByEmail(response.getEmail());
-        final Long userId = saveCache(findUserId, response);
-        final UserEvent userEvent = createEvent(userId, createTimeBasedUUID(), CREATE);
-        eventPublisher.publishEvent(userEvent);
+        final Long userId = upsertUserCache(response);
 
         final DailygeToken token = tokenProvider.createToken(userId, response.getEmail());
         tokenManager.saveRefreshToken(userId, token.refreshToken());
         return token;
     }
 
-    private Long saveCache(Long userId, GoogleUserInfoResponse response) {
-        final UserCache userCache;
-        if (userId != null) {
-            userCache = new UserCache(
-                userId,
-                response.getName(),
-                response.getEmail(),
-                response.getPicture(),
-                NORMAL.name()
-            );
+    private Long upsertUserCache(final GoogleUserInfoResponse response) {
+        final Long findUserId = userReadUseCase.findUserIdByEmail(response.getEmail());
+        if (findUserId == null) {
+            return createUserCache(response);
         } else {
-            userCache = new UserCache(
-                userWriteUseCase.getSequence(),
-                response.getName(),
-                response.getEmail(),
-                response.getPicture(),
-                NORMAL.name()
+            return refreshUserCache(findUserId);
+        }
+    }
+
+    private Long createUserCache(final GoogleUserInfoResponse response) {
+        final Long userId = saveCache(
+            userWriteUseCase.getSequence(),
+            response.getName(),
+            response.getEmail(),
+            response.getPicture()
+        );
+        final UserEvent userEvent = createEvent(userId, createTimeBasedUUID(), CREATE);
+        eventPublisher.publishEvent(userEvent);
+        return userId;
+    }
+
+    private Long refreshUserCache(final Long userId) {
+        if (userCacheReadUseCase.existsById(userId)) {
+            userCacheWriteUseCase.refreshExpirationDate(userId);
+        } else {
+            final UserJpaEntity user = userReadUseCase.findActiveUserById(userId);
+            saveCache(
+                userId,
+                user.getNickname(),
+                user.getEmail(),
+                user.getProfileImageUrl()
             );
         }
+        return userId;
+    }
+
+    private Long saveCache(
+        final Long userId,
+        final String name,
+        final String email,
+        final String profileImageUrl
+    ) {
+        final UserCache userCache = new UserCache(
+            userId,
+            name,
+            email,
+            profileImageUrl,
+            NORMAL.name()
+        );
         userCacheWriteUseCase.save(userCache);
         return userCache.getId();
     }

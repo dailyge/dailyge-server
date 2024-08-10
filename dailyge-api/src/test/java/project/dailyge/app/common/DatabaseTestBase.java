@@ -84,7 +84,7 @@ public abstract class DatabaseTestBase {
     @Transactional
     void setUp(final RestDocumentationContextProvider restDocumentation) {
         databaseInitialization.initData();
-        persist(createUser(1L));
+        persist(createUser(userWriteUseCase.getSequence()));
         this.specification = initSpecificationConfig(restDocumentation, port);
     }
 

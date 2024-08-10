@@ -25,7 +25,7 @@ class UserJpaEntityUnitTest {
 
     @BeforeEach
     void setUp() {
-        user = new UserJpaEntity(NICKNAME, EMAIL, PROFILE_IMAGE_URL);
+        user = new UserJpaEntity(1L, NICKNAME, EMAIL, PROFILE_IMAGE_URL);
     }
 
     @Test
@@ -42,7 +42,7 @@ class UserJpaEntityUnitTest {
     @Test
     @DisplayName("사용자 생성 시 프로필 이미지를 넣지 않아도, 정상적으로 사용자 인스턴스가 생성된다.")
     void whenUserCreateByEmptyImageUrlThenUserShouldBeNotNull() {
-        final UserJpaEntity userWithoutProfile = new UserJpaEntity(NICKNAME, EMAIL);
+        final UserJpaEntity userWithoutProfile = new UserJpaEntity(2L, NICKNAME, EMAIL);
         assertAll(
             () -> assertEquals(NICKNAME, userWithoutProfile.getNickname()),
             () -> assertEquals(EMAIL, userWithoutProfile.getEmail()),
@@ -55,7 +55,7 @@ class UserJpaEntityUnitTest {
     void whenMaxLengthOverNicknameThenIllegalArgumentExceptionShouldBeHappen() {
         final String overLengthNickname = "n".repeat(21);
 
-        assertThatThrownBy(() -> new UserJpaEntity(overLengthNickname, EMAIL))
+        assertThatThrownBy(() -> new UserJpaEntity(1L, overLengthNickname, EMAIL))
             .isExactlyInstanceOf(IllegalArgumentException.class)
             .hasMessage(user.getOverMaxNicknameLengthErrorMessage());
     }
@@ -65,7 +65,7 @@ class UserJpaEntityUnitTest {
     void whenMaxLengthOverEmailThenIllegalArgumentExceptionShouldBeHappen() {
         final String overLengthEmail = "e".repeat(50) + "@domain.com";
 
-        assertThatThrownBy(() -> new UserJpaEntity(NICKNAME, overLengthEmail))
+        assertThatThrownBy(() -> new UserJpaEntity(1L, NICKNAME, overLengthEmail))
             .isExactlyInstanceOf(IllegalArgumentException.class)
             .hasMessage(user.getInvalidEmailErrorMessage());
     }
@@ -74,7 +74,7 @@ class UserJpaEntityUnitTest {
     @DisplayName("이메일 규격에 맞지 않을 경우 IllegalArgumentException이 발생한다.")
     @ValueSource(strings = {"email.domain.com", "email@damain,com", "email@domain@domain.com"})
     void whenNotCompliantEmailThenIllegalArgumentExceptionShouldBeHappen(final String notCompliantEmail) {
-        assertThatThrownBy(() -> new UserJpaEntity(NICKNAME, notCompliantEmail))
+        assertThatThrownBy(() -> new UserJpaEntity(1L, NICKNAME, notCompliantEmail))
             .isExactlyInstanceOf(IllegalArgumentException.class)
             .hasMessage(user.getInvalidEmailErrorMessage());
     }
@@ -84,7 +84,7 @@ class UserJpaEntityUnitTest {
     void whenMaxLengthOverProfileImageUrlThenIllegalArgumentExceptionShouldBeHappen() {
         final String overLengthProfileImageUrl = "p".repeat(2001);
 
-        assertThatThrownBy(() -> new UserJpaEntity(NICKNAME, EMAIL, overLengthProfileImageUrl))
+        assertThatThrownBy(() -> new UserJpaEntity(1L, NICKNAME, EMAIL, overLengthProfileImageUrl))
             .isExactlyInstanceOf(IllegalArgumentException.class)
             .hasMessage(user.getOverMaxProfileImageUrlErrorMessage());
     }

@@ -1,5 +1,6 @@
 package project.dailyge.app.test.user.integrationtest;
 
+import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,9 +10,6 @@ import project.dailyge.app.core.user.application.UserReadUseCase;
 import project.dailyge.app.core.user.application.UserWriteUseCase;
 import project.dailyge.app.core.user.exception.UserTypeException;
 import project.dailyge.entity.user.UserJpaEntity;
-
-import java.util.Optional;
-
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -21,11 +19,14 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static project.dailyge.app.common.exception.UnAuthorizedException.USER_NOT_FOUND_MESSAGE;
 import static project.dailyge.app.core.user.exception.UserCodeAndMessage.USER_NOT_FOUND;
-import static project.dailyge.app.test.user.fixture.UserFixture.EMAIL;
 import static project.dailyge.app.test.user.fixture.UserFixture.createUser;
 
 @DisplayName("[IntegrationTest] 사용자 조회 통합 테스트")
 class UserReadIntegrationTest extends DatabaseTestBase {
+
+    private static final String NAME = "dailyges";
+    private static final String EMAIL = "dailyges@gmail.com";
+
 
     @Autowired
     private UserReadUseCase userReadUseCase;
@@ -36,7 +37,7 @@ class UserReadIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("등록된 사용자를 조회하면, Null이 아니다.")
     void whenFindUserThenUserShouldBeNotNull() {
-        final UserJpaEntity user = userWriteUseCase.save(createUser("dailyges", "dailyges@gmail.com"));
+        final UserJpaEntity user = userWriteUseCase.save(createUser(2L, NAME, EMAIL));
         final UserJpaEntity findUser = userReadUseCase.findById(user.getId());
 
         assertNotNull(findUser);
@@ -54,7 +55,7 @@ class UserReadIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("사용자를 조회하면, Null이 아니다.")
     void whenActiveUserFindThenUserShouldBeNotNull() {
-        final UserJpaEntity saveUser = userWriteUseCase.save(createUser("dailyges", "dailyges@gmail.com"));
+        final UserJpaEntity saveUser = userWriteUseCase.save(createUser(2L, NAME, EMAIL));
         final UserJpaEntity findUser = userReadUseCase.findActiveUserById(saveUser.getId());
 
         assertNotNull(findUser);
@@ -81,7 +82,7 @@ class UserReadIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("이메일로 사용자를 조회 시, 값이 존재한다.")
     void whenFindUserByRegisteredEmailThenResultShouldBeTrue() {
-        final UserJpaEntity user = userWriteUseCase.save(createUser("dailyges", "dailyges@gmail.com"));
+        final UserJpaEntity user = userWriteUseCase.save(createUser(2L, NAME, EMAIL));
         final Optional<UserJpaEntity> findUser = userReadUseCase.findActiveUserByEmail(user.getEmail());
 
         assertTrue(findUser.isPresent());
@@ -95,12 +96,13 @@ class UserReadIntegrationTest extends DatabaseTestBase {
         assertFalse(findUser.isPresent());
     }
 
+    @Test
     @DisplayName("동일한 이메일로 재 가입 시, 삭제 되지 않은 정보만 검색된다.")
     void whenFindUserReRegisteredBySameEmailThenActiveUserShouldBeOne() {
-        final UserJpaEntity deleteUser = userWriteUseCase.save(createUser("dailyges", "dailyges@gmail.com"));
+        final UserJpaEntity deleteUser = userWriteUseCase.save(createUser(2L, NAME, EMAIL));
         userWriteUseCase.delete(deleteUser.getId());
 
-        final UserJpaEntity activeUser = userWriteUseCase.save(createUser("dailyges", "dailyges@gmail.com"));
+        final UserJpaEntity activeUser = userWriteUseCase.save(createUser(3L, NAME, EMAIL));
         final Optional<UserJpaEntity> findUser = userReadUseCase.findActiveUserByEmail(EMAIL);
 
         assertAll(
@@ -113,7 +115,7 @@ class UserReadIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("사용자가 존재할 경우, true 를 반환한다.")
     void whenUserExistentUserThenResultShouldBeTrue() {
-        final UserJpaEntity user = userWriteUseCase.save(createUser("dailyges", "dailyges@gmail.com"));
+        final UserJpaEntity user = userWriteUseCase.save(createUser(2L, NAME, EMAIL));
 
         assertTrue(userReadUseCase.existsById(user.getId()));
     }

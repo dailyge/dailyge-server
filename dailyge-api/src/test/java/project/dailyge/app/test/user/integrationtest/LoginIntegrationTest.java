@@ -11,11 +11,14 @@ import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.common.auth.TokenProvider;
 import project.dailyge.app.common.exception.ExternalServerException;
 import project.dailyge.app.common.response.ApiResponse;
+import project.dailyge.app.core.user.application.UserWriteUseCase;
 import project.dailyge.app.core.user.presentation.LoginApi;
 import project.dailyge.app.core.user.presentation.response.OAuthLoginResponse;
 import project.dailyge.core.cache.user.UserCache;
 import project.dailyge.core.cache.user.UserCacheReadUseCase;
+import project.dailyge.core.cache.user.UserCacheWriteUseCase;
 import project.dailyge.entity.user.UserEvent;
+import project.dailyge.entity.user.UserJpaEntity;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
@@ -23,9 +26,11 @@ import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.http.HttpStatus.BAD_GATEWAY;
+import static project.dailyge.app.test.user.fixture.UserFixture.createUser;
 
 @RecordApplicationEvents
 @DisplayName("[IntegrationTest] 사용자 로그인 통합 테스트")
@@ -41,6 +46,12 @@ class LoginIntegrationTest extends DatabaseTestBase {
 
     @Autowired
     private UserCacheReadUseCase userCacheReadUseCase;
+
+    @Autowired
+    private UserCacheWriteUseCase userCacheWriteUseCase;
+
+    @Autowired
+    private UserWriteUseCase userWriteUseCase;
 
     @Autowired
     private TokenProvider tokenProvider;
@@ -78,6 +89,34 @@ class LoginIntegrationTest extends DatabaseTestBase {
         final long count = applicationEvents.stream(UserEvent.class).count();
         assertEquals(1, count);
     }
+
+    @Test
+    @DisplayName("재 로그인 시, Cache 유효기간만 갱신된다.")
+    void whenReLoginThenCacheShouldBeRefresh() {
+        final UserJpaEntity user = userWriteUseCase.save(createUser(2L, "dailyges", "dailyges@gmail.com"));
+        final UserCache userCache = new UserCache(
+            user.getId(),
+            user.getNickname(),
+            user.getEmail(),
+            user.getProfileImageUrl(),
+            user.getRoleToString()
+        );
+        userCacheWriteUseCase.save(userCache);
+
+        final ApiResponse<OAuthLoginResponse> response = loginApi.login(AUTHENTICATION_CODE);
+        final String secondResponseAccessToken = response.getBody().getData().getAccessToken();
+        final Long userId = tokenProvider.getUserId(secondResponseAccessToken);
+        final UserCache refreshUserCache = userCacheReadUseCase.findById(userId);
+
+        assertAll(
+            () -> assertEquals(userCache.getId(), refreshUserCache.getId()),
+            () -> assertEquals(userCache.getEmail(), refreshUserCache.getEmail()),
+            () -> assertEquals(userCache.getNickname(), refreshUserCache.getNickname()),
+            () -> assertEquals(userCache.getProfileImageUrl(), refreshUserCache.getProfileImageUrl()),
+            () -> assertEquals(userCache.getRole(), refreshUserCache.getRole())
+        );
+    }
+
 
     @Test
     @DisplayName("구글 인증 API 중 에러 응답을 반환하면, ExternalServerException이 발생한다.")

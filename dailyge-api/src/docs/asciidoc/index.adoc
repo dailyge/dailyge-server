@@ -284,23 +284,23 @@ include::{snippets}/monthly_tasks_register_documentation_test/when_create_monthl
 
 #### Request
 
-include::{snippets}/task_register_documentation_test/when_register_task_then_status_code_should_be_201/http-request.adoc[]
+include::{snippets}/task_register_documentation_test/when_register_task_then_status_code_should_be_201__rest_docs/http-request.adoc[]
 
 #### Request-Header
 
-include::{snippets}/task_register_documentation_test/when_register_task_then_status_code_should_be_201/request-headers.adoc[]
+include::{snippets}/task_register_documentation_test/when_register_task_then_status_code_should_be_201__rest_docs/request-headers.adoc[]
 
 #### Request-Fields
 
-include::{snippets}/task_register_documentation_test/when_register_task_then_status_code_should_be_201/request-fields.adoc[]
+include::{snippets}/task_register_documentation_test/when_register_task_then_status_code_should_be_201__rest_docs/request-fields.adoc[]
 
 #### Response
 
-include::{snippets}/task_register_documentation_test/when_register_task_then_status_code_should_be_201/http-response.adoc[]
+include::{snippets}/task_register_documentation_test/when_register_task_then_status_code_should_be_201__rest_docs/http-response.adoc[]
 
 #### Response-Fields
 
-include::{snippets}/task_register_documentation_test/when_register_task_then_status_code_should_be_201/response-fields.adoc[]
+include::{snippets}/task_register_documentation_test/when_register_task_then_status_code_should_be_201__rest_docs/response-fields.adoc[]
 
 ### 2-4. Task 수정
 

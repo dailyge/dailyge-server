@@ -34,10 +34,10 @@ image::url.jpg[이미지,width=1920,height=500]
 |===
 | 기능 | Method | 인증 | API | Success | Failure | 설명
 
-| <<1-1 사용자 정보 조회>> | GET|O|/api/users/{userId} | 200 | 400, 401, 403, 404, 422, 429, 500, 502 |
-| <<1-2 사용자 삭제>> | DELETE|O|/api/users/{userId} | 200 | 400, 401, 403, 404, 429, 500, 502 |
-| <<1-3 로그인 페이지 조회>> | GET|X|/api/users/{userId} | 200 | 400, 401, 403, 404, 429, 500, 502 |
-| <<1-4 로그아웃>> | POST|O|/api/users/{userId} | 200 | 400, 401, 403, 404, 429, 500, 502 |
+| <<1-1 사용자 정보 조회>> | GET|O|/api/users/{userId} | 200 | - | 사용자 ID로 조회
+| <<1-2 사용자 삭제>> | DELETE|O|/api/users/{userId} | 204 | - | 사용자 ID로 삭제
+| <<1-3 로그인 페이지 조회>> | GET|X|/api/login/{userId} | 200 | - | 구글 로그인 페이지 조회
+| <<1-4 로그아웃>> | POST|O|/api/logout | 200 | - | 사용자 로그아웃
 |===
 
 ### 1-1 사용자 정보 조회
@@ -46,23 +46,23 @@ image::url.jpg[이미지,width=1920,height=500]
 
 #### Request
 
-include::{snippets}/user_detail_search_documentation_test/when_find_user_then_status_code_should_be200_ok/http-request.adoc[]
+include::{snippets}/user_read_documentation_test/when_find_user_then_status_code_should_be_200_ok__rest_docs/http-request.adoc[]
 
 #### Request-Header
 
-include::{snippets}/user_detail_search_documentation_test/when_find_user_then_status_code_should_be200_ok/request-headers.adoc[]
+include::{snippets}/user_read_documentation_test/when_find_user_then_status_code_should_be_200_ok__rest_docs/request-headers.adoc[]
 
 #### Path-Parameters
 
-include::{snippets}/user_detail_search_documentation_test/when_find_user_then_status_code_should_be200_ok/path-parameters.adoc[]
+include::{snippets}/user_read_documentation_test/when_find_user_then_status_code_should_be_200_ok__rest_docs/path-parameters.adoc[]
 
 #### Response
 
-include::{snippets}/user_detail_search_documentation_test/when_find_user_then_status_code_should_be200_ok/http-response.adoc[]
+include::{snippets}/user_read_documentation_test/when_find_user_then_status_code_should_be_200_ok__rest_docs/http-response.adoc[]
 
 #### Response-Fields
 
-include::{snippets}/user_detail_search_documentation_test/when_find_user_then_status_code_should_be200_ok/response-fields.adoc[]
+include::{snippets}/user_read_documentation_test/when_find_user_then_status_code_should_be_200_ok__rest_docs/response-fields.adoc[]
 
 ### 1-2 사용자 삭제
 
@@ -70,19 +70,20 @@ include::{snippets}/user_detail_search_documentation_test/when_find_user_then_st
 
 #### Request
 
-include::{snippets}/user_delete_documentation_test/when_delete_user_succeeds_then_status_code_should_be204_no_content/http-request.adoc[]
+include::{snippets}/user_delete_documentation_test/when_user_delete_then_status_code_should_be_204__no_content__rest_docs/http-request.adoc[]
+
 
 #### Request-Header
 
-include::{snippets}/user_delete_documentation_test/when_delete_user_succeeds_then_status_code_should_be204_no_content/request-headers.adoc[]
+include::{snippets}/user_delete_documentation_test/when_user_delete_then_status_code_should_be_204__no_content__rest_docs/request-headers.adoc[]
 
 #### Path-Parameters
 
-include::{snippets}/user_delete_documentation_test/when_delete_user_succeeds_then_status_code_should_be204_no_content/path-parameters.adoc[]
+include::{snippets}/user_delete_documentation_test/when_user_delete_then_status_code_should_be_204__no_content__rest_docs/path-parameters.adoc[]
 
 #### Response
 
-include::{snippets}/user_delete_documentation_test/when_delete_user_succeeds_then_status_code_should_be204_no_content/http-response.adoc[]
+include::{snippets}/user_delete_documentation_test/when_user_delete_then_status_code_should_be_204__no_content__rest_docs/http-response.adoc[]
 
 ### 1-3 로그인 페이지 조회
 
@@ -90,29 +91,29 @@ include::{snippets}/user_delete_documentation_test/when_delete_user_succeeds_the
 
 #### Request
 
-include::{snippets}/login_page_documentation_test/when_get_login_page_then_status_code_should_be200_ok/http-request.adoc[]
+include::{snippets}/login_page_documentation_test\when_get_login_page_then_status_code_should_be_200_ok__rest_docs/http-request.adoc[]
 
 #### Response
 
-include::{snippets}/login_page_documentation_test/when_get_login_page_then_status_code_should_be200_ok/http-response.adoc[]
+include::{snippets}/login_page_documentation_test\when_get_login_page_then_status_code_should_be_200_ok__rest_docs/http-response.adoc[]
 
 #### Response-Fields
 
-include::{snippets}/login_page_documentation_test/when_get_login_page_then_status_code_should_be200_ok/response-fields.adoc[]
+include::{snippets}/login_page_documentation_test\when_get_login_page_then_status_code_should_be_200_ok__rest_docs/response-fields.adoc[]
 
 ### 1-4 로그아웃
 
 #### Request
 
-include::{snippets}/logout_documentation_test/when_logout_then_status_code_should_be200_ok/curl-request.adoc[]
+include::{snippets}/logout_documentation_test/when_logout_then_status_code_should_be_200_ok__rest_docs/http-request.adoc[]
 
 #### Response
 
-include::{snippets}/logout_documentation_test/when_logout_then_status_code_should_be200_ok/http-response.adoc[]
+include::{snippets}/logout_documentation_test/when_logout_then_status_code_should_be_200_ok__rest_docs/http-response.adoc[]
 
 #### Response-Cookies
 
-include::{snippets}/logout_documentation_test/when_logout_then_status_code_should_be200_ok/response-cookies.adoc[]
+include::{snippets}/logout_documentation_test/when_logout_then_status_code_should_be_200_ok__rest_docs/response-cookies.adoc[]
 
 == 📝 2. 할 일(Task)
 
@@ -283,23 +284,23 @@ include::{snippets}/monthly_tasks_register_documentation_test/when_create_monthl
 
 #### Request
 
-include::{snippets}/task_register_documentation_test/when_register_task_then_status_code_should_be_201/http-request.adoc[]
+include::{snippets}/task_register_documentation_test/when_register_task_then_status_code_should_be_201__rest_docs/http-request.adoc[]
 
 #### Request-Header
 
-include::{snippets}/task_register_documentation_test/when_register_task_then_status_code_should_be_201/request-headers.adoc[]
+include::{snippets}/task_register_documentation_test/when_register_task_then_status_code_should_be_201__rest_docs/request-headers.adoc[]
 
 #### Request-Fields
 
-include::{snippets}/task_register_documentation_test/when_register_task_then_status_code_should_be_201/request-fields.adoc[]
+include::{snippets}/task_register_documentation_test/when_register_task_then_status_code_should_be_201__rest_docs/request-fields.adoc[]
 
 #### Response
 
-include::{snippets}/task_register_documentation_test/when_register_task_then_status_code_should_be_201/http-response.adoc[]
+include::{snippets}/task_register_documentation_test/when_register_task_then_status_code_should_be_201__rest_docs/http-response.adoc[]
 
 #### Response-Fields
 
-include::{snippets}/task_register_documentation_test/when_register_task_then_status_code_should_be_201/response-fields.adoc[]
+include::{snippets}/task_register_documentation_test/when_register_task_then_status_code_should_be_201__rest_docs/response-fields.adoc[]
 
 ### 2-4. Task 수정
 

@@ -1,7 +1,7 @@
 name: Dailyge Deploy
 
 on:
-  pull_request:
+  push:
     branches:
       - dev
       - main
@@ -9,6 +9,7 @@ on:
       - dailyge-api/**
       - storage/**
       - support/**
+      - .github/workflows/**
 
 env:
   ENV: ${{ github.event.pull_request.base.ref == 'dev' && 'dev' || github.event.pull_request.base.ref == 'main' && 'prod' }}

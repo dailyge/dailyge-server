@@ -66,3 +66,16 @@ core 패키지는 서비스에 관한 기능을, common 패키지는 프로젝�
 패키지 순환 참조를 막기 위해 주기적으로 패키지 사이클을 관리하고 있습니다.
 
 ![image]()
+
+<br/><br/><br/><br/><br/><br/>
+
+# Git Branch 전략
+
+브랜치 전략은 `Git-Flow`를 사용하고 있습니다.
+
+![image](https://github.com/user-attachments/assets/ec93846d-e3c2-43d4-bd11-e5af98af2817)
+
+1. `dev`브랜치를 기준으로 개발이나 수정 작업을 합니다.
+2. 개발은 `dev`브랜치에서 `feature`를 생성한 후 진행하며, 
+3. 이상이 없다면 `Squash Merge`방식으로 `dev`에 병합합니다.
+3. 작업이 취소 되었을 경우, `Revert`하고 브랜치를 `Closed` 합니다.

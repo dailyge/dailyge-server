@@ -21,4 +21,9 @@ public class UserCacheWriteService implements UserCacheWriteUseCase {
     public void refreshExpirationDate(final Long userId) {
         userWriteRepository.refreshExpirationDate(userId);
     }
+
+    @Override
+    public void delete(final Long userId) {
+        userWriteRepository.delete(userId);
+    }
 }

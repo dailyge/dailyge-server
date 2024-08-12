@@ -10,8 +10,8 @@
     "status": 200,
     "jsonBody": {
       "id": "1",
-      "name": "test",
-      "email": "test@gmail.com",
+      "name": "dailyges",
+      "email": "dailyges@gmail.com",
       "picture": "test.url"
     }
   }

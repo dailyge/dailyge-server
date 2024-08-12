@@ -5,14 +5,17 @@ import org.springframework.context.ApplicationEventPublisher;
 import project.dailyge.app.common.annotation.Facade;
 import project.dailyge.app.common.auth.DailygeToken;
 import project.dailyge.app.common.auth.TokenProvider;
-import project.dailyge.app.common.exception.CommonException;
 import project.dailyge.app.core.user.application.UserReadUseCase;
+import project.dailyge.app.core.user.application.UserWriteUseCase;
 import project.dailyge.app.core.user.external.oauth.GoogleOAuthManager;
 import project.dailyge.app.core.user.external.oauth.TokenManager;
 import project.dailyge.app.core.user.external.response.GoogleUserInfoResponse;
+import project.dailyge.core.cache.user.UserCache;
+import project.dailyge.core.cache.user.UserCacheWriteUseCase;
+import project.dailyge.entity.user.UserEvent;
 import static project.dailyge.document.common.UuidGenerator.createTimeBasedUUID;
 import static project.dailyge.entity.common.EventType.CREATE;
-import project.dailyge.entity.user.UserEvent;
+import static project.dailyge.entity.user.Role.NORMAL;
 import static project.dailyge.entity.user.UserEvent.createEvent;
 
 @Facade
@@ -21,34 +24,42 @@ public class UserFacade {
 
     private final GoogleOAuthManager googleOAuthManager;
     private final UserReadUseCase userReadUseCase;
+    private final UserWriteUseCase userWriteUseCase;
     private final TokenProvider tokenProvider;
     private final TokenManager tokenManager;
-    private final ApplicationEventPublisher publisher;
+    private final ApplicationEventPublisher eventPublisher;
+    private final UserCacheWriteUseCase userCacheWriteUseCase;
 
-    public DailygeToken login(final String code) throws CommonException {
+    public DailygeToken login(final String code) {
         final GoogleUserInfoResponse response = googleOAuthManager.getUserInfo(code);
-        final Long findUserId = userReadUseCase.findUserIdByEmail(response.getEmail());
-        final Long userId = publishEvent(findUserId, response);
+        final Long userId = getUserId(response);
+        final UserEvent userEvent = createEvent(userId, createTimeBasedUUID(), CREATE);
+        eventPublisher.publishEvent(userEvent);
 
         final DailygeToken token = tokenProvider.createToken(userId, response.getEmail());
         tokenManager.saveRefreshToken(userId, token.refreshToken());
         return token;
     }
 
-    private Long publishEvent(
-        final Long userId,
-        final GoogleUserInfoResponse response
-    ) {
-        final UserEvent event = createEvent(
-            userId,
-            createTimeBasedUUID(),
-            CREATE,
+    private Long getUserId(final GoogleUserInfoResponse response) {
+        final Long findUserId = userReadUseCase.findUserIdByEmail(response.getEmail());
+        if (findUserId != null) {
+            return findUserId;
+        }
+        final UserCache userCache = initUserCache(response);
+        return userCache.getId();
+    }
+
+    private UserCache initUserCache(final GoogleUserInfoResponse response) {
+        final UserCache userCache = new UserCache(
+            userWriteUseCase.getSequence(),
             response.getName(),
             response.getEmail(),
-            response.getPicture()
+            response.getPicture(),
+            NORMAL.name()
         );
-        publisher.publishEvent(event);
-        return userId;
+        userCacheWriteUseCase.save(userCache);
+        return userCache;
     }
 
     public void logout(final Long userId) {

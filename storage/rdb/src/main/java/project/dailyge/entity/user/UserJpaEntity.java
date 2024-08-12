@@ -4,8 +4,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,7 +28,6 @@ public class UserJpaEntity extends BaseEntity {
     private static final String USER_ALREADY_DELETED_MESSAGE = "이미 탈퇴한 사용자입니다.";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "nickname")
@@ -50,25 +47,25 @@ public class UserJpaEntity extends BaseEntity {
     private LocalDateTime deletedAt;
 
     public UserJpaEntity(
-        final Long userId,
+        final Long id,
         final String nickname,
         final String email
     ) {
         validate(nickname, email);
-        this.id = userId;
+        this.id = id;
         this.nickname = nickname;
         this.email = email;
         this.role = Role.NORMAL;
     }
 
     public UserJpaEntity(
-        final Long userId,
+        final Long id,
         final String nickname,
         final String email,
         final LocalDateTime createdAt
     ) {
         validate(nickname, email);
-        this.id = userId;
+        this.id = id;
         this.nickname = nickname;
         this.email = email;
         this.role = Role.NORMAL;
@@ -76,32 +73,26 @@ public class UserJpaEntity extends BaseEntity {
     }
 
     public UserJpaEntity(
-        final String nickname,
-        final String email
-    ) {
-        validate(nickname, email);
-        this.nickname = nickname;
-        this.email = email;
-        this.role = Role.NORMAL;
-    }
-
-    public UserJpaEntity(
+        final Long id,
         final String nickname,
         final String email,
         final Role role
     ) {
         validate(nickname, email);
+        this.id = id;
         this.nickname = nickname;
         this.email = email;
         this.role = role;
     }
 
     public UserJpaEntity(
+        final Long id,
         final String nickname,
         final String email,
         final String profileImageUrl
     ) {
         validate(nickname, email, profileImageUrl);
+        this.id = id;
         this.nickname = nickname;
         this.email = email;
         this.profileImageUrl = profileImageUrl;
@@ -137,6 +128,10 @@ public class UserJpaEntity extends BaseEntity {
         }
         this.deleted = true;
         this.deletedAt = LocalDateTime.now();
+    }
+
+    public String getRoleAsString() {
+        return role.name();
     }
 
     public void profileImageInit(String profileImageUrl) {

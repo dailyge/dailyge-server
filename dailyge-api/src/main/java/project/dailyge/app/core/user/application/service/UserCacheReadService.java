@@ -10,10 +10,15 @@ import project.dailyge.core.cache.user.UserCacheReadRepository;
 @RequiredArgsConstructor
 class UserCacheReadService implements UserCacheReadUseCase {
 
-    private final UserCacheReadRepository userReadRepository;
+    private final UserCacheReadRepository userCacheReadRepository;
 
     @Override
     public UserCache findById(final Long userId) {
-        return userReadRepository.findById(userId);
+        return userCacheReadRepository.findById(userId);
+    }
+
+    @Override
+    public boolean existsById(final Long userId) {
+        return userCacheReadRepository.existsById(userId);
     }
 }

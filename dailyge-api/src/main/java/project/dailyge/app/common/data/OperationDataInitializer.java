@@ -83,7 +83,7 @@ public class OperationDataInitializer implements CommandLineRunner {
     public void initData() {
         if (isEnv(LOCAL)) {
             try {
-                entityManager.persist(new UserJpaEntity(nickname, email));
+                entityManager.persist(new UserJpaEntity(1L, nickname, email));
             } catch (Exception ex) {
                 log.error("Data initialization failed: {}", ex.getMessage());
             }

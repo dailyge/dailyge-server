@@ -7,7 +7,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import project.dailyge.app.common.auth.TokenProvider;
 import project.dailyge.app.core.common.web.LoginInterceptor;
-import project.dailyge.app.core.user.application.UserReadUseCase;
+import project.dailyge.core.cache.user.UserCacheReadUseCase;
 
 import java.util.List;
 
@@ -15,13 +15,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WebConfiguration implements WebMvcConfigurer {
 
-    private final UserReadUseCase userReadUseCase;
+    private final UserCacheReadUseCase userCacheReadUseCase;
     private final TokenProvider tokenProvider;
     private final LoginInterceptor loginInterceptor;
 
     @Override
     public void addArgumentResolvers(final List<HandlerMethodArgumentResolver> resolvers) {
-        resolvers.add(new AuthArgumentResolver(userReadUseCase, tokenProvider));
+        resolvers.add(new AuthArgumentResolver(userCacheReadUseCase, tokenProvider));
     }
 
     @Override

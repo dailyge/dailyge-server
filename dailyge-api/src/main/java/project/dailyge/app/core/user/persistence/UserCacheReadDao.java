@@ -23,7 +23,22 @@ public class UserCacheReadDao implements UserCacheReadRepository {
     public UserCache findById(final Long userId) {
         try {
             final String userCacheJson = redisTemplate.opsForValue().get(String.format("user:cache:%s", userId));
+            if (userCacheJson == null) {
+                return null;
+            }
             return objectMapper.readValue(userCacheJson, UserCache.class);
+        } catch (RedisException ex) {
+            throw new ExternalServerException(ex.getMessage(), BAD_GATEWAY);
+        } catch (Exception ex) {
+            throw new ExternalServerException(ex.getMessage(), INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public boolean existsById(final Long userId) {
+        try {
+            final Boolean hasKey = redisTemplate.hasKey(String.format("user:cache:%s", userId));
+            return Boolean.TRUE.equals(hasKey);
         } catch (RedisException ex) {
             throw new ExternalServerException(ex.getMessage(), BAD_GATEWAY);
         } catch (Exception ex) {

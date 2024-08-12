@@ -2,6 +2,7 @@ package project.dailyge.app.core.user.persistence;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.lettuce.core.RedisException;
+import java.time.Duration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Repository;
@@ -23,13 +24,29 @@ public class UserCacheWriteDao implements UserCacheWriteRepository {
     public void save(final UserCache userCache) {
         try {
             redisTemplate.opsForValue().set(
-                String.format("user:cache:%s", userCache.getId()),
-                objectMapper.writeValueAsString(userCache)
+                getKey(userCache.getId()),
+                objectMapper.writeValueAsString(userCache),
+                Duration.ofDays(90)
             );
         } catch (RedisException ex) {
             throw new ExternalServerException(ex.getMessage(), BAD_GATEWAY);
         } catch (Exception ex) {
             throw new ExternalServerException(ex.getMessage(), INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @Override
+    public void refreshExpirationDate(final Long userId) {
+        try {
+            redisTemplate.expire(getKey(userId), Duration.ofDays(90));
+        } catch (RedisException ex) {
+            throw new ExternalServerException(ex.getMessage(), BAD_GATEWAY);
+        } catch (Exception ex) {
+            throw new ExternalServerException(ex.getMessage(), INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    private String getKey(final Long userId) {
+        return String.format("user:cache:%s", userId);
     }
 }

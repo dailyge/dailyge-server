@@ -12,10 +12,7 @@ public class UserEvent extends Event {
     private static final String INVALID_PUBLISHER_ID_ERROR_MESSAGE = "올바른 Publisher Id를 입력해주세요.";
     private static final String INVALID_EVENT_ID_ERROR_MESSAGE = "올바른 Event Id를 입력해주세요.";
     private static final String INVALID_EVENT_TYPE_ERROR_MESSAGE = "올바른 Event Type을 입력해주세요.";
-
-    private String nickname;
-    private String email;
-    private String profileImageUrl;
+    private static final String INVALID_ROLE_ERROR_MESSAGE = "올바른 Role을 입력해주세요.";
 
     /**
      * 직렬화를 위한 생성자로 외부에서 호출하지 말 것.
@@ -27,10 +24,7 @@ public class UserEvent extends Event {
         final Long publisher,
         final String domain,
         final String eventId,
-        final EventType eventType,
-        final String nickname,
-        final String email,
-        final String profileImageUrl
+        final EventType eventType
     ) {
         validate(publisher, eventId, eventType);
         this.publisher = publisher;
@@ -38,20 +32,19 @@ public class UserEvent extends Event {
         this.eventId = eventId;
         this.eventType = eventType;
         this.createdAt = now();
-        this.nickname = nickname;
-        this.email = email;
-        this.profileImageUrl = profileImageUrl;
     }
 
     public static UserEvent createEvent(
         final Long publisher,
         final String eventId,
-        final EventType eventType,
-        final String nickname,
-        final String email,
-        final String profileImageUrl
+        final EventType eventType
     ) {
-        return new UserEvent(publisher, "user", eventId, eventType, nickname, email, profileImageUrl);
+        return new UserEvent(
+            publisher,
+            "user",
+            eventId,
+            eventType
+        );
     }
 
     public void validate(
@@ -84,15 +77,9 @@ public class UserEvent extends Event {
 
     @Override
     public String toString() {
-        return "{"
-            + "\"publisher\":\"" + publisher + "\","
-            + "\"eventId\":\"" + eventId + "\","
-            + "\"eventType\":\"" + eventType + "\","
-            + "\"nickname\":\"" + nickname + "\","
-            + "\"email\":\"" + email + "\","
-            + "\"profileImageUrl\":\"" + profileImageUrl + "\","
-            + "\"domain\":\"" + domain + "\","
-            + "\"createdAt\":\"" + createdAt + "\""
-            + "}";
+        return String.format(
+            "{\"publisher\":\"%s\",\"domain\":\"%s\",\"eventId\":\"%s\",\"eventType\":\"%s\",\"createdAt\":\"%s\"}",
+            publisher, domain, eventId, eventType, createdAt
+        );
     }
 }

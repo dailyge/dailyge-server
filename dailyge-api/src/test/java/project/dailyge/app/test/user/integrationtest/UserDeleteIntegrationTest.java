@@ -34,7 +34,7 @@ class UserDeleteIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("이미 삭제된 사용자를 삭제하면, IllegalArgumentException이 발생한다.")
     void whenDeleteAlreadyDeletedUserThenIllegalArgumentExceptionShouldBeHappen() {
-        final UserJpaEntity saveUser = userWriteUseCase.save(createUser("dailyges", "dailyge@gmail.com"));
+        final UserJpaEntity saveUser = userWriteUseCase.save(createUser(2L, "dailyges", "dailyges@gmail.com"));
         userWriteUseCase.delete(saveUser.getId());
 
         assertThatThrownBy(() -> userWriteUseCase.delete(saveUser.getId()))

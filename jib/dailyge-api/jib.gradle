@@ -5,6 +5,7 @@ def ecrUri = ""
 def port = ""
 def profile = ""
 def label = ""
+def imageTag = System.getenv("IMAGE_TAG")
 
 if (env != null && (env == "dev" || env == "prod")) {
     ecrUri = env == "prod" ? System.getenv("PROD_ECR_URI") : System.getenv("DEV_ECR_URI")
@@ -19,7 +20,7 @@ if (env != null && (skipJib != null && skipJib == "false")) {
             image = 'openjdk:17-jdk-slim'
         }
         to {
-            image = ecrUri
+            image = "${ecrUri}:${imageTag}"
             credHelper = 'ecr-login'
             tags = ['latest']
         }

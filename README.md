@@ -67,7 +67,7 @@ core 패키지는 서비스에 관한 기능을, common 패키지는 프로젝�
 
 ![image]()
 
-
+<br/><br/><br/><br/><br/><br/>
 # Git Branch 전략
 효율적인 협업과 안정적인 배포를 위해 다음과 같은 `Git-Flow`를 사용하고 있습니다.
 ![image](https://github.com/user-attachments/assets/ec93846d-e3c2-43d4-bd11-e5af98af2817)

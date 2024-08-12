@@ -1,7 +1,6 @@
 package project.dailyge.app.core.user.persistence;
 
 import io.lettuce.core.RedisException;
-import java.time.Duration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
@@ -28,7 +27,7 @@ public class UserCacheWriteDao implements UserCacheWriteRepository {
             redisTemplate.opsForValue().set(
                 getKey(userCache.getId()),
                 compressedCache,
-                Duration.ofDays(90)
+                ofDays(CACHE_DURATION)
             )
         );
     }

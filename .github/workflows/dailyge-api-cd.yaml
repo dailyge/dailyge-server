@@ -9,6 +9,7 @@ on:
       - dailyge-api/**
       - storage/**
       - support/**
+      - .github/workflows/**
 
 env:
   ENV: ${{ github.event.pull_request.base.ref == 'dev' && 'dev' || github.event.pull_request.base.ref == 'main' && 'prod' }}
@@ -58,6 +59,7 @@ jobs:
           elif [ "${{ env.ENV }}" == "prod" ]; then
             echo "ECR_URI=${{ secrets.PROD_ECR_URI }}" >> $GITHUB_ENV
           fi
+          echo "IMAGE_TAG=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
           echo "CONTAINER_NAME=dailyge-${{ env.ENV }}-container" >> $GITHUB_ENV
           echo "TASK_DEFINITION_NAME=dailyge-api-${{ env.ENV }}" >> $GITHUB_ENV
           echo "SERVICE_NAME=dailyge-api-${{ env.ENV }}-service" >> $GITHUB_ENV
@@ -77,9 +79,7 @@ jobs:
       - name: Build and push Docker image to ECR with Jib
         id: build-image
         run: |
-          export IMAGE_TAG=$(git rev-parse --short HEAD)
-          ./gradlew dailyge-api:jib -Djib.to.image=${{ env.ECR_URI }}:$IMAGE_TAG --stacktrace --info
-          echo "::set-output name=imageTag::$IMAGE_TAG"
+          ./gradlew dailyge-api:jib -Djib.to.image=${{ env.ECR_URI }}:${{ env.IMAGE_TAG }} --stacktrace --info
         env:
           ENABLE_JIB: true
           ENV: ${{ env.ENV }}

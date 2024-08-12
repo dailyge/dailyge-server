@@ -1,7 +1,7 @@
 name: Dailyge Deploy
 
 on:
-  pull_request:
+  push:
     branches:
       - dev
       - main

@@ -106,7 +106,7 @@ public abstract class DatabaseTestBase {
             user.getNickname(),
             user.getEmail(),
             user.getProfileImageUrl(),
-            user.getRoleToString()
+            user.getRoleAsString()
         );
         userCacheWriteUseCase.save(userCache);
         dailygeUser = new DailygeUser(user.getId(), user.getRole());

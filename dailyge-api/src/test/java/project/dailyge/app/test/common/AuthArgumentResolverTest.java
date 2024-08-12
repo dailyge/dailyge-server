@@ -66,7 +66,7 @@ class AuthArgumentResolverTest {
                 user.getNickname(),
                 user.getEmail(),
                 user.getProfileImageUrl(),
-                user.getRoleToString()
+                user.getRoleAsString()
             ));
 
         final DailygeUser result = (DailygeUser) resolver.resolveArgument(null, null, webRequest, null);
@@ -97,7 +97,7 @@ class AuthArgumentResolverTest {
                 expectedUser.getNickname(),
                 expectedUser.getEmail(),
                 expectedUser.getProfileImageUrl(),
-                expectedUser.getRoleToString()
+                expectedUser.getRoleAsString()
             ));
 
         assertDoesNotThrow(

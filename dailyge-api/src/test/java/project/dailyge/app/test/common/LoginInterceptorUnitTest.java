@@ -101,7 +101,7 @@ class LoginInterceptorUnitTest {
                 user.getNickname(),
                 user.getEmail(),
                 user.getProfileImageUrl(),
-                user.getRoleToString()
+                user.getRoleAsString()
             ));
         when(tokenManager.getRefreshToken(user.getId()))
             .thenReturn(token.refreshToken());

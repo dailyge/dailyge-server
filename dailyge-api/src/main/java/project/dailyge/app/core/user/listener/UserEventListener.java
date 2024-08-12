@@ -43,16 +43,16 @@ public class UserEventListener {
             user.getNickname(),
             user.getEmail(),
             user.getProfileImageUrl(),
-            user.getRoleToString()
+            user.getRoleAsString()
         );
         userCacheWriteUseCase.save(userCache);
     }
 
-    private void saveUser(final UserCache findUserCache) {
+    private void saveUser(final UserCache userCache) {
         final UserJpaEntity user = new UserJpaEntity(
-            findUserCache.getId(),
-            findUserCache.getNickname(),
-            findUserCache.getEmail()
+            userCache.getId(),
+            userCache.getNickname(),
+            userCache.getEmail()
         );
         userWriteUseCase.save(user);
     }

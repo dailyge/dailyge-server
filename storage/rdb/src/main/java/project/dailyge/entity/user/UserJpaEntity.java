@@ -4,8 +4,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -132,7 +130,7 @@ public class UserJpaEntity extends BaseEntity {
         this.deletedAt = LocalDateTime.now();
     }
 
-    public String getRoleToString() {
+    public String getRoleAsString() {
         return role.name();
     }
 

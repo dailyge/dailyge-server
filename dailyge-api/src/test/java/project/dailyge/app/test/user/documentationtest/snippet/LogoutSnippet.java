@@ -1,13 +1,11 @@
 package project.dailyge.app.test.user.documentationtest.snippet;
 
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
-import org.springframework.restdocs.cookies.CookieDocumentation;
-import org.springframework.restdocs.restassured.RestDocumentationFilter;
-
 import java.util.Arrays;
 import java.util.List;
-
+import org.springframework.restdocs.restassured.RestDocumentationFilter;
 import static com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper.document;
+import static org.springframework.restdocs.cookies.CookieDocumentation.responseCookies;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
@@ -42,7 +40,7 @@ public final class LogoutSnippet implements UserSnippet {
                 List.of(
                     requestHeaders(HEADER_DESCRIPTOR),
                     responseFields(Arrays.stream(RESPONSE_STATUS).toList()),
-                    CookieDocumentation.responseCookies(LOGOUT_RESPONSE_COOKIE_DESCRIPTOR)
+                    responseCookies(LOGOUT_RESPONSE_COOKIE_DESCRIPTOR)
                 );
             }
         );

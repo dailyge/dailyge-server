@@ -31,6 +31,7 @@ public class UserEventListener {
         }
         if (!userReadUseCase.existsById(event.getPublisher())) {
             saveUser(findUserCache);
+            return;
         }
         userCacheWriteUseCase.refreshExpirationDate(event.getPublisher());
     }

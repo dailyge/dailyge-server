@@ -1,31 +1,31 @@
 package project.dailyge.app.core.user.persistence;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.lettuce.core.RedisException;
-import java.time.Duration;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_GATEWAY;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
 import project.dailyge.app.common.exception.ExternalServerException;
+import static project.dailyge.common.configuration.CompressionHelper.compressAsByteArray;
 import project.dailyge.core.cache.user.UserCache;
 import project.dailyge.core.cache.user.UserCacheWriteRepository;
 
-import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_GATEWAY;
-import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
+import java.time.Duration;
 
 @Repository
 @RequiredArgsConstructor
 public class UserCacheWriteDao implements UserCacheWriteRepository {
 
-    private final StringRedisTemplate redisTemplate;
-    private final ObjectMapper objectMapper;
+    private final RedisTemplate<String, byte[]> redisTemplate;
 
     @Override
     public void save(final UserCache userCache) {
         try {
+            final byte[] compressedCache = compressAsByteArray(userCache);
             redisTemplate.opsForValue().set(
                 getKey(userCache.getId()),
-                objectMapper.writeValueAsString(userCache),
+                compressedCache,
                 Duration.ofDays(90)
             );
         } catch (RedisException ex) {

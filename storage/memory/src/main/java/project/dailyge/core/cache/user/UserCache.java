@@ -2,10 +2,11 @@ package project.dailyge.core.cache.user;
 
 import lombok.Getter;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 @Getter
-public class UserCache {
+public class UserCache implements Serializable {
 
     private Long id;
     private String nickname;

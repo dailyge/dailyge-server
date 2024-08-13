@@ -72,7 +72,6 @@ include::{snippets}/user_read_documentation_test/when_find_user_then_status_code
 
 include::{snippets}/user_delete_documentation_test/when_user_delete_then_status_code_should_be_204__no_content__rest_docs/http-request.adoc[]
 
-
 #### Request-Header
 
 include::{snippets}/user_delete_documentation_test/when_user_delete_then_status_code_should_be_204__no_content__rest_docs/request-headers.adoc[]
@@ -84,6 +83,10 @@ include::{snippets}/user_delete_documentation_test/when_user_delete_then_status_
 #### Response
 
 include::{snippets}/user_delete_documentation_test/when_user_delete_then_status_code_should_be_204__no_content__rest_docs/http-response.adoc[]
+
+#### Response-Cookies
+
+include::{snippets}/user_delete_documentation_test/when_user_delete_then_status_code_should_be_204__no_content__rest_docs/response-cookies.adoc[]
 
 ### 1-3 로그인 페이지 조회
 

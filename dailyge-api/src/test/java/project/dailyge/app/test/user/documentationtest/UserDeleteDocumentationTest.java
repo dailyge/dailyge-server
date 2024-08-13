@@ -8,11 +8,13 @@ import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.core.user.application.UserWriteUseCase;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.containsString;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.document;
 import static project.dailyge.app.test.user.documentationtest.snippet.UserDeleteSnippet.createUserDeleteFilter;
 import static project.dailyge.app.test.user.documentationtest.snippet.UserSnippet.USER_AUTHORIZATION_HEADER;
 import static project.dailyge.app.test.user.documentationtest.snippet.UserSnippet.USER_DELETE_PATH_PARAMETER_SNIPPET;
+import static project.dailyge.app.test.user.documentationtest.snippet.UserSnippet.USER_DELETE_RESPONSE_COOKIE_SNIPPET;
 import static project.dailyge.app.test.user.documentationtest.snippet.UserSnippet.createIdentifier;
 
 @DisplayName("[DocumentationTest] 유저 삭제 API 문서화 테스트")
@@ -27,13 +29,18 @@ class UserDeleteDocumentationTest extends DatabaseTestBase {
         given(this.specification)
             .filter(document(IDENTIFIER,
                 USER_AUTHORIZATION_HEADER,
-                USER_DELETE_PATH_PARAMETER_SNIPPET
+                USER_DELETE_PATH_PARAMETER_SNIPPET,
+                USER_DELETE_RESPONSE_COOKIE_SNIPPET
             ))
             .contentType(APPLICATION_JSON_VALUE)
             .header(AUTHORIZATION, getAuthorizationHeader())
             .when()
             .delete("/api/users/{userId}", newUser.getId())
             .then()
+            .header(
+                "set-Cookie",
+                containsString("Refresh-Token=; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT")
+            )
             .statusCode(204)
             .log()
             .all();
@@ -51,6 +58,10 @@ class UserDeleteDocumentationTest extends DatabaseTestBase {
             .when()
             .delete("/api/users/{userId}", newUser.getId())
             .then()
+            .header(
+                "set-Cookie",
+                containsString("Refresh-Token=; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT")
+            )
             .statusCode(204)
             .log()
             .all();

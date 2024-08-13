@@ -63,8 +63,12 @@ public class UserFacade {
     }
 
     public void logout(final Long userId) {
-        if (userId != null) {
-            tokenManager.deleteRefreshToken(userId);
-        }
+        tokenManager.deleteRefreshToken(userId);
+    }
+
+    public void delete(final Long userId) {
+        userWriteUseCase.delete(userId);
+        userCacheWriteUseCase.delete(userId);
+        logout(userId);
     }
 }

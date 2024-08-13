@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper.document;
+import static org.springframework.restdocs.cookies.CookieDocumentation.responseCookies;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
@@ -43,7 +44,8 @@ public final class UserDeleteSnippet implements UserSnippet {
                 List.of(
                     requestHeaders(List.of(HEADER_DESCRIPTOR)),
                     pathParameters(USER_DELETE_PATH_DESCRIPTOR),
-                    responseFields(Arrays.stream(RESPONSE_STATUS).toList())
+                    responseFields(Arrays.stream(RESPONSE_STATUS).toList()),
+                    responseCookies(LOGOUT_RESPONSE_COOKIE_DESCRIPTOR)
                 );
             }
         );

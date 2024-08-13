@@ -1,10 +1,9 @@
 package project.dailyge.app.core.user.persistence;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.lettuce.core.RedisException;
+import java.time.Duration;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 import project.dailyge.app.common.exception.ExternalServerException;
 import project.dailyge.core.cache.user.UserCache;
@@ -12,6 +11,7 @@ import project.dailyge.core.cache.user.UserCacheWriteRepository;
 import static java.time.Duration.ofDays;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_GATEWAY;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
+import static project.dailyge.common.configuration.CompressionHelper.compressAsByteArray;
 
 @Repository
 @RequiredArgsConstructor
@@ -19,19 +19,18 @@ public class UserCacheWriteDao implements UserCacheWriteRepository {
 
     private static final long CACHE_DURATION = 90;
 
-    private final StringRedisTemplate redisTemplate;
-    private final ObjectMapper objectMapper;
+    private final RedisTemplate<String, byte[]> redisTemplate;
 
     @Override
     public void save(final UserCache userCache) {
-        final String key = getKey(userCache.getId());
-        try {
-            final String value = objectMapper.writeValueAsString(userCache);
-            executeRedisCommand(() ->
-                redisTemplate.opsForValue().set(key, value, ofDays(CACHE_DURATION)));
-        } catch (JsonProcessingException ex) {
-            throw new IllegalArgumentException(ex.getMessage());
-        }
+        final byte[] compressedCache = compressAsByteArray(userCache);
+        executeRedisCommand(() ->
+            redisTemplate.opsForValue().set(
+                getKey(userCache.getId()),
+                compressedCache,
+                Duration.ofDays(90)
+            )
+        );
     }
 
     @Override

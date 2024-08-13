@@ -50,7 +50,6 @@ public class TokenManager {
         } catch (RedisException ex) {
             throw new ExternalServerException(ex.getMessage(), BAD_GATEWAY);
         } catch (Exception ex) {
-            ex.printStackTrace();
             throw new ExternalServerException(ex.getMessage(), INTERNAL_SERVER_ERROR);
         }
     }

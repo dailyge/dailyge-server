@@ -1,41 +1,45 @@
 package project.dailyge.app.core.user.external.oauth;
 
 import io.lettuce.core.RedisException;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import project.dailyge.app.common.exception.ExternalServerException;
-
-import java.util.function.Supplier;
-
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_GATEWAY;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
+import project.dailyge.app.common.exception.ExternalServerException;
+import static project.dailyge.common.configuration.CompressionHelper.compressStringAsByteArray;
+import static project.dailyge.common.configuration.CompressionHelper.decompressAsString;
+
+import java.util.function.Supplier;
 
 @Service
 @RequiredArgsConstructor
 public class TokenManager {
 
-    private final StringRedisTemplate redisTemplate;
+    private final RedisTemplate<String, byte[]> redisTemplate;
 
-    public void saveRefreshToken(
-        final Long userId,
-        final String refreshToken
-    ) {
+    public void saveRefreshToken(final Long userId, final String refreshToken) {
         executeRedisCommand(() -> {
-            redisTemplate.opsForValue().set(String.format("user:refreshToken:%s", userId), refreshToken);
+            final byte[] compressedRefreshToken = compressStringAsByteArray(refreshToken.getBytes(UTF_8));
+            redisTemplate.opsForValue().set(getKey(userId), compressedRefreshToken);
             return null;
         });
     }
 
     public String getRefreshToken(final Long userId) {
-        return executeRedisCommand(() ->
-            redisTemplate.opsForValue().get(String.format("user:refreshToken:%s", userId))
-        );
+        return executeRedisCommand(() -> {
+            final byte[] refreshToken = redisTemplate.opsForValue().get(getKey(userId));
+            if (refreshToken == null) {
+                return null;
+            }
+            return decompressAsString(refreshToken);
+        });
     }
 
     public void deleteRefreshToken(final Long userId) {
         executeRedisCommand(() -> {
-            redisTemplate.delete(String.format("user:refreshToken:%s", userId));
+            redisTemplate.delete(getKey(userId));
             return null;
         });
     }
@@ -48,5 +52,9 @@ public class TokenManager {
         } catch (Exception ex) {
             throw new ExternalServerException(ex.getMessage(), INTERNAL_SERVER_ERROR);
         }
+    }
+
+    private static String getKey(Long userId) {
+        return String.format("user:refreshToken:%s", userId);
     }
 }

@@ -83,7 +83,7 @@ class EventLayerWriteUnitTest {
 
         latch.await(3, SECONDS);
 
-        verify(eventWriteUseCase, never()).save(any(UserEvent.class));
+        verify(eventWriteUseCase, never()).saveDeadLetter(any(UserEvent.class));
         verify(eventDocumentWriteRepository, atLeastOnce()).save(any());
     }
 }

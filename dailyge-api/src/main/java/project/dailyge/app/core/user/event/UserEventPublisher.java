@@ -19,7 +19,7 @@ public class UserEventPublisher implements EventPublisher<UserEvent> {
     @Override
     public void publishInternalEvent(final UserEvent event) {
         if (event.overCount(MAX_PUBLISH_COUNT)) {
-            eventWriteUseCase.save(event);
+            eventWriteUseCase.saveDeadLetter(event);
             return;
         }
         eventPublisher.publishEvent(createEventWithIncreasedPublishCount(event));

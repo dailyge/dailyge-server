@@ -13,7 +13,7 @@ public class EventWriteService implements EventWriteUseCase {
     private final DeadLetterQueue inMemoryDeadLetterQueue;
 
     @Override
-    public void save(final Event event) {
+    public void saveDeadLetter(final Event event) {
         inMemoryDeadLetterQueue.save(event);
     }
 }

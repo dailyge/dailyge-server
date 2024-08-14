@@ -48,7 +48,7 @@ class UserEventPublisherUnitTest {
         userEventPublisher.publishInternalEvent(thirdEvent);
 
         verify(eventWriteUseCase, times(1))
-            .save(thirdEvent);
+            .saveDeadLetter(thirdEvent);
         verify(eventPublisher, never())
             .publishEvent(any());
     }
@@ -62,7 +62,7 @@ class UserEventPublisherUnitTest {
 
         userEventPublisher.publishInternalEvent(event);
 
-        verify(eventWriteUseCase, never()).save(any());
+        verify(eventWriteUseCase, never()).saveDeadLetter(any());
         verify(eventPublisher, times(1)).publishEvent(any(UserEvent.class));
     }
 }

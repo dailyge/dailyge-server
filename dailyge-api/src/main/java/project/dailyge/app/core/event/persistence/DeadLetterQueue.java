@@ -14,4 +14,8 @@ public class DeadLetterQueue {
     public void save(final Event event) {
         inMemoryDeadLetter.add(event);
     }
+
+    public boolean isEmpty() {
+        return inMemoryDeadLetter.isEmpty();
+    }
 }

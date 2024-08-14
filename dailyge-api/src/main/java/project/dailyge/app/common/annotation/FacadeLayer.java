@@ -1,11 +1,11 @@
 package project.dailyge.app.common.annotation;
 
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Component;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-@RestController
+@Component
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Presentation {
+public @interface FacadeLayer {
 }

@@ -29,27 +29,34 @@ public class LoggingAspect {
     private static final String FACADE = "FACADE";
     private static final String APPLICATION = "APPLICATION";
     private static final String EXTERNAL = "EXTERNAL";
+    private static final String EVENT = "EVENT";
     private static final String TRACE_ID = "traceId";
     private static final String IP = "ip";
+    private static final int START_DURATION = 0;
 
-    @Around("@within(project.dailyge.app.common.annotation.Presentation)")
+    @Around("@within(project.dailyge.app.common.annotation.PresentationLayer)")
     public Object writeLogAroundPresentation(final ProceedingJoinPoint joinPoint) throws Throwable {
         return writeLog(joinPoint, PRESENTATION);
     }
 
-    @Around("@within(project.dailyge.app.common.annotation.Facade)")
+    @Around("@within(project.dailyge.app.common.annotation.FacadeLayer)")
     public Object writeLogAroundFacade(final ProceedingJoinPoint joinPoint) throws Throwable {
         return writeLog(joinPoint, FACADE);
     }
 
-    @Around("@within(project.dailyge.app.common.annotation.Application)")
+    @Around("@within(project.dailyge.app.common.annotation.ApplicationLayer)")
     public Object writeLogAroundApplication(final ProceedingJoinPoint joinPoint) throws Throwable {
         return writeLog(joinPoint, APPLICATION);
     }
 
-    @Around("@within(project.dailyge.app.common.annotation.External)")
+    @Around("@within(project.dailyge.app.common.annotation.ExternalLayer)")
     public Object writeLogAroundExternal(final ProceedingJoinPoint joinPoint) throws Throwable {
         return writeLog(joinPoint, EXTERNAL);
+    }
+
+    @Around("@within(project.dailyge.app.common.annotation.EventLayer)")
+    public Object writeLogAroundEvent(final ProceedingJoinPoint joinPoint) throws Throwable {
+        return writeLog(joinPoint, EVENT);
     }
 
     private Object writeLog(
@@ -69,7 +76,7 @@ public class LoggingAspect {
             layer,
             getDailygeUserAsString(request),
             startTime,
-            0,
+            START_DURATION,
             args,
             null
         );

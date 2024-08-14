@@ -1,7 +1,7 @@
 package project.dailyge.app.core.task.facade;
 
 import lombok.RequiredArgsConstructor;
-import project.dailyge.app.common.annotation.Facade;
+import project.dailyge.app.common.annotation.FacadeLayer;
 import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.core.task.application.TaskWriteUseCase;
 import project.dailyge.app.core.task.application.command.TaskCreateCommand;
@@ -15,7 +15,7 @@ import project.dailyge.lock.LockUseCase;
 
 import java.time.LocalDate;
 
-@Facade
+@FacadeLayer
 @RequiredArgsConstructor
 public class TaskFacade {
 

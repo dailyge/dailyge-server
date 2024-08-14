@@ -1,76 +1,67 @@
 package project.dailyge.app.test.user.unittest;
 
+import static java.time.LocalDateTime.now;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import project.dailyge.app.core.user.application.UserReadUseCase;
-import project.dailyge.app.core.user.application.UserWriteUseCase;
-import project.dailyge.app.core.user.listener.UserEventListener;
-import project.dailyge.core.cache.user.UserCacheReadUseCase;
-import project.dailyge.core.cache.user.UserCacheWriteUseCase;
-import project.dailyge.entity.user.UserEvent;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static project.dailyge.app.test.user.fixture.UserFixture.ID;
-import static project.dailyge.app.test.user.fixture.UserFixture.user;
-import static project.dailyge.app.test.user.fixture.UserFixture.userCache;
+import project.dailyge.app.core.user.event.UserEventListener;
+import static project.dailyge.document.common.UuidGenerator.createTimeBasedUUID;
+import project.dailyge.document.event.EventDocument;
+import project.dailyge.document.event.EventDocumentWriteRepository;
+import project.dailyge.entity.common.EventPublisher;
 import static project.dailyge.entity.common.EventType.CREATE;
+import project.dailyge.entity.user.UserEvent;
 
 @DisplayName("[UnitTest] UserEventListener 단위 테스트")
 class UserEventListenerUnitTest {
 
-    private UserCacheReadUseCase userCacheReadUseCase;
-    private UserCacheWriteUseCase userCacheWriteUseCase;
-    private UserReadUseCase userReadUseCase;
-    private UserWriteUseCase userWriteUseCase;
+    private EventPublisher<UserEvent> eventPublisher;
+    private EventDocumentWriteRepository eventWriteRepository;
     private UserEventListener userEventListener;
 
     @BeforeEach
     void setUp() {
-        userCacheReadUseCase = mock(UserCacheReadUseCase.class);
-        userCacheWriteUseCase = mock(UserCacheWriteUseCase.class);
-        userReadUseCase = mock(UserReadUseCase.class);
-        userWriteUseCase = mock(UserWriteUseCase.class);
-        userEventListener = new UserEventListener(
-            userCacheReadUseCase,
-            userCacheWriteUseCase,
-            userReadUseCase,
-            userWriteUseCase
+        eventPublisher = mock(EventPublisher.class);
+        eventWriteRepository = mock(EventDocumentWriteRepository.class);
+        userEventListener = new UserEventListener(eventPublisher, eventWriteRepository);
+    }
+
+    @Test
+    @DisplayName("이벤트를 수신하면 EventDocument로 변환해 저장한다.")
+    void whenEventReceivedThenConvertAndSave() {
+        final String eventId = createTimeBasedUUID();
+        final Long publisherId = 1L;
+        final EventDocument eventDocument = new EventDocument(
+            eventId, publisherId, "user", CREATE.name(), now()
         );
+        when(eventWriteRepository.save(eventDocument))
+            .thenReturn(eventId);
+
+        final UserEvent event = UserEvent.createEvent(publisherId, eventId, CREATE);
+        userEventListener.listenEvent(event);
+
+        verify(eventWriteRepository)
+            .save(eventDocument);
     }
 
     @Test
-    @DisplayName("캐시에 없다면, DB에서 가져와 저장한다.")
-    void whenCacheIsEmptyThenCacheShouldBeResave() {
-        when(userCacheReadUseCase.findById(ID)).thenReturn(null);
-        when(userReadUseCase.findById(ID)).thenReturn(user);
-        final UserEvent event = UserEvent.createEvent(ID, "123", CREATE);
+    @DisplayName("예외 발생 시 이벤트를 다시 발행한다.")
+    void whenExceptionThrownThenPublishInternalEvent() {
+        final String eventId = createTimeBasedUUID();
+        final Long publisherId = 1L;
+        final UserEvent event = UserEvent.createEvent(publisherId, eventId, CREATE);
+
+        doThrow(new RuntimeException("Database error"))
+            .when(eventWriteRepository).save(any(EventDocument.class));
+
         userEventListener.listenEvent(event);
 
-        verify(userCacheWriteUseCase).save(userCache);
-    }
-
-    @Test
-    @DisplayName("캐시에 등록된 사용자는, 캐시 유효기간만 갱신한다.")
-    void whenRegisteredUserLoginThenCacheValidityShouldBeRefresh() {
-        when(userCacheReadUseCase.findById(ID)).thenReturn(userCache);
-        when(userReadUseCase.existsById(ID)).thenReturn(true);
-        final UserEvent event = UserEvent.createEvent(ID, "123", CREATE);
-        userEventListener.listenEvent(event);
-
-        verify(userCacheWriteUseCase).refreshExpirationDate(ID);
-    }
-
-    @Test
-    @DisplayName("최초 가입 시, DB에 저장한다.")
-    void whenFirstSignUpThenUserShouldBeSaveToDB() {
-        when(userCacheReadUseCase.findById(ID)).thenReturn(userCache);
-        when(userReadUseCase.existsById(ID)).thenReturn(false);
-
-        final UserEvent event = UserEvent.createEvent(ID, "123", CREATE);
-        userEventListener.listenEvent(event);
-
-        verify(userWriteUseCase).save(user);
+        verify(eventPublisher)
+            .publishInternalEvent(event);
     }
 }

@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.OK;
-import project.dailyge.app.common.annotation.Presentation;
+import project.dailyge.app.common.annotation.PresentationLayer;
 import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.common.auth.LoginUser;
 import project.dailyge.app.common.response.ApiResponse;
@@ -24,7 +24,7 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
-@Presentation
+@PresentationLayer
 @RequiredArgsConstructor
 @RequestMapping(path = {"/api"})
 public class TaskReadApi {

@@ -10,6 +10,7 @@ import java.util.Objects;
 @Getter
 public class TaskEvent extends Event {
 
+    private static final int FIRST_EVENT = 1;
     private static final String DOMAIN = "task";
 
     /**
@@ -30,6 +31,7 @@ public class TaskEvent extends Event {
         this.eventId = eventId;
         this.eventType = eventType;
         this.createdAt = now();
+        this.publishCount = FIRST_EVENT;
     }
 
     public static TaskEvent createEvent(

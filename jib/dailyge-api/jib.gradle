@@ -28,12 +28,13 @@ if (env != null && (skipJib != null && skipJib == "false")) {
             ports = [port]
             labels = [server: label]
             jvmFlags = [
+                    "-Xms256m",
+                    "-Xmx512m",
                     "-Dspring.profiles.active=${profile}",
                     "-Dfile.encoding=UTF-8",
                     "--add-opens=java.base/java.time=ALL-UNNAMED"
             ]
             environment = [
-                    'JAVA_OPTIONS' : '-Xms256m -Xmx256m',
                     'ENCRYPTOR_KEY': System.getenv("ENCRYPTOR_KEY")
             ]
             creationTime = 'USE_CURRENT_TIMESTAMP'

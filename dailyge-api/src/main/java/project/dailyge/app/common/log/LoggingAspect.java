@@ -54,11 +54,6 @@ public class LoggingAspect {
         return writeLog(joinPoint, EXTERNAL);
     }
 
-    @Around("@within(project.dailyge.app.common.annotation.EventLayer)")
-    public Object writeLogAroundEvent(final ProceedingJoinPoint joinPoint) throws Throwable {
-        return writeLog(joinPoint, EVENT);
-    }
-
     private Object writeLog(
         final ProceedingJoinPoint joinPoint,
         final String layer

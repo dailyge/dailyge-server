@@ -1,18 +1,19 @@
 name: Dailyge Deploy
 
 on:
-  push:
+  pull_request:
+    types: [closed]
     branches:
       - dev
-      - main
+      - prod
     paths:
       - dailyge-api/**
       - storage/**
-      - support/**
+      - support**
       - .github/workflows/**
 
 env:
-  ENV: ${{ github.event.pull_request.base.ref == 'dev' && 'dev' || github.event.pull_request.base.ref == 'main' && 'prod' }}
+  ENV: ${{ github.base_ref == 'dev' && 'dev' || github.base_ref == 'main' && 'prod' }}
   SKIP_JIB: false
   SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -22,6 +23,7 @@ env:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
     steps:
       - name: Check out code
         uses: actions/checkout@v2

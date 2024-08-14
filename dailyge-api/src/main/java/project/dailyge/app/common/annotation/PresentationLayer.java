@@ -1,11 +1,11 @@
 package project.dailyge.app.common.annotation;
 
-import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-@Service
+@RestController
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Application {
+public @interface PresentationLayer {
 }

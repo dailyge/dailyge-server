@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.OK;
-import project.dailyge.app.common.annotation.Presentation;
+import project.dailyge.app.common.annotation.PresentationLayer;
 import project.dailyge.app.common.auth.DailygeToken;
 import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.common.auth.LoginUser;
@@ -19,7 +19,7 @@ import project.dailyge.app.core.user.facade.UserFacade;
 import project.dailyge.app.core.user.presentation.response.LoginPageUrlResponse;
 import project.dailyge.app.core.user.presentation.response.OAuthLoginResponse;
 
-@Presentation
+@PresentationLayer
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class LoginApi {

@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.CREATED;
-import project.dailyge.app.common.annotation.Presentation;
+import project.dailyge.app.common.annotation.PresentationLayer;
 import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.common.auth.LoginUser;
 import project.dailyge.app.common.response.ApiResponse;
@@ -15,7 +15,7 @@ import project.dailyge.app.core.task.presentation.requesst.MonthlyTasksCreateReq
 import project.dailyge.app.core.task.presentation.requesst.TaskCreateRequest;
 import project.dailyge.app.core.task.presentation.response.TaskCreateResponse;
 
-@Presentation
+@PresentationLayer
 @RequiredArgsConstructor
 @RequestMapping(path = "/api")
 public class TaskCreateApi {

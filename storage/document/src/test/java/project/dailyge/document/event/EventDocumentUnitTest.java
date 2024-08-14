@@ -53,7 +53,7 @@ class EventDocumentUnitTest {
             eventDocument.publisher,
             eventDocument.domain,
             eventDocument.eventType,
-            eventDocument.createdAt
+            eventDocument.getCreatedAt()
         );
 
         assertEquals(eventDocument, sameEvent);
@@ -67,7 +67,7 @@ class EventDocumentUnitTest {
             eventDocument.publisher,
             eventDocument.domain,
             eventDocument.eventType,
-            eventDocument.createdAt
+            eventDocument.getCreatedAt()
         );
         assertNotEquals(eventDocument, differentEvent);
     }

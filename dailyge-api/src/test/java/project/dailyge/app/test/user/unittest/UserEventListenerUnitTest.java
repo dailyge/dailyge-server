@@ -5,7 +5,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -47,7 +46,7 @@ class UserEventListenerUnitTest {
         userEventListener.listenEvent(event);
 
         verify(eventWriteRepository)
-            .save(eq(eventDocument));
+            .save(eventDocument);
     }
 
     @Test
@@ -62,6 +61,7 @@ class UserEventListenerUnitTest {
 
         userEventListener.listenEvent(event);
 
-        verify(eventPublisher).publishInternalEvent(eq(event));
+        verify(eventPublisher)
+            .publishInternalEvent(event);
     }
 }

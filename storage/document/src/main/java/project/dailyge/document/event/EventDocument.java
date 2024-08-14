@@ -27,6 +27,9 @@ public class EventDocument extends DocumentBaseEntity {
     @Field(name = "created_at")
     protected LocalDateTime createdAt;
 
+    /**
+     * 직렬화를 위한 기본 생성자로, 외부 패키지에서 호출하지 말 것.
+     */
     private EventDocument() {
     }
 

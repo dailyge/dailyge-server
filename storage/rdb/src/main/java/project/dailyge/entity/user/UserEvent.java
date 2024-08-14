@@ -1,10 +1,9 @@
 package project.dailyge.entity.user;
 
+import static java.time.LocalDateTime.now;
 import lombok.Getter;
 import project.dailyge.entity.common.Event;
 import project.dailyge.entity.common.EventType;
-
-import static java.time.LocalDateTime.now;
 
 @Getter
 public class UserEvent extends Event {
@@ -24,14 +23,25 @@ public class UserEvent extends Event {
         final Long publisher,
         final String domain,
         final String eventId,
-        final EventType eventType
+        final EventType eventType,
+        final int publishCount
     ) {
         validate(publisher, eventId, eventType);
         this.publisher = publisher;
         this.domain = domain;
         this.eventId = eventId;
         this.eventType = eventType;
+        this.publishCount = publishCount;
         this.createdAt = now();
+    }
+
+    private UserEvent(
+        final Long publisher,
+        final String domain,
+        final String eventId,
+        final EventType eventType
+    ) {
+        this(publisher, domain, eventId, eventType, 1);
     }
 
     public static UserEvent createEvent(
@@ -39,6 +49,7 @@ public class UserEvent extends Event {
         final String eventId,
         final EventType eventType
     ) {
+        validate(publisher, eventId, eventType);
         return new UserEvent(
             publisher,
             "user",
@@ -47,7 +58,17 @@ public class UserEvent extends Event {
         );
     }
 
-    public void validate(
+    public static UserEvent createEventWithIncreasedPublishCount(final UserEvent event) {
+        return new UserEvent(
+            event.publisher,
+            event.getDomain(),
+            event.eventId,
+            event.getEventType(),
+            event.publishCount + 1
+        );
+    }
+
+    public static void validate(
         final Long publisher,
         final String eventId,
         final EventType eventType
@@ -63,6 +84,10 @@ public class UserEvent extends Event {
         }
     }
 
+    public String getEventTypeAsString() {
+        return eventType.name();
+    }
+
     public String getInvalidPublisherIdErrorMessage() {
         return INVALID_PUBLISHER_ID_ERROR_MESSAGE;
     }
@@ -73,6 +98,10 @@ public class UserEvent extends Event {
 
     public String getInvalidEventTypeErrorMessage() {
         return INVALID_EVENT_TYPE_ERROR_MESSAGE;
+    }
+
+    public boolean overCount(final int maxPublishCount) {
+        return publishCount >= maxPublishCount;
     }
 
     @Override

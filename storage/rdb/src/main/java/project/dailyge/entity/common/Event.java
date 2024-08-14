@@ -11,5 +11,6 @@ public abstract class Event {
     protected String domain;
     protected String eventId;
     protected EventType eventType;
+    protected int publishCount;
     protected LocalDateTime createdAt;
 }

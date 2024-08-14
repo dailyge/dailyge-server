@@ -1,15 +1,14 @@
 package project.dailyge.entity.test.user;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import project.dailyge.entity.user.UserEvent;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import static project.dailyge.entity.common.EventType.CREATE;
+import project.dailyge.entity.user.UserEvent;
 
 @DisplayName("[UnitTest] UserEvent 단위 테스트")
 class UserEventUnitTest {
@@ -35,8 +34,33 @@ class UserEventUnitTest {
             () -> assertEquals(PUBLISHER, userEvent.getPublisher()),
             () -> assertEquals(EVENT_ID, userEvent.getEventId()),
             () -> assertEquals(CREATE, userEvent.getEventType()),
+            () -> assertEquals("CREATE", userEvent.getEventTypeAsString()),
             () -> assertEquals("user", userEvent.getDomain())
         );
+    }
+
+    @Test
+    @DisplayName("publishCount가 증가된 새로운 이벤트를 생성할 수 있다.")
+    void whenCreateEventWithIncreasedPublishCountThenCountShouldBeIncremented() {
+        final int initialPublishCount = userEvent.getPublishCount();
+        final UserEvent newEvent = UserEvent.createEventWithIncreasedPublishCount(userEvent);
+
+        assertAll(
+            () -> assertThat(newEvent).isNotNull(),
+            () -> assertThat(newEvent.getPublisher()).isEqualTo(userEvent.getPublisher()),
+            () -> assertThat(newEvent.getEventId()).isEqualTo(userEvent.getEventId()),
+            () -> assertThat(newEvent.getEventType()).isEqualTo(userEvent.getEventType()),
+            () -> assertThat(newEvent.getDomain()).isEqualTo(userEvent.getDomain()),
+            () -> assertThat(newEvent.getPublishCount()).isEqualTo(initialPublishCount + 1)
+        );
+    }
+
+    @Test
+    @DisplayName("publishCount가 maxPublishCount를 초과하지 않은 경우, false를 반환한다.")
+    void whenPublishCountIsLessThanMaxPublishCountThenReturnFalse() {
+        int maxPublishCount = userEvent.getPublishCount() + 1;
+        boolean result = userEvent.overCount(maxPublishCount);
+        assertThat(result).isFalse();
     }
 
     @Test

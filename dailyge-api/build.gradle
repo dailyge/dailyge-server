@@ -61,6 +61,7 @@ test {
     outputs.dir snippetsDir
     dependsOn(":storage:rdb:test")
     dependsOn(":storage:document:test")
+    jvmArgs "--add-opens=java.base/java.time=ALL-UNNAMED"
 }
 
 asciidoctor {

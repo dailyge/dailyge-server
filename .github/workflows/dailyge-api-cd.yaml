@@ -1,4 +1,4 @@
-name: Dailyge Deploy
+name: Dailyge-Api Deploy
 
 on:
   pull_request:
@@ -9,7 +9,7 @@ on:
     paths:
       - dailyge-api/**
       - storage/**
-      - support**
+      - support/**
       - .github/workflows/**
 
 env:
@@ -103,7 +103,7 @@ jobs:
         with:
           task-definition: task-definition.json
           container-name: ${{ env.CONTAINER_NAME }}
-          image: ${{ env.ECR_URI }}:${{ steps.build-image.outputs.imageTag }}
+          image: ${{ env.ECR_URI }}:${{ env.IMAGE_TAG }}
 
       - name: Deploy ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1

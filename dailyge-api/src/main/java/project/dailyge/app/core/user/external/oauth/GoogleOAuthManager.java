@@ -31,7 +31,7 @@ public class GoogleOAuthManager {
     private final ClientRegistrationRepository clientRegistrationRepository;
 
     public GoogleOAuthManager(
-        @Value("env") final String env,
+        @Value("${env}") final String env,
         @Value("${oauth.google.authorization}") final String authorizationUrl,
         @Value("${oauth.google.user-access}") final String userAccessUrl,
         final RestTemplate restTemplate,

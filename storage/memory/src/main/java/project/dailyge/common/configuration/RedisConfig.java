@@ -7,7 +7,8 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.GenericToStringSerializer;
+import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.data.redis.serializer.SerializationException;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
@@ -34,12 +35,23 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisTemplate<String, byte[]> redisTemplate(final RedisConnectionFactory connectionFactory) {
-        final RedisTemplate<String, byte[]> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setConnectionFactory(connectionFactory);
-        redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setValueSerializer(new GenericToStringSerializer<>(byte[].class));
-        redisTemplate.afterPropertiesSet();
-        return redisTemplate;
+    public RedisTemplate<String, byte[]> redisTemplate(final RedisConnectionFactory redisConnectionFactory) {
+        final RedisTemplate<String, byte[]> template = new RedisTemplate<>();
+        template.setConnectionFactory(redisConnectionFactory);
+        template.setKeySerializer(new StringRedisSerializer());
+        template.setValueSerializer(new ByteArrayRedisSerializer());
+        return template;
+    }
+
+    public static class ByteArrayRedisSerializer implements RedisSerializer<byte[]> {
+        @Override
+        public byte[] serialize(byte[] byteArray) throws SerializationException {
+            return byteArray;
+        }
+
+        @Override
+        public byte[] deserialize(byte[] byteArray) throws SerializationException {
+            return byteArray;
+        }
     }
 }

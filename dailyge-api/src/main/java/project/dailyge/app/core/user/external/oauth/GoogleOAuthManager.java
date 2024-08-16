@@ -54,7 +54,7 @@ public class GoogleOAuthManager {
 
     private GoogleUserInfoResponse returnMockUserInfo() {
         final String uuid = UUID.randomUUID().toString();
-        final String name = uuid.substring(1, 9);
+        final String name = uuid.substring(1, 25).replaceAll("-", "");
         final String email = name + "@gmail.com";
         final String imageUrl = "https://shorturl.at/dejs2";
         return new GoogleUserInfoResponse(uuid, name, email, imageUrl, true);

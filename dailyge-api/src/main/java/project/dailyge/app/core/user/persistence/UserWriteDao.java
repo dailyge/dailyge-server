@@ -58,7 +58,7 @@ public class UserWriteDao implements UserEntityWriteRepository {
      */
     @Override
     @Transactional
-    public void delete(UserJpaEntity user) {
+    public void delete(final UserJpaEntity user) {
         entityManager.detach(user);
     }
 }

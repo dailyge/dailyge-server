@@ -53,11 +53,12 @@ public class GoogleOAuthManager {
     }
 
     private GoogleUserInfoResponse returnMockUserInfo() {
-        final String uuid = UUID.randomUUID().toString();
-        final String name = uuid.substring(1, 25).replaceAll("-", "");
-        final String email = name + "@gmail.com";
+        final String firstUuid = UUID.randomUUID().toString().substring(0, 7).replace("-", "");
+        final String secondUuid = UUID.randomUUID().toString().replace("-", "");
+        final String email = firstUuid + secondUuid;
+        final String emailFormat = email + "@gmail.com";
         final String imageUrl = "https://shorturl.at/dejs2";
-        return new GoogleUserInfoResponse(uuid, name, email, imageUrl, true);
+        return new GoogleUserInfoResponse(secondUuid, emailFormat, emailFormat, imageUrl, true);
     }
 
     private GoogleAuthorizationResponse getAccessToken(final String code) {

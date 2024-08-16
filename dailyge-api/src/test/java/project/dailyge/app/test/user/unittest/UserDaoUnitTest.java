@@ -1,6 +1,5 @@
 package project.dailyge.app.test.user.unittest;
 
-import jakarta.persistence.EntityManager;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -21,9 +20,6 @@ import project.dailyge.app.core.user.persistence.UserWriteDao;
 class UserDaoUnitTest {
 
     @Mock
-    private EntityManager entityManager;
-
-    @Mock
     private JdbcTemplate jdbcTemplate;
 
     @InjectMocks
@@ -41,6 +37,6 @@ class UserDaoUnitTest {
 
         doThrow(dataAccessException).when(jdbcTemplate).update(any(), any(KeyHolder.class));
 
-        assertThrows(DaoException.class, () -> userWriteDao.getSequence());
+        assertThrows(DaoException.class, () -> userWriteDao.save("test@gmail.com"));
     }
 }

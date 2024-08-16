@@ -25,11 +25,11 @@ import static project.dailyge.app.common.RestAssureConfig.initObjectMapper;
 import static project.dailyge.app.common.RestAssureConfig.initSpecificationConfig;
 import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.core.user.application.UserWriteUseCase;
+import static project.dailyge.app.test.user.fixture.UserFixture.EMAIL;
 import static project.dailyge.app.test.user.fixture.UserFixture.createUser;
-import static project.dailyge.entity.user.Role.NORMAL;
-
 import project.dailyge.core.cache.user.UserCache;
 import project.dailyge.core.cache.user.UserCacheWriteUseCase;
+import static project.dailyge.entity.user.Role.NORMAL;
 import project.dailyge.entity.user.UserJpaEntity;
 
 import java.time.LocalDate;
@@ -84,7 +84,7 @@ public abstract class DatabaseTestBase {
     @Transactional
     void setUp(final RestDocumentationContextProvider restDocumentation) {
         databaseInitialization.initData();
-        persist(createUser(userWriteUseCase.getSequence()));
+        persist(createUser(userWriteUseCase.save(EMAIL)));
         this.specification = initSpecificationConfig(restDocumentation, port);
     }
 

@@ -14,7 +14,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import static org.springframework.http.HttpStatus.BAD_GATEWAY;
-import org.springframework.test.context.event.RecordApplicationEvents;
 import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.common.auth.TokenProvider;
 import project.dailyge.app.common.exception.ExternalServerException;
@@ -24,7 +23,6 @@ import project.dailyge.app.core.user.presentation.response.OAuthLoginResponse;
 import project.dailyge.core.cache.user.UserCache;
 import project.dailyge.core.cache.user.UserCacheReadUseCase;
 
-@RecordApplicationEvents
 @DisplayName("[IntegrationTest] 사용자 로그인 통합 테스트")
 class LoginIntegrationTest extends DatabaseTestBase {
 

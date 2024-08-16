@@ -45,7 +45,7 @@ public class GoogleOAuthManager {
     }
 
     public GoogleUserInfoResponse getUserInfo(final String code) {
-        if (env.equals("dev")) {
+        if (env.equals("dev") || env.equals("test")) {
             return returnMockUserInfo();
         }
         final GoogleAuthorizationResponse response = getAccessToken(code);

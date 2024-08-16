@@ -13,14 +13,39 @@ import project.dailyge.app.common.exception.DaoException;
 import project.dailyge.entity.user.UserEntityWriteRepository;
 import project.dailyge.entity.user.UserJpaEntity;
 
-import java.util.Objects;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 
 @Repository
 @RequiredArgsConstructor
 public class UserWriteDao implements UserEntityWriteRepository {
 
+    private static final String USER_SAVE_FAILED_MESSAGE = "사용자 Sequence를 저장하지 못했습니다.";
     private final EntityManager entityManager;
     private final JdbcTemplate jdbcTemplate;
+
+    @Override
+    public Long save(final String email) {
+        final String sql = "INSERT INTO user_sequence (email, executed) VALUES (?, ?)";
+        final KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        try {
+            jdbcTemplate.update(connection -> {
+                final PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                ps.setString(1, email);
+                ps.setBoolean(2, false);
+                return ps;
+            }, keyHolder);
+
+            final Number number = keyHolder.getKey();
+            if (number == null) {
+                throw new DaoException(USER_SAVE_FAILED_MESSAGE, DATA_ACCESS_EXCEPTION);
+            }
+            return number.longValue();
+        } catch (DataAccessException ex) {
+            throw new DaoException(ex.getMessage(), DATA_ACCESS_EXCEPTION);
+        }
+    }
 
     @Override
     public UserJpaEntity save(final UserJpaEntity user) {
@@ -35,18 +60,5 @@ public class UserWriteDao implements UserEntityWriteRepository {
     @Transactional
     public void delete(final UserJpaEntity user) {
         entityManager.detach(user);
-    }
-
-    @Override
-    public Long getSequence() {
-        final String sql = "INSERT INTO user_sequence (id, executed) VALUES (null, 0)";
-        final KeyHolder keyHolder = new GeneratedKeyHolder();
-
-        try {
-            jdbcTemplate.update(connection -> connection.prepareStatement(sql, new String[]{"id"}), keyHolder);
-            return Objects.requireNonNull(keyHolder.getKey()).longValue();
-        } catch (DataAccessException ex) {
-            throw new DaoException(ex.getMessage(), DATA_ACCESS_EXCEPTION);
-        }
     }
 }

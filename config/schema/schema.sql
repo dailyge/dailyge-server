@@ -16,6 +16,7 @@ DROP TABLE IF EXISTS user_sequence;
 CREATE TABLE IF NOT EXISTS user_sequence
 (
     id       BIGINT PRIMARY KEY AUTO_INCREMENT NOT NULL COMMENT '사용자 PK',
+    email    VARCHAR(50)                       NOT NULL COMMENT '이메일',
     executed BIT                               NOT NULL DEFAULT FALSE COMMENT '처리 여부'
 ) ENGINE InnoDB COMMENT '사용자 채번 테이블';
 

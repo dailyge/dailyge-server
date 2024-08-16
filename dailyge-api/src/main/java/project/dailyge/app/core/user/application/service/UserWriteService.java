@@ -22,6 +22,12 @@ public class UserWriteService implements UserWriteUseCase {
 
     @Override
     @Transactional
+    public Long save(final String email) {
+        return userWriteRepository.save(email);
+    }
+
+    @Override
+    @Transactional
     public UserJpaEntity save(final UserJpaEntity user) {
         final Optional<UserJpaEntity> findUser = userReadRepository.findActiveUserByEmail(user.getEmail());
         if (findUser.isPresent()) {
@@ -51,10 +57,5 @@ public class UserWriteService implements UserWriteUseCase {
             .orElseThrow(() -> UserTypeException.from(USER_NOT_FOUND));
         findUser.delete();
         userWriteRepository.save(findUser);
-    }
-
-    @Override
-    public Long getSequence() {
-        return userWriteRepository.getSequence();
     }
 }

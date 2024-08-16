@@ -48,16 +48,19 @@ public class UserFacade {
 
     private Long getUserId(final GoogleUserInfoResponse response) {
         final Long findUserId = userReadUseCase.findUserIdByEmail(response.getEmail());
-        if (findUserId != null) {
-            return findUserId;
+        if (findUserId == null) {
+            return userWriteUseCase.save(response.getEmail());
         }
-        final UserCache userCache = initUserCache(response);
+        final UserCache userCache = initUserCache(findUserId, response);
         return userCache.getId();
     }
 
-    private UserCache initUserCache(final GoogleUserInfoResponse response) {
+    private UserCache initUserCache(
+        final Long userId,
+        final GoogleUserInfoResponse response
+    ) {
         final UserCache userCache = new UserCache(
-            userWriteUseCase.getSequence(),
+            userId,
             response.getName(),
             response.getEmail(),
             response.getPicture(),

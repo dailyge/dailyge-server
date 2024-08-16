@@ -15,6 +15,9 @@ public class UserSequence {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "email")
+    private String email;
+
     @Column(name = "executed")
     private boolean executed;
 

@@ -49,6 +49,27 @@ class MonthlyGoalJpaEntityUnitTest {
     }
 
     @Test
+    @DisplayName("올바른 인자가 들어오면 월간 목표 제목과 내용이 업데이트된다.")
+    void whenValidArgumentsProvidedThenMonthlyGoalIsUpdated() {
+        final String updatedTitle = "업데이트된 목표";
+        final String updatedContent = "업데이트된 내용";
+
+        monthlyGoal.update(updatedTitle, updatedContent);
+
+        assertAll(
+            () -> assertThat(monthlyGoal.getTitle()).isEqualTo(updatedTitle),
+            () -> assertThat(monthlyGoal.getContent()).isEqualTo(updatedContent)
+        );
+    }
+
+    @Test
+    @DisplayName("상태 값이 들어오면 월간 목표 상태가 변경된다.")
+    void whenValidStatusProvidedThenMonthlyGoalStatusShouldBeUpdated() {
+        monthlyGoal.updateStatus(true);
+        assertTrue(monthlyGoal.isDone());
+    }
+
+    @Test
     @DisplayName("월간 목표를 삭제하면 상태가 바뀐다.")
     void whenDeleteThenStatusShouldBeChanged() {
         final MonthlyGoalJpaEntity newMonthlyGoal = new MonthlyGoalJpaEntity(1L, "달성 목표", "월간 목표 내용", false, 1L);

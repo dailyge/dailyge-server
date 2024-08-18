@@ -5,6 +5,9 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -14,13 +17,9 @@ import project.dailyge.app.common.auth.TokenProvider;
 import project.dailyge.app.core.user.external.oauth.TokenManager;
 import project.dailyge.core.cache.user.UserCache;
 import project.dailyge.core.cache.user.UserCacheReadUseCase;
-
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.NO_CONTENT;
 
 @Slf4j
 @Component
@@ -110,6 +109,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         bodyMap.put("url", referer == null ? "/" : referer);
         bodyMap.put("Access-Token", accessToken);
 
+        response.setStatus(NO_CONTENT.code());
         response.setContentType(APPLICATION_JSON_VALUE);
         response.setCharacterEncoding("UTF-8");
         objectMapper.writeValue(response.getWriter(), bodyMap);

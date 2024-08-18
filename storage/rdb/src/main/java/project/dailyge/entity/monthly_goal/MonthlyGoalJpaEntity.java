@@ -54,6 +54,18 @@ public class MonthlyGoalJpaEntity extends BaseEntity {
         this(null, title, content, false, userId);
     }
 
+    public void update(
+        final String title,
+        final String content
+    ) {
+        this.title = title;
+        this.content = content;
+    }
+
+    public void updateStatus(final Boolean done) {
+        this.done = done;
+    }
+
     public void delete() {
         deleted = true;
     }

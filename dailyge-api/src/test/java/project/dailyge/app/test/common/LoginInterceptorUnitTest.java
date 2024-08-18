@@ -3,17 +3,12 @@ package project.dailyge.app.test.common;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
 import org.json.JSONException;
 import org.json.JSONObject;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import org.springframework.mock.web.MockHttpServletResponse;
 import project.dailyge.app.common.auth.DailygeToken;
 import project.dailyge.app.common.auth.JwtProperties;
@@ -21,13 +16,18 @@ import project.dailyge.app.common.auth.SecretKeyManager;
 import project.dailyge.app.common.auth.TokenProvider;
 import project.dailyge.app.core.common.web.LoginInterceptor;
 import project.dailyge.app.core.user.external.oauth.TokenManager;
-import static project.dailyge.app.test.user.fixture.UserFixture.createUser;
-
 import project.dailyge.core.cache.user.UserCache;
 import project.dailyge.core.cache.user.UserCacheReadUseCase;
 import project.dailyge.entity.user.UserJpaEntity;
-
-import java.io.UnsupportedEncodingException;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_REQUEST;
+import static project.dailyge.app.test.user.fixture.UserFixture.createUser;
 
 @DisplayName("[UnitTest] LoginInterceptor 단위 테스트")
 class LoginInterceptorUnitTest {
@@ -77,6 +77,7 @@ class LoginInterceptorUnitTest {
             .thenReturn(true);
 
         assertFalse(loginInterceptor.preHandle(request, response, null));
+        assertEquals(BAD_REQUEST.code(), response.getStatus());
     }
 
     @Test

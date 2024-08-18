@@ -23,7 +23,7 @@ public class MonthlyGoalUpdateApi {
     private final MonthlyGoalWriteUseCase monthlyGoalWriteUseCase;
 
     @PutMapping(path = {"/{monthlyGoalId}"})
-    public ApiResponse<Void> deleteMonthlyGoalById(
+    public ApiResponse<Void> updateMonthlyGoalById(
         @LoginUser final DailygeUser dailygeUser,
         @PathVariable(name = "monthlyGoalId") final Long monthlyGoalId,
         @Valid @RequestBody MonthlyGoalUpdateRequest request
@@ -33,7 +33,7 @@ public class MonthlyGoalUpdateApi {
     }
 
     @PutMapping(path = {"/{monthlyGoalId}/status"})
-    public ApiResponse<Void> deleteMonthlyGoalById(
+    public ApiResponse<Void> updateMonthlyGoalById(
         @LoginUser final DailygeUser dailygeUser,
         @PathVariable(name = "monthlyGoalId") final Long monthlyGoalId,
         @Valid @RequestBody MonthlyGoalStatusUpdateRequest request

@@ -1,20 +1,20 @@
 package project.dailyge.app.core.notice.presentation;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import project.dailyge.app.codeandmessage.CommonCodeAndMessage;
-import project.dailyge.app.common.annotation.PresentationLayer;
 import project.dailyge.app.common.auth.DailygeUser;
-import project.dailyge.app.common.auth.LoginUser;
 import project.dailyge.app.common.exception.UnAuthorizedException;
 import project.dailyge.app.common.response.ApiResponse;
+import project.dailyge.app.common.auth.LoginUser;
 import project.dailyge.app.core.notice.application.service.NoticeWriteService;
 import project.dailyge.app.core.notice.presentation.request.NoticeCreateRequest;
 import project.dailyge.app.core.notice.presentation.response.NoticeCreateResponse;
 
-@PresentationLayer
+@Controller
 @RequiredArgsConstructor
 @RequestMapping(path = "/api")
 public class NoticeCreateApi {

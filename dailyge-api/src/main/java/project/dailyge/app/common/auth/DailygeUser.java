@@ -40,6 +40,10 @@ public class DailygeUser {
         }
     }
 
+    public boolean isValid(final Long userId) {
+        return this.userId.equals(userId);
+    }
+
     @Override
     public boolean equals(final Object obj) {
         if (this == obj) {

@@ -28,11 +28,16 @@ if (env != null && (skipJib != null && skipJib == "false")) {
             ports = [port]
             labels = [server: label]
             jvmFlags = [
-                    "-Xms256m",
-                    "-Xmx512m",
+                    "-Xms512m",
+                    "-Xmx1024m",
                     "-Dspring.profiles.active=${profile}",
                     "-Dfile.encoding=UTF-8",
-                    "--add-opens=java.base/java.time=ALL-UNNAMED"
+                    "--add-opens=java.base/java.time=ALL-UNNAMED",
+                    "-XX:+UseG1GC",
+                    "-XX:+HeapDumpOnOutOfMemoryError",
+                    "-XX:HeapDumpPath=/var/log/app/heapdump.hprof",
+                    "-Xss512k",
+                    "-XX:+UseCompressedOops"
             ]
             environment = [
                     'ENCRYPTOR_KEY': System.getenv("ENCRYPTOR_KEY")

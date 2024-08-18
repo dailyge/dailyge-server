@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
-import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_REQUEST;
 import static project.dailyge.app.test.user.fixture.UserFixture.createUser;
 
 @DisplayName("[UnitTest] LoginInterceptor 단위 테스트")
@@ -77,7 +77,7 @@ class LoginInterceptorUnitTest {
             .thenReturn(true);
 
         assertFalse(loginInterceptor.preHandle(request, response, null));
-        assertEquals(UNPROCESSABLE_ENTITY.value(), response.getStatus());
+        assertEquals(BAD_REQUEST.code(), response.getStatus());
     }
 
     @Test

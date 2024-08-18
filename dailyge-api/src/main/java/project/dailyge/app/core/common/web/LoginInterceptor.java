@@ -18,8 +18,8 @@ import project.dailyge.app.core.user.external.oauth.TokenManager;
 import project.dailyge.core.cache.user.UserCache;
 import project.dailyge.core.cache.user.UserCacheReadUseCase;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
-import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_REQUEST;
 
 @Slf4j
 @Component
@@ -109,7 +109,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         bodyMap.put("url", referer == null ? "/" : referer);
         bodyMap.put("Access-Token", accessToken);
 
-        response.setStatus(UNPROCESSABLE_ENTITY.value());
+        response.setStatus(BAD_REQUEST.code());
         response.setContentType(APPLICATION_JSON_VALUE);
         response.setCharacterEncoding("UTF-8");
         objectMapper.writeValue(response.getWriter(), bodyMap);

@@ -34,7 +34,7 @@ public class MonthlyGoalUpdateApi {
     }
 
     @PatchMapping(path = {"/{monthlyGoalId}/status"})
-    public ApiResponse<Void> updateMonthlyGoalById(
+    public ApiResponse<Void> updateStatusMonthlyGoalById(
         @LoginUser final DailygeUser dailygeUser,
         @PathVariable(name = "monthlyGoalId") final Long monthlyGoalId,
         @Valid @RequestBody MonthlyGoalStatusUpdateRequest request

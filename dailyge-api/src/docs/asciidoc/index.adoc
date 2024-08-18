@@ -380,3 +380,38 @@ include::{snippets}/task_delete_documentation_test/when_delete_task_then_status_
 #### Response
 
 include::{snippets}/task_delete_documentation_test/when_delete_task_then_status_code_should_be204_no_content/http-response.adoc[]
+
+
+== 📝 3. 월간 목표(MonthlyGoal)
+
+[cols=7*]
+
+|===
+| 기능 | Method | 인증 | API | Success | Failure | 설명
+
+| <<3-1. MonthlyGoal 생성>> | POST | O | /api/monthly-goals/ | 201 | - | 월간 목표 생성
+|===
+
+### 3-1. MonthlyGoal 생성
+
+월간 목표를 생성하는 API 입니다.
+
+#### Request
+
+include::{snippets}/monthly_goal_create_documentation_test/when_create_monthly_goal_then_status_code_should_be201__rest_docs/http-request.adoc[]
+
+#### Request-Header
+
+include::{snippets}/monthly_goal_create_documentation_test/when_create_monthly_goal_then_status_code_should_be201__rest_docs/request-headers.adoc[]
+
+#### Request-Fields
+
+include::{snippets}/monthly_goal_create_documentation_test/when_create_monthly_goal_then_status_code_should_be201__rest_docs/request-fields.adoc[]
+
+#### Response
+
+include::{snippets}/monthly_goal_create_documentation_test/when_create_monthly_goal_then_status_code_should_be201__rest_docs/http-response.adoc[]
+
+#### Response-Fields
+
+include::{snippets}/monthly_goal_create_documentation_test/when_create_monthly_goal_then_status_code_should_be201__rest_docs/response-fields.adoc[]

@@ -3,6 +3,7 @@ package project.dailyge.entity.test.monthly_goal;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -45,6 +46,14 @@ class MonthlyGoalJpaEntityUnitTest {
             () -> assertThat(newMonthlyGoal.isDone()).isFalse(),
             () -> assertThat(newMonthlyGoal.getUserId()).isNull()
         );
+    }
+
+    @Test
+    @DisplayName("월간 목표를 삭제하면 상태가 바뀐다.")
+    void whenDeleteThenStatusShouldBeChanged() {
+        final MonthlyGoalJpaEntity newMonthlyGoal = new MonthlyGoalJpaEntity(1L, "달성 목표", "월간 목표 내용", false, 1L);
+        newMonthlyGoal.delete();
+        assertTrue(newMonthlyGoal.getDeleted());
     }
 
     @Test

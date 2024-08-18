@@ -22,7 +22,7 @@ public class UserDeleteApi {
     private final UserFacade userFacade;
 
     @DeleteMapping(path = "/{userId}")
-    public ApiResponse<Void> userDelete(
+    public ApiResponse<Void> delete (
         @LoginUser final DailygeUser dailygeUser,
         @PathVariable(name = "userId") final Long userId
     ) {

@@ -416,7 +416,67 @@ include::{snippets}/monthly_goal_create_documentation_test/when_create_monthly_g
 
 include::{snippets}/monthly_goal_create_documentation_test/when_create_monthly_goal_then_status_code_should_be201__rest_docs/response-fields.adoc[]
 
-### 3-2. MonthlyGoal 삭제
+### 3-2. MonthlyGoal 수정
+
+월간 목표를 수정하는 API 입니다.
+
+#### Request
+
+include::{snippets}/monthly_goal_update_documentation_test/when_update_monthly_goal_then_status_code_should_be200__rest_docs/http-request.adoc[]
+
+#### Request-Header
+
+include::{snippets}/monthly_goal_update_documentation_test/when_update_monthly_goal_then_status_code_should_be200__rest_docs/request-headers.adoc[]
+
+#### Path-Parameters
+
+include::{snippets}/monthly_goal_update_documentation_test/when_update_monthly_goal_then_status_code_should_be200__rest_docs/path-parameters.adoc[]
+
+#### Request-Fields
+
+include::{snippets}/monthly_goal_update_documentation_test/when_update_monthly_goal_then_status_code_should_be200__rest_docs/request-fields.adoc[]
+
+
+#### Response
+
+include::{snippets}/monthly_goal_update_documentation_test/when_update_monthly_goal_then_status_code_should_be200__rest_docs/http-response.adoc[]
+
+#### Response-Fields
+
+include::{snippets}/monthly_goal_update_documentation_test/when_update_monthly_goal_then_status_code_should_be200__rest_docs/response-fields.adoc[]
+
+
+### 3-3. MonthlyGoal 상태 수정
+
+월간 목표 달성 여부를 수정하는 API 입니다.
+
+#### Request
+
+include::{snippets}/monthly_goal_update_documentation_test/when_update_monthly_goal_then_status_code_should_be200__rest_docs/http-request.adoc[]
+
+#### Request-Header
+
+include::{snippets}/monthly_goal_update_documentation_test/when_update_monthly_goal_then_status_code_should_be200__rest_docs/request-headers.adoc[]
+
+#### Path-Parameters
+
+include::{snippets}/monthly_goal_update_documentation_test/when_update_monthly_goal_then_status_code_should_be200__rest_docs/path-parameters.adoc[]
+
+#### Request-Fields
+
+include::{snippets}/monthly_goal_update_documentation_test/when_update_monthly_goal_then_status_code_should_be200__rest_docs/request-fields.adoc[]
+
+
+#### Response
+
+include::{snippets}/monthly_goal_update_documentation_test/when_update_monthly_goal_then_status_code_should_be200__rest_docs/http-response.adoc[]
+
+#### Response-Fields
+
+include::{snippets}/monthly_goal_update_documentation_test/when_update_monthly_goal_then_status_code_should_be200__rest_docs/response-fields.adoc[]
+
+
+### 3-4. MonthlyGoal 삭제
 
 월간 목표를 삭제하는 API 입니다.
 

@@ -7,11 +7,16 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.headerWit
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import org.springframework.restdocs.headers.RequestHeadersSnippet;
 import org.springframework.restdocs.payload.FieldDescriptor;
+import static org.springframework.restdocs.payload.JsonFieldType.NULL;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
+import org.springframework.restdocs.request.ParameterDescriptor;
+import org.springframework.restdocs.request.PathParametersSnippet;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static project.dailyge.app.common.SnippetUtils.getAttribute;
 import project.dailyge.app.core.monthly_goal.presentation.request.MonthlyGoalCreateRequest;
 
@@ -44,6 +49,11 @@ public interface MonthlyGoalSnippet {
         fieldWithPath("message").type(STRING).description("응답 메시지")
     };
 
+    ParameterDescriptor[] MONTHLY_GOAL_ID_PATH_PARAMETER_DESCRIPTORS = {
+        parameterWithName("monthlyGoalId").description("MonthlyGoal ID")
+    };
+
+    PathParametersSnippet MONTHLY_GOAL_PATH_PARAMETER_SNIPPET = pathParameters(MONTHLY_GOAL_ID_PATH_PARAMETER_DESCRIPTORS);
     RequestFieldsSnippet MONTHLY_GOAL_CREATE_REQUEST_SNIPPET = requestFields(MONTHLY_GOAL_CREATE_REQUEST_FIELDS_DESCRIPTORS);
     ResponseFieldsSnippet MONTHLY_GOAL_CREATE_RESPONSE_SNIPPET = responseFields(MONTHLY_GOAL_CREATE_RESPONSE_FIELD_DESCRIPTORS);
 

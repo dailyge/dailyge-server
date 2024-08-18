@@ -5,4 +5,6 @@ import project.dailyge.app.core.monthly_goal.application.command.MonthlyGoalCrea
 
 public interface MonthlyGoalWriteUseCase {
     Long save(DailygeUser dailygeUser, MonthlyGoalCreateCommand command);
+
+    void delete(DailygeUser dailygeUser, Long monthlyGoalId);
 }

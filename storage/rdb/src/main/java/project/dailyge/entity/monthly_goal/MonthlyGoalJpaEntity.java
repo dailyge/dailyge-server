@@ -54,6 +54,10 @@ public class MonthlyGoalJpaEntity extends BaseEntity {
         this(null, title, content, false, userId);
     }
 
+    public void delete() {
+        deleted = true;
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) {

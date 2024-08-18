@@ -2,6 +2,7 @@ package project.dailyge.app.core.monthlygoal.presentation;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,7 +33,7 @@ public class MonthlyGoalUpdateApi {
         return ApiResponse.from(OK);
     }
 
-    @PutMapping(path = {"/{monthlyGoalId}/status"})
+    @PatchMapping(path = {"/{monthlyGoalId}/status"})
     public ApiResponse<Void> updateMonthlyGoalById(
         @LoginUser final DailygeUser dailygeUser,
         @PathVariable(name = "monthlyGoalId") final Long monthlyGoalId,

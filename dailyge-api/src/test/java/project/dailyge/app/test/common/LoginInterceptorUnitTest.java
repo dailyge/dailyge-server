@@ -5,6 +5,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -15,12 +16,14 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import org.springframework.mock.web.MockHttpServletResponse;
+import project.dailyge.app.codeandmessage.CommonCodeAndMessage;
 import project.dailyge.app.common.auth.DailygeToken;
 import project.dailyge.app.common.auth.JwtProperties;
 import project.dailyge.app.common.auth.SecretKeyManager;
 import project.dailyge.app.common.auth.TokenProvider;
 import project.dailyge.app.core.common.web.LoginInterceptor;
 import project.dailyge.app.core.user.external.oauth.TokenManager;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.NO_CONTENT;
 import static project.dailyge.app.test.user.fixture.UserFixture.createUser;
 
 import project.dailyge.core.cache.user.UserCache;
@@ -77,6 +80,7 @@ class LoginInterceptorUnitTest {
             .thenReturn(true);
 
         assertFalse(loginInterceptor.preHandle(request, response, null));
+        assertEquals(NO_CONTENT.code(), response.getStatus());
     }
 
     @Test

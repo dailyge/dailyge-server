@@ -1,0 +1,22 @@
+package project.dailyge.app.core.monthlygoal.application.service;
+
+import lombok.RequiredArgsConstructor;
+import project.dailyge.app.common.annotation.ApplicationLayer;
+import project.dailyge.app.core.monthlygoal.application.MonthlyGoalReadUseCase;
+import static project.dailyge.app.core.monthlygoal.exception.MonthlyGoalCodeAndMessage.MONTHLY_GOAL_NOT_FOUND;
+import project.dailyge.app.core.monthlygoal.exception.MonthlyGoalTypeException;
+import project.dailyge.entity.monthlygoal.MonthlyGoalEntityReadRepository;
+import project.dailyge.entity.monthlygoal.MonthlyGoalJpaEntity;
+
+@ApplicationLayer
+@RequiredArgsConstructor
+public class MonthlyGoalReadService implements MonthlyGoalReadUseCase {
+
+    private final MonthlyGoalEntityReadRepository monthlyGoalReadRepository;
+
+    @Override
+    public MonthlyGoalJpaEntity findById(final Long monthlyGoalId) {
+        return monthlyGoalReadRepository.findById(monthlyGoalId)
+            .orElseThrow(() -> MonthlyGoalTypeException.from(MONTHLY_GOAL_NOT_FOUND));
+    }
+}

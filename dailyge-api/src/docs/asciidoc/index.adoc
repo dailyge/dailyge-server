@@ -415,3 +415,27 @@ include::{snippets}/monthly_goal_create_documentation_test/when_create_monthly_g
 #### Response-Fields
 
 include::{snippets}/monthly_goal_create_documentation_test/when_create_monthly_goal_then_status_code_should_be201__rest_docs/response-fields.adoc[]
+
+### 3-2. MonthlyGoal 삭제
+
+월간 목표를 삭제하는 API 입니다.
+
+#### Request
+
+include::{snippets}/monthly_goal_delete_documentation_test/when_delete_monthly_goal_then_status_code_should_be204__rest_docs/http-request.adoc[]
+
+#### Request-Header
+
+include::{snippets}/monthly_goal_delete_documentation_test/when_delete_monthly_goal_then_status_code_should_be204__rest_docs/request-headers.adoc[]
+
+#### Path-Parameters
+
+include::{snippets}/monthly_goal_delete_documentation_test/when_delete_monthly_goal_then_status_code_should_be204__rest_docs/path-parameters.adoc[]
+
+#### Response
+
+include::{snippets}/monthly_goal_delete_documentation_test/when_delete_monthly_goal_then_status_code_should_be204__rest_docs/http-response.adoc[]
+
+#### Response-Fields
+
+include::{snippets}/monthly_goal_delete_documentation_test/when_delete_monthly_goal_then_status_code_should_be204__rest_docs/response-fields.adoc[]

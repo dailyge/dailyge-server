@@ -50,7 +50,7 @@ public class UserReadDao implements UserEntityReadRepository {
 
     @Override
     public Long findUserIdByEmail(final String email) {
-        final String sql = "SELECT id FROM users WHERE email = ? AND deleted = false";
+        final String sql = "SELECT id FROM user_sequence WHERE email = ?";
         try {
             return jdbcTemplate.queryForObject(sql, Long.class, email);
         } catch (DataAccessException ex) {

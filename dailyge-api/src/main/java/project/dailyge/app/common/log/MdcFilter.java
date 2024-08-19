@@ -21,7 +21,7 @@ import java.time.temporal.ChronoUnit;
 
 @Slf4j
 @Order(1)
-@Component
+// @Component
 public class MdcFilter implements Filter {
 
     private static final String[] IP_HEADERS = {

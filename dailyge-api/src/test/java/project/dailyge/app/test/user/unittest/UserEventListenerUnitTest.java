@@ -5,11 +5,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import project.dailyge.app.core.user.event.UserEventListener;
+import project.dailyge.app.core.user.facade.UserFacade;
 import static project.dailyge.document.common.UuidGenerator.createTimeBasedUUID;
 import project.dailyge.document.event.EventDocument;
 import project.dailyge.document.event.EventDocumentWriteRepository;
@@ -20,6 +22,7 @@ import project.dailyge.entity.user.UserEvent;
 @DisplayName("[UnitTest] UserEventListener 단위 테스트")
 class UserEventListenerUnitTest {
 
+    private UserFacade userFacade;
     private EventPublisher<UserEvent> eventPublisher;
     private EventDocumentWriteRepository eventWriteRepository;
     private UserEventListener userEventListener;
@@ -27,8 +30,9 @@ class UserEventListenerUnitTest {
     @BeforeEach
     void setUp() {
         eventPublisher = mock(EventPublisher.class);
+        userFacade = mock(UserFacade.class);
         eventWriteRepository = mock(EventDocumentWriteRepository.class);
-        userEventListener = new UserEventListener(eventPublisher, eventWriteRepository);
+        userEventListener = new UserEventListener(userFacade, eventPublisher, eventWriteRepository);
     }
 
     @Test
@@ -43,7 +47,7 @@ class UserEventListenerUnitTest {
             .thenReturn(eventId);
 
         final UserEvent event = UserEvent.createEvent(publisherId, eventId, CREATE);
-        userEventListener.listenEvent(event);
+        userEventListener.listenInternalEvent(event);
 
         verify(eventWriteRepository)
             .save(eventDocument);
@@ -59,9 +63,9 @@ class UserEventListenerUnitTest {
         doThrow(new RuntimeException("Database error"))
             .when(eventWriteRepository).save(any(EventDocument.class));
 
-        userEventListener.listenEvent(event);
+        userEventListener.listenInternalEvent(event);
 
         verify(eventPublisher)
-            .publishInternalEvent(event);
+            .publishInternalEvent(argThat(argument -> !argument.equals(event)));
     }
 }

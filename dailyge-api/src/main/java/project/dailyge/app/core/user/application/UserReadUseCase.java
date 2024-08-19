@@ -15,5 +15,7 @@ public interface UserReadUseCase {
 
     Long findUserIdByEmail(String email);
 
+    String findEmailByUserId(Long userId);
+
     boolean existsById(Long userId);
 }

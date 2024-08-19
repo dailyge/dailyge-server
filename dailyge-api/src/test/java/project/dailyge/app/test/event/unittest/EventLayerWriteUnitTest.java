@@ -5,16 +5,17 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.argThat;
 import org.mockito.Mock;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.openMocks;
 import project.dailyge.app.core.event.application.EventWriteUseCase;
 import project.dailyge.app.core.user.event.UserEventListener;
+import project.dailyge.app.core.user.facade.UserFacade;
 import project.dailyge.document.event.EventDocumentWriteRepository;
 import project.dailyge.entity.common.EventPublisher;
 import static project.dailyge.entity.common.EventType.CREATE;
@@ -24,6 +25,9 @@ import java.util.concurrent.CountDownLatch;
 
 @DisplayName("[UnitTest] 이벤트 쓰기 단위 테스트")
 class EventLayerWriteUnitTest {
+
+    @Mock
+    private UserFacade userFacade;
 
     @Mock
     private EventDocumentWriteRepository eventDocumentWriteRepository;
@@ -39,7 +43,7 @@ class EventLayerWriteUnitTest {
     @BeforeEach
     void setUp() {
         openMocks(this);
-        eventListener = new UserEventListener(userEventPublisher, eventDocumentWriteRepository);
+        eventListener = new UserEventListener(userFacade, userEventPublisher, eventDocumentWriteRepository);
     }
 
     @Test
@@ -58,10 +62,10 @@ class EventLayerWriteUnitTest {
             return null;
         }).when(userEventPublisher).publishInternalEvent(any(UserEvent.class));
 
-        eventListener.listenEvent(event);
+        eventListener.listenInternalEvent(event);
         latch.await(3, SECONDS);
 
-        verify(userEventPublisher).publishInternalEvent(eq(event));
+        verify(userEventPublisher).publishInternalEvent(argThat(argument -> !argument.equals(event)));
     }
 
     @Test
@@ -78,8 +82,8 @@ class EventLayerWriteUnitTest {
             return null;
         }).when(eventDocumentWriteRepository).save(any());
 
-        eventListener.listenEvent(event);
-        eventListener.listenEvent(event);
+        eventListener.listenInternalEvent(event);
+        eventListener.listenInternalEvent(event);
 
         latch.await(3, SECONDS);
 

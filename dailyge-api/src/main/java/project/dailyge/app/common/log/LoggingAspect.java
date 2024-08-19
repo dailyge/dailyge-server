@@ -19,9 +19,9 @@ import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 
 @Slf4j
-@Aspect
-@Component
-@Profile("!test")
+// @Aspect
+// @Component
+// @Profile("!test")
 public class LoggingAspect {
 
     private static final String SERVER = "dailyge-api";

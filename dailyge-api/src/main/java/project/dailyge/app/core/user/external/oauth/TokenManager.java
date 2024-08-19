@@ -29,6 +29,8 @@ public class TokenManager {
                 redisTemplate.opsForValue().set(getKey(userId), compressedRefreshToken);
                 return null;
             });
+        } catch (RedisException ex) {
+            throw new ExternalServerException(ex.getMessage(), BAD_GATEWAY);
         } catch (Exception ex) {
             throw new ExternalServerException(ex.getMessage(), INTERNAL_SERVER_ERROR);
         }
@@ -43,6 +45,8 @@ public class TokenManager {
                 }
                 return decompressAsString(refreshToken);
             });
+        } catch (RedisException ex) {
+            throw new ExternalServerException(ex.getMessage(), BAD_GATEWAY);
         } catch (Exception ex) {
             throw new ExternalServerException(ex.getMessage(), INTERNAL_SERVER_ERROR);
         }
@@ -54,6 +58,8 @@ public class TokenManager {
                 redisTemplate.delete(getKey(userId));
                 return null;
             });
+        } catch (RedisException ex) {
+            throw new ExternalServerException(ex.getMessage(), BAD_GATEWAY);
         } catch (Exception ex) {
             throw new ExternalServerException(ex.getMessage(), INTERNAL_SERVER_ERROR);
         }

@@ -19,29 +19,44 @@ public class TokenManager {
 
     private final RedisTemplate<String, byte[]> redisTemplate;
 
-    public void saveRefreshToken(final Long userId, final String refreshToken) {
-        executeRedisCommand(() -> {
-            final byte[] compressedRefreshToken = compressStringAsByteArray(refreshToken.getBytes(UTF_8));
-            redisTemplate.opsForValue().set(getKey(userId), compressedRefreshToken);
-            return null;
-        });
+    public void saveRefreshToken(
+        final Long userId,
+        final String refreshToken
+    ) {
+        try {
+            executeRedisCommand(() -> {
+                final byte[] compressedRefreshToken = compressStringAsByteArray(refreshToken.getBytes(UTF_8));
+                redisTemplate.opsForValue().set(getKey(userId), compressedRefreshToken);
+                return null;
+            });
+        } catch (Exception ex) {
+            throw new ExternalServerException(ex.getMessage(), INTERNAL_SERVER_ERROR);
+        }
     }
 
     public String getRefreshToken(final Long userId) {
-        return executeRedisCommand(() -> {
-            final byte[] refreshToken = redisTemplate.opsForValue().get(getKey(userId));
-            if (refreshToken == null) {
-                return null;
-            }
-            return decompressAsString(refreshToken);
-        });
+        try {
+            return executeRedisCommand(() -> {
+                final byte[] refreshToken = redisTemplate.opsForValue().get(getKey(userId));
+                if (refreshToken == null) {
+                    return null;
+                }
+                return decompressAsString(refreshToken);
+            });
+        } catch (Exception ex) {
+            throw new ExternalServerException(ex.getMessage(), INTERNAL_SERVER_ERROR);
+        }
     }
 
     public void deleteRefreshToken(final Long userId) {
-        executeRedisCommand(() -> {
-            redisTemplate.delete(getKey(userId));
-            return null;
-        });
+        try {
+            executeRedisCommand(() -> {
+                redisTemplate.delete(getKey(userId));
+                return null;
+            });
+        } catch (Exception ex) {
+            throw new ExternalServerException(ex.getMessage(), INTERNAL_SERVER_ERROR);
+        }
     }
 
     private String executeRedisCommand(final Supplier<String> command) {

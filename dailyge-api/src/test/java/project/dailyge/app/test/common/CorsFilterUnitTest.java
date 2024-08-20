@@ -54,7 +54,7 @@ class CorsFilterUnitTest {
 
         verify(response).setHeader(ACCESS_CONTROL_ALLOW_ORIGIN, CLIENT_URL);
         verify(response).setHeader(ACCESS_CONTROL_ALLOW_CREDENTIALS, "true");
-        verify(response).setHeader(ACCESS_CONTROL_ALLOW_METHODS, "*");
+        verify(response).setHeader(ACCESS_CONTROL_ALLOW_METHODS, "GET, POST, PUT, DELETE, PATCH, OPTIONS");
         verify(response).setHeader(ACCESS_CONTROL_MAX_AGE, "600");
         verify(response).setHeader(ACCESS_CONTROL_ALLOW_HEADERS,
             String.join(", ", ORIGIN, CONTENT_TYPE, ACCEPT, AUTHORIZATION, "X-Requested-With"));

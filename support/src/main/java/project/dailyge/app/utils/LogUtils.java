@@ -1,7 +1,6 @@
 package project.dailyge.app.utils;
 
 import com.fasterxml.uuid.Generators;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -10,8 +9,8 @@ public final class LogUtils {
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
     private static final String GUEST = "{ \"userId\":null, \"role\":\"GUEST\" }";
     private static final String EMPTY_STRING = "null";
-    private static final String LOG_FORMAT = "{\"server\":\"%s\", \"path\":\"%s\", \"method\":\"%s\", \"traceId\":\"%s\", " +
-        "\"ip\":\"%s\", \"layer\":\"%s\", \"visitor\":\"%s\", \"time\":\"%s\", \"duration\":\"%dms\", \"context\":{\"args\":%s, \"result\":%s}}";
+    private static final String LOG_FORMAT = "{\"server\":\"%s\", \"path\":\"%s\", \"method\":\"%s\", \"traceId\":\"%s\", "
+        + "\"ip\":\"%s\", \"layer\":\"%s\", \"visitor\":\"%s\", \"time\":\"%s\", \"duration\":\"%dms\", \"context\":{\"args\":%s, \"result\":%s}}";
 
     private LogUtils() {
         throw new AssertionError("올바른 방식으로 생성자를 호출해주세요.");

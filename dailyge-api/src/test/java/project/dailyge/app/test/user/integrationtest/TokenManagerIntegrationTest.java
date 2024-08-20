@@ -54,7 +54,7 @@ class TokenManagerIntegrationTest extends DatabaseTestBase {
         assertThatThrownBy(() -> mockTokenManager.saveRefreshToken(1L, REFRESH_TOKEN))
             .isExactlyInstanceOf(ExternalServerException.class)
             .extracting(CODE_AND_MESSAGE)
-            .isEqualTo(INTERNAL_SERVER_ERROR);
+            .isEqualTo(BAD_GATEWAY);
     }
 
     @Test

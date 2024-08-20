@@ -36,7 +36,7 @@ public class UserFacade {
 
     public DailygeToken login(final String code) {
         final GoogleUserInfoResponse response = googleOAuthManager.getUserInfo(code);
-        final Long userId = getUserId(response);
+        final Long userId = userReadUseCase.findUserIdByEmail(response.getEmail());
         publishEvent(userId, response);
         final DailygeToken token = tokenProvider.createToken(userId, response.getEmail());
         tokenManager.saveRefreshToken(userId, token.refreshToken());
@@ -55,14 +55,6 @@ public class UserFacade {
         }
         final UserEvent userEvent = createEvent(userId, createTimeBasedUUID(), UPDATE);
         eventPublisher.publishInternalEvent(userEvent);
-    }
-
-    private Long getUserId(final GoogleUserInfoResponse response) {
-        final Long userId = userReadUseCase.findUserIdByEmail(response.getEmail());
-        if (userId == null) {
-            return userWriteUseCase.save(response.getEmail());
-        }
-        return userId;
     }
 
     public void logout(final Long userId) {

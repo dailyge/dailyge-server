@@ -36,14 +36,14 @@ public class UserFacade {
 
     public DailygeToken login(final String code) {
         final GoogleUserInfoResponse response = googleOAuthManager.getUserInfo(code);
-        final Long userId = userReadUseCase.findUserIdByEmail(response.getEmail());
-        publishEvent(userId, response);
+        final Long findUserId = userReadUseCase.findUserIdByEmail(response.getEmail());
+        final Long userId = publishEvent(findUserId, response);
         final DailygeToken token = tokenProvider.createToken(userId, response.getEmail());
         tokenManager.saveRefreshToken(userId, token.refreshToken());
         return token;
     }
 
-    private void publishEvent(
+    private Long publishEvent(
         final Long userId,
         final GoogleUserInfoResponse response
     ) {
@@ -51,10 +51,11 @@ public class UserFacade {
             final Long newUserId = userWriteUseCase.save(response.getEmail());
             final UserEvent userEvent = createEvent(newUserId, createTimeBasedUUID(), CREATE);
             eventPublisher.publishInternalEvent(userEvent);
-            return;
+            return newUserId;
         }
         final UserEvent userEvent = createEvent(userId, createTimeBasedUUID(), UPDATE);
         eventPublisher.publishInternalEvent(userEvent);
+        return userId;
     }
 
     public void logout(final Long userId) {

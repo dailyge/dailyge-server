@@ -16,6 +16,8 @@ import project.dailyge.app.core.task.presentation.requesst.TaskCreateRequest;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskReadSnippet.createMonthlyTasksSearchWithIdFilter;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskReadSnippet.createTaskDetailSearchFilter;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskReadSnippet.createTaskStatusesReadFilter;
+import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.DATE_SEARCH_QUERY_PARAMETER_SNIPPET;
+import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASKS_SEARCH_RESPONSE_SNIPPET;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASK_AUTHORIZATION_HEADER;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASK_DATE_REQUEST_PARAMETER_SNIPPET;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASK_DETAIL_SEARCH_RESPONSE_SNIPPET;
@@ -151,8 +153,36 @@ class TaskReadDocumentationTest extends DatabaseTestBase {
     }
 
     @Test
+    @DisplayName("[RestDocs] 월간 일정을 조회하면 200 OK 응답을 받는다.")
+    void whenSearchTasksWithBetweenStartDateAndEndDateThenStatusCodeShouldBe_200_OK_RestDocs() {
+        final LocalDate startTime = now;
+        final LocalDate endTime = now.plusDays(10);
+        final TaskCreateRequest request = createTaskRegisterRequest(monthlyTask.getId(), now);
+        taskWriteUseCase.save(dailygeUser, request.toCommand());
+
+        given(this.specification)
+            .filter(document(IDENTIFIER,
+                TASK_AUTHORIZATION_HEADER,
+                DATE_SEARCH_QUERY_PARAMETER_SNIPPET,
+                TASKS_SEARCH_RESPONSE_SNIPPET
+            ))
+            .contentType(APPLICATION_JSON_VALUE)
+            .param("startDate", startTime.toString())
+            .param("endDate", endTime.toString())
+            .header(AUTHORIZATION, getAuthorizationHeader())
+            .when()
+            .get("/api/tasks")
+            .then()
+            .statusCode(200)
+            .log()
+            .all();
+    }
+
+    @Test
     @DisplayName("[Swagger] 월간 일정을 조회하면 200 OK 응답을 받는다.")
-    void whenMonthlyTaskExistsWithIdThenStatusCodeShouldBe_200_OK_Swagger() {
+    void whenSearchTasksWithBetweenStartDateAndEndDateThenStatusCodeShouldBe_200_OK_Swagger() {
+        final LocalDate startTime = now;
+        final LocalDate endTime = now.plusDays(10);
         final TaskCreateRequest request = createTaskRegisterRequest(monthlyTask.getId(), now);
         taskWriteUseCase.save(dailygeUser, request.toCommand());
         final RestDocumentationFilter filter = createMonthlyTasksSearchWithIdFilter(
@@ -162,7 +192,8 @@ class TaskReadDocumentationTest extends DatabaseTestBase {
         given(this.specification)
             .filter(filter)
             .contentType(APPLICATION_JSON_VALUE)
-            .param("date", now.toString())
+            .param("startDate", startTime.toString())
+            .param("endDate", endTime.toString())
             .header(AUTHORIZATION, getAuthorizationHeader())
             .when()
             .get("/api/tasks")
@@ -174,7 +205,9 @@ class TaskReadDocumentationTest extends DatabaseTestBase {
 
     @Test
     @DisplayName("[Swagger] 올바르지 않은 파라미터로 월간 일정을 조회하면 400 Bad Request 응답을 받는다.")
-    void whenMonthlyTaskExistsWithIdThenStatusCodeShouldBe_400_Bad_Request_Swagger() {
+    void whenSearchTasksWithBetweenStartDateAndEndDateThenStatusCodeShouldBe_400_Bad_Request_Swagger() {
+        final LocalDate startTime = now;
+        final LocalDate endTime = now.plusDays(10);
         final TaskCreateRequest request = createTaskRegisterRequest(monthlyTask.getId(), now);
         taskWriteUseCase.save(dailygeUser, request.toCommand());
         final RestDocumentationFilter filter = createMonthlyTasksSearchWithIdFilter(
@@ -184,7 +217,8 @@ class TaskReadDocumentationTest extends DatabaseTestBase {
         given(this.specification)
             .filter(filter)
             .contentType(APPLICATION_JSON_VALUE)
-            .param("date", now)
+            .param("startDate", endTime.toString())
+            .param("endDate", startTime.toString())
             .header(AUTHORIZATION, getAuthorizationHeader())
             .when()
             .get("/api/tasks")

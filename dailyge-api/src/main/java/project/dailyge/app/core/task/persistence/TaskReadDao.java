@@ -16,8 +16,10 @@ import project.dailyge.entity.task.TaskJpaEntity;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Repository
 @RequiredArgsConstructor
@@ -81,6 +83,21 @@ class TaskReadDao implements TaskEntityReadRepository, MonthlyTaskEntityReadRepo
     }
 
     @Override
+    public List<TaskJpaEntity> findTasksByMonthlyTaskIdAndDates(
+        final Long userId,
+        final Set<Long> monthlyTaskIds,
+        final LocalDate startDate,
+        final LocalDate endDate
+    ) {
+        return queryFactory.selectFrom(taskJpaEntity)
+            .where(
+                taskJpaEntity.monthlyTaskId.in(monthlyTaskIds)
+                    .and(taskJpaEntity.userId.eq(userId))
+                    .and(taskJpaEntity.date.between(startDate, endDate))
+            ).fetch();
+    }
+
+    @Override
     public Long findMonthlyTaskIdByUserIdAndDate(
         final Long userId,
         final LocalDate date
@@ -94,6 +111,30 @@ class TaskReadDao implements TaskEntityReadRepository, MonthlyTaskEntityReadRepo
             )
             .limit(1)
             .fetchOne();
+    }
+
+    @Override
+    public Set<Long> findMonthlyTasksByUserIdAndDates(
+        final Long userId,
+        final LocalDate startDate,
+        final LocalDate endDate
+    ) {
+        final int startYear = startDate.getYear();
+        final int startMonth = startDate.getMonthValue();
+        final int endYear = endDate.getYear();
+        final int endMonth = endDate.getMonthValue();
+        return new HashSet<>(queryFactory.select(monthlyTaskJpaEntity.id)
+            .from(monthlyTaskJpaEntity)
+            .where(
+                monthlyTaskJpaEntity.userId.eq(userId),
+                monthlyTaskJpaEntity.year.eq(startYear)
+                    .and(monthlyTaskJpaEntity.month.goe(startMonth))
+                    .or(monthlyTaskJpaEntity.year.gt(startYear)),
+                monthlyTaskJpaEntity.year.eq(endYear)
+                    .and(monthlyTaskJpaEntity.month.loe(endMonth))
+                    .or(monthlyTaskJpaEntity.year.lt(endYear))
+            )
+            .fetch());
     }
 
     @Override

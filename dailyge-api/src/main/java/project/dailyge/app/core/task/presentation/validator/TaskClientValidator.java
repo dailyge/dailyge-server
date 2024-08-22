@@ -7,7 +7,7 @@ import java.time.LocalDate;
 @Component
 public class TaskClientValidator {
 
-    public void validateWeeklyTasksSearchParams(
+    public void validateFromStartDateToEndDate(
         final LocalDate startDate,
         final LocalDate endDate
     ) {

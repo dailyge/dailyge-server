@@ -6,14 +6,14 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Getter
-public class WeeklyTasksResponse {
+public class TasksResponse {
     private Long monthlyTaskId;
     private List<TaskDetailResponse> tasks;
 
-    private WeeklyTasksResponse() {
+    private TasksResponse() {
     }
 
-    public WeeklyTasksResponse(final List<TaskDetailResponse> tasks) {
+    public TasksResponse(final List<TaskDetailResponse> tasks) {
         this.monthlyTaskId = getMonthlyTaskId(tasks);
         this.tasks = tasks;
     }

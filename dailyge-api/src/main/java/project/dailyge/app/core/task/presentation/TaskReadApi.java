@@ -14,7 +14,7 @@ import project.dailyge.app.core.task.application.TaskReadUseCase;
 import project.dailyge.app.core.task.presentation.response.MonthlyTaskIdResponse;
 import project.dailyge.app.core.task.presentation.response.TaskDetailResponse;
 import project.dailyge.app.core.task.presentation.response.TaskStatusResponse;
-import project.dailyge.app.core.task.presentation.response.WeeklyTasksResponse;
+import project.dailyge.app.core.task.presentation.response.TasksResponse;
 import project.dailyge.app.core.task.presentation.validator.TaskClientValidator;
 import project.dailyge.entity.task.TaskJpaEntity;
 import project.dailyge.entity.task.TaskStatus;
@@ -42,17 +42,17 @@ public class TaskReadApi {
     }
 
     @GetMapping(path = {"/tasks"})
-    public ApiResponse<WeeklyTasksResponse> findTasksByMonthlyTaskIdAndDates(
+    public ApiResponse<TasksResponse> findTasksByDates(
         @LoginUser final DailygeUser dailygeUser,
         @RequestParam(value = "startDate") final LocalDate startDate,
         @RequestParam(value = "endDate") final LocalDate endDate
     ) {
-        validator.validateWeeklyTasksSearchParams(startDate, endDate);
+        validator.validateFromStartDateToEndDate(startDate, endDate);
         final List<TaskDetailResponse> findWeeklyTasks =
             taskReadUseCase.findTasksByMonthlyTaskIdAndDates(dailygeUser, startDate, endDate).stream()
                 .map(TaskDetailResponse::from)
                 .toList();
-        final WeeklyTasksResponse payload = new WeeklyTasksResponse(findWeeklyTasks);
+        final TasksResponse payload = new TasksResponse(findWeeklyTasks);
         return ApiResponse.from(OK, payload);
     }
 

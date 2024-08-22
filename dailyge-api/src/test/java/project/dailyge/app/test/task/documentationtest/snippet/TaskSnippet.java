@@ -52,6 +52,8 @@ public interface TaskSnippet {
             .attributes(getAttribute(TaskCreateRequest.class, "content")),
         fieldWithPath("date").description("날짜")
             .attributes(getAttribute(TaskCreateRequest.class, "date")),
+        fieldWithPath("color").description("색상")
+            .attributes(getAttribute(TaskCreateRequest.class, "color")),
     };
 
     FieldDescriptor[] TASK_UPDATE_REQUEST_FIELDS = {
@@ -65,6 +67,8 @@ public interface TaskSnippet {
             .attributes(getAttribute(TaskUpdateRequest.class, "date")),
         fieldWithPath("status").description("상태")
             .attributes(getAttribute(TaskUpdateRequest.class, "status")),
+        fieldWithPath("color").description("색상")
+            .attributes(getAttribute(TaskUpdateRequest.class, "color")),
     };
 
     FieldDescriptor[] TASK_STATUS_UPDATE_REQUEST_FIELDS = {
@@ -81,7 +85,7 @@ public interface TaskSnippet {
     };
 
     FieldDescriptor[] TASK_CREATE_RESPONSE = {
-        fieldWithPath("data.taskId").type(STRING).description("Task ID"),
+        fieldWithPath("data.taskId").type(NUMBER).description("Task ID"),
         fieldWithPath("code").type(NUMBER).description("응답 코드"),
         fieldWithPath("message").type(STRING).description("응답 메시지")
     };
@@ -112,30 +116,24 @@ public interface TaskSnippet {
         parameterWithName("taskId").description("Task ID")
     };
 
-    ParameterDescriptor[] TASK_DELETE_PATH_DESCRIPTOR = {
-        parameterWithName("taskId").description("Task ID")
-    };
-
     FieldDescriptor[] MONTHLY_TASK_ID_READ_RESPONSE_FIELD_DESCRIPTOR = {
-        fieldWithPath("data.monthlyTaskId").type(STRING).description("월간 일정표 ID"),
+        fieldWithPath("data.monthlyTaskId").type(NUMBER).description("월간 일정표 ID"),
         fieldWithPath("code").type(NUMBER).description("응답 코드"),
         fieldWithPath("message").type(STRING).description("응답 메시지")
     };
 
     FieldDescriptor[] MONTHLY_TASK_READ_RESPONSE_FIELD_DESCRIPTOR = {
-        fieldWithPath("data.id").type(STRING).description("월간 일정표 ID"),
-        fieldWithPath("data.userId").type(NUMBER).description("사용자 ID"),
+        fieldWithPath("data.monthlyTaskId").type(NUMBER).description("월간 일정표 ID"),
         fieldWithPath("data.year").type(NUMBER).description("년"),
         fieldWithPath("data.month").type(NUMBER).description("월"),
-        fieldWithPath("data.createdAt").type(STRING).description("등록일"),
-        fieldWithPath("data.lastModifiedAt").type(STRING).description("최종 수정일"),
-        fieldWithPath("data.tasks.[].id").type(STRING).description("Task ID"),
-        fieldWithPath("data.tasks.[].monthlyTaskId").type(STRING).description("월간 일정표 ID"),
+        fieldWithPath("data.tasks.[].taskId").type(NUMBER).description("Task ID"),
+        fieldWithPath("data.tasks.[].monthlyTaskId").type(NUMBER).description("월간 일정표 ID"),
         fieldWithPath("data.tasks.[].title").type(STRING).description("제목"),
         fieldWithPath("data.tasks.[].content").type(STRING).description("내용"),
         fieldWithPath("data.tasks.[].day").type(NUMBER).description("날짜"),
         fieldWithPath("data.tasks.[].weekOfMonth").type(NUMBER).description("주 차"),
         fieldWithPath("data.tasks.[].status").type(STRING).description("상태"),
+        fieldWithPath("data.tasks.[].color").type(STRING).description("색상"),
         fieldWithPath("data.tasks.[].userId").type(NUMBER).description("사용자 ID"),
         fieldWithPath("data.tasks.[].createdAt").type(STRING).description("등록일"),
         fieldWithPath("data.tasks.[].lastModifiedAt").type(STRING).description("최종 수정일"),
@@ -144,13 +142,14 @@ public interface TaskSnippet {
     };
 
     FieldDescriptor[] TASK_DETAIL_SEARCH_RESPONSE_FIELD_DESCRIPTOR = {
-        fieldWithPath("data.id").type(STRING).description("Task ID"),
+        fieldWithPath("data.taskId").type(NUMBER).description("Task ID"),
         fieldWithPath("data.monthlyTaskId").type(STRING).description("Task ID"),
         fieldWithPath("data.title").type(STRING).description("제목"),
         fieldWithPath("data.content").type(STRING).description("내용"),
         fieldWithPath("data.day").type(NUMBER).description("날짜"),
         fieldWithPath("data.weekOfMonth").type(NUMBER).description("주 차"),
         fieldWithPath("data.status").type(STRING).description("상태"),
+        fieldWithPath("data.color").type(STRING).description("색상"),
         fieldWithPath("data.userId").type(NUMBER).description("사용자 ID"),
         fieldWithPath("data.createdAt").type(STRING).description("등록일"),
         fieldWithPath("data.lastModifiedAt").type(STRING).description("최종 수정일"),
@@ -180,12 +179,10 @@ public interface TaskSnippet {
     ResponseFieldsSnippet TASK_UPDATE_RESPONSE_SNIPPET = responseFields(TASK_UPDATE_RESPONSE_FIELD_DESCRIPTOR);
     ResponseFieldsSnippet TASK_STATUS_UPDATE_RESPONSE_SNIPPET = responseFields(TASK_STATUS_UPDATE_RESPONSE);
 
-    // Detail Search
+    // Search
     PathParametersSnippet TASK_PATH_PARAMETER_SNIPPET = pathParameters(TASK_ID_PATH_PARAMETER_DESCRIPTORS);
-    PathParametersSnippet MONTHLY_TASK_PATH_PARAMETER_SNIPPET = pathParameters(MONTHLY_TASK_PATH_PARAMETER_DESCRIPTORS);
+    QueryParametersSnippet DATE_REQUEST_PARAMETER_SNIPPET = queryParameters(DATE_QUERY_PARAMETER_DESCRIPTORS);
     QueryParametersSnippet TASK_DATE_REQUEST_PARAMETER_SNIPPET = queryParameters(DATE_QUERY_PARAMETER_DESCRIPTORS);
-    QueryParametersSnippet MONTHLY_TASK_DATE_QUERY_PARAMETER_SNIPPET = queryParameters(DATE_QUERY_PARAMETER_DESCRIPTORS);
-    ResponseFieldsSnippet MONTHLY_TASK_ID_READ_RESPONSE_SNIPPET = responseFields(MONTHLY_TASK_ID_READ_RESPONSE_FIELD_DESCRIPTOR);
     ResponseFieldsSnippet MONTHLY_TASK_READ_RESPONSE_SNIPPET = responseFields(MONTHLY_TASK_READ_RESPONSE_FIELD_DESCRIPTOR);
     ResponseFieldsSnippet TASK_DETAIL_SEARCH_RESPONSE_SNIPPET = responseFields(TASK_DETAIL_SEARCH_RESPONSE_FIELD_DESCRIPTOR);
 

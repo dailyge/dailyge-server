@@ -159,9 +159,6 @@ class TaskReadDocumentationTest extends DatabaseTestBase {
         final LocalDate endTime = now.plusDays(10);
         final TaskCreateRequest request = createTaskRegisterRequest(monthlyTask.getId(), now);
         taskWriteUseCase.save(dailygeUser, request.toCommand());
-        final RestDocumentationFilter filter = createMonthlyTasksSearchWithIdFilter(
-            createIdentifier("MonthlyTaskDetailSearch", 200)
-        );
 
         given(this.specification)
             .filter(document(IDENTIFIER,

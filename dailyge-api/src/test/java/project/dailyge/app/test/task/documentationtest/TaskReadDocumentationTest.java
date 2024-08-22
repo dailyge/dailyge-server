@@ -26,6 +26,7 @@ import static project.dailyge.app.test.task.fixture.TaskRequestFixture.createTas
 import project.dailyge.entity.task.MonthlyTaskJpaEntity;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @DisplayName("[DocumentationTest] Task 조회 문서화 테스트")
 class TaskReadDocumentationTest extends DatabaseTestBase {
@@ -153,7 +154,10 @@ class TaskReadDocumentationTest extends DatabaseTestBase {
     @Test
     @DisplayName("[Swagger] 월간 일정을 조회하면 200 OK 응답을 받는다.")
     void whenMonthlyTaskExistsWithIdThenStatusCodeShouldBe_200_OK_Swagger() {
+        final LocalDate startTime = now;
+        final LocalDate endTime = now.plusDays(10);
         final TaskCreateRequest request = createTaskRegisterRequest(monthlyTask.getId(), now);
+        final List<Long> monthlyTaskIds = List.of(request.monthlyTaskId());
         taskWriteUseCase.save(dailygeUser, request.toCommand());
         final RestDocumentationFilter filter = createMonthlyTasksSearchWithIdFilter(
             createIdentifier("MonthlyTaskDetailSearch", 200)
@@ -162,7 +166,9 @@ class TaskReadDocumentationTest extends DatabaseTestBase {
         given(this.specification)
             .filter(filter)
             .contentType(APPLICATION_JSON_VALUE)
-            .param("date", now.toString())
+            .param("monthlyTaskIds", monthlyTaskIds)
+            .param("startDate", startTime.toString())
+            .param("endDate", endTime.toString())
             .header(AUTHORIZATION, getAuthorizationHeader())
             .when()
             .get("/api/tasks")
@@ -175,7 +181,10 @@ class TaskReadDocumentationTest extends DatabaseTestBase {
     @Test
     @DisplayName("[Swagger] 올바르지 않은 파라미터로 월간 일정을 조회하면 400 Bad Request 응답을 받는다.")
     void whenMonthlyTaskExistsWithIdThenStatusCodeShouldBe_400_Bad_Request_Swagger() {
+        final LocalDate startTime = now;
+        final LocalDate endTime = now.plusDays(10);
         final TaskCreateRequest request = createTaskRegisterRequest(monthlyTask.getId(), now);
+        final List<Long> monthlyTaskIds = List.of(request.monthlyTaskId());
         taskWriteUseCase.save(dailygeUser, request.toCommand());
         final RestDocumentationFilter filter = createMonthlyTasksSearchWithIdFilter(
             createIdentifier("MonthlyTaskDetailSearch", 400)
@@ -184,7 +193,9 @@ class TaskReadDocumentationTest extends DatabaseTestBase {
         given(this.specification)
             .filter(filter)
             .contentType(APPLICATION_JSON_VALUE)
-            .param("date", now)
+            .param("monthlyTaskIds", monthlyTaskIds)
+            .param("startDate", endTime.toString())
+            .param("endDate", startTime.toString())
             .header(AUTHORIZATION, getAuthorizationHeader())
             .when()
             .get("/api/tasks")

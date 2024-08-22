@@ -8,13 +8,13 @@ import project.dailyge.app.core.task.application.command.TaskUpdateCommand;
 import java.time.LocalDate;
 
 public interface TaskWriteUseCase {
-    void createMonthlyTasks(DailygeUser dailygeUser, LocalDate date);
+    void saveAll(DailygeUser dailygeUser, LocalDate date);
 
-    String save(DailygeUser dailygeUser, TaskCreateCommand command);
+    Long save(DailygeUser dailygeUser, TaskCreateCommand command);
 
-    void update(DailygeUser dailygeUser, String taskId, TaskUpdateCommand command);
+    void update(DailygeUser dailygeUser, Long taskId, TaskUpdateCommand command);
 
-    void updateStatus(DailygeUser dailygeUser, String taskId, TaskStatusUpdateCommand command);
+    void updateStatus(DailygeUser dailygeUser, Long taskId, TaskStatusUpdateCommand command);
 
     void delete(DailygeUser dailygeUser, Long taskId);
 }

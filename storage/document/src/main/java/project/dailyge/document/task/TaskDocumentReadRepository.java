@@ -14,8 +14,6 @@ public interface TaskDocumentReadRepository {
 
     Optional<MonthlyTaskDocument> findMonthlyDocumentByUserIdAndDate(Long userId, LocalDate date);
 
-    boolean existsMonthlyPlanByUserIdAndDate(Long userId, LocalDate date);
-
     long countMonthlyTask(Long userId, LocalDate date);
 
     long countTodayTask(Long userId, LocalDate date);

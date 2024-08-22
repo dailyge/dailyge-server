@@ -9,7 +9,7 @@ import project.dailyge.app.common.annotation.PresentationLayer;
 import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.common.auth.LoginUser;
 import project.dailyge.app.common.response.ApiResponse;
-import project.dailyge.app.core.task.facade.TaskFacade;
+import project.dailyge.app.core.task.application.TaskWriteUseCase;
 import project.dailyge.app.core.task.presentation.response.TaskCreateResponse;
 
 @PresentationLayer
@@ -17,14 +17,14 @@ import project.dailyge.app.core.task.presentation.response.TaskCreateResponse;
 @RequestMapping("/api/tasks")
 public class TaskDeleteApi {
 
-    private final TaskFacade taskFacade;
+    private final TaskWriteUseCase taskWriteUseCase;
 
     @DeleteMapping(path = {"/{taskId}"})
     public ApiResponse<TaskCreateResponse> deleteTaskById(
         @LoginUser final DailygeUser dailygeUser,
         @PathVariable(name = "taskId") final Long taskId
     ) {
-        taskFacade.delete(dailygeUser, taskId);
+        taskWriteUseCase.delete(dailygeUser, taskId);
         return ApiResponse.from(NO_CONTENT);
     }
 }

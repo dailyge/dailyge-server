@@ -5,12 +5,12 @@ import lombok.Getter;
 @Getter
 public class TaskCreateResponse {
 
-    private String taskId;
+    private Long taskId;
 
     private TaskCreateResponse() {
     }
 
-    public TaskCreateResponse(final String taskId) {
+    public TaskCreateResponse(final Long taskId) {
         this.taskId = taskId;
     }
 

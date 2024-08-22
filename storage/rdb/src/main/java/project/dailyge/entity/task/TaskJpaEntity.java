@@ -56,11 +56,30 @@ public class TaskJpaEntity extends BaseEntity {
     @Column(name = "user_id")
     private Long userId;
 
+    @Column(name = "monthly_task_id")
+    private Long monthlyTaskId;
+
+    @Column(name = "color")
+    @Enumerated(EnumType.STRING)
+    private TaskColor color;
+
     public TaskJpaEntity(
         final String title,
         final String content,
         final LocalDate date,
         final TaskStatus status,
+        final Long userId
+    ) {
+        this(title, content, date, status, null, null, userId);
+    }
+
+    public TaskJpaEntity(
+        final String title,
+        final String content,
+        final LocalDate date,
+        final TaskStatus status,
+        final TaskColor color,
+        final Long monthlyTaskId,
         final Long userId
     ) {
         validate(title, content, date);
@@ -70,6 +89,8 @@ public class TaskJpaEntity extends BaseEntity {
         this.date = date;
         this.year = date.getYear();
         this.month = date.getMonthValue();
+        this.color = color;
+        this.monthlyTaskId = monthlyTaskId;
         this.userId = userId;
         this.createdBy = userId;
         this.createdAt = LocalDateTime.now();
@@ -148,6 +169,14 @@ public class TaskJpaEntity extends BaseEntity {
         return this.userId.equals(userId);
     }
 
+    public int getDay() {
+        return date.getDayOfMonth();
+    }
+
+    public int getWeekOfMonth() {
+        return date.getDayOfWeek().getValue();
+    }
+
     public void update(
         final String title,
         final String content,
@@ -159,6 +188,10 @@ public class TaskJpaEntity extends BaseEntity {
         this.date = date;
         this.year = date.getYear();
         this.month = date.getMonthValue();
+        this.status = status;
+    }
+
+    public void updateStatus(final TaskStatus status) {
         this.status = status;
     }
 

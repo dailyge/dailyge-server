@@ -21,14 +21,12 @@ public final class TaskReadSnippet implements TaskSnippet {
     private static final String TASK_DETAIL_SEARCH_SUMMARY = "Task 상세 조회 API";
     private static final String MONTHLY_TASK_ID_SEARCH_SUMMARY = "월간 일정표 ID 조회 API";
     private static final String TASKS_SEARCH_SUMMARY = "월간 일정 목록 조회 API";
-    private static final String MONTHLY_TASK_DETAIL_SEARCH_V2_SUMMARY = "월간 일정표 상세 조회 API(V2)";
 
     // Description
     private static final String TASK_STATUS_LIST_DESCRIPTION = "Task 상태 목록(TODO, IN_PROGRESS, DONE)을 조회하는 API 입니다.";
     private static final String TASK_DETAIL_SEARCH_DESCRIPTION = "Task 상세 정보를 조회하는 API 입니다.";
     private static final String MONTHLY_TASK_ID_SEARCH_DESCRIPTION = "월간 일정 ID를 조회하는 API 입니다.";
     private static final String TASKS_SEARCH_DESCRIPTION = "월간 일정을 조회하는 API 입니다.";
-    private static final String MONTHLY_TASK_DETAIL_SEARCH_V2_DESCRIPTION = "월간 일정 정보를 조회하는 API 입니다. 사용자 ID와 날짜로 월간 일정표를 조회합니다.";
 
     private TaskReadSnippet() {
         throw new AssertionError("올바른 방식으로 생성자를 호출해주세요.");
@@ -100,7 +98,7 @@ public final class TaskReadSnippet implements TaskSnippet {
             identifier,
             ResourceSnippetParameters.builder()
                 .requestHeaders(HEADER_DESCRIPTOR)
-                .pathParameters(DATE_QUERY_PARAMETER_DESCRIPTORS)
+                .pathParameters(TASKS_SEARCH_DATE_QUERY_PARAMETER_DESCRIPTORS)
                 .responseFields(MONTHLY_TASK_READ_RESPONSE_FIELD_DESCRIPTOR)
                 .tag(TAG)
                 .summary(TASKS_SEARCH_SUMMARY)
@@ -112,7 +110,7 @@ public final class TaskReadSnippet implements TaskSnippet {
             snippets -> {
                 List.of(
                     requestHeaders(List.of(HEADER_DESCRIPTOR)),
-                    pathParameters(DATE_QUERY_PARAMETER_DESCRIPTORS),
+                    pathParameters(TASKS_SEARCH_DATE_QUERY_PARAMETER_DESCRIPTORS),
                     responseFields(Arrays.stream(MONTHLY_TASK_READ_RESPONSE_FIELD_DESCRIPTOR).toList()),
                     responseFields(Arrays.stream(ERROR_RESPONSE).toList())
                 );

@@ -14,6 +14,8 @@ public class TaskDetailResponse {
     private final Long monthlyTaskId;
     private final String title;
     private final String content;
+    private final int year;
+    private final int month;
     private final int day;
     private final int weekOfMonth;
     private final TaskStatus status;
@@ -27,6 +29,8 @@ public class TaskDetailResponse {
         this.monthlyTaskId = task.getMonthlyTaskId();
         this.title = task.getTitle();
         this.content = task.getContent();
+        this.year = task.getYear();
+        this.month = task.getMonth();
         this.day = task.getDay();
         this.weekOfMonth = task.getWeekOfMonth();
         this.status = task.getStatus();
@@ -43,9 +47,10 @@ public class TaskDetailResponse {
     @Override
     public String toString() {
         return String.format(
-            "{\"id\":\"%s\",\"monthlyTaskId\":\"%s\",\"title\":\"%s\",\"content\":\"%s\",\"day\":%d,\"weekOfMonth\":%d,"
-                + "\"status\":\"%s\", \"color\":%s\", \"userId\":%d,\"createdAt\":\"%s\",\"lastModifiedAt\":\"%s\"}",
-            taskId, monthlyTaskId, title, content, day, weekOfMonth, status, color, userId, createdAt, lastModifiedAt
+            "{\"id\":\"%s\",\"monthlyTaskId\":\"%s\",\"title\":\"%s\",\"content\":\"%s\",\"year\":%d,\"month\":%d,"
+                + "\"day\":%d,\"weekOfMonth\":%d,\"status\":\"%s\", \"color\":\"%s\", \"userId\":%d,"
+                + "\"createdAt\":\"%s\",\"lastModifiedAt\":\"%s\"}",
+            taskId, monthlyTaskId, title, content, year, month, day, weekOfMonth, status, color, userId, createdAt, lastModifiedAt
         );
     }
 }

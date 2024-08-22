@@ -13,7 +13,9 @@ import project.dailyge.entity.task.TaskEntityReadRepository;
 import project.dailyge.entity.task.TaskJpaEntity;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 @ApplicationLayer
 @RequiredArgsConstructor
@@ -34,6 +36,19 @@ class TaskReadService implements TaskReadUseCase {
     public MonthlyTaskJpaEntity findMonthlyTaskById(final Long monthlyTaskId) {
         return monthlyTaskReadRepository.findMonthlyTaskById(monthlyTaskId)
             .orElseThrow(() -> TaskTypeException.from(MONTHLY_TASK_NOT_FOUND));
+    }
+
+    @Override
+    public List<TaskJpaEntity> findTasksByMonthlyTaskIdAndDates(
+        final DailygeUser dailygeUser,
+        final LocalDate startDate,
+        final LocalDate endDate
+    ) {
+        final Set<Long> findMonthlyTaskIds = monthlyTaskReadRepository.findMonthlyTasksByUserIdAndDates(dailygeUser.getId(), startDate, endDate);
+        if (findMonthlyTaskIds.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return taskReadRepository.findTasksByMonthlyTaskIdAndDates(dailygeUser.getId(), findMonthlyTaskIds, startDate, endDate);
     }
 
     @Override

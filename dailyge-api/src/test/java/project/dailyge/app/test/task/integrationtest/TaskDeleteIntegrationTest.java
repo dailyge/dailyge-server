@@ -22,7 +22,7 @@ import project.dailyge.entity.task.MonthlyTaskJpaEntity;
 import static project.dailyge.entity.user.Role.NORMAL;
 
 @DisplayName("[IntegrationTest] Task 삭제 통합 테스트")
-public class TaskDeleteIntegrationTest extends DatabaseTestBase {
+class TaskDeleteIntegrationTest extends DatabaseTestBase {
 
     private MonthlyTaskJpaEntity monthlyTask;
     private TaskCreateCommand taskCreateCommand;

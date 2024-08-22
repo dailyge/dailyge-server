@@ -12,9 +12,10 @@ import project.dailyge.app.common.auth.LoginUser;
 import project.dailyge.app.common.response.ApiResponse;
 import project.dailyge.app.core.task.application.TaskReadUseCase;
 import project.dailyge.app.core.task.presentation.response.MonthlyTaskIdResponse;
-import project.dailyge.app.core.task.presentation.response.MonthlyTaskResponse;
 import project.dailyge.app.core.task.presentation.response.TaskDetailResponse;
 import project.dailyge.app.core.task.presentation.response.TaskStatusResponse;
+import project.dailyge.app.core.task.presentation.response.TasksResponse;
+import project.dailyge.app.core.task.presentation.validator.TaskClientValidator;
 import project.dailyge.entity.task.TaskJpaEntity;
 import project.dailyge.entity.task.TaskStatus;
 
@@ -27,6 +28,7 @@ import java.util.List;
 @RequestMapping(path = {"/api"})
 public class TaskReadApi {
 
+    private final TaskClientValidator validator;
     private final TaskReadUseCase taskReadUseCase;
 
     @GetMapping(path = {"/monthly-tasks/id"})
@@ -40,14 +42,17 @@ public class TaskReadApi {
     }
 
     @GetMapping(path = {"/tasks"})
-    public ApiResponse<MonthlyTaskResponse> findMonthlyTasksByDate(
+    public ApiResponse<TasksResponse> findTasksByDates(
         @LoginUser final DailygeUser dailygeUser,
-        @RequestParam(value = "date") final LocalDate date
+        @RequestParam(value = "startDate") final LocalDate startDate,
+        @RequestParam(value = "endDate") final LocalDate endDate
     ) {
-        final List<TaskDetailResponse> findTasks = taskReadUseCase.findTasksByMonthlyTasksIdAndDate(dailygeUser, date).stream()
-            .map(TaskDetailResponse::from)
-            .toList();
-        final MonthlyTaskResponse payload = MonthlyTaskResponse.from(date, findTasks);
+        validator.validateFromStartDateToEndDate(startDate, endDate);
+        final List<TaskDetailResponse> findWeeklyTasks =
+            taskReadUseCase.findTasksByMonthlyTaskIdAndDates(dailygeUser, startDate, endDate).stream()
+                .map(TaskDetailResponse::from)
+                .toList();
+        final TasksResponse payload = new TasksResponse(findWeeklyTasks);
         return ApiResponse.from(OK, payload);
     }
 

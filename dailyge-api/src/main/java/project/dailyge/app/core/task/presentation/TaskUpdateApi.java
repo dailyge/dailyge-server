@@ -2,6 +2,7 @@ package project.dailyge.app.core.task.presentation;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,7 +12,6 @@ import project.dailyge.app.common.annotation.PresentationLayer;
 import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.common.auth.LoginUser;
 import project.dailyge.app.common.response.ApiResponse;
-import project.dailyge.app.core.common.validation.UuidFormat;
 import project.dailyge.app.core.task.application.TaskWriteUseCase;
 import project.dailyge.app.core.task.application.command.TaskStatusUpdateCommand;
 import project.dailyge.app.core.task.application.command.TaskUpdateCommand;
@@ -28,7 +28,7 @@ public class TaskUpdateApi {
     @PutMapping(path = {"/{taskId}"})
     public ApiResponse<Void> update(
         @LoginUser final DailygeUser dailygeUser,
-        @UuidFormat @PathVariable(name = "taskId") final String taskId,
+        @PathVariable(name = "taskId") final Long taskId,
         @Valid @RequestBody final TaskUpdateRequest request
     ) {
         final TaskUpdateCommand command = request.toCommand();
@@ -36,10 +36,10 @@ public class TaskUpdateApi {
         return ApiResponse.from(OK);
     }
 
-    @PutMapping(path = {"/{taskId}/status"})
+    @PatchMapping(path = {"/{taskId}/status"})
     public ApiResponse<Void> updateStatus(
         @LoginUser final DailygeUser dailygeUser,
-        @PathVariable(name = "taskId") final String taskId,
+        @PathVariable(name = "taskId") final Long taskId,
         @Valid @RequestBody final TaskStatusUpdateRequest request
     ) {
         final TaskStatusUpdateCommand command = request.toCommand();

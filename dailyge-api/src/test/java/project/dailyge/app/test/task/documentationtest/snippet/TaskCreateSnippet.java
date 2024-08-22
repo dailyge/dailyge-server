@@ -2,7 +2,6 @@ package project.dailyge.app.test.task.documentationtest.snippet;
 
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import static com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper.document;
-import com.epages.restdocs.apispec.Schema;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
@@ -23,18 +22,37 @@ public final class TaskCreateSnippet implements TaskSnippet {
         throw new AssertionError("올바른 방식으로 생성자를 호출해주세요.");
     }
 
-    public static RestDocumentationFilter createMonthlyTasksFilter(
-        final String identifier,
-        final String requestSchema,
-        final String responseSchema
-    ) {
+    public static RestDocumentationFilter createTasksFilter(final String identifier) {
         return document(
             identifier,
             ResourceSnippetParameters.builder()
                 .requestHeaders(HEADER_DESCRIPTOR)
-                .requestSchema(Schema.schema(requestSchema))
+                .requestFields(TASK_CREATE_REQUEST_FIELDS)
+                .responseFields(TASK_CREATE_RESPONSE)
+                .tag(TAG)
+                .summary(SUMMARY)
+                .privateResource(false)
+                .deprecated(false)
+                .description(DESCRIPTION),
+            preprocessRequest(prettyPrint()),
+            preprocessResponse(prettyPrint()),
+            snippets -> {
+                List.of(
+                    requestHeaders(List.of(HEADER_DESCRIPTOR)),
+                    requestFields(Arrays.stream(TASK_CREATE_REQUEST_FIELDS).toList()),
+                    responseFields(Arrays.stream(TASK_CREATE_RESPONSE).toList()),
+                    responseFields(Arrays.stream(ERROR_RESPONSE).toList())
+                );
+            }
+        );
+    }
+
+    public static RestDocumentationFilter createMonthlyTasksFilter(final String identifier) {
+        return document(
+            identifier,
+            ResourceSnippetParameters.builder()
+                .requestHeaders(HEADER_DESCRIPTOR)
                 .requestFields(MONTHLY_TASK_CREATE_REQUEST_FIELDS)
-                .responseSchema(Schema.schema(responseSchema))
                 .responseFields(MONTHLY_TASK_CREATE_RESPONSE)
                 .tag(TAG)
                 .summary(SUMMARY)
@@ -53,18 +71,12 @@ public final class TaskCreateSnippet implements TaskSnippet {
         );
     }
 
-    public static RestDocumentationFilter createMonthlyTasksErrorFilter(
-        final String identifier,
-        final String requestSchema,
-        final String responseSchema
-    ) {
+    public static RestDocumentationFilter createMonthlyTasksErrorFilter(final String identifier) {
         return document(
             identifier,
             ResourceSnippetParameters.builder()
                 .requestHeaders(HEADER_DESCRIPTOR)
-                .requestSchema(Schema.schema(requestSchema))
                 .requestFields(MONTHLY_TASK_CREATE_REQUEST_FIELDS)
-                .responseSchema(Schema.schema(responseSchema))
                 .responseFields(ERROR_RESPONSE)
                 .tag(TAG)
                 .summary(SUMMARY)

@@ -22,15 +22,13 @@ import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippe
 import java.time.LocalDate;
 
 @DisplayName("[DocumentationTest] 월간 일정표 생성 문서화 테스트")
-class MonthlyTasksRegisterDocumentationTest extends DatabaseTestBase {
-
-    private final String responseSchema = "MonthlyTasksRegisterResponse";
+class MonthlyTasksCreateDocumentationTest extends DatabaseTestBase {
 
     @Autowired
     private TaskFacade taskFacade;
 
     @Test
-    @DisplayName("월간 일정표를 생성하면 201 Created 응답을 받는다.")
+    @DisplayName("[RestDocs] 월간 일정표를 생성하면 201 Created 응답을 받는다.")
     void whenCreateMonthlyTasksThenResponseShouldBe201_RestDocs() throws JsonProcessingException {
         final LocalDate now = LocalDate.now();
         final MonthlyTasksCreateRequest request = new MonthlyTasksCreateRequest(now);
@@ -52,12 +50,12 @@ class MonthlyTasksRegisterDocumentationTest extends DatabaseTestBase {
     }
 
     @Test
-    @DisplayName("월간 일정표를 생성하면 201 Created 응답을 받는다.")
+    @DisplayName("[Swagger] 월간 일정표를 생성하면 201 Created 응답을 받는다.")
     void whenCreateMonthlyTasksThenResponseShouldBe201_Swagger() throws JsonProcessingException {
         final LocalDate now = LocalDate.now();
         final MonthlyTasksCreateRequest request = new MonthlyTasksCreateRequest(now);
         final RestDocumentationFilter filter = createMonthlyTasksFilter(
-            createIdentifier("MonthlyTaskCreate", 201), MonthlyTasksCreateRequest.class.getSimpleName(), responseSchema
+            createIdentifier("MonthlyTaskCreate", 201)
         );
 
         given(this.specification)
@@ -73,12 +71,10 @@ class MonthlyTasksRegisterDocumentationTest extends DatabaseTestBase {
     }
 
     @Test
-    @DisplayName("월간 일정표를 생성할 때, 날짜를 입력하지 않으면 400 Bad Request 응답을 받는다.")
+    @DisplayName("[Swagger] 월간 일정표를 생성할 때, 날짜를 입력하지 않으면 400 Bad Request 응답을 받는다.")
     void whenCreateMonthlyTasksMissDateThenResponseShouldBe400_Swagger() throws JsonProcessingException {
         final MonthlyTasksCreateRequest request = new MonthlyTasksCreateRequest(null);
-        final RestDocumentationFilter filter = createMonthlyTasksErrorFilter(
-            createIdentifier("MonthlyTaskCreate", 400), MonthlyTasksCreateRequest.class.getSimpleName(), responseSchema
-        );
+        final RestDocumentationFilter filter = createMonthlyTasksErrorFilter(createIdentifier("MonthlyTaskCreate", 400));
 
         given(this.specification)
             .relaxedHTTPSValidation()
@@ -93,14 +89,12 @@ class MonthlyTasksRegisterDocumentationTest extends DatabaseTestBase {
     }
 
     @Test
-    @DisplayName("월간 일정표를 생성할 때, 월간 일정표가 이미 존재한다면, 409 Conflict 응답을 받는다.")
+    @DisplayName("[Swagger] 월간 일정표를 생성할 때, 월간 일정표가 이미 존재한다면, 409 Conflict 응답을 받는다.")
     void whenCreateExistsMonthlyTasksDateThenResponseShouldBe409_Swagger() throws JsonProcessingException {
         final DailygeUser dailygeUser = new DailygeUser(newUser.getId(), newUser.getRole());
         final LocalDate now = LocalDate.now();
         final MonthlyTasksCreateRequest request = new MonthlyTasksCreateRequest(now);
-        final RestDocumentationFilter filter = createMonthlyTasksErrorFilter(
-            createIdentifier("MonthlyTaskCreate", 409), MonthlyTasksCreateRequest.class.getSimpleName(), responseSchema
-        );
+        final RestDocumentationFilter filter = createMonthlyTasksErrorFilter(createIdentifier("MonthlyTaskCreate", 409));
         taskFacade.createMonthlyTasks(dailygeUser, now);
 
         given(this.specification)

@@ -1,55 +1,51 @@
 package project.dailyge.app.core.task.presentation.response;
 
 import lombok.Getter;
-import project.dailyge.document.task.MonthlyTaskDocument;
 
-import java.time.LocalDateTime;
-import java.util.Collections;
+import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 public class MonthlyTaskResponse {
 
-    private String id;
-    private Long userId;
+    private Long monthlyTaskId;
     private int year;
     private int month;
-    private List<TaskDocumentResponse> tasks;
-    private LocalDateTime createdAt;
-    private LocalDateTime lastModifiedAt;
+    private List<TaskDetailResponse> tasks;
 
     private MonthlyTaskResponse() {
     }
 
-    public MonthlyTaskResponse(final MonthlyTaskDocument monthlyTaskDocument) {
-        this.id = monthlyTaskDocument.getId();
-        this.userId = monthlyTaskDocument.getUserId();
-        this.year = monthlyTaskDocument.getYear();
-        this.month = monthlyTaskDocument.getMonth();
-        this.tasks = convert(monthlyTaskDocument);
-        this.createdAt = monthlyTaskDocument.getCreatedAt();
-        this.lastModifiedAt = monthlyTaskDocument.getLastModifiedAt();
+    public MonthlyTaskResponse(
+        final LocalDate date,
+        final List<TaskDetailResponse> tasks
+    ) {
+        this.monthlyTaskId = getMonthlyTaskId(tasks);
+        this.year = date.getYear();
+        this.month = date.getMonthValue();
+        this.tasks = tasks;
     }
 
-    public static MonthlyTaskResponse from(final MonthlyTaskDocument monthlyTaskDocument) {
-        return new MonthlyTaskResponse(monthlyTaskDocument);
-    }
-
-    private static List<TaskDocumentResponse> convert(final MonthlyTaskDocument monthlyTaskDocument) {
-        if (!monthlyTaskDocument.hasTasks()) {
-            return Collections.emptyList();
+    private Long getMonthlyTaskId(final List<TaskDetailResponse> tasks) {
+        if (tasks.isEmpty()) {
+            return null;
         }
-        return monthlyTaskDocument.getTasks().stream()
-            .map(TaskDocumentResponse::from)
-            .collect(Collectors.toList());
+        return tasks.get(0)
+            .getMonthlyTaskId();
+    }
+
+    public static MonthlyTaskResponse from(
+        final LocalDate date,
+        final List<TaskDetailResponse> tasks
+    ) {
+        return new MonthlyTaskResponse(date, tasks);
     }
 
     @Override
     public String toString() {
         return String.format(
-            "{\"id\":\"%s\",\"userId\":%d,\"year\":%d,\"month\":%d,\"tasks\":%s,\"createdAt\":\"%s\",\"lastModifiedAt\":\"%s\"}",
-            id, userId, year, month, tasks, createdAt, lastModifiedAt
+            "{\"monthlyTaskId\":%d,\"year\":%d,\"month\":%d,\"tasks\":%s}",
+            monthlyTaskId, year, month, tasks
         );
     }
 }

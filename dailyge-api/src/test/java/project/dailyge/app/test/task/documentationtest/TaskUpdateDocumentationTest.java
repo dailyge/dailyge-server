@@ -10,6 +10,7 @@ import static org.springframework.restdocs.restassured.RestAssuredRestDocumentat
 import org.springframework.restdocs.restassured.RestDocumentationFilter;
 import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.core.task.application.TaskReadUseCase;
+import project.dailyge.app.core.task.application.TaskWriteUseCase;
 import project.dailyge.app.core.task.facade.TaskFacade;
 import project.dailyge.app.core.task.presentation.requesst.TaskCreateRequest;
 import project.dailyge.app.core.task.presentation.requesst.TaskStatusUpdateRequest;
@@ -21,14 +22,12 @@ import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippe
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASK_UPDATE_REQUEST_SNIPPET;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASK_UPDATE_RESPONSE_SNIPPET;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.createIdentifier;
-import static project.dailyge.app.test.task.documentationtest.snippet.TaskUpdateSnippet.createTaskStatusUpdateErrorFilter;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskUpdateSnippet.createTaskStatusUpdateFilter;
-import static project.dailyge.app.test.task.documentationtest.snippet.TaskUpdateSnippet.createTaskUpdateErrorFilter;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskUpdateSnippet.createTaskUpdateFilter;
 import static project.dailyge.app.test.task.fixture.TaskRequestFixture.createTaskStatusUpdateRequest;
 import static project.dailyge.app.test.task.fixture.TaskRequestFixture.createTaskUpdateRequest;
-import static project.dailyge.document.common.UuidGenerator.createTimeBasedUUID;
-import project.dailyge.document.task.MonthlyTaskDocument;
+import project.dailyge.entity.task.MonthlyTaskJpaEntity;
+import static project.dailyge.entity.task.TaskColor.BLUE;
 import static project.dailyge.entity.task.TaskStatus.IN_PROGRESS;
 
 import java.time.LocalDate;
@@ -36,10 +35,8 @@ import java.time.LocalDate;
 @DisplayName("[DocumentationTest] Task 수정 문서화 테스트")
 class TaskUpdateDocumentationTest extends DatabaseTestBase {
 
-    private final String taskUpdateResponseSchema = "TaskUpdateResponse";
-    private final String taskStatusUpdateResponseSchema = "TaskStatusUpdateResponse";
-
-    private MonthlyTaskDocument monthlyTaskDocument;
+    private TaskCreateRequest taskCreateRequest;
+    private MonthlyTaskJpaEntity monthlyTask;
 
     @Autowired
     private TaskFacade taskFacade;
@@ -47,21 +44,22 @@ class TaskUpdateDocumentationTest extends DatabaseTestBase {
     @Autowired
     private TaskReadUseCase taskReadUseCase;
 
+    @Autowired
+    private TaskWriteUseCase taskWriteUseCase;
+
     @BeforeEach
     void setUp() {
         now = LocalDate.now();
         taskFacade.createMonthlyTasks(dailygeUser, now);
-        monthlyTaskDocument = taskReadUseCase.findMonthlyTaskByUserIdAndDate(dailygeUser, now);
+        monthlyTask = taskReadUseCase.findMonthlyTaskByUserIdAndDate(dailygeUser, now);
+        taskCreateRequest = new TaskCreateRequest(monthlyTask.getId(), "주간 미팅", "Backend 팀과 Api 스펙 정의", BLUE, now);
     }
 
     @Test
-    @DisplayName("Task를 수정하면 200 OK 응답을 받는다.")
+    @DisplayName("[RestDocs] Task를 수정하면 200 OK 응답을 받는다.")
     void whenUpdateTaskThenStatusCodeShouldBe_200_RestDocs() throws Exception {
-        final TaskCreateRequest taskCreateRequest = new TaskCreateRequest(
-            monthlyTaskDocument.getId(), "주간 미팅", "Backend 팀과 Api 스펙 정의", now
-        );
-        final String newTaskId = taskFacade.save(dailygeUser, taskCreateRequest.toCommand());
-        final TaskUpdateRequest taskUpdateRequest = createTaskUpdateRequest(monthlyTaskDocument.getId(), now);
+        final Long newTaskId = taskWriteUseCase.save(dailygeUser, taskCreateRequest.toCommand());
+        final TaskUpdateRequest taskUpdateRequest = createTaskUpdateRequest(monthlyTask.getId(), now);
 
         given(this.specification)
             .filter(document(IDENTIFIER,
@@ -81,16 +79,11 @@ class TaskUpdateDocumentationTest extends DatabaseTestBase {
     }
 
     @Test
-    @DisplayName("Task를 수정하면 200 OK 응답을 받는다.")
+    @DisplayName("[Swagger] Task를 수정하면 200 OK 응답을 받는다.")
     void whenUpdateTaskThenStatusCodeShouldBe_200_Swagger() throws Exception {
-        final TaskCreateRequest taskCreateRequest = new TaskCreateRequest(
-            monthlyTaskDocument.getId(), "주간 미팅", "Backend 팀과 Api 스펙 정의", now
-        );
-        final String newTaskId = taskFacade.save(dailygeUser, taskCreateRequest.toCommand());
-        final TaskUpdateRequest taskUpdateRequest = createTaskUpdateRequest(monthlyTaskDocument.getId(), now);
-        final RestDocumentationFilter filter = createTaskUpdateFilter(
-            createIdentifier("TaskUpdate", 200), TaskUpdateRequest.class.getSimpleName(), taskUpdateResponseSchema
-        );
+        final Long newTaskId = taskWriteUseCase.save(dailygeUser, taskCreateRequest.toCommand());
+        final TaskUpdateRequest taskUpdateRequest = createTaskUpdateRequest(monthlyTask.getId(), now);
+        final RestDocumentationFilter filter = createTaskUpdateFilter(createIdentifier("TaskUpdate", 200));
 
         given(this.specification)
             .filter(filter)
@@ -105,22 +98,18 @@ class TaskUpdateDocumentationTest extends DatabaseTestBase {
     }
 
     @Test
-    @DisplayName("Task를 수정할 때, 올바른 필드를 입력하지 않으면 400 Bad Request 응답을 받는다.")
+    @DisplayName("[Swagger] Task를 수정할 때, 올바른 필드를 입력하지 않으면 400 Bad Request 응답을 받는다.")
     void whenUpdateTaskWithInvalidFieldsThenStatusCodeShouldBe_400_Swagger() throws Exception {
-        final TaskCreateRequest taskCreateRequest = new TaskCreateRequest(
-            monthlyTaskDocument.getId(), "주간 미팅", "Backend 팀과 Api 스펙 정의", now
-        );
-        final String newTaskId = taskFacade.save(dailygeUser, taskCreateRequest.toCommand());
+        final Long newTaskId = taskWriteUseCase.save(dailygeUser, taskCreateRequest.toCommand());
         final TaskUpdateRequest taskUpdateRequest = new TaskUpdateRequest(
             null,
             "Api 스펙 수정",
             "Backend 팀과 Api 스펙 수정 회의",
             now,
-            IN_PROGRESS
+            IN_PROGRESS,
+            BLUE
         );
-        final RestDocumentationFilter filter = createTaskUpdateErrorFilter(
-            createIdentifier("TaskUpdate", 400), TaskUpdateRequest.class.getSimpleName(), taskUpdateResponseSchema
-        );
+        final RestDocumentationFilter filter = createTaskUpdateFilter(createIdentifier("TaskUpdate", 400));
 
         given(this.specification)
             .filter(filter)
@@ -134,13 +123,11 @@ class TaskUpdateDocumentationTest extends DatabaseTestBase {
     }
 
     @Test
-    @DisplayName("존재하지 않는 Task를 수정하면 404 Not Found 응답을 받는다.")
+    @DisplayName("[Swagger] 존재하지 않는 Task를 수정하려고 하면 404 Not Found 응답을 받는다.")
     void whenUpdateNotExistsTaskThenStatusCodeShouldBe_404_Swagger() throws Exception {
-        final String invalidTaskId = createTimeBasedUUID();
-        final TaskUpdateRequest taskUpdateRequest = createTaskUpdateRequest(invalidTaskId, now);
-        final RestDocumentationFilter filter = createTaskUpdateErrorFilter(
-            createIdentifier("TaskUpdate", 404), TaskUpdateRequest.class.getSimpleName(), taskUpdateResponseSchema
-        );
+        final Long invalidTaskId = Long.MAX_VALUE;
+        final TaskUpdateRequest taskUpdateRequest = createTaskUpdateRequest(monthlyTask.getId(), now);
+        final RestDocumentationFilter filter = createTaskUpdateFilter(createIdentifier("TaskUpdate", 404));
 
         given(this.specification)
             .filter(filter)
@@ -154,13 +141,10 @@ class TaskUpdateDocumentationTest extends DatabaseTestBase {
     }
 
     @Test
-    @DisplayName("Task 상태를 수정하면 200 OK 응답을 받는다.")
+    @DisplayName("[RestDocs] Task 상태를 수정하면 200 OK 응답을 받는다.")
     void whenUpdateTaskStatusThenStatusCodeShouldBe_200_RestDocs() throws Exception {
-        final TaskCreateRequest taskCreateRequest = new TaskCreateRequest(
-            monthlyTaskDocument.getId(), "주간 미팅", "Backend 팀과 Api 스펙 정의", now
-        );
-        final String newTaskId = taskFacade.save(dailygeUser, taskCreateRequest.toCommand());
-        final TaskStatusUpdateRequest request = createTaskStatusUpdateRequest(monthlyTaskDocument.getId());
+        final Long newTaskId = taskWriteUseCase.save(dailygeUser, taskCreateRequest.toCommand());
+        final TaskStatusUpdateRequest request = createTaskStatusUpdateRequest(monthlyTask.getId());
 
         given(this.specification)
             .filter(document(IDENTIFIER,
@@ -173,22 +157,17 @@ class TaskUpdateDocumentationTest extends DatabaseTestBase {
             .header(AUTHORIZATION, getAuthorizationHeader())
             .body(objectMapper.writeValueAsString(request))
             .when()
-            .put("/api/tasks/{taskId}/status", newTaskId)
+            .patch("/api/tasks/{taskId}/status", newTaskId)
             .then()
             .statusCode(200);
     }
 
     @Test
-    @DisplayName("Task 상태를 수정하면 200 OK 응답을 받는다.")
+    @DisplayName("[Swagger] Task 상태를 수정하면 200 OK 응답을 받는다.")
     void whenUpdateTaskStatusThenStatusCodeShouldBe_200_Swagger() throws Exception {
-        final TaskCreateRequest taskCreateRequest = new TaskCreateRequest(
-            monthlyTaskDocument.getId(), "주간 미팅", "Backend 팀과 Api 스펙 정의", now
-        );
-        final String newTaskId = taskFacade.save(dailygeUser, taskCreateRequest.toCommand());
-        final TaskStatusUpdateRequest request = createTaskStatusUpdateRequest(monthlyTaskDocument.getId());
-        final RestDocumentationFilter filter = createTaskStatusUpdateFilter(
-            createIdentifier("TaskStatusUpdate", 200), TaskStatusUpdateRequest.class.getSimpleName(), taskStatusUpdateResponseSchema
-        );
+        final Long newTaskId = taskWriteUseCase.save(dailygeUser, taskCreateRequest.toCommand());
+        final TaskStatusUpdateRequest request = createTaskStatusUpdateRequest(monthlyTask.getId());
+        final RestDocumentationFilter filter = createTaskStatusUpdateFilter(createIdentifier("TaskStatusUpdate", 200));
 
         given(this.specification)
             .filter(filter)
@@ -196,22 +175,17 @@ class TaskUpdateDocumentationTest extends DatabaseTestBase {
             .header(AUTHORIZATION, getAuthorizationHeader())
             .body(objectMapper.writeValueAsString(request))
             .when()
-            .put("/api/tasks/{taskId}/status", newTaskId)
+            .patch("/api/tasks/{taskId}/status", newTaskId)
             .then()
             .statusCode(200);
     }
 
     @Test
-    @DisplayName("Task 상태를 수정할 때, 올바르지 않은 파라미터를 입력하면 400 Bad Request 응답을 받는다.")
+    @DisplayName("[Swagger] Task 상태를 수정할 때, 올바르지 않은 파라미터를 입력하면 400 Bad Request 응답을 받는다.")
     void whenUpdateTaskStatusWithInvalidParameterThenStatusCodeShouldBe_400_Swagger() throws Exception {
-        final TaskCreateRequest taskCreateRequest = new TaskCreateRequest(
-            monthlyTaskDocument.getId(), "주간 미팅", "Backend 팀과 Api 스펙 정의", now
-        );
-        final String newTaskId = taskFacade.save(dailygeUser, taskCreateRequest.toCommand());
-        final TaskStatusUpdateRequest request = createTaskStatusUpdateRequest(monthlyTaskDocument.getId(), null);
-        final RestDocumentationFilter filter = createTaskStatusUpdateErrorFilter(
-            createIdentifier("TaskStatusUpdate", 400), TaskStatusUpdateRequest.class.getSimpleName(), taskStatusUpdateResponseSchema
-        );
+        final Long newTaskId = taskWriteUseCase.save(dailygeUser, taskCreateRequest.toCommand());
+        final TaskStatusUpdateRequest request = createTaskStatusUpdateRequest(monthlyTask.getId(), null);
+        final RestDocumentationFilter filter = createTaskStatusUpdateFilter(createIdentifier("TaskStatusUpdate", 400));
 
         given(this.specification)
             .filter(filter)
@@ -219,23 +193,18 @@ class TaskUpdateDocumentationTest extends DatabaseTestBase {
             .header(AUTHORIZATION, getAuthorizationHeader())
             .body(objectMapper.writeValueAsString(request))
             .when()
-            .put("/api/tasks/{taskId}/status", newTaskId)
+            .patch("/api/tasks/{taskId}/status", newTaskId)
             .then()
             .statusCode(400);
     }
 
     @Test
-    @DisplayName("Task 상태를 수정할 때, 존재하지 않는 taskId를 입력하면 404 Not Found 응답을 받는다.")
+    @DisplayName("[Swagger] Task 상태를 수정할 때, 존재하지 않는 taskId를 입력하면 404 Not Found 응답을 받는다.")
     void whenUpdateTaskStatusWithInvalidTaskIdThenStatusCodeShouldBe_404_Swagger() throws Exception {
-        final TaskCreateRequest taskCreateRequest = new TaskCreateRequest(
-            monthlyTaskDocument.getId(), "주간 미팅", "Backend 팀과 Api 스펙 정의", now
-        );
-        taskFacade.save(dailygeUser, taskCreateRequest.toCommand());
-        final String invalidUUID = "abcd-15";
-        final TaskStatusUpdateRequest request = createTaskStatusUpdateRequest(monthlyTaskDocument.getId());
-        final RestDocumentationFilter filter = createTaskStatusUpdateErrorFilter(
-            createIdentifier("TaskStatusUpdate", 404), TaskStatusUpdateRequest.class.getSimpleName(), taskStatusUpdateResponseSchema
-        );
+        taskWriteUseCase.save(dailygeUser, taskCreateRequest.toCommand());
+        final Long invalidUUID = Long.MAX_VALUE;
+        final TaskStatusUpdateRequest request = createTaskStatusUpdateRequest(monthlyTask.getId());
+        final RestDocumentationFilter filter = createTaskStatusUpdateFilter(createIdentifier("TaskStatusUpdate", 404));
 
         given(this.specification)
             .filter(filter)
@@ -243,7 +212,7 @@ class TaskUpdateDocumentationTest extends DatabaseTestBase {
             .header(AUTHORIZATION, getAuthorizationHeader())
             .body(objectMapper.writeValueAsString(request))
             .when()
-            .put("/api/tasks/{taskId}/status", invalidUUID)
+            .patch("/api/tasks/{taskId}/status", invalidUUID)
             .then()
             .statusCode(404);
     }

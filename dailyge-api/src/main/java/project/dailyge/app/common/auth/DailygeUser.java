@@ -35,6 +35,9 @@ public class DailygeUser {
     }
 
     public void validateAuth(final Long userId) {
+        if (isAdmin()) {
+            return;
+        }
         if (!this.userId.equals(userId)) {
             throw new UnAuthorizedException(USER_NOT_MATCH_MESSAGE, UN_AUTHORIZED);
         }

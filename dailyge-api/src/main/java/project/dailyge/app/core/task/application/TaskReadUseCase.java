@@ -1,15 +1,20 @@
 package project.dailyge.app.core.task.application;
 
 import project.dailyge.app.common.auth.DailygeUser;
-import project.dailyge.document.task.MonthlyTaskDocument;
-import project.dailyge.document.task.TaskDocument;
+import project.dailyge.entity.task.MonthlyTaskJpaEntity;
+import project.dailyge.entity.task.TaskJpaEntity;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public interface TaskReadUseCase {
-    MonthlyTaskDocument findMonthlyTaskByUserIdAndDate(DailygeUser dailygeUser, LocalDate date);
+    Long findMonthlyTaskId(DailygeUser dailygeUser, LocalDate date);
 
-    MonthlyTaskDocument findMonthlyTaskById(DailygeUser dailygeUser, String monthlyTaskId);
+    TaskJpaEntity findTaskById(DailygeUser dailygeUser, Long taskId);
 
-    TaskDocument findByIdAndDate(DailygeUser dailygeUser, String taskId, LocalDate date);
+    MonthlyTaskJpaEntity findMonthlyTaskById(Long monthlyTaskId);
+
+    MonthlyTaskJpaEntity findMonthlyTaskByUserIdAndDate(DailygeUser dailygeUser, LocalDate date);
+
+    List<TaskJpaEntity> findTasksByMonthlyTasksIdAndDate(DailygeUser dailygeUser, LocalDate date);
 }

@@ -37,6 +37,16 @@ class TaskReadService implements TaskReadUseCase {
     }
 
     @Override
+    public List<TaskJpaEntity> findTasksByMonthlyTaskIdAndDates(
+        final DailygeUser dailygeUser,
+        final List<Long> monthlyTaskIds,
+        final LocalDate startDate,
+        final LocalDate endDate
+    ) {
+        return taskReadRepository.findTasksByMonthlyTaskIdAndDates(dailygeUser.getId(), monthlyTaskIds, startDate, endDate);
+    }
+
+    @Override
     public MonthlyTaskJpaEntity findMonthlyTaskByUserIdAndDate(
         final DailygeUser dailygeUser,
         final LocalDate date

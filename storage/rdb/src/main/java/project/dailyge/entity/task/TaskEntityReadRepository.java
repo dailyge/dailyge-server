@@ -13,5 +13,7 @@ public interface TaskEntityReadRepository {
 
     boolean existsMonthlyPlanByUserIdAndDate(Long userId, LocalDate date);
 
+    List<TaskJpaEntity> findTasksByMonthlyTaskIdAndDates(Long userId, List<Long> monthlyTaskIds, LocalDate startDate, LocalDate endDate);
+
     List<TaskJpaEntity> findMonthlyTasksByIdAndDate(Long monthlyTaskId, LocalDate date);
 }

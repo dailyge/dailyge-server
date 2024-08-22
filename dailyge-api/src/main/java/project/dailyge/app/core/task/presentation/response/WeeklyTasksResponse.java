@@ -6,23 +6,15 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Getter
-public class MonthlyTaskResponse {
-
+public class WeeklyTasksResponse {
     private Long monthlyTaskId;
-    private int year;
-    private int month;
     private List<TaskDetailResponse> tasks;
 
-    private MonthlyTaskResponse() {
+    private WeeklyTasksResponse() {
     }
 
-    public MonthlyTaskResponse(
-        final LocalDate date,
-        final List<TaskDetailResponse> tasks
-    ) {
+    public WeeklyTasksResponse(final List<TaskDetailResponse> tasks) {
         this.monthlyTaskId = getMonthlyTaskId(tasks);
-        this.year = date.getYear();
-        this.month = date.getMonthValue();
         this.tasks = tasks;
     }
 
@@ -34,18 +26,19 @@ public class MonthlyTaskResponse {
             .getMonthlyTaskId();
     }
 
-    public static MonthlyTaskResponse from(
+    public static MonthlyTasksResponse from(
         final LocalDate date,
         final List<TaskDetailResponse> tasks
     ) {
-        return new MonthlyTaskResponse(date, tasks);
+        return new MonthlyTasksResponse(date, tasks);
     }
 
     @Override
     public String toString() {
         return String.format(
-            "{\"monthlyTaskId\":%d,\"year\":%d,\"month\":%d,\"tasks\":%s}",
-            monthlyTaskId, year, month, tasks
+            "{\"monthlyTaskId\":%d,\"tasks\":%s}",
+            monthlyTaskId, tasks
         );
     }
 }
+

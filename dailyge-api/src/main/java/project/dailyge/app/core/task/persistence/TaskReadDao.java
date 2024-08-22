@@ -81,6 +81,21 @@ class TaskReadDao implements TaskEntityReadRepository, MonthlyTaskEntityReadRepo
     }
 
     @Override
+    public List<TaskJpaEntity> findTasksByMonthlyTaskIdAndDates(
+        final Long userId,
+        final List<Long> monthlyTaskIds,
+        final LocalDate startDate,
+        final LocalDate endDate
+    ) {
+        return queryFactory.selectFrom(taskJpaEntity)
+            .where(
+                taskJpaEntity.monthlyTaskId.in(monthlyTaskIds)
+                    .and(taskJpaEntity.userId.eq(userId))
+                    .and(taskJpaEntity.date.between(startDate, endDate))
+            ).fetch();
+    }
+
+    @Override
     public Long findMonthlyTaskIdByUserIdAndDate(
         final Long userId,
         final LocalDate date

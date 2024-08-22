@@ -119,7 +119,11 @@ class TaskReadDao implements TaskEntityReadRepository, MonthlyTaskEntityReadRepo
         final String sql = "SELECT COUNT(*) FROM tasks WHERE user_id = ? AND date = ? AND deleted = false";
         try {
             final Date dbDate = Date.valueOf(date);
-            return jdbcTemplate.queryForObject(sql, new Object[]{userId, dbDate}, Long.class);
+            final Long result = jdbcTemplate.queryForObject(sql, new Object[]{userId, dbDate}, Long.class);
+            if (result != null) {
+                return result;
+            }
+            return 0L;
         } catch (DataAccessException ex) {
             throw new DaoException(ex.getMessage(), DATA_ACCESS_EXCEPTION);
         }

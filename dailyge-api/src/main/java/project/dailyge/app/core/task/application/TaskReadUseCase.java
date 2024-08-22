@@ -14,7 +14,7 @@ public interface TaskReadUseCase {
 
     MonthlyTaskJpaEntity findMonthlyTaskById(Long monthlyTaskId);
 
-    List<TaskJpaEntity> findTasksByMonthlyTaskIdAndDates(DailygeUser dailygeUser, List<Long> monthlyTaskIds, LocalDate startDate, LocalDate endDate);
+    List<TaskJpaEntity> findTasksByMonthlyTaskIdAndDates(DailygeUser dailygeUser, LocalDate startDate, LocalDate endDate);
 
     MonthlyTaskJpaEntity findMonthlyTaskByUserIdAndDate(DailygeUser dailygeUser, LocalDate date);
 

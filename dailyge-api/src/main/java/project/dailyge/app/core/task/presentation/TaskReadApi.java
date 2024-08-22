@@ -44,13 +44,12 @@ public class TaskReadApi {
     @GetMapping(path = {"/tasks"})
     public ApiResponse<WeeklyTasksResponse> findTasksByMonthlyTaskIdAndDates(
         @LoginUser final DailygeUser dailygeUser,
-        @RequestParam(value = "monthlyTaskIds") final List<Long> monthlyTaskIds,
         @RequestParam(value = "startDate") final LocalDate startDate,
         @RequestParam(value = "endDate") final LocalDate endDate
     ) {
-        validator.validateWeeklyTasksSearchParams(monthlyTaskIds, startDate, endDate);
+        validator.validateWeeklyTasksSearchParams(startDate, endDate);
         final List<TaskDetailResponse> findWeeklyTasks =
-            taskReadUseCase.findTasksByMonthlyTaskIdAndDates(dailygeUser, monthlyTaskIds, startDate, endDate).stream()
+            taskReadUseCase.findTasksByMonthlyTaskIdAndDates(dailygeUser, startDate, endDate).stream()
                 .map(TaskDetailResponse::from)
                 .toList();
         final WeeklyTasksResponse payload = new WeeklyTasksResponse(findWeeklyTasks);

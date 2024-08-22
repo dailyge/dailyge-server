@@ -8,19 +8,16 @@ import project.dailyge.app.core.task.application.TaskWriteUseCase;
 import project.dailyge.app.core.task.application.command.TaskCreateCommand;
 import project.dailyge.app.core.task.application.command.TaskStatusUpdateCommand;
 import project.dailyge.app.core.task.application.command.TaskUpdateCommand;
+import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.MONTHLY_TASK_NOT_FOUND;
 import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.TASK_NOT_FOUND;
 import project.dailyge.app.core.task.exception.TaskTypeException;
-import static project.dailyge.document.common.UuidGenerator.createTimeBasedUUID;
-import project.dailyge.document.task.MonthlyTaskDocument;
-import static project.dailyge.document.task.MonthlyTaskDocuments.createMonthlyDocuments;
-import project.dailyge.document.task.TaskActivity;
-import project.dailyge.document.task.TaskDocument;
-import project.dailyge.document.task.TaskDocumentReadRepository;
-import project.dailyge.document.task.TaskDocumentWriteRepository;
-import project.dailyge.entity.common.EventPublisher;
-import static project.dailyge.entity.common.EventType.CREATE;
-import project.dailyge.entity.task.TaskEvent;
-import static project.dailyge.entity.task.TaskEvent.createEvent;
+import project.dailyge.entity.task.MonthlyTaskEntityReadRepository;
+import project.dailyge.entity.task.MonthlyTaskEntityWriteRepository;
+import project.dailyge.entity.task.MonthlyTaskJpaEntity;
+import static project.dailyge.entity.task.MonthlyTasks.createMonthlyTasks;
+import project.dailyge.entity.task.TaskEntityReadRepository;
+import project.dailyge.entity.task.TaskEntityWriteRepository;
+import project.dailyge.entity.task.TaskJpaEntity;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -29,69 +26,60 @@ import java.util.List;
 @RequiredArgsConstructor
 class TaskWriteService implements TaskWriteUseCase {
 
-    private final EventPublisher<TaskEvent> eventPublisher;
     private final TaskValidator validator;
-    private final TaskDocumentReadRepository taskReadRepository;
-    private final TaskDocumentWriteRepository taskWriteRepository;
+    private final TaskEntityReadRepository taskReadRepository;
+    private final TaskEntityWriteRepository taskWriteRepository;
+    private final MonthlyTaskEntityReadRepository monthlyTaskReadRepository;
+    private final MonthlyTaskEntityWriteRepository monthlyTaskWriteRepository;
 
     @Override
-    public void createMonthlyTasks(
+    @Transactional
+    public void saveAll(
         final DailygeUser dailygeUser,
         final LocalDate date
     ) {
-        validator.validateMonthlyPlan(dailygeUser.getUserId());
-        final List<MonthlyTaskDocument> monthlyTasks = createMonthlyDocuments(dailygeUser.getUserId(), date);
-        taskWriteRepository.saveAll(monthlyTasks);
+        validator.validateMonthlyPlan(dailygeUser.getUserId(), date);
+        final List<MonthlyTaskJpaEntity> monthlyTasks = createMonthlyTasks(dailygeUser.getId(), date.getYear());
+        monthlyTaskWriteRepository.saveAll(monthlyTasks);
     }
 
     @Override
-    public String save(
+    @Transactional
+    public Long save(
         final DailygeUser dailygeUser,
         final TaskCreateCommand command
     ) {
-        final TaskDocument newTask = command.toDocument(dailygeUser);
-        validator.validateTaskCreation(newTask.getUserId(), newTask.getLocalDate());
-        final String newTaskId = taskWriteRepository.save(newTask, newTask.getLocalDate());
-
-        final TaskEvent event = createEvent(newTask.getUserId(), createTimeBasedUUID(), CREATE);
-        eventPublisher.publishExternalEvent(event);
-        return newTaskId;
+        validator.validateTaskCreation(dailygeUser.getId(), command.date());
+        final MonthlyTaskJpaEntity findMonthlyTask = monthlyTaskReadRepository.findMonthlyTaskById(command.monthlyTaskId())
+            .orElseThrow(() -> TaskTypeException.from(MONTHLY_TASK_NOT_FOUND));
+        final TaskJpaEntity newTask = command.toEntity(dailygeUser, findMonthlyTask.getId());
+        return taskWriteRepository.save(newTask);
     }
 
     @Override
+    @Transactional
     public void update(
         final DailygeUser dailygeUser,
-        final String taskId,
+        final Long taskId,
         final TaskUpdateCommand command
     ) {
-        final TaskActivity findTaskActivity = taskReadRepository.findTaskDocumentByIds(
-            dailygeUser.getId(), command.monthlyTaskId(), taskId
-        ).orElseThrow(() -> TaskTypeException.from(TASK_NOT_FOUND));
-        validator.validateAuth(dailygeUser, findTaskActivity);
-
-        taskWriteRepository.update(
-            dailygeUser.getId(),
-            command.monthlyTaskId(),
-            taskId,
-            command.title(),
-            command.content(),
-            command.date(),
-            command.getStatus()
-        );
+        final TaskJpaEntity findTask = taskReadRepository.findTaskById(taskId)
+            .orElseThrow(() -> TaskTypeException.from(TASK_NOT_FOUND));
+        dailygeUser.validateAuth(findTask.getUserId());
+        findTask.update(command.title(), command.content(), command.date(), command.status());
     }
 
     @Override
+    @Transactional
     public void updateStatus(
         final DailygeUser dailygeUser,
-        final String taskId,
+        final Long taskId,
         final TaskStatusUpdateCommand command
     ) {
-        final TaskActivity findTaskActivity = taskReadRepository.findTaskDocumentByIds(
-            dailygeUser.getId(), command.monthlyTaskId(), taskId
-        ).orElseThrow(() -> TaskTypeException.from(TASK_NOT_FOUND));
-        validator.validateAuth(dailygeUser, findTaskActivity);
-
-        taskWriteRepository.update(dailygeUser.getId(), command.monthlyTaskId(), taskId, command.getStatus());
+        final TaskJpaEntity findTask = taskReadRepository.findTaskById(taskId)
+            .orElseThrow(() -> TaskTypeException.from(TASK_NOT_FOUND));
+        dailygeUser.validateAuth(findTask.getUserId());
+        findTask.updateStatus(command.status());
     }
 
     @Override
@@ -100,10 +88,9 @@ class TaskWriteService implements TaskWriteUseCase {
         final DailygeUser dailygeUser,
         final Long taskId
     ) {
-//        final TaskJpaEntity findTask = taskReadRepository.findById(taskId)
-//            .orElseThrow(() -> TaskTypeException.from(TASK_NOT_FOUND));
-//        validator.validateAuth(dailygeUser, findTask);
-//
-//        findTask.delete();
+        final TaskJpaEntity findTask = taskReadRepository.findTaskById(taskId)
+            .orElseThrow(() -> TaskTypeException.from(TASK_NOT_FOUND));
+        dailygeUser.validateAuth(findTask.getUserId());
+        findTask.delete();
     }
 }

@@ -5,14 +5,14 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 import project.dailyge.app.core.task.application.command.TaskUpdateCommand;
+import project.dailyge.entity.task.TaskColor;
 import project.dailyge.entity.task.TaskStatus;
 
 import java.time.LocalDate;
 
 public record TaskUpdateRequest(
     @NotNull(message = "monthlyId를 입력해 주세요.")
-    @NotBlank(message = "monthlyId는 공백일 수 없습니다.")
-    String monthlyTaskId,
+    Long monthlyTaskId,
 
     @Length(min = 1, max = 150)
     @NotNull(message = "제목을 입력해 주세요.")
@@ -29,7 +29,10 @@ public record TaskUpdateRequest(
     LocalDate date,
 
     @NotNull(message = "Task 상태를 입력해 주세요.")
-    TaskStatus status
+    TaskStatus status,
+
+    @NotNull(message = "Task 색상을 입력해주세요.")
+    TaskColor color
 ) {
 
     public TaskUpdateCommand toCommand() {
@@ -38,15 +41,16 @@ public record TaskUpdateRequest(
             title,
             content,
             date,
-            status
+            status,
+            color
         );
     }
 
     @Override
     public String toString() {
         return String.format(
-            "{\"monthlyTaskId\":\"%s\",\"title\":\"%s\",\"content\":\"%s\",\"date\":\"%s\",\"status\":\"%s\"}",
-            monthlyTaskId, title, content, date, status
+            "{\"monthlyTaskId\":\"%s\",\"title\":\"%s\",\"content\":\"%s\",\"date\":\"%s\",\"status\":\"%s\",\"color\":|%s\"}",
+            monthlyTaskId, title, content, date, status, color
         );
     }
 }

@@ -3,7 +3,7 @@ package project.dailyge.app.core.task.application.command;
 import project.dailyge.entity.task.TaskStatus;
 
 public record TaskStatusUpdateCommand(
-    String monthlyTaskId,
+    Long monthlyTaskId,
     TaskStatus status
 ) {
 

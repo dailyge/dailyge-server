@@ -1,7 +1,17 @@
 package project.dailyge.entity.task;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 public interface TaskEntityReadRepository {
-    Optional<TaskJpaEntity> findById(Long taskId);
+    Optional<TaskJpaEntity> findTaskById(Long taskId);
+
+    Optional<MonthlyTaskJpaEntity> findMonthlyTaskByUserIdAndDate(Long userId, LocalDate now);
+
+    long countTodayTask(Long userId, LocalDate date);
+
+    boolean existsMonthlyPlanByUserIdAndDate(Long userId, LocalDate date);
+
+    List<TaskJpaEntity> findMonthlyTasksByIdAndDate(Long monthlyTaskId, LocalDate date);
 }

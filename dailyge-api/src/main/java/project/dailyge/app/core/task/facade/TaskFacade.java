@@ -8,8 +8,6 @@ import project.dailyge.app.core.task.application.command.TaskCreateCommand;
 import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.MONTHLY_TASK_EXISTS;
 import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.TASK_UN_RESOLVED_EXCEPTION;
 import project.dailyge.app.core.task.exception.TaskTypeException;
-import project.dailyge.app.core.user.application.UserReadUseCase;
-import project.dailyge.entity.user.UserJpaEntity;
 import project.dailyge.lock.Lock;
 import project.dailyge.lock.LockUseCase;
 
@@ -20,7 +18,6 @@ import java.time.LocalDate;
 public class TaskFacade {
 
     private final LockUseCase lockUseCase;
-    private final UserReadUseCase userReadUseCase;
     private final TaskWriteUseCase taskWriteUseCase;
 
     public void createMonthlyTasks(
@@ -32,26 +29,11 @@ public class TaskFacade {
             if (!lock.tryLock(0, 4)) {
                 throw TaskTypeException.from(MONTHLY_TASK_EXISTS);
             }
-            taskWriteUseCase.createMonthlyTasks(dailygeUser, date);
+            taskWriteUseCase.saveAll(dailygeUser, date);
         } catch (InterruptedException ex) {
             throw TaskTypeException.from(ex.getMessage(), TASK_UN_RESOLVED_EXCEPTION);
         } finally {
             lockUseCase.releaseLock(lock);
         }
-    }
-
-    public String save(
-        final DailygeUser dailygeUser,
-        final TaskCreateCommand command
-    ) {
-        return taskWriteUseCase.save(dailygeUser, command);
-    }
-
-    public void delete(
-        final DailygeUser dailygeUser,
-        final Long taskId
-    ) {
-        final UserJpaEntity findUser = userReadUseCase.findActiveUserById(dailygeUser.getUserId());
-        taskWriteUseCase.delete(dailygeUser, taskId);
     }
 }

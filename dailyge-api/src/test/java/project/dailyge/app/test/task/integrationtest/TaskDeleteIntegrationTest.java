@@ -1,64 +1,73 @@
 package project.dailyge.app.test.task.integrationtest;
 
 
+import static java.time.LocalDate.now;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import project.dailyge.app.common.DatabaseTestBase;
+import project.dailyge.app.common.auth.DailygeUser;
+import project.dailyge.app.common.exception.UnAuthorizedException;
+import project.dailyge.app.core.task.application.TaskWriteUseCase;
+import project.dailyge.app.core.task.application.command.TaskCreateCommand;
+import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.TASK_NOT_FOUND;
+import project.dailyge.app.core.task.exception.TaskTypeException;
 import project.dailyge.app.core.task.facade.TaskFacade;
-import project.dailyge.app.core.user.application.UserWriteUseCase;
+import static project.dailyge.app.test.task.fixture.TaskCommandFixture.createTaskCreationCommand;
+import project.dailyge.entity.task.MonthlyTaskEntityReadRepository;
+import project.dailyge.entity.task.MonthlyTaskJpaEntity;
+import static project.dailyge.entity.user.Role.NORMAL;
 
-@DisplayName("[IntegrationTest] 할 일 삭제 통합 테스트")
+@DisplayName("[IntegrationTest] Task 삭제 통합 테스트")
 public class TaskDeleteIntegrationTest extends DatabaseTestBase {
 
-    @Autowired
-    private UserWriteUseCase userWriteUseCase;
+    private MonthlyTaskJpaEntity monthlyTask;
+    private TaskCreateCommand taskCreateCommand;
 
     @Autowired
     private TaskFacade taskFacade;
 
-//    @Test
-//    @DisplayName("존재하지 않는 사용자 ID가 입력되면, UserTypeException이 발생한다.")
-//    void whenTaskRegisterDoesNotExistsThenUserTypeExceptionShouldBeHappen() {
-//        final UserJpaEntity newUser = userWriteUseCase.save(createUserJpaEntity());
-//        final DailygeUser dailygeUser = new DailygeUser(newUser);
-//        taskFacade.createMonthlyTasks(dailygeUser, LocalDate.now());
-//        final TaskCreateCommand command = new TaskCreateCommand(
-//            "독서",
-//            "Kafka 완벽가이드 1~30p 읽기",
-//            now()
-//        );
-//
-//        taskFacade.save(dailygeUser, command);
-//        final Long invalidUserId = Long.MAX_VALUE;
-//        final DailygeUser invalidDailygeUser = new DailygeUser(invalidUserId, NORMAL);
-//
-////        assertThatThrownBy(() -> taskFacade.delete(invalidDailygeUser, savedTask.getId()))
-////            .isInstanceOf(UserTypeException.class)
-////            .hasMessage(ACTIVE_USER_NOT_FOUND.message());
-//    }
+    @Autowired
+    private TaskWriteUseCase taskWriteUseCase;
 
-//    @Test
-//    @DisplayName("존재하는 할 일이 삭제되면, 예외가 발생하지 않는다.")
-//    void whenDeleteExistenceTaskThenTaskTypeExceptionShouldNotBeHappen() {
-//        final UserJpaEntity newUser = userWriteUseCase.save(createUserJpaEntity());
-//        final DailygeUser dailygeUser = new DailygeUser(newUser);
-//        final TaskJpaEntity newTask = new TaskJpaEntity("독서", "Kafka 완벽가이드 1~30p 읽기", now(), TODO, newUser.getId());
-//
-////        final TaskJpaEntity savedTask = taskFacade.save(newTask);
-////
-////        assertDoesNotThrow(() -> taskFacade.delete(dailygeUser, savedTask.getId()));
-//    }
+    @Autowired
+    private MonthlyTaskEntityReadRepository monthlyTaskReadRepository;
 
-//    @Test
-//    @DisplayName("존재하지 않는 할 일을 삭제하면, TaskTypeException이 발생한다.")
-//    void whenDeleteNotExistenceTaskThenTaskTypeExceptionShouldBeHappen() {
-//        final UserJpaEntity newUser = userWriteUseCase.save(createUserJpaEntity());
-//        final DailygeUser dailygeUser = new DailygeUser(newUser);
-//        final Long invalidTaskId = Long.MAX_VALUE;
-//
-//        assertThatThrownBy(() -> taskFacade.delete(dailygeUser, invalidTaskId))
-//            .isInstanceOf(TaskTypeException.class)
-//            .hasMessage(TASK_NOT_FOUND.message());
-//    }
+    @BeforeEach
+    void setUp() {
+        now = now();
+        taskFacade.createMonthlyTasks(dailygeUser, now);
+        monthlyTask = monthlyTaskReadRepository.findMonthlyTaskByUserIdAndDate(dailygeUser.getUserId(), now).get();
+        taskCreateCommand = createTaskCreationCommand(monthlyTask.getId(), now);
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 사용자 ID가 입력되면, UserTypeException이 발생한다.")
+    void whenTaskDoesNotExistsThenUnAuthorizedExceptionShouldBeHappen() {
+        final Long newTaskId = taskWriteUseCase.save(dailygeUser, taskCreateCommand);
+        final DailygeUser invalidDailygeUser = new DailygeUser(Long.MAX_VALUE, NORMAL);
+
+        assertThatThrownBy(() -> taskWriteUseCase.delete(invalidDailygeUser, newTaskId))
+            .isInstanceOf(UnAuthorizedException.class);
+    }
+
+    @Test
+    @DisplayName("존재하는 Task이 삭제되면, 예외가 발생하지 않는다.")
+    void whenDeleteExistenceTaskThenTaskTypeExceptionShouldNotBeHappen() {
+        final Long newTaskId = taskWriteUseCase.save(dailygeUser, taskCreateCommand);
+        assertDoesNotThrow(() -> taskWriteUseCase.delete(dailygeUser, newTaskId));
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 Task을 삭제하면, TaskTypeException이 발생한다.")
+    void whenDeleteNotExistenceTaskThenTaskTypeExceptionShouldBeHappen() {
+        final Long invalidTaskId = Long.MAX_VALUE;
+
+        assertThatThrownBy(() -> taskWriteUseCase.delete(dailygeUser, invalidTaskId))
+            .isInstanceOf(TaskTypeException.class)
+            .hasMessage(TASK_NOT_FOUND.message());
+    }
 }

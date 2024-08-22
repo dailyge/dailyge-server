@@ -10,14 +10,12 @@ import project.dailyge.app.common.annotation.PresentationLayer;
 import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.common.auth.LoginUser;
 import project.dailyge.app.common.response.ApiResponse;
-import project.dailyge.app.core.common.validation.UuidFormat;
 import project.dailyge.app.core.task.application.TaskReadUseCase;
 import project.dailyge.app.core.task.presentation.response.MonthlyTaskIdResponse;
 import project.dailyge.app.core.task.presentation.response.MonthlyTaskResponse;
-import project.dailyge.app.core.task.presentation.response.TaskDocumentResponse;
+import project.dailyge.app.core.task.presentation.response.TaskDetailResponse;
 import project.dailyge.app.core.task.presentation.response.TaskStatusResponse;
-import project.dailyge.document.task.MonthlyTaskDocument;
-import project.dailyge.document.task.TaskDocument;
+import project.dailyge.entity.task.TaskJpaEntity;
 import project.dailyge.entity.task.TaskStatus;
 
 import java.time.LocalDate;
@@ -32,43 +30,34 @@ public class TaskReadApi {
     private final TaskReadUseCase taskReadUseCase;
 
     @GetMapping(path = {"/monthly-tasks/id"})
-    public ApiResponse<MonthlyTaskIdResponse> findMonthlyTaskIdByUserIdAndDate(
+    public ApiResponse<MonthlyTaskIdResponse> findMonthlyTaskId(
         @LoginUser final DailygeUser dailygeUser,
         @RequestParam(value = "date") final LocalDate date
     ) {
-        final MonthlyTaskDocument findMonthlyTask = taskReadUseCase.findMonthlyTaskByUserIdAndDate(dailygeUser, date);
-        final MonthlyTaskIdResponse payload = new MonthlyTaskIdResponse(findMonthlyTask);
+        final Long findMonthlyTaskId = taskReadUseCase.findMonthlyTaskId(dailygeUser, date);
+        final MonthlyTaskIdResponse payload = new MonthlyTaskIdResponse(findMonthlyTaskId);
         return ApiResponse.from(OK, payload);
     }
 
-    @GetMapping(path = {"/monthly-tasks"})
-    public ApiResponse<MonthlyTaskResponse> findMonthlyTaskByUserIdAndDate(
+    @GetMapping(path = {"/tasks"})
+    public ApiResponse<MonthlyTaskResponse> findMonthlyTasksByDate(
         @LoginUser final DailygeUser dailygeUser,
         @RequestParam(value = "date") final LocalDate date
     ) {
-        final MonthlyTaskDocument findMonthlyTask = taskReadUseCase.findMonthlyTaskByUserIdAndDate(dailygeUser, date);
-        final MonthlyTaskResponse payload = MonthlyTaskResponse.from(findMonthlyTask);
-        return ApiResponse.from(OK, payload);
-    }
-
-    @GetMapping(path = {"/monthly-tasks/{monthlyTaskId}"})
-    public ApiResponse<MonthlyTaskResponse> findMonthlyTaskById(
-        @LoginUser final DailygeUser dailygeUser,
-        @UuidFormat @PathVariable(value = "monthlyTaskId") final String monthlyTaskId
-    ) {
-        final MonthlyTaskDocument findMonthlyTask = taskReadUseCase.findMonthlyTaskById(dailygeUser, monthlyTaskId);
-        final MonthlyTaskResponse payload = MonthlyTaskResponse.from(findMonthlyTask);
+        final List<TaskDetailResponse> findTasks = taskReadUseCase.findTasksByMonthlyTasksIdAndDate(dailygeUser, date).stream()
+            .map(TaskDetailResponse::from)
+            .toList();
+        final MonthlyTaskResponse payload = MonthlyTaskResponse.from(date, findTasks);
         return ApiResponse.from(OK, payload);
     }
 
     @GetMapping(path = {"/tasks/{taskId}"})
-    public ApiResponse<TaskDocumentResponse> findTaskById(
+    public ApiResponse<TaskDetailResponse> findTaskById(
         @LoginUser final DailygeUser dailygeUser,
-        @UuidFormat @PathVariable(value = "taskId") final String taskId,
-        @RequestParam(name = "date") final LocalDate date
+        @PathVariable(value = "taskId") final Long taskId
     ) {
-        final TaskDocument findTask = taskReadUseCase.findByIdAndDate(dailygeUser, taskId, date);
-        final TaskDocumentResponse payload = TaskDocumentResponse.from(findTask);
+        final TaskJpaEntity findTask = taskReadUseCase.findTaskById(dailygeUser, taskId);
+        final TaskDetailResponse payload = TaskDetailResponse.from(findTask);
         return ApiResponse.from(OK, payload);
     }
 

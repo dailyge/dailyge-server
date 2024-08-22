@@ -1,14 +1,12 @@
 package project.dailyge.app.core.task.presentation.requesst;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import project.dailyge.app.core.task.application.command.TaskStatusUpdateCommand;
 import project.dailyge.entity.task.TaskStatus;
 
 public record TaskStatusUpdateRequest(
     @NotNull(message = "monthlyId를 입력해 주세요.")
-    @NotBlank(message = "monthlyId는 공백일 수 없습니다.")
-    String monthlyTaskId,
+    Long monthlyTaskId,
 
     @NotNull(message = "Task 상태를 입력해 주세요.")
     TaskStatus status

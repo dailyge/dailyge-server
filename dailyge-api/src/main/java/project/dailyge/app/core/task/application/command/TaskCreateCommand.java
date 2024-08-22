@@ -1,25 +1,31 @@
 package project.dailyge.app.core.task.application.command;
 
 import project.dailyge.app.common.auth.DailygeUser;
-import project.dailyge.document.task.TaskDocument;
+import project.dailyge.entity.task.TaskColor;
+import project.dailyge.entity.task.TaskJpaEntity;
 import static project.dailyge.entity.task.TaskStatus.TODO;
 
 import java.time.LocalDate;
 
 public record TaskCreateCommand(
-    String monthlyTaskId,
+    Long monthlyTaskId,
     String title,
     String content,
+    TaskColor color,
     LocalDate date
 ) {
 
-    public TaskDocument toDocument(final DailygeUser user) {
-        return new TaskDocument(
-            monthlyTaskId,
+    public TaskJpaEntity toEntity(
+        final DailygeUser user,
+        final Long monthlyTaskId
+    ) {
+        return new TaskJpaEntity(
             title,
             content,
             date,
-            TODO.name(),
+            TODO,
+            color,
+            monthlyTaskId,
             user.getUserId()
         );
     }

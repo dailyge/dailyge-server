@@ -1,54 +1,33 @@
 package project.dailyge.app.core.task.persistence;
 
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.model.Aggregates;
-import com.mongodb.client.model.Filters;
-import com.mongodb.client.model.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.bson.Document;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationResults;
-import org.springframework.data.mongodb.core.aggregation.MatchOperation;
-import org.springframework.data.mongodb.core.aggregation.ProjectionOperation;
-import org.springframework.data.mongodb.core.aggregation.UnwindOperation;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import project.dailyge.document.task.MonthlyTaskDocument;
-import project.dailyge.document.task.TaskActivity;
-import project.dailyge.document.task.TaskCount;
-import project.dailyge.document.task.TaskDocument;
-import project.dailyge.document.task.TaskDocumentReadRepository;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.DATA_ACCESS_EXCEPTION;
+import project.dailyge.app.common.exception.DaoException;
+import project.dailyge.entity.task.MonthlyTaskEntityReadRepository;
+import project.dailyge.entity.task.MonthlyTaskJpaEntity;
+import static project.dailyge.entity.task.QMonthlyTaskJpaEntity.monthlyTaskJpaEntity;
 import static project.dailyge.entity.task.QTaskJpaEntity.taskJpaEntity;
 import project.dailyge.entity.task.TaskEntityReadRepository;
 import project.dailyge.entity.task.TaskJpaEntity;
 
+import java.sql.Date;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-class TaskReadDao implements TaskEntityReadRepository, TaskDocumentReadRepository {
+class TaskReadDao implements TaskEntityReadRepository, MonthlyTaskEntityReadRepository {
 
-    private static final String MONTHLY_TASKS_DOCUMENT = "monthly_tasks";
-    private static final String TASKS = "tasks";
-    private static final String TASKS_ID = "tasks._id";
-    private static final String TASKS_USER_ID = "tasks.user_id";
-    private static final String COUNT = "count";
-    private static final String ID = "_id";
-    private static final String USER_ID = "user_id";
-    private static final String YEAR = "year";
-    private static final String MONTH = "month";
-
+    private final JdbcTemplate jdbcTemplate;
     private final JPAQueryFactory queryFactory;
-    private final MongoTemplate mongoTemplate;
 
     @Override
-    public Optional<TaskJpaEntity> findById(final Long taskId) {
+    public Optional<TaskJpaEntity> findTaskById(final Long taskId) {
         return Optional.ofNullable(
             queryFactory.selectFrom(taskJpaEntity)
                 .where(taskJpaEntity.id.eq(taskId))
@@ -56,103 +35,28 @@ class TaskReadDao implements TaskEntityReadRepository, TaskDocumentReadRepositor
         );
     }
 
-    /**
-     * findOne 이슈로 인해, 저수준 Collection 직접 조회.
-     */
     @Override
-    public Optional<MonthlyTaskDocument> findMonthlyTaskById(final String monthlyTaskId) {
-        final MongoCollection<Document> collection = getMonthlyTaskDocumentMongoCollection();
-        final Document doc = collection.find(Filters.eq(ID, monthlyTaskId)).first();
-        if (doc == null) {
-            return Optional.empty();
-        }
+    public Optional<MonthlyTaskJpaEntity> findMonthlyTaskByUserIdAndDate(
+        final Long userId,
+        final LocalDate now
+    ) {
         return Optional.ofNullable(
-            mongoTemplate.getConverter().read(MonthlyTaskDocument.class, doc)
+            queryFactory.selectFrom(monthlyTaskJpaEntity)
+                .where(
+                    monthlyTaskJpaEntity.userId.eq(userId)
+                        .and(monthlyTaskJpaEntity.year.eq(now.getYear()))
+                        .and(monthlyTaskJpaEntity.month.eq(now.getMonthValue()))
+                )
+                .fetchFirst()
         );
     }
 
     @Override
-    public Optional<TaskDocument> findTaskDocumentByIdsAndDate(
-        final Long userId,
-        final String taskId,
-        final LocalDate date
-    ) {
-        final MongoCollection<Document> collection = getMonthlyTaskDocumentMongoCollection();
-        final Document document = collection.aggregate(Arrays.asList(
-            Aggregates.match(Filters.eq(USER_ID, userId)),
-            Aggregates.unwind("$tasks"),
-            Aggregates.match(Filters.eq("tasks._id", taskId)),
-            Aggregates.project(Projections.fields(Projections.excludeId(), Projections.include(TASKS)))
-        )).first();
-        if (document != null && document.get(TASKS) != null) {
-            final Document task = (Document) document.get(TASKS);
-            return Optional.of(mongoTemplate.getConverter().read(TaskDocument.class, task));
-        }
-        return Optional.empty();
-    }
-
-    @Override
-    public Optional<TaskDocument> findTaskDocumentByIds(
-        final String monthlyTaskId,
-        final String taskId
-    ) {
-        final MongoCollection<Document> collection = getMonthlyTaskDocumentMongoCollection();
-        final Document document = collection.aggregate(Arrays.asList(
-            Aggregates.match(Filters.eq(ID, monthlyTaskId)),
-            Aggregates.unwind("$tasks"),
-            Aggregates.match(Filters.eq("tasks._id", taskId)),
-            Aggregates.project(Projections.fields(Projections.excludeId(), Projections.include(TASKS)))
-        )).first();
-        if (document != null && document.get(TASKS) != null) {
-            final Document task = (Document) document.get(TASKS);
-            return Optional.of(mongoTemplate.getConverter().read(TaskDocument.class, task));
-        }
-        return Optional.empty();
-    }
-
-    @Override
-    public Optional<TaskActivity> findTaskDocumentByIds(
-        final Long userId,
-        final String monthlyTaskId,
-        final String taskId
-    ) {
-        final MatchOperation monthlyTaskMatch = Aggregation.match(Criteria.where(ID).is(monthlyTaskId));
-        final UnwindOperation unwindTasks = Aggregation.unwind(TASKS);
-        final MatchOperation matchTask = Aggregation.match(
-            Criteria.where(TASKS_USER_ID).is(userId)
-                .and(TASKS_ID).is(taskId)
-        );
-        final ProjectionOperation project = Aggregation.project()
-            .and(TASKS_USER_ID).as("userId")
-            .and(TASKS_ID).as("taskId")
-            .andExclude(ID);
-
-        final Aggregation aggregation = Aggregation.newAggregation(
-            monthlyTaskMatch,
-            unwindTasks,
-            matchTask,
-            project
-        );
-
-        final AggregationResults<TaskActivity> result = mongoTemplate.aggregate(
-            aggregation, MONTHLY_TASKS_DOCUMENT, TaskActivity.class
-        );
-        final List<TaskActivity> taskActivities = result.getMappedResults();
-        return taskActivities.isEmpty() ? Optional.empty() : Optional.of(taskActivities.get(0));
-    }
-
-    @Override
-    public Optional<MonthlyTaskDocument> findMonthlyDocumentByUserIdAndDate(
-        final Long userId,
-        final LocalDate date
-    ) {
-        final Query query = Query.query(
-            Criteria.where(USER_ID).is(userId)
-                .and(YEAR).is(date.getYear())
-                .and(MONTH).is(date.getMonthValue())
-        );
+    public Optional<MonthlyTaskJpaEntity> findMonthlyTaskById(final Long monthlyTaskId) {
         return Optional.ofNullable(
-            mongoTemplate.findOne(query, MonthlyTaskDocument.class)
+            queryFactory.selectFrom(monthlyTaskJpaEntity)
+                .where(monthlyTaskJpaEntity.id.eq(monthlyTaskId))
+                .fetchFirst()
         );
     }
 
@@ -161,32 +65,50 @@ class TaskReadDao implements TaskEntityReadRepository, TaskDocumentReadRepositor
         final Long userId,
         final LocalDate date
     ) {
-        final Query query = Query.query(
-            Criteria.where(USER_ID).is(userId)
-                .and(YEAR).is(date.getYear())
-                .and(MONTH).is(date.getMonthValue())
-        ).limit(1);
-        return mongoTemplate.exists(query, MonthlyTaskDocument.class);
+        final String sql = "SELECT 1 FROM monthly_tasks WHERE user_id = ? AND year = ?";
+        try {
+            final Integer count = jdbcTemplate.query(sql, new Object[]{userId, date.getYear()}, rs -> {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                } else {
+                    return 0;
+                }
+            });
+            return count != null && count > 0;
+        } catch (DataAccessException ex) {
+            throw new DaoException(ex.getMessage(), DATA_ACCESS_EXCEPTION);
+        }
     }
 
     @Override
-    public long countMonthlyTask(
+    public Long findMonthlyTaskIdByUserIdAndDate(
         final Long userId,
         final LocalDate date
     ) {
-        final MatchOperation matchOperation = Aggregation.match(
-            Criteria.where(USER_ID).is(userId)
-                .and(YEAR).is(date.getYear())
-        );
-        final Aggregation aggregation = Aggregation.newAggregation(
-            matchOperation,
-            Aggregation.group().count().as(COUNT)
-        );
-        final AggregationResults<TaskCount> results = mongoTemplate.aggregate(
-            aggregation, MONTHLY_TASKS_DOCUMENT, TaskCount.class
-        );
-        final TaskCount taskCount = results.getUniqueMappedResult();
-        return taskCount != null ? taskCount.getCount() : 0;
+        return queryFactory.select(monthlyTaskJpaEntity.id)
+            .from(monthlyTaskJpaEntity)
+            .where(
+                monthlyTaskJpaEntity.userId.eq(userId)
+                    .and(monthlyTaskJpaEntity.year.eq(date.getYear()))
+                    .and(monthlyTaskJpaEntity.month.eq(date.getMonthValue()))
+            )
+            .limit(1)
+            .fetchOne();
+    }
+
+    @Override
+    public List<TaskJpaEntity> findMonthlyTasksByIdAndDate(
+        final Long monthlyTaskId,
+        final LocalDate date
+    ) {
+        return queryFactory.selectFrom(taskJpaEntity)
+            .where(
+                taskJpaEntity.monthlyTaskId.eq(monthlyTaskId)
+                    .and(taskJpaEntity.year.eq(date.getYear()))
+                    .and(taskJpaEntity.year.eq(date.getYear()))
+                    .and(taskJpaEntity.month.eq(date.getMonthValue()))
+                    .and(taskJpaEntity.deleted.eq(false))
+            ).fetch();
     }
 
     @Override
@@ -194,28 +116,16 @@ class TaskReadDao implements TaskEntityReadRepository, TaskDocumentReadRepositor
         final Long userId,
         final LocalDate date
     ) {
-        final UnwindOperation unwindOperation = Aggregation.unwind(MONTHLY_TASKS_DOCUMENT);
-        final MatchOperation matchOperation = Aggregation.match(
-            Criteria.where(USER_ID).is(userId)
-                .and(YEAR).is(date.getYear())
-                .and("tasks.month").is(date.getMonthValue())
-                .and("tasks.day").is(date.getDayOfMonth())
-                .and("tasks.deleted").is(false)
-        );
-        final Aggregation aggregation = Aggregation.newAggregation(
-            unwindOperation,
-            matchOperation,
-            Aggregation.group().count().as(COUNT)
-        );
-
-        final AggregationResults<TaskCount> results = mongoTemplate.aggregate(
-            aggregation, MONTHLY_TASKS_DOCUMENT, TaskCount.class
-        );
-        final TaskCount taskCount = results.getUniqueMappedResult();
-        return taskCount != null ? taskCount.getCount() : 0;
-    }
-
-    private MongoCollection<Document> getMonthlyTaskDocumentMongoCollection() {
-        return mongoTemplate.getCollection(MONTHLY_TASKS_DOCUMENT);
+        final String sql = "SELECT COUNT(*) FROM tasks WHERE user_id = ? AND date = ? AND deleted = false";
+        try {
+            final Date dbDate = Date.valueOf(date);
+            final Long result = jdbcTemplate.queryForObject(sql, new Object[]{userId, dbDate}, Long.class);
+            if (result != null) {
+                return result;
+            }
+            return 0L;
+        } catch (DataAccessException ex) {
+            throw new DaoException(ex.getMessage(), DATA_ACCESS_EXCEPTION);
+        }
     }
 }

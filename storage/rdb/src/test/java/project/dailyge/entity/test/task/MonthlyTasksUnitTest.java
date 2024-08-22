@@ -43,8 +43,8 @@ class MonthlyTasksUnitTest {
         assertAll(
             () -> assertThat(monthlyTasks).hasSize(12),
             () -> {
-                for (int month = 1; month <= 12; month++) {
-                    assertThat(monthlyTasks.get(month).getMonth()).isEqualTo(month);
+                for (int month = 0; month <= 11; month++) {
+                    assertThat(monthlyTasks.get(month).getMonth()).isEqualTo(month + 1);
                 }
             }
         );

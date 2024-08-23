@@ -1,14 +1,13 @@
 package project.dailyge.app.test.user.documentationtest;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.restdocs.restassured.RestDocumentationFilter;
-import project.dailyge.app.common.DatabaseTestBase;
-
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.containsString;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.document;
+import org.springframework.restdocs.restassured.RestDocumentationFilter;
+import project.dailyge.app.common.DatabaseTestBase;
 import static project.dailyge.app.test.user.documentationtest.snippet.LogoutSnippet.createLogoutFilter;
 import static project.dailyge.app.test.user.documentationtest.snippet.UserSnippet.LOGOUT_RESPONSE_COOKIE_SNIPPET;
 import static project.dailyge.app.test.user.documentationtest.snippet.UserSnippet.createIdentifier;
@@ -29,8 +28,8 @@ class LogoutDocumentationTest extends DatabaseTestBase {
             .post("/api/logout")
             .then()
             .header(
-                "set-Cookie",
-                containsString("Refresh-Token=; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT")
+                "Set-Cookie",
+                containsString("Refresh-Token=; Path=/; Domain=.dailyge.com; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT")
             )
             .statusCode(200)
             .log()
@@ -50,8 +49,8 @@ class LogoutDocumentationTest extends DatabaseTestBase {
             .post("/api/logout")
             .then()
             .header(
-                "set-Cookie",
-                containsString("Refresh-Token=; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT")
+                "Set-Cookie",
+                containsString("Refresh-Token=; Path=/; Domain=.dailyge.com; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT")
             )
             .statusCode(200)
             .log()

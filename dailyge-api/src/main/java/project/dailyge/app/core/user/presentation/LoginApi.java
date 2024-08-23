@@ -39,7 +39,13 @@ public class LoginApi {
     public ApiResponse<OAuthLoginResponse> login(@RequestParam("code") final String code) {
         final DailygeToken dailygeToken = userFacade.login(code);
         final HttpHeaders headers = new HttpHeaders();
-        headers.add(SET_COOKIE, dailygeToken.getRefreshTokenCookie());
+        final ResponseCookie refreshTokenCookie = ResponseCookie.from("Refresh-Token", dailygeToken.refreshToken())
+            .domain(".dailyge.com")
+            .path("/")
+            .httpOnly(true)
+            .secure(true)
+            .build();
+        headers.add(SET_COOKIE, refreshTokenCookie.toString());
         final OAuthLoginResponse payload = new OAuthLoginResponse(dailygeToken.accessToken());
         return ApiResponse.from(OK, headers, payload);
     }
@@ -50,6 +56,8 @@ public class LoginApi {
         final HttpHeaders headers = new HttpHeaders();
         final ResponseCookie expiredRefreshTokenCookie = ResponseCookie.from("Refresh-Token")
             .value(null)
+            .path("/")
+            .domain(".dailyge.com")
             .maxAge(0L)
             .build();
         headers.add(SET_COOKIE, expiredRefreshTokenCookie.toString());

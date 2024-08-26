@@ -36,7 +36,6 @@ jobs:
         run: |
           git submodule sync --recursive
           git submodule update --init --recursive --remote
-
       - name: Set up JDK 17
         uses: actions/setup-java@v2
         with:
@@ -81,10 +80,11 @@ jobs:
         with:
           region: ${{ env.AWS_REGION }}
 
-      - name: Build, push Docker image to ECR with Jib, and Deploy Docs
+      - name: Build, push Docker image to ECR with Jib with Deploy Docs
         run: |
           ./gradlew dailyge-api:jib -Djib.to.image=${{ env.ECR_URI }}:${{ env.IMAGE_TAG }} --stacktrace --info
-          aws s3 cp dailyge-api/build/api-spec/* s3://${{ secrets.API_DOCS_PATH }}/ --recursive
+          aws s3 cp dailyge-api/build/api-spec/openapi3.json s3://${{ secrets.API_DOCS_BUCKET_PATH }}/openapi3.json
+          aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths "/${{ secrets.API_DOCS_BUCKET_PATH }}/openapi3.json"
         env:
           ENABLE_JIB: true
           ENV: ${{ env.ENV }}
@@ -94,6 +94,7 @@ jobs:
           PROD_ECR_URI: ${{ secrets.PROD_ECR_URI }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          DISTRIBUTION_ID: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
           AWS_REGION: ap-northeast-2
 
       - name: Download ECS task definition JSON file
@@ -116,28 +117,27 @@ jobs:
         with:
           task-definition: ${{ steps.task-def.outputs.task-definition }}
           service: ${{ env.SERVICE_NAME }}
-          cluster: dailyge-api
+          cluster: dailyge
           wait-for-service-stability: true
+          stability-timeout-minutes: 10
 
   notify_slack:
-    runs-on: ubuntu-latest
     needs: [ deploy ]
+    runs-on: ubuntu-latest
     if: always()
     steps:
       - name: Notify Deployment Result to Slack - Success
-        if: ${{ success() }}
+        if: ${{ needs.deploy.outputs.result == 'success' }}
         uses: 8398a7/action-slack@v3
         with:
-          status: success
-          color: "good"
+          status: custom
+          fields: 'project,ref,commit,author,action,eventName,job,took'
           text: |
             :white_check_mark: *배포를 성공적으로 완료했습니다.*
             *Contributor:* ${{ github.actor }}
             *Reviewers:* ${{ join(github.event.pull_request.requested_reviewers.*.login, ', ') }}
             *PR:* <${{ github.event.pull_request.html_url }}|PR>
             *Env:* ${{ env.ENV }}
-            *Server:* Admin
-            *Sonarqube:* <${{ secrets.SONAR_HOST_URL }}|정적 분석지표>
           username: "PR_Bot"
           icon_emoji: ":robot_face:"
           channel: "pr"
@@ -148,35 +148,14 @@ jobs:
         if: ${{ failure() }}
         uses: 8398a7/action-slack@v3
         with:
-          status: failure
-          color: "danger"
+          status: custom
+          fields: 'project,ref,commit,author,action,eventName,job,took'
           text: |
             :x: *배포에 실패했습니다.*
             *Contributor:* ${{ github.actor }}
             *Reviewers:* ${{ join(github.event.pull_request.requested_reviewers.*.login, ', ') }}
             *PR:* <${{ github.event.pull_request.html_url }}|PR>
             *Env:* ${{ env.ENV }}
-            *Sonarqube:* <${{ secrets.SONAR_HOST_URL }}|정적 분석지표>
-            *Description:* PR 채널을 확인해주세요.
-          username: "PR_Bot"
-          icon_emoji: ":robot_face:"
-          channel: "pr"
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.PR_WEBHOOK_URL }}
-
-      - name: Notify Deployment Result to Slack - Cancelled
-        if: ${{ cancelled() }}
-        uses: 8398a7/action-slack@v3
-        with:
-          status: cancelled
-          color: "warning"
-          text: |
-            :warning: *배포가 취소되었습니다.*
-            *Contributor:* ${{ github.actor }}
-            *Reviewers:* ${{ join(github.event.pull_request.requested_reviewers.*.login, ', ') }}
-            *PR:* <${{ github.event.pull_request.html_url }}|PR>
-            *Env:* ${{ env.ENV }}
-            *Sonarqube:* <${{ secrets.SONAR_HOST_URL }}|정적 분석지표>
             *Description:* PR 채널을 확인해주세요.
           username: "PR_Bot"
           icon_emoji: ":robot_face:"

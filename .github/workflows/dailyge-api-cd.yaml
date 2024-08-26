@@ -2,7 +2,6 @@ name: Dailyge-Api Deploy
 
 on:
   pull_request:
-    types: [closed]
     branches:
       - dev
       - prod
@@ -62,7 +61,7 @@ jobs:
             echo "ECR_URI=${{ secrets.PROD_ECR_URI }}" >> $GITHUB_ENV
           fi
           echo "IMAGE_TAG=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
-          echo "CONTAINER_NAME=dailyge-${{ env.ENV }}-container" >> $GITHUB_ENV
+          echo "CONTAINER_NAME=dailyge-api-${{ env.ENV }}-container" >> $GITHUB_ENV
           echo "TASK_DEFINITION_NAME=dailyge-api-${{ env.ENV }}" >> $GITHUB_ENV
           echo "SERVICE_NAME=dailyge-api-${{ env.ENV }}-service" >> $GITHUB_ENV
 
@@ -113,6 +112,13 @@ jobs:
           cluster: dailyge-api
           wait-for-service-stability: true
 
+      - name: Deploy Docs
+        run: |
+          aws s3 cp dailyge-api/build/api-spec/* s3://$/${API_DOCS_PATH}
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ap-northeast-2
   notify_slack:
     runs-on: ubuntu-latest
     needs: [ deploy ]

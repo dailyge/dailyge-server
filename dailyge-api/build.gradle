@@ -110,6 +110,8 @@ tasks.withType(JavaCompile).configureEach {
 
 tasks.named("jib").configure {
     dependsOn("copySubmoduleConfig")
+    dependsOn("openapi3")
+    dependsOn("copyDocument")
     enabled = true
 }
 

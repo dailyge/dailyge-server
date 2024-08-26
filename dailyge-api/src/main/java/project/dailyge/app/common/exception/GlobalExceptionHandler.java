@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.NoHandlerFoundException;
 import project.dailyge.app.codeandmessage.CodeAndMessage;
+import project.dailyge.app.codeandmessage.CommonCodeAndMessage;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_REQUEST;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_PARAMETERS;
@@ -25,6 +27,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResponse> resolveIllegalArgumentException(final IllegalArgumentException exception) {
         final CodeAndMessage codeAndMessage = BAD_REQUEST;
+        writeLog(codeAndMessage, exception);
+        return ResponseEntity.status(codeAndMessage.code())
+            .body(ErrorResponse.from(codeAndMessage));
+    }
+
+    @ExceptionHandler(NoHandlerFoundException.class)
+    public ResponseEntity<ErrorResponse> resolveNoHandlerFoundException(final NoHandlerFoundException exception) {
+        final CommonCodeAndMessage codeAndMessage = CommonCodeAndMessage.INVALID_URL;
         writeLog(codeAndMessage, exception);
         return ResponseEntity.status(codeAndMessage.code())
             .body(ErrorResponse.from(codeAndMessage));

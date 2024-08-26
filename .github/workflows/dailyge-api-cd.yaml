@@ -2,6 +2,8 @@ name: Dailyge-Api Deploy
 
 on:
   pull_request:
+    types:
+      - closed
     branches:
       - dev
       - prod

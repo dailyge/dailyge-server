@@ -2,7 +2,7 @@ name: Dailyge-Api Deploy
 
 on:
   pull_request:
-    types: [closed]
+    types: [ closed ]
     branches:
       - dev
       - prod
@@ -58,13 +58,16 @@ jobs:
         run: |
           if [ "${{ env.ENV }}" == "dev" ]; then
             echo "ECR_URI=${{ secrets.DEV_ECR_URI }}" >> $GITHUB_ENV
+            echo "SERVICE_NAME=dailyge-api-dev-service" >> $GITHUB_ENV
+            echo "CONTAINER_NAME=dailyge-api-dev-container" >> $GITHUB_ENV
+            echo "TASK_DEFINITION_NAME=dailyge-api-dev" >> $GITHUB_ENV
           elif [ "${{ env.ENV }}" == "prod" ]; then
             echo "ECR_URI=${{ secrets.PROD_ECR_URI }}" >> $GITHUB_ENV
+            echo "SERVICE_NAME=dailyge-api-prod-service" >> $GITHUB_ENV
+            echo "CONTAINER_NAME=dailyge-api-prod-container" >> $GITHUB_ENV
+            echo "TASK_DEFINITION_NAME=dailyge-api-prod" >> $GITHUB_ENV
           fi
           echo "IMAGE_TAG=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
-          echo "CONTAINER_NAME=dailyge-${{ env.ENV }}-container" >> $GITHUB_ENV
-          echo "TASK_DEFINITION_NAME=dailyge-api-${{ env.ENV }}" >> $GITHUB_ENV
-          echo "SERVICE_NAME=dailyge-api-${{ env.ENV }}-service" >> $GITHUB_ENV
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -78,10 +81,10 @@ jobs:
         with:
           region: ${{ env.AWS_REGION }}
 
-      - name: Build and push Docker image to ECR with Jib
-        id: build-image
+      - name: Build, push Docker image to ECR with Jib, and Deploy Docs
         run: |
           ./gradlew dailyge-api:jib -Djib.to.image=${{ env.ECR_URI }}:${{ env.IMAGE_TAG }} --stacktrace --info
+          aws s3 cp dailyge-api/build/api-spec/* s3://${{ secrets.API_DOCS_PATH }}/ --recursive
         env:
           ENABLE_JIB: true
           ENV: ${{ env.ENV }}
@@ -89,6 +92,9 @@ jobs:
           ENCRYPTOR_KEY: ${{ secrets.ENCRYPTOR_KEY }}
           DEV_ECR_URI: ${{ secrets.DEV_ECR_URI }}
           PROD_ECR_URI: ${{ secrets.PROD_ECR_URI }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ap-northeast-2
 
       - name: Download ECS task definition JSON file
         run: |

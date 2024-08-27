@@ -127,7 +127,7 @@ jobs:
     if: always()
     steps:
       - name: Notify Deployment Result to Slack - Success
-        if: ${{ needs.deploy.outputs.result == 'success' }}
+        if: ${{ success() }}
         uses: 8398a7/action-slack@v3
         with:
           status: custom

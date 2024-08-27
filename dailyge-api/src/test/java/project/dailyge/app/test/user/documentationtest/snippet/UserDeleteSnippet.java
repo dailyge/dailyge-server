@@ -17,8 +17,8 @@ import static org.springframework.restdocs.request.RequestDocumentation.pathPara
 
 public final class UserDeleteSnippet implements UserSnippet {
 
-    private static final String USER_DELETE_SUMMARY = "User 조회 API";
-    private static final String USER_DELETE_DESCRIPTION = "User 정보를 조회하는 API 입니다.";
+    private static final String USER_DELETE_SUMMARY = "User 삭제 API";
+    private static final String USER_DELETE_DESCRIPTION = "User 정보를 삭제하는 API 입니다.";
 
     private UserDeleteSnippet() {
         throw new AssertionError("올바른 방식으로 생성자를 호출해주세요.");

@@ -8,7 +8,6 @@ import static project.dailyge.entity.task.TaskStatus.TODO;
 import java.time.LocalDate;
 
 public record TaskCreateCommand(
-    Long monthlyTaskId,
     String title,
     String content,
     TaskColor color,

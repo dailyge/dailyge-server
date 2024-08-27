@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -163,6 +164,7 @@ class TaskJpaEntityUnitTest {
         final String newContent = "Updated content of the task.";
         final LocalDate today = LocalDate.now();
         final TaskStatus newStatus = TaskStatus.TODO;
+        final Long newMonthlyTaskId = 300L;
 
         final TaskJpaEntity newTask = new TaskJpaEntity(
             "Initial Title",
@@ -172,7 +174,7 @@ class TaskJpaEntityUnitTest {
             1L
         );
 
-        newTask.update(newTitle, newContent, today, newStatus);
+        newTask.update(newTitle, newContent, today, newStatus, newMonthlyTaskId);
 
         assertAll(
             () -> assertEquals(newTitle, newTask.getTitle()),
@@ -180,8 +182,32 @@ class TaskJpaEntityUnitTest {
             () -> assertEquals(today, newTask.getDate()),
             () -> assertEquals(today.getYear(), newTask.getYear()),
             () -> assertEquals(today.getMonthValue(), newTask.getMonth()),
-            () -> assertEquals(newStatus, newTask.getStatus())
+            () -> assertEquals(newStatus, newTask.getStatus()),
+            () -> assertEquals(newMonthlyTaskId, newTask.getMonthlyTaskId())
         );
+    }
+
+    @Test
+    @DisplayName("monthlyTaskId 값으로 결과를 판단한다.")
+    void whenSameMonthlyTaskIdThenResultShouldBeTrue() {
+        final LocalDateTime now = LocalDateTime.now();
+        final TaskJpaEntity newTask = TaskJpaEntity.builder()
+            .id(1L)
+            .title("프로젝트 관리")
+            .content("프로젝트 진행 상황 점검")
+            .date(LocalDate.now().plusDays(10))
+            .status(TaskStatus.TODO)
+            .monthlyTaskId(1L)
+            .userId(1L)
+            .createdAt(now)
+            .createdBy(1L)
+            .lastModifiedAt(now)
+            .lastModifiedBy(1L)
+            .deleted(false)
+            .build();
+
+        assertTrue(newTask.isValidMonthlyTask(1L));
+        assertFalse(newTask.isValidMonthlyTask(2L));
     }
 
     @Test

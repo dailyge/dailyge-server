@@ -164,6 +164,7 @@ class TaskJpaEntityUnitTest {
         final String newContent = "Updated content of the task.";
         final LocalDate today = LocalDate.now();
         final TaskStatus newStatus = TaskStatus.TODO;
+        final Long newMonthlyTaskId = 300L;
 
         final TaskJpaEntity newTask = new TaskJpaEntity(
             "Initial Title",
@@ -173,7 +174,7 @@ class TaskJpaEntityUnitTest {
             1L
         );
 
-        newTask.update(newTitle, newContent, today, newStatus);
+        newTask.update(newTitle, newContent, today, newStatus, newMonthlyTaskId);
 
         assertAll(
             () -> assertEquals(newTitle, newTask.getTitle()),
@@ -181,7 +182,8 @@ class TaskJpaEntityUnitTest {
             () -> assertEquals(today, newTask.getDate()),
             () -> assertEquals(today.getYear(), newTask.getYear()),
             () -> assertEquals(today.getMonthValue(), newTask.getMonth()),
-            () -> assertEquals(newStatus, newTask.getStatus())
+            () -> assertEquals(newStatus, newTask.getStatus()),
+            () -> assertEquals(newMonthlyTaskId, newTask.getMonthlyTaskId())
         );
     }
 

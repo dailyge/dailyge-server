@@ -17,7 +17,6 @@ import static project.dailyge.app.test.task.documentationtest.snippet.TaskDelete
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASK_AUTHORIZATION_HEADER;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASK_PATH_PARAMETER_SNIPPET;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.createIdentifier;
-import project.dailyge.entity.task.MonthlyTaskJpaEntity;
 import static project.dailyge.entity.task.TaskColor.BLUE;
 
 import java.time.LocalDate;
@@ -43,7 +42,6 @@ class TaskDeleteDocumentationTest extends DatabaseTestBase {
     @Test
     @DisplayName("[RestDocs] Task를 삭제하면 204 No-Content 응답을 받는다.")
     void whenDeleteTaskThenStatusCodeShouldBe_204_RestDocs() {
-        final MonthlyTaskJpaEntity findMonthlyTask = taskReadUseCase.findMonthlyTaskByUserIdAndDate(dailygeUser, now);
         final TaskCreateRequest request = new TaskCreateRequest(
             "주간 미팅", "Backend 팀과 Api 스펙 정의", BLUE, now
         );
@@ -58,7 +56,6 @@ class TaskDeleteDocumentationTest extends DatabaseTestBase {
             .contentType(APPLICATION_JSON_VALUE)
             .header(AUTHORIZATION, getAuthorizationHeader())
             .header(USER_ID_KEY, newUser.getId())
-            .param("date", now.toString())
             .when()
             .delete("/api/tasks/{taskId}", newTaskId)
             .then()
@@ -70,7 +67,6 @@ class TaskDeleteDocumentationTest extends DatabaseTestBase {
     @Test
     @DisplayName("[Swagger] Task를 삭제하면 204 No-Content 응답을 받는다.")
     void whenDeleteTaskThenStatusCodeShouldBe_204_Swagger() {
-        final MonthlyTaskJpaEntity findMonthlyTask = taskReadUseCase.findMonthlyTaskByUserIdAndDate(dailygeUser, now);
         final TaskCreateRequest request = new TaskCreateRequest(
             "주간 미팅", "Backend 팀과 Api 스펙 정의", BLUE, now
         );
@@ -85,7 +81,6 @@ class TaskDeleteDocumentationTest extends DatabaseTestBase {
             .contentType(APPLICATION_JSON_VALUE)
             .header(AUTHORIZATION, getAuthorizationHeader())
             .header(USER_ID_KEY, newUser.getId())
-            .param("date", now.toString())
             .when()
             .delete("/api/tasks/{taskId}", newTaskId)
             .then()

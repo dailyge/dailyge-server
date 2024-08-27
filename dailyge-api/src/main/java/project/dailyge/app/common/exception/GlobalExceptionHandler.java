@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
@@ -32,9 +33,11 @@ public class GlobalExceptionHandler {
             .body(ErrorResponse.from(codeAndMessage));
     }
 
-    @ExceptionHandler(NoHandlerFoundException.class)
-    public ResponseEntity<ErrorResponse> resolveNoHandlerFoundException(final NoHandlerFoundException exception) {
-        final CommonCodeAndMessage codeAndMessage = CommonCodeAndMessage.INVALID_URL;
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ResponseEntity<ErrorResponse> resolveMissingServletRequestParameterException(
+        final MissingServletRequestParameterException exception
+    ) {
+        final CodeAndMessage codeAndMessage = BAD_REQUEST;
         writeLog(codeAndMessage, exception);
         return ResponseEntity.status(codeAndMessage.code())
             .body(ErrorResponse.from(codeAndMessage));
@@ -45,6 +48,14 @@ public class GlobalExceptionHandler {
         final MethodArgumentTypeMismatchException exception
     ) {
         final CodeAndMessage codeAndMessage = BAD_REQUEST;
+        writeLog(codeAndMessage, exception);
+        return ResponseEntity.status(codeAndMessage.code())
+            .body(ErrorResponse.from(codeAndMessage));
+    }
+
+    @ExceptionHandler(NoHandlerFoundException.class)
+    public ResponseEntity<ErrorResponse> resolveNoHandlerFoundException(final NoHandlerFoundException exception) {
+        final CommonCodeAndMessage codeAndMessage = CommonCodeAndMessage.INVALID_URL;
         writeLog(codeAndMessage, exception);
         return ResponseEntity.status(codeAndMessage.code())
             .body(ErrorResponse.from(codeAndMessage));

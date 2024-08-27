@@ -15,8 +15,8 @@ import java.util.List;
 
 public final class TaskCreateSnippet implements TaskSnippet {
 
-    private static final String SUMMARY = "월간 일정표 생성 API";
-    private static final String DESCRIPTION = "월간 일정표를 생성합니다. 월간 일정표가 이미 존재한다면 이를 중복생성할 수 없습니다.";
+    private static final String SUMMARY = "Task 생성 API";
+    private static final String DESCRIPTION = "Task를 생성합니다.";
 
     private TaskCreateSnippet() {
         throw new AssertionError("올바른 방식으로 생성자를 호출해주세요.");

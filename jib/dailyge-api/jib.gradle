@@ -11,7 +11,7 @@ if (env != null && (env == "dev" || env == "prod")) {
     ecrUri = env == "prod" ? System.getenv("PROD_ECR_URI") : System.getenv("DEV_ECR_URI")
     port = env == 'prod' ? '8080' : '8081'
     profile = env == 'prod' ? 'prod' : 'dev'
-    label = "dailyge-${profile}-api"
+    label = "dailyge-api-${profile}"
 }
 
 if (env != null && (skipJib != null && skipJib == "false")) {
@@ -22,7 +22,6 @@ if (env != null && (skipJib != null && skipJib == "false")) {
         to {
             image = "${ecrUri}:${imageTag}"
             credHelper = 'ecr-login'
-            tags = ['latest']
         }
         container {
             ports = [port]

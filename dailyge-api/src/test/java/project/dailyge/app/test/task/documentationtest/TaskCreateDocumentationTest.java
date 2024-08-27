@@ -17,7 +17,6 @@ import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippe
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASK_CREATE_REQUEST_SNIPPET;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASK_CREATE_RESPONSE_SNIPPET;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.createIdentifier;
-import project.dailyge.entity.task.MonthlyTaskJpaEntity;
 import static project.dailyge.entity.task.TaskColor.BLUE;
 
 import java.time.LocalDate;
@@ -40,10 +39,7 @@ class TaskCreateDocumentationTest extends DatabaseTestBase {
     @Test
     @DisplayName("[RestDocs] Task를 등록하면 201 Created 응답을 받는다.")
     void whenRegisterTaskThenStatusCodeShouldBe_201_RestDocs() throws Exception {
-        final MonthlyTaskJpaEntity findMonthlyTask = taskReadUseCase.findMonthlyTaskByUserIdAndDate(dailygeUser, now);
-        final TaskCreateRequest request = new TaskCreateRequest(
-            findMonthlyTask.getId(), "주간 미팅", "Backend 팀과 Api 스펙 정의", BLUE, now
-        );
+        final TaskCreateRequest request = new TaskCreateRequest("주간 미팅", "Backend 팀과 Api 스펙 정의", BLUE, now);
 
         given(this.specification)
             .relaxedHTTPSValidation()
@@ -64,10 +60,7 @@ class TaskCreateDocumentationTest extends DatabaseTestBase {
     @Test
     @DisplayName("[Swagger] Task를 등록하면 201 Created 응답을 받는다.")
     void whenRegisterTaskThenStatusCodeShouldBe_201_Swagger() throws Exception {
-        final MonthlyTaskJpaEntity findMonthlyTask = taskReadUseCase.findMonthlyTaskByUserIdAndDate(dailygeUser, now);
-        final TaskCreateRequest request = new TaskCreateRequest(
-            findMonthlyTask.getId(), "주간 미팅", "Backend 팀과 Api 스펙 정의", BLUE, now
-        );
+        final TaskCreateRequest request = new TaskCreateRequest("주간 미팅", "Backend 팀과 Api 스펙 정의", BLUE, now);
         final RestDocumentationFilter filter = createTasksFilter(createIdentifier("TaskCreate", 201));
 
         given(this.specification)
@@ -85,10 +78,7 @@ class TaskCreateDocumentationTest extends DatabaseTestBase {
     @Test
     @DisplayName("[Swagger] 올바르지 않은 파라미터로 Task를 생성하면 400 Bad Request 응답을 받는다.")
     void whenInvalidParameterThenStatusCodeShouldBe_400_Swagger() throws Exception {
-        final MonthlyTaskJpaEntity findMonthlyTask = taskReadUseCase.findMonthlyTaskByUserIdAndDate(dailygeUser, now);
-        final TaskCreateRequest request = new TaskCreateRequest(
-            findMonthlyTask.getId(), "주간 미팅", "Backend 팀과 Api 스펙 정의", null, now
-        );
+        final TaskCreateRequest request = new TaskCreateRequest("주간 미팅", null, BLUE, now);
         final RestDocumentationFilter filter = createTasksFilter(createIdentifier("TaskCreate", 400));
 
         given(this.specification)

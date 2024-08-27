@@ -56,7 +56,7 @@ class TaskReadDocumentationTest extends DatabaseTestBase {
     @Test
     @DisplayName("[RestDocs] Task가 존재하면 200 OK 응답을 받는다.")
     void whenTaskExistsThenStatusCodeShouldBe200_OK_RestDocs() {
-        final TaskCreateRequest request = createTaskRegisterRequest(monthlyTask.getId(), now);
+        final TaskCreateRequest request = createTaskRegisterRequest(now);
         final Long newTaskId = taskWriteUseCase.save(dailygeUser, request.toCommand());
 
         given(this.specification)
@@ -80,7 +80,7 @@ class TaskReadDocumentationTest extends DatabaseTestBase {
     @Test
     @DisplayName("[Swagger] Task가 존재하면 200 OK 응답을 받는다.")
     void whenTaskExistsThenStatusCodeShouldBe200_OK_Swagger() {
-        final TaskCreateRequest request = createTaskRegisterRequest(monthlyTask.getId(), now);
+        final TaskCreateRequest request = createTaskRegisterRequest(now);
         final Long newTaskId = taskWriteUseCase.save(dailygeUser, request.toCommand());
         final RestDocumentationFilter filter = createTaskDetailSearchFilter(createIdentifier("TaskDetailSearch", 200));
         given(this.specification)
@@ -99,7 +99,7 @@ class TaskReadDocumentationTest extends DatabaseTestBase {
     @Test
     @DisplayName("[Swagger] 올바르지 않은 TaskId라면 400 Bad Request 응답을 받는다.")
     void whenInvalidTaskIdThenStatusCodeShouldBe_400_Swagger() {
-        final TaskCreateRequest request = createTaskRegisterRequest(monthlyTask.getId(), now);
+        final TaskCreateRequest request = createTaskRegisterRequest(now);
         taskWriteUseCase.save(dailygeUser, request.toCommand());
         final RestDocumentationFilter filter = createTaskDetailSearchFilter(createIdentifier("TaskDetailSearch", 400));
 
@@ -119,7 +119,7 @@ class TaskReadDocumentationTest extends DatabaseTestBase {
     @Test
     @DisplayName("[Swagger] Task가 존재하지 않는다면 404 NotFound 응답을 받는다.")
     void whenTaskNotExistsThenStatusCodeShouldBe_404_Swagger() {
-        final TaskCreateRequest request = createTaskRegisterRequest(monthlyTask.getId(), now);
+        final TaskCreateRequest request = createTaskRegisterRequest(now);
         taskWriteUseCase.save(dailygeUser, request.toCommand());
         final RestDocumentationFilter filter = createTaskDetailSearchFilter(createIdentifier("TaskDetailSearch", 404));
 
@@ -157,7 +157,7 @@ class TaskReadDocumentationTest extends DatabaseTestBase {
     void whenSearchTasksWithBetweenStartDateAndEndDateThenStatusCodeShouldBe_200_OK_RestDocs() {
         final LocalDate startTime = now;
         final LocalDate endTime = now.plusDays(10);
-        final TaskCreateRequest request = createTaskRegisterRequest(monthlyTask.getId(), now);
+        final TaskCreateRequest request = createTaskRegisterRequest(now);
         taskWriteUseCase.save(dailygeUser, request.toCommand());
 
         given(this.specification)
@@ -183,7 +183,7 @@ class TaskReadDocumentationTest extends DatabaseTestBase {
     void whenSearchTasksWithBetweenStartDateAndEndDateThenStatusCodeShouldBe_200_OK_Swagger() {
         final LocalDate startTime = now;
         final LocalDate endTime = now.plusDays(10);
-        final TaskCreateRequest request = createTaskRegisterRequest(monthlyTask.getId(), now);
+        final TaskCreateRequest request = createTaskRegisterRequest(now);
         taskWriteUseCase.save(dailygeUser, request.toCommand());
         final RestDocumentationFilter filter = createMonthlyTasksSearchWithIdFilter(
             createIdentifier("MonthlyTaskDetailSearch", 200)
@@ -208,7 +208,7 @@ class TaskReadDocumentationTest extends DatabaseTestBase {
     void whenSearchTasksWithBetweenStartDateAndEndDateThenStatusCodeShouldBe_400_Bad_Request_Swagger() {
         final LocalDate startTime = now;
         final LocalDate endTime = now.plusDays(10);
-        final TaskCreateRequest request = createTaskRegisterRequest(monthlyTask.getId(), now);
+        final TaskCreateRequest request = createTaskRegisterRequest(now);
         taskWriteUseCase.save(dailygeUser, request.toCommand());
         final RestDocumentationFilter filter = createMonthlyTasksSearchWithIdFilter(
             createIdentifier("MonthlyTaskDetailSearch", 400)

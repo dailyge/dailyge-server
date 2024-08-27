@@ -11,9 +11,6 @@ import project.dailyge.entity.task.TaskStatus;
 import java.time.LocalDate;
 
 public record TaskUpdateRequest(
-    @NotNull(message = "monthlyId를 입력해 주세요.")
-    Long monthlyTaskId,
-
     @Length(min = 1, max = 150)
     @NotNull(message = "제목을 입력해 주세요.")
     @NotBlank(message = "제목은 공백일 수 없습니다.")
@@ -37,7 +34,6 @@ public record TaskUpdateRequest(
 
     public TaskUpdateCommand toCommand() {
         return new TaskUpdateCommand(
-            monthlyTaskId,
             title,
             content,
             date,
@@ -49,8 +45,8 @@ public record TaskUpdateRequest(
     @Override
     public String toString() {
         return String.format(
-            "{\"monthlyTaskId\":\"%s\",\"title\":\"%s\",\"content\":\"%s\",\"date\":\"%s\",\"status\":\"%s\",\"color\":|%s\"}",
-            monthlyTaskId, title, content, date, status, color
+            "{\"title\":\"%s\",\"content\":\"%s\",\"date\":\"%s\",\"status\":\"%s\",\"color\":|%s\"}",
+            title, content, date, status, color
         );
     }
 }

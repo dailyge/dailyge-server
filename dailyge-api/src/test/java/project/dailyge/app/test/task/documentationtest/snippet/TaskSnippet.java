@@ -44,8 +44,6 @@ public interface TaskSnippet {
     };
 
     FieldDescriptor[] TASK_CREATE_REQUEST_FIELDS = {
-        fieldWithPath("monthlyTaskId").description("MonthlyTask ID")
-            .attributes(getAttribute(TaskCreateRequest.class, "monthlyTaskId")),
         fieldWithPath("title").description("제목")
             .attributes(getAttribute(TaskCreateRequest.class, "title")),
         fieldWithPath("content").description("내용")
@@ -57,8 +55,6 @@ public interface TaskSnippet {
     };
 
     FieldDescriptor[] TASK_UPDATE_REQUEST_FIELDS = {
-        fieldWithPath("monthlyTaskId").description("MonthlyTask ID")
-            .attributes(getAttribute(TaskUpdateRequest.class, "monthlyTaskId")),
         fieldWithPath("title").description("제목")
             .attributes(getAttribute(TaskUpdateRequest.class, "title")),
         fieldWithPath("content").description("내용")
@@ -72,8 +68,8 @@ public interface TaskSnippet {
     };
 
     FieldDescriptor[] TASK_STATUS_UPDATE_REQUEST_FIELDS = {
-        fieldWithPath("monthlyTaskId").description("MonthlyTask ID")
-            .attributes(getAttribute(TaskStatusUpdateRequest.class, "monthlyTaskId")),
+        fieldWithPath("date").description("날짜")
+            .attributes(getAttribute(TaskStatusUpdateRequest.class, "date")),
         fieldWithPath("status").description("상태")
             .attributes(getAttribute(TaskStatusUpdateRequest.class, "status")),
     };

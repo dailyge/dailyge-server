@@ -14,4 +14,6 @@ public interface MonthlyTaskEntityReadRepository {
     Long findMonthlyTaskIdByUserIdAndDate(Long userId, LocalDate date);
 
     Set<Long> findMonthlyTasksByUserIdAndDates(Long userId, LocalDate startDate, LocalDate endDate);
+
+    long countMonthlyTask(Long userId, LocalDate date);
 }

@@ -41,11 +41,11 @@ class TaskDeleteIntegrationTest extends DatabaseTestBase {
         now = now();
         taskFacade.createMonthlyTasks(dailygeUser, now);
         monthlyTask = monthlyTaskReadRepository.findMonthlyTaskByUserIdAndDate(dailygeUser.getUserId(), now).get();
-        taskCreateCommand = createTaskCreationCommand(monthlyTask.getId(), now);
+        taskCreateCommand = createTaskCreationCommand(now);
     }
 
     @Test
-    @DisplayName("존재하지 않는 사용자 ID가 입력되면, UserTypeException이 발생한다.")
+    @DisplayName("존재하지 않는 사용자 ID가 입력되면, UnAuthorizedException이 발생한다.")
     void whenTaskDoesNotExistsThenUnAuthorizedExceptionShouldBeHappen() {
         final Long newTaskId = taskWriteUseCase.save(dailygeUser, taskCreateCommand);
         final DailygeUser invalidDailygeUser = new DailygeUser(Long.MAX_VALUE, NORMAL);

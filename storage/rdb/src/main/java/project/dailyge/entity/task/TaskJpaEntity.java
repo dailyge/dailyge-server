@@ -103,6 +103,7 @@ public class TaskJpaEntity extends BaseEntity {
         final String content,
         final LocalDate date,
         final TaskStatus status,
+        final Long monthlyTaskId,
         final Long userId,
         final LocalDateTime createdAt,
         final Long createdBy,
@@ -118,6 +119,7 @@ public class TaskJpaEntity extends BaseEntity {
         this.year = date.getYear();
         this.month = date.getMonthValue();
         this.status = status;
+        this.monthlyTaskId = monthlyTaskId;
         this.userId = userId;
         this.createdAt = createdAt;
         this.createdBy = createdBy;
@@ -181,7 +183,8 @@ public class TaskJpaEntity extends BaseEntity {
         final String title,
         final String content,
         final LocalDate date,
-        final TaskStatus status
+        final TaskStatus status,
+        final Long monthlyTaskId
     ) {
         this.title = title;
         this.content = content;
@@ -189,6 +192,7 @@ public class TaskJpaEntity extends BaseEntity {
         this.year = date.getYear();
         this.month = date.getMonthValue();
         this.status = status;
+        this.monthlyTaskId = monthlyTaskId;
     }
 
     public void updateStatus(final TaskStatus status) {
@@ -197,6 +201,10 @@ public class TaskJpaEntity extends BaseEntity {
 
     public void delete() {
         this.deleted = true;
+    }
+
+    public boolean isValidMonthlyTask(final Long monthlyTaskId) {
+        return getId().equals(monthlyTaskId);
     }
 
     @Override

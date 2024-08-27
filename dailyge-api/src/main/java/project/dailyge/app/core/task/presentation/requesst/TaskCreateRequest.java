@@ -10,9 +10,6 @@ import project.dailyge.entity.task.TaskColor;
 import java.time.LocalDate;
 
 public record TaskCreateRequest(
-    @NotNull(message = "monthlyTaskId를 입력해 주세요.")
-    Long monthlyTaskId,
-
     @Length(min = 1, max = 150)
     @NotNull(message = "제목을 입력해 주세요.")
     @NotBlank(message = "제목은 공백일 수 없습니다.")
@@ -33,7 +30,6 @@ public record TaskCreateRequest(
 
     public TaskCreateCommand toCommand() {
         return new TaskCreateCommand(
-            monthlyTaskId,
             title,
             content,
             color,
@@ -44,8 +40,8 @@ public record TaskCreateRequest(
     @Override
     public String toString() {
         return String.format(
-            "{\"monthlyTaskId\":\"%s\",\"title\":\"%s\",\"content\":\"%s\",\"date\":\"%s\"}",
-            monthlyTaskId, title, content, date
+            "{\"title\":\"%s\",\"content\":\"%s\",\"date\":\"%s\"}",
+            title, content, date
         );
     }
 }

@@ -98,20 +98,3 @@ jobs:
           channel: "pr"
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.PR_WEBHOOK_URL }}
-
-      - name: Notify Static Analysis Result to Slack - Cancelled
-        if: cancelled()
-        uses: 8398a7/action-slack@v3
-        with:
-          status: cancelled
-          color: "warning"
-          text: |
-            :warning: *정적 분석이 취소되었습니다.*
-            *Contributor:* ${{ github.actor }}
-            *Reviewers:* ${{ join(github.event.pull_request.requested_reviewers.*.login, ', ') }}
-            *PR:* <${{ github.event.pull_request.html_url }}|PR>
-            *Env:* ${{ env.ENV }}
-            *Sonarqube:* <${{ secrets.SONAR_HOST_URL }}|정적 분석지표>
-            *Description:* PR 채널을 확인해주세요.
-          username: "PR_Bot"
-

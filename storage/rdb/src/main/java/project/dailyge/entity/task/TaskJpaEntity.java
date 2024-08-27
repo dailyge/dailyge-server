@@ -199,6 +199,10 @@ public class TaskJpaEntity extends BaseEntity {
         this.deleted = true;
     }
 
+    public boolean isValidMonthlyTask(final Long monthlyTaskId) {
+        return getId().equals(monthlyTaskId);
+    }
+
     @Override
     public boolean equals(final Object obj) {
         if (this == obj) {

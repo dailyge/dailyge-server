@@ -16,5 +16,5 @@ public interface TaskWriteUseCase {
 
     void updateStatus(DailygeUser dailygeUser, Long taskId, TaskStatusUpdateCommand command);
 
-    void delete(DailygeUser dailygeUser, Long taskId, LocalDate date);
+    void delete(DailygeUser dailygeUser, Long taskId);
 }

@@ -6,7 +6,6 @@ import project.dailyge.entity.task.TaskStatus;
 import java.time.LocalDate;
 
 public record TaskUpdateCommand(
-    Long monthlyTaskId,
     String title,
     String content,
     LocalDate date,

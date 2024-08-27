@@ -8,6 +8,7 @@ import project.dailyge.app.core.task.application.TaskWriteUseCase;
 import project.dailyge.app.core.task.application.command.TaskCreateCommand;
 import project.dailyge.app.core.task.application.command.TaskStatusUpdateCommand;
 import project.dailyge.app.core.task.application.command.TaskUpdateCommand;
+import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.INVALID_MONTHLY_TASK;
 import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.MONTHLY_TASK_NOT_FOUND;
 import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.TASK_NOT_FOUND;
 import project.dailyge.app.core.task.exception.TaskTypeException;
@@ -50,8 +51,7 @@ class TaskWriteService implements TaskWriteUseCase {
         final TaskCreateCommand command
     ) {
         validator.validateTaskCreation(dailygeUser.getId(), command.date());
-        final MonthlyTaskJpaEntity findMonthlyTask = monthlyTaskReadRepository.findMonthlyTaskById(command.monthlyTaskId())
-            .orElseThrow(() -> TaskTypeException.from(MONTHLY_TASK_NOT_FOUND));
+        final MonthlyTaskJpaEntity findMonthlyTask = findMonthlyTaskById(dailygeUser, command.date());
         final TaskJpaEntity newTask = command.toEntity(dailygeUser, findMonthlyTask.getId());
         return taskWriteRepository.save(newTask);
     }
@@ -63,8 +63,12 @@ class TaskWriteService implements TaskWriteUseCase {
         final Long taskId,
         final TaskUpdateCommand command
     ) {
+        final MonthlyTaskJpaEntity findMonthlyTask = findMonthlyTaskById(dailygeUser, command.date());
         final TaskJpaEntity findTask = taskReadRepository.findTaskById(taskId)
             .orElseThrow(() -> TaskTypeException.from(TASK_NOT_FOUND));
+        if (findTask.isValidMonthlyTask(findMonthlyTask.getId())) {
+            throw new IllegalArgumentException(INVALID_MONTHLY_TASK.message());
+        }
         dailygeUser.validateAuth(findTask.getUserId());
         findTask.update(command.title(), command.content(), command.date(), command.status());
     }
@@ -76,8 +80,12 @@ class TaskWriteService implements TaskWriteUseCase {
         final Long taskId,
         final TaskStatusUpdateCommand command
     ) {
+        final MonthlyTaskJpaEntity findMonthlyTask = findMonthlyTaskById(dailygeUser, command.date());
         final TaskJpaEntity findTask = taskReadRepository.findTaskById(taskId)
             .orElseThrow(() -> TaskTypeException.from(TASK_NOT_FOUND));
+        if (findTask.isValidMonthlyTask(findMonthlyTask.getId())) {
+            throw new IllegalArgumentException(INVALID_MONTHLY_TASK.message());
+        }
         dailygeUser.validateAuth(findTask.getUserId());
         findTask.updateStatus(command.status());
     }
@@ -86,11 +94,24 @@ class TaskWriteService implements TaskWriteUseCase {
     @Transactional
     public void delete(
         final DailygeUser dailygeUser,
-        final Long taskId
+        final Long taskId,
+        final LocalDate date
     ) {
+        final MonthlyTaskJpaEntity findMonthlyTask = findMonthlyTaskById(dailygeUser, date);
         final TaskJpaEntity findTask = taskReadRepository.findTaskById(taskId)
             .orElseThrow(() -> TaskTypeException.from(TASK_NOT_FOUND));
+        if (findTask.isValidMonthlyTask(findMonthlyTask.getId())) {
+            throw new IllegalArgumentException(INVALID_MONTHLY_TASK.message());
+        }
         dailygeUser.validateAuth(findTask.getUserId());
         findTask.delete();
+    }
+
+    private MonthlyTaskJpaEntity findMonthlyTaskById(
+        final DailygeUser dailygeUser,
+        final LocalDate date
+    ) {
+        return monthlyTaskReadRepository.findMonthlyTaskByUserIdAndDate(dailygeUser.getUserId(), date)
+            .orElseThrow(() -> TaskTypeException.from(MONTHLY_TASK_NOT_FOUND));
     }
 }

@@ -24,7 +24,6 @@ import java.time.LocalDate;
 @DisplayName("[IntegrationTest] 할 일 조회 통합 테스트")
 class TaskReadIntegrationTest extends DatabaseTestBase {
 
-    private MonthlyTaskJpaEntity monthlyTask;
     private TaskCreateCommand taskCreateCommand;
 
 
@@ -41,7 +40,6 @@ class TaskReadIntegrationTest extends DatabaseTestBase {
     void setUp() {
         now = LocalDate.now();
         taskFacade.createMonthlyTasks(dailygeUser, now);
-        monthlyTask = taskReadUseCase.findMonthlyTaskByUserIdAndDate(dailygeUser, now);
         taskCreateCommand = createTaskCreationCommand(now);
     }
 
@@ -56,8 +54,6 @@ class TaskReadIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("MonthlyTask가 존재하면, Id를 조회할 수 있다.")
     void whenMonthlyTaskExistsThenIdShouldNotBeNull() {
-        final MonthlyTaskJpaEntity findMonthlyTask = taskReadUseCase.findMonthlyTaskByUserIdAndDate(dailygeUser, now);
-
         assertNotNull(taskReadUseCase.findTasksByMonthlyTasksIdAndDate(dailygeUser, now));
     }
 

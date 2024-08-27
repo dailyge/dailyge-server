@@ -42,7 +42,7 @@ class TaskReadIntegrationTest extends DatabaseTestBase {
         now = LocalDate.now();
         taskFacade.createMonthlyTasks(dailygeUser, now);
         monthlyTask = taskReadUseCase.findMonthlyTaskByUserIdAndDate(dailygeUser, now);
-        taskCreateCommand = createTaskCreationCommand(monthlyTask.getId(), now);
+        taskCreateCommand = createTaskCreationCommand(now);
     }
 
     @Test

@@ -45,7 +45,7 @@ class TaskDeleteDocumentationTest extends DatabaseTestBase {
     void whenDeleteTaskThenStatusCodeShouldBe_204_RestDocs() {
         final MonthlyTaskJpaEntity findMonthlyTask = taskReadUseCase.findMonthlyTaskByUserIdAndDate(dailygeUser, now);
         final TaskCreateRequest request = new TaskCreateRequest(
-            findMonthlyTask.getId(), "주간 미팅", "Backend 팀과 Api 스펙 정의", BLUE, now
+            "주간 미팅", "Backend 팀과 Api 스펙 정의", BLUE, now
         );
         final Long newTaskId = taskWriteUseCase.save(dailygeUser, request.toCommand());
 
@@ -58,6 +58,7 @@ class TaskDeleteDocumentationTest extends DatabaseTestBase {
             .contentType(APPLICATION_JSON_VALUE)
             .header(AUTHORIZATION, getAuthorizationHeader())
             .header(USER_ID_KEY, newUser.getId())
+            .param("date", now.toString())
             .when()
             .delete("/api/tasks/{taskId}", newTaskId)
             .then()
@@ -71,7 +72,7 @@ class TaskDeleteDocumentationTest extends DatabaseTestBase {
     void whenDeleteTaskThenStatusCodeShouldBe_204_Swagger() {
         final MonthlyTaskJpaEntity findMonthlyTask = taskReadUseCase.findMonthlyTaskByUserIdAndDate(dailygeUser, now);
         final TaskCreateRequest request = new TaskCreateRequest(
-            findMonthlyTask.getId(), "주간 미팅", "Backend 팀과 Api 스펙 정의", BLUE, now
+            "주간 미팅", "Backend 팀과 Api 스펙 정의", BLUE, now
         );
         final Long newTaskId = taskWriteUseCase.save(dailygeUser, request.toCommand());
         final RestDocumentationFilter filter = createTaskDeleteFilter(
@@ -84,6 +85,7 @@ class TaskDeleteDocumentationTest extends DatabaseTestBase {
             .contentType(APPLICATION_JSON_VALUE)
             .header(AUTHORIZATION, getAuthorizationHeader())
             .header(USER_ID_KEY, newUser.getId())
+            .param("date", now.toString())
             .when()
             .delete("/api/tasks/{taskId}", newTaskId)
             .then()

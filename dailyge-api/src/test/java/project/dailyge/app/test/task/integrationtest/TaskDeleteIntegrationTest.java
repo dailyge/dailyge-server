@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.common.auth.DailygeUser;
-import project.dailyge.app.common.exception.UnAuthorizedException;
 import project.dailyge.app.core.task.application.TaskWriteUseCase;
 import project.dailyge.app.core.task.application.command.TaskCreateCommand;
 import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.TASK_NOT_FOUND;
@@ -41,24 +40,24 @@ class TaskDeleteIntegrationTest extends DatabaseTestBase {
         now = now();
         taskFacade.createMonthlyTasks(dailygeUser, now);
         monthlyTask = monthlyTaskReadRepository.findMonthlyTaskByUserIdAndDate(dailygeUser.getUserId(), now).get();
-        taskCreateCommand = createTaskCreationCommand(monthlyTask.getId(), now);
+        taskCreateCommand = createTaskCreationCommand(now);
     }
 
     @Test
-    @DisplayName("존재하지 않는 사용자 ID가 입력되면, UserTypeException이 발생한다.")
+    @DisplayName("존재하지 않는 사용자 ID가 입력되면, TaskTypeException이 발생한다.")
     void whenTaskDoesNotExistsThenUnAuthorizedExceptionShouldBeHappen() {
         final Long newTaskId = taskWriteUseCase.save(dailygeUser, taskCreateCommand);
         final DailygeUser invalidDailygeUser = new DailygeUser(Long.MAX_VALUE, NORMAL);
 
-        assertThatThrownBy(() -> taskWriteUseCase.delete(invalidDailygeUser, newTaskId))
-            .isInstanceOf(UnAuthorizedException.class);
+        assertThatThrownBy(() -> taskWriteUseCase.delete(invalidDailygeUser, newTaskId, now))
+            .isInstanceOf(TaskTypeException.class);
     }
 
     @Test
     @DisplayName("존재하는 Task이 삭제되면, 예외가 발생하지 않는다.")
     void whenDeleteExistenceTaskThenTaskTypeExceptionShouldNotBeHappen() {
         final Long newTaskId = taskWriteUseCase.save(dailygeUser, taskCreateCommand);
-        assertDoesNotThrow(() -> taskWriteUseCase.delete(dailygeUser, newTaskId));
+        assertDoesNotThrow(() -> taskWriteUseCase.delete(dailygeUser, newTaskId, now));
     }
 
     @Test
@@ -66,7 +65,7 @@ class TaskDeleteIntegrationTest extends DatabaseTestBase {
     void whenDeleteNotExistenceTaskThenTaskTypeExceptionShouldBeHappen() {
         final Long invalidTaskId = Long.MAX_VALUE;
 
-        assertThatThrownBy(() -> taskWriteUseCase.delete(dailygeUser, invalidTaskId))
+        assertThatThrownBy(() -> taskWriteUseCase.delete(dailygeUser, invalidTaskId, now))
             .isInstanceOf(TaskTypeException.class)
             .hasMessage(TASK_NOT_FOUND.message());
     }

@@ -1,7 +1,6 @@
 package project.dailyge.app.test.task.integrationtest;
 
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
@@ -39,7 +38,7 @@ class TaskSaveIntegrationTest extends DatabaseTestBase {
         final LocalDate now = LocalDate.now();
         taskFacade.createMonthlyTasks(dailygeUser, now);
         final MonthlyTaskJpaEntity findMonthlyTask = monthlyTaskReadRepository.findMonthlyTaskByUserIdAndDate(dailygeUser.getUserId(), now).get();
-        final TaskCreateCommand command = createTaskCreationCommand(findMonthlyTask.getId(), now);
+        final TaskCreateCommand command = createTaskCreationCommand(now);
 
         final Long newTaskId = taskWriteUseCase.save(dailygeUser, command);
         assertNotNull(newTaskId);

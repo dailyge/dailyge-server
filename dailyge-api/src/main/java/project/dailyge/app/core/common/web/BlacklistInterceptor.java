@@ -45,9 +45,7 @@ public class BlacklistInterceptor implements HandlerInterceptor {
         return true;
     }
 
-    private void setLogoutResponse(
-        final HttpServletResponse response
-    ) {
+    private void setLogoutResponse(final HttpServletResponse response) {
         Cookie refreshToken = new Cookie("Refresh-Token", null);
         refreshToken.setHttpOnly(true);
         refreshToken.setSecure(true);

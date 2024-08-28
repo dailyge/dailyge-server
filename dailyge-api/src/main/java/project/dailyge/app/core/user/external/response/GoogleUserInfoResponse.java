@@ -16,10 +16,10 @@ public class GoogleUserInfoResponse {
     }
 
     public GoogleUserInfoResponse(
-        final String id,
-        final String name,
-        final String email,
-        final String picture,
+        @JsonProperty(value = "id") final String id,
+        @JsonProperty(value = "name") final String name,
+        @JsonProperty(value = "email") final String email,
+        @JsonProperty(value = "picture") final String picture,
         @JsonProperty(value = "verified_email") final boolean verifiedEmail
     ) {
         this.id = id;

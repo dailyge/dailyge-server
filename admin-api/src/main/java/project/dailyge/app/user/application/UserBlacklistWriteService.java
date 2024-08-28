@@ -1,19 +1,19 @@
 package project.dailyge.app.user.application;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import project.dailyge.app.common.annotation.ApplicationLayer;
 import project.dailyge.core.cache.user.UserBlacklistWriteUseCase;
 import project.dailyge.core.cache.user.UserBlacklistWriteRepository;
 
-@Service
+@ApplicationLayer
 @RequiredArgsConstructor
 public class UserBlacklistWriteService implements UserBlacklistWriteUseCase {
 
     private final UserBlacklistWriteRepository userBlacklistWriteRepository;
 
     @Override
-    public void saveBlacklistById(final Long userId) {
-        userBlacklistWriteRepository.saveBlacklistById(userId);
+    public void save(final String accessToken) {
+        userBlacklistWriteRepository.save(accessToken);
     }
 
     @Override

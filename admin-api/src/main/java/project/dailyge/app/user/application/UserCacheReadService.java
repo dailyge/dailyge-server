@@ -1,12 +1,12 @@
 package project.dailyge.app.user.application;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import project.dailyge.app.common.annotation.ApplicationLayer;
 import project.dailyge.core.cache.user.UserCache;
 import project.dailyge.core.cache.user.UserCacheReadRepository;
 import project.dailyge.core.cache.user.UserCacheReadUseCase;
 
-@Service
+@ApplicationLayer
 @RequiredArgsConstructor
 public class UserCacheReadService implements UserCacheReadUseCase {
 
@@ -14,7 +14,7 @@ public class UserCacheReadService implements UserCacheReadUseCase {
 
     @Override
     public UserCache findById(final Long userId) {
-        return null;
+        return userCacheReadRepository.findById(userId);
     }
 
     @Override

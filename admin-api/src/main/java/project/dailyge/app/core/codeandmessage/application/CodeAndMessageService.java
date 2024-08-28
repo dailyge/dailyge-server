@@ -3,6 +3,7 @@ package project.dailyge.app.core.codeandmessage.application;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import project.dailyge.app.common.annotation.ApplicationLayer;
 import project.dailyge.entity.codeandmessage.CodeAndMessageEntityReadRepository;
 import project.dailyge.entity.codeandmessage.CodeAndMessageEntityWriteRepository;
 import project.dailyge.entity.codeandmessage.CodeAndMessageEntityWriteService;
@@ -12,7 +13,7 @@ import project.dailyge.entity.codeandmessage.CodeAndMessages;
 
 import java.util.List;
 
-@Service
+@ApplicationLayer
 @RequiredArgsConstructor
 class CodeAndMessageService implements CodeAndMessageReadService, CodeAndMessageEntityWriteService {
 

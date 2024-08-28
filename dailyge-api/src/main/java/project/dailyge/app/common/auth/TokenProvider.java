@@ -63,7 +63,6 @@ public class TokenProvider {
                 .setExpiration(expiry)
                 .setSubject(userEmail)
                 .claim(ID, encryptUserId(userId))
-                .setIssuedAt(new Date())
                 .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey())
                 .compact();
         } catch (IllegalArgumentException ex) {
@@ -83,14 +82,6 @@ public class TokenProvider {
         }
         final String encryptUserId = claims.get(ID, String.class);
         return decryptUserId(encryptUserId);
-    }
-
-    public Date getIssuedAt(final String token) {
-        final Claims claims = getClaims(token);
-        if (claims == null) {
-            throw new UnAuthorizedException(INVALID_USER_TOKEN);
-        };
-        return claims.getIssuedAt();
     }
 
     private Claims getClaims(final String token) {

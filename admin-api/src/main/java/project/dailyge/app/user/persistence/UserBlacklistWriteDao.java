@@ -1,16 +1,16 @@
 package project.dailyge.app.user.persistence;
 
 import io.lettuce.core.RedisException;
-import java.util.Date;
 import java.util.function.Supplier;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 import project.dailyge.app.common.exception.ExternalServerException;
 import project.dailyge.core.cache.user.UserBlacklistWriteRepository;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_GATEWAY;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
-import static project.dailyge.common.configuration.CompressionHelper.compressAsByteArray;
+import static project.dailyge.common.configuration.CompressionHelper.compressStringAsByteArray;
 
 @Repository
 @RequiredArgsConstructor
@@ -19,13 +19,10 @@ public class UserBlacklistWriteDao implements UserBlacklistWriteRepository {
     private final RedisTemplate<String, byte[]> redisTemplate;
 
     @Override
-    public void saveBlacklistById(
-        final Long userId
-    ) {
+    public void save(final String accessToken) {
         executeRedisCommand(() -> {
-            final Date date = new Date();
-            final byte[] compressedRefreshToken = compressAsByteArray(date);
-            redisTemplate.opsForValue().set(getBlacklistKey(userId), compressedRefreshToken);
+            final byte[] compressedRefreshToken = compressStringAsByteArray(accessToken.getBytes(UTF_8));
+            redisTemplate.opsForSet().add("user:blacklist", compressedRefreshToken);
             return null;
         });
     }
@@ -36,10 +33,6 @@ public class UserBlacklistWriteDao implements UserBlacklistWriteRepository {
             redisTemplate.delete(String.format("user:refreshToken:%s", userId));
             return null;
         });
-    }
-
-    private static String getBlacklistKey(final Long userId) {
-        return String.format("user:blacklist:%s", userId);
     }
 
     private String executeRedisCommand(final Supplier<String> command) {

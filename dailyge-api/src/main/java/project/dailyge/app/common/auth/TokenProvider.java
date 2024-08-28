@@ -8,22 +8,21 @@ import io.jsonwebtoken.RequiredTypeException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
+import java.nio.charset.StandardCharsets;
+import java.security.SecureRandom;
+import java.time.Duration;
+import java.util.Base64;
+import java.util.Date;
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import project.dailyge.app.common.exception.UnAuthorizedException;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_PARAMETERS;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_USER_TOKEN;
-import project.dailyge.app.common.exception.UnAuthorizedException;
-
-import java.nio.charset.StandardCharsets;
-import java.security.SecureRandom;
-import java.time.Duration;
-import java.util.Base64;
-import java.util.Date;
 
 @Slf4j
 @Component
@@ -64,6 +63,7 @@ public class TokenProvider {
                 .setExpiration(expiry)
                 .setSubject(userEmail)
                 .claim(ID, encryptUserId(userId))
+                .setIssuedAt(new Date())
                 .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey())
                 .compact();
         } catch (IllegalArgumentException ex) {
@@ -83,6 +83,14 @@ public class TokenProvider {
         }
         final String encryptUserId = claims.get(ID, String.class);
         return decryptUserId(encryptUserId);
+    }
+
+    public Date getIssuedAt(final String token) {
+        final Claims claims = getClaims(token);
+        if (claims == null) {
+            throw new UnAuthorizedException(INVALID_USER_TOKEN);
+        };
+        return claims.getIssuedAt();
     }
 
     private Claims getClaims(final String token) {

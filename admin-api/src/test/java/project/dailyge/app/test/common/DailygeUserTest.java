@@ -3,14 +3,9 @@ package project.dailyge.app.test.common;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import project.dailyge.app.common.auth.DailygeUser;
-import project.dailyge.app.common.exception.UnAuthorizedException;
 import project.dailyge.entity.user.Role;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static project.dailyge.app.common.exception.UnAuthorizedException.USER_NOT_MATCH_MESSAGE;
 
 @DisplayName("[UnitTest] DailygeUser 단위 테스트")
 class DailygeUserTest {

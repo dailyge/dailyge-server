@@ -15,6 +15,4 @@ public class UserBlacklistService implements UserBlacklistReadUseCase {
     public boolean existsByAccessToken(final String accessToken) {
         return userBlacklistReadRepository.existsByAccessToken(accessToken);
     }
-
-
 }

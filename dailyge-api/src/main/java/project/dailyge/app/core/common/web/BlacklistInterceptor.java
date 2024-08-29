@@ -8,7 +8,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import project.dailyge.app.common.auth.TokenProvider;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_USER_TOKEN;
-import static project.dailyge.app.common.utils.CookieUtils.deleteCookie;
+import static project.dailyge.app.common.utils.CookieUtils.clearCookie;
 
 @Component
 @RequiredArgsConstructor
@@ -43,7 +43,7 @@ public class BlacklistInterceptor implements HandlerInterceptor {
     }
 
     private void setLogoutResponse(final HttpServletResponse response) {
-        response.addCookie(deleteCookie("Refresh-Token"));
+        response.addCookie(clearCookie("Refresh-Token"));
         response.setStatus(INVALID_USER_TOKEN.code());
     }
 }

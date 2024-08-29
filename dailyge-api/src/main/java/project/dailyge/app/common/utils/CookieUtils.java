@@ -4,13 +4,13 @@ import jakarta.servlet.http.Cookie;
 
 public class CookieUtils {
 
-    public static Cookie deleteCookie(final String name) {
+    public static Cookie clearCookie(final String name) {
         Cookie cookie = new Cookie(name, null);
         cookie.setHttpOnly(true);
         cookie.setSecure(true);
         cookie.setDomain(".dailyge.com");
         cookie.setPath("/");
-        cookie.setMaxAge(3000);
+        cookie.setMaxAge(0);
         return cookie;
     }
 }

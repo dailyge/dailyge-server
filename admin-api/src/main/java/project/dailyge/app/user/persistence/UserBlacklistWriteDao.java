@@ -18,16 +18,12 @@ public class UserBlacklistWriteDao implements UserBlacklistWriteRepository {
 
     @Override
     public void save(final String accessToken) {
-        executeRedisCommand(() -> {
-            redisTemplate.opsForValue().set(String.format("user:blacklist:%s", accessToken), "", Duration.ofHours(1));
-        });
+        executeRedisCommand(() -> redisTemplate.opsForValue().set(String.format("user:blacklist:%s", accessToken), "", Duration.ofHours(1)));
     }
 
     @Override
     public void deleteRefreshToken(final Long userId) {
-        executeRedisCommand(() -> {
-            redisTemplate.delete(String.format("user:refreshToken:%s", userId));
-        });
+        executeRedisCommand(() -> redisTemplate.delete(String.format("user:refreshToken:%s", userId)));
     }
 
     private void executeRedisCommand(final Runnable command) {

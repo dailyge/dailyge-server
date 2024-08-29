@@ -23,7 +23,7 @@ import static project.dailyge.app.test.user.documentationtest.snippet.UserSnippe
 import static project.dailyge.app.test.user.documentationtest.snippet.UserSnippet.USER_BLACKLIST_CREATE_RESPONSE_SNIPPET;
 import static project.dailyge.app.test.user.documentationtest.snippet.UserSnippet.createIdentifier;
 
-@DisplayName("[DocumentationTest] UserBlasklist 문서화 테스트")
+@DisplayName("[DocumentationTest] User Blacklist 등록 문서화 테스트")
 class UserBlacklistCreateDocumentation extends DatabaseTestBase {
 
     private static final Long ADMIN_ID = 2L;

@@ -1,13 +1,18 @@
 package project.dailyge.app.common.auth;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.RequiredTypeException;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import java.nio.charset.StandardCharsets;
+import java.security.SecureRandom;
+import java.time.Duration;
 import java.util.Base64;
+import java.util.Date;
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
@@ -15,6 +20,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import project.dailyge.app.common.exception.UnAuthorizedException;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_PARAMETERS;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_USER_TOKEN;
 
 @Slf4j
@@ -25,9 +32,44 @@ public class TokenProvider {
     private static final String ID = "id";
     private static final int ARRAY_START_INDEX = 0;
     private static final int IV_SIZE = 16;
+    private static final SecureRandom secureRandom = new SecureRandom();
 
     private final JwtProperties jwtProperties;
     private final SecretKeyManager secretKeyManager;
+
+    public DailygeToken createToken(
+        final Long userId,
+        final String userEmail
+    ) {
+        final String accessToken = generateToken(userId, userEmail, getExpiry(jwtProperties.getAccessExpiredTime()));
+        final String refreshToken = generateToken(userId, userEmail, getExpiry(jwtProperties.getRefreshExpiredTime()));
+        return new DailygeToken(accessToken, refreshToken, jwtProperties.getRefreshExpiredTime() * 3600);
+    }
+
+    private Date getExpiry(final int expiredTime) {
+        final Date now = new Date();
+        return new Date(now.getTime() + Duration.ofHours(expiredTime).toMillis());
+    }
+
+    private String generateToken(
+        final Long userId,
+        final String userEmail,
+        final Date expiry
+    ) {
+        try {
+            return Jwts.builder()
+                .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
+                .setExpiration(expiry)
+                .setSubject(userEmail)
+                .claim(ID, encryptUserId(userId))
+                .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey())
+                .compact();
+        } catch (IllegalArgumentException ex) {
+            throw new UnAuthorizedException(ex.getMessage(), INVALID_PARAMETERS);
+        } catch (Exception ex) {
+            throw new UnAuthorizedException(ex.getMessage(), INTERNAL_SERVER_ERROR);
+        }
+    }
 
     public Long getUserId(final String token) {
         final Claims claims = getClaims(token);
@@ -65,6 +107,26 @@ public class TokenProvider {
             throw new UnAuthorizedException(INVALID_USER_TOKEN);
         }
         return authorizationHeader.substring(7);
+    }
+
+    public String encryptUserId(final Long userId) {
+        try {
+            final byte[] iv = new byte[IV_SIZE];
+            secureRandom.nextBytes(iv);
+            final byte[] encryptedUserId = applyCipher(
+                iv,
+                Cipher.ENCRYPT_MODE,
+                userId.toString().getBytes(StandardCharsets.UTF_8)
+            );
+
+            final byte[] encryptedUserIdWithIv = new byte[IV_SIZE + encryptedUserId.length];
+            System.arraycopy(iv, ARRAY_START_INDEX, encryptedUserIdWithIv, ARRAY_START_INDEX, IV_SIZE);
+            System.arraycopy(encryptedUserId, ARRAY_START_INDEX, encryptedUserIdWithIv, IV_SIZE, encryptedUserId.length);
+
+            return Base64.getEncoder().encodeToString(encryptedUserIdWithIv);
+        } catch (Exception ex) {
+            throw new UnAuthorizedException(ex.getMessage(), INVALID_USER_TOKEN);
+        }
     }
 
     public Long decryptUserId(final String encryptedUserIdWithIv) {

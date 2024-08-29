@@ -18,11 +18,15 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
-import project.dailyge.app.DailygeAdminApplication;
+import org.springframework.transaction.annotation.Transactional;
 import static project.dailyge.app.common.RestAssureConfig.initObjectMapper;
 import static project.dailyge.app.common.RestAssureConfig.initSpecificationConfig;
+import project.dailyge.app.DailygeAdminApplication;
 import project.dailyge.app.common.auth.DailygeUser;
+import static project.dailyge.app.test.user.fixture.UserFixture.createUser;
 import static project.dailyge.entity.user.Role.NORMAL;
+import project.dailyge.core.cache.user.UserCache;
+import project.dailyge.core.cache.user.UserCacheWriteUseCase;
 import project.dailyge.entity.user.UserJpaEntity;
 
 import java.time.LocalDate;
@@ -50,6 +54,9 @@ public abstract class DatabaseTestBase {
     @Autowired
     private DatabaseInitializer databaseInitialization;
 
+    @Autowired
+    private UserCacheWriteUseCase userCacheWriteUseCase;
+
     protected RequestSpecification specification;
     protected ObjectMapper objectMapper;
     protected UserJpaEntity newUser;
@@ -67,8 +74,10 @@ public abstract class DatabaseTestBase {
     }
 
     @BeforeEach
+    @Transactional
     void setUp(final RestDocumentationContextProvider restDocumentation) {
         databaseInitialization.initData();
+        persist(createUser(1L));
         this.specification = initSpecificationConfig(restDocumentation, port);
     }
 
@@ -79,5 +88,19 @@ public abstract class DatabaseTestBase {
 
     protected String getAuthorizationHeader() {
         return "Bearer " + accessToken;
+    }
+
+    protected UserJpaEntity persist(final UserJpaEntity user) {
+        newUser = user;
+        final UserCache userCache = new UserCache(
+            user.getId(),
+            user.getNickname(),
+            user.getEmail(),
+            user.getProfileImageUrl(),
+            user.getRoleAsString()
+        );
+        userCacheWriteUseCase.save(userCache);
+        dailygeUser = new DailygeUser(user.getId(), user.getRole());
+        return user;
     }
 }

@@ -12,6 +12,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import project.dailyge.entity.task.TaskJpaEntity;
 import project.dailyge.entity.task.TaskStatus;
+import static project.dailyge.entity.task.TaskStatus.TODO;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -29,7 +30,7 @@ class TaskJpaEntityUnitTest {
             .title("프로젝트 관리")
             .content("프로젝트 진행 상황 점검")
             .date(LocalDate.now().plusDays(10))
-            .status(TaskStatus.TODO)
+            .status(TODO)
             .userId(1L)
             .createdAt(now)
             .createdBy(1L)
@@ -48,7 +49,7 @@ class TaskJpaEntityUnitTest {
             .title("프로젝트 관리")
             .content("프로젝트 진행 상황 점검")
             .date(LocalDate.now().plusDays(10))
-            .status(TaskStatus.TODO)
+            .status(TODO)
             .userId(1L)
             .createdAt(now)
             .createdBy(1L)
@@ -62,7 +63,7 @@ class TaskJpaEntityUnitTest {
             () -> assertThat(newTask.getTitle()).isEqualTo("프로젝트 관리"),
             () -> assertThat(newTask.getContent()).isEqualTo("프로젝트 진행 상황 점검"),
             () -> assertThat(newTask.getDate()).isEqualTo(LocalDate.now().plusDays(10)),
-            () -> assertThat(newTask.getStatus()).isEqualTo(TaskStatus.TODO),
+            () -> assertThat(newTask.getStatus()).isEqualTo(TODO),
             () -> assertThat(newTask.getUserId()).isEqualTo(1L),
             () -> assertThat(newTask.getCreatedAt()).isEqualTo(now),
             () -> assertThat(newTask.getCreatedBy()).isEqualTo(1L),
@@ -80,7 +81,7 @@ class TaskJpaEntityUnitTest {
             .title("유효한 제목")
             .content("유효한 내용")
             .date(futureDate)
-            .status(TaskStatus.TODO)
+            .status(TODO)
             .userId(1L)
             .deleted(false)
             .build())
@@ -98,10 +99,11 @@ class TaskJpaEntityUnitTest {
                 .title(longTitle)
                 .content("내용")
                 .date(futureDate)
-                .status(TaskStatus.TODO)
+                .status(TODO)
                 .userId(1L)
                 .build()
-        ).isInstanceOf(IllegalArgumentException.class)
+        ).isInstanceOf(RuntimeException.class)
+            .isExactlyInstanceOf(IllegalArgumentException.class)
             .hasMessage(task.getOverMaxTitleLengthErrorMessage());
     }
 
@@ -116,45 +118,49 @@ class TaskJpaEntityUnitTest {
                 .title("제목")
                 .content(longContent)
                 .date(futureDate)
-                .status(TaskStatus.TODO)
+                .status(TODO)
                 .userId(1L)
                 .build()
-        ).isInstanceOf(IllegalArgumentException.class)
+        ).isInstanceOf(RuntimeException.class)
+            .isExactlyInstanceOf(IllegalArgumentException.class)
             .hasMessageContaining(task.getOverMaxContentLengthErrorMessage());
     }
 
     @Test
-    @DisplayName("과거 날짜 사용 시 IllegalArgumentException가 발생한다.")
+    @DisplayName("5년 전 날짜를 입력하면 IllegalArgumentException가 발생한다.")
     void whenDateIsBeforeThenIllegalArgumentExceptionShouldBeOccur() {
-        final LocalDate pastDate = LocalDate.now().minusDays(1);
+        final LocalDate pastDate = LocalDate.now().minusYears(6);
 
         assertThatThrownBy(() ->
             TaskJpaEntity.builder()
                 .title("제목")
                 .content("내용")
                 .date(pastDate)
-                .status(TaskStatus.TODO)
+                .status(TODO)
                 .userId(1L)
                 .build()
-        ).isInstanceOf(IllegalArgumentException.class)
-            .hasMessageContaining(task.getPastDateErrorMessage());
+        ).isInstanceOf(RuntimeException.class)
+            .isExactlyInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining(task.getDateErrorMessage());
     }
 
     @Test
-    @DisplayName("1년 초과 날짜 사용 시 IllegalArgumentException가 발생한다.")
+    @DisplayName("5년 초과 날짜 사용 시 IllegalArgumentException가 발생한다.")
     void whenDateIsTooFarThenIllegalArgumentExceptionShouldBeOccur() {
-        final LocalDate beyondOneYearDate = LocalDate.now().plusYears(1).plusDays(1);
+        final LocalDate now = LocalDate.now();
+        final LocalDate beyondOneYearDate = now.plusYears(5).plusDays(1);
 
         assertThatThrownBy(() ->
             TaskJpaEntity.builder()
                 .title("제목")
                 .content("내용")
                 .date(beyondOneYearDate)
-                .status(TaskStatus.TODO)
+                .status(TODO)
                 .userId(1L)
                 .build()
-        ).isInstanceOf(IllegalArgumentException.class)
-            .hasMessageContaining(task.getBeyondOneYearErrorMessage());
+        ).isInstanceOf(RuntimeException.class)
+            .isExactlyInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining(task.getDateErrorMessage());
     }
 
     @Test
@@ -163,14 +169,14 @@ class TaskJpaEntityUnitTest {
         final String newTitle = "Updated Title";
         final String newContent = "Updated content of the task.";
         final LocalDate today = LocalDate.now();
-        final TaskStatus newStatus = TaskStatus.TODO;
+        final TaskStatus newStatus = TODO;
         final Long newMonthlyTaskId = 300L;
 
         final TaskJpaEntity newTask = new TaskJpaEntity(
             "Initial Title",
             "Initial content of the task.",
             LocalDate.now(),
-            TaskStatus.TODO,
+            TODO,
             1L
         );
 
@@ -196,7 +202,7 @@ class TaskJpaEntityUnitTest {
             .title("프로젝트 관리")
             .content("프로젝트 진행 상황 점검")
             .date(LocalDate.now().plusDays(10))
-            .status(TaskStatus.TODO)
+            .status(TODO)
             .monthlyTaskId(1L)
             .userId(1L)
             .createdAt(now)
@@ -219,7 +225,7 @@ class TaskJpaEntityUnitTest {
             .title("프로젝트 관리")
             .content("프로젝트 진행 상황 점검")
             .date(LocalDate.now().plusDays(10))
-            .status(TaskStatus.TODO)
+            .status(TODO)
             .userId(1L)
             .createdAt(now)
             .createdBy(1L)
@@ -241,7 +247,7 @@ class TaskJpaEntityUnitTest {
             .title("제목")
             .content("내용")
             .date(LocalDate.now().plusDays(10))
-            .status(TaskStatus.TODO)
+            .status(TODO)
             .userId(1L)
             .createdAt(LocalDateTime.now())
             .createdBy(1L)
@@ -255,7 +261,7 @@ class TaskJpaEntityUnitTest {
             .title("제목")
             .content("내용")
             .date(LocalDate.now().plusDays(10))
-            .status(TaskStatus.TODO)
+            .status(TODO)
             .userId(1L)
             .createdAt(LocalDateTime.now())
             .createdBy(1L)
@@ -275,7 +281,7 @@ class TaskJpaEntityUnitTest {
             .title("제목")
             .content("내용")
             .date(LocalDate.now().plusDays(10))
-            .status(TaskStatus.TODO)
+            .status(TODO)
             .userId(1L)
             .createdAt(LocalDateTime.now())
             .createdBy(1L)
@@ -289,7 +295,7 @@ class TaskJpaEntityUnitTest {
             .title("제목")
             .content("내용")
             .date(LocalDate.now().plusDays(10))
-            .status(TaskStatus.TODO)
+            .status(TODO)
             .userId(1L)
             .createdAt(LocalDateTime.now())
             .createdBy(1L)
@@ -309,7 +315,7 @@ class TaskJpaEntityUnitTest {
             .title("제목")
             .content("내용")
             .date(LocalDate.now().plusDays(10))
-            .status(TaskStatus.TODO)
+            .status(TODO)
             .userId(1L)
             .createdAt(LocalDateTime.now())
             .createdBy(1L)

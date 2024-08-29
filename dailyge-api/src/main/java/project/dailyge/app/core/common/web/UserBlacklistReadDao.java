@@ -13,8 +13,9 @@ import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_S
 @RequiredArgsConstructor
 public class UserBlacklistReadDao implements UserBlacklistReadRepository {
 
-    private final RedisTemplate<String, byte[]> redisTemplate;
+    private final RedisTemplate<String, String> redisTemplate;
 
+    @Override
     public boolean existsByAccessToken(final String accessToken) {
         try {
             return redisTemplate.hasKey(String.format("user:blacklist:%s", accessToken));

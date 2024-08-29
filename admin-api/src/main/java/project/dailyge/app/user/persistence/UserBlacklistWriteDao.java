@@ -14,12 +14,12 @@ import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_S
 @RequiredArgsConstructor
 public class UserBlacklistWriteDao implements UserBlacklistWriteRepository {
 
-    private final RedisTemplate<String, byte[]> redisTemplate;
+    private final RedisTemplate<String, String> redisTemplate;
 
     @Override
     public void save(final String accessToken) {
         executeRedisCommand(() -> {
-            redisTemplate.opsForValue().set(String.format("user:blacklist:%s", accessToken), null, Duration.ofHours(1));
+            redisTemplate.opsForValue().set(String.format("user:blacklist:%s", accessToken), "", Duration.ofHours(1));
         });
     }
 

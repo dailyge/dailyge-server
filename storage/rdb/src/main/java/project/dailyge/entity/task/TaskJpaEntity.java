@@ -27,8 +27,7 @@ public class TaskJpaEntity extends BaseEntity {
 
     private static final String OVER_MAX_TITLE_LENGTH_ERROR_MESSAGE = "입력 가능한 최대 제목 길이를 초과했습니다.";
     private static final String OVER_MAX_CONTENT_LENGTH_ERROR_MESSAGE = "입력 가능한 최대 내용 길이를 초과했습니다.";
-    private static final String PAST_DATE_ERROR_MESSAGE = "과거 날짜는 등록할 수 없습니다.";
-    private static final String BEYOND_ONE_YEAR_ERROR_MESSAGE = "1년 이내의 일정을 등록해주세요.";
+    private static final String DATE_BETWEEN_BEFORE_OR_AFTER_ERROR_MESSAGE = "5년 이내의 일정을 등록해주세요.";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -109,7 +108,7 @@ public class TaskJpaEntity extends BaseEntity {
         final Long createdBy,
         final LocalDateTime lastModifiedAt,
         final Long lastModifiedBy,
-        final Boolean deleted
+        final boolean deleted
     ) {
         validate(title, content, date);
         this.id = id;
@@ -141,13 +140,10 @@ public class TaskJpaEntity extends BaseEntity {
         }
 
         final LocalDate today = LocalDate.now();
-        if (date.isBefore(today)) {
-            throw new IllegalArgumentException(PAST_DATE_ERROR_MESSAGE);
-        }
-
-        final LocalDate afterOneYear = today.plusYears(1);
-        if (date.isAfter(afterOneYear)) {
-            throw new IllegalArgumentException(BEYOND_ONE_YEAR_ERROR_MESSAGE);
+        final LocalDate dateBeforeFiveYears = today.minusYears(5);
+        final LocalDate dateAfterFiveYears = today.plusYears(5);
+        if (date.isBefore(dateBeforeFiveYears) || date.isAfter(dateAfterFiveYears)) {
+            throw new IllegalArgumentException(DATE_BETWEEN_BEFORE_OR_AFTER_ERROR_MESSAGE);
         }
     }
 
@@ -160,11 +156,11 @@ public class TaskJpaEntity extends BaseEntity {
     }
 
     public String getPastDateErrorMessage() {
-        return PAST_DATE_ERROR_MESSAGE;
+        return DATE_BETWEEN_BEFORE_OR_AFTER_ERROR_MESSAGE;
     }
 
     public String getBeyondOneYearErrorMessage() {
-        return BEYOND_ONE_YEAR_ERROR_MESSAGE;
+        return DATE_BETWEEN_BEFORE_OR_AFTER_ERROR_MESSAGE;
     }
 
     public boolean isOwner(Long userId) {

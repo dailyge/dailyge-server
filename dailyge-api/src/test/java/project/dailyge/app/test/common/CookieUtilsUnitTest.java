@@ -12,15 +12,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @DisplayName("[UnitTest] CookieUtils 단위 테스트")
 class CookieUtilsUnitTest {
 
-    private static final String refreshToken = "Refresh-Token";
+    private static final String REFRESH_TOKEN = "Refresh-Token";
 
     @Test
     @DisplayName("만료할 쿠키를 생성하면, 정상적으로 생성된다.")
     void whenCreateCookieToExpireThenMaxAgeShouldBeZero() {
-        final Cookie cookie = CookieUtils.clearCookie(refreshToken);
+        final Cookie cookie = CookieUtils.clearCookie(REFRESH_TOKEN);
 
         assertAll(
-            () -> assertEquals(refreshToken, cookie.getName()),
+            () -> assertEquals(REFRESH_TOKEN, cookie.getName()),
             () -> assertEquals(0, cookie.getMaxAge()),
             () -> assertEquals(".dailyge.com", cookie.getDomain()),
             () -> assertEquals("/", cookie.getPath()),

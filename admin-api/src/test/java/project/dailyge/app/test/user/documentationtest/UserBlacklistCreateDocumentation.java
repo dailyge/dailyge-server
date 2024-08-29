@@ -24,7 +24,7 @@ import static project.dailyge.app.test.user.documentationtest.snippet.UserSnippe
 import static project.dailyge.app.test.user.documentationtest.snippet.UserSnippet.createIdentifier;
 
 @DisplayName("[DocumentationTest] UserBlasklist 문서화 테스트")
-class UserBlacklistDocumentation extends DatabaseTestBase {
+class UserBlacklistCreateDocumentation extends DatabaseTestBase {
 
     private static final Long ADMIN_ID = 2L;
     private static final String ADMIN_EMAIL = "admin@gmail.com";

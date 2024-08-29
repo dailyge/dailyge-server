@@ -155,11 +155,7 @@ public class TaskJpaEntity extends BaseEntity {
         return OVER_MAX_CONTENT_LENGTH_ERROR_MESSAGE;
     }
 
-    public String getPastDateErrorMessage() {
-        return DATE_BETWEEN_BEFORE_OR_AFTER_ERROR_MESSAGE;
-    }
-
-    public String getBeyondOneYearErrorMessage() {
+    public String getDateErrorMessage() {
         return DATE_BETWEEN_BEFORE_OR_AFTER_ERROR_MESSAGE;
     }
 

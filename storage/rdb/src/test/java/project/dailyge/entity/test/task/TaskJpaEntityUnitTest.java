@@ -102,7 +102,8 @@ class TaskJpaEntityUnitTest {
                 .status(TODO)
                 .userId(1L)
                 .build()
-        ).isInstanceOf(IllegalArgumentException.class)
+        ).isInstanceOf(RuntimeException.class)
+            .isExactlyInstanceOf(IllegalArgumentException.class)
             .hasMessage(task.getOverMaxTitleLengthErrorMessage());
     }
 
@@ -120,12 +121,13 @@ class TaskJpaEntityUnitTest {
                 .status(TODO)
                 .userId(1L)
                 .build()
-        ).isInstanceOf(IllegalArgumentException.class)
+        ).isInstanceOf(RuntimeException.class)
+            .isExactlyInstanceOf(IllegalArgumentException.class)
             .hasMessageContaining(task.getOverMaxContentLengthErrorMessage());
     }
 
     @Test
-    @DisplayName("5년 전/후 날짜를 입력하면 IllegalArgumentException가 발생한다.")
+    @DisplayName("5년 전 날짜를 입력하면 IllegalArgumentException가 발생한다.")
     void whenDateIsBeforeThenIllegalArgumentExceptionShouldBeOccur() {
         final LocalDate pastDate = LocalDate.now().minusYears(6);
 
@@ -137,8 +139,9 @@ class TaskJpaEntityUnitTest {
                 .status(TODO)
                 .userId(1L)
                 .build()
-        ).isInstanceOf(IllegalArgumentException.class)
-            .hasMessageContaining(task.getPastDateErrorMessage());
+        ).isInstanceOf(RuntimeException.class)
+            .isExactlyInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining(task.getDateErrorMessage());
     }
 
     @Test
@@ -155,8 +158,9 @@ class TaskJpaEntityUnitTest {
                 .status(TODO)
                 .userId(1L)
                 .build()
-        ).isInstanceOf(IllegalArgumentException.class)
-            .hasMessageContaining(task.getBeyondOneYearErrorMessage());
+        ).isInstanceOf(RuntimeException.class)
+            .isExactlyInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining(task.getDateErrorMessage());
     }
 
     @Test

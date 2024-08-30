@@ -1,12 +1,12 @@
-package project.dailyge.app.user.application;
+package project.dailyge.app.user.application.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import project.dailyge.app.common.annotation.ApplicationLayer;
 import project.dailyge.core.cache.user.UserCache;
 import project.dailyge.core.cache.user.UserCacheWriteRepository;
 import project.dailyge.core.cache.user.UserCacheWriteUseCase;
 
-@Service
+@ApplicationLayer
 @RequiredArgsConstructor
 public class UserCacheWriteService implements UserCacheWriteUseCase {
 

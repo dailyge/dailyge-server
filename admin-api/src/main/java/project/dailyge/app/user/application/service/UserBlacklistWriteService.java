@@ -1,4 +1,4 @@
-package project.dailyge.app.user.application;
+package project.dailyge.app.user.application.service;
 
 import lombok.RequiredArgsConstructor;
 import project.dailyge.app.common.annotation.ApplicationLayer;

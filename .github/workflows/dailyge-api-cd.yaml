@@ -13,12 +13,22 @@ on:
       - .github/workflows/**
 
 env:
-  ENV: ${{ github.base_ref == 'dev' && 'dev' || github.base_ref == 'main' && 'prod' }}
-  SKIP_JIB: false
   SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   ENCRYPTOR_KEY: ${{ secrets.ENCRYPTOR_KEY }}
-  AWS_REGION: ap-northeast-2
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: write
+  checks: write
+  deployments: write
+  issues: write
+  packages: write
+  pages: write
+  repository-projects: write
+  security-events: write
+  statuses: write
 
 jobs:
   deploy:
@@ -36,6 +46,7 @@ jobs:
         run: |
           git submodule sync --recursive
           git submodule update --init --recursive --remote
+
       - name: Set up JDK 17
         uses: actions/setup-java@v2
         with:
@@ -55,12 +66,14 @@ jobs:
 
       - name: Set environment-specific variables
         run: |
-          if [ "${{ env.ENV }}" == "dev" ]; then
+          if [[ "${{ github.base_ref }}" == "dev" ]]; then
+            echo "ENV=dev" >> $GITHUB_ENV
             echo "ECR_URI=${{ secrets.DEV_ECR_URI }}" >> $GITHUB_ENV
             echo "SERVICE_NAME=dailyge-api-dev-service" >> $GITHUB_ENV
             echo "CONTAINER_NAME=dailyge-api-dev-container" >> $GITHUB_ENV
             echo "TASK_DEFINITION_NAME=dailyge-api-dev" >> $GITHUB_ENV
-          elif [ "${{ env.ENV }}" == "prod" ]; then
+          elif [[ "${{ github.base_ref }}" == "prod" || "${{ github.base_ref }}" == "main" ]]; then
+            echo "ENV=prod" >> $GITHUB_ENV
             echo "ECR_URI=${{ secrets.PROD_ECR_URI }}" >> $GITHUB_ENV
             echo "SERVICE_NAME=dailyge-api-prod-service" >> $GITHUB_ENV
             echo "CONTAINER_NAME=dailyge-api-prod-container" >> $GITHUB_ENV
@@ -73,16 +86,16 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v1
         with:
           region: ${{ env.AWS_REGION }}
 
-      - name: Build, push Docker image to ECR with Jib with Deploy Docs
+      - name: Build, push Docker image to ECR with Jib
         run: |
-          ./gradlew dailyge-api:jib -Djib.to.image=${{ env.ECR_URI }}:${{ env.IMAGE_TAG }} --stacktrace --info
+          ./gradlew dailyge-api:jib -Djib.to.image=${{ env.ECR_URI }}:${{ env.IMAGE_TAG }}
           aws s3 cp dailyge-api/build/api-spec/openapi3.json s3://${{ secrets.API_DOCS_BUCKET_PATH }}/openapi3.json
           aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths "/${{ secrets.API_DOCS_BUCKET_PATH }}/openapi3.json"
         env:
@@ -95,7 +108,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           DISTRIBUTION_ID: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
-          AWS_REGION: ap-northeast-2
+          AWS_REGION: ${{ secrets.AWS_REGION }}
 
       - name: Download ECS task definition JSON file
         run: |
@@ -126,30 +139,30 @@ jobs:
     runs-on: ubuntu-latest
     if: always()
     steps:
-      - name: Notify Deployment Result to Slack - Success
-        if: ${{ success() }}
+      - name: Notify Deploy Result to Slack - Success
+        if: ${{ needs.deploy.result == 'success' }}
         uses: 8398a7/action-slack@v3
         with:
-          status: custom
-          fields: 'project,ref,commit,author,action,eventName,job,took'
+          status: success
+          fields: project,ref,commit,author,action,eventName,job,took
           text: |
             :white_check_mark: *배포를 성공적으로 완료했습니다.*
             *Contributor:* ${{ github.actor }}
             *Reviewers:* ${{ join(github.event.pull_request.requested_reviewers.*.login, ', ') }}
             *PR:* <${{ github.event.pull_request.html_url }}|PR>
             *Env:* ${{ env.ENV }}
-          username: "PR_Bot"
+          username: PR_Bot
           icon_emoji: ":robot_face:"
-          channel: "pr"
+          channel: pr
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.PR_WEBHOOK_URL }}
 
-      - name: Notify Deployment Result to Slack - Failure
-        if: ${{ failure() }}
+      - name: Notify Deploy Result to Slack - Failure
+        if: ${{ needs.deploy.result == 'failure' }}
         uses: 8398a7/action-slack@v3
         with:
-          status: custom
-          fields: 'project,ref,commit,author,action,eventName,job,took'
+          status: failure
+          fields: project,ref,commit,author,action,eventName,job,took
           text: |
             :x: *배포에 실패했습니다.*
             *Contributor:* ${{ github.actor }}
@@ -157,8 +170,8 @@ jobs:
             *PR:* <${{ github.event.pull_request.html_url }}|PR>
             *Env:* ${{ env.ENV }}
             *Description:* PR 채널을 확인해주세요.
-          username: "PR_Bot"
+          username: PR_Bot
           icon_emoji: ":robot_face:"
-          channel: "pr"
+          channel: pr
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.PR_WEBHOOK_URL }}

@@ -13,10 +13,10 @@ public enum CommonCodeAndMessage implements CodeAndMessage {
     INVALID_URL(404, "올바르지 않은 URL 입니다."),
     INTERNAL_SERVER_ERROR(500, "서버 내부 오류입니다."),
     DATA_ACCESS_EXCEPTION(500, "데이터베이스와 통신하는 과정에서 오류가 발생했습니다"),
+    COMMON_UN_RESOLVED_EXCEPTION(500, "정의되지 않은 공통 오류입니다."),
     BAD_GATEWAY(502, "외부 서버와 통신하는 과정에서 오류가 발생했습니다."),
     SERVICE_UNAVAILABLE(503, "외부 서버가 응답할 수 없는 상태입니다."),
-    GATEWAY_TIMEOUT(504, "외부 서버와 통신하는 과정에서 응답시간이 초과되었습니다."),
-    COMMON_UN_RESOLVED_EXCEPTION(500, "정의되지 않은 공통 오류입니다.");
+    GATEWAY_TIMEOUT(504, "외부 서버와 통신하는 과정에서 응답시간이 초과되었습니다.");
 
     private final int code;
     private final String message;

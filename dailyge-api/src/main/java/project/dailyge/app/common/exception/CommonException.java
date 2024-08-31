@@ -43,7 +43,7 @@ public sealed class CommonException extends RuntimeException {
         factory.put(SERVICE_UNAVAILABLE, new ExternalServerException(SERVICE_UNAVAILABLE));
         factory.put(GATEWAY_TIMEOUT, new ExternalServerException(GATEWAY_TIMEOUT));
         factory.put(DATA_ACCESS_EXCEPTION, new DaoException(DATA_ACCESS_EXCEPTION));
-        factory.put(COMMON_UN_RESOLVED_EXCEPTION, new CommonResolvedException(COMMON_UN_RESOLVED_EXCEPTION));
+        factory.put(COMMON_UN_RESOLVED_EXCEPTION, new CommoUnResolvedException(COMMON_UN_RESOLVED_EXCEPTION));
     }
 
     public static CommonException from(final CommonCodeAndMessage codeAndMessage) {
@@ -52,7 +52,8 @@ public sealed class CommonException extends RuntimeException {
 
     public static CommonException from(
         final String detailMessage,
-        final CommonCodeAndMessage codeAndMessage) {
+        final CommonCodeAndMessage codeAndMessage
+    ) {
         final CommonException commonException = getException(codeAndMessage);
         if (detailMessage != null) {
             commonException.addDetailMessage(detailMessage);
@@ -77,31 +78,31 @@ public sealed class CommonException extends RuntimeException {
     }
 
     private static final class InvalidParameterException extends CommonException {
-        private InvalidParameterException(CodeAndMessage codeAndMessage) {
+        private InvalidParameterException(final CodeAndMessage codeAndMessage) {
             super(codeAndMessage);
         }
     }
 
     private static final class UnAuthorizedException extends CommonException {
-        private UnAuthorizedException(CodeAndMessage codeAndMessage) {
+        private UnAuthorizedException(final CodeAndMessage codeAndMessage) {
             super(codeAndMessage);
         }
     }
 
     private static final class DaoException extends CommonException {
-        private DaoException(CodeAndMessage codeAndMessage) {
+        private DaoException(final CodeAndMessage codeAndMessage) {
             super(codeAndMessage);
         }
     }
 
     private static final class ExternalServerException extends CommonException {
-        private ExternalServerException(CodeAndMessage codeAndMessage) {
+        private ExternalServerException(final CodeAndMessage codeAndMessage) {
             super(codeAndMessage);
         }
     }
 
-    private static final class CommonResolvedException extends CommonException {
-        public CommonResolvedException(CodeAndMessage codeAndMessage) {
+    private static final class CommoUnResolvedException extends CommonException {
+        public CommoUnResolvedException(final CodeAndMessage codeAndMessage) {
             super(codeAndMessage);
         }
     }

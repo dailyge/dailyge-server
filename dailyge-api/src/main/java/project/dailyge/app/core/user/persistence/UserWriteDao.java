@@ -44,7 +44,7 @@ public class UserWriteDao implements UserEntityWriteRepository {
             }
             return number.longValue();
         } catch (DataAccessException ex) {
-            throw CommonException.from(USER_SAVE_FAILED_MESSAGE, DATA_ACCESS_EXCEPTION);
+            throw CommonException.from(ex.getMessage(), DATA_ACCESS_EXCEPTION);
         }
     }
 

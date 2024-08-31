@@ -75,8 +75,7 @@ class UserReadIntegrationTest extends DatabaseTestBase {
     @DisplayName("사용자 조회 시 없다면, UnAuthorizedException이 발생한다.")
     void whenFindLoggedUserNonExistentThenUnAuthorizedExceptionShouldBeHappen() {
         assertThatThrownBy(() -> userReadUseCase.findAuthorizedUserById(Long.MAX_VALUE))
-            .isInstanceOf(CommonException.class)
-            .isInstanceOf(RuntimeException.class)
+            .isExactlyInstanceOf(CommonException.from(INVALID_USER_ID).getClass())
             .extracting(DETAIL_MESSAGE)
             .isEqualTo(USER_NOT_FOUND.message());
     }

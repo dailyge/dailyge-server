@@ -76,13 +76,11 @@ class AuthArgumentResolverTest {
     }
 
     @Test
-    @DisplayName("토큰이 없다면, UnAuthorizedException이 발생한다.")
+    @DisplayName("토큰이 없다면, CommonException이 발생한다.")
     void whenTokenIsEmptyThenUnAuthorizedExceptionShouldBeHappen() {
         assertThatThrownBy(() -> resolver.resolveArgument(null, null, webRequest, null))
-            .isInstanceOf(CommonException.class)
-            .isInstanceOf(RuntimeException.class)
-            .extracting(DETAIL_MESSAGE)
-            .isEqualTo(INVALID_USER_TOKEN.message());
+            .isExactlyInstanceOf(CommonException.from(INVALID_USER_TOKEN).getClass())
+            .isInstanceOf(RuntimeException.class);
     }
 
     @Test

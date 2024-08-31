@@ -2,6 +2,8 @@ name: Dailyge-Api Deploy
 
 on:
   pull_request:
+    types:
+      - closed
     branches:
       - dev
       - prod
@@ -31,6 +33,7 @@ permissions:
 
 jobs:
   deploy:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     outputs:
       ENV: ${{ steps.set_env.outputs.ENV }}

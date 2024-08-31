@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.common.auth.DailygeUser;
-import project.dailyge.app.common.exception.UnAuthorizedException;
+import project.dailyge.app.common.exception.CommonException;
 import project.dailyge.app.core.task.application.TaskWriteUseCase;
 import project.dailyge.app.core.task.application.command.TaskCreateCommand;
 import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.TASK_NOT_FOUND;
@@ -51,7 +51,7 @@ class TaskDeleteIntegrationTest extends DatabaseTestBase {
         final DailygeUser invalidDailygeUser = new DailygeUser(Long.MAX_VALUE, NORMAL);
 
         assertThatThrownBy(() -> taskWriteUseCase.delete(invalidDailygeUser, newTaskId))
-            .isInstanceOf(UnAuthorizedException.class);
+            .isInstanceOf(CommonException.class);
     }
 
     @Test

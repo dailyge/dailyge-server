@@ -13,7 +13,8 @@ import static org.mockito.MockitoAnnotations.openMocks;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.KeyHolder;
-import project.dailyge.app.common.exception.DaoException;
+
+import project.dailyge.app.common.exception.CommonException;
 import project.dailyge.app.core.user.persistence.UserWriteDao;
 
 @DisplayName("[UnitTest] UserDao 단위 테스트")
@@ -37,6 +38,6 @@ class UserDaoUnitTest {
 
         doThrow(dataAccessException).when(jdbcTemplate).update(any(), any(KeyHolder.class));
 
-        assertThrows(DaoException.class, () -> userWriteDao.save("test@gmail.com"));
+        assertThrows(CommonException.class, () -> userWriteDao.save("test@gmail.com"));
     }
 }

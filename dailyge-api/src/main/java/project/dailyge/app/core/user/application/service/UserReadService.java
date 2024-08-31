@@ -3,8 +3,7 @@ package project.dailyge.app.core.user.application.service;
 import lombok.RequiredArgsConstructor;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_USER_ID;
 import project.dailyge.app.common.annotation.ApplicationLayer;
-import project.dailyge.app.common.exception.UnAuthorizedException;
-import static project.dailyge.app.common.exception.UnAuthorizedException.USER_NOT_FOUND_MESSAGE;
+import project.dailyge.app.common.exception.CommonException;
 import project.dailyge.app.core.user.application.UserReadUseCase;
 import static project.dailyge.app.core.user.exception.UserCodeAndMessage.USER_NOT_FOUND;
 import project.dailyge.app.core.user.exception.UserTypeException;
@@ -34,7 +33,7 @@ class UserReadService implements UserReadUseCase {
     @Override
     public UserJpaEntity findAuthorizedUserById(final Long userId) {
         return userReadRepository.findActiveUserById(userId)
-            .orElseThrow(() -> new UnAuthorizedException(USER_NOT_FOUND_MESSAGE, INVALID_USER_ID));
+            .orElseThrow(() -> CommonException.from(USER_NOT_FOUND.message(), INVALID_USER_ID));
     }
 
     @Override

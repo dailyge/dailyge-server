@@ -2,13 +2,16 @@ package project.dailyge.app.core.monthlygoal.application.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
+
 import project.dailyge.app.common.annotation.ApplicationLayer;
 import project.dailyge.app.common.auth.DailygeUser;
-import project.dailyge.app.common.exception.UnAuthorizedException;
+import project.dailyge.app.common.exception.CommonException;
 import project.dailyge.app.core.monthlygoal.application.MonthlyGoalWriteUseCase;
 import project.dailyge.app.core.monthlygoal.application.command.MonthlyGoalCreateCommand;
 import project.dailyge.app.core.monthlygoal.application.command.MonthlyGoalStatusUpdateCommand;
 import project.dailyge.app.core.monthlygoal.application.command.MonthlyGoalUpdateCommand;
+
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.*;
 import static project.dailyge.app.core.monthlygoal.exception.MonthlyGoalCodeAndMessage.MONTHLY_GOAL_NOT_FOUND;
 import project.dailyge.app.core.monthlygoal.exception.MonthlyGoalTypeException;
 import project.dailyge.entity.monthlygoal.MonthlyGoalEntityReadRepository;
@@ -41,7 +44,7 @@ public class MonthlyGoalWriteService implements MonthlyGoalWriteUseCase {
         final MonthlyGoalJpaEntity findMonthlyGoal = monthlyGoalReadRepository.findById(monthlyGoalId)
             .orElseThrow(() -> MonthlyGoalTypeException.from(MONTHLY_GOAL_NOT_FOUND));
         if (!dailygeUser.isValid(findMonthlyGoal.getUserId())) {
-            throw new UnAuthorizedException();
+            throw CommonException.from(INVALID_USER_ID);
         }
         findMonthlyGoal.delete();
     }
@@ -56,7 +59,7 @@ public class MonthlyGoalWriteService implements MonthlyGoalWriteUseCase {
         final MonthlyGoalJpaEntity findMonthlyGoal = monthlyGoalReadRepository.findById(monthlyGoalId)
             .orElseThrow(() -> MonthlyGoalTypeException.from(MONTHLY_GOAL_NOT_FOUND));
         if (!dailygeUser.isValid(findMonthlyGoal.getUserId())) {
-            throw new UnAuthorizedException();
+            throw CommonException.from(INVALID_USER_ID);
         }
         findMonthlyGoal.update(command.title(), command.content());
     }
@@ -71,7 +74,7 @@ public class MonthlyGoalWriteService implements MonthlyGoalWriteUseCase {
         final MonthlyGoalJpaEntity findMonthlyGoal = monthlyGoalReadRepository.findById(monthlyGoalId)
             .orElseThrow(() -> MonthlyGoalTypeException.from(MONTHLY_GOAL_NOT_FOUND));
         if (!dailygeUser.isValid(findMonthlyGoal.getUserId())) {
-            throw new UnAuthorizedException();
+            throw CommonException.from(INVALID_USER_ID);
         }
         findMonthlyGoal.updateStatus(command.done());
     }

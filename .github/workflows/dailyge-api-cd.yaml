@@ -2,7 +2,6 @@ name: Dailyge-Api Deploy
 
 on:
   pull_request:
-    types: [ closed ]
     branches:
       - dev
       - prod
@@ -33,7 +32,8 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true
+    outputs:
+      ENV: ${{ steps.set_env.outputs.ENV }}
     steps:
       - name: Check out code
         uses: actions/checkout@v2
@@ -59,25 +59,26 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', 'gradle.properties', 'settings.gradle', 'build.gradle', '**/build.gradle') }}
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', '**/build.gradle') }}
           restore-keys: |
             ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
             ${{ runner.os }}-gradle-
 
       - name: Set environment-specific variables
+        id: set_env
         run: |
-          if [[ "${{ github.base_ref }}" == "dev" ]]; then
-            echo "ENV=dev" >> $GITHUB_ENV
-            echo "ECR_URI=${{ secrets.DEV_ECR_URI }}" >> $GITHUB_ENV
-            echo "SERVICE_NAME=dailyge-api-dev-service" >> $GITHUB_ENV
-            echo "CONTAINER_NAME=dailyge-api-dev-container" >> $GITHUB_ENV
-            echo "TASK_DEFINITION_NAME=dailyge-api-dev" >> $GITHUB_ENV
-          elif [[ "${{ github.base_ref }}" == "prod" || "${{ github.base_ref }}" == "main" ]]; then
+          if [[ "${{ github.event.pull_request.base.ref }}" == "prod" ]]; then
             echo "ENV=prod" >> $GITHUB_ENV
             echo "ECR_URI=${{ secrets.PROD_ECR_URI }}" >> $GITHUB_ENV
             echo "SERVICE_NAME=dailyge-api-prod-service" >> $GITHUB_ENV
             echo "CONTAINER_NAME=dailyge-api-prod-container" >> $GITHUB_ENV
             echo "TASK_DEFINITION_NAME=dailyge-api-prod" >> $GITHUB_ENV
+          else
+            echo "ENV=dev" >> $GITHUB_ENV
+            echo "ECR_URI=${{ secrets.DEV_ECR_URI }}" >> $GITHUB_ENV
+            echo "SERVICE_NAME=dailyge-api-dev-service" >> $GITHUB_ENV
+            echo "CONTAINER_NAME=dailyge-api-dev-container" >> $GITHUB_ENV
+            echo "TASK_DEFINITION_NAME=dailyge-api-dev" >> $GITHUB_ENV
           fi
           echo "IMAGE_TAG=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
 
@@ -93,15 +94,14 @@ jobs:
         with:
           region: ${{ env.AWS_REGION }}
 
-      - name: Build, push Docker image to ECR with Jib
+      - name: Build and Push Docker image to ECR
         run: |
           ./gradlew dailyge-api:jib -Djib.to.image=${{ env.ECR_URI }}:${{ env.IMAGE_TAG }}
           aws s3 cp dailyge-api/build/api-spec/openapi3.json s3://${{ secrets.API_DOCS_BUCKET_PATH }}/openapi3.json
-          aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths "/${{ secrets.API_DOCS_BUCKET_PATH }}/openapi3.json"
+          aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths "/*"
         env:
-          ENABLE_JIB: true
           ENV: ${{ env.ENV }}
-          SKIP_JIB: ${{ env.SKIP_JIB }}
+          SKIP_JIB: false
           ENCRYPTOR_KEY: ${{ secrets.ENCRYPTOR_KEY }}
           DEV_ECR_URI: ${{ secrets.DEV_ECR_URI }}
           PROD_ECR_URI: ${{ secrets.PROD_ECR_URI }}
@@ -150,7 +150,7 @@ jobs:
             *Contributor:* ${{ github.actor }}
             *Reviewers:* ${{ join(github.event.pull_request.requested_reviewers.*.login, ', ') }}
             *PR:* <${{ github.event.pull_request.html_url }}|PR>
-            *Env:* ${{ env.ENV }}
+            *Env:* ${{ needs.deploy.outputs.ENV }}
           username: PR_Bot
           icon_emoji: ":robot_face:"
           channel: pr
@@ -168,7 +168,7 @@ jobs:
             *Contributor:* ${{ github.actor }}
             *Reviewers:* ${{ join(github.event.pull_request.requested_reviewers.*.login, ', ') }}
             *PR:* <${{ github.event.pull_request.html_url }}|PR>
-            *Env:* ${{ env.ENV }}
+            *Env:* ${{ needs.deploy.outputs.ENV }}
             *Description:* PR 채널을 확인해주세요.
           username: PR_Bot
           icon_emoji: ":robot_face:"

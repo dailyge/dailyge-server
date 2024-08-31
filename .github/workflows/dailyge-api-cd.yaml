@@ -36,7 +36,6 @@ jobs:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     outputs:
-      ENV: ${{ steps.set_env.outputs.ENV }}
     steps:
       - name: Check out code
         uses: actions/checkout@v2
@@ -68,7 +67,6 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - name: Set environment-specific variables
-        id: set_env
         run: |
           if [[ "${{ github.event.pull_request.base.ref }}" == "prod" ]]; then
             echo "ENV=prod" >> $GITHUB_ENV
@@ -153,7 +151,7 @@ jobs:
             *Contributor:* ${{ github.actor }}
             *Reviewers:* ${{ join(github.event.pull_request.requested_reviewers.*.login, ', ') }}
             *PR:* <${{ github.event.pull_request.html_url }}|PR>
-            *Env:* ${{ needs.deploy.outputs.ENV }}
+            *Env:* ${{ github.event.pull_request.base.ref }}
           username: PR_Bot
           icon_emoji: ":robot_face:"
           channel: pr
@@ -171,7 +169,7 @@ jobs:
             *Contributor:* ${{ github.actor }}
             *Reviewers:* ${{ join(github.event.pull_request.requested_reviewers.*.login, ', ') }}
             *PR:* <${{ github.event.pull_request.html_url }}|PR>
-            *Env:* ${{ needs.deploy.outputs.ENV }}
+            *Env:* ${{ github.event.pull_request.base.ref }}
             *Description:* PR 채널을 확인해주세요.
           username: PR_Bot
           icon_emoji: ":robot_face:"

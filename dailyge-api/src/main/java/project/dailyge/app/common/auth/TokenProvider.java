@@ -104,10 +104,10 @@ public class TokenProvider {
 
     public String getAccessToken(final String authorizationHeader) {
         if (authorizationHeader == null) {
-            CommonException.from(INVALID_USER_TOKEN);
+            throw CommonException.from(INVALID_USER_TOKEN);
         }
         if (!authorizationHeader.startsWith(BEARER)) {
-            CommonException.from(INVALID_USER_TOKEN);
+            throw CommonException.from(INVALID_USER_TOKEN);
         }
         return authorizationHeader.substring(TOKEN_BEGIN_INDEX);
     }

@@ -33,9 +33,9 @@ public final class RedisUtils {
                 lock.unlock();
             }
         } catch (IllegalArgumentException ex) {
-            CommonException.from(ex.getMessage(), BAD_REQUEST);
+            throw CommonException.from(ex.getMessage(), BAD_REQUEST);
         } catch (RedisException ex) {
-            CommonException.from(ex.getMessage(), BAD_GATEWAY);
+            throw CommonException.from(ex.getMessage(), BAD_GATEWAY);
         }
     }
 

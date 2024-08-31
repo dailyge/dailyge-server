@@ -2,8 +2,11 @@ package project.dailyge.app.core.task.application.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+
 import project.dailyge.app.common.auth.DailygeUser;
-import project.dailyge.app.common.exception.UnAuthorizedException;
+import project.dailyge.app.common.exception.CommonException;
+
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.*;
 import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.MONTHLY_TASK_EXISTS;
 import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.TOO_MANY_TASKS;
 import project.dailyge.app.core.task.exception.TaskTypeException;
@@ -28,7 +31,7 @@ public class TaskValidator {
             return;
         }
         if (!findTask.isOwner(dailygeUser.getUserId())) {
-            throw new UnAuthorizedException();
+            throw CommonException.from(UN_AUTHORIZED);
         }
     }
 

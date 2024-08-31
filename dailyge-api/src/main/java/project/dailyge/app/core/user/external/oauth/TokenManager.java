@@ -7,7 +7,9 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_GATEWAY;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
-import project.dailyge.app.common.exception.ExternalServerException;
+
+import project.dailyge.app.common.exception.CommonException;
+
 import static project.dailyge.common.configuration.CompressionHelper.compressStringAsByteArray;
 import static project.dailyge.common.configuration.CompressionHelper.decompressAsString;
 
@@ -51,9 +53,9 @@ public class TokenManager {
         try {
             return command.get();
         } catch (RedisException ex) {
-            throw new ExternalServerException(ex.getMessage(), BAD_GATEWAY);
+            throw CommonException.from(ex.getMessage(), BAD_GATEWAY);
         } catch (Exception ex) {
-            throw new ExternalServerException(ex.getMessage(), INTERNAL_SERVER_ERROR);
+            throw CommonException.from(ex.getMessage(), INTERNAL_SERVER_ERROR);
         }
     }
 

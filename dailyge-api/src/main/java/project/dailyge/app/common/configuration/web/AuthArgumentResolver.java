@@ -11,14 +11,13 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.common.auth.LoginUser;
 import project.dailyge.app.common.auth.TokenProvider;
-import project.dailyge.app.common.exception.UnAuthorizedException;
+import project.dailyge.app.common.exception.CommonException;
 import project.dailyge.core.cache.user.UserCache;
 import project.dailyge.core.cache.user.UserCacheReadUseCase;
 import project.dailyge.entity.user.Role;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
-import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_USER_TOKEN;
-import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.*;
 
 @RequiredArgsConstructor
 public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
@@ -44,16 +43,16 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
         try {
             final Long userId = tokenProvider.getUserId(accessToken);
             if (userId == null) {
-                throw new UnAuthorizedException();
+                throw CommonException.from(INVALID_USER_ID);
             }
             final UserCache user = userCacheReadUseCase.findById(userId);
             final DailygeUser dailygeUser = new DailygeUser(user.getId(), Role.valueOf(user.getRole()));
             request.setAttribute("dailyge-user", dailygeUser);
             return dailygeUser;
         } catch (ExpiredJwtException ex) {
-            throw new UnAuthorizedException(ex.getMessage(), INVALID_USER_TOKEN);
+            throw CommonException.from(ex.getMessage(), INVALID_USER_TOKEN);
         } catch (Exception ex) {
-            throw new UnAuthorizedException(ex.getMessage(), UN_AUTHORIZED);
+            throw CommonException.from(ex.getMessage(), UN_AUTHORIZED);
         }
     }
 }

@@ -5,7 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import project.dailyge.app.common.DatabaseTestBase;
-import project.dailyge.app.common.exception.UnAuthorizedException;
+import project.dailyge.app.common.exception.CommonException;
 import project.dailyge.app.core.user.application.UserReadUseCase;
 import project.dailyge.app.core.user.application.UserWriteUseCase;
 import project.dailyge.app.core.user.exception.UserTypeException;
@@ -17,9 +17,10 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static project.dailyge.app.common.exception.UnAuthorizedException.USER_NOT_FOUND_MESSAGE;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.*;
 import static project.dailyge.app.core.user.exception.UserCodeAndMessage.USER_NOT_FOUND;
 import static project.dailyge.app.test.user.fixture.UserFixture.createUser;
+import static project.dailyge.app.test.user.integrationtest.TokenManagerIntegrationTest.*;
 
 @DisplayName("[IntegrationTest] 사용자 조회 통합 테스트")
 class UserReadIntegrationTest extends DatabaseTestBase {
@@ -74,9 +75,9 @@ class UserReadIntegrationTest extends DatabaseTestBase {
     @DisplayName("사용자 조회 시 없다면, UnAuthorizedException이 발생한다.")
     void whenFindLoggedUserNonExistentThenUnAuthorizedExceptionShouldBeHappen() {
         assertThatThrownBy(() -> userReadUseCase.findAuthorizedUserById(Long.MAX_VALUE))
-            .isExactlyInstanceOf(UnAuthorizedException.class)
-            .isInstanceOf(RuntimeException.class)
-            .hasMessage(USER_NOT_FOUND_MESSAGE);
+            .isExactlyInstanceOf(CommonException.from(INVALID_USER_ID).getClass())
+            .extracting(DETAIL_MESSAGE)
+            .isEqualTo(USER_NOT_FOUND.message());
     }
 
     @Test

@@ -6,7 +6,8 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.DATA_ACCESS_EXCEPTION;
-import project.dailyge.app.common.exception.DaoException;
+
+import project.dailyge.app.common.exception.CommonException;
 import project.dailyge.entity.task.MonthlyTaskEntityReadRepository;
 import project.dailyge.entity.task.MonthlyTaskJpaEntity;
 import static project.dailyge.entity.task.QMonthlyTaskJpaEntity.monthlyTaskJpaEntity;
@@ -78,7 +79,7 @@ class TaskReadDao implements TaskEntityReadRepository, MonthlyTaskEntityReadRepo
             });
             return count != null && count > 0;
         } catch (DataAccessException ex) {
-            throw new DaoException(ex.getMessage(), DATA_ACCESS_EXCEPTION);
+            throw CommonException.from(ex.getMessage(), DATA_ACCESS_EXCEPTION);
         }
     }
 
@@ -183,7 +184,7 @@ class TaskReadDao implements TaskEntityReadRepository, MonthlyTaskEntityReadRepo
             }
             return 0L;
         } catch (DataAccessException ex) {
-            throw new DaoException(ex.getMessage(), DATA_ACCESS_EXCEPTION);
+            throw CommonException.from(ex.getMessage(), DATA_ACCESS_EXCEPTION);
         }
     }
 }

@@ -14,7 +14,7 @@ import project.dailyge.app.common.auth.DailygeToken;
 import project.dailyge.app.common.auth.JwtProperties;
 import project.dailyge.app.common.auth.SecretKeyManager;
 import project.dailyge.app.common.auth.TokenProvider;
-import project.dailyge.app.common.exception.UnAuthorizedException;
+import project.dailyge.app.common.exception.CommonException;
 import project.dailyge.app.test.user.fixture.UserFixture;
 import project.dailyge.entity.user.UserJpaEntity;
 
@@ -75,7 +75,7 @@ class TokenProviderUnitTest {
     @DisplayName("빈 토큰을 검증하면, UnAuthorizedException 가 발생한다.")
     void whenEmptyTokenThenUnAuthorizedExceptionShouldBeHappen() {
         assertThatThrownBy(() -> tokenProvider.getUserId(null))
-            .isExactlyInstanceOf(UnAuthorizedException.class)
+            .isInstanceOf(CommonException.class)
             .isInstanceOf(RuntimeException.class);
     }
 
@@ -83,7 +83,7 @@ class TokenProviderUnitTest {
     @DisplayName("서명이 다른 토큰으로 검증하면, UnAuthorizedException 가 발생한다.")
     void whenDifferentSignatureThenUnAuthorizedExceptionShouldBeHappen() {
         assertThatThrownBy(() -> tokenProvider.getUserId("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.test.test"))
-            .isExactlyInstanceOf(UnAuthorizedException.class)
+            .isInstanceOf(CommonException.class)
             .isInstanceOf(RuntimeException.class);
     }
 
@@ -91,7 +91,7 @@ class TokenProviderUnitTest {
     @DisplayName("토큰 형식이 올바르지 않는다면, UnAuthorizedException 가 발생한다.")
     void whenTokenFormatIncorrectThenUnAuthorizedExceptionShouldBeHappen() {
         assertThatThrownBy(() -> tokenProvider.getUserId("test"))
-            .isExactlyInstanceOf(UnAuthorizedException.class)
+            .isInstanceOf(CommonException.class)
             .isInstanceOf(RuntimeException.class);
     }
 
@@ -99,7 +99,7 @@ class TokenProviderUnitTest {
     @DisplayName("지원되지 않는 형식의 JWT 일 경우, UnAuthorizedException 가 발생한다.")
     void whenUnsupportedTokenThenUnAuthorizedExceptionShouldBeHappen() {
         assertThatThrownBy(() -> tokenProvider.getUserId("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.test."))
-            .isExactlyInstanceOf(UnAuthorizedException.class)
+            .isInstanceOf(CommonException.class)
             .isInstanceOf(RuntimeException.class);
     }
 
@@ -129,7 +129,7 @@ class TokenProviderUnitTest {
         final String abnormalPayload = "jwtAbnormalPayloadData";
 
         assertThatThrownBy(() -> tokenProvider.decryptUserId(abnormalPayload))
-            .isExactlyInstanceOf(UnAuthorizedException.class)
+            .isInstanceOf(CommonException.class)
             .isInstanceOf(RuntimeException.class);
     }
 }

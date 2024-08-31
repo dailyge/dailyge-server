@@ -11,7 +11,8 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 import org.springframework.web.client.RestTemplate;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_GATEWAY;
 import project.dailyge.app.common.annotation.ExternalLayer;
-import project.dailyge.app.common.exception.ExternalServerException;
+import project.dailyge.app.common.exception.CommonException;
+
 import static project.dailyge.app.core.user.external.oauth.OAuthClient.GOOGLE;
 import project.dailyge.app.core.user.external.request.GoogleAuthorizationRequest;
 import project.dailyge.app.core.user.external.response.GoogleAuthorizationResponse;
@@ -67,7 +68,7 @@ public class GoogleOAuthManager {
         try {
             return restTemplate.postForObject(authorizationUrl, authorizationRequest, GoogleAuthorizationResponse.class);
         } catch (Exception ex) {
-            throw new ExternalServerException(ex.getMessage(), BAD_GATEWAY);
+            throw CommonException.from(ex.getMessage(), BAD_GATEWAY);
         }
     }
 
@@ -83,7 +84,7 @@ public class GoogleOAuthManager {
             );
             return userInfoResponse.getBody();
         } catch (Exception ex) {
-            throw new ExternalServerException(ex.getMessage(), BAD_GATEWAY);
+            throw CommonException.from(ex.getMessage(), BAD_GATEWAY);
         }
     }
 }

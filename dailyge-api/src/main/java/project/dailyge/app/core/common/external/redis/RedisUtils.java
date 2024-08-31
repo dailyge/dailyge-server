@@ -4,8 +4,8 @@ import org.redisson.api.RedissonClient;
 import org.redisson.client.RedisException;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_GATEWAY;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_REQUEST;
-import project.dailyge.app.common.exception.ExternalServerException;
-import project.dailyge.app.common.exception.InvalidParameterException;
+
+import project.dailyge.app.common.exception.CommonException;
 import project.dailyge.lock.Lock;
 
 public final class RedisUtils {
@@ -21,9 +21,9 @@ public final class RedisUtils {
         try {
             return Lock.createLock(redissonClient.getLock(getLockKey(userId)));
         } catch (IllegalArgumentException ex) {
-            throw new InvalidParameterException(ex.getMessage(), BAD_REQUEST);
+            throw CommonException.from(ex.getMessage(), BAD_REQUEST);
         } catch (RedisException ex) {
-            throw new ExternalServerException(ex.getMessage(), BAD_GATEWAY);
+            throw CommonException.from(ex.getMessage(), BAD_GATEWAY);
         }
     }
 
@@ -33,9 +33,9 @@ public final class RedisUtils {
                 lock.unlock();
             }
         } catch (IllegalArgumentException ex) {
-            throw new InvalidParameterException(ex.getMessage(), BAD_REQUEST);
+            throw CommonException.from(ex.getMessage(), BAD_REQUEST);
         } catch (RedisException ex) {
-            throw new ExternalServerException(ex.getMessage(), BAD_GATEWAY);
+            throw CommonException.from(ex.getMessage(), BAD_GATEWAY);
         }
     }
 

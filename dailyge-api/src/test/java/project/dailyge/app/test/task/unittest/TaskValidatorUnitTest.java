@@ -10,7 +10,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
 import project.dailyge.app.common.auth.DailygeUser;
-import project.dailyge.app.common.exception.UnAuthorizedException;
+import project.dailyge.app.common.exception.CommonException;
 import project.dailyge.app.core.task.application.service.TaskValidator;
 import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.MONTHLY_TASK_EXISTS;
 import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.TOO_MANY_TASKS;
@@ -56,7 +56,7 @@ class TaskValidatorUnitTest {
         final TaskJpaEntity newTask = new TaskJpaEntity("독서", "Kafka 완벽가이드 1~30p 읽기", now(), TODO, 300L);
 
         assertThatThrownBy(() -> validator.validateAuth(dailygeUser, newTask))
-            .isInstanceOf(UnAuthorizedException.class)
+            .isInstanceOf(CommonException.class)
             .hasMessage(UN_AUTHORIZED.message());
     }
 

@@ -6,7 +6,9 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_GATEWAY;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
-import project.dailyge.app.common.exception.ExternalServerException;
+
+import project.dailyge.app.common.exception.CommonException;
+
 import static project.dailyge.common.configuration.CompressionHelper.decompressAsObj;
 import project.dailyge.core.cache.user.UserCache;
 import project.dailyge.core.cache.user.UserCacheReadRepository;
@@ -26,9 +28,9 @@ public class UserCacheReadDao implements UserCacheReadRepository {
             }
             return decompressAsObj(cache, UserCache.class);
         } catch (RedisException ex) {
-            throw new ExternalServerException(ex.getMessage(), BAD_GATEWAY);
+            throw CommonException.from(ex.getMessage(), BAD_GATEWAY);
         } catch (Exception ex) {
-            throw new ExternalServerException(ex.getMessage(), INTERNAL_SERVER_ERROR);
+            throw CommonException.from(ex.getMessage(), INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -38,9 +40,9 @@ public class UserCacheReadDao implements UserCacheReadRepository {
             final Boolean hasKey = redisTemplate.hasKey(getKey(userId));
             return Boolean.TRUE.equals(hasKey);
         } catch (RedisException ex) {
-            throw new ExternalServerException(ex.getMessage(), BAD_GATEWAY);
+            throw CommonException.from(ex.getMessage(), BAD_GATEWAY);
         } catch (Exception ex) {
-            throw new ExternalServerException(ex.getMessage(), INTERNAL_SERVER_ERROR);
+            throw CommonException.from(ex.getMessage(), INTERNAL_SERVER_ERROR);
         }
     }
 

@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import project.dailyge.app.common.auth.TokenProvider;
+import project.dailyge.core.cache.user.UserBlacklistReadUseCase;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_USER_TOKEN;
 import static project.dailyge.app.common.utils.CookieUtils.clearCookie;
@@ -14,7 +15,7 @@ import static project.dailyge.app.common.utils.CookieUtils.clearCookie;
 @RequiredArgsConstructor
 public class BlacklistInterceptor implements HandlerInterceptor {
 
-    private final UserBlacklistService userBlacklistService;
+    private final UserBlacklistReadUseCase userBlacklistReadUseCase;
     private final TokenProvider tokenProvider;
 
     @Override
@@ -32,7 +33,7 @@ public class BlacklistInterceptor implements HandlerInterceptor {
                 return true;
             }
             final String accessToken = tokenProvider.getAccessToken(authorizationHeader);
-            if (userBlacklistService.existsByAccessToken(accessToken)) {
+            if (userBlacklistReadUseCase.existsByAccessToken(accessToken)) {
                 setLogoutResponse(response);
                 return false;
             }

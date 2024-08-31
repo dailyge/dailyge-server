@@ -2,10 +2,10 @@ package project.dailyge.app.user.facade;
 
 import lombok.RequiredArgsConstructor;
 import project.dailyge.app.common.annotation.FacadeLayer;
-import project.dailyge.app.user.application.UserBlacklistCreateCommand;
-import project.dailyge.app.user.application.UserCacheReadService;
-import project.dailyge.app.user.application.UserBlacklistWriteService;
+import project.dailyge.app.user.application.command.UserBlacklistCreateCommand;
+import project.dailyge.app.user.application.service.UserCacheReadService;
 import project.dailyge.app.user.exception.UserTypeException;
+import project.dailyge.core.cache.user.UserBlacklistWriteUseCase;
 import static project.dailyge.app.user.exception.UserCodeAndMessage.USER_NOT_FOUND;
 
 @FacadeLayer
@@ -13,7 +13,7 @@ import static project.dailyge.app.user.exception.UserCodeAndMessage.USER_NOT_FOU
 public class UserFacade {
 
     private final UserCacheReadService userCacheReadService;
-    private final UserBlacklistWriteService userBlacklistWriteService;
+    private final UserBlacklistWriteUseCase userBlacklistWriteUseCase;
 
     public void invalidateUser(
         final Long userId,
@@ -22,7 +22,7 @@ public class UserFacade {
         if (!userCacheReadService.existsById(userId)) {
             throw UserTypeException.from(USER_NOT_FOUND);
         }
-        userBlacklistWriteService.deleteRefreshToken(userId);
-        userBlacklistWriteService.save(command.accessToken());
+        userBlacklistWriteUseCase.deleteRefreshToken(userId);
+        userBlacklistWriteUseCase.save(command.accessToken());
     }
 }

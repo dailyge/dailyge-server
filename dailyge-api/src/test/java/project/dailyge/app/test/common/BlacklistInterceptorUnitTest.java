@@ -10,8 +10,9 @@ import project.dailyge.app.common.auth.JwtProperties;
 import project.dailyge.app.common.auth.SecretKeyManager;
 import project.dailyge.app.common.auth.TokenProvider;
 import project.dailyge.app.core.common.web.BlacklistInterceptor;
-import project.dailyge.app.core.common.web.UserBlacklistService;
+import project.dailyge.app.core.common.web.UserBlacklistReadService;
 import project.dailyge.core.cache.user.UserBlacklistReadRepository;
+import project.dailyge.core.cache.user.UserBlacklistReadUseCase;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -29,7 +30,7 @@ class BlacklistInterceptorUnitTest {
 
     private BlacklistInterceptor blacklistInterceptor;
     private UserBlacklistReadRepository userBlacklistReadRepository;
-    private UserBlacklistService userBlacklistService;
+    private UserBlacklistReadUseCase userBlacklistReadUseCase;
     private SecretKeyManager secretKeyManager;
     private TokenProvider tokenProvider;
     private HttpServletRequest request;
@@ -41,8 +42,8 @@ class BlacklistInterceptorUnitTest {
         secretKeyManager = new SecretKeyManager(jwtProperties);
         tokenProvider = new TokenProvider(jwtProperties, secretKeyManager);
         userBlacklistReadRepository = mock(UserBlacklistReadRepository.class);
-        userBlacklistService = new UserBlacklistService(userBlacklistReadRepository);
-        blacklistInterceptor = new BlacklistInterceptor(userBlacklistService, tokenProvider);
+        userBlacklistReadUseCase = new UserBlacklistReadService(userBlacklistReadRepository);
+        blacklistInterceptor = new BlacklistInterceptor(userBlacklistReadUseCase, tokenProvider);
         request = mock(HttpServletRequest.class);
         response = new MockHttpServletResponse();
     }

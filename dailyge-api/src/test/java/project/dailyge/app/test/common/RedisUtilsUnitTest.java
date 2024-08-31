@@ -9,8 +9,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import org.redisson.api.RedissonClient;
 import org.redisson.client.RedisException;
-import project.dailyge.app.common.exception.ExternalServerException;
-import project.dailyge.app.common.exception.InvalidParameterException;
+
+import project.dailyge.app.common.exception.CommonException;
 import project.dailyge.app.core.common.external.conccurent.LockService;
 import project.dailyge.lock.LockUseCase;
 
@@ -35,7 +35,7 @@ class RedisUtilsUnitTest {
 
         assertThatThrownBy(() -> lockUseCase.getLock(userId))
             .isInstanceOf(RuntimeException.class)
-            .isExactlyInstanceOf(InvalidParameterException.class);
+            .isInstanceOf(CommonException.class);
     }
 
     @Test
@@ -46,6 +46,6 @@ class RedisUtilsUnitTest {
 
         assertThatThrownBy(() -> lockUseCase.getLock(1L))
             .isInstanceOf(RuntimeException.class)
-            .isExactlyInstanceOf(ExternalServerException.class);
+            .isInstanceOf(CommonException.class);
     }
 }

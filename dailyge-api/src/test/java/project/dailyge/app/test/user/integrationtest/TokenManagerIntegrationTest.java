@@ -15,7 +15,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_GATEWAY;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
 import project.dailyge.app.common.DatabaseTestBase;
-import project.dailyge.app.common.exception.ExternalServerException;
+import project.dailyge.app.common.exception.CommonException;
 import project.dailyge.app.core.user.external.oauth.TokenManager;
 
 @DisplayName("[IntegrationTest] TokenManager 통합 테스트")
@@ -23,6 +23,8 @@ class TokenManagerIntegrationTest extends DatabaseTestBase {
 
     public static final String REFRESH_TOKEN = "Refresh-Token";
     public static final String CODE_AND_MESSAGE = "codeAndMessage";
+
+    public static final String DETAIL_MESSAGE = "detailMessage";
 
     @Autowired
     private TokenManager tokenManager;
@@ -52,7 +54,7 @@ class TokenManagerIntegrationTest extends DatabaseTestBase {
         when(mockStringRedisTemplate.opsForValue()).thenThrow(RedisConnectionException.class);
 
         assertThatThrownBy(() -> mockTokenManager.saveRefreshToken(1L, REFRESH_TOKEN))
-            .isExactlyInstanceOf(ExternalServerException.class)
+            .isInstanceOf(CommonException.class)
             .extracting(CODE_AND_MESSAGE)
             .isEqualTo(BAD_GATEWAY);
     }
@@ -63,7 +65,7 @@ class TokenManagerIntegrationTest extends DatabaseTestBase {
         when(mockStringRedisTemplate.opsForValue()).thenThrow(RuntimeException.class);
 
         assertThatThrownBy(() -> mockTokenManager.saveRefreshToken(1L, REFRESH_TOKEN))
-            .isExactlyInstanceOf(ExternalServerException.class)
+            .isInstanceOf(CommonException.class)
             .extracting(CODE_AND_MESSAGE)
             .isEqualTo(INTERNAL_SERVER_ERROR);
     }

@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import static org.springframework.http.HttpStatus.BAD_GATEWAY;
 import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.common.auth.TokenProvider;
-import project.dailyge.app.common.exception.ExternalServerException;
+import project.dailyge.app.common.exception.CommonException;
 import project.dailyge.app.common.response.ApiResponse;
 import project.dailyge.app.core.user.presentation.LoginApi;
 import project.dailyge.app.core.user.presentation.response.OAuthLoginResponse;
@@ -73,7 +73,7 @@ class LoginIntegrationTest extends DatabaseTestBase {
                 .withBody(BAD_GATEWAY.getReasonPhrase())));
 
         assertThatThrownBy(() -> loginApi.login(AUTHENTICATION_CODE))
-            .isExactlyInstanceOf(ExternalServerException.class)
+            .isInstanceOf(CommonException.class)
             .isInstanceOf(RuntimeException.class)
             .hasMessage(BAD_GATEWAY.value() + " " + BAD_GATEWAY.getReasonPhrase() + ": \"" + BAD_GATEWAY.getReasonPhrase() + "\"");
     }
@@ -89,7 +89,7 @@ class LoginIntegrationTest extends DatabaseTestBase {
                 .withBody(BAD_GATEWAY.getReasonPhrase())));
 
         assertThatThrownBy(() -> loginApi.login(AUTHENTICATION_CODE))
-            .isExactlyInstanceOf(ExternalServerException.class)
+            .isInstanceOf(CommonException.class)
             .isInstanceOf(RuntimeException.class)
             .hasMessage(BAD_GATEWAY.value() + " " + BAD_GATEWAY.getReasonPhrase() + ": \"" + BAD_GATEWAY.getReasonPhrase() + "\"");
     }

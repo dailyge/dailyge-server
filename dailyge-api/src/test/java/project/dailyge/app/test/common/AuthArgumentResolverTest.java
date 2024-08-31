@@ -11,7 +11,7 @@ import project.dailyge.app.common.auth.JwtProperties;
 import project.dailyge.app.common.auth.SecretKeyManager;
 import project.dailyge.app.common.auth.TokenProvider;
 import project.dailyge.app.common.configuration.web.AuthArgumentResolver;
-import project.dailyge.app.common.exception.UnAuthorizedException;
+import project.dailyge.app.common.exception.CommonException;
 import project.dailyge.app.test.user.fixture.UserFixture;
 import project.dailyge.core.cache.user.UserCache;
 import project.dailyge.core.cache.user.UserCacheReadUseCase;
@@ -27,6 +27,7 @@ import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_US
 
 @DisplayName("[UnitTest] AuthArgumentResolver 검증 단위 테스트")
 class AuthArgumentResolverTest {
+    private static final String DETAIL_MESSAGE = "detailMessage";
 
     private TokenProvider tokenProvider;
     private AuthArgumentResolver resolver;
@@ -78,9 +79,10 @@ class AuthArgumentResolverTest {
     @DisplayName("토큰이 없다면, UnAuthorizedException이 발생한다.")
     void whenTokenIsEmptyThenUnAuthorizedExceptionShouldBeHappen() {
         assertThatThrownBy(() -> resolver.resolveArgument(null, null, webRequest, null))
-            .isExactlyInstanceOf(UnAuthorizedException.class)
+            .isInstanceOf(CommonException.class)
             .isInstanceOf(RuntimeException.class)
-            .hasMessage(INVALID_USER_TOKEN.message());
+            .extracting(DETAIL_MESSAGE)
+            .isEqualTo(INVALID_USER_TOKEN.message());
     }
 
     @Test

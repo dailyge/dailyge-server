@@ -37,6 +37,7 @@ public class BlacklistInterceptor implements HandlerInterceptor {
     private void setLogoutResponse(final HttpServletResponse response) {
         response.addCookie(clearCookie("Refresh-Token"));
         response.addCookie(clearCookie("Access-Token"));
+        response.addCookie(clearCookie("Logged-In"));
         response.setStatus(INVALID_USER_TOKEN.code());
     }
 }

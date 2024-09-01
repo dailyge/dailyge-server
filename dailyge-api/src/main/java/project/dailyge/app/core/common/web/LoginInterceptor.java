@@ -17,6 +17,7 @@ import project.dailyge.app.common.auth.TokenProvider;
 import project.dailyge.app.core.user.external.oauth.TokenManager;
 import project.dailyge.core.cache.user.UserCache;
 import project.dailyge.core.cache.user.UserCacheReadUseCase;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_REQUEST;
 import static project.dailyge.app.common.utils.CookieUtils.createCookie;
@@ -93,7 +94,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         response.addCookie(createCookie("Access-Token", accessToken, "/", 900));
         response.setStatus(BAD_REQUEST.code());
         response.setContentType(APPLICATION_JSON_VALUE);
-        response.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding(UTF_8.name());
         objectMapper.writeValue(response.getWriter(), bodyMap);
     }
 }

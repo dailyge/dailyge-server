@@ -13,11 +13,11 @@ public record DailygeToken(
     private static final String REFRESH_TOKEN = "Refresh-Token";
 
     public String getAccessTokenCookie() {
-        return createResponseCookie(ACCESS_TOKEN, accessToken, "/", accessTokenMaxAge);
+        return createResponseCookie(ACCESS_TOKEN, accessToken, "/", accessTokenMaxAge, true);
     }
 
     public String getRefreshTokenCookie() {
-        return createResponseCookie(REFRESH_TOKEN, refreshToken, "/", refreshTokenMaxAge);
+        return createResponseCookie(REFRESH_TOKEN, refreshToken, "/", refreshTokenMaxAge, true);
     }
 
     @Override

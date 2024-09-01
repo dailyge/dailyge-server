@@ -11,23 +11,27 @@ public class CookieUtils {
         final String name,
         final String value,
         final String path,
-        final long maxAge
+        final long maxAge,
+        final boolean httpOnly
     ) {
         final ResponseCookie cookie =  ResponseCookie.from(name, value)
             .domain(DOMAIN)
             .path(path)
-            .httpOnly(true)
+            .httpOnly(httpOnly)
             .secure(true)
             .maxAge(maxAge)
             .build();
         return cookie.toString();
     }
 
-    public static String clearResponseCookie(final String name) {
+    public static String clearResponseCookie(
+        final String name,
+        final boolean httpOnly
+    ) {
         final ResponseCookie clearCookie = ResponseCookie.from(name, null)
             .domain(DOMAIN)
             .path("/")
-            .httpOnly(true)
+            .httpOnly(httpOnly)
             .secure(true)
             .maxAge(0)
             .build();

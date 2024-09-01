@@ -42,6 +42,9 @@ public class LoginApi {
         final HttpHeaders headers = new HttpHeaders();
         headers.add(SET_COOKIE, dailygeToken.getAccessTokenCookie());
         headers.add(SET_COOKIE, dailygeToken.getRefreshTokenCookie());
+        headers.add(SET_COOKIE, CookieUtils.createResponseCookie(
+            "Logged-In", "yes", "/", dailygeToken.accessTokenMaxAge(), false
+        ));
         final OAuthLoginResponse payload = new OAuthLoginResponse(dailygeToken.accessToken());
         return ApiResponse.from(OK, headers, payload);
     }
@@ -50,8 +53,9 @@ public class LoginApi {
     public ApiResponse<Void> logout(@LoginUser final DailygeUser dailygeUser) {
         userFacade.logout(dailygeUser.getUserId());
         final HttpHeaders headers = new HttpHeaders();
-        headers.add(SET_COOKIE, clearResponseCookie("Access-Token"));
-        headers.add(SET_COOKIE, clearResponseCookie("Refresh-Token"));
+        headers.add(SET_COOKIE, clearResponseCookie("Access-Token", true));
+        headers.add(SET_COOKIE, clearResponseCookie("Refresh-Token", true));
+        headers.add(SET_COOKIE, clearResponseCookie("Logged-In", false));
         return ApiResponse.from(OK, headers, null);
     }
 }

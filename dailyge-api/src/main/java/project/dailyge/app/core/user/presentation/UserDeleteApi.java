@@ -29,8 +29,9 @@ public class UserDeleteApi {
         dailygeUser.validateAuth(userId);
         userFacade.delete(userId);
         final HttpHeaders headers = new HttpHeaders();
-        headers.add(SET_COOKIE, clearResponseCookie("Access-Token"));
-        headers.add(SET_COOKIE, clearResponseCookie("Refresh-Token"));
+        headers.add(SET_COOKIE, clearResponseCookie("Access-Token", true));
+        headers.add(SET_COOKIE, clearResponseCookie("Refresh-Token", true));
+        headers.add(SET_COOKIE, clearResponseCookie("Logged-In", false));
         return ApiResponse.from(NO_CONTENT, headers, null);
     }
 }

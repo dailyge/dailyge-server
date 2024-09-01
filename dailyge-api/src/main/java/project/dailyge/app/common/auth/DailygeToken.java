@@ -1,26 +1,23 @@
 package project.dailyge.app.common.auth;
 
-import org.springframework.http.ResponseCookie;
+import static project.dailyge.app.common.utils.CookieUtils.createResponseCookie;
 
 public record DailygeToken(
     String accessToken,
     String refreshToken,
-    int maxAge
+    int accessTokenMaxAge,
+    int refreshTokenMaxAge
 ) {
-    private static final String BEARER =  "Bearer ";
-    private static final String REFRESH_TOKEN =  "Refresh-Token";
 
-    public String getAuthorizationToken() {
-        return BEARER + accessToken;
+    private static final String ACCESS_TOKEN = "Access-Token";
+    private static final String REFRESH_TOKEN = "Refresh-Token";
+
+    public String getAccessTokenCookie() {
+        return createResponseCookie(ACCESS_TOKEN, accessToken, "/", accessTokenMaxAge);
     }
 
     public String getRefreshTokenCookie() {
-        return ResponseCookie.from(REFRESH_TOKEN, refreshToken)
-            .httpOnly(true)
-            .secure(true)
-            .maxAge(maxAge)
-            .build()
-            .toString();
+        return createResponseCookie(REFRESH_TOKEN, refreshToken, "/", refreshTokenMaxAge);
     }
 
     @Override

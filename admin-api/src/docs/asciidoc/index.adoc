@@ -52,3 +52,35 @@ include::{snippets}/code_and_message_read_documentation_test/when_search_code_an
 #### Response-Fields
 
 include::{snippets}/code_and_message_read_documentation_test/when_search_code_and_message_then_result_should_be_200__rest_docs/response-fields.adoc[]
+
+
+== 📝 2. User Blacklist
+
+[cols=7*]
+|===
+| 기능 | Method | 인증 | API | Success | Failure | 설명
+
+| <<2-1. User Blacklist 등록>> | Post | O | /api/user/blacklist/{userId} | 200 | - | User Blacklist 등록
+|===
+
+### 2-1. User Blacklist 등록
+
+### Request
+
+include::{snippets}/user_blacklist_create_documentation/when_save_user_blacklist_then_result_should_be_200__rest_docs/http-request.adoc[]
+
+#### Request-Path-Parameters
+
+include::{snippets}/user_blacklist_create_documentation/when_save_user_blacklist_then_result_should_be_200__rest_docs/path-parameters.adoc[]
+
+#### Request-Fields
+
+include::{snippets}/user_blacklist_create_documentation/when_save_user_blacklist_then_result_should_be_200__rest_docs/request-fields.adoc[]
+
+#### Response
+
+include::{snippets}/user_blacklist_create_documentation/when_save_user_blacklist_then_result_should_be_200__rest_docs/http-response.adoc[]
+
+#### Response-Fields
+
+include::{snippets}/user_blacklist_create_documentation/when_save_user_blacklist_then_result_should_be_200__rest_docs/response-fields.adoc[]

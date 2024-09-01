@@ -1,22 +1,24 @@
 package project.dailyge.app.core.coupon.persistence;
 
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
-
 import org.springframework.stereotype.Component;
 
-import project.dailyge.entity.coupon.CouponEventParticipant;
-import project.dailyge.entity.coupon.CouponEventParticipantRepository;
+import java.util.concurrent.BlockingQueue;
 
 @Component
 public class CouponEventParticipantInMemoryQueue implements CouponEventParticipantRepository {
-	private final BlockingQueue<CouponEventParticipant> queue;
-	public CouponEventParticipantInMemoryQueue() {
-		this.queue = new LinkedBlockingQueue<>();
-	}
+    private final BlockingQueue<CouponEventParticipant> queue;
 
-	@Override
-	public void save(final CouponEventParticipant couponEventParticipant) {
-		queue.add(couponEventParticipant);
-	}
+    public CouponEventParticipantInMemoryQueue(BlockingQueue<CouponEventParticipant> queue) {
+        this.queue = queue;
+    }
+
+    @Override
+    public void save(final CouponEventParticipant couponEventParticipant) {
+        queue.add(couponEventParticipant);
+    }
+
+    @Override
+    public int count() {
+        return queue.size();
+    }
 }

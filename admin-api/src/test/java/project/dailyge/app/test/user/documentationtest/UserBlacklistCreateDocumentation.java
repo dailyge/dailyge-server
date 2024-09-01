@@ -1,6 +1,7 @@
 package project.dailyge.app.test.user.documentationtest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import io.restassured.http.Cookie;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,7 +18,7 @@ import project.dailyge.entity.user.Role;
 import static io.restassured.RestAssured.given;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.document;
-import static project.dailyge.app.test.user.documentationtest.snippet.UserSnippet.USER_AUTHORIZATION_HEADER;
+import static project.dailyge.app.test.user.documentationtest.snippet.UserSnippet.USER_BLACKLIST_ACCESS_TOKEN_COOKIE_SNIPPET;
 import static project.dailyge.app.test.user.documentationtest.snippet.UserSnippet.USER_BLACKLIST_CREATE_PATH_PARAMETER_SNIPPET;
 import static project.dailyge.app.test.user.documentationtest.snippet.UserSnippet.USER_BLACKLIST_CREATE_RESPONSE_FIELDS_SNIPPET;
 import static project.dailyge.app.test.user.documentationtest.snippet.UserSnippet.USER_BLACKLIST_CREATE_RESPONSE_SNIPPET;
@@ -28,6 +29,7 @@ class UserBlacklistCreateDocumentation extends DatabaseTestBase {
 
     private static final Long ADMIN_ID = 2L;
     private static final String ADMIN_EMAIL = "admin@gmail.com";
+    private Cookie adminCookie;
     private DailygeToken token;
     private UserBlacklistCreateRequest request;
 
@@ -43,6 +45,7 @@ class UserBlacklistCreateDocumentation extends DatabaseTestBase {
         userCacheWriteUseCase.save(admin);
         token = tokenProvider.createToken(ADMIN_ID, ADMIN_EMAIL);
         request = new UserBlacklistCreateRequest("accessToken");
+        adminCookie = new Cookie.Builder("Access-Token", token.accessToken()).build();
     }
 
     @Test
@@ -50,13 +53,13 @@ class UserBlacklistCreateDocumentation extends DatabaseTestBase {
     void whenSaveUserBlacklistThenResultShouldBe_200_RestDocs() throws JsonProcessingException {
         given(this.specification)
             .filter(document(IDENTIFIER,
-                USER_AUTHORIZATION_HEADER,
+                USER_BLACKLIST_ACCESS_TOKEN_COOKIE_SNIPPET,
                 USER_BLACKLIST_CREATE_PATH_PARAMETER_SNIPPET,
                 USER_BLACKLIST_CREATE_RESPONSE_SNIPPET,
                 USER_BLACKLIST_CREATE_RESPONSE_FIELDS_SNIPPET
             ))
             .contentType(APPLICATION_JSON_VALUE)
-            .header(AUTHORIZATION, token.getAuthorizationToken())
+            .cookie(adminCookie)
             .body(objectMapper.writeValueAsString(request))
             .when()
             .post("/api/user/blacklist/{userId}", 1L)
@@ -72,7 +75,7 @@ class UserBlacklistCreateDocumentation extends DatabaseTestBase {
         given(this.specification)
             .filter(filter)
             .contentType(APPLICATION_JSON_VALUE)
-            .header(AUTHORIZATION, token.getAuthorizationToken())
+            .cookie(adminCookie)
             .body(objectMapper.writeValueAsString(request))
             .when()
             .post("/api/user/blacklist/{userId}", 1L)
@@ -88,7 +91,7 @@ class UserBlacklistCreateDocumentation extends DatabaseTestBase {
         given(this.specification)
             .filter(filter)
             .contentType(APPLICATION_JSON_VALUE)
-            .header(AUTHORIZATION, getAuthorizationHeader())
+            .cookie(AUTHORIZATION, getAccessTokenCookie())
             .body(objectMapper.writeValueAsString(request))
             .when()
             .post("/api/user/blacklist/{userId}", Long.MAX_VALUE)
@@ -104,7 +107,7 @@ class UserBlacklistCreateDocumentation extends DatabaseTestBase {
         given(this.specification)
             .filter(filter)
             .contentType(APPLICATION_JSON_VALUE)
-            .header(AUTHORIZATION, token.getAuthorizationToken())
+            .cookie(adminCookie)
             .body(objectMapper.writeValueAsString(request))
             .when()
             .post("/api/user/blacklist/{userId}", Long.MAX_VALUE)

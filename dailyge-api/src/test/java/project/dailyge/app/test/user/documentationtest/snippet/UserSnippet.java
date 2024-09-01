@@ -1,9 +1,8 @@
 package project.dailyge.app.test.user.documentationtest.snippet;
 
 import org.springframework.restdocs.cookies.CookieDescriptor;
+import org.springframework.restdocs.cookies.RequestCookiesSnippet;
 import org.springframework.restdocs.cookies.ResponseCookiesSnippet;
-import org.springframework.restdocs.headers.HeaderDescriptor;
-import org.springframework.restdocs.headers.RequestHeadersSnippet;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.restdocs.request.ParameterDescriptor;
@@ -11,9 +10,8 @@ import org.springframework.restdocs.request.PathParametersSnippet;
 import static javax.xml.xpath.XPathEvaluationResult.XPathResultType.NUMBER;
 import static javax.xml.xpath.XPathEvaluationResult.XPathResultType.STRING;
 import static org.springframework.restdocs.cookies.CookieDocumentation.cookieWithName;
+import static org.springframework.restdocs.cookies.CookieDocumentation.requestCookies;
 import static org.springframework.restdocs.cookies.CookieDocumentation.responseCookies;
-import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
-import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
@@ -23,11 +21,11 @@ public interface UserSnippet {
 
     String TAG = "User";
 
-    HeaderDescriptor HEADER_DESCRIPTOR = headerWithName("Authorization").description("인증 토큰").optional();
+    CookieDescriptor[] USER_ACCESS_TOKEN_COOKIE_DESCRIPTOR = {
+        cookieWithName("Access-Token").description("사용자 토큰 쿠키")
+    };
 
-    RequestHeadersSnippet USER_AUTHORIZATION_HEADER = requestHeaders(
-        headerWithName("Authorization").description("인증 토큰").optional()
-    );
+    RequestCookiesSnippet USER_ACCESS_TOKEN_COOKIE_SNIPPET = requestCookies(USER_ACCESS_TOKEN_COOKIE_DESCRIPTOR);
 
     ParameterDescriptor[] USER_SEARCH_PATH_DESCRIPTOR = {
         parameterWithName("userId").description("사용자 ID")
@@ -47,7 +45,9 @@ public interface UserSnippet {
     };
 
     CookieDescriptor[] USER_DELETE_RESPONSE_COOKIE_DESCRIPTOR = {
-        cookieWithName("Refresh-Token").description("만료 된 리프레시 토큰")
+        cookieWithName("Access-Token").description("만료 된 인증 토큰"),
+        cookieWithName("Refresh-Token").description("만료 된 리프레시 토큰"),
+        cookieWithName("Logged-In").description("로그인 여부")
     };
 
     FieldDescriptor[] LOGIN_PAGE_FIELD_DESCRIPTOR = {
@@ -57,7 +57,9 @@ public interface UserSnippet {
     };
 
     CookieDescriptor[] LOGOUT_RESPONSE_COOKIE_DESCRIPTOR = {
-        cookieWithName("Refresh-Token").description("만료 된 리프레시 토큰")
+        cookieWithName("Access-Token").description("만료 된 인증 토큰"),
+        cookieWithName("Refresh-Token").description("만료 된 리프레시 토큰"),
+        cookieWithName("Logged-In").description("로그인 여부")
     };
 
     FieldDescriptor[] RESPONSE_STATUS = {

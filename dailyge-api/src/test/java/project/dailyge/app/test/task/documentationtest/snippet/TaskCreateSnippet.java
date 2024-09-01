@@ -2,7 +2,7 @@ package project.dailyge.app.test.task.documentationtest.snippet;
 
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import static com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper.document;
-import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.cookies.CookieDocumentation.requestCookies;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
@@ -26,7 +26,6 @@ public final class TaskCreateSnippet implements TaskSnippet {
         return document(
             identifier,
             ResourceSnippetParameters.builder()
-                .requestHeaders(HEADER_DESCRIPTOR)
                 .requestFields(TASK_CREATE_REQUEST_FIELDS)
                 .responseFields(TASK_CREATE_RESPONSE)
                 .tag(TAG)
@@ -38,7 +37,7 @@ public final class TaskCreateSnippet implements TaskSnippet {
             preprocessResponse(prettyPrint()),
             snippets -> {
                 List.of(
-                    requestHeaders(List.of(HEADER_DESCRIPTOR)),
+                    requestCookies(TASK_TOKEN_COOKIE_DESCRIPTORS),
                     requestFields(Arrays.stream(TASK_CREATE_REQUEST_FIELDS).toList()),
                     responseFields(Arrays.stream(TASK_CREATE_RESPONSE).toList()),
                     responseFields(Arrays.stream(ERROR_RESPONSE).toList())
@@ -51,7 +50,6 @@ public final class TaskCreateSnippet implements TaskSnippet {
         return document(
             identifier,
             ResourceSnippetParameters.builder()
-                .requestHeaders(HEADER_DESCRIPTOR)
                 .requestFields(MONTHLY_TASK_CREATE_REQUEST_FIELDS)
                 .responseFields(MONTHLY_TASK_CREATE_RESPONSE)
                 .tag(TAG)
@@ -63,7 +61,7 @@ public final class TaskCreateSnippet implements TaskSnippet {
             preprocessResponse(prettyPrint()),
             snippets -> {
                 List.of(
-                    requestHeaders(List.of(HEADER_DESCRIPTOR)),
+                    requestCookies(TASK_TOKEN_COOKIE_DESCRIPTORS),
                     requestFields(Arrays.stream(MONTHLY_TASK_CREATE_REQUEST_FIELDS).toList()),
                     responseFields(Arrays.stream(MONTHLY_TASK_CREATE_RESPONSE).toList())
                 );
@@ -75,7 +73,6 @@ public final class TaskCreateSnippet implements TaskSnippet {
         return document(
             identifier,
             ResourceSnippetParameters.builder()
-                .requestHeaders(HEADER_DESCRIPTOR)
                 .requestFields(MONTHLY_TASK_CREATE_REQUEST_FIELDS)
                 .responseFields(ERROR_RESPONSE)
                 .tag(TAG)
@@ -87,7 +84,7 @@ public final class TaskCreateSnippet implements TaskSnippet {
             preprocessResponse(prettyPrint()),
             snippets -> {
                 List.of(
-                    requestHeaders(List.of(HEADER_DESCRIPTOR)),
+                    requestCookies(TASK_TOKEN_COOKIE_DESCRIPTORS),
                     requestFields(Arrays.stream(MONTHLY_TASK_CREATE_REQUEST_FIELDS).toList()),
                     responseFields(Arrays.stream(MONTHLY_TASK_CREATE_RESPONSE).toList())
                 );

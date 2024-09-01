@@ -1,13 +1,11 @@
 package project.dailyge.app.test.user.documentationtest.snippet;
 
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
-import org.springframework.restdocs.restassured.RestDocumentationFilter;
-
 import java.util.Arrays;
 import java.util.List;
-
+import org.springframework.restdocs.restassured.RestDocumentationFilter;
 import static com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper.document;
-import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.cookies.CookieDocumentation.requestCookies;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
@@ -30,7 +28,6 @@ public final class UserReadSnippet implements UserSnippet {
         return document(
             identifier,
             ResourceSnippetParameters.builder()
-                .requestHeaders(HEADER_DESCRIPTOR)
                 .pathParameters(USER_SEARCH_PATH_DESCRIPTOR)
                 .responseFields(USER_SEARCH_RESPONSE_FIELD_DESCRIPTOR)
                 .tag(TAG)
@@ -42,7 +39,7 @@ public final class UserReadSnippet implements UserSnippet {
             preprocessResponse(prettyPrint()),
             snippets -> {
                 List.of(
-                    requestHeaders(List.of(HEADER_DESCRIPTOR)),
+                    requestCookies(USER_ACCESS_TOKEN_COOKIE_DESCRIPTOR),
                     pathParameters(USER_SEARCH_PATH_DESCRIPTOR),
                     responseFields(Arrays.stream(USER_SEARCH_RESPONSE_FIELD_DESCRIPTOR).toList()),
                     responseFields(Arrays.stream(RESPONSE_STATUS).toList())

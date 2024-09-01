@@ -12,7 +12,7 @@ import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.core.monthlygoal.application.MonthlyGoalWriteUseCase;
 import project.dailyge.app.core.monthlygoal.application.command.MonthlyGoalCreateCommand;
 import project.dailyge.app.core.monthlygoal.presentation.request.MonthlyGoalUpdateRequest;
-import static project.dailyge.app.test.monthlygoal.documentationtest.snippet.MonthlyGoalSnippet.MONTHLY_GOAL_AUTHORIZATION_HEADER;
+import static project.dailyge.app.test.monthlygoal.documentationtest.snippet.MonthlyGoalSnippet.MONTHLY_GOAL_ACCESS_TOKEN_COOKIE_SNIPPET;
 import static project.dailyge.app.test.monthlygoal.documentationtest.snippet.MonthlyGoalSnippet.MONTHLY_GOAL_PATH_PARAMETER_SNIPPET;
 import static project.dailyge.app.test.monthlygoal.documentationtest.snippet.MonthlyGoalSnippet.MONTHLY_GOAL_UPDATE_REQUEST_SNIPPET;
 import static project.dailyge.app.test.monthlygoal.documentationtest.snippet.MonthlyGoalSnippet.MONTHLY_GOAL_UPDATE_RESPONSE_SNIPPET;
@@ -36,14 +36,14 @@ class MonthlyGoalUpdateDocumentationTest extends DatabaseTestBase {
 
         given(this.specification)
             .filter(document(IDENTIFIER,
-                MONTHLY_GOAL_AUTHORIZATION_HEADER,
+                MONTHLY_GOAL_ACCESS_TOKEN_COOKIE_SNIPPET,
                 MONTHLY_GOAL_PATH_PARAMETER_SNIPPET,
                 MONTHLY_GOAL_UPDATE_REQUEST_SNIPPET,
                 MONTHLY_GOAL_UPDATE_RESPONSE_SNIPPET
             ))
             .relaxedHTTPSValidation()
             .contentType(APPLICATION_JSON_VALUE)
-            .header(AUTHORIZATION, getAuthorizationHeader())
+            .cookie(getAccessTokenCookie())
             .body(objectMapper.writeValueAsString(request))
             .put("/api/monthly-goals/{monthlyGoalId}", monthlyGoalId)
             .then()
@@ -65,7 +65,7 @@ class MonthlyGoalUpdateDocumentationTest extends DatabaseTestBase {
             .filter(filter)
             .relaxedHTTPSValidation()
             .contentType(APPLICATION_JSON_VALUE)
-            .header(AUTHORIZATION, getAuthorizationHeader())
+            .cookie(getAccessTokenCookie())
             .body(objectMapper.writeValueAsString(request))
             .put("/api/monthly-goals/{monthlyGoalId}", monthlyGoalId)
             .then()
@@ -84,7 +84,7 @@ class MonthlyGoalUpdateDocumentationTest extends DatabaseTestBase {
             .filter(filter)
             .relaxedHTTPSValidation()
             .contentType(APPLICATION_JSON_VALUE)
-            .header(AUTHORIZATION, getAuthorizationHeader())
+            .cookie(getAccessTokenCookie())
             .body(objectMapper.writeValueAsString(request))
             .put("/api/monthly-goals/{monthlyGoalId}", "invalidId")
             .then()
@@ -103,7 +103,7 @@ class MonthlyGoalUpdateDocumentationTest extends DatabaseTestBase {
             .filter(filter)
             .relaxedHTTPSValidation()
             .contentType(APPLICATION_JSON_VALUE)
-            .header(AUTHORIZATION, getAuthorizationHeader())
+            .cookie(getAccessTokenCookie())
             .body(objectMapper.writeValueAsString(request))
             .put("/api/monthly-goals/{monthlyGoalId}", 300)
             .then()

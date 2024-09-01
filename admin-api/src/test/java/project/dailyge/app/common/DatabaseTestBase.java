@@ -2,6 +2,7 @@ package project.dailyge.app.common;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.RestAssured;
+import io.restassured.http.Cookie;
 import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -86,8 +87,8 @@ public abstract class DatabaseTestBase {
         RestAssured.reset();
     }
 
-    protected String getAuthorizationHeader() {
-        return "Bearer " + accessToken;
+    protected Cookie getAccessTokenCookie() {
+        return new Cookie.Builder("Access-Token", accessToken).build();
     }
 
     protected UserJpaEntity persist(final UserJpaEntity user) {

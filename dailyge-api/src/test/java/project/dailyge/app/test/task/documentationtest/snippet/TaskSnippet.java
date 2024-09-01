@@ -2,10 +2,10 @@ package project.dailyge.app.test.task.documentationtest.snippet;
 
 import static javax.xml.xpath.XPathEvaluationResult.XPathResultType.NUMBER;
 import static javax.xml.xpath.XPathEvaluationResult.XPathResultType.STRING;
-import org.springframework.restdocs.headers.HeaderDescriptor;
-import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
-import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
-import org.springframework.restdocs.headers.RequestHeadersSnippet;
+import org.springframework.restdocs.cookies.CookieDescriptor;
+import org.springframework.restdocs.cookies.RequestCookiesSnippet;
+import static org.springframework.restdocs.cookies.CookieDocumentation.cookieWithName;
+import static org.springframework.restdocs.cookies.CookieDocumentation.requestCookies;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import static org.springframework.restdocs.payload.JsonFieldType.NULL;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -25,18 +25,17 @@ import project.dailyge.app.core.task.presentation.requesst.TaskCreateRequest;
 import project.dailyge.app.core.task.presentation.requesst.TaskStatusUpdateRequest;
 import project.dailyge.app.core.task.presentation.requesst.TaskUpdateRequest;
 
-import java.util.List;
-
 public interface TaskSnippet {
 
     String TAG = "Task";
     String identifier = "{class_name}/{method_name}/";
 
-    HeaderDescriptor HEADER_DESCRIPTOR = headerWithName("Authorization").description("인증 토큰").optional();
+    CookieDescriptor[] TASK_TOKEN_COOKIE_DESCRIPTORS = {
+        cookieWithName("Access-Token").description("인증 토큰")
+    };
 
-    RequestHeadersSnippet TASK_AUTHORIZATION_HEADER = requestHeaders(
-        List.of(HEADER_DESCRIPTOR)
-    );
+    RequestCookiesSnippet TASK_ACCESS_TOKEN_COOKIE_SNIPPET = requestCookies(TASK_TOKEN_COOKIE_DESCRIPTORS);
+
 
     FieldDescriptor[] MONTHLY_TASK_CREATE_REQUEST_FIELDS = {
         fieldWithPath("date").description("날짜")

@@ -5,7 +5,6 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,7 +24,6 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_REQUEST;
 import static project.dailyge.app.test.user.fixture.UserFixture.createUser;
 
@@ -71,8 +69,9 @@ class LoginInterceptorUnitTest {
         final UserJpaEntity user = createUser(1L);
         final DailygeToken token = tokenProvider.createToken(user.getId(), user.getEmail());
 
-        when(request.getHeader(AUTHORIZATION))
-            .thenReturn(token.getAuthorizationToken());
+        final Cookie[] cookies = new Cookie[1];
+        cookies[0] = new Cookie("Access-Token", token.accessToken());
+        when(request.getCookies()).thenReturn(cookies);
         when(userCacheReadUseCase.existsById(user.getId()))
             .thenReturn(true);
 
@@ -87,13 +86,11 @@ class LoginInterceptorUnitTest {
         final DailygeToken token = tokenProvider.createToken(user.getId(), user.getEmail());
         final TokenProvider expiredTokenProvider = new TokenProvider(expiredJwtProperties, secretKeyManager);
         final DailygeToken expiredToken = expiredTokenProvider.createToken(user.getId(), user.getEmail());
-        final Cookie[] cookies = new Cookie[1];
+        final Cookie[] cookies = new Cookie[2];
         cookies[0] = new Cookie("Refresh-Token", token.refreshToken());
+        cookies[1] = new Cookie("Access-Token", expiredToken.accessToken());
 
-        when(request.getCookies())
-            .thenReturn(cookies);
-        when(request.getHeader(AUTHORIZATION))
-            .thenReturn(expiredToken.getAuthorizationToken());
+        when(request.getCookies()).thenReturn(cookies);
         when(userCacheReadUseCase.existsById(user.getId()))
             .thenReturn(true);
         when(userCacheReadUseCase.findById(user.getId()))
@@ -108,11 +105,10 @@ class LoginInterceptorUnitTest {
             .thenReturn(token.refreshToken());
 
         final boolean result = loginInterceptor.preHandle(request, response, null);
-        final JSONObject jsonObject = new JSONObject(response.getContentAsString());
-        final String newAccessToken = jsonObject.getString("Access-Token");
+        final Cookie accessTokencookie = response.getCookie("Access-Token");
 
         assertFalse(result);
-        assertNotEquals(expiredToken.accessToken(), newAccessToken);
+        assertNotEquals(cookies[1].getValue(), accessTokencookie.getValue());
     }
 
     @Test
@@ -121,13 +117,11 @@ class LoginInterceptorUnitTest {
         final TokenProvider expiredTokenProvider = new TokenProvider(expiredJwtProperties, secretKeyManager);
         final UserJpaEntity user = createUser(1L);
         final DailygeToken expiredToken = expiredTokenProvider.createToken(user.getId(), user.getEmail());
-        final Cookie[] cookies = new Cookie[1];
+        final Cookie[] cookies = new Cookie[2];
         cookies[0] = new Cookie("Refresh-Token", null);
+        cookies[1] = new Cookie("Access-Token", expiredToken.accessToken());
 
-        when(request.getCookies())
-            .thenReturn(cookies);
-        when(request.getHeader(AUTHORIZATION))
-            .thenReturn(expiredToken.getAuthorizationToken());
+        when(request.getCookies()).thenReturn(cookies);
 
         assertTrue(loginInterceptor.preHandle(request, response, null));
     }

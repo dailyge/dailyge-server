@@ -18,7 +18,7 @@ import static project.dailyge.app.test.task.documentationtest.snippet.TaskReadSn
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskReadSnippet.createTaskStatusesReadFilter;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.DATE_SEARCH_QUERY_PARAMETER_SNIPPET;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASKS_SEARCH_RESPONSE_SNIPPET;
-import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASK_AUTHORIZATION_HEADER;
+import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASK_ACCESS_TOKEN_COOKIE_SNIPPET;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASK_DATE_REQUEST_PARAMETER_SNIPPET;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASK_DETAIL_SEARCH_RESPONSE_SNIPPET;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASK_PATH_PARAMETER_SNIPPET;
@@ -61,13 +61,13 @@ class TaskReadDocumentationTest extends DatabaseTestBase {
 
         given(this.specification)
             .filter(document(IDENTIFIER,
-                TASK_AUTHORIZATION_HEADER,
+                TASK_ACCESS_TOKEN_COOKIE_SNIPPET,
                 TASK_PATH_PARAMETER_SNIPPET,
                 TASK_DATE_REQUEST_PARAMETER_SNIPPET,
                 TASK_DETAIL_SEARCH_RESPONSE_SNIPPET
             ))
             .contentType(APPLICATION_JSON_VALUE)
-            .header(AUTHORIZATION, getAuthorizationHeader())
+            .cookie(getAccessTokenCookie())
             .param("date", now.toString())
             .when()
             .get("/api/tasks/{taskId}", newTaskId)
@@ -86,7 +86,7 @@ class TaskReadDocumentationTest extends DatabaseTestBase {
         given(this.specification)
             .filter(filter)
             .contentType(APPLICATION_JSON_VALUE)
-            .header(AUTHORIZATION, getAuthorizationHeader())
+            .cookie(getAccessTokenCookie())
             .param("date", now.toString())
             .when()
             .get("/api/tasks/{taskId}", newTaskId)
@@ -106,7 +106,7 @@ class TaskReadDocumentationTest extends DatabaseTestBase {
         given(this.specification)
             .filter(filter)
             .contentType(APPLICATION_JSON_VALUE)
-            .header(AUTHORIZATION, getAuthorizationHeader())
+            .cookie(getAccessTokenCookie())
             .param("date", now.toString())
             .when()
             .get("/api/tasks/{taskId}", "abcd-1234")
@@ -126,7 +126,7 @@ class TaskReadDocumentationTest extends DatabaseTestBase {
         given(this.specification)
             .filter(filter)
             .contentType(APPLICATION_JSON_VALUE)
-            .header(AUTHORIZATION, getAuthorizationHeader())
+            .cookie(getAccessTokenCookie())
             .param("date", now.toString())
             .when()
             .get("/api/tasks/{taskId}", Long.MAX_VALUE)
@@ -143,7 +143,7 @@ class TaskReadDocumentationTest extends DatabaseTestBase {
         given(this.specification)
             .contentType(APPLICATION_JSON_VALUE)
             .param("date", now.toString())
-            .header(AUTHORIZATION, getAuthorizationHeader())
+            .cookie(getAccessTokenCookie())
             .when()
             .get("/api/monthly-tasks/id")
             .then()
@@ -162,14 +162,14 @@ class TaskReadDocumentationTest extends DatabaseTestBase {
 
         given(this.specification)
             .filter(document(IDENTIFIER,
-                TASK_AUTHORIZATION_HEADER,
+                TASK_ACCESS_TOKEN_COOKIE_SNIPPET,
                 DATE_SEARCH_QUERY_PARAMETER_SNIPPET,
                 TASKS_SEARCH_RESPONSE_SNIPPET
             ))
             .contentType(APPLICATION_JSON_VALUE)
             .param("startDate", startTime.toString())
             .param("endDate", endTime.toString())
-            .header(AUTHORIZATION, getAuthorizationHeader())
+            .cookie(getAccessTokenCookie())
             .when()
             .get("/api/tasks")
             .then()
@@ -194,7 +194,7 @@ class TaskReadDocumentationTest extends DatabaseTestBase {
             .contentType(APPLICATION_JSON_VALUE)
             .param("startDate", startTime.toString())
             .param("endDate", endTime.toString())
-            .header(AUTHORIZATION, getAuthorizationHeader())
+            .cookie(getAccessTokenCookie())
             .when()
             .get("/api/tasks")
             .then()
@@ -219,7 +219,7 @@ class TaskReadDocumentationTest extends DatabaseTestBase {
             .contentType(APPLICATION_JSON_VALUE)
             .param("startDate", endTime.toString())
             .param("endDate", startTime.toString())
-            .header(AUTHORIZATION, getAuthorizationHeader())
+            .cookie(getAccessTokenCookie())
             .when()
             .get("/api/tasks")
             .then()
@@ -236,11 +236,11 @@ class TaskReadDocumentationTest extends DatabaseTestBase {
     void whenReadTaskStatusResultShouldBe_200_OK_RestDocs() {
         given(this.specification)
             .filter(document(IDENTIFIER,
-                TASK_AUTHORIZATION_HEADER,
+                TASK_ACCESS_TOKEN_COOKIE_SNIPPET,
                 TASK_STATUS_READ_RESPONSE_FIELD_SNIPPET)
             )
             .contentType(APPLICATION_JSON_VALUE)
-            .header(AUTHORIZATION, getAuthorizationHeader())
+            .cookie(getAccessTokenCookie())
             .when()
             .get("/api/tasks/status")
             .then()
@@ -256,7 +256,7 @@ class TaskReadDocumentationTest extends DatabaseTestBase {
         given(this.specification)
             .filter(filter)
             .contentType(APPLICATION_JSON_VALUE)
-            .header(AUTHORIZATION, getAuthorizationHeader())
+            .cookie(getAccessTokenCookie())
             .when()
             .get("/api/tasks/status")
             .then()

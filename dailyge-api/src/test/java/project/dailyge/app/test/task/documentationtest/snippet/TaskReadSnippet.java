@@ -2,7 +2,7 @@ package project.dailyge.app.test.task.documentationtest.snippet;
 
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import static com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper.document;
-import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.cookies.CookieDocumentation.requestCookies;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
@@ -39,7 +39,6 @@ public final class TaskReadSnippet implements TaskSnippet {
         return document(
             identifier,
             ResourceSnippetParameters.builder()
-                .requestHeaders(HEADER_DESCRIPTOR)
                 .pathParameters(TASK_ID_PATH_PARAMETER_DESCRIPTORS)
                 .queryParameters(DATE_QUERY_PARAMETER_DESCRIPTORS)
                 .responseFields(TASK_DETAIL_SEARCH_RESPONSE_FIELD_DESCRIPTOR)
@@ -52,7 +51,7 @@ public final class TaskReadSnippet implements TaskSnippet {
             preprocessResponse(prettyPrint()),
             snippets -> {
                 List.of(
-                    requestHeaders(List.of(HEADER_DESCRIPTOR)),
+                    requestCookies(TASK_TOKEN_COOKIE_DESCRIPTORS),
                     pathParameters(TASK_ID_PATH_PARAMETER_DESCRIPTORS),
                     queryParameters(DATE_QUERY_PARAMETER_DESCRIPTORS),
                     responseFields(Arrays.stream(TASK_DETAIL_SEARCH_RESPONSE_FIELD_DESCRIPTOR).toList()),
@@ -69,7 +68,6 @@ public final class TaskReadSnippet implements TaskSnippet {
         return document(
             identifier,
             ResourceSnippetParameters.builder()
-                .requestHeaders(HEADER_DESCRIPTOR)
                 .pathParameters(DATE_QUERY_PARAMETER_DESCRIPTORS)
                 .responseFields(MONTHLY_TASK_ID_READ_RESPONSE_FIELD_DESCRIPTOR)
                 .tag(TAG)
@@ -81,7 +79,7 @@ public final class TaskReadSnippet implements TaskSnippet {
             preprocessResponse(prettyPrint()),
             snippets -> {
                 List.of(
-                    requestHeaders(List.of(HEADER_DESCRIPTOR)),
+                    requestCookies(TASK_TOKEN_COOKIE_DESCRIPTORS),
                     pathParameters(DATE_QUERY_PARAMETER_DESCRIPTORS),
                     responseFields(Arrays.stream(MONTHLY_TASK_ID_READ_RESPONSE_FIELD_DESCRIPTOR).toList()),
                     responseFields(Arrays.stream(ERROR_RESPONSE).toList())
@@ -97,7 +95,6 @@ public final class TaskReadSnippet implements TaskSnippet {
         return document(
             identifier,
             ResourceSnippetParameters.builder()
-                .requestHeaders(HEADER_DESCRIPTOR)
                 .pathParameters(TASKS_SEARCH_DATE_QUERY_PARAMETER_DESCRIPTORS)
                 .responseFields(MONTHLY_TASK_READ_RESPONSE_FIELD_DESCRIPTOR)
                 .tag(TAG)
@@ -109,7 +106,7 @@ public final class TaskReadSnippet implements TaskSnippet {
             preprocessResponse(prettyPrint()),
             snippets -> {
                 List.of(
-                    requestHeaders(List.of(HEADER_DESCRIPTOR)),
+                    requestCookies(TASK_TOKEN_COOKIE_DESCRIPTORS),
                     pathParameters(TASKS_SEARCH_DATE_QUERY_PARAMETER_DESCRIPTORS),
                     responseFields(Arrays.stream(MONTHLY_TASK_READ_RESPONSE_FIELD_DESCRIPTOR).toList()),
                     responseFields(Arrays.stream(ERROR_RESPONSE).toList())
@@ -125,7 +122,6 @@ public final class TaskReadSnippet implements TaskSnippet {
         return document(
             identifier,
             ResourceSnippetParameters.builder()
-                .requestHeaders(HEADER_DESCRIPTOR)
                 .responseFields(TASK_STATUS_LIST_READ_RESPONSE_FIELD_DESCRIPTOR)
                 .tag(TAG)
                 .summary(TASK_STATUS_LIST_SUMMARY)
@@ -136,7 +132,7 @@ public final class TaskReadSnippet implements TaskSnippet {
             preprocessResponse(prettyPrint()),
             snippets -> {
                 List.of(
-                    requestHeaders(List.of(HEADER_DESCRIPTOR)),
+                    requestCookies(TASK_TOKEN_COOKIE_DESCRIPTORS),
                     responseFields(Arrays.stream(TASK_STATUS_LIST_READ_RESPONSE_FIELD_DESCRIPTOR).toList())
                 );
             }

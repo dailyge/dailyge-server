@@ -5,8 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 import org.springframework.restdocs.restassured.RestDocumentationFilter;
 import static com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper.document;
+import static org.springframework.restdocs.cookies.CookieDocumentation.requestCookies;
 import static org.springframework.restdocs.cookies.CookieDocumentation.responseCookies;
-import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
@@ -28,7 +28,6 @@ public final class LogoutSnippet implements UserSnippet {
         return document(
             identifier,
             ResourceSnippetParameters.builder()
-                .requestHeaders(HEADER_DESCRIPTOR)
                 .tag(TAG)
                 .summary(LOGOUT_SUMMARY)
                 .privateResource(false)
@@ -38,7 +37,7 @@ public final class LogoutSnippet implements UserSnippet {
             preprocessResponse(prettyPrint()),
             snippets -> {
                 List.of(
-                    requestHeaders(HEADER_DESCRIPTOR),
+                    requestCookies(USER_ACCESS_TOKEN_COOKIE_DESCRIPTOR),
                     responseFields(Arrays.stream(RESPONSE_STATUS).toList()),
                     responseCookies(LOGOUT_RESPONSE_COOKIE_DESCRIPTOR)
                 );

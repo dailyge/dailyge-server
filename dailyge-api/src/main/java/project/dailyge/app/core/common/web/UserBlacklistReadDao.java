@@ -4,7 +4,7 @@ import io.lettuce.core.RedisException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
-import project.dailyge.app.common.exception.ExternalServerException;
+import project.dailyge.app.common.exception.CommonException;
 import project.dailyge.core.cache.user.UserBlacklistReadRepository;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_GATEWAY;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
@@ -20,9 +20,9 @@ public class UserBlacklistReadDao implements UserBlacklistReadRepository {
         try {
             return redisTemplate.hasKey(String.format("user:blacklist:%s", accessToken));
         } catch (RedisException ex) {
-            throw new ExternalServerException(ex.getMessage(), BAD_GATEWAY);
+            throw CommonException.from(ex.getMessage(), BAD_GATEWAY);
         } catch (Exception ex) {
-            throw new ExternalServerException(ex.getMessage(), INTERNAL_SERVER_ERROR);
+            throw CommonException.from(ex.getMessage(), INTERNAL_SERVER_ERROR);
         }
     }
 }

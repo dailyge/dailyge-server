@@ -12,7 +12,9 @@ CREATE TABLE IF NOT EXISTS tasks
     created_by       BIGINT                               NULL COMMENT '생성한 사람',
     last_modified_at DATETIME(6)                          NULL COMMENT '최종 수정일',
     last_modified_by BIGINT                               NULL COMMENT '최종 수정한 사람',
-    deleted          BIT                                  NOT NULL COMMENT '삭제 유무'
+    deleted          BIT                                  NOT NULL COMMENT '삭제 유무',
+    color            varchar(255)                         NULL,
+    monthly_task_id  BIGINT                               NULL
 ) engine 'InnoDB' COMMENT '할 일';
 
 CREATE TABLE IF NOT EXISTS user_sequence

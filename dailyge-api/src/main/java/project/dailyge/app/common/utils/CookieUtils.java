@@ -34,6 +34,21 @@ public class CookieUtils {
         return clearCookie.toString();
     }
 
+    public static Cookie createCookie(
+        final String name,
+        final String value,
+        final String path,
+        final int maxAge
+    ) {
+        final Cookie cookie = new Cookie(name, value);
+        cookie.setDomain(DOMAIN);
+        cookie.setPath(path);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true);
+        cookie.setMaxAge(maxAge);
+        return cookie;
+    }
+
     public static Cookie clearCookie(final String name) {
         final Cookie cookie = new Cookie(name, null);
         cookie.setDomain(DOMAIN);

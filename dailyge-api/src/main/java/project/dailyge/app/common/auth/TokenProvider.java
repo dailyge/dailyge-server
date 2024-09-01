@@ -102,16 +102,6 @@ public class TokenProvider {
         }
     }
 
-    public String getAccessToken(final String authorizationHeader) {
-        if (authorizationHeader == null) {
-            throw CommonException.from(INVALID_USER_TOKEN);
-        }
-        if (!authorizationHeader.startsWith(BEARER)) {
-            throw CommonException.from(INVALID_USER_TOKEN);
-        }
-        return authorizationHeader.substring(TOKEN_BEGIN_INDEX);
-    }
-
     public String encryptUserId(final Long userId) {
         try {
             final byte[] iv = new byte[IV_SIZE];

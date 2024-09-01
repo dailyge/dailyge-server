@@ -33,6 +33,7 @@ import static project.dailyge.entity.user.Role.NORMAL;
 import project.dailyge.entity.user.UserJpaEntity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs
@@ -70,6 +71,7 @@ public abstract class DatabaseTestBase {
     protected DailygeUser dailygeUser;
     protected final DailygeUser invalidUser = new DailygeUser(Long.MAX_VALUE, NORMAL);
     protected LocalDate now;
+    protected LocalDateTime nowTime;
 
     protected DatabaseTestBase() {
         this.objectMapper = initObjectMapper();

@@ -63,15 +63,6 @@ class TokenProviderUnitTest {
     }
 
     @Test
-    @DisplayName("authorizationHeader 가 존재하면, AccessToken 을 반환한다.")
-    void whenAuthorizationHeaderExistsThenResultShouldBeAccessToken() {
-        final String authorizationHeader = "Bearer " + ACCESS_TOKEN;
-        final String accessToken = tokenProvider.getAccessToken(authorizationHeader);
-
-        assertEquals(ACCESS_TOKEN, accessToken);
-    }
-
-    @Test
     @DisplayName("빈 토큰을 검증하면, UnAuthorizedException 가 발생한다.")
     void whenEmptyTokenThenUnAuthorizedExceptionShouldBeHappen() {
         assertThatThrownBy(() -> tokenProvider.getUserId(null))

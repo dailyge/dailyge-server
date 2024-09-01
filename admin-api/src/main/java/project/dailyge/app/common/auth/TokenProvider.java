@@ -99,16 +99,6 @@ public class TokenProvider {
         }
     }
 
-    public String getAccessToken(final String authorizationHeader) {
-        if (authorizationHeader == null) {
-            throw new UnAuthorizedException(INVALID_USER_TOKEN);
-        }
-        if (!authorizationHeader.startsWith("Bearer ")) {
-            throw new UnAuthorizedException(INVALID_USER_TOKEN);
-        }
-        return authorizationHeader.substring(7);
-    }
-
     public String encryptUserId(final Long userId) {
         try {
             final byte[] iv = new byte[IV_SIZE];

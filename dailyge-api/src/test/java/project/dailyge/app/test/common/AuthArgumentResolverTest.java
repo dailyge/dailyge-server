@@ -40,8 +40,8 @@ class AuthArgumentResolverTest {
             "secretKey",
             "payloadSecretKey",
             "salt",
-            1,
-            2
+            900,
+            1_209_600
         );
         final SecretKeyManager secretKeyManager = new SecretKeyManager(jwtProperties);
         tokenProvider = new TokenProvider(jwtProperties, secretKeyManager);

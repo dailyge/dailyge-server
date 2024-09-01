@@ -21,8 +21,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @DisplayName("[UnitTest] TokenProvider 단위 테스트")
 class TokenProviderUnitTest {
 
-    private static final int REFRESH_EXPIRED_TIME = 2;
-    private static final String ACCESS_TOKEN = "access_token";
+    private static final int ACCESS_TOKEN_EXPIRED_TIME = 900;
+    private static final int REFRESH_TOKEN_EXPIRED_TIME = 1_209_600;
 
     private TokenProvider tokenProvider;
 
@@ -32,8 +32,8 @@ class TokenProviderUnitTest {
             "secretKey",
             "payloadSecretKey",
             "salt",
-            1,
-            REFRESH_EXPIRED_TIME
+            ACCESS_TOKEN_EXPIRED_TIME,
+            REFRESH_TOKEN_EXPIRED_TIME
         );
         final SecretKeyManager secretKeyManager = new SecretKeyManager(jwtProperties);
         tokenProvider = new TokenProvider(jwtProperties, secretKeyManager);
@@ -49,9 +49,11 @@ class TokenProviderUnitTest {
             () -> assertNotNull(token),
             () -> assertDoesNotThrow(() -> tokenProvider.getUserId(token.accessToken())),
             () -> assertDoesNotThrow(() -> tokenProvider.getUserId(token.refreshToken())),
-            () -> assertEquals(REFRESH_EXPIRED_TIME * 3600, token.maxAge())
+            () -> assertEquals(ACCESS_TOKEN_EXPIRED_TIME, token.accessTokenMaxAge()),
+            () -> assertEquals(REFRESH_TOKEN_EXPIRED_TIME, token.refreshTokenMaxAge())
         );
     }
+
 
     @Test
     @DisplayName("사용자 토큰이 올바르다면, 사용자 ID를 얻는다.")

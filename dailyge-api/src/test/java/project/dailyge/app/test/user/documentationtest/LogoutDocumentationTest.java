@@ -1,19 +1,21 @@
 package project.dailyge.app.test.user.documentationtest;
 
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.containsString;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.document;
 import org.springframework.restdocs.restassured.RestDocumentationFilter;
 import project.dailyge.app.common.DatabaseTestBase;
+import static io.restassured.RestAssured.given;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.document;
 import static project.dailyge.app.test.user.documentationtest.snippet.LogoutSnippet.createLogoutFilter;
 import static project.dailyge.app.test.user.documentationtest.snippet.UserSnippet.LOGOUT_RESPONSE_COOKIE_SNIPPET;
 import static project.dailyge.app.test.user.documentationtest.snippet.UserSnippet.createIdentifier;
 
 @DisplayName("[DocumentationTest] 로그아웃 API 문서화 테스트")
 class LogoutDocumentationTest extends DatabaseTestBase {
+
+    private static final String ACCESS_TOKEN = "Access-Token";
+    private static final String REFRESH_TOKEN = "Refresh-Token";
 
     @Test
     @DisplayName("[RestDocs] 로그아웃을 하면, 200 OK 응답을 받는다.")
@@ -22,15 +24,13 @@ class LogoutDocumentationTest extends DatabaseTestBase {
             .filter(document(IDENTIFIER,
                 LOGOUT_RESPONSE_COOKIE_SNIPPET
             ))
-            .header(AUTHORIZATION, getAuthorizationHeader())
+            .cookie(getAccessTokenCookie())
             .contentType(APPLICATION_JSON_VALUE)
             .when()
             .post("/api/logout")
             .then()
-            .header(
-                "Set-Cookie",
-                containsString("Refresh-Token=; Path=/; Domain=.dailyge.com; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT")
-            )
+            .cookie(ACCESS_TOKEN)
+            .cookie(REFRESH_TOKEN)
             .statusCode(200)
             .log()
             .all();
@@ -43,15 +43,13 @@ class LogoutDocumentationTest extends DatabaseTestBase {
 
         given(this.specification)
             .filter(filter)
-            .header(AUTHORIZATION, getAuthorizationHeader())
+            .cookie(getAccessTokenCookie())
             .contentType(APPLICATION_JSON_VALUE)
             .when()
             .post("/api/logout")
             .then()
-            .header(
-                "Set-Cookie",
-                containsString("Refresh-Token=; Path=/; Domain=.dailyge.com; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT")
-            )
+            .cookie(ACCESS_TOKEN)
+            .cookie(REFRESH_TOKEN)
             .statusCode(200)
             .log()
             .all();
@@ -64,7 +62,7 @@ class LogoutDocumentationTest extends DatabaseTestBase {
 
         given(this.specification)
             .filter(filter)
-            .header(AUTHORIZATION, "ABCD")
+            .cookie("Access-Token", "ABCD")
             .contentType(APPLICATION_JSON_VALUE)
             .when()
             .post("/api/logout")

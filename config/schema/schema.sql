@@ -31,6 +31,8 @@ CREATE TABLE IF NOT EXISTS tasks
     `year`           INT                                  NOT NULL COMMENT '년',
     `date`           DATE                                 NOT NULL COMMENT '날짜',
     status           ENUM ('TODO', 'IN_PROGRESS', 'DONE') NOT NULL COMMENT '할 일 상태',
+    color            varchar(255)                         NOT NULL COMMENT '할 일 색상',
+    monthly_task_id  BIGINT                               NOT NULL COMMENT '월간 일정',
     created_at       DATETIME(6)                          NOT NULL COMMENT '생성일',
     created_by       BIGINT                               NULL COMMENT '생성한 사람',
     last_modified_at DATETIME(6)                          NULL COMMENT '최종 수정일',
@@ -101,8 +103,8 @@ CREATE TABLE IF NOT EXISTS free_coupons
     deleted          BIT                               NOT NULL DEFAULT 0 COMMENT '삭제 여부'
 ) ENGINE = InnoDB COMMENT '무료 쿠폰';
 
-DROP TABLE IF EXISTS monthly_gols;
-CREATE TABLE IF NOT EXISTS monthly_gols
+DROP TABLE IF EXISTS monthly_goals;
+CREATE TABLE IF NOT EXISTS monthly_goals
 (
     id               BIGINT AUTO_INCREMENT PRIMARY KEY NOT NULL COMMENT '월간 목표 ID',
     title            VARCHAR(50)                       NOT NULL COMMENT '제목',

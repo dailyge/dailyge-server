@@ -26,7 +26,6 @@ import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_US
 
 @DisplayName("[UnitTest] AuthArgumentResolver 검증 단위 테스트")
 class AuthArgumentResolverTest {
-    private static final String DETAIL_MESSAGE = "detailMessage";
 
     private TokenProvider tokenProvider;
     private AuthArgumentResolver resolver;

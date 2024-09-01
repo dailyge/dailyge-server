@@ -6,8 +6,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockHttpServletResponse;
-import project.dailyge.app.common.auth.JwtProperties;
-import project.dailyge.app.common.auth.SecretKeyManager;
 import project.dailyge.app.core.common.web.BlacklistInterceptor;
 import project.dailyge.app.core.common.web.UserBlacklistReadService;
 import project.dailyge.core.cache.user.UserBlacklistReadRepository;
@@ -27,14 +25,11 @@ class BlacklistInterceptorUnitTest {
     private BlacklistInterceptor blacklistInterceptor;
     private UserBlacklistReadRepository userBlacklistReadRepository;
     private UserBlacklistReadUseCase userBlacklistReadUseCase;
-    private SecretKeyManager secretKeyManager;
     private HttpServletRequest request;
     private MockHttpServletResponse response;
 
     @BeforeEach
     void setUp() {
-        final JwtProperties jwtProperties = new JwtProperties("secretKey", "payloadSecretKey", "salt", 1, 2);
-        secretKeyManager = new SecretKeyManager(jwtProperties);
         userBlacklistReadRepository = mock(UserBlacklistReadRepository.class);
         userBlacklistReadUseCase = new UserBlacklistReadService(userBlacklistReadRepository);
         blacklistInterceptor = new BlacklistInterceptor(userBlacklistReadUseCase);

@@ -91,7 +91,7 @@ class UserBlacklistCreateDocumentation extends DatabaseTestBase {
         given(this.specification)
             .filter(filter)
             .contentType(APPLICATION_JSON_VALUE)
-            .header(AUTHORIZATION, getAccessTokenCookie())
+            .cookie(AUTHORIZATION, getAccessTokenCookie())
             .body(objectMapper.writeValueAsString(request))
             .when()
             .post("/api/user/blacklist/{userId}", Long.MAX_VALUE)

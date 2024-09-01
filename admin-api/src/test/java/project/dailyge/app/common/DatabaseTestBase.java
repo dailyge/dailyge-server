@@ -104,4 +104,18 @@ public abstract class DatabaseTestBase {
         dailygeUser = new DailygeUser(user.getId(), user.getRole());
         return user;
     }
+
+    protected UserJpaEntity persist(final UserJpaEntity user) {
+        newUser = user;
+        final UserCache userCache = new UserCache(
+            user.getId(),
+            user.getNickname(),
+            user.getEmail(),
+            user.getProfileImageUrl(),
+            user.getRoleAsString()
+        );
+        userCacheWriteUseCase.save(userCache);
+        dailygeUser = new DailygeUser(user.getId(), user.getRole());
+        return user;
+    }
 }

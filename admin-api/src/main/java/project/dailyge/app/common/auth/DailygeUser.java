@@ -1,11 +1,9 @@
 package project.dailyge.app.common.auth;
 
+import java.util.Objects;
 import lombok.Getter;
 import project.dailyge.entity.user.Role;
 import static project.dailyge.entity.user.Role.ADMIN;
-import project.dailyge.entity.user.UserJpaEntity;
-
-import java.util.Objects;
 
 @Getter
 public class DailygeUser {
@@ -19,6 +17,10 @@ public class DailygeUser {
     ) {
         this.userId = userId;
         this.role = role;
+    }
+
+    public boolean isAdmin() {
+        return ADMIN.equals(this.role);
     }
 
     @Override

@@ -12,12 +12,13 @@ import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.common.auth.LoginUser;
 import project.dailyge.app.common.auth.TokenProvider;
 import project.dailyge.app.common.exception.CommonException;
+import project.dailyge.app.core.common.web.Cookies;
 import project.dailyge.core.cache.user.UserCache;
 import project.dailyge.core.cache.user.UserCacheReadUseCase;
 import project.dailyge.entity.user.Role;
-
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
-import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.*;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_USER_ID;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_USER_TOKEN;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
 
 @RequiredArgsConstructor
 public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
@@ -38,9 +39,9 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
         final WebDataBinderFactory binderFactory
     ) {
         final HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
-        final String authorizationHeader = request.getHeader(AUTHORIZATION);
-        final String accessToken = tokenProvider.getAccessToken(authorizationHeader);
         try {
+            final Cookies cookies = new Cookies(request.getCookies());
+            final String accessToken = cookies.getValueByKey("Access-Token");
             final Long userId = tokenProvider.getUserId(accessToken);
             if (userId == null) {
                 throw CommonException.from(INVALID_USER_ID);

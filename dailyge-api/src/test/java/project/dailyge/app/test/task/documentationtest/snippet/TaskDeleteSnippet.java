@@ -2,7 +2,7 @@ package project.dailyge.app.test.task.documentationtest.snippet;
 
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import static com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper.document;
-import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.cookies.CookieDocumentation.requestCookies;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
@@ -26,7 +26,6 @@ public final class TaskDeleteSnippet implements TaskSnippet {
         return document(
             identifier,
             ResourceSnippetParameters.builder()
-                .requestHeaders(HEADER_DESCRIPTOR)
                 .pathParameters(TASK_ID_PATH_PARAMETER_DESCRIPTORS)
                 .tag(TAG)
                 .summary(TASK_DELETE_SUMMARY)
@@ -37,7 +36,7 @@ public final class TaskDeleteSnippet implements TaskSnippet {
             preprocessResponse(prettyPrint()),
             snippets -> {
                 List.of(
-                    requestHeaders(List.of(HEADER_DESCRIPTOR)),
+                    requestCookies(TASK_TOKEN_COOKIE_DESCRIPTORS),
                     pathParameters(Arrays.stream(TASK_ID_PATH_PARAMETER_DESCRIPTORS).toList()),
                     responseFields(Arrays.stream(ERROR_RESPONSE).toList())
                 );

@@ -1,37 +1,36 @@
 package project.dailyge.app.test.monthlygoal.documentationtest.snippet;
 
-import static javax.xml.xpath.XPathEvaluationResult.XPathResultType.NUMBER;
-import static javax.xml.xpath.XPathEvaluationResult.XPathResultType.STRING;
-import org.springframework.restdocs.headers.HeaderDescriptor;
-import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
-import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
-import org.springframework.restdocs.headers.RequestHeadersSnippet;
+import org.springframework.restdocs.cookies.CookieDescriptor;
+import org.springframework.restdocs.cookies.RequestCookiesSnippet;
 import org.springframework.restdocs.payload.FieldDescriptor;
-import static org.springframework.restdocs.payload.JsonFieldType.NULL;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.restdocs.request.ParameterDescriptor;
 import org.springframework.restdocs.request.PathParametersSnippet;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
-import static project.dailyge.app.common.SnippetUtils.getAttribute;
 import project.dailyge.app.core.monthlygoal.presentation.request.MonthlyGoalCreateRequest;
 import project.dailyge.app.core.monthlygoal.presentation.request.MonthlyGoalStatusUpdateRequest;
 import project.dailyge.app.core.monthlygoal.presentation.request.MonthlyGoalUpdateRequest;
-
-import java.util.List;
+import static javax.xml.xpath.XPathEvaluationResult.XPathResultType.NUMBER;
+import static javax.xml.xpath.XPathEvaluationResult.XPathResultType.STRING;
+import static org.springframework.restdocs.cookies.CookieDocumentation.cookieWithName;
+import static org.springframework.restdocs.cookies.CookieDocumentation.requestCookies;
+import static org.springframework.restdocs.payload.JsonFieldType.NULL;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static project.dailyge.app.common.SnippetUtils.getAttribute;
 
 public interface MonthlyGoalSnippet {
     String tag = "MonthlyGoal";
     String identifier = "{class_name}/{method_name}/";
 
-    HeaderDescriptor HEADER_DESCRIPTOR = headerWithName("Authorization").description("인증 토큰").optional();
-    RequestHeadersSnippet MONTHLY_GOAL_AUTHORIZATION_HEADER = requestHeaders(
-        List.of(HEADER_DESCRIPTOR)
-    );
+    CookieDescriptor[] MONTHLY_GOAL_TOKEN_COOKIE_DESCRIPTORS = {
+        cookieWithName("Access-Token").description("인증 토큰")
+    };
+
+    RequestCookiesSnippet MONTHLY_GOAL_ACCESS_TOKEN_COOKIE_SNIPPET = requestCookies(MONTHLY_GOAL_TOKEN_COOKIE_DESCRIPTORS);
 
     FieldDescriptor[] MONTHLY_GOAL_CREATE_REQUEST_FIELDS_DESCRIPTORS = {
         fieldWithPath("title").description("제목")

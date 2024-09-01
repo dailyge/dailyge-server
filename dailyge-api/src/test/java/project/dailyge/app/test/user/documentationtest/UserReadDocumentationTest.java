@@ -4,12 +4,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.restdocs.restassured.RestDocumentationFilter;
 import project.dailyge.app.common.DatabaseTestBase;
-
 import static io.restassured.RestAssured.given;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.document;
 import static project.dailyge.app.test.user.documentationtest.snippet.UserReadSnippet.createUserSearchFilter;
-import static project.dailyge.app.test.user.documentationtest.snippet.UserSnippet.USER_AUTHORIZATION_HEADER;
+import static project.dailyge.app.test.user.documentationtest.snippet.UserSnippet.USER_ACCESS_TOKEN_COOKIE_SNIPPET;
 import static project.dailyge.app.test.user.documentationtest.snippet.UserSnippet.USER_SEARCH_PATH_PARAMETER_SNIPPET;
 import static project.dailyge.app.test.user.documentationtest.snippet.UserSnippet.USER_SEARCH_RESPONSE_SNIPPET;
 import static project.dailyge.app.test.user.documentationtest.snippet.UserSnippet.createIdentifier;
@@ -22,12 +21,12 @@ class UserReadDocumentationTest extends DatabaseTestBase {
     void whenFindUserThenStatusCodeShouldBe_200_OK_RestDocs() {
         given(this.specification)
             .filter(document(IDENTIFIER,
-                USER_AUTHORIZATION_HEADER,
+                USER_ACCESS_TOKEN_COOKIE_SNIPPET,
                 USER_SEARCH_PATH_PARAMETER_SNIPPET,
                 USER_SEARCH_RESPONSE_SNIPPET
             ))
             .contentType(APPLICATION_JSON_VALUE)
-            .header(AUTHORIZATION, getAuthorizationHeader())
+            .cookie(getAccessTokenCookie())
             .when()
             .get("/api/users/{userId}", newUser.getId())
             .then()
@@ -44,7 +43,7 @@ class UserReadDocumentationTest extends DatabaseTestBase {
         given(this.specification)
             .filter(filter)
             .contentType(APPLICATION_JSON_VALUE)
-            .header(AUTHORIZATION, getAuthorizationHeader())
+            .cookie(getAccessTokenCookie())
             .when()
             .get("/api/users/{userId}", newUser.getId())
             .then()
@@ -61,7 +60,7 @@ class UserReadDocumentationTest extends DatabaseTestBase {
         given(this.specification)
             .filter(filter)
             .contentType(APPLICATION_JSON_VALUE)
-            .header(AUTHORIZATION, getAuthorizationHeader())
+            .cookie(getAccessTokenCookie())
             .when()
             .get("/api/users/{userId}", Long.MAX_VALUE)
             .then()
@@ -78,7 +77,7 @@ class UserReadDocumentationTest extends DatabaseTestBase {
         given(this.specification)
             .filter(filter)
             .contentType(APPLICATION_JSON_VALUE)
-            .header(AUTHORIZATION, "ABCD")
+            .cookie("Access-Token", "ABCD")
             .when()
             .get("/api/users/{userId}", Long.MAX_VALUE)
             .then()

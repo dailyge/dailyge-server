@@ -1,7 +1,7 @@
 package project.dailyge.app.test.user.documentationtest.snippet;
 
-import org.springframework.restdocs.headers.HeaderDescriptor;
-import org.springframework.restdocs.headers.RequestHeadersSnippet;
+import org.springframework.restdocs.cookies.CookieDescriptor;
+import org.springframework.restdocs.cookies.RequestCookiesSnippet;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
@@ -10,8 +10,8 @@ import org.springframework.restdocs.request.PathParametersSnippet;
 import project.dailyge.app.user.presentation.request.UserBlacklistCreateRequest;
 import static javax.xml.xpath.XPathEvaluationResult.XPathResultType.NUMBER;
 import static javax.xml.xpath.XPathEvaluationResult.XPathResultType.STRING;
-import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
-import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.cookies.CookieDocumentation.cookieWithName;
+import static org.springframework.restdocs.cookies.CookieDocumentation.requestCookies;
 import static org.springframework.restdocs.payload.JsonFieldType.NULL;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
@@ -24,14 +24,14 @@ public interface UserSnippet {
 
     String TAG = "user";
 
-    HeaderDescriptor HEADER_DESCRIPTOR = headerWithName("Authorization").description("인증 토큰").optional();
+    CookieDescriptor[] USER_BLACKLIST_ACCESS_TOKEN_COOKIE_DESCRIPTOR = {
+        cookieWithName("Access-Token").description("사용자 토큰 쿠키")
+    };
 
-    RequestHeadersSnippet USER_AUTHORIZATION_HEADER = requestHeaders(
-        headerWithName("Authorization").description("인증 토큰").optional()
-    );
+    RequestCookiesSnippet USER_BLACKLIST_ACCESS_TOKEN_COOKIE_SNIPPET = requestCookies(USER_BLACKLIST_ACCESS_TOKEN_COOKIE_DESCRIPTOR);
 
     FieldDescriptor[] USER_BLACKLIST_CREATE_REQUEST_FIELDS_DESCRIPTORS = {
-        fieldWithPath("accessToken").description("엑세스 토큰").attributes(getAttribute(UserBlacklistCreateRequest.class, "accessToken")),
+        fieldWithPath("accessToken").description("인증 토큰").attributes(getAttribute(UserBlacklistCreateRequest.class, "accessToken")),
     };
 
     ParameterDescriptor[] USER_BLACKLIST_CREATE_PATH_DESCRIPTOR = {

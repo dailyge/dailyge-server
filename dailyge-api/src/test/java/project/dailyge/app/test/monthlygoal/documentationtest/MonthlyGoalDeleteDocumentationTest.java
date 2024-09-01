@@ -13,7 +13,7 @@ import project.dailyge.app.core.monthlygoal.application.MonthlyGoalWriteUseCase;
 import project.dailyge.app.core.monthlygoal.application.command.MonthlyGoalCreateCommand;
 import static project.dailyge.app.test.monthlygoal.documentationtest.snippet.MonthlyGoalDeleteSnippet.deleteMonthlyGoalErrorFilter;
 import static project.dailyge.app.test.monthlygoal.documentationtest.snippet.MonthlyGoalDeleteSnippet.deleteMonthlyGoalFilter;
-import static project.dailyge.app.test.monthlygoal.documentationtest.snippet.MonthlyGoalSnippet.MONTHLY_GOAL_AUTHORIZATION_HEADER;
+import static project.dailyge.app.test.monthlygoal.documentationtest.snippet.MonthlyGoalSnippet.MONTHLY_GOAL_ACCESS_TOKEN_COOKIE_SNIPPET;
 import static project.dailyge.app.test.monthlygoal.documentationtest.snippet.MonthlyGoalSnippet.MONTHLY_GOAL_PATH_PARAMETER_SNIPPET;
 import static project.dailyge.app.test.monthlygoal.documentationtest.snippet.MonthlyGoalSnippet.createIdentifier;
 
@@ -38,12 +38,12 @@ class MonthlyGoalDeleteDocumentationTest extends DatabaseTestBase {
 
         given(this.specification)
             .filter(document(IDENTIFIER,
-                MONTHLY_GOAL_AUTHORIZATION_HEADER,
+                MONTHLY_GOAL_ACCESS_TOKEN_COOKIE_SNIPPET,
                 MONTHLY_GOAL_PATH_PARAMETER_SNIPPET
             ))
             .relaxedHTTPSValidation()
             .contentType(APPLICATION_JSON_VALUE)
-            .header(AUTHORIZATION, getAuthorizationHeader())
+            .cookie(getAccessTokenCookie())
             .delete("/api/monthly-goals/{monthlyGoalId}", monthlyGoalId)
             .then()
             .statusCode(204)
@@ -62,7 +62,7 @@ class MonthlyGoalDeleteDocumentationTest extends DatabaseTestBase {
             .filter(filter)
             .relaxedHTTPSValidation()
             .contentType(APPLICATION_JSON_VALUE)
-            .header(AUTHORIZATION, getAuthorizationHeader())
+            .cookie(getAccessTokenCookie())
             .delete("/api/monthly-goals/{monthlyGoalId}", monthlyGoalId)
             .then()
             .statusCode(204)
@@ -79,7 +79,7 @@ class MonthlyGoalDeleteDocumentationTest extends DatabaseTestBase {
             .filter(filter)
             .relaxedHTTPSValidation()
             .contentType(APPLICATION_JSON_VALUE)
-            .header(AUTHORIZATION, getAuthorizationHeader())
+            .cookie(getAccessTokenCookie())
             .delete("/api/monthly-goals/{monthlyGoalId}", "invalid")
             .then()
             .statusCode(400)
@@ -96,7 +96,7 @@ class MonthlyGoalDeleteDocumentationTest extends DatabaseTestBase {
             .filter(filter)
             .relaxedHTTPSValidation()
             .contentType(APPLICATION_JSON_VALUE)
-            .header(AUTHORIZATION, getAuthorizationHeader())
+            .cookie(getAccessTokenCookie())
             .delete("/api/monthly-goals/{monthlyGoalId}", 300)
             .then()
             .statusCode(404)

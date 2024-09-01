@@ -14,7 +14,7 @@ import project.dailyge.app.core.task.application.TaskWriteUseCase;
 import project.dailyge.app.core.task.facade.TaskFacade;
 import project.dailyge.app.core.task.presentation.requesst.TaskCreateRequest;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskDeleteSnippet.createTaskDeleteFilter;
-import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASK_AUTHORIZATION_HEADER;
+import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASK_ACCESS_TOKEN_COOKIE_SNIPPET;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASK_PATH_PARAMETER_SNIPPET;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.createIdentifier;
 import static project.dailyge.entity.task.TaskColor.BLUE;
@@ -50,11 +50,11 @@ class TaskDeleteDocumentationTest extends DatabaseTestBase {
         given(this.specification)
             .relaxedHTTPSValidation()
             .filter(document(IDENTIFIER,
-                TASK_AUTHORIZATION_HEADER,
+                TASK_ACCESS_TOKEN_COOKIE_SNIPPET,
                 TASK_PATH_PARAMETER_SNIPPET
             ))
             .contentType(APPLICATION_JSON_VALUE)
-            .header(AUTHORIZATION, getAuthorizationHeader())
+            .cookie(getAccessTokenCookie())
             .header(USER_ID_KEY, newUser.getId())
             .when()
             .delete("/api/tasks/{taskId}", newTaskId)
@@ -79,7 +79,7 @@ class TaskDeleteDocumentationTest extends DatabaseTestBase {
             .relaxedHTTPSValidation()
             .filter(filter)
             .contentType(APPLICATION_JSON_VALUE)
-            .header(AUTHORIZATION, getAuthorizationHeader())
+            .cookie(getAccessTokenCookie())
             .header(USER_ID_KEY, newUser.getId())
             .when()
             .delete("/api/tasks/{taskId}", newTaskId)

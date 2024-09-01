@@ -13,7 +13,7 @@ import project.dailyge.app.core.task.application.TaskReadUseCase;
 import project.dailyge.app.core.task.facade.TaskFacade;
 import project.dailyge.app.core.task.presentation.requesst.TaskCreateRequest;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskCreateSnippet.createTasksFilter;
-import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASK_AUTHORIZATION_HEADER;
+import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASK_ACCESS_TOKEN_COOKIE_SNIPPET;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASK_CREATE_REQUEST_SNIPPET;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASK_CREATE_RESPONSE_SNIPPET;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.createIdentifier;
@@ -44,12 +44,12 @@ class TaskCreateDocumentationTest extends DatabaseTestBase {
         given(this.specification)
             .relaxedHTTPSValidation()
             .filter(document(IDENTIFIER,
-                TASK_AUTHORIZATION_HEADER,
+                TASK_ACCESS_TOKEN_COOKIE_SNIPPET,
                 TASK_CREATE_REQUEST_SNIPPET,
                 TASK_CREATE_RESPONSE_SNIPPET
             ))
             .contentType(APPLICATION_JSON_VALUE)
-            .header(AUTHORIZATION, getAuthorizationHeader())
+            .cookie(getAccessTokenCookie())
             .body(objectMapper.writeValueAsString(request))
             .when()
             .post("/api/tasks")
@@ -67,7 +67,7 @@ class TaskCreateDocumentationTest extends DatabaseTestBase {
             .relaxedHTTPSValidation()
             .filter(filter)
             .contentType(APPLICATION_JSON_VALUE)
-            .header(AUTHORIZATION, getAuthorizationHeader())
+            .cookie(getAccessTokenCookie())
             .body(objectMapper.writeValueAsString(request))
             .when()
             .post("/api/tasks")
@@ -85,7 +85,7 @@ class TaskCreateDocumentationTest extends DatabaseTestBase {
             .relaxedHTTPSValidation()
             .filter(filter)
             .contentType(APPLICATION_JSON_VALUE)
-            .header(AUTHORIZATION, getAuthorizationHeader())
+            .cookie(getAccessTokenCookie())
             .body(objectMapper.writeValueAsString(request))
             .when()
             .post("/api/tasks")

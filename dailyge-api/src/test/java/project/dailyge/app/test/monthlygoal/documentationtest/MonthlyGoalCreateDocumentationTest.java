@@ -12,7 +12,7 @@ import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.core.monthlygoal.presentation.request.MonthlyGoalCreateRequest;
 import static project.dailyge.app.test.monthlygoal.documentationtest.snippet.MonthlyGoalCreateSnippet.createMonthlyGoalErrorFilter;
 import static project.dailyge.app.test.monthlygoal.documentationtest.snippet.MonthlyGoalCreateSnippet.createMonthlyGoalFilter;
-import static project.dailyge.app.test.monthlygoal.documentationtest.snippet.MonthlyGoalSnippet.MONTHLY_GOAL_AUTHORIZATION_HEADER;
+import static project.dailyge.app.test.monthlygoal.documentationtest.snippet.MonthlyGoalSnippet.MONTHLY_GOAL_ACCESS_TOKEN_COOKIE_SNIPPET;
 import static project.dailyge.app.test.monthlygoal.documentationtest.snippet.MonthlyGoalSnippet.MONTHLY_GOAL_CREATE_REQUEST_SNIPPET;
 import static project.dailyge.app.test.monthlygoal.documentationtest.snippet.MonthlyGoalSnippet.MONTHLY_GOAL_CREATE_RESPONSE_SNIPPET;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.createIdentifier;
@@ -35,14 +35,14 @@ class MonthlyGoalCreateDocumentationTest extends DatabaseTestBase {
     void whenCreateMonthlyGoalThenStatusCodeShouldBe201_RestDocs() throws JsonProcessingException {
         given(this.specification)
             .filter(document(IDENTIFIER,
-                MONTHLY_GOAL_AUTHORIZATION_HEADER,
+                MONTHLY_GOAL_ACCESS_TOKEN_COOKIE_SNIPPET,
                 MONTHLY_GOAL_CREATE_REQUEST_SNIPPET,
                 MONTHLY_GOAL_CREATE_RESPONSE_SNIPPET
             ))
             .relaxedHTTPSValidation()
             .body(objectMapper.writeValueAsString(request))
             .contentType(APPLICATION_JSON_VALUE)
-            .header(AUTHORIZATION, getAuthorizationHeader())
+            .cookie(getAccessTokenCookie())
             .post("/api/monthly-goals")
             .then()
             .statusCode(201)
@@ -59,7 +59,7 @@ class MonthlyGoalCreateDocumentationTest extends DatabaseTestBase {
             .relaxedHTTPSValidation()
             .body(objectMapper.writeValueAsString(request))
             .contentType(APPLICATION_JSON_VALUE)
-            .header(AUTHORIZATION, getAuthorizationHeader())
+            .cookie(getAccessTokenCookie())
             .post("/api/monthly-goals")
             .then()
             .statusCode(201)
@@ -77,7 +77,7 @@ class MonthlyGoalCreateDocumentationTest extends DatabaseTestBase {
             .relaxedHTTPSValidation()
             .body(objectMapper.writeValueAsString(invalidRequest))
             .contentType(APPLICATION_JSON_VALUE)
-            .header(AUTHORIZATION, getAuthorizationHeader())
+            .cookie(getAccessTokenCookie())
             .post("/api/monthly-goals")
             .then()
             .statusCode(400)

@@ -43,12 +43,12 @@ public class TokenProvider {
     ) {
         final String accessToken = generateToken(userId, userEmail, getExpiry(jwtProperties.getAccessExpiredTime()));
         final String refreshToken = generateToken(userId, userEmail, getExpiry(jwtProperties.getRefreshExpiredTime()));
-        return new DailygeToken(accessToken, refreshToken, jwtProperties.getRefreshExpiredTime() * 3600);
+        return new DailygeToken(accessToken, refreshToken, jwtProperties.getAccessExpiredTime(), jwtProperties.getRefreshExpiredTime());
     }
 
     private Date getExpiry(final int expiredTime) {
         final Date now = new Date();
-        return new Date(now.getTime() + Duration.ofHours(expiredTime).toMillis());
+        return new Date(now.getTime() + Duration.ofSeconds(expiredTime).toMillis());
     }
 
     private String generateToken(
@@ -97,16 +97,6 @@ public class TokenProvider {
         ) {
             throw new UnAuthorizedException(ex.getMessage(), INVALID_USER_TOKEN);
         }
-    }
-
-    public String getAccessToken(final String authorizationHeader) {
-        if (authorizationHeader == null) {
-            throw new UnAuthorizedException(INVALID_USER_TOKEN);
-        }
-        if (!authorizationHeader.startsWith("Bearer ")) {
-            throw new UnAuthorizedException(INVALID_USER_TOKEN);
-        }
-        return authorizationHeader.substring(7);
     }
 
     public String encryptUserId(final Long userId) {

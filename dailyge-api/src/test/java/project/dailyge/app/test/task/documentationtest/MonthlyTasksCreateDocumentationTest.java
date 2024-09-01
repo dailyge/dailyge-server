@@ -16,7 +16,7 @@ import static project.dailyge.app.test.task.documentationtest.snippet.TaskCreate
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskCreateSnippet.createMonthlyTasksFilter;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.MONTHLY_TASK_CREATE_REQUEST_SNIPPET;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.MONTHLY_TASK_CREATE_RESPONSE_SNIPPET;
-import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASK_AUTHORIZATION_HEADER;
+import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASK_ACCESS_TOKEN_COOKIE_SNIPPET;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.createIdentifier;
 
 import java.time.LocalDate;
@@ -36,12 +36,12 @@ class MonthlyTasksCreateDocumentationTest extends DatabaseTestBase {
         given(this.specification)
             .relaxedHTTPSValidation()
             .filter(document(IDENTIFIER,
-                TASK_AUTHORIZATION_HEADER,
+                TASK_ACCESS_TOKEN_COOKIE_SNIPPET,
                 MONTHLY_TASK_CREATE_REQUEST_SNIPPET,
                 MONTHLY_TASK_CREATE_RESPONSE_SNIPPET
             ))
             .contentType(APPLICATION_JSON_VALUE)
-            .header(AUTHORIZATION, getAuthorizationHeader())
+            .cookie(getAccessTokenCookie())
             .body(objectMapper.writeValueAsString(request))
             .when()
             .post("/api/monthly-tasks")
@@ -62,7 +62,7 @@ class MonthlyTasksCreateDocumentationTest extends DatabaseTestBase {
             .relaxedHTTPSValidation()
             .filter(filter)
             .contentType(APPLICATION_JSON_VALUE)
-            .header(AUTHORIZATION, getAuthorizationHeader())
+            .cookie(getAccessTokenCookie())
             .body(objectMapper.writeValueAsString(request))
             .when()
             .post("/api/monthly-tasks")
@@ -80,7 +80,7 @@ class MonthlyTasksCreateDocumentationTest extends DatabaseTestBase {
             .relaxedHTTPSValidation()
             .filter(filter)
             .contentType(APPLICATION_JSON_VALUE)
-            .header(AUTHORIZATION, getAuthorizationHeader())
+            .cookie(getAccessTokenCookie())
             .body(objectMapper.writeValueAsString(request))
             .when()
             .post("/api/monthly-tasks")
@@ -101,7 +101,7 @@ class MonthlyTasksCreateDocumentationTest extends DatabaseTestBase {
             .relaxedHTTPSValidation()
             .filter(filter)
             .contentType(APPLICATION_JSON_VALUE)
-            .header(AUTHORIZATION, getAuthorizationHeader())
+            .cookie(getAccessTokenCookie())
             .body(objectMapper.writeValueAsString(request))
             .when()
             .post("/api/monthly-tasks")

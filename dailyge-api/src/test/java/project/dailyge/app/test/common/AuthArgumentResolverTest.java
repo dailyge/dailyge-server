@@ -1,5 +1,6 @@
 package project.dailyge.app.test.common;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -16,18 +17,15 @@ import project.dailyge.app.test.user.fixture.UserFixture;
 import project.dailyge.core.cache.user.UserCache;
 import project.dailyge.core.cache.user.UserCacheReadUseCase;
 import project.dailyge.entity.user.UserJpaEntity;
-
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_USER_TOKEN;
 
 @DisplayName("[UnitTest] AuthArgumentResolver 검증 단위 테스트")
 class AuthArgumentResolverTest {
-    private static final String DETAIL_MESSAGE = "detailMessage";
 
     private TokenProvider tokenProvider;
     private AuthArgumentResolver resolver;
@@ -41,8 +39,8 @@ class AuthArgumentResolverTest {
             "secretKey",
             "payloadSecretKey",
             "salt",
-            1,
-            2
+            900,
+            1_209_600
         );
         final SecretKeyManager secretKeyManager = new SecretKeyManager(jwtProperties);
         tokenProvider = new TokenProvider(jwtProperties, secretKeyManager);
@@ -59,8 +57,9 @@ class AuthArgumentResolverTest {
     void shouldBeNotNullWhenUserIdIsValid() {
         final UserJpaEntity user = UserFixture.createUser(1L);
         final DailygeToken token = tokenProvider.createToken(user.getId(), user.getEmail());
-        when(request.getHeader(AUTHORIZATION))
-            .thenReturn(token.getAuthorizationToken());
+        final Cookie[] cookies = new Cookie[1];
+        cookies[0] = new Cookie("Access-Token", token.accessToken());
+        when(request.getCookies()).thenReturn(cookies);
         when(userCacheReadUseCase.findById(user.getId()))
             .thenReturn(new UserCache(
                 user.getId(),
@@ -89,8 +88,9 @@ class AuthArgumentResolverTest {
         final Long validUserId = 456L;
         final UserJpaEntity expectedUser = UserFixture.createUser(validUserId);
         final DailygeToken token = tokenProvider.createToken(expectedUser.getId(), expectedUser.getEmail());
-        when(request.getHeader(AUTHORIZATION))
-            .thenReturn(token.getAuthorizationToken());
+        final Cookie[] cookies = new Cookie[1];
+        cookies[0] = new Cookie("Access-Token", token.accessToken());
+        when(request.getCookies()).thenReturn(cookies);
         when(userCacheReadUseCase.findById(validUserId))
             .thenReturn(new UserCache(
                 expectedUser.getId(),

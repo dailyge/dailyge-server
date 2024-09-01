@@ -2,7 +2,7 @@ package project.dailyge.app.test.monthlygoal.documentationtest.snippet;
 
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import static com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper.document;
-import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.cookies.CookieDocumentation.requestCookies;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
@@ -26,7 +26,6 @@ public final class MonthlyGoalDeleteSnippet implements MonthlyGoalSnippet {
         return document(
             identifier,
             ResourceSnippetParameters.builder()
-                .requestHeaders(HEADER_DESCRIPTOR)
                 .pathParameters(MONTHLY_GOAL_ID_PATH_PARAMETER_DESCRIPTORS)
                 .tag(tag)
                 .summary(SUMMARY)
@@ -37,7 +36,7 @@ public final class MonthlyGoalDeleteSnippet implements MonthlyGoalSnippet {
             preprocessResponse(prettyPrint()),
             snippets -> {
                 List.of(
-                    requestHeaders(List.of(HEADER_DESCRIPTOR)),
+                    requestCookies(MONTHLY_GOAL_TOKEN_COOKIE_DESCRIPTORS),
                     pathParameters(Arrays.stream(MONTHLY_GOAL_ID_PATH_PARAMETER_DESCRIPTORS).toList())
                 );
             }
@@ -48,7 +47,6 @@ public final class MonthlyGoalDeleteSnippet implements MonthlyGoalSnippet {
         return document(
             identifier,
             ResourceSnippetParameters.builder()
-                .requestHeaders(HEADER_DESCRIPTOR)
                 .pathParameters(MONTHLY_GOAL_ID_PATH_PARAMETER_DESCRIPTORS)
                 .responseFields(ERROR_RESPONSE_FIELD_DESCRIPTORS)
                 .tag(tag)
@@ -60,7 +58,7 @@ public final class MonthlyGoalDeleteSnippet implements MonthlyGoalSnippet {
             preprocessResponse(prettyPrint()),
             snippets -> {
                 List.of(
-                    requestHeaders(List.of(HEADER_DESCRIPTOR)),
+                    requestCookies(MONTHLY_GOAL_TOKEN_COOKIE_DESCRIPTORS),
                     pathParameters(Arrays.stream(MONTHLY_GOAL_ID_PATH_PARAMETER_DESCRIPTORS).toList()),
                     responseFields(ERROR_RESPONSE_FIELD_DESCRIPTORS)
                 );

@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import org.springframework.restdocs.restassured.RestDocumentationFilter;
 import static com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper.document;
-import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.cookies.CookieDocumentation.requestCookies;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
@@ -22,7 +22,6 @@ public final class UserBlacklistSnippet implements UserSnippet {
         return document(
             identifier,
             ResourceSnippetParameters.builder()
-                .requestHeaders(HEADER_DESCRIPTOR)
                 .pathParameters(USER_BLACKLIST_CREATE_PATH_DESCRIPTOR)
                 .requestFields(USER_BLACKLIST_CREATE_REQUEST_FIELDS_DESCRIPTORS)
                 .responseFields(USER_BLACKLIST_CREATE_RESPONSE_FIELDS_DESCRIPTORS)
@@ -32,7 +31,7 @@ public final class UserBlacklistSnippet implements UserSnippet {
             preprocessResponse(prettyPrint()),
             snippets -> {
                 List.of(
-                    requestHeaders(List.of(HEADER_DESCRIPTOR)),
+                    requestCookies(USER_BLACKLIST_ACCESS_TOKEN_COOKIE_DESCRIPTOR),
                     pathParameters(USER_BLACKLIST_CREATE_PATH_DESCRIPTOR),
                     requestFields(Arrays.stream(USER_BLACKLIST_CREATE_REQUEST_FIELDS_DESCRIPTORS).toList()),
                     responseFields(Arrays.stream(USER_BLACKLIST_CREATE_RESPONSE_FIELDS_DESCRIPTORS).toList())

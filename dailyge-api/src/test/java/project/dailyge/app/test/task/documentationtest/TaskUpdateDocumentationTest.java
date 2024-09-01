@@ -15,7 +15,7 @@ import project.dailyge.app.core.task.facade.TaskFacade;
 import project.dailyge.app.core.task.presentation.requesst.TaskCreateRequest;
 import project.dailyge.app.core.task.presentation.requesst.TaskStatusUpdateRequest;
 import project.dailyge.app.core.task.presentation.requesst.TaskUpdateRequest;
-import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASK_AUTHORIZATION_HEADER;
+import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASK_ACCESS_TOKEN_COOKIE_SNIPPET;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASK_PATH_PARAMETER_SNIPPET;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASK_STATUS_UPDATE_REQUEST_SNIPPET;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASK_STATUS_UPDATE_RESPONSE_SNIPPET;
@@ -63,13 +63,13 @@ class TaskUpdateDocumentationTest extends DatabaseTestBase {
 
         given(this.specification)
             .filter(document(IDENTIFIER,
-                TASK_AUTHORIZATION_HEADER,
+                TASK_ACCESS_TOKEN_COOKIE_SNIPPET,
                 TASK_PATH_PARAMETER_SNIPPET,
                 TASK_UPDATE_REQUEST_SNIPPET,
                 TASK_UPDATE_RESPONSE_SNIPPET
             ))
             .contentType(APPLICATION_JSON_VALUE)
-            .header(AUTHORIZATION, getAuthorizationHeader())
+            .cookie(getAccessTokenCookie())
             .header(USER_ID_KEY, newUser.getId())
             .body(objectMapper.writeValueAsString(taskUpdateRequest))
             .when()
@@ -88,7 +88,7 @@ class TaskUpdateDocumentationTest extends DatabaseTestBase {
         given(this.specification)
             .filter(filter)
             .contentType(APPLICATION_JSON_VALUE)
-            .header(AUTHORIZATION, getAuthorizationHeader())
+            .cookie(getAccessTokenCookie())
             .header(USER_ID_KEY, newUser.getId())
             .body(objectMapper.writeValueAsString(taskUpdateRequest))
             .when()
@@ -113,7 +113,7 @@ class TaskUpdateDocumentationTest extends DatabaseTestBase {
         given(this.specification)
             .filter(filter)
             .contentType(APPLICATION_JSON_VALUE)
-            .header(AUTHORIZATION, getAuthorizationHeader())
+            .cookie(getAccessTokenCookie())
             .body(objectMapper.writeValueAsString(taskUpdateRequest))
             .when()
             .put("/api/tasks/{taskId}", newTaskId)
@@ -131,7 +131,7 @@ class TaskUpdateDocumentationTest extends DatabaseTestBase {
         given(this.specification)
             .filter(filter)
             .contentType(APPLICATION_JSON_VALUE)
-            .header(AUTHORIZATION, getAuthorizationHeader())
+            .cookie(getAccessTokenCookie())
             .body(objectMapper.writeValueAsString(taskUpdateRequest))
             .when()
             .put("/api/tasks/{taskId}", invalidTaskId)
@@ -147,13 +147,13 @@ class TaskUpdateDocumentationTest extends DatabaseTestBase {
 
         given(this.specification)
             .filter(document(IDENTIFIER,
-                TASK_AUTHORIZATION_HEADER,
+                TASK_ACCESS_TOKEN_COOKIE_SNIPPET,
                 TASK_PATH_PARAMETER_SNIPPET,
                 TASK_STATUS_UPDATE_REQUEST_SNIPPET,
                 TASK_STATUS_UPDATE_RESPONSE_SNIPPET
             ))
             .contentType(APPLICATION_JSON_VALUE)
-            .header(AUTHORIZATION, getAuthorizationHeader())
+            .cookie(getAccessTokenCookie())
             .body(objectMapper.writeValueAsString(request))
             .when()
             .patch("/api/tasks/{taskId}/status", newTaskId)
@@ -171,7 +171,7 @@ class TaskUpdateDocumentationTest extends DatabaseTestBase {
         given(this.specification)
             .filter(filter)
             .contentType(APPLICATION_JSON_VALUE)
-            .header(AUTHORIZATION, getAuthorizationHeader())
+            .cookie(getAccessTokenCookie())
             .body(objectMapper.writeValueAsString(request))
             .when()
             .patch("/api/tasks/{taskId}/status", newTaskId)
@@ -189,7 +189,7 @@ class TaskUpdateDocumentationTest extends DatabaseTestBase {
         given(this.specification)
             .filter(filter)
             .contentType(APPLICATION_JSON_VALUE)
-            .header(AUTHORIZATION, getAuthorizationHeader())
+            .cookie(getAccessTokenCookie())
             .body(objectMapper.writeValueAsString(request))
             .when()
             .patch("/api/tasks/{taskId}/status", newTaskId)
@@ -208,7 +208,7 @@ class TaskUpdateDocumentationTest extends DatabaseTestBase {
         given(this.specification)
             .filter(filter)
             .contentType(APPLICATION_JSON_VALUE)
-            .header(AUTHORIZATION, getAuthorizationHeader())
+            .cookie(getAccessTokenCookie())
             .body(objectMapper.writeValueAsString(request))
             .when()
             .patch("/api/tasks/{taskId}/status", invalidUUID)

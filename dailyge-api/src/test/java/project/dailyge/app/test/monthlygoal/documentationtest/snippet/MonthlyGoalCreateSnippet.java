@@ -2,7 +2,7 @@ package project.dailyge.app.test.monthlygoal.documentationtest.snippet;
 
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import static com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper.document;
-import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.cookies.CookieDocumentation.requestCookies;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
@@ -26,7 +26,6 @@ public final class MonthlyGoalCreateSnippet implements MonthlyGoalSnippet {
         return document(
             identifier,
             ResourceSnippetParameters.builder()
-                .requestHeaders(HEADER_DESCRIPTOR)
                 .requestFields(MONTHLY_GOAL_CREATE_REQUEST_FIELDS_DESCRIPTORS)
                 .responseFields(MONTHLY_GOAL_CREATE_RESPONSE_FIELD_DESCRIPTORS)
                 .tag(tag)
@@ -38,7 +37,7 @@ public final class MonthlyGoalCreateSnippet implements MonthlyGoalSnippet {
             preprocessResponse(prettyPrint()),
             snippets -> {
                 List.of(
-                    requestHeaders(List.of(HEADER_DESCRIPTOR)),
+                    requestCookies(MONTHLY_GOAL_TOKEN_COOKIE_DESCRIPTORS),
                     requestFields(Arrays.stream(MONTHLY_GOAL_CREATE_REQUEST_FIELDS_DESCRIPTORS).toList()),
                     responseFields(Arrays.stream(MONTHLY_GOAL_CREATE_RESPONSE_FIELD_DESCRIPTORS).toList())
                 );
@@ -50,7 +49,6 @@ public final class MonthlyGoalCreateSnippet implements MonthlyGoalSnippet {
         return document(
             identifier,
             ResourceSnippetParameters.builder()
-                .requestHeaders(HEADER_DESCRIPTOR)
                 .requestFields(MONTHLY_GOAL_CREATE_REQUEST_FIELDS_DESCRIPTORS)
                 .responseFields(ERROR_RESPONSE_FIELD_DESCRIPTORS)
                 .tag(tag)
@@ -62,7 +60,7 @@ public final class MonthlyGoalCreateSnippet implements MonthlyGoalSnippet {
             preprocessResponse(prettyPrint()),
             snippets -> {
                 List.of(
-                    requestHeaders(List.of(HEADER_DESCRIPTOR)),
+                    requestCookies(MONTHLY_GOAL_TOKEN_COOKIE_DESCRIPTORS),
                     requestFields(Arrays.stream(MONTHLY_GOAL_CREATE_REQUEST_FIELDS_DESCRIPTORS).toList()),
                     responseFields(Arrays.stream(ERROR_RESPONSE_FIELD_DESCRIPTORS).toList())
                 );

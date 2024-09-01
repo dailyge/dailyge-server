@@ -15,7 +15,6 @@ import project.dailyge.app.common.exception.UnAuthorizedException;
 import project.dailyge.core.cache.user.UserCache;
 import project.dailyge.core.cache.user.UserCacheReadUseCase;
 import project.dailyge.entity.user.Role;
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_USER_TOKEN;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
 
@@ -38,9 +37,9 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
         final WebDataBinderFactory binderFactory
     ) {
         final HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
-        final String authorizationHeader = request.getHeader(AUTHORIZATION);
-        final String accessToken = tokenProvider.getAccessToken(authorizationHeader);
         try {
+            final Cookies cookies = new Cookies(request.getCookies());
+            final String accessToken = cookies.getValueByKey("Access-Token");
             final Long userId = tokenProvider.getUserId(accessToken);
             if (userId == null) {
                 throw new UnAuthorizedException();

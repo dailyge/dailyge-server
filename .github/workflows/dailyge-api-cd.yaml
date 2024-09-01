@@ -33,8 +33,9 @@ permissions:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
     if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    outputs:
     steps:
       - name: Check out code
         uses: actions/checkout@v2

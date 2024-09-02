@@ -23,17 +23,12 @@ public class CouponEventParticipant {
         if (!(object instanceof CouponEventParticipant that)) {
             return false;
         }
-        if (getUserId() != null ? !getUserId().equals(that.getUserId()) : that.getUserId() != null) {
-            return false;
-        }
-        return getTimestamp() != null ? getTimestamp().equals(that.getTimestamp()) : that.getTimestamp() == null;
+        return getUserId().equals(that.getUserId());
     }
 
     @Override
     public int hashCode() {
-        int result = getUserId() != null ? getUserId().hashCode() : 0;
-        result = 31 * result + (getTimestamp() != null ? getTimestamp().hashCode() : 0);
-        return result;
+        return getUserId().hashCode();
     }
 
     @Override

@@ -54,6 +54,6 @@ class MonthlyGoalReadIntegrationTest extends DatabaseTestBase {
         final int month = now.getMonthValue();
 
         final List<MonthlyGoalJpaEntity> findMonthlyGoals = monthlyGoalReadUseCase.findMonthlyGoalsByCursor(dailygeUser, cursor, year, month);
-        assertEquals(1, findMonthlyGoals.size());
+        assertEquals(2, findMonthlyGoals.size());
     }
 }

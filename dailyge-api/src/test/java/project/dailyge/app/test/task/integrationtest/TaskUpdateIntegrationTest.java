@@ -20,15 +20,12 @@ import project.dailyge.app.core.task.exception.TaskTypeException;
 import project.dailyge.app.core.task.facade.TaskFacade;
 import static project.dailyge.app.test.task.fixture.TaskCommandFixture.createTaskCreationCommand;
 import static project.dailyge.app.test.task.fixture.TaskCommandFixture.createTaskUpdateCommand;
-import project.dailyge.entity.task.MonthlyTaskEntityReadRepository;
-import project.dailyge.entity.task.MonthlyTaskJpaEntity;
 import project.dailyge.entity.task.TaskJpaEntity;
 import static project.dailyge.entity.user.Role.NORMAL;
 
 @DisplayName("[IntegrationTest] Task 수정 통합 테스트")
 class TaskUpdateIntegrationTest extends DatabaseTestBase {
 
-    private MonthlyTaskJpaEntity monthlyTask;
     private TaskCreateCommand taskCreateCommand;
 
     @Autowired
@@ -40,14 +37,10 @@ class TaskUpdateIntegrationTest extends DatabaseTestBase {
     @Autowired
     private TaskWriteUseCase taskWriteUseCase;
 
-    @Autowired
-    private MonthlyTaskEntityReadRepository monthlyTaskReadRepository;
-
     @BeforeEach
     void setUp() {
         now = now();
         taskFacade.createMonthlyTasks(dailygeUser, now);
-        monthlyTask = monthlyTaskReadRepository.findMonthlyTaskByUserIdAndDate(dailygeUser.getUserId(), now).get();
         taskCreateCommand = createTaskCreationCommand(now);
     }
 

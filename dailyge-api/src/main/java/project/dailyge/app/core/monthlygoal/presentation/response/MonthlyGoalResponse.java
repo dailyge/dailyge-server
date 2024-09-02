@@ -3,8 +3,6 @@ package project.dailyge.app.core.monthlygoal.presentation.response;
 import lombok.Getter;
 import project.dailyge.entity.monthlygoal.MonthlyGoalJpaEntity;
 
-import java.time.LocalDateTime;
-
 @Getter
 public class MonthlyGoalResponse {
 
@@ -15,7 +13,7 @@ public class MonthlyGoalResponse {
     private final int year;
     private final int month;
     private final Long userId;
-    private final LocalDateTime createdAt;
+    private final String createdAt;
 
     public MonthlyGoalResponse(final MonthlyGoalJpaEntity monthlyGoal) {
         this.id = monthlyGoal.getId();
@@ -25,14 +23,14 @@ public class MonthlyGoalResponse {
         this.year = monthlyGoal.getYear();
         this.month = monthlyGoal.getMonth();
         this.userId = monthlyGoal.getUserId();
-        this.createdAt = monthlyGoal.getCreatedAt();
+        this.createdAt = monthlyGoal.getCreatedAtAsString();
     }
 
     @Override
     public String toString() {
         return String.format(
             "{\"id\": %d, \"title\": \"%s\", \"content\": \"%s\", \"done\": %b, \"year\": %d, \"month\": %d, \"userId\": %d, \"createdAt\": \"%s\"}",
-            id, title, content, done, year, month, userId, createdAt.toString()
+            id, title, content, done, year, month, userId, createdAt
         );
     }
 }

@@ -10,9 +10,9 @@ import project.dailyge.app.common.annotation.PresentationLayer;
 import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.common.auth.LoginUser;
 import project.dailyge.app.common.response.ApiResponse;
-import project.dailyge.app.cursor.Cursor;
 import project.dailyge.app.core.monthlygoal.application.MonthlyGoalReadUseCase;
 import project.dailyge.app.core.monthlygoal.presentation.response.MonthlyGoalResponse;
+import project.dailyge.app.cursor.Cursor;
 
 import java.util.List;
 
@@ -27,8 +27,8 @@ public class MonthlyGoalReadApi {
     public ApiResponse<List<MonthlyGoalResponse>> findMonthlyGoalsByCursor(
         @LoginUser final DailygeUser dailygeUser,
         @CursorPageable final Cursor cursor,
-        @RequestParam(required = false) final int year,
-        @RequestParam(required = false) final int month
+        @RequestParam(name = "year", required = false) final Integer year,
+        @RequestParam(name = "month", required = false) final Integer month
     ) {
         final List<MonthlyGoalResponse> payload = monthlyGoalReadUseCase.findMonthlyGoalsByCursor(dailygeUser, cursor, year, month).stream()
             .map(MonthlyGoalResponse::new)

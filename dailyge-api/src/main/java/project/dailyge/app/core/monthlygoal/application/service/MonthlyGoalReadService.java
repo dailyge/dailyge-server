@@ -3,11 +3,11 @@ package project.dailyge.app.core.monthlygoal.application.service;
 import lombok.RequiredArgsConstructor;
 import project.dailyge.app.common.annotation.ApplicationLayer;
 import project.dailyge.app.common.auth.DailygeUser;
-import project.dailyge.app.cursor.Cursor;
 import project.dailyge.app.core.monthlygoal.application.MonthlyGoalReadUseCase;
 import static project.dailyge.app.core.monthlygoal.exception.MonthlyGoalCodeAndMessage.MONTHLY_GOAL_NOT_FOUND;
 import project.dailyge.app.core.monthlygoal.exception.MonthlyGoalTypeException;
 import project.dailyge.app.core.monthlygoal.persistence.MonthlyGoalReadDao;
+import project.dailyge.app.cursor.Cursor;
 import project.dailyge.entity.monthlygoal.MonthlyGoalEntityReadRepository;
 import project.dailyge.entity.monthlygoal.MonthlyGoalJpaEntity;
 
@@ -17,6 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MonthlyGoalReadService implements MonthlyGoalReadUseCase {
 
+    private final MonthlyGoalValidator validator;
     private final MonthlyGoalReadDao monthlyGoalReadDao;
     private final MonthlyGoalEntityReadRepository monthlyGoalReadRepository;
 
@@ -34,6 +35,7 @@ public class MonthlyGoalReadService implements MonthlyGoalReadUseCase {
         final Integer month
     ) {
         if (cursor.isNull()) {
+            validator.validateYearAndMonth(year, month);
             return monthlyGoalReadDao.findByUserIdAndYearAndMonth(dailygeUser.getId(), year, month);
         }
         return monthlyGoalReadDao.findMonthlyGoalsByCursor(cursor);

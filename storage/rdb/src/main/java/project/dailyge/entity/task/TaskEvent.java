@@ -1,20 +1,22 @@
-package project.dailyge.entity.user;
+package project.dailyge.entity.task;
 
 import static java.time.LocalDateTime.now;
 import lombok.Getter;
 import project.dailyge.entity.common.Event;
 import project.dailyge.entity.common.EventType;
 
+import java.time.LocalDate;
+
 @Getter
-public class UserEvent extends Event {
+public class TaskEvent extends Event {
 
     /**
      * 직렬화를 위한 생성자로 외부에서 호출하지 말 것.
      */
-    private UserEvent() {
+    private TaskEvent() {
     }
 
-    private UserEvent(
+    private TaskEvent(
         final Long publisher,
         final String domain,
         final String eventId,
@@ -30,7 +32,7 @@ public class UserEvent extends Event {
         this.createdAt = now();
     }
 
-    private UserEvent(
+    private TaskEvent(
         final Long publisher,
         final String domain,
         final String eventId,
@@ -39,22 +41,22 @@ public class UserEvent extends Event {
         this(publisher, domain, eventId, eventType, 1);
     }
 
-    public static UserEvent createEvent(
+    public static TaskEvent createEvent(
         final Long publisher,
         final String eventId,
         final EventType eventType
     ) {
         validate(publisher, eventId, eventType);
-        return new UserEvent(
+        return new TaskEvent(
             publisher,
-            "users",
+            "task",
             eventId,
             eventType
         );
     }
 
-    public static UserEvent createEventWithIncreasedPublishCount(final UserEvent event) {
-        return new UserEvent(
+    public static TaskEvent createEventWithIncreasedPublishCount(final TaskEvent event) {
+        return new TaskEvent(
             event.publisher,
             event.getDomain(),
             event.eventId,
@@ -81,6 +83,10 @@ public class UserEvent extends Event {
 
     public String getEventTypeAsString() {
         return eventType.name();
+    }
+
+    public LocalDate getLocalDate() {
+        return createdAt.toLocalDate();
     }
 
     public String getInvalidPublisherIdErrorMessage() {

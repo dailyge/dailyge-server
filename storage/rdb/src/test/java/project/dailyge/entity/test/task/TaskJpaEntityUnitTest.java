@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import project.dailyge.entity.task.TaskColor;
 import project.dailyge.entity.task.TaskJpaEntity;
 import project.dailyge.entity.task.TaskStatus;
 import static project.dailyge.entity.task.TaskStatus.TODO;
@@ -171,6 +172,7 @@ class TaskJpaEntityUnitTest {
         final LocalDate today = LocalDate.now();
         final TaskStatus newStatus = TODO;
         final Long newMonthlyTaskId = 300L;
+        final TaskColor color = TaskColor.BLUE;
 
         final TaskJpaEntity newTask = new TaskJpaEntity(
             "Initial Title",
@@ -180,7 +182,7 @@ class TaskJpaEntityUnitTest {
             1L
         );
 
-        newTask.update(newTitle, newContent, today, newStatus, newMonthlyTaskId);
+        newTask.update(newTitle, newContent, today, newStatus, newMonthlyTaskId, color);
 
         assertAll(
             () -> assertEquals(newTitle, newTask.getTitle()),
@@ -189,7 +191,8 @@ class TaskJpaEntityUnitTest {
             () -> assertEquals(today.getYear(), newTask.getYear()),
             () -> assertEquals(today.getMonthValue(), newTask.getMonth()),
             () -> assertEquals(newStatus, newTask.getStatus()),
-            () -> assertEquals(newMonthlyTaskId, newTask.getMonthlyTaskId())
+            () -> assertEquals(newMonthlyTaskId, newTask.getMonthlyTaskId()),
+            () -> assertEquals(color, newTask.getColor())
         );
     }
 

@@ -176,7 +176,8 @@ public class TaskJpaEntity extends BaseEntity {
         final String content,
         final LocalDate date,
         final TaskStatus status,
-        final Long monthlyTaskId
+        final Long monthlyTaskId,
+        final TaskColor color
     ) {
         this.title = title;
         this.content = content;
@@ -185,6 +186,7 @@ public class TaskJpaEntity extends BaseEntity {
         this.month = date.getMonthValue();
         this.status = status;
         this.monthlyTaskId = monthlyTaskId;
+        this.color = color;
     }
 
     public void updateStatus(final TaskStatus status) {

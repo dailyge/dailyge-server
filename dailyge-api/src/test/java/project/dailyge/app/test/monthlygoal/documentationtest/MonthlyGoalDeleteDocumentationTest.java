@@ -1,6 +1,7 @@
 package project.dailyge.app.test.monthlygoal.documentationtest;
 
 import static io.restassured.RestAssured.given;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,16 +17,23 @@ import static project.dailyge.app.test.monthlygoal.documentationtest.snippet.Mon
 import static project.dailyge.app.test.monthlygoal.documentationtest.snippet.MonthlyGoalSnippet.MONTHLY_GOAL_PATH_PARAMETER_SNIPPET;
 import static project.dailyge.app.test.monthlygoal.documentationtest.snippet.MonthlyGoalSnippet.createIdentifier;
 
+import java.time.LocalDate;
+
 @DisplayName("[DocumentationTest] 월간 목표 삭제 문서화 테스트")
 class MonthlyGoalDeleteDocumentationTest extends DatabaseTestBase {
 
     @Autowired
     private MonthlyGoalWriteUseCase monthlyGoalWriteUseCase;
 
+    @BeforeEach
+    void setUp() {
+        now = LocalDate.now();
+    }
+
     @Test
     @DisplayName("[RestDocs] 월간 목표를 삭제하면 204 No-Content 응답을 받는다.")
     void whenDeleteMonthlyGoalThenStatusCodeShouldBe204_RestDocs() {
-        final MonthlyGoalCreateCommand createCommand = new MonthlyGoalCreateCommand("메인 페이지 개발 완료", "서비스 출시.");
+        final MonthlyGoalCreateCommand createCommand = new MonthlyGoalCreateCommand("메인 페이지 개발 완료", "서비스 출시.", now);
         final Long monthlyGoalId = monthlyGoalWriteUseCase.save(dailygeUser, createCommand);
 
         given(this.specification)
@@ -47,7 +55,7 @@ class MonthlyGoalDeleteDocumentationTest extends DatabaseTestBase {
     @DisplayName("[Swagger] 월간 목표를 삭제하면 204 No-Content 응답을 받는다.")
     void whenDeleteMonthlyGoalThenStatusCodeShouldBe204_Swagger() {
         final RestDocumentationFilter filter = deleteMonthlyGoalFilter(createIdentifier("MonthlyGoalDelete", 204));
-        final MonthlyGoalCreateCommand createCommand = new MonthlyGoalCreateCommand("메인 페이지 개발 완료", "서비스 출시.");
+        final MonthlyGoalCreateCommand createCommand = new MonthlyGoalCreateCommand("메인 페이지 개발 완료", "서비스 출시.", now);
         final Long monthlyGoalId = monthlyGoalWriteUseCase.save(dailygeUser, createCommand);
 
         given(this.specification)

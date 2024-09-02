@@ -17,6 +17,8 @@ import static project.dailyge.app.test.monthlygoal.documentationtest.snippet.Mon
 import static project.dailyge.app.test.monthlygoal.documentationtest.snippet.MonthlyGoalSnippet.MONTHLY_GOAL_CREATE_RESPONSE_SNIPPET;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.createIdentifier;
 
+import java.time.LocalDate;
+
 @DisplayName("[DocumentationTest] 월간 목표 작성 문서화 테스트")
 class MonthlyGoalCreateDocumentationTest extends DatabaseTestBase {
 
@@ -24,7 +26,8 @@ class MonthlyGoalCreateDocumentationTest extends DatabaseTestBase {
 
     @BeforeEach
     void setUp() {
-        request = new MonthlyGoalCreateRequest("메인 페이지 개발 완료", "서비스 출시.");
+        now = LocalDate.now();
+        request = new MonthlyGoalCreateRequest("메인 페이지 개발 완료", "서비스 출시.", now);
     }
 
     @Test
@@ -68,7 +71,7 @@ class MonthlyGoalCreateDocumentationTest extends DatabaseTestBase {
     @DisplayName("[Swagger] 월간 목표를 생성할 때, 올바르지 않은 인자를 입력하면 400 Bad Request 응답을 받는다.")
     void whenCreateMonthlyGoalWithInvalidRequestThenStatusCodeShouldBe400_Swagger() throws JsonProcessingException {
         final RestDocumentationFilter filter = createMonthlyGoalErrorFilter(createIdentifier("MonthlyGoalCreate", 400));
-        final MonthlyGoalCreateRequest invalidRequest = request = new MonthlyGoalCreateRequest("", "서비스 출시.");
+        final MonthlyGoalCreateRequest invalidRequest = request = new MonthlyGoalCreateRequest("", "서비스 출시.", now);
         given(this.specification)
             .filter(filter)
             .relaxedHTTPSValidation()

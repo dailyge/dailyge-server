@@ -35,4 +35,8 @@ public abstract class BaseEntity {
     public boolean getDeleted() {
         return deleted;
     }
+
+    public String getCreatedAtAsString() {
+        return createdAt.toString();
+    }
 }

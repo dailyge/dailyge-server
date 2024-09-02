@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import project.dailyge.entity.BaseEntity;
 
+import java.time.LocalDate;
 import java.util.Objects;
 
 @Getter
@@ -29,6 +30,12 @@ public class MonthlyGoalJpaEntity extends BaseEntity {
     @Column(name = "done")
     private boolean done;
 
+    @Column(name = "year")
+    private int year;
+
+    @Column(name = "month")
+    private int month;
+
     @Column(name = "user_id")
     private Long userId;
 
@@ -37,21 +44,25 @@ public class MonthlyGoalJpaEntity extends BaseEntity {
         final String title,
         final String content,
         final boolean done,
+        final LocalDate date,
         final Long userId
     ) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.done = done;
+        this.year = date.getYear();
+        this.month = date.getMonthValue();
         this.userId = userId;
     }
 
     public MonthlyGoalJpaEntity(
         final String title,
         final String content,
+        final LocalDate date,
         final Long userId
     ) {
-        this(null, title, content, false, userId);
+        this(null, title, content, false, date, userId);
     }
 
     public void update(

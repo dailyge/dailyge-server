@@ -40,9 +40,9 @@ class MonthlyTasksUnitTest {
         final int endYear = year + 5;
         final List<MonthlyTaskJpaEntity> monthlyTasks = MonthlyTasks.createMonthlyTasks(userId, year);
 
-        for (int year = startYear; year <= endYear; year++) {
+        for (int currentYear = startYear; currentYear <= endYear; currentYear++) {
             for (int month = 1; month <= 12; month++) {
-                boolean exists = monthlyTasks.stream().anyMatch(equals(year, month));
+                boolean exists = monthlyTasks.stream().anyMatch(equals(currentYear, month));
                 assertTrue(exists);
             }
         }
@@ -62,7 +62,10 @@ class MonthlyTasksUnitTest {
     void whenCreateMonthlyTasksThenUserIdShouldBeCorrected() {
         final List<MonthlyTaskJpaEntity> monthlyTasks = MonthlyTasks.createMonthlyTasks(userId, year);
         assertAll(
-            () -> assertThat(monthlyTasks).allMatch(task -> task.getUserId().equals(userId))
+            () -> assertThat(monthlyTasks)
+                .isNotEmpty(),
+            () -> assertThat(monthlyTasks)
+                .allMatch(task -> task.getUserId().equals(userId))
         );
     }
 

@@ -13,18 +13,22 @@ import org.junit.jupiter.params.provider.ValueSource;
 import project.dailyge.entity.common.EventType;
 import static project.dailyge.entity.common.EventType.CREATE;
 import project.dailyge.entity.task.TaskEvent;
+import static project.dailyge.entity.task.TaskEvent.createEvent;
+import static project.dailyge.entity.task.TaskEvent.createEventWithIncreasedPublishCount;
+
+import java.util.UUID;
 
 @DisplayName("[UnitTest] TaskEvent 단위 테스트")
 class TaskEventUnitTest {
 
     private static final long PUBLISHER = 1L;
-    private static final String EVENT_ID = "eventId";
+    private static final String EVENT_ID = UUID.randomUUID().toString();
 
     private TaskEvent event;
 
     @BeforeEach
     void setUp() {
-        event = TaskEvent.createEvent(
+        event = createEvent(
             PUBLISHER,
             EVENT_ID,
             CREATE
@@ -47,15 +51,15 @@ class TaskEventUnitTest {
     @DisplayName("이벤트 타입을 체크할 수 있다.")
     @ValueSource(strings = {"CREATE", "UPDATE", "DELETE"})
     void whenDetermineEventTypeThenCanCheckEventType(final String parameter) {
-        final TaskEvent event = TaskEvent.createEvent(1L, "dd", EventType.valueOf(parameter));
-        assertTrue(event.isType(EventType.valueOf(parameter)));
+        final TaskEvent newEvent = createEvent(1L, UUID.randomUUID().toString(), EventType.valueOf(parameter));
+        assertTrue(newEvent.isType(EventType.valueOf(parameter)));
     }
 
     @Test
     @DisplayName("publishCount가 증가된 새로운 이벤트를 생성할 수 있다.")
     void whenCreateEventWithIncreasedPublishCountThenCountShouldBeIncremented() {
         final int initialPublishCount = event.getPublishCount();
-        final TaskEvent newEvent = TaskEvent.createEventWithIncreasedPublishCount(event);
+        final TaskEvent newEvent = createEventWithIncreasedPublishCount(event);
 
         assertAll(
             () -> assertThat(newEvent).isNotNull(),
@@ -78,7 +82,7 @@ class TaskEventUnitTest {
     @Test
     @DisplayName("publisher가 비어있을 경우, IllegalArgumentException이 발생한다.")
     void whenPublisherIsNullThenIllegalArgumentExceptionShouldBeHappen() {
-        assertThatThrownBy(() -> TaskEvent.createEvent(
+        assertThatThrownBy(() -> createEvent(
             null,
             EVENT_ID,
             CREATE
@@ -89,7 +93,7 @@ class TaskEventUnitTest {
     @Test
     @DisplayName("eventId가 비어있을 경우, IllegalArgumentException이 발생한다.")
     void whenEventIdIsNullThenIllegalArgumentExceptionShouldBeHappen() {
-        assertThatThrownBy(() -> TaskEvent.createEvent(
+        assertThatThrownBy(() -> createEvent(
             PUBLISHER,
             null,
             CREATE
@@ -100,7 +104,7 @@ class TaskEventUnitTest {
     @Test
     @DisplayName("eventType이 비어있을 경우, IllegalArgumentException이 발생한다.")
     void whenEventTypeIsNullThenIllegalArgumentExceptionShouldBeHappen() {
-        assertThatThrownBy(() -> TaskEvent.createEvent(
+        assertThatThrownBy(() -> createEvent(
             PUBLISHER,
             EVENT_ID,
             null

@@ -74,8 +74,8 @@ class TaskEventUnitTest {
     @Test
     @DisplayName("publishCount가 maxPublishCount를 초과하지 않은 경우, false를 반환한다.")
     void whenPublishCountIsLessThanMaxPublishCountThenReturnFalse() {
-        int maxPublishCount = event.getPublishCount() + 1;
-        boolean result = event.overCount(maxPublishCount);
+        final int maxPublishCount = event.getPublishCount() + 1;
+        final boolean result = event.overCount(maxPublishCount);
         assertThat(result).isFalse();
     }
 

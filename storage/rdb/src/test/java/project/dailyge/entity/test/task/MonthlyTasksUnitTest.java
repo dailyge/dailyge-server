@@ -42,8 +42,7 @@ class MonthlyTasksUnitTest {
 
         for (int currentYear = startYear; currentYear <= endYear; currentYear++) {
             for (int month = 1; month <= 12; month++) {
-                boolean exists = monthlyTasks.stream().anyMatch(equals(currentYear, month));
-                assertTrue(exists);
+                assertTrue(monthlyTasks.stream().anyMatch(equals(currentYear, month)));
             }
         }
     }

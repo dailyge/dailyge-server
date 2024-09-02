@@ -49,6 +49,7 @@ public class TaskFacade {
             }
             taskWriteUseCase.saveAll(new DailygeUser(userId, NORMAL), date);
         } catch (InterruptedException ex) {
+            Thread.currentThread().interrupt();
             throw TaskTypeException.from(ex.getMessage(), TASK_UN_RESOLVED_EXCEPTION);
         } finally {
             lockUseCase.releaseLock(lock);

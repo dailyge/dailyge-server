@@ -22,13 +22,13 @@ public class BlockingQueueConfig {
 
     @Bean
     public BlockingQueue<CouponEventParticipant> couponEventParticipantQueue() {
-        if (queueType.equals(ARRAY_QUEUE)) {
+        if (ARRAY_QUEUE.equals(queueType)) {
             return new ArrayBlockingQueue<>(queueCapacity);
         }
-        if (queueType.equals(LINKED_QUEUE)) {
+        if (LINKED_QUEUE.equals(queueType)) {
             return new LinkedBlockingQueue<>();
         }
-        if (queueType.equals(PRIORITY_QUEUE)) {
+        if (PRIORITY_QUEUE.equals(queueType)) {
             return new PriorityBlockingQueue<>();
         }
         return new LinkedBlockingQueue<>();

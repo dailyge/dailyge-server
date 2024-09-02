@@ -3,9 +3,9 @@ package project.dailyge.app.test.monthlygoal.documentationtest.snippet;
 import static javax.xml.xpath.XPathEvaluationResult.XPathResultType.NUMBER;
 import static javax.xml.xpath.XPathEvaluationResult.XPathResultType.STRING;
 import org.springframework.restdocs.cookies.CookieDescriptor;
-import org.springframework.restdocs.cookies.RequestCookiesSnippet;
 import static org.springframework.restdocs.cookies.CookieDocumentation.cookieWithName;
 import static org.springframework.restdocs.cookies.CookieDocumentation.requestCookies;
+import org.springframework.restdocs.cookies.RequestCookiesSnippet;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import static org.springframework.restdocs.payload.JsonFieldType.NULL;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -15,15 +15,12 @@ import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.restdocs.request.ParameterDescriptor;
 import org.springframework.restdocs.request.PathParametersSnippet;
-import org.springframework.restdocs.request.QueryParametersSnippet;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
-import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
-import static org.springframework.restdocs.snippet.Attributes.key;
 import static project.dailyge.app.common.SnippetUtils.getAttribute;
-import project.dailyge.app.core.task.presentation.requesst.TaskCreateRequest;
-import project.dailyge.app.core.task.presentation.requesst.TaskStatusUpdateRequest;
-import project.dailyge.app.core.task.presentation.requesst.TaskUpdateRequest;
+import project.dailyge.app.core.monthlygoal.presentation.request.MonthlyGoalCreateRequest;
+import project.dailyge.app.core.monthlygoal.presentation.request.MonthlyGoalStatusUpdateRequest;
+import project.dailyge.app.core.monthlygoal.presentation.request.MonthlyGoalUpdateRequest;
 
 public interface MonthlyGoalSnippet {
     String tag = "MonthlyGoal";
@@ -98,7 +95,6 @@ public interface MonthlyGoalSnippet {
     };
 
     PathParametersSnippet MONTHLY_GOAL_PATH_PARAMETER_SNIPPET = pathParameters(MONTHLY_GOAL_ID_PATH_PARAMETER_DESCRIPTORS);
-    PathParametersSnippet MONTHLY_GOAL_PAGING_PARAMETER_SNIPPET = pathParameters(MONTHLY_GOAL_CURSOR_PAGING_PARAMETER_DESCRIPTORS);
     RequestFieldsSnippet MONTHLY_GOAL_CREATE_REQUEST_SNIPPET = requestFields(MONTHLY_GOAL_CREATE_REQUEST_FIELDS_DESCRIPTORS);
     RequestFieldsSnippet MONTHLY_GOAL_UPDATE_REQUEST_SNIPPET = requestFields(MONTHLY_GOAL_UPDATE_REQUEST_FIELDS_DESCRIPTORS);
     ResponseFieldsSnippet MONTHLY_GOAL_CREATE_RESPONSE_SNIPPET = responseFields(MONTHLY_GOAL_CREATE_RESPONSE_FIELD_DESCRIPTORS);

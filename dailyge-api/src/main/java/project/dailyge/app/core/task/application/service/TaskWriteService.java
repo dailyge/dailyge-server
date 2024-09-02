@@ -66,7 +66,7 @@ class TaskWriteService implements TaskWriteUseCase {
         final TaskJpaEntity findTask = taskReadRepository.findTaskById(taskId)
             .orElseThrow(() -> TaskTypeException.from(TASK_NOT_FOUND));
         dailygeUser.validateAuth(findTask.getUserId());
-        findTask.update(command.title(), command.content(), command.date(), command.status(), findMonthlyTask.getId());
+        findTask.update(command.title(), command.content(), command.date(), command.status(), findMonthlyTask.getId(), command.color());
     }
 
     @Override

@@ -1,7 +1,5 @@
 package project.dailyge.app.cursor;
 
-import project.dailyge.app.cursor.Cursor;
-
 public final class CursorFactory {
 
     private static final int ZERO = 0;

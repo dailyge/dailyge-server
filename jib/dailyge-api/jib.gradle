@@ -41,8 +41,7 @@ if (env != null && (skipJib != null && skipJib == "false")) {
                     "-XX:+HeapDumpOnOutOfMemoryError",
                     "-XX:HeapDumpPath=/var/log/app/heapdump.hprof",
                     "-Xss512k",
-                    "-XX:+UseCompressedOops",
-                    "-XX:+PrintGCDateStamps"
+                    "-XX:+UseCompressedOops"
             ]
             environment = [
                     "ENCRYPTOR_KEY": System.getenv("ENCRYPTOR_KEY")

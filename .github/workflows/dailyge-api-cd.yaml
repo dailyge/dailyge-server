@@ -2,8 +2,6 @@ name: Dailyge-Api Deploy
 
 on:
   pull_request:
-    types:
-      - closed
     branches:
       - dev
       - prod
@@ -33,7 +31,6 @@ permissions:
 
 jobs:
   deploy:
-    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
@@ -67,19 +64,11 @@ jobs:
 
       - name: Set environment-specific variables
         run: |
-          if [[ "${{ github.event.pull_request.base.ref }}" == "prod" ]]; then
-            echo "ENV=prod" >> $GITHUB_ENV
-            echo "ECR_URI=${{ secrets.PROD_ECR_URI }}" >> $GITHUB_ENV
-            echo "SERVICE_NAME=dailyge-api-prod-service" >> $GITHUB_ENV
-            echo "CONTAINER_NAME=dailyge-api-prod-container" >> $GITHUB_ENV
-            echo "TASK_DEFINITION_NAME=dailyge-api-prod" >> $GITHUB_ENV
-          else
-            echo "ENV=dev" >> $GITHUB_ENV
-            echo "ECR_URI=${{ secrets.DEV_ECR_URI }}" >> $GITHUB_ENV
-            echo "SERVICE_NAME=dailyge-api-dev-service" >> $GITHUB_ENV
-            echo "CONTAINER_NAME=dailyge-api-dev-container" >> $GITHUB_ENV
-            echo "TASK_DEFINITION_NAME=dailyge-api-dev" >> $GITHUB_ENV
-          fi
+          echo "ENV=prod" >> $GITHUB_ENV
+          echo "ECR_URI=${{ secrets.PROD_ECR_URI }}" >> $GITHUB_ENV
+          echo "SERVICE_NAME=dailyge-api-prod-service" >> $GITHUB_ENV
+          echo "CONTAINER_NAME=dailyge-api-prod-container" >> $GITHUB_ENV
+          echo "TASK_DEFINITION_NAME=dailyge-api-prod" >> $GITHUB_ENV
           echo "IMAGE_TAG=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
 
       - name: Configure AWS credentials
@@ -132,7 +121,6 @@ jobs:
           service: ${{ env.SERVICE_NAME }}
           cluster: dailyge
           wait-for-service-stability: true
-          stability-timeout-minutes: 10
 
   notify_slack:
     needs: [ deploy ]

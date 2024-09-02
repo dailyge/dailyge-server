@@ -23,6 +23,7 @@ class CouponEventParticipantIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("쿠폰 발급 신청 정보를 저장하면 쿠폰 발급 저장소에 저장된다.")
     void whenCreateCouponEventParticipationThenSavedInMemoryQueue() {
+        couponEventParticipantRepository.deleteAll();
         log.info("쿠폰 발급 전 count: {}", couponEventParticipantRepository.count());
         couponWriteUseCase.saveApply(dailygeUser);
         log.info("쿠폰 발급 후 count: {}", couponEventParticipantRepository.count());

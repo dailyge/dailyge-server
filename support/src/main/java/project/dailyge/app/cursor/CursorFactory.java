@@ -21,7 +21,7 @@ public final class CursorFactory {
     }
 
     private static Long getIndex(final String index) {
-        Long parsedIndex = parseIndex(index);
+        final Long parsedIndex = parseIndex(index);
         if (parsedIndex == null) {
             return null;
         }

@@ -21,4 +21,9 @@ public class CouponEventParticipantInMemoryQueue implements CouponEventParticipa
     public int count() {
         return queue.size();
     }
+
+    @Override
+    public void deleteAll() {
+        queue.clear();
+    }
 }

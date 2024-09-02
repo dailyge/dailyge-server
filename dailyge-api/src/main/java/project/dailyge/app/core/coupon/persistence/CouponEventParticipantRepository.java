@@ -4,4 +4,6 @@ public interface CouponEventParticipantRepository {
     void save(final CouponEventParticipant couponEventParticipant);
 
     int count();
+
+    void deleteAll();
 }

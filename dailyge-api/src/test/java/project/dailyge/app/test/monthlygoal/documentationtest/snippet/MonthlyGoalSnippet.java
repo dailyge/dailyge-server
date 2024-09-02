@@ -38,6 +38,8 @@ public interface MonthlyGoalSnippet {
             .attributes(getAttribute(MonthlyGoalCreateRequest.class, "title")),
         fieldWithPath("content").description("내용")
             .attributes(getAttribute(MonthlyGoalCreateRequest.class, "content")),
+        fieldWithPath("date").description("날짜")
+            .attributes(getAttribute(MonthlyGoalCreateRequest.class, "date"))
     };
 
     FieldDescriptor[] MONTHLY_GOAL_STATUS_UPDATE_REQUEST_FIELDS_DESCRIPTORS = {

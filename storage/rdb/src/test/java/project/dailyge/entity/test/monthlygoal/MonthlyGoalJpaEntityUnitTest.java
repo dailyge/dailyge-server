@@ -1,5 +1,6 @@
 package project.dailyge.entity.test.monthlygoal;
 
+import static java.time.LocalDate.now;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -72,7 +73,7 @@ class MonthlyGoalJpaEntityUnitTest {
     @Test
     @DisplayName("월간 목표를 삭제하면 상태가 바뀐다.")
     void whenDeleteThenStatusShouldBeChanged() {
-        final MonthlyGoalJpaEntity newMonthlyGoal = new MonthlyGoalJpaEntity(1L, "달성 목표", "월간 목표 내용", false, 1L);
+        final MonthlyGoalJpaEntity newMonthlyGoal = new MonthlyGoalJpaEntity(1L, "달성 목표", "월간 목표 내용", false, now(), 1L);
         newMonthlyGoal.delete();
         assertTrue(newMonthlyGoal.getDeleted());
     }
@@ -85,6 +86,7 @@ class MonthlyGoalJpaEntityUnitTest {
             "달성 목표",
             "월간 목표 내용",
             false,
+            now(),
             1L
         );
         final MonthlyGoalJpaEntity newMonthlyGoal = new MonthlyGoalJpaEntity(
@@ -92,6 +94,7 @@ class MonthlyGoalJpaEntityUnitTest {
             "달성 목표",
             "월간 목표 내용",
             false,
+            now(),
             1L
         );
 
@@ -106,6 +109,7 @@ class MonthlyGoalJpaEntityUnitTest {
             "달성 목표",
             "월간 목표 내용",
             false,
+            now(),
             1L
         );
         final MonthlyGoalJpaEntity differentMonthlyGoal = new MonthlyGoalJpaEntity(
@@ -113,6 +117,7 @@ class MonthlyGoalJpaEntityUnitTest {
             "달성 목표",
             "월간 목표 내용",
             false,
+            now(),
             1L
         );
 
@@ -127,6 +132,7 @@ class MonthlyGoalJpaEntityUnitTest {
             "달성 목표",
             "월간 목표 내용",
             false,
+            now(),
             1L
         );
         assertEquals(newMonthlyGoal.hashCode(), newMonthlyGoal.hashCode());

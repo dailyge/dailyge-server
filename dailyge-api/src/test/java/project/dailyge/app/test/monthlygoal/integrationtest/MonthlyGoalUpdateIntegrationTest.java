@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,8 @@ import project.dailyge.app.core.monthlygoal.exception.MonthlyGoalCodeAndMessage;
 import project.dailyge.app.core.monthlygoal.exception.MonthlyGoalTypeException;
 import project.dailyge.entity.monthlygoal.MonthlyGoalJpaEntity;
 
+import java.time.LocalDate;
+
 @DisplayName("[IntegrationTest] 월간 목표 삭제 통합 테스트")
 class MonthlyGoalUpdateIntegrationTest extends DatabaseTestBase {
 
@@ -26,10 +29,15 @@ class MonthlyGoalUpdateIntegrationTest extends DatabaseTestBase {
     @Autowired
     private MonthlyGoalWriteUseCase monthlyGoalWriteUseCase;
 
+    @BeforeEach
+    void setUp() {
+        now = LocalDate.now();
+    }
+
     @Test
     @DisplayName("MonthlyGoal 상태를 업데이트하면, 상태가 변경된다.")
     void whenUpdateMonthlyGoalStatusThenStatusShouldBeChanged() {
-        final MonthlyGoalCreateCommand createCommand = new MonthlyGoalCreateCommand("메인 페이지 개발 완료", "서비스 출시.");
+        final MonthlyGoalCreateCommand createCommand = new MonthlyGoalCreateCommand("메인 페이지 개발 완료", "서비스 출시.", now);
         final Long newMonthlyGoalId = monthlyGoalWriteUseCase.save(dailygeUser, createCommand);
         final MonthlyGoalStatusUpdateCommand statusUpdateCommand = new MonthlyGoalStatusUpdateCommand(true);
         monthlyGoalWriteUseCase.update(dailygeUser, newMonthlyGoalId, statusUpdateCommand);
@@ -41,7 +49,7 @@ class MonthlyGoalUpdateIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("MonthlyGoal 내용을 업데이트하면, 내용이 변경된다.")
     void whenUpdateMonthlyGoalThenContentsShouldBeChanged() {
-        final MonthlyGoalCreateCommand createCommand = new MonthlyGoalCreateCommand("메인 페이지 개발 완료", "서비스 출시.");
+        final MonthlyGoalCreateCommand createCommand = new MonthlyGoalCreateCommand("메인 페이지 개발 완료", "서비스 출시.", now);
         final Long newMonthlyGoalId = monthlyGoalWriteUseCase.save(dailygeUser, createCommand);
         final String changedTitle = "마라톤 참여";
         final String changedContent = "가족들과 한강 마라톤 참여";

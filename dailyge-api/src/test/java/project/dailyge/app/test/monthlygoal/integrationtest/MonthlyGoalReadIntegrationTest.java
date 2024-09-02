@@ -1,5 +1,6 @@
 package project.dailyge.app.test.monthlygoal.integrationtest;
 
+import static org.junit.Assert.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,7 +40,7 @@ class MonthlyGoalReadIntegrationTest extends DatabaseTestBase {
         final int month = now.getMonthValue();
 
         final List<MonthlyGoalJpaEntity> findMonthlyGoals = monthlyGoalReadUseCase.findMonthlyGoalsByCursor(dailygeUser, cursor, year, month);
-        System.out.println(findMonthlyGoals.size());
+        assertEquals(1, findMonthlyGoals.size());
     }
 
     @Test
@@ -53,6 +54,6 @@ class MonthlyGoalReadIntegrationTest extends DatabaseTestBase {
         final int month = now.getMonthValue();
 
         final List<MonthlyGoalJpaEntity> findMonthlyGoals = monthlyGoalReadUseCase.findMonthlyGoalsByCursor(dailygeUser, cursor, year, month);
-        System.out.println(findMonthlyGoals.size());
+        assertEquals(1, findMonthlyGoals.size());
     }
 }

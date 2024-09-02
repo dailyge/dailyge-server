@@ -7,6 +7,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import project.dailyge.app.common.auth.TokenProvider;
 import project.dailyge.app.core.common.web.BlacklistInterceptor;
+import project.dailyge.app.core.common.web.CursorPagingArgumentResolver;
 import project.dailyge.app.core.common.web.LoginInterceptor;
 import project.dailyge.core.cache.user.UserCacheReadUseCase;
 
@@ -24,6 +25,7 @@ public class WebConfiguration implements WebMvcConfigurer {
     @Override
     public void addArgumentResolvers(final List<HandlerMethodArgumentResolver> resolvers) {
         resolvers.add(new AuthArgumentResolver(userCacheReadUseCase, tokenProvider));
+        resolvers.add(new CursorPagingArgumentResolver());
     }
 
     @Override

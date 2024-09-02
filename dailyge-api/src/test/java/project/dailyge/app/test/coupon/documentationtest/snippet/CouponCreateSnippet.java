@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper.document;
-import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.cookies.CookieDocumentation.requestCookies;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 
@@ -23,7 +23,6 @@ public final class CouponCreateSnippet implements CouponSnippet {
         return document(
             identifier,
             ResourceSnippetParameters.builder()
-                .requestHeaders(HEADER_DESCRIPTOR)
                 .responseFields(COUPON_CREATE_RESPONSE_FIELDS)
                 .tag(TAG)
                 .summary(SUMMARY)
@@ -34,7 +33,7 @@ public final class CouponCreateSnippet implements CouponSnippet {
             preprocessResponse(prettyPrint()),
             snippets -> {
                 List.of(
-                    requestHeaders(List.of(HEADER_DESCRIPTOR)),
+                    requestCookies(COUPON_TOKEN_COOKIE_DESCRIPTORS),
                     responseFields(Arrays.stream(COUPON_CREATE_RESPONSE_FIELDS).toList()),
                     responseFields(Arrays.stream(ERROR_RESPONSE).toList())
                 );

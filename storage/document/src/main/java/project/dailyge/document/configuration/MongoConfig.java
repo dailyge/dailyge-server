@@ -40,8 +40,8 @@ public class MongoConfig {
     @Value("${spring.data.mongodb.password}")
     private String password;
 
-    @Value("${spring.data.mongodb.credential}")
-    private String credentialUser;
+    @Value("${spring.data.mongodb.authentication-database}")
+    private String authenticationDatabase;
 
     @Value("${spring.data.mongodb.schema}")
     private String schema;
@@ -83,7 +83,7 @@ public class MongoConfig {
 
     @Bean
     public MongoClient mongoClient() {
-        final MongoCredential credential = createCredential(username, credentialUser, password.toCharArray());
+        final MongoCredential credential = createCredential(username, authenticationDatabase, password.toCharArray());
         final MongoClientSettings settings = MongoClientSettings.builder()
             .applyToConnectionPoolSettings(builder ->
                 builder.maxSize(maxConnection)

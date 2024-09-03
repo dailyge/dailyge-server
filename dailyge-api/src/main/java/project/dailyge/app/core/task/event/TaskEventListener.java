@@ -1,39 +1,40 @@
-package project.dailyge.app.core.user.event;
+package project.dailyge.app.core.task.event;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import project.dailyge.app.common.annotation.EventLayer;
-import project.dailyge.app.core.user.facade.UserFacade;
+import project.dailyge.app.core.task.facade.TaskFacade;
 import project.dailyge.document.event.EventDocument;
 import project.dailyge.document.event.EventDocumentWriteRepository;
 import project.dailyge.entity.common.EventPublisher;
 import static project.dailyge.entity.common.EventType.CREATE;
-import project.dailyge.entity.user.UserEvent;
-import static project.dailyge.entity.user.UserEvent.createEventWithIncreasedPublishCount;
+import project.dailyge.entity.task.TaskEvent;
+import static project.dailyge.entity.task.TaskEvent.createEventWithIncreasedPublishCount;
 
 @EventLayer
 @RequiredArgsConstructor
-public class UserEventListener {
+public class TaskEventListener {
 
-    private final UserFacade userFacade;
-    private final EventPublisher<UserEvent> userEventPublisher;
+    private final TaskFacade taskFacade;
+    private final EventPublisher<TaskEvent> taskEventPublisher;
     private final EventDocumentWriteRepository eventWriteRepository;
 
     @Async
     @EventListener
-    public void listenInternalEvent(final UserEvent event) {
+    public void execute(final TaskEvent event) {
         try {
             if (event.isType(CREATE)) {
-                userFacade.saveCache(event);
-                eventWriteRepository.save(createEventDocument(event));
+                final EventDocument eventDocument = createEventDocument(event);
+                eventWriteRepository.save(eventDocument);
+                taskFacade.createMonthlyTasksInternally(event.getPublisher(), event.getLocalDate());
             }
         } catch (Exception ex) {
-            userEventPublisher.publishInternalEvent(createEventWithIncreasedPublishCount(event));
+            taskEventPublisher.publishInternalEvent(createEventWithIncreasedPublishCount(event));
         }
     }
 
-    private static EventDocument createEventDocument(final UserEvent event) {
+    private static EventDocument createEventDocument(final TaskEvent event) {
         return new EventDocument(
             event.getEventId(),
             event.getPublisher(),

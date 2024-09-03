@@ -1,4 +1,4 @@
-package project.dailyge.entity.test.user;
+package project.dailyge.entity.test.task;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -12,19 +12,23 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import project.dailyge.entity.common.EventType;
 import static project.dailyge.entity.common.EventType.CREATE;
-import project.dailyge.entity.user.UserEvent;
+import project.dailyge.entity.task.TaskEvent;
+import static project.dailyge.entity.task.TaskEvent.createEvent;
+import static project.dailyge.entity.task.TaskEvent.createEventWithIncreasedPublishCount;
 
-@DisplayName("[UnitTest] UserEvent 단위 테스트")
-class UserEventUnitTest {
+import java.util.UUID;
+
+@DisplayName("[UnitTest] TaskEvent 단위 테스트")
+class TaskEventUnitTest {
 
     private static final long PUBLISHER = 1L;
-    private static final String EVENT_ID = "eventId";
+    private static final String EVENT_ID = UUID.randomUUID().toString();
 
-    private UserEvent userEvent;
+    private TaskEvent event;
 
     @BeforeEach
     void setUp() {
-        userEvent = UserEvent.createEvent(
+        event = createEvent(
             PUBLISHER,
             EVENT_ID,
             CREATE
@@ -32,14 +36,14 @@ class UserEventUnitTest {
     }
 
     @Test
-    @DisplayName("사용자 이벤트를 생성하면, 정상적으로 생성된다.")
-    void whenCreateUserEventThenEventShouldBeGeneratedNormally() {
+    @DisplayName("Task 이벤트를 생성하면, 정상적으로 생성된다.")
+    void whenCreateTaskEventThenEventShouldBeGeneratedNormally() {
         assertAll(
-            () -> assertEquals(PUBLISHER, userEvent.getPublisher()),
-            () -> assertEquals(EVENT_ID, userEvent.getEventId()),
-            () -> assertEquals(CREATE, userEvent.getEventType()),
-            () -> assertEquals("CREATE", userEvent.getEventTypeAsString()),
-            () -> assertEquals("users", userEvent.getDomain())
+            () -> assertEquals(PUBLISHER, event.getPublisher()),
+            () -> assertEquals(EVENT_ID, event.getEventId()),
+            () -> assertEquals(CREATE, event.getEventType()),
+            () -> assertEquals("CREATE", event.getEventTypeAsString()),
+            () -> assertEquals("task", event.getDomain())
         );
     }
 
@@ -47,22 +51,22 @@ class UserEventUnitTest {
     @DisplayName("이벤트 타입을 체크할 수 있다.")
     @ValueSource(strings = {"CREATE", "UPDATE", "DELETE"})
     void whenDetermineEventTypeThenCanCheckEventType(final String parameter) {
-        final UserEvent event = UserEvent.createEvent(1L, "dd", EventType.valueOf(parameter));
-        assertTrue(event.isType(EventType.valueOf(parameter)));
+        final TaskEvent newEvent = createEvent(1L, UUID.randomUUID().toString(), EventType.valueOf(parameter));
+        assertTrue(newEvent.isType(EventType.valueOf(parameter)));
     }
 
     @Test
     @DisplayName("publishCount가 증가된 새로운 이벤트를 생성할 수 있다.")
     void whenCreateEventWithIncreasedPublishCountThenCountShouldBeIncremented() {
-        final int initialPublishCount = userEvent.getPublishCount();
-        final UserEvent newEvent = UserEvent.createEventWithIncreasedPublishCount(userEvent);
+        final int initialPublishCount = event.getPublishCount();
+        final TaskEvent newEvent = createEventWithIncreasedPublishCount(event);
 
         assertAll(
             () -> assertThat(newEvent).isNotNull(),
-            () -> assertThat(newEvent.getPublisher()).isEqualTo(userEvent.getPublisher()),
-            () -> assertThat(newEvent.getEventId()).isEqualTo(userEvent.getEventId()),
-            () -> assertThat(newEvent.getEventType()).isEqualTo(userEvent.getEventType()),
-            () -> assertThat(newEvent.getDomain()).isEqualTo(userEvent.getDomain()),
+            () -> assertThat(newEvent.getPublisher()).isEqualTo(event.getPublisher()),
+            () -> assertThat(newEvent.getEventId()).isEqualTo(event.getEventId()),
+            () -> assertThat(newEvent.getEventType()).isEqualTo(event.getEventType()),
+            () -> assertThat(newEvent.getDomain()).isEqualTo(event.getDomain()),
             () -> assertThat(newEvent.getPublishCount()).isEqualTo(initialPublishCount + 1)
         );
     }
@@ -70,42 +74,42 @@ class UserEventUnitTest {
     @Test
     @DisplayName("publishCount가 maxPublishCount를 초과하지 않은 경우, false를 반환한다.")
     void whenPublishCountIsLessThanMaxPublishCountThenReturnFalse() {
-        int maxPublishCount = userEvent.getPublishCount() + 1;
-        boolean result = userEvent.overCount(maxPublishCount);
+        final int maxPublishCount = event.getPublishCount() + 1;
+        final boolean result = event.overCount(maxPublishCount);
         assertThat(result).isFalse();
     }
 
     @Test
     @DisplayName("publisher가 비어있을 경우, IllegalArgumentException이 발생한다.")
     void whenPublisherIsNullThenIllegalArgumentExceptionShouldBeHappen() {
-        assertThatThrownBy(() -> UserEvent.createEvent(
+        assertThatThrownBy(() -> createEvent(
             null,
             EVENT_ID,
             CREATE
         )).isInstanceOf(IllegalArgumentException.class)
-            .hasMessage(userEvent.getInvalidPublisherIdErrorMessage());
+            .hasMessage(event.getInvalidPublisherIdErrorMessage());
     }
 
     @Test
     @DisplayName("eventId가 비어있을 경우, IllegalArgumentException이 발생한다.")
     void whenEventIdIsNullThenIllegalArgumentExceptionShouldBeHappen() {
-        assertThatThrownBy(() -> UserEvent.createEvent(
+        assertThatThrownBy(() -> createEvent(
             PUBLISHER,
             null,
             CREATE
         )).isInstanceOf(IllegalArgumentException.class)
-            .hasMessage(userEvent.getInvalidEventIdErrorMessage());
+            .hasMessage(event.getInvalidEventIdErrorMessage());
     }
 
     @Test
     @DisplayName("eventType이 비어있을 경우, IllegalArgumentException이 발생한다.")
     void whenEventTypeIsNullThenIllegalArgumentExceptionShouldBeHappen() {
-        assertThatThrownBy(() -> UserEvent.createEvent(
+        assertThatThrownBy(() -> createEvent(
             PUBLISHER,
             EVENT_ID,
             null
         )).isInstanceOf(IllegalArgumentException.class)
-            .hasMessage(userEvent.getInvalidEventTypeErrorMessage());
+            .hasMessage(event.getInvalidEventTypeErrorMessage());
     }
 
     @Test
@@ -113,9 +117,9 @@ class UserEventUnitTest {
     void whenToStringThenReturnJsonString() {
         final String expectedString = String.format(
             "{\"publisher\":\"%s\",\"domain\":\"%s\",\"eventId\":\"%s\",\"eventType\":\"%s\",\"createdAt\":\"%s\"}",
-            PUBLISHER, "users", EVENT_ID, CREATE, userEvent.getCreatedAt()
+            PUBLISHER, "task", EVENT_ID, CREATE, event.getCreatedAt()
         );
 
-        assertThat(userEvent.toString()).hasToString(expectedString);
+        assertThat(event.toString()).hasToString(expectedString);
     }
 }

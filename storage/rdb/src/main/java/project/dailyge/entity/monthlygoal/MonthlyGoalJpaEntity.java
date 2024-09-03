@@ -14,7 +14,7 @@ import java.util.Objects;
 
 @Getter
 @NoArgsConstructor
-@Entity(name = "monthly_gols")
+@Entity(name = "monthly_goals")
 public class MonthlyGoalJpaEntity extends BaseEntity {
 
     @Id

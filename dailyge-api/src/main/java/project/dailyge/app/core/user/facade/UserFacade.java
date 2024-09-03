@@ -15,6 +15,7 @@ import static project.dailyge.document.common.UuidGenerator.createTimeBasedUUID;
 import project.dailyge.entity.common.EventPublisher;
 import static project.dailyge.entity.common.EventType.CREATE;
 import static project.dailyge.entity.common.EventType.UPDATE;
+import project.dailyge.entity.task.TaskEvent;
 import static project.dailyge.entity.user.Role.NORMAL;
 import project.dailyge.entity.user.UserEvent;
 import static project.dailyge.entity.user.UserEvent.createEvent;
@@ -31,7 +32,8 @@ public class UserFacade {
     private final UserWriteUseCase userWriteUseCase;
     private final TokenProvider tokenProvider;
     private final TokenManager tokenManager;
-    private final EventPublisher<UserEvent> eventPublisher;
+    private final EventPublisher<UserEvent> userEventPublisher;
+    private final EventPublisher<TaskEvent> taskEventEventPublisher;
     private final UserCacheWriteUseCase userCacheWriteUseCase;
 
     public DailygeToken login(final String code) {
@@ -49,13 +51,22 @@ public class UserFacade {
     ) {
         if (userId == null) {
             final Long newUserId = userWriteUseCase.save(response.getEmail());
+            final TaskEvent taskEvent = TaskEvent.createEvent(newUserId, createTimeBasedUUID(), CREATE);
             final UserEvent userEvent = createEvent(newUserId, createTimeBasedUUID(), CREATE);
-            eventPublisher.publishInternalEvent(userEvent);
+            executeEvent(userEvent, taskEvent);
             return newUserId;
         }
         final UserEvent userEvent = createEvent(userId, createTimeBasedUUID(), UPDATE);
-        eventPublisher.publishInternalEvent(userEvent);
+        userEventPublisher.publishInternalEvent(userEvent);
         return userId;
+    }
+
+    private void executeEvent(
+        final UserEvent userEvent,
+        final TaskEvent taskEvent
+    ) {
+        userEventPublisher.publishInternalEvent(userEvent);
+        taskEventEventPublisher.publishInternalEvent(taskEvent);
     }
 
     public void logout(final Long userId) {

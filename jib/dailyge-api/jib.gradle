@@ -9,29 +9,34 @@ def imageTag = System.getenv("IMAGE_TAG")
 
 if (env != null && (env == "dev" || env == "prod")) {
     ecrUri = env == "prod" ? System.getenv("PROD_ECR_URI") : System.getenv("DEV_ECR_URI")
-    port = env == 'prod' ? '8080' : '8081'
-    profile = env == 'prod' ? 'prod' : 'dev'
+    port = env == "prod" ? "8080" : "8081"
+    profile = env == "prod" ? "prod" : "dev"
     label = "dailyge-api-${profile}"
 }
 
 if (env != null && (skipJib != null && skipJib == "false")) {
     jib {
         from {
-            image = 'openjdk:17-jdk-slim'
+            image = "openjdk:17-jdk-slim"
         }
         to {
             image = "${ecrUri}:${imageTag}"
-            credHelper = 'ecr-login'
+            credHelper = "ecr-login"
         }
         container {
             ports = [port]
             labels = [server: label]
             jvmFlags = [
-                    "-Xms512m",
-                    "-Xmx1024m",
                     "-Dspring.profiles.active=${profile}",
                     "-Dfile.encoding=UTF-8",
+                    "-Duser.timezone=Asia/Seoul",
+                    "-Duser.language=ko",
+                    "-Duser.country=KR",
+                    "-Dlog4j2.formatMsgNoLookups=true",
+                    "-XX:+PrintFlagsFinal",
                     "--add-opens=java.base/java.time=ALL-UNNAMED",
+                    "-Xms512m",
+                    "-Xmx1024m",
                     "-XX:+UseG1GC",
                     "-XX:+HeapDumpOnOutOfMemoryError",
                     "-XX:HeapDumpPath=/var/log/app/heapdump.hprof",
@@ -39,9 +44,9 @@ if (env != null && (skipJib != null && skipJib == "false")) {
                     "-XX:+UseCompressedOops"
             ]
             environment = [
-                    'ENCRYPTOR_KEY': System.getenv("ENCRYPTOR_KEY")
+                    "ENCRYPTOR_KEY": System.getenv("ENCRYPTOR_KEY")
             ]
-            creationTime = 'USE_CURRENT_TIMESTAMP'
+            creationTime = "USE_CURRENT_TIMESTAMP"
             allowInsecureRegistries = true
         }
     }

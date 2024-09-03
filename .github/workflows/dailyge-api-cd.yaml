@@ -33,8 +33,8 @@ permissions:
 
 jobs:
   deploy:
-    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
     steps:
       - name: Check out code
         uses: actions/checkout@v2
@@ -132,7 +132,6 @@ jobs:
           service: ${{ env.SERVICE_NAME }}
           cluster: dailyge
           wait-for-service-stability: true
-          stability-timeout-minutes: 10
 
   notify_slack:
     needs: [ deploy ]

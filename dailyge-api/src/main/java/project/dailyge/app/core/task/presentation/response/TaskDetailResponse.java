@@ -5,8 +5,6 @@ import project.dailyge.entity.task.TaskColor;
 import project.dailyge.entity.task.TaskJpaEntity;
 import project.dailyge.entity.task.TaskStatus;
 
-import java.time.LocalDateTime;
-
 @Getter
 public class TaskDetailResponse {
 
@@ -21,8 +19,8 @@ public class TaskDetailResponse {
     private final TaskStatus status;
     private final TaskColor color;
     private final Long userId;
-    private final LocalDateTime createdAt;
-    private final LocalDateTime lastModifiedAt;
+    private final String createdAt;
+    private final String lastModifiedAt;
 
     private TaskDetailResponse(final TaskJpaEntity task) {
         this.taskId = task.getId();
@@ -36,8 +34,8 @@ public class TaskDetailResponse {
         this.status = task.getStatus();
         this.color = task.getColor();
         this.userId = task.getUserId();
-        this.createdAt = task.getCreatedAt();
-        this.lastModifiedAt = task.getLastModifiedAt();
+        this.createdAt = task.getCreatedAtAsString();
+        this.lastModifiedAt = task.getLastModifiedAtAsString();
     }
 
     public static TaskDetailResponse from(final TaskJpaEntity taskDocument) {

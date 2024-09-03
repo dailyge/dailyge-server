@@ -39,4 +39,8 @@ public abstract class BaseEntity {
     public String getCreatedAtAsString() {
         return createdAt.toString();
     }
+
+    public String getLastModifiedAtAsString() {
+        return lastModifiedAt.toString();
+    }
 }

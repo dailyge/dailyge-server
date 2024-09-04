@@ -10,7 +10,7 @@ Dailyge로 일정 관리를 간편하게! <br>
 성실한 하루의 연속이 큰 변화를 가져옵니다. 🏃
 
 [![Release](https://img.shields.io/badge/-📆_Web_Service-blue)](https://www.dailyge.com/) [![Release](https://img.shields.io/badge/-📚_API_Docs-brightgreen)](https://api-docs.dailyge.com/) <br/>
-[![Release](https://img.shields.io/badge/%E2%9C%A8%20release-v0.0.0-brightgreen)](https://www.dailyge.com/)
+[![Release](https://img.shields.io/badge/%E2%9C%A8%20release-v1.0.0-brightgreen)](https://github.com/dailyge/dailyge-server/releases/tag/v1.0.0)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=dailyge_dailyge-server&metric=coverage)](https://sonarcloud.io/summary/new_code?id=dailyge_dailyge-server)
 
 </div>
@@ -69,7 +69,7 @@ Backend, Infra, 협업에 사용된 기술 스택/툴은 다음과 같습니다.
 
 ## 🖥️ Backend.
 
-Java/SpringBoot를 사용해 애플리케이션을 구축했습니다. Liquibase로 데이터베이스 스키마를 추적하고 있으며, API 문서는 Swagger와 RestDocs를 조합해 사용하고 있습니다. 
+Java/SpringBoot를 사용해 애플리케이션을 구축했습니다. Liquibase로 데이터베이스 스키마를 추적하고 있으며, API 문서는 Swagger와 RestDocs를 조합해 사용하고 있습니다.
 
 ![image](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FG9Nmi%2FbtsH9FZOYqq%2FmoUcUwmJZ4Mz9Lxz4LVKc1%2Fimg.png)
 
@@ -77,9 +77,11 @@ Java/SpringBoot를 사용해 애플리케이션을 구축했습니다. Liquibase
 
 ## ☁️ Infra.
 
-서비스 구축을 위해 AWS를 활용했으며, Terraform을 사용해 자원을 프로비저닝 했습니다. Terraform으로 관리되는 자원은 Route53, CloudFront, S3, ALB, ECS, EC2(Application), RD 이며, 일부 자원들은 설치형으로 사용하고 있습니다. 모니터링은 Prometheus와 Grafana를 사용하고 있으며, 운영 및 시스템 로그는 모두 AWS CloudWatch로 관리하고 있습니다. 운영 과정에서 발생하는 이슈는 Grafana Alert 또는 AWS Lambda를 통해 슬랙으로 보고받고 있습니다.
+서비스 구축을 위해 AWS를 활용했으며, Terraform을 사용해 자원을 프로비저닝 했습니다. Terraform으로 관리되는 자원은 Route53, CloudFront, S3, ALB, ECS, EC2(
+Application), RD 이며, 일부 자원들은 설치형으로 사용하고 있습니다. 모니터링은 Prometheus와 Grafana를 사용하고 있으며, 운영 및 시스템 로그는 모두 AWS CloudWatch로 관리하고
+있습니다. 운영 과정에서 발생하는 이슈는 Grafana Alert 또는 AWS Lambda를 통해 슬랙으로 보고받고 있습니다.
 
-![image](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FRUR1K%2FbtsJebYQ9S7%2Fpr8dSua2YHDtpnNlQ6bdR1%2Fimg.png)
+![image](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kaka[…]Fdn%2FY5ifk%2FbtsJeVnHEJH%2FyQlxRPikUxlOzPKbyUs2Fk%2Fimg.png)
 
 > 인프라에 대한 상세한 내용은 [해당 링크](https://github.com/dailyge/dailyge-infra)를 참조해주세요.
 
@@ -87,7 +89,9 @@ Java/SpringBoot를 사용해 애플리케이션을 구축했습니다. Liquibase
 
 ## 👬 Collaboration.
 
-협업 툴은 이슈 트래킹을 위해 Jira/Confluencer를, 자동화 툴은 Zapier와 AWS EventBridge, Lambda, SNS/SQS를 사용하고 있습니다. 팀원 간 커뮤니케이션은 Slack으로 이루어지며, 또한 CICD 과정에서 발생한 리포트, AWS 비용 결과도 Slack으로 보고 받고 있습니다. 팀원 간 코드 컨벤션 관리 및 코드 스멜 제거를 위해 CheckStlye, PMD, SonarCloud와 같은 정적 코드 분석 툴을 사용하고 있습니다.
+협업 툴은 이슈 트래킹을 위해 Jira/Confluencer를, 자동화 툴은 Zapier와 AWS EventBridge, Lambda, SNS/SQS를 사용하고 있습니다. 팀원 간 커뮤니케이션은 Slack으로
+이루어지며, 또한 CICD 과정에서 발생한 리포트, AWS 비용 결과도 Slack으로 보고 받고 있습니다. 팀원 간 코드 컨벤션 관리 및 코드 스멜 제거를 위해 CheckStlye, PMD, SonarCloud와
+같은 정적 코드 분석 툴을 사용하고 있습니다.
 
 ![image](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fb7h7Xw%2FbtsJniCWIXE%2FhKO3sUXR9X4Oq4E30LXu00%2Fimg.png)
 
@@ -95,7 +99,8 @@ Java/SpringBoot를 사용해 애플리케이션을 구축했습니다. Liquibase
 
 # 4. CICD
 
-PR이 생성되면 자동으로 정적 분석을 시작하며, Slack으로 결과를 보고받습니다. 팀원 간 코드 리뷰를 거친 후, dev 브랜치로 병합이 되면, 개발 서버로 배포가 되며, 인수 테스트가 시작됩니다. 이후 QA를 진행하며 기능의 동작 유무, 버그 리포팅을 합니다. 마지막으로 main 브랜치로 병합이 되면 상용 서버로 배포가 되고 최종 결과를 보고받습니다.
+PR이 생성되면 자동으로 정적 분석을 시작하며, Slack으로 결과를 보고받습니다. 팀원 간 코드 리뷰를 거친 후, dev 브랜치로 병합이 되면, 개발 서버로 배포가 되며, 인수 테스트가 시작됩니다. 이후 QA를
+진행하며 기능의 동작 유무, 버그 리포팅을 합니다. 마지막으로 main 브랜치로 병합이 되면 상용 서버로 배포가 되고 최종 결과를 보고받습니다.
 
 ![image](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FN1QMI%2FbtsJm6v06aM%2FuoKarw39V591Ii8FFUTk2k%2Fimg.png)
 
@@ -105,7 +110,8 @@ PR이 생성되면 자동으로 정적 분석을 시작하며, Slack으로 결�
 
 # 5. Architecture
 
-정적 자원은 S3와 CloudFront를, 서버 오케스트레이션은 AWS ECS를 사용했습니다. 각 리소스는 VPC 내부 별도의 서브넷(Public/Private)에 존재하며, ALB와 NAT를 통해 외부와 통신합니다. 부하 테스트를 할 때는 terraform을 통해 서버를 동적으로 확장하고 있으며, 평상시에는 최소 인스턴스만 사용하고 있습니다.
+정적 자원은 S3와 CloudFront를, 서버 오케스트레이션은 AWS ECS를 사용했습니다. 각 리소스는 VPC 내부 별도의 서브넷(Public/Private)에 존재하며, ALB와 NAT를 통해 외부와
+통신합니다. 부하 테스트를 할 때는 terraform을 통해 서버를 동적으로 확장하고 있으며, 평상시에는 최소 인스턴스만 사용하고 있습니다.
 
 ![image](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FRUR1K%2FbtsJebYQ9S7%2Fpr8dSua2YHDtpnNlQ6bdR1%2Fimg.png)
 
@@ -113,7 +119,8 @@ PR이 생성되면 자동으로 정적 분석을 시작하며, Slack으로 결�
 
 # 6. Monitoring
 
-모니터링은 Prometheus와 Grafana를 CloudWatch와 연동해 사용하고 있으며, 이를 통해 알림을 받고 있습니다. 모니터링 중인 리소스는 EC2 서버, 애플리케이션 지표, RDS, Redis, MongoDB 이며, CPU/메모리 사용률, Slow Query 등을 체크하고 있습니다.
+모니터링은 Prometheus와 Grafana를 CloudWatch와 연동해 사용하고 있으며, 이를 통해 알림을 받고 있습니다. 모니터링 중인 리소스는 EC2 서버, 애플리케이션 지표, RDS, Redis,
+MongoDB 이며, CPU/메모리 사용률, Slow Query 등을 체크하고 있습니다.
 
 ![image](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FeEeYh0%2FbtsJfPz2TdW%2FDD2Zu0zqkZfkljdEFs7960%2Fimg.png)
 
@@ -142,7 +149,8 @@ PR이 생성되면 자동으로 정적 분석을 시작하며, Slack으로 결�
 
 <br/><br/><br/><br/>
 
-모듈간 의존관계는 다음과 같으며, 불필요한 의존성 제거, 빌드 시간 단축을 위해 위해 대체로 runtimeOnly 또는 imeimplementation [구성(Configuration)](https://docs.gradle.org/current/userguide/declaring_dependencies.html)을 사용하고 있습니다.
+모듈간 의존관계는 다음과 같으며, 불필요한 의존성 제거, 빌드 시간 단축을 위해 위해 대체로 runtimeOnly 또는
+imeimplementation [구성(Configuration)](https://docs.gradle.org/current/userguide/declaring_dependencies.html)을 사용하고 있습니다.
 
 <br/>
 
@@ -183,9 +191,9 @@ core 패키지는 서비스에 관한 기능을, common 패키지는 프로젝�
 
 <div align="center">
 
-| [beatmeJy](https://github.com/beatmeJY) | [devjun10](https://github.com/devjun10) | [kmularise](https://github.com/kmularise) |
-| :---: | :---: | :---: |
-|<img width="150" src="https://avatars.githubusercontent.com/u/54700818?v=4">|<img width="150" src="https://avatars.githubusercontent.com/u/92818747?v=4">|<img width="150" src="https://avatars.githubusercontent.com/u/106499310?v=4">|
-|**Backend, Frontend**|**Backend, Infra**|**Backend**|
+|                   [beatmeJy](https://github.com/beatmeJY)                    |                   [devjun10](https://github.com/devjun10)                    |                   [kmularise](https://github.com/kmularise)                   |
+|:----------------------------------------------------------------------------:|:----------------------------------------------------------------------------:|:-----------------------------------------------------------------------------:|
+| <img width="150" src="https://avatars.githubusercontent.com/u/54700818?v=4"> | <img width="150" src="https://avatars.githubusercontent.com/u/92818747?v=4"> | <img width="150" src="https://avatars.githubusercontent.com/u/106499310?v=4"> |
+|                            **Backend, Frontend**                             |                              **Backend, Infra**                              |                                  **Backend**                                  |
 
 </div>

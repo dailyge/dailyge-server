@@ -1,0 +1,50 @@
+plugins {
+    id("java-test-fixtures")
+    id("io.spring.dependency-management")
+    id("org.springframework.boot") apply false
+    id("org.asciidoctor.jvm.convert") apply false
+}
+
+dependencies {
+    // JPA
+    api("org.springframework.boot:spring-boot-starter-data-jpa")
+
+    // MySQL
+    runtimeOnly("mysql:mysql-connector-java:${property("mysqlVersion")}")
+}
+
+tasks.named("processResources") {
+    dependsOn "compileJava", "compileTestJava", "compileTestFixturesJava"
+}
+
+def querydslDir = "src/main/generated"
+
+sourceSets {
+    main.java.srcDirs += [querydslDir]
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.getGeneratedSourceOutputDirectory().set(file(querydslDir))
+}
+
+clean.doLast {
+    file(querydslDir).deleteDir()
+}
+
+tasks.named("checkstyleMain") {
+    dependsOn("compileTestJava")
+}
+
+project(":storage:rdb") {
+    tasks.named("pmdMain") {
+        dependsOn "compileTestJava"
+    }
+}
+
+jar {
+    enabled = true
+}
+
+bootJar {
+    enabled = false
+}

@@ -1,0 +1,11 @@
+**.*Application*
+**.*Config*
+**.*CommonApi*
+**.*Health*
+**.common.**
+**.command.**
+**.exception.**
+**.request.**
+**.response.**
+**.support.**
+**.test.**

@@ -1,0 +1,3 @@
+[submodule "config-module"]
+	path = config-module
+	url = https://github.com/dailyge/config-module.git

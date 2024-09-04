@@ -1,0 +1,4 @@
+# https://docs.liquibase.com/concepts/changelogs/yaml-format.html 참조.
+databaseChangeLog:
+  - include:
+      file: /db/rdb/changelog/release-1.0.0/release-1.0.0.yaml

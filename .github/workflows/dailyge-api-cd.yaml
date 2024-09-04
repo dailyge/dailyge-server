@@ -1,0 +1,177 @@
+name: Dailyge-Api Deploy
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - dev
+      - prod
+    paths:
+      - dailyge-api/**
+      - storage/**
+      - support/**
+      - .github/workflows/**
+
+env:
+  SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
+  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  ENCRYPTOR_KEY: ${{ secrets.ENCRYPTOR_KEY }}
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: write
+  checks: write
+  deployments: write
+  issues: write
+  packages: write
+  pages: write
+  repository-projects: write
+  security-events: write
+  statuses: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.pull_request.base.ref }}
+    if: github.event.pull_request.merged == true
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          submodules: true
+          token: ${{ secrets.SUBMODULE_TOKEN }}
+
+      - name: Update submodules
+        run: |
+          git submodule sync --recursive
+          git submodule update --init --recursive --remote
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Cache Gradle
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', '**/build.gradle') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+            ${{ runner.os }}-gradle-
+
+      - name: Set environment-specific variables
+        run: |
+          if [[ "${{ github.event.pull_request.base.ref }}" == "prod" ]]; then
+            echo "ENV=prod" >> $GITHUB_ENV
+            echo "ECR_URI=${{ secrets.PROD_ECR_URI }}" >> $GITHUB_ENV
+            echo "SERVICE_NAME=dailyge-api-prod-service" >> $GITHUB_ENV
+            echo "CONTAINER_NAME=dailyge-api-prod-container" >> $GITHUB_ENV
+            echo "TASK_DEFINITION_NAME=dailyge-api-prod" >> $GITHUB_ENV
+          else
+            echo "ENV=dev" >> $GITHUB_ENV
+            echo "ECR_URI=${{ secrets.DEV_ECR_URI }}" >> $GITHUB_ENV
+            echo "SERVICE_NAME=dailyge-api-dev-service" >> $GITHUB_ENV
+            echo "CONTAINER_NAME=dailyge-api-dev-container" >> $GITHUB_ENV
+            echo "TASK_DEFINITION_NAME=dailyge-api-dev" >> $GITHUB_ENV
+          fi
+          echo "IMAGE_TAG=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v1
+        with:
+          region: ${{ env.AWS_REGION }}
+
+      - name: Build and Push Docker image to ECR
+        run: |
+          ./gradlew dailyge-api:jib -Djib.to.image=${{ env.ECR_URI }}:${{ env.IMAGE_TAG }}
+          aws s3 cp dailyge-api/build/api-spec/openapi3.json s3://${{ secrets.API_DOCS_BUCKET_PATH }}/openapi3.json
+          aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths "/*"
+        env:
+          ENV: ${{ env.ENV }}
+          SKIP_JIB: false
+          ENCRYPTOR_KEY: ${{ secrets.ENCRYPTOR_KEY }}
+          DEV_ECR_URI: ${{ secrets.DEV_ECR_URI }}
+          PROD_ECR_URI: ${{ secrets.PROD_ECR_URI }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          DISTRIBUTION_ID: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+
+      - name: Download ECS task definition JSON file
+        run: |
+          aws ecs describe-task-definition \
+            --task-definition ${{ env.TASK_DEFINITION_NAME }} \
+            --query "taskDefinition" \
+            --output json > task-definition.json
+
+      - name: Fill in the new image ID in the ECS task definition
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: task-definition.json
+          container-name: ${{ env.CONTAINER_NAME }}
+          image: ${{ env.ECR_URI }}:${{ env.IMAGE_TAG }}
+
+      - name: Deploy ECS task definition
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: ${{ env.SERVICE_NAME }}
+          cluster: dailyge
+          wait-for-service-stability: true
+
+  notify_slack:
+    needs: [ deploy ]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Notify Deploy Result to Slack - Success
+        if: ${{ needs.deploy.result == 'success' }}
+        uses: 8398a7/action-slack@v3
+        with:
+          status: success
+          fields: project,ref,commit,author,action,eventName,job,took
+          text: |
+            :white_check_mark: *배포를 성공적으로 완료했습니다.*
+            *Contributor:* ${{ github.actor }}
+            *Reviewers:* ${{ join(github.event.pull_request.requested_reviewers.*.login, ', ') }}
+            *PR:* <${{ github.event.pull_request.html_url }}|PR>
+            *Env:* ${{ github.event.pull_request.base.ref }}
+          username: PR_Bot
+          icon_emoji: ":robot_face:"
+          channel: pr
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.PR_WEBHOOK_URL }}
+
+      - name: Notify Deploy Result to Slack - Failure
+        if: ${{ needs.deploy.result == 'failure' }}
+        uses: 8398a7/action-slack@v3
+        with:
+          status: failure
+          fields: project,ref,commit,author,action,eventName,job,took
+          text: |
+            :x: *배포에 실패했습니다.*
+            *Contributor:* ${{ github.actor }}
+            *Reviewers:* ${{ join(github.event.pull_request.requested_reviewers.*.login, ', ') }}
+            *PR:* <${{ github.event.pull_request.html_url }}|PR>
+            *Env:* ${{ github.event.pull_request.base.ref }}
+            *Description:* PR 채널을 확인해주세요.
+          username: PR_Bot
+          icon_emoji: ":robot_face:"
+          channel: pr
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.PR_WEBHOOK_URL }}

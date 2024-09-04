@@ -1,0 +1,69 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        mavenCentral()
+        maven { url 'https://repo.spring.io/plugin-release' }
+    }
+    resolutionStrategy {
+        eachPlugin {
+            if (requested.id.id == "org.springframework.boot") {
+                useVersion springBootVersion as String
+            }
+            if (requested.id.id == "io.spring.dependency-management") {
+                useVersion springDependencyManagementVersion as String
+            }
+            if (requested.id.id == "org.testcontainers") {
+                useVersion testcontainersVersion as String
+            }
+            if (requested.id.id == "com.ewerk.gradle.plugins.querydsl") {
+                useVersion ewerkVersion as String
+            }
+            if (requested.id.id == "org.asciidoctor.jvm.convert") {
+                useVersion jvmConvertVersion as String
+            }
+            if (requested.id.id == "com.google.cloud.tools.jib") {
+                useVersion jibVersion as String
+            }
+            if (requested.id.id == "org.sonarqube") {
+                useVersion sonarQubeVersion as String
+            }
+            if (requested.id.id == "com.epages.restdocs-api-spec") {
+                useVersion restdocsApiSpecVersion as String
+            }
+            if (requested.id.id == "com.epages.restdocs-api-spec") {
+                useVersion restdocsApiSpecVersion as String
+            }
+            if (requested.id.id == "com.epages:restdocs-api-spec-mockmvc") {
+                useVersion restdocsApiSpecVersion as String
+            }
+            if (requested.id.id == "org.liquibase.gradle") {
+                useVersion(liquibaseVersion)
+            }
+            if (requested.id.id == "org.liquibase:liquibase-core") {
+                useVersion(liquibaseCoreVersion)
+            }
+        }
+    }
+}
+
+gradle.projectsLoaded {
+    gradle.startParameter.maxWorkerCount = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
+}
+
+buildCache {
+    local {
+        enabled = true
+        directory = "${rootProject.projectDir}/.gradle/build-cache"
+    }
+}
+
+rootProject.name = "dailyge"
+include(
+        "admin-api",
+        "dailyge-api",
+        "storage:common",
+        "storage:document",
+        "storage:rdb",
+        "storage:memory",
+        "support"
+)

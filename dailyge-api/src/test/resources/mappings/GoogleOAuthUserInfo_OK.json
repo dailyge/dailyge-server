@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "urlPath": "/userinfo"
+  },
+  "response": {
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "status": 200,
+    "jsonBody": {
+      "id": "1",
+      "name": "dailyges",
+      "email": "dailyges@gmail.com",
+      "picture": "test.url"
+    }
+  }
+}

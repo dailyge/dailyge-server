@@ -1,0 +1,142 @@
+plugins {
+    id("java")
+    id("pmd")
+    id("jacoco")
+    id("checkstyle")
+    id("org.sonarqube")
+    id("org.springframework.boot") apply false
+    id("com.google.cloud.tools.jib") apply false
+    id("io.spring.dependency-management") apply false
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+allprojects {
+    repositories {
+        mavenCentral()
+        maven { url "https://repo.spring.io/release" }
+    }
+}
+
+sonarqube {
+    properties {
+        property("sonar.organization", "dailyge")
+        property("sonar.host.url", "https://sonarcloud.io")
+        property("sonar.token", System.getenv("SONAR_TOKEN"))
+        property("sonar.projectKey", "dailyge_dailyge-server")
+        property("sonar.language", "java")
+        property("sonar.sourceEncoding", "UTF-8")
+        property("sonar.test.inclusions", "**/*Test.java")
+        property("sonar.scm.forceReloadAll", "true")
+        def exclusions = []
+        file("${rootDir}/config/jacoco/exclude-coverage.txt").eachLine {
+            exclusions.add(it)
+        }
+        property("sonar.exclusions", exclusions.join(", "))
+        property("sonar.java.coveragePlugin", "jacoco")
+    }
+}
+
+subprojects {
+    apply(plugin: "pmd")
+    apply(plugin: "java")
+    apply(plugin: "jacoco")
+    apply(plugin: "checkstyle")
+    apply(plugin: "application")
+    apply(plugin: "java-library")
+    apply(plugin: "org.sonarqube")
+    apply(plugin: "java-test-fixtures")
+    apply(plugin: "org.springframework.boot")
+    apply(plugin: "com.google.cloud.tools.jib")
+    apply(plugin: "io.spring.dependency-management")
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+        }
+    }
+
+    dependencies {
+        // Test
+        testImplementation("org.springframework.boot:spring-boot-starter-test")
+
+        // QueryDsl
+        implementation("com.querydsl:querydsl-jpa:${queryDslVersion}:jakarta")
+
+        // Lombok
+        compileOnly("org.projectlombok:lombok:${lombokVersion}")
+        annotationProcessor("org.projectlombok:lombok:${lombokVersion}")
+
+        // AnnotationProcessor
+        annotationProcessor("com.querydsl:querydsl-apt:${queryDslVersion}:jakarta")
+        annotationProcessor("jakarta.annotation:jakarta.annotation-api")
+        annotationProcessor("jakarta.persistence:jakarta.persistence-api")
+    }
+
+    jacocoTestReport {
+        dependsOn("test")
+        reports {
+            xml.required = true
+            html.required = false
+            csv.required = false
+            xml.destination file("${buildDir}/reports/jacoco/test/jacocoTestReport.xml")
+        }
+        afterEvaluate {
+            def exclusions = extractQClass()
+            file("${rootDir}/config/jacoco/exclude-coverage.txt").eachLine {
+                exclusions.add(it)
+            }
+            classDirectories.setFrom(files(classDirectories.files.collect {
+                fileTree(dir: it, exclude: exclusions)
+            }))
+        }
+    }
+
+    tasks.test {
+        useJUnitPlatform()
+        finalizedBy jacocoTestReport
+        jvmArgs "--add-opens=java.base/java.time=ALL-UNNAMED"
+    }
+
+    sonarqube {
+        properties {
+            property("sonar.java.binaries", "${buildDir}/classes/java/main")
+            property("sonar.sources", "src/main/java")
+            if (file("${projectDir}/src/test/java").exists()) {
+                property "sonar.tests", "src/test/java"
+            }
+            property("sonar.coverage.jacoco.xmlReportPaths", "${buildDir}/reports/jacoco/test/jacocoTestReport.xml")
+        }
+    }
+
+    checkstyle {
+        toolVersion = project.findProperty("checkStyleVersion")
+        configFile = file("${rootDir}/config/lint/dailyge-rule.xml")
+        configProperties = ["suppressionFile": file("${rootDir}/config/lint/dailyge-suppressions.xml")]
+        maxWarnings = 0
+    }
+
+    pmd {
+        toolVersion = project.findProperty("pmdVersion")
+        pmdTest.enabled = true
+        consoleOutput = true
+        ignoreFailures = false
+        ruleSetFiles = files("${rootDir}/config/lint/dailyge-pmd-rules.xml")
+    }
+}
+
+static def extractQClass() {
+    def qClasses = []
+    for (qPattern in "QA".."QZ") {
+        qClasses.add("**/*$qPattern*")
+    }
+    return qClasses
+}

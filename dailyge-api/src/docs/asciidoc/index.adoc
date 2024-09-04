@@ -1,0 +1,501 @@
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+:operation-http-request-title: Request
+:operation-http-response-title: Response
+
+= 📆 Dailyge
+
+link:https:/www.dailyge.com[Dailyge] API 문서 입니다.
+각 API에 대한 상세 정보는 왼쪽 목차를 **클릭** 하면 확인할 수 있습니다. +
+
+image::url.jpg[이미지,width=1920,height=500]
+
+[TIP]
+📆 서비스 icon:info-circle[] link:https:/www.dailyge.com[Dailyge]
+
+[NOTE]
+====
+📧 문의 사항 mailto:helper@dailyge.com[helper@dailyge.com]
+====
+
+- - -
+
+== 📝 1. 사용자(User)
+
+[cols=7*]
+
+|===
+| 기능 | Method | 인증 | API | Success | Failure | 설명
+
+| <<1-1 사용자 정보 조회>> | GET|O|/api/users/{userId} | 200 | - | 사용자 ID로 조회
+| <<1-2 사용자 삭제>> | DELETE|O|/api/users/{userId} | 204 | - | 사용자 ID로 삭제
+| <<1-3 로그인 페이지 조회>> | GET|X|/api/login/{userId} | 200 | - | 구글 로그인 페이지 조회
+| <<1-4 로그아웃>> | POST|O|/api/logout | 200 | - | 사용자 로그아웃
+|===
+
+### 1-1 사용자 정보 조회
+
+사용자 정보를 조회합니다.
+
+#### Request
+
+include::{snippets}/user_read_documentation_test/when_find_user_then_status_code_should_be_200_ok__rest_docs/http-request.adoc[]
+
+#### Request-Header
+
+include::{snippets}/user_read_documentation_test/when_find_user_then_status_code_should_be_200_ok__rest_docs/request-headers.adoc[]
+
+#### Path-Parameters
+
+include::{snippets}/user_read_documentation_test/when_find_user_then_status_code_should_be_200_ok__rest_docs/path-parameters.adoc[]
+
+#### Response
+
+include::{snippets}/user_read_documentation_test/when_find_user_then_status_code_should_be_200_ok__rest_docs/http-response.adoc[]
+
+#### Response-Fields
+
+include::{snippets}/user_read_documentation_test/when_find_user_then_status_code_should_be_200_ok__rest_docs/response-fields.adoc[]
+
+### 1-2 사용자 삭제
+
+사용자를 삭제합니다.
+
+#### Request
+
+include::{snippets}/user_delete_documentation_test/when_user_delete_then_status_code_should_be_204__no_content__rest_docs/http-request.adoc[]
+
+#### Request-Header
+
+include::{snippets}/user_delete_documentation_test/when_user_delete_then_status_code_should_be_204__no_content__rest_docs/request-headers.adoc[]
+
+#### Path-Parameters
+
+include::{snippets}/user_delete_documentation_test/when_user_delete_then_status_code_should_be_204__no_content__rest_docs/path-parameters.adoc[]
+
+#### Response
+
+include::{snippets}/user_delete_documentation_test/when_user_delete_then_status_code_should_be_204__no_content__rest_docs/http-response.adoc[]
+
+#### Response-Cookies
+
+include::{snippets}/user_delete_documentation_test/when_user_delete_then_status_code_should_be_204__no_content__rest_docs/response-cookies.adoc[]
+
+### 1-3 로그인 페이지 조회
+
+로그인 페이지를 조회합니다.
+
+#### Request
+
+include::{snippets}/login_page_documentation_test\when_get_login_page_then_status_code_should_be_200_ok__rest_docs/http-request.adoc[]
+
+#### Response
+
+include::{snippets}/login_page_documentation_test\when_get_login_page_then_status_code_should_be_200_ok__rest_docs/http-response.adoc[]
+
+#### Response-Fields
+
+include::{snippets}/login_page_documentation_test\when_get_login_page_then_status_code_should_be_200_ok__rest_docs/response-fields.adoc[]
+
+### 1-4 로그아웃
+
+#### Request
+
+include::{snippets}/logout_documentation_test/when_logout_then_status_code_should_be_200_ok__rest_docs/http-request.adoc[]
+
+#### Response
+
+include::{snippets}/logout_documentation_test/when_logout_then_status_code_should_be_200_ok__rest_docs/http-response.adoc[]
+
+#### Response-Cookies
+
+include::{snippets}/logout_documentation_test/when_logout_then_status_code_should_be_200_ok__rest_docs/response-cookies.adoc[]
+
+== 📝 2. 할 일(Task)
+
+[cols=7*]
+
+|===
+| 기능 | Method | 인증 | API | Success | Failure | 설명
+
+| <<2-1. Task 상세 조회>> | GET | O | /api/tasks/+{taskId}+?date=+{date}+ | 200 | - | Task ID로 조회
+| <<2-2. 월간 일정표 조회>> | GET | O | /api/monthly-tasks/+{monthlyTaskId}+ | 200 | - | 월간 일정표 ID로 조회
+| <<2-3. 월간 일정표 조회(2)>> | GET | O | /api/monthly-tasks?date=+{date}+ | 200 | - | 월간 일정표 Date로 조회
+| <<2-4. 월간 일정표 ID 조회>> | GET | O | /api/monthly-tasks/id | 200 | - | 월간 일정표 ID 조회
+| <<2-5. Task 상태 목록 조회>> | GET | O | /api/tasks?date=+{date}+ | 200 | - | 월간 일정표 생성
+| <<2-6. 월간 일정표 생성>> | POST | O | /api/tasks | 201 | 409 | 월간 일정표 생성
+| <<2-3. Task 등록>> | POST | O | /api/tasks | 201 | - | -
+| <<2-4. Task 수정>> | PUT | O | /api/tasks/+{taskId}+ | 200 | - | -
+| <<2-5. Task 상태 수정>> | PUT | O | /api/tasks/+{taskId}+ | 200 | - | -
+| <<2-6. Task 삭제>> | DELETE | O | /api/tasks | 201 | | -
+|===
+
+### 2-1. Task 상세 조회
+
+오늘 할 일 상세 조회하는 API 입니다.
+
+#### Request
+
+include::{snippets}/task_read_documentation_test/when_task_exists_then_status_code_should_be200_ok__rest_docs/http-request.adoc[]
+
+#### Request-Header
+
+include::{snippets}/task_read_documentation_test/when_task_exists_then_status_code_should_be200_ok__rest_docs/request-headers.adoc[]
+
+#### Query-Parameters
+
+include::{snippets}/task_read_documentation_test/when_task_exists_then_status_code_should_be200_ok__rest_docs/query-parameters.adoc[]
+
+#### Request-Path-Parameters
+
+include::{snippets}/task_read_documentation_test/when_task_exists_then_status_code_should_be200_ok__rest_docs/path-parameters.adoc[]
+
+#### Response
+
+include::{snippets}/task_read_documentation_test/when_task_exists_then_status_code_should_be200_ok__rest_docs/http-response.adoc[]
+
+#### Response-Fields
+
+include::{snippets}/task_read_documentation_test/when_task_exists_then_status_code_should_be200_ok__rest_docs/response-fields.adoc[]
+
+### 2-2. 월간 일정표 조회
+
+월간 일정을 조회하는 API 입니다.
+
+#### Request
+
+include::{snippets}/monthly_task_read_documentation_test/when_monthly_task_exists_with_id_then_status_code_should_be_200_ok__rest_docs/http-request.adoc[]
+
+#### Request-Header
+
+include::{snippets}/monthly_task_read_documentation_test/when_monthly_task_exists_with_id_then_status_code_should_be_200_ok__rest_docs/request-headers.adoc[]
+
+#### Request-Path-Parameters
+
+include::{snippets}/monthly_task_read_documentation_test/when_monthly_task_exists_with_id_then_status_code_should_be_200_ok__rest_docs/path-parameters.adoc[]
+
+#### Response
+
+include::{snippets}/monthly_task_read_documentation_test/when_monthly_task_exists_with_id_then_status_code_should_be_200_ok__rest_docs/http-response.adoc[]
+
+#### Response-Fields
+
+include::{snippets}/monthly_task_read_documentation_test/when_monthly_task_exists_with_id_then_status_code_should_be_200_ok__rest_docs/response-fields.adoc[]
+
+### 2-3. 월간 일정표 조회(2)
+
+월간 일정을 조회하는 API 입니다.
+
+#### Request
+
+include::{snippets}/monthly_task_read_documentation_test/when_monthly_task_exists_with_user_id_and_date_then_status_code_should_be200_ok__rest_docs/http-request.adoc[]
+
+#### Request-Header
+
+include::{snippets}/monthly_task_read_documentation_test/when_monthly_task_exists_with_user_id_and_date_then_status_code_should_be200_ok__rest_docs/request-headers.adoc[]
+
+#### Query-Parameters
+
+include::{snippets}/monthly_task_read_documentation_test/when_monthly_task_exists_with_user_id_and_date_then_status_code_should_be200_ok__rest_docs/query-parameters.adoc[]
+
+#### Response
+
+include::{snippets}/monthly_task_read_documentation_test/when_monthly_task_exists_with_user_id_and_date_then_status_code_should_be200_ok__rest_docs/http-response.adoc[]
+
+#### Response-Fields
+
+include::{snippets}/monthly_task_read_documentation_test/when_monthly_task_exists_with_user_id_and_date_then_status_code_should_be200_ok__rest_docs/response-fields.adoc[]
+
+### 2-4. 월간 일정표 ID 조회
+
+월간 일정표 ID를 조회하는 API 입니다.
+
+#### Request
+
+include::{snippets}/monthly_task_read_documentation_test/when_monthly_task_id_exists_with_user_id_and_date_then_status_code_should_be200_ok__rest_docs/http-request.adoc[]
+
+#### Request-Header
+
+include::{snippets}/monthly_task_read_documentation_test/when_monthly_task_id_exists_with_user_id_and_date_then_status_code_should_be200_ok__rest_docs/request-headers.adoc[]
+
+#### Query-Parameters
+
+include::{snippets}/monthly_task_read_documentation_test/when_monthly_task_id_exists_with_user_id_and_date_then_status_code_should_be200_ok__rest_docs/query-parameters.adoc[]
+
+#### Response
+
+include::{snippets}/monthly_task_read_documentation_test/when_monthly_task_id_exists_with_user_id_and_date_then_status_code_should_be200_ok__rest_docs/http-response.adoc[]
+
+#### Response-Fields
+
+include::{snippets}/monthly_task_read_documentation_test/when_monthly_task_id_exists_with_user_id_and_date_then_status_code_should_be200_ok__rest_docs/response-fields.adoc[]
+
+### 2-5. Task 상태 목록 조회
+
+Task 상태 목록을 조회하는 API 입니다.
+
+#### Request
+
+include::{snippets}/task_read_documentation_test/when_read_task_status_result_should_be_200_ok__rest_docs/http-request.adoc[]
+
+#### Request-Header
+
+include::{snippets}/task_read_documentation_test/when_read_task_status_result_should_be_200_ok__rest_docs/request-headers.adoc[]
+
+#### Response
+
+include::{snippets}/task_read_documentation_test/when_read_task_status_result_should_be_200_ok__rest_docs/http-response.adoc[]
+
+#### Response-Fields
+
+include::{snippets}/task_read_documentation_test/when_read_task_status_result_should_be_200_ok__rest_docs/response-fields.adoc[]
+
+### 2-6. 월간 일정표 생성
+
+월간 일정표를 생성하는 API 입니다.
+
+#### Request
+
+include::{snippets}/monthly_tasks_register_documentation_test/when_create_monthly_tasks_then_response_should_be201__rest_docs/http-request.adoc[]
+
+#### Request-Header
+
+include::{snippets}/monthly_tasks_register_documentation_test/when_create_monthly_tasks_then_response_should_be201__rest_docs/request-headers.adoc[]
+
+#### Request-Fields
+
+include::{snippets}/monthly_tasks_register_documentation_test/when_create_monthly_tasks_then_response_should_be201__rest_docs/request-fields.adoc[]
+
+#### Response
+
+include::{snippets}/monthly_tasks_register_documentation_test/when_create_monthly_tasks_then_response_should_be201__rest_docs/http-response.adoc[]
+
+#### Response-Fields
+
+include::{snippets}/monthly_tasks_register_documentation_test/when_create_monthly_tasks_then_response_should_be201__rest_docs/response-fields.adoc[]
+
+### 2-3. Task 등록
+
+오늘 할 일을 등록하는 API 입니다.
+
+#### Request
+
+include::{snippets}/task_register_documentation_test/when_register_task_then_status_code_should_be_201__rest_docs/http-request.adoc[]
+
+#### Request-Header
+
+include::{snippets}/task_register_documentation_test/when_register_task_then_status_code_should_be_201__rest_docs/request-headers.adoc[]
+
+#### Request-Fields
+
+include::{snippets}/task_register_documentation_test/when_register_task_then_status_code_should_be_201__rest_docs/request-fields.adoc[]
+
+#### Response
+
+include::{snippets}/task_register_documentation_test/when_register_task_then_status_code_should_be_201__rest_docs/http-response.adoc[]
+
+#### Response-Fields
+
+include::{snippets}/task_register_documentation_test/when_register_task_then_status_code_should_be_201__rest_docs/response-fields.adoc[]
+
+### 2-4. Task 수정
+
+Task를 수정하는 API 입니다.
+
+#### Request
+
+include::{snippets}/task_update_documentation_test/when_update_task_then_status_code_should_be_200__rest_docs/http-request.adoc[]
+
+#### Request-Header
+
+include::{snippets}/task_update_documentation_test/when_update_task_then_status_code_should_be_200__rest_docs/request-headers.adoc[]
+
+#### Path-Parameters
+
+include::{snippets}/task_update_documentation_test/when_update_task_then_status_code_should_be_200__rest_docs/path-parameters.adoc[]
+
+#### Request-Fields
+
+include::{snippets}/task_update_documentation_test/when_update_task_then_status_code_should_be_200__rest_docs/request-fields.adoc[]
+
+#### Response
+
+include::{snippets}/task_update_documentation_test/when_update_task_then_status_code_should_be_200__rest_docs/http-response.adoc[]
+
+#### Response-Fields
+
+include::{snippets}/task_update_documentation_test/when_update_task_then_status_code_should_be_200__rest_docs/response-fields.adoc[]
+
+### 2-5. Task 상태 수정
+
+Task 상태(TODO, DONE, NONE)를 수정하는 API 입니다.
+
+#### Request
+
+include::{snippets}/task_update_documentation_test/when_update_task_status_then_status_code_should_be_200__rest_docs/http-request.adoc[]
+
+#### Request-Header
+
+include::{snippets}/task_update_documentation_test/when_update_task_status_then_status_code_should_be_200__rest_docs/request-headers.adoc[]
+
+#### Path-Parameters
+
+include::{snippets}/task_update_documentation_test/when_update_task_status_then_status_code_should_be_200__rest_docs/path-parameters.adoc[]
+
+#### Request-Fields
+
+include::{snippets}/task_update_documentation_test/when_update_task_status_then_status_code_should_be_200__rest_docs/request-fields.adoc[]
+
+#### Response
+
+include::{snippets}/task_update_documentation_test/when_update_task_status_then_status_code_should_be_200__rest_docs/http-response.adoc[]
+
+#### Response-Fields
+
+include::{snippets}/task_update_documentation_test/when_update_task_status_then_status_code_should_be_200__rest_docs/response-fields.adoc[]
+
+### 2-6. Task 삭제
+
+오늘 할 일을 삭제하는 API 입니다.
+
+#### Request
+
+include::{snippets}/task_delete_documentation_test/when_delete_task_then_status_code_should_be204_no_content/http-request.adoc[]
+
+#### Request-Header
+
+include::{snippets}/task_delete_documentation_test/when_delete_task_then_status_code_should_be204_no_content/request-headers.adoc[]
+
+#### Request-Path-Parameters
+
+include::{snippets}/task_delete_documentation_test/when_delete_task_then_status_code_should_be204_no_content/path-parameters.adoc[]
+
+#### Response
+
+include::{snippets}/task_delete_documentation_test/when_delete_task_then_status_code_should_be204_no_content/http-response.adoc[]
+
+
+== 📝 3. 월간 목표(MonthlyGoal)
+
+[cols=7*]
+
+|===
+| 기능 | Method | 인증 | API | Success | Failure | 설명
+
+| <<3-1. MonthlyGoal 생성>> | POST | O | /api/monthly-goals/ | 201 | - | 월간 목표 생성
+|===
+
+### 3-1. MonthlyGoal 생성
+
+월간 목표를 생성하는 API 입니다.
+
+#### Request
+
+include::{snippets}/monthly_goal_create_documentation_test/when_create_monthly_goal_then_status_code_should_be201__rest_docs/http-request.adoc[]
+
+#### Request-Header
+
+include::{snippets}/monthly_goal_create_documentation_test/when_create_monthly_goal_then_status_code_should_be201__rest_docs/request-headers.adoc[]
+
+#### Request-Fields
+
+include::{snippets}/monthly_goal_create_documentation_test/when_create_monthly_goal_then_status_code_should_be201__rest_docs/request-fields.adoc[]
+
+#### Response
+
+include::{snippets}/monthly_goal_create_documentation_test/when_create_monthly_goal_then_status_code_should_be201__rest_docs/http-response.adoc[]
+
+#### Response-Fields
+
+include::{snippets}/monthly_goal_create_documentation_test/when_create_monthly_goal_then_status_code_should_be201__rest_docs/response-fields.adoc[]
+
+### 3-2. MonthlyGoal 수정
+
+월간 목표를 수정하는 API 입니다.
+
+#### Request
+
+include::{snippets}/monthly_goal_update_documentation_test/when_update_monthly_goal_then_status_code_should_be200__rest_docs/http-request.adoc[]
+
+#### Request-Header
+
+include::{snippets}/monthly_goal_update_documentation_test/when_update_monthly_goal_then_status_code_should_be200__rest_docs/request-headers.adoc[]
+
+#### Path-Parameters
+
+include::{snippets}/monthly_goal_update_documentation_test/when_update_monthly_goal_then_status_code_should_be200__rest_docs/path-parameters.adoc[]
+
+#### Request-Fields
+
+include::{snippets}/monthly_goal_update_documentation_test/when_update_monthly_goal_then_status_code_should_be200__rest_docs/request-fields.adoc[]
+
+
+#### Response
+
+include::{snippets}/monthly_goal_update_documentation_test/when_update_monthly_goal_then_status_code_should_be200__rest_docs/http-response.adoc[]
+
+#### Response-Fields
+
+include::{snippets}/monthly_goal_update_documentation_test/when_update_monthly_goal_then_status_code_should_be200__rest_docs/response-fields.adoc[]
+
+
+### 3-3. MonthlyGoal 상태 수정
+
+월간 목표 달성 여부를 수정하는 API 입니다.
+
+#### Request
+
+include::{snippets}/monthly_goal_update_documentation_test/when_update_monthly_goal_then_status_code_should_be200__rest_docs/http-request.adoc[]
+
+#### Request-Header
+
+include::{snippets}/monthly_goal_update_documentation_test/when_update_monthly_goal_then_status_code_should_be200__rest_docs/request-headers.adoc[]
+
+#### Path-Parameters
+
+include::{snippets}/monthly_goal_update_documentation_test/when_update_monthly_goal_then_status_code_should_be200__rest_docs/path-parameters.adoc[]
+
+#### Request-Fields
+
+include::{snippets}/monthly_goal_update_documentation_test/when_update_monthly_goal_then_status_code_should_be200__rest_docs/request-fields.adoc[]
+
+
+#### Response
+
+include::{snippets}/monthly_goal_update_documentation_test/when_update_monthly_goal_then_status_code_should_be200__rest_docs/http-response.adoc[]
+
+#### Response-Fields
+
+include::{snippets}/monthly_goal_update_documentation_test/when_update_monthly_goal_then_status_code_should_be200__rest_docs/response-fields.adoc[]
+
+
+### 3-4. MonthlyGoal 삭제
+
+월간 목표를 삭제하는 API 입니다.
+
+#### Request
+
+include::{snippets}/monthly_goal_delete_documentation_test/when_delete_monthly_goal_then_status_code_should_be204__rest_docs/http-request.adoc[]
+
+#### Request-Header
+
+include::{snippets}/monthly_goal_delete_documentation_test/when_delete_monthly_goal_then_status_code_should_be204__rest_docs/request-headers.adoc[]
+
+#### Path-Parameters
+
+include::{snippets}/monthly_goal_delete_documentation_test/when_delete_monthly_goal_then_status_code_should_be204__rest_docs/path-parameters.adoc[]
+
+#### Response
+
+include::{snippets}/monthly_goal_delete_documentation_test/when_delete_monthly_goal_then_status_code_should_be204__rest_docs/http-response.adoc[]
+
+#### Response-Fields
+
+include::{snippets}/monthly_goal_delete_documentation_test/when_delete_monthly_goal_then_status_code_should_be204__rest_docs/response-fields.adoc[]

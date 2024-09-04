@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         name="Custom ruleset"
+         xmlns="http://pmd.sourceforge.netruleset/2.0.0"
+         xsi:schemaLocation="http://pmd.sourceforge.netruleset/2.0.0 http://pmd.sourceforge.netruleset_2_0_0.xsd">
+    <description>
+        Dailyge PMD Rules
+    </description>
+    <!--  https://www.ing.iac.es//~docs/external/java/pmd/rules/junit.html/-->
+    <rule ref="category/java/bestpractices.xml">
+        <exclude name="AbstractClassWithoutAbstractMethod"/>
+        <exclude name="UnusedLocalVariable"/>
+        <exclude name="JUnitAssertionsShouldIncludeMessage"/>
+        <exclude name="AbbreviationAsWordInName"/>
+        <exclude name="UnusedPrivateMethod"/>
+        <exclude name="UnusedFormalParameter"/>
+        <exclude name="GuardLogStatement"/>
+        <exclude name="AvoidUsingHardCodedIP"/>
+        <exclude name="UnusedPrivateField"/>
+        <exclude name="JUnitTestsShouldIncludeAssert"/>
+        <exclude name="JUnitTestContainsTooManyAsserts"/>
+        <exclude name="AbbreviationAsWordInName"/>
+        <exclude name="SimplifiableTestAssertion"/>
+        <exclude name="PreserveStackTrace"/>
+        <exclude name="ConstantsInInterface"/>
+    </rule>
+</ruleset>

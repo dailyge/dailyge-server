@@ -1,0 +1,125 @@
+plugins {
+    id("org.liquibase.gradle")
+    id("org.asciidoctor.jvm.convert")
+    id("com.epages.restdocs-api-spec")
+}
+
+configurations {
+    asciidoctorExt
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+apply(from: "${rootDir}/jib/dailyge-api/jib.gradle")
+
+dependencies {
+    implementation(project(":storage:common"))
+    implementation(project(":storage:document"))
+    implementation(project(":storage:rdb"))
+    implementation(project(":storage:memory"))
+    implementation(project(":support"))
+
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
+
+    implementation("io.jsonwebtoken:jjwt:0.9.1")
+    implementation("javax.xml.bind:jaxb-api:2.3.1")
+    implementation("com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4")
+    implementation("org.liquibase:liquibase-core")
+
+    implementation("software.amazon.awssdk:sns")
+    implementation(platform("io.awspring.cloud:spring-cloud-aws-dependencies:${property("awsSpringCloudVersion")}"))
+    implementation("io.awspring.cloud:spring-cloud-aws-starter-sqs")
+
+    testImplementation("org.springframework.restdocs:spring-restdocs-restassured")
+    testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
+    testImplementation("com.epages:restdocs-api-spec-mockmvc:${restdocsApiSpecVersion}")
+    testImplementation("com.epages:restdocs-api-spec-restassured:${restdocsApiSpecVersion}")
+    testImplementation("org.testcontainers:testcontainers")
+    testImplementation("org.testcontainers:localstack")
+    testImplementation("org.testcontainers:junit-jupiter")
+    testImplementation("org.testcontainers:mysql")
+    testImplementation("org.springframework.cloud:spring-cloud-contract-wiremock")
+
+    asciidoctorExt("org.springframework.restdocs:spring-restdocs-asciidoctor")
+}
+
+springBoot {
+    mainClassName = "project.dailyge.app.DailygeApplication"
+}
+
+ext {
+    snippetsDir = file("build/generated-snippets")
+}
+
+test {
+    dependsOn("copySubmoduleConfig")
+    outputs.dir snippetsDir
+    dependsOn(":storage:rdb:test")
+    dependsOn(":storage:document:test")
+    jvmArgs "--add-opens=java.base/java.time=ALL-UNNAMED"
+}
+
+asciidoctor {
+    attributes "snippets": snippetsDir
+    inputs.dir snippetsDir
+    dependsOn test
+    onlyIf { test.state.executed && test.state.failure == null }
+}
+
+tasks.build.dependsOn(":storage:rdb:test")
+tasks.build.dependsOn(":storage:document:test")
+
+tasks.register("copyDocument", Copy) {
+    dependsOn asciidoctor
+    from file("build/docs/asciidoc")
+    into file("src/main/resources/static/docs")
+    onlyIf { test.state.executed && test.state.failure == null }
+}
+
+build {
+    dependsOn copyDocument
+    dependsOn(':dailyge-api:openapi3')
+}
+
+bootJar {
+    dependsOn asciidoctor
+    from("${asciidoctor.outputDir}/html5") {
+        into "static/docs"
+    }
+}
+
+tasks.register("copySubmoduleConfig", Copy) {
+    from("${rootDir}/config-module/dailyge-api")
+    include("*.yml")
+    into("${rootDir}/dailyge-api/src/main/resources")
+}
+
+tasks.named("processResources") {
+    dependsOn("copySubmoduleConfig")
+    dependsOn(":storage:rdb:compileTestJava")
+}
+
+tasks.withType(JavaCompile).configureEach {
+    outputs.cacheIf { true }
+}
+
+tasks.named("jib").configure {
+    dependsOn("copySubmoduleConfig")
+    dependsOn("openapi3")
+    dependsOn("copyDocument")
+    enabled = true
+}
+
+openapi3 {
+    def env = System.getenv("ENV")
+    setServer(env != null && env == 'prod' ? "https://api.dailyge.com" : "https://api-dev.dailyge.com")
+    title = "Dailyge Api"
+    description = "Dailyge Api 문서 입니다."
+    version = "1.0.0"
+    format = "json"
+}

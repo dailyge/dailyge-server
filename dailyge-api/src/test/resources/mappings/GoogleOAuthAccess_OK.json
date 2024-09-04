@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "POST",
+    "urlPath": "/authorization"
+  },
+  "response": {
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "status": 200,
+    "jsonBody": {
+      "access_token": "Access-Token",
+      "expires_in": 3600,
+      "scope": "email, openid",
+      "token_type": "Bearer"
+    }
+  }
+}

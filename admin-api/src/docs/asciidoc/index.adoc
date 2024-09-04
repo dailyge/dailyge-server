@@ -1,0 +1,86 @@
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+:operation-http-request-title: Request
+:operation-http-response-title: Response
+
+= 📆 Dailyge
+
+link:https:/www.dailyge.com[Dailyge] 관리자 API 문서 입니다.
+각 API에 대한 상세 정보는 왼쪽 목차를 **클릭** 하면 확인할 수 있습니다. +
+
+image::url.jpg[이미지,width=1920,height=500]
+
+[TIP]
+📆 서비스 icon:info-circle[] link:https:/www.dailyge.com[Dailyge]
+
+[NOTE]
+====
+📧 문의 사항 mailto:helper@dailyge.com[helper@dailyge.com]
+====
+
+- - -
+
+== 📝 1. CodeAndMessage
+
+[cols=7*]
+
+|===
+| 기능 | Method | 인증 | API | Success | Failure | 설명
+
+| <<1-1. Task Dailyge 서비스 코드&메시지 목록 조회>> | GET | O | /api/codeandmessages | 200 | - | Dailyge 서비스 코드&메시지 조회
+|===
+
+### 1-1. Task Dailyge 서비스 코드&메시지 목록 조회
+
+Dailyge 서비스에서 사용되는 코드&메시지를 조회하는 API 입니다.
+
+#### Request
+
+include::{snippets}/code_and_message_read_documentation_test/when_search_code_and_message_then_result_should_be_200__rest_docs/http-request.adoc[]
+
+#### Response
+
+include::{snippets}/code_and_message_read_documentation_test/when_search_code_and_message_then_result_should_be_200__rest_docs/http-response.adoc[]
+
+#### Response-Fields
+
+include::{snippets}/code_and_message_read_documentation_test/when_search_code_and_message_then_result_should_be_200__rest_docs/response-fields.adoc[]
+
+
+== 📝 2. User Blacklist
+
+[cols=7*]
+|===
+| 기능 | Method | 인증 | API | Success | Failure | 설명
+
+| <<2-1. User Blacklist 등록>> | Post | O | /api/user/blacklist/{userId} | 200 | - | User Blacklist 등록
+|===
+
+### 2-1. User Blacklist 등록
+
+### Request
+
+include::{snippets}/user_blacklist_create_documentation/when_save_user_blacklist_then_result_should_be_200__rest_docs/http-request.adoc[]
+
+#### Request-Path-Parameters
+
+include::{snippets}/user_blacklist_create_documentation/when_save_user_blacklist_then_result_should_be_200__rest_docs/path-parameters.adoc[]
+
+#### Request-Fields
+
+include::{snippets}/user_blacklist_create_documentation/when_save_user_blacklist_then_result_should_be_200__rest_docs/request-fields.adoc[]
+
+#### Response
+
+include::{snippets}/user_blacklist_create_documentation/when_save_user_blacklist_then_result_should_be_200__rest_docs/http-response.adoc[]
+
+#### Response-Fields
+
+include::{snippets}/user_blacklist_create_documentation/when_save_user_blacklist_then_result_should_be_200__rest_docs/response-fields.adoc[]

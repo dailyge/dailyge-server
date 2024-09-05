@@ -11,6 +11,7 @@ import project.dailyge.document.common.UuidGenerator;
 @ApplicationLayer
 @RequiredArgsConstructor
 class CouponWriteService implements CouponWriteUseCase {
+
     private final CouponEventParticipantRepository couponEventParticipantRepository;
 
     @Override

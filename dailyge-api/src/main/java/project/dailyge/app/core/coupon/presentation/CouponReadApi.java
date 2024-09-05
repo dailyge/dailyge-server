@@ -17,6 +17,7 @@ import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.OK;
 @RequiredArgsConstructor
 @RequestMapping(path = "/api")
 public class CouponReadApi {
+
     private static final String IS_PARTICIPATED = "isParticipated";
     private static final String VALID_COOKIE_VALUE = "true";
     private final CouponCacheReadUseCase couponCacheReadUseCase;

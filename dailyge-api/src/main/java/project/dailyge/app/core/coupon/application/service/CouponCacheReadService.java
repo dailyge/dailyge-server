@@ -8,6 +8,7 @@ import project.dailyge.core.cache.coupon.CouponCacheReadUseCase;
 @ApplicationLayer
 @RequiredArgsConstructor
 class CouponCacheReadService implements CouponCacheReadUseCase {
+
     CouponCacheReadRepository couponCacheReadRepository;
 
     @Override

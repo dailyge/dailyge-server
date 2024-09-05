@@ -4,6 +4,7 @@ import lombok.Getter;
 
 @Getter
 public class CouponEventParticipant {
+
     private Long userId;
     private Long timestamp;
 

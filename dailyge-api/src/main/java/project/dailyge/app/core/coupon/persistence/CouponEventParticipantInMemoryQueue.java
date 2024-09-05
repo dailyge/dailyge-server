@@ -7,6 +7,7 @@ import java.util.concurrent.BlockingQueue;
 
 @Component
 public class CouponEventParticipantInMemoryQueue implements CouponEventParticipantRepository {
+
     private final BlockingQueue<CouponEventParticipant> queue;
 
     public CouponEventParticipantInMemoryQueue(BlockingQueue<CouponEventParticipant> queue) {

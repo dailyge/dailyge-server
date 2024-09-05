@@ -15,6 +15,7 @@ import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.CREATED;
 @RequiredArgsConstructor
 @RequestMapping("/api")
 public class CouponCreateApi {
+
     private final CouponWriteUseCase couponWriteUseCase;
 
     @PostMapping(path = "/coupons")

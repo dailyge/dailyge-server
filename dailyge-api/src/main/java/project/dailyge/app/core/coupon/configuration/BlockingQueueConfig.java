@@ -12,8 +12,10 @@ import java.util.concurrent.PriorityBlockingQueue;
 
 @Configuration
 public class BlockingQueueConfig {
+
     @Value("${queue.type:linked}")
     private String queueType;
+
     @Value("${queue.capacity:10000}")
     private int queueCapacity;
     private static final String LINKED_QUEUE = "linked";

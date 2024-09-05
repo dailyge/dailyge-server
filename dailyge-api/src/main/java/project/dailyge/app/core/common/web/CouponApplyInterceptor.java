@@ -11,6 +11,7 @@ import static org.springframework.http.HttpMethod.POST;
 
 @Component
 public class CouponApplyInterceptor implements HandlerInterceptor {
+
     private static final String IS_PARTICIPATED = "isParticipated";
     private static final int maxAge = 7 * 24 * 60 * 60;
 

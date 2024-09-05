@@ -18,6 +18,7 @@ import static project.dailyge.common.configuration.CompressionHelper.decompressA
 @Repository
 @RequiredArgsConstructor
 public class CouponCacheReadDao implements CouponCacheReadRepository {
+
     private final RedisTemplate<String, byte[]> redisTemplate;
     private static final String COUPON_KEY_PREFIX = "coupon_apply:";
     private static final String COUPON_COUNT_KEY = "coupon_count";

@@ -11,7 +11,7 @@ import project.dailyge.entity.user.Role;
 import static org.mockito.Mockito.*;
 
 @DisplayName("[UnitTest] 쿠폰 발급 신청 API 테스트")
-class CouponWriteUseCaseUnitTest {
+class CouponCreateApiUnitTest {
     private CouponWriteUseCase couponWriteUseCase;
     private CouponCreateApi couponCreateApi;
 
@@ -28,5 +28,4 @@ class CouponWriteUseCaseUnitTest {
         couponCreateApi.createCouponApply(user);
         verify(couponWriteUseCase, times(1)).saveApply(user);
     }
-
 }

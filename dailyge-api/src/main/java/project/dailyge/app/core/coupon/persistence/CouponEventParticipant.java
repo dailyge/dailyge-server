@@ -11,7 +11,10 @@ public class CouponEventParticipant {
     private CouponEventParticipant() {
     }
 
-    public CouponEventParticipant(Long userId, Long timestamp) {
+    public CouponEventParticipant(
+        final Long userId,
+        final Long timestamp
+    ) {
         this.userId = userId;
         this.timestamp = timestamp;
     }

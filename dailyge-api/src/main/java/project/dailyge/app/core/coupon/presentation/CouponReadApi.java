@@ -1,7 +1,6 @@
 package project.dailyge.app.core.coupon.presentation;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import project.dailyge.app.common.annotation.PresentationLayer;
@@ -18,18 +17,10 @@ import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.OK;
 @RequestMapping(path = "/api")
 public class CouponReadApi {
 
-    private static final String IS_PARTICIPATED = "isParticipated";
-    private static final String VALID_COOKIE_VALUE = "true";
     private final CouponCacheReadUseCase couponCacheReadUseCase;
 
     @GetMapping(path = "/coupons")
-    public ApiResponse<CouponParticipationResponse> findCouponParticipationStatus(
-        @LoginUser final DailygeUser dailygeUser,
-        @CookieValue(value = IS_PARTICIPATED, required = false) final String cookieValue
-    ) {
-        if (cookieValue != null && cookieValue.equals(VALID_COOKIE_VALUE)) {
-            return ApiResponse.from(OK, new CouponParticipationResponse(true));
-        }
+    public ApiResponse<CouponParticipationResponse> findCouponParticipationStatus(@LoginUser final DailygeUser dailygeUser) {
         final boolean isParticipated = couponCacheReadUseCase.existsByUserId(dailygeUser.getUserId());
         return ApiResponse.from(OK, new CouponParticipationResponse(isParticipated));
     }

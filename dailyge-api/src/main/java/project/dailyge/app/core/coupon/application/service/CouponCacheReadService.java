@@ -9,7 +9,7 @@ import project.dailyge.core.cache.coupon.CouponCacheReadUseCase;
 @RequiredArgsConstructor
 class CouponCacheReadService implements CouponCacheReadUseCase {
 
-    CouponCacheReadRepository couponCacheReadRepository;
+    private final CouponCacheReadRepository couponCacheReadRepository;
 
     @Override
     public boolean existsByUserId(final Long userId) {

@@ -1,31 +1,55 @@
 package project.dailyge.app.core.common.web;
 
-import jakarta.servlet.http.Cookie;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
-import project.dailyge.app.common.utils.CookieUtils;
+import project.dailyge.app.common.response.ApiResponse;
+import project.dailyge.app.core.coupon.presentation.response.CouponParticipationResponse;
+import project.dailyge.app.core.coupon.presentation.validator.CouponClientValidator;
 
-import static org.springframework.http.HttpMethod.POST;
+import java.io.IOException;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.OK;
 
 @Component
+@RequiredArgsConstructor
 public class CouponApplyInterceptor implements HandlerInterceptor {
 
     private static final String IS_PARTICIPATED = "isParticipated";
-    private static final int maxAge = 7 * 24 * 60 * 60;
+    private final CouponClientValidator couponClientValidator;
+    private final ObjectMapper objectMapper;
+
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        if (request.getMethod().equals(POST.name())) {
-            createCouponApplyCookie(response);
+    public boolean preHandle(
+        final HttpServletRequest request,
+        final HttpServletResponse response,
+        final Object handler
+    ) {
+        final Cookies cookies = new Cookies(request.getCookies());
+        if (couponClientValidator.validateCookies(cookies)) {
+            try {
+                setCouponResponse(response);
+            } catch (Exception exception) {
+                return false;
+            }
+            return false;
         }
         return true;
     }
 
-    private void createCouponApplyCookie(HttpServletResponse response) {
-        Cookie cookie = CookieUtils.createCookie(IS_PARTICIPATED, "true", "/", maxAge);
-        response.addCookie(cookie);
+    private void setCouponResponse(
+        final HttpServletResponse response
+    ) throws IOException {
+        response.setStatus(OK.code());
+        response.setContentType(APPLICATION_JSON_VALUE);
+        response.setCharacterEncoding(UTF_8.name());
+        final CouponParticipationResponse couponParticipationResponse = new CouponParticipationResponse(true);
+        objectMapper.writeValue(response.getWriter(), ApiResponse.from(OK, couponParticipationResponse));
     }
-
 }

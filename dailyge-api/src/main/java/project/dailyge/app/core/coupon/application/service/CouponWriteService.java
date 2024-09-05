@@ -15,9 +15,8 @@ class CouponWriteService implements CouponWriteUseCase {
     private final CouponEventParticipantRepository couponEventParticipantRepository;
 
     @Override
-    public void saveApply(
-        final DailygeUser dailygeUser
-    ) {
-        couponEventParticipantRepository.save(new CouponEventParticipant(dailygeUser.getUserId(), UuidGenerator.createTimeStamp()));
+    public void saveApply(final DailygeUser dailygeUser) {
+        final CouponEventParticipant participant = new CouponEventParticipant(dailygeUser.getUserId(), UuidGenerator.createTimeStamp());
+        couponEventParticipantRepository.save(participant);
     }
 }

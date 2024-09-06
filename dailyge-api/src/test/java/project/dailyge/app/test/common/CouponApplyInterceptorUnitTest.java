@@ -35,6 +35,6 @@ class CouponApplyInterceptorUnitTest {
     @DisplayName("요청을 보내면 쿠폰 관련 쿠키를 검증한다.")
     void whenSendRequestThenValidateCouponCookie() throws Exception {
         couponApplyInterceptor.preHandle(request, response, null);
-        verify(couponClientValidator).validateCookies(any(Cookies.class));
+        verify(couponClientValidator).isParticipated(any(Cookies.class));
     }
 }

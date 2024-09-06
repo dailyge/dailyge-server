@@ -14,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_GATEWAY;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
 
 @DisplayName("[UnitTest] CouponCacheReadDao 단위 테스트")
 class CouponCacheReadDaoUnitTest {
@@ -63,10 +64,10 @@ class CouponCacheReadDaoUnitTest {
     @DisplayName("redis 호출 시 Exception을 던지면 existsByUserId는 false를 반환한다.")
     void whenRedisThrowExceptionThenThrowCommonException() {
         final String message = "test1";
-        final RedisException exception = new RedisException(message);
+        final RuntimeException exception = new RuntimeException(message);
         when(redisTemplate.opsForValue()).thenReturn(tempOperations);
         when(tempOperations.getBit(USER_COUPON_KEY, 1L)).thenThrow(exception);
-        assertThrows(CommonException.from(exception.getMessage(), BAD_GATEWAY).getClass(), () -> {
+        assertThrows(CommonException.from(exception.getMessage(), INTERNAL_SERVER_ERROR).getClass(), () -> {
             couponCacheReadDao.existsByUserId(1L);
         });
     }

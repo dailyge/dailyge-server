@@ -1,5 +1,6 @@
 **/*Application*
 **/*Config*
+**/*Dao*
 **/*Exception*
 **/*Health*
 **/*CommonApi*

@@ -1,21 +1,74 @@
 package project.dailyge.common.configuration;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.luben.zstd.Zstd;
+import static com.github.luben.zstd.Zstd.isError;
+import com.github.luben.zstd.ZstdDictCompress;
+import com.github.luben.zstd.ZstdDictDecompress;
+import com.github.luben.zstd.ZstdInputStream;
+import com.github.luben.zstd.ZstdOutputStream;
 import static java.nio.charset.StandardCharsets.UTF_8;
+import project.dailyge.core.cache.user.UserCache;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 public final class CompressionHelper {
 
+    private static final byte[] zstdDictionary;
+    private static final int COMPRESSION_LEVEL = 5;
+    private static final int START = 1;
+    private static final int END = 1_000;
+    private static final int DICTIONARY_SIZE = 1_024;
+
+    static {
+        zstdDictionary = trainZstdDictionary(createTrainingData(), new ObjectMapper());
+    }
+
     private CompressionHelper() {
         throw new AssertionError("올바른 방식으로 생성자를 호출해주세요.");
     }
 
-    public static byte[] compressAsByteArray(final Object obj) {
+    public static byte[] compressAsByteArrayWithZstd(
+        final Object obj,
+        final ObjectMapper objectMapper
+    ) {
+        try (
+            final ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            final ZstdDictCompress dictCompress = new ZstdDictCompress(zstdDictionary, COMPRESSION_LEVEL);
+            final ZstdOutputStream zos = new ZstdOutputStream(bos).setDict(dictCompress)
+        ) {
+            if (obj == null) {
+                throw new IllegalArgumentException("Cannot compress null object.");
+            }
+            final byte[] byteArray = objectMapper.writeValueAsBytes(obj);
+            zos.write(byteArray);
+            zos.flush();
+            zos.close();
+            return bos.toByteArray();
+        } catch (Exception ex) {
+            throw new RuntimeException("Failed to compress data with Zstd using dictionary.", ex);
+        }
+    }
+
+    /**
+     * Compresses the given object into a byte array using Gzip compression.
+     *
+     * @param obj the object to compress. Must not be null.
+     * @return a byte array containing the compressed object.
+     * @throws IllegalArgumentException if the object is null.
+     * @throws RuntimeException         if compression fails.
+     * @deprecated As of 2024.09.06, replaced by {@code compressAsByteArrayWithZst(Object obj)}.
+     * Zstandard offers better compression performance and efficiency.
+     */
+    @Deprecated(since = "2024.09.06")
+    public static byte[] compressAsByteArrayWithGZip(final Object obj) {
         try (
             final ByteArrayOutputStream bos = new ByteArrayOutputStream();
             final GZIPOutputStream gos = new GZIPOutputStream(bos);
@@ -46,6 +99,33 @@ public final class CompressionHelper {
         }
     }
 
+    public static <T> T decompressAsObjWithZstd(
+        final byte[] byteArray,
+        final Class<T> clazz,
+        final ObjectMapper objectMapper
+    ) {
+        try (
+            final ByteArrayInputStream bis = new ByteArrayInputStream(byteArray);
+            final ZstdDictDecompress dictDecompress = new ZstdDictDecompress(zstdDictionary);
+            final ZstdInputStream zis = new ZstdInputStream(bis).setDict(dictDecompress)
+        ) {
+            byte[] decompressedData = zis.readAllBytes();
+            return objectMapper.readValue(decompressedData, clazz);
+        } catch (Exception ex) {
+            throw new RuntimeException("Failed to decompress data with Zstd using dictionary.", ex);
+        }
+    }
+
+    /**
+     * Compresses the given byte array using Gzip compression.
+     *
+     * @param byteArray the byte array to compress. Must not be null.
+     * @return a byte array containing the compressed data.
+     * @throws RuntimeException if compression fails.
+     * @deprecated As of 2024.09.06, replaced by {@code compressStringAsByteArrayWithZst(byte[] byteArray)}.
+     * Zstandard offers better compression performance and efficiency.
+     */
+    @Deprecated(since = "2024.09.06")
     public static <T> T decompressAsObj(
         final byte[] byteArray,
         final Class<T> clazz
@@ -71,5 +151,46 @@ public final class CompressionHelper {
         } catch (Exception ex) {
             throw new RuntimeException("Failed to decompress data", ex);
         }
+    }
+
+    private static List<UserCache> createTrainingData() {
+        final List<UserCache> userCaches = new ArrayList<>();
+        for (int index = START; index <= END; index++) {
+            final UserCache cache = createUserCache(index);
+            userCaches.add(cache);
+        }
+        return userCaches;
+    }
+
+    private static UserCache createUserCache(final int index) {
+        return new UserCache(
+            (long) index,
+            "user" + index,
+            "user" + index + "@gmail.com",
+            "https://shorturl.at/D5sge",
+            "NORMAL"
+        );
+    }
+
+    private static byte[] trainZstdDictionary(
+        final List<UserCache> trainingData,
+        final ObjectMapper objectMapper
+    ) {
+        final List<byte[]> serializedData = new ArrayList<>();
+        for (final UserCache userCache : trainingData) {
+            try {
+                byte[] jsonData = objectMapper.writeValueAsBytes(userCache);
+                serializedData.add(jsonData);
+            } catch (Exception ex) {
+                throw new RuntimeException("Serialization failed during dictionary training", ex);
+            }
+        }
+        final byte[][] input = serializedData.toArray(new byte[0][]);
+        final byte[] dict = new byte[DICTIONARY_SIZE];
+        final long result = Zstd.trainFromBuffer(input, dict);
+        if (isError(result)) {
+            throw new RuntimeException("Zstd dictionary training failed: " + Zstd.getErrorName(result));
+        }
+        return dict;
     }
 }

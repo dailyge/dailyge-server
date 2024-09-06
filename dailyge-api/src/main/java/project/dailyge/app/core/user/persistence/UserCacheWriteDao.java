@@ -1,17 +1,17 @@
 package project.dailyge.app.core.user.persistence;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.lettuce.core.RedisException;
+import static java.time.Duration.ofDays;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
-
-import project.dailyge.app.common.exception.CommonException;
-import project.dailyge.core.cache.user.UserCache;
-import project.dailyge.core.cache.user.UserCacheWriteRepository;
-import static java.time.Duration.ofDays;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_GATEWAY;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
-import static project.dailyge.common.configuration.CompressionHelper.compressAsByteArray;
+import project.dailyge.app.common.exception.CommonException;
+import static project.dailyge.common.configuration.CompressionHelper.compressAsByteArrayWithZstd;
+import project.dailyge.core.cache.user.UserCache;
+import project.dailyge.core.cache.user.UserCacheWriteRepository;
 
 @Repository
 @RequiredArgsConstructor
@@ -20,10 +20,11 @@ public class UserCacheWriteDao implements UserCacheWriteRepository {
     private static final long CACHE_DURATION = 90;
 
     private final RedisTemplate<String, byte[]> redisTemplate;
+    private final ObjectMapper objectMapper;
 
     @Override
     public void save(final UserCache userCache) {
-        final byte[] compressedCache = compressAsByteArray(userCache);
+        final byte[] compressedCache = compressAsByteArrayWithZstd(userCache, objectMapper);
         executeRedisCommand(() ->
             redisTemplate.opsForValue().set(
                 getKey(userCache.getId()),

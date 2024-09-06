@@ -23,7 +23,7 @@ public class CouponCreateApi {
     @PostMapping(path = "/coupons")
     public ResponseEntity<Void> createCouponApply(@LoginUser final DailygeUser dailygeUser) {
         couponWriteUseCase.saveApply(dailygeUser);
-        final String responseCookie = createResponseCookie("isParticipated", "true", "/", 7 * 60 * 60, true);
+        final String responseCookie = createResponseCookie("isParticipated", "true", "/", 7L * 60L * 60L, true);
         return ResponseEntity
             .status(CREATED)
             .header(SET_COOKIE, responseCookie)

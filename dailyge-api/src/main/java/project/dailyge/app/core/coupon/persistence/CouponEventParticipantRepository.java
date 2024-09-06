@@ -7,5 +7,5 @@ public interface CouponEventParticipantRepository {
 
     void deleteAll();
 
-    boolean existsByUserId(Long userId);
+    boolean existsByUserId(final Long userId);
 }

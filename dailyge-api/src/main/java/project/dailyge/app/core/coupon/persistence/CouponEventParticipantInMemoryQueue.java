@@ -10,7 +10,7 @@ public class CouponEventParticipantInMemoryQueue implements CouponEventParticipa
 
     private final BlockingQueue<CouponEventParticipant> queue;
 
-    public CouponEventParticipantInMemoryQueue(BlockingQueue<CouponEventParticipant> queue) {
+    public CouponEventParticipantInMemoryQueue(final BlockingQueue<CouponEventParticipant> queue) {
         this.queue = queue;
     }
 
@@ -33,7 +33,7 @@ public class CouponEventParticipantInMemoryQueue implements CouponEventParticipa
     }
 
     @Override
-    public boolean existsByUserId(Long userId) {
+    public boolean existsByUserId(final Long userId) {
         return queue.contains(new CouponEventParticipant(userId, UuidGenerator.createTimeStamp()));
     }
 }

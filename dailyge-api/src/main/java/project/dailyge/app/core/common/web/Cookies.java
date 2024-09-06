@@ -10,6 +10,9 @@ public final class Cookies {
     private final Map<String, Cookie> cookieMap = new HashMap<>();
 
     public Cookies(final Cookie... cookies) {
+        if (cookies == null) {
+            return;
+        }
         for (final Cookie cookie : cookies) {
             cookieMap.put(cookie.getName(), cookie);
         }

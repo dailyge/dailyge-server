@@ -13,7 +13,7 @@ import project.dailyge.app.core.coupon.presentation.validator.CouponClientValida
 import static org.mockito.Mockito.*;
 
 @DisplayName("[UnitTest] CouponApplyInterceptor 단위 테스트")
-public class CouponApplyInterceptorUnitTest {
+class CouponApplyInterceptorUnitTest {
     private static final String IS_PARTICIPATED = "isParticipated";
     private static final int maxAge = 7 * 24 * 60 * 60;
     private ObjectMapper objectMapper;

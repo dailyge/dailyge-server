@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("[UnitTest] CouponClientValidator 단위 테스트")
-public class CouponClientValidatorUnitTest {
+class CouponClientValidatorUnitTest {
     private CouponClientValidator couponClientValidator;
 
     @BeforeEach

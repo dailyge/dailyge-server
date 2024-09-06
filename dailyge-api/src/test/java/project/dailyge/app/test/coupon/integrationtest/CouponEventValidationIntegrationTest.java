@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("[IntegrationTest] 쿠폰 발급 유효성 검증 통합 테스트")
-public class CouponEventValidationIntegrationTest extends DatabaseTestBase {
+class CouponEventValidationIntegrationTest extends DatabaseTestBase {
     private static final int USER_CAPACITY = 1_000_000;
     private static final String KEY = "user:coupon";
 

@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @DisplayName("[UnitTest] CouponParticipant 단위 테스트")
-public class CouponParticipantUnitTest {
+class CouponParticipantUnitTest {
     @Test
     @DisplayName("userId가 같으면 equals 반환값이 true이다.")
     void whenUserIdisSameThenEqualsReturnTrue() {

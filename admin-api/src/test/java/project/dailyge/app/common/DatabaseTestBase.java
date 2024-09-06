@@ -20,17 +20,18 @@ import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
-import static project.dailyge.app.common.RestAssureConfig.initObjectMapper;
-import static project.dailyge.app.common.RestAssureConfig.initSpecificationConfig;
 import project.dailyge.app.DailygeAdminApplication;
 import project.dailyge.app.common.auth.DailygeUser;
-import static project.dailyge.app.test.user.fixture.UserFixture.createUser;
-import static project.dailyge.entity.user.Role.NORMAL;
 import project.dailyge.core.cache.user.UserCache;
 import project.dailyge.core.cache.user.UserCacheWriteUseCase;
 import project.dailyge.entity.user.UserJpaEntity;
 
 import java.time.LocalDate;
+
+import static project.dailyge.app.common.RestAssureConfig.initObjectMapper;
+import static project.dailyge.app.common.RestAssureConfig.initSpecificationConfig;
+import static project.dailyge.app.test.user.fixture.UserFixture.createUser;
+import static project.dailyge.entity.user.Role.NORMAL;
 
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs

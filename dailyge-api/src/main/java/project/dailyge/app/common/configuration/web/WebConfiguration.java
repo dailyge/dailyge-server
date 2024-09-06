@@ -7,6 +7,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import project.dailyge.app.common.auth.TokenProvider;
 import project.dailyge.app.core.common.web.BlacklistInterceptor;
+import project.dailyge.app.core.common.web.CouponApplyInterceptor;
 import project.dailyge.app.core.common.web.CursorPagingArgumentResolver;
 import project.dailyge.app.core.common.web.LoginInterceptor;
 import project.dailyge.core.cache.user.UserCacheReadUseCase;
@@ -21,6 +22,7 @@ public class WebConfiguration implements WebMvcConfigurer {
     private final TokenProvider tokenProvider;
     private final LoginInterceptor loginInterceptor;
     private final BlacklistInterceptor blacklistInterceptor;
+    private final CouponApplyInterceptor couponApplyInterceptor;
 
     @Override
     public void addArgumentResolvers(final List<HandlerMethodArgumentResolver> resolvers) {
@@ -32,5 +34,6 @@ public class WebConfiguration implements WebMvcConfigurer {
     public void addInterceptors(final InterceptorRegistry registry) {
         registry.addInterceptor(loginInterceptor).addPathPatterns("/api/login");
         registry.addInterceptor(blacklistInterceptor).addPathPatterns("/api/**");
+        registry.addInterceptor(couponApplyInterceptor).addPathPatterns("/api/coupons");
     }
 }

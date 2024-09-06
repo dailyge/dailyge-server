@@ -96,12 +96,14 @@ class CompressionUnitTest {
     void whenCompressZstdObjectThenDataSizeShouldBeSmaller() {
         final byte[] originalData = serialize(userCache);
 
-        final byte[] compressedData = compressAsByteArrayWithZstd(userCache, objectMapper);
+        final byte[] zStandardCompressedData = compressAsByteArrayWithZstd(userCache, objectMapper);
+        final byte[] gZipCompressedData = compressAsByteArrayWithGZip(userCache);
 
-        assertTrue(compressedData.length < originalData.length);
+        assertTrue(zStandardCompressedData.length < originalData.length);
 
         log.info("Zstd Original Data Size: {}", originalData.length);
-        log.info("Zstd Compressed Data Size: {}", compressedData.length);
+        log.info("Zstd Compressed Data Size: {}", zStandardCompressedData.length);
+        log.info("GZip Compressed Data Size: {}", gZipCompressedData.length);
     }
 
     @Test

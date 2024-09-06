@@ -6,6 +6,4 @@ public interface CouponEventParticipantRepository {
     int count();
 
     void deleteAll();
-
-    boolean existsByUserId(final Long userId);
 }

@@ -1,7 +1,6 @@
 package project.dailyge.app.core.coupon.persistence;
 
 import org.springframework.stereotype.Component;
-import project.dailyge.document.common.UuidGenerator;
 
 import java.util.concurrent.BlockingQueue;
 
@@ -30,10 +29,5 @@ public class CouponEventParticipantInMemoryQueue implements CouponEventParticipa
     @Override
     public void deleteAll() {
         queue.clear();
-    }
-
-    @Override
-    public boolean existsByUserId(final Long userId) {
-        return queue.contains(new CouponEventParticipant(userId, UuidGenerator.createTimeStamp()));
     }
 }

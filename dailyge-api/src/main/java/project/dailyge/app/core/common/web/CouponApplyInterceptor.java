@@ -12,6 +12,7 @@ import project.dailyge.app.core.coupon.presentation.validator.CouponClientValida
 
 import java.io.IOException;
 
+import static jakarta.servlet.http.HttpServletResponse.SC_OK;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.OK;
@@ -20,7 +21,6 @@ import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.OK;
 @RequiredArgsConstructor
 public class CouponApplyInterceptor implements HandlerInterceptor {
 
-    private static final String IS_PARTICIPATED = "isParticipated";
     private final CouponClientValidator couponClientValidator;
     private final ObjectMapper objectMapper;
 
@@ -32,7 +32,7 @@ public class CouponApplyInterceptor implements HandlerInterceptor {
         final Object handler
     ) {
         final Cookies cookies = new Cookies(request.getCookies());
-        if (couponClientValidator.validateCookies(cookies)) {
+        if (couponClientValidator.isParticipated(cookies)) {
             try {
                 setCouponResponse(response);
             } catch (Exception exception) {
@@ -46,7 +46,7 @@ public class CouponApplyInterceptor implements HandlerInterceptor {
     private void setCouponResponse(
         final HttpServletResponse response
     ) throws IOException {
-        response.setStatus(OK.code());
+        response.setStatus(SC_OK);
         response.setContentType(APPLICATION_JSON_VALUE);
         response.setCharacterEncoding(UTF_8.name());
         final CouponParticipationResponse couponParticipationResponse = new CouponParticipationResponse(true);

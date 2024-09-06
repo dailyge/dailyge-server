@@ -9,7 +9,7 @@ public class CouponClientValidator {
         return "true".equals(cookieValue);
     }
 
-    public boolean validateCookies(final Cookies cookies) {
+    public boolean isParticipated(final Cookies cookies) {
         return "true".equals(cookies.getValueByKey("isParticipated"));
     }
 }

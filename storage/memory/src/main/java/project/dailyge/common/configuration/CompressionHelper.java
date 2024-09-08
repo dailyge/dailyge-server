@@ -49,7 +49,6 @@ public final class CompressionHelper {
             }
             final byte[] byteArray = objectMapper.writeValueAsBytes(obj);
             zos.write(byteArray);
-            zos.flush();
             zos.close();
             return bos.toByteArray();
         } catch (Exception ex) {
@@ -57,17 +56,6 @@ public final class CompressionHelper {
         }
     }
 
-    /**
-     * Compresses the given object into a byte array using Gzip compression.
-     *
-     * @param obj the object to compress. Must not be null.
-     * @return a byte array containing the compressed object.
-     * @throws IllegalArgumentException if the object is null.
-     * @throws RuntimeException         if compression fails.
-     * @deprecated As of 2024.09.06, replaced by {@code compressAsByteArrayWithZst(Object obj)}.
-     * Zstandard offers better compression performance and efficiency.
-     */
-    @Deprecated(since = "2024.09.06")
     public static byte[] compressAsByteArrayWithGZip(final Object obj) {
         try (
             final ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -104,6 +92,9 @@ public final class CompressionHelper {
         final Class<T> clazz,
         final ObjectMapper objectMapper
     ) {
+        if (byteArray.length == 0) {
+            throw new IllegalArgumentException("Cannot decompress empty data.");
+        }
         try (
             final ByteArrayInputStream bis = new ByteArrayInputStream(byteArray);
             final ZstdDictDecompress dictDecompress = new ZstdDictDecompress(zstdDictionary);
@@ -116,16 +107,6 @@ public final class CompressionHelper {
         }
     }
 
-    /**
-     * Compresses the given byte array using Gzip compression.
-     *
-     * @param byteArray the byte array to compress. Must not be null.
-     * @return a byte array containing the compressed data.
-     * @throws RuntimeException if compression fails.
-     * @deprecated As of 2024.09.06, replaced by {@code compressStringAsByteArrayWithZst(byte[] byteArray)}.
-     * Zstandard offers better compression performance and efficiency.
-     */
-    @Deprecated(since = "2024.09.06")
     public static <T> T decompressAsObj(
         final byte[] byteArray,
         final Class<T> clazz

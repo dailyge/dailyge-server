@@ -2,6 +2,8 @@ package project.dailyge.app.core.coupon.persistence;
 
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.BlockingQueue;
 
 @Component
@@ -29,5 +31,15 @@ public class CouponEventParticipantInMemoryQueue implements CouponEventParticipa
     @Override
     public void deleteAll() {
         queue.clear();
+    }
+
+    /**
+     * 큐에 있는 요소들 전체를 List 자료구조에 저장
+     */
+    @Override
+    public List<CouponEventParticipant> popAll() {
+        final List<CouponEventParticipant> participants = new ArrayList<>();
+        queue.drainTo(participants);
+        return participants;
     }
 }

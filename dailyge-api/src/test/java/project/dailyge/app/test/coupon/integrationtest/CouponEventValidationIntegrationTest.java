@@ -24,6 +24,8 @@ class CouponEventValidationIntegrationTest extends DatabaseTestBase {
 
     @BeforeEach
     void setUp() {
+        redisTemplate.delete(KEY);
+        redisTemplate.opsForValue().set(KEY, "\0" .getBytes());
         redisTemplate.execute(connection -> {
             connection.openPipeline();
             for (long participantId = 4L; participantId < USER_CAPACITY; participantId += 100L) {

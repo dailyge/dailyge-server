@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @DisplayName("[IntegrationTest] 쿠폰 요청 벌크 처리 통합 테스트")
 class CouponBulksIntegrationTest extends DatabaseTestBase {
     private static final Logger log = LoggerFactory.getLogger(CouponBulksIntegrationTest.class);
+    private static final String KEY = "coupon:cache";
 
     @Autowired
     private CouponCacheWriteUseCase couponCacheWriteUseCase;
@@ -38,6 +39,11 @@ class CouponBulksIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("인메모리큐에 있던 쿠폰 요청 벌크들이 있으면 Redis에 저장된다.")
     void whenCouponBulksExistsThenRedisSave() {
+        final String targetKey = "coupon:queue:1";
+        redisTemplate.delete(KEY);
+        redisTemplate.opsForValue().set(KEY, "\0" .getBytes());
+        redisTemplate.delete(targetKey);
+        redisTemplate.delete("coupon:queue:count");
         couponInMemoryRepository.deleteAll();
         final long maxId = 10;
         log.info("memory queue size:{}", couponInMemoryRepository.count());
@@ -50,7 +56,6 @@ class CouponBulksIntegrationTest extends DatabaseTestBase {
         for (long id = 1; id <= maxId; id++) {
             assertTrue(couponCacheReadDao.existsByUserId(maxId));
         }
-        final String targetKey = "coupon:queue:1";
         final CouponEventBulks actualCouponEventBulks = CompressionHelper.decompressAsObjWithZstd(redisTemplate.opsForValue().get(targetKey), CouponEventBulks.class, objectMapper);
         assertEquals(maxId, actualCouponEventBulks.couponCaches().size());
     }

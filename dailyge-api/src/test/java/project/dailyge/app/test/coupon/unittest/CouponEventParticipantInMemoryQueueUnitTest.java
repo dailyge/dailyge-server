@@ -6,9 +6,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import project.dailyge.app.core.coupon.persistence.CouponEventMemoryQueue;
 import project.dailyge.app.core.coupon.persistence.CouponEventParticipant;
-import project.dailyge.app.core.coupon.persistence.CouponEventParticipantInMemoryQueue;
-import project.dailyge.app.core.coupon.persistence.CouponEventParticipantRepository;
+import project.dailyge.app.core.coupon.persistence.CouponInMemoryRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,12 +19,12 @@ import java.util.concurrent.LinkedBlockingQueue;
 class CouponEventParticipantInMemoryQueueUnitTest {
 
     private BlockingQueue<CouponEventParticipant> queue;
-    private CouponEventParticipantRepository repository;
+    private CouponInMemoryRepository repository;
 
     @BeforeEach
     void setUp() {
         queue = new LinkedBlockingQueue<>();
-        repository = new CouponEventParticipantInMemoryQueue(queue);
+        repository = new CouponEventMemoryQueue(queue);
     }
 
     @ParameterizedTest
@@ -40,7 +40,7 @@ class CouponEventParticipantInMemoryQueueUnitTest {
     @DisplayName("인메모리큐에 요소가 없으면 popAll 반환 리스트의 크기는 0이다.")
     void whenQueueIsEmptyThenPopAllResultListSizeZero() {
         repository.deleteAll();
-        List<CouponEventParticipant> participants = repository.popAll();
+        final List<CouponEventParticipant> participants = repository.popAll();
         Assertions.assertEquals(0, participants.size());
     }
 
@@ -48,13 +48,13 @@ class CouponEventParticipantInMemoryQueueUnitTest {
     @DisplayName("인메모리에 요소가 있으면 popAll 반환 리스트는 전체 요소들을 순서대로 반환한다.")
     @ValueSource(ints = {3, 4, 5, 6, 7, 8})
     void whenQueueIsNotEmptyPopAllResultReturnElementsByOrder(final int count) {
-        List<CouponEventParticipant> expectedResult = createCouponParticipantsBySize(count);
-        List<CouponEventParticipant> actualResult = repository.popAll();
+        final List<CouponEventParticipant> expectedResult = createCouponParticipantsBySize(count);
+        final List<CouponEventParticipant> actualResult = repository.popAll();
         Assertions.assertEquals(expectedResult, actualResult);
     }
 
     private List<CouponEventParticipant> createCouponParticipantsBySize(int count) {
-        List<CouponEventParticipant> participants = new ArrayList<>();
+        final List<CouponEventParticipant> participants = new ArrayList<>();
         for (int id = 1; id <= count; id++) {
             long userId = id;
             CouponEventParticipant participant = new CouponEventParticipant(userId, System.currentTimeMillis());

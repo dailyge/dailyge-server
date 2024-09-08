@@ -4,5 +4,5 @@ import project.dailyge.core.cache.coupon.CouponCache;
 
 import java.util.List;
 
-public record CouponCacheBulks(List<CouponCache> couponCaches) {
+public record CouponEventBulks(List<CouponCache> couponCaches) {
 }

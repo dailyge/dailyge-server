@@ -9,7 +9,7 @@ import org.mockito.InjectMocks;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import project.dailyge.app.common.exception.CommonException;
-import project.dailyge.app.core.coupon.persistence.CouponCacheWriteDao;
+import project.dailyge.app.core.coupon.persistence.CouponEventWriteDao;
 import project.dailyge.core.cache.coupon.CouponCache;
 
 import java.util.List;
@@ -23,18 +23,18 @@ import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_GATEWA
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
 
 @DisplayName("[UnitTest] CouponCacheWriteDao 단위 테스트")
-class CouponCacheWriteDaoUnitTest {
+class CouponEventWriteDaoUnitTest {
 
     private RedisTemplate<String, byte[]> redisTemplate;
     private ObjectMapper objectMapper;
     private ValueOperations<String, byte[]> tempOperations;
     @InjectMocks
-    private CouponCacheWriteDao couponCacheWriteDao;
+    private CouponEventWriteDao couponEventWriteDao;
 
     @BeforeEach
     void setUp() {
         redisTemplate = mock(RedisTemplate.class);
-        couponCacheWriteDao = new CouponCacheWriteDao(redisTemplate, objectMapper);
+        couponEventWriteDao = new CouponEventWriteDao(redisTemplate, objectMapper);
         tempOperations = mock(ValueOperations.class);
     }
 
@@ -47,7 +47,7 @@ class CouponCacheWriteDaoUnitTest {
         final RedisException exception = new RedisException(message);
         when(redisTemplate.execute(any(), eq(true))).thenThrow(exception);
         assertThrows(CommonException.from(exception.getMessage(), BAD_GATEWAY).getClass(), () -> {
-            couponCacheWriteDao.saveBulks(couponCaches);
+            couponEventWriteDao.saveBulks(couponCaches);
         });
     }
 
@@ -60,7 +60,7 @@ class CouponCacheWriteDaoUnitTest {
         final RuntimeException exception = new RuntimeException(message);
         when(redisTemplate.execute(any(), eq(true))).thenThrow(exception);
         assertThrows(CommonException.from(exception.getMessage(), INTERNAL_SERVER_ERROR).getClass(), () -> {
-            couponCacheWriteDao.saveBulks(couponCaches);
+            couponEventWriteDao.saveBulks(couponCaches);
         });
     }
 

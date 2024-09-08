@@ -17,7 +17,7 @@ import static project.dailyge.common.configuration.CompressionHelper.compressAsB
 
 @Repository
 @RequiredArgsConstructor
-public class CouponCacheWriteDao implements CouponCacheWriteRepository {
+public class CouponEventWriteDao implements CouponCacheWriteRepository {
 
     private static final String COUPON_KEY = "coupon:cache";
     private static final String QUEUE_COUNT_KEY = "coupon:queue:count";
@@ -26,13 +26,13 @@ public class CouponCacheWriteDao implements CouponCacheWriteRepository {
 
     @Override
     public void saveBulks(List<CouponCache> couponCaches) {
-        final CouponCacheBulks couponCacheBulks = new CouponCacheBulks(couponCaches);
+        final CouponEventBulks couponEventBulks = new CouponEventBulks(couponCaches);
         try {
             redisTemplate.execute(connection -> {
                 connection.openPipeline();
                 couponCaches.forEach(couponCache -> redisTemplate.opsForValue().setBit(COUPON_KEY, couponCache.getUserId(), true));
                 final Long count = redisTemplate.opsForValue().increment(QUEUE_COUNT_KEY);
-                redisTemplate.opsForValue().set(getKey(count), compressAsByteArrayWithZstd(couponCacheBulks, objectMapper));
+                redisTemplate.opsForValue().set(getKey(count), compressAsByteArrayWithZstd(couponEventBulks, objectMapper));
                 connection.closePipeline();
                 return null;
             }, true);

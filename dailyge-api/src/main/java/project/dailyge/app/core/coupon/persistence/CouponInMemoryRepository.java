@@ -2,7 +2,7 @@ package project.dailyge.app.core.coupon.persistence;
 
 import java.util.List;
 
-public interface CouponEventParticipantRepository {
+public interface CouponInMemoryRepository {
     void save(CouponEventParticipant couponEventParticipant);
 
     int count();

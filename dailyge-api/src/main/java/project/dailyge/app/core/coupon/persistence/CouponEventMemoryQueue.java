@@ -7,11 +7,11 @@ import java.util.List;
 import java.util.concurrent.BlockingQueue;
 
 @Component
-public class CouponEventParticipantInMemoryQueue implements CouponEventParticipantRepository {
+public class CouponEventMemoryQueue implements CouponInMemoryRepository {
 
     private final BlockingQueue<CouponEventParticipant> queue;
 
-    public CouponEventParticipantInMemoryQueue(final BlockingQueue<CouponEventParticipant> queue) {
+    public CouponEventMemoryQueue(final BlockingQueue<CouponEventParticipant> queue) {
         this.queue = queue;
     }
 

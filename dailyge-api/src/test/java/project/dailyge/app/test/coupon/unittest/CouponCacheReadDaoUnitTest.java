@@ -8,7 +8,7 @@ import org.mockito.InjectMocks;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import project.dailyge.app.common.exception.CommonException;
-import project.dailyge.app.core.coupon.persistence.CouponCacheReadDao;
+import project.dailyge.app.core.coupon.persistence.CouponEventReadDao;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
@@ -23,12 +23,12 @@ class CouponCacheReadDaoUnitTest {
     private RedisTemplate<String, byte[]> redisTemplate;
     private ValueOperations<String, byte[]> tempOperations;
     @InjectMocks
-    private CouponCacheReadDao couponCacheReadDao;
+    private CouponEventReadDao couponCacheReadDao;
 
     @BeforeEach
     void setUp() {
         redisTemplate = mock(RedisTemplate.class);
-        couponCacheReadDao = new CouponCacheReadDao(redisTemplate);
+        couponCacheReadDao = new CouponEventReadDao(redisTemplate);
         tempOperations = mock(ValueOperations.class);
     }
 

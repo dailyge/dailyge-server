@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.core.coupon.persistence.CouponEventParticipant;
-import project.dailyge.app.core.coupon.persistence.CouponEventParticipantRepository;
+import project.dailyge.app.core.coupon.persistence.CouponInMemoryRepository;
 
 import static io.restassured.RestAssured.given;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -15,13 +15,13 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 class CouponBulkProcessDocumentationTest extends DatabaseTestBase {
 
     @Autowired
-    CouponEventParticipantRepository couponEventParticipantRepository;
+    private CouponInMemoryRepository couponInMemoryRepository;
 
     @BeforeEach
     void setUp() {
         for (long id = 1; id <= 100; id++) {
-            CouponEventParticipant couponEventParticipant = new CouponEventParticipant(id, System.currentTimeMillis());
-            couponEventParticipantRepository.save(couponEventParticipant);
+            final CouponEventParticipant couponEventParticipant = new CouponEventParticipant(id, System.currentTimeMillis());
+            couponInMemoryRepository.save(couponEventParticipant);
         }
     }
 

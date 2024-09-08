@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @DisplayName("[IntegrationTest] 쿠폰 발급 유효성 검증 통합 테스트")
 class CouponEventValidationIntegrationTest extends DatabaseTestBase {
     private static final int USER_CAPACITY = 1_000_000;
-    private static final String KEY = "user:coupon";
+    private static final String KEY = "coupon:cache";
 
     @Autowired
     private RedisTemplate<String, byte[]> redisTemplate;

@@ -22,7 +22,7 @@ Dailyge로 일정 관리를 간편하게! <br>
 1. 서비스 소개
 2. Contents
 3. Skills
-4. CICD
+4. CI/CD
 5. Architecture
 6. Monitoring
 7. Moduels
@@ -34,11 +34,14 @@ Dailyge로 일정 관리를 간편하게! <br>
 
 Dailyge는 일정을 체계적으로 관리하고 하루를 효과적으로 계획하여 중요한 일에 집중할 수 있도록 도와주는 서비스입니다.
 
+> [서비스 이용하기](https://www.dailyge.com) <br />
+> ※ 현재 웹 서비스만 지원하고 있습니다.
+
 ![image](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FbGAESd%2FbtsJnrmbCzr%2FI3OIR1VM5LFYxuMnXrP9X1%2Fimg.png)
 
 ![image](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FEVA0Y%2FbtsJnhxeyvw%2FxEpotIGhrNVG8Gb9VWlPxk%2Fimg.png)
 
-> 현재 웹 서비스만 지원하고 있습니다.
+![image](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FbMcMbd%2FbtsJwPz8t9z%2FAzsBX8H0O9UbLmJJJug43k%2Fimg.png)
 
 <br/><br/><br/><br/><br/><br/><br/>
 
@@ -52,6 +55,8 @@ Dailyge는 일정을 체계적으로 관리하고 하루를 효과적으로 계�
 - [데이터 압축하면 어떤 이점이 있을까? (feat.레디스)](https://github.com/dailyge/dailyge-server/discussions/86)
 - [부하 테스트를 할 때, 톰캣의 어떤 설정들을 고려해야 할까?](https://github.com/dailyge/dailyge-server/discussions/84)
 - [부하 테스트 과정에서 어떤 지표들을 모니터링 해야 할까?](https://github.com/dailyge/dailyge-server/discussions/82)
+- [선착순 쿠폰 당첨자를 선정할 때, 응답 속도를 어떻게 빠르게 할 수 있을까?](https://github.com/dailyge/dailyge-server/discussions/117)
+- [Redis Bitmap 구조로 Redis 메모리 절약하기](https://github.com/dailyge/dailyge-server/discussions/137)
 
 <br/><br/><br/><br/><br/><br/><br/>
 
@@ -97,7 +102,21 @@ Application), RD 이며, 일부 자원들은 설치형으로 사용하고 있습
 
 <br/><br/><br/><br/><br/><br/><br/>
 
-# 4. CICD
+## 🔀 Git Branch 전략
+
+Git branch 전략은 `Git-Flow`를 사용하고 있습니다.
+
+![image](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FdgKiWN%2FbtsJwLxPhk4%2FNyEcaykO7gmRGKLPcNdD51%2Fimg.png)
+
+1. 새로운 기능을 추가할 때, `dev` 브랜치에서 `feature` 브랜치를 분기합니다.
+2. `feature` 브랜치에서 작업을 끝내면 코드리뷰를 한 후 `Squash Merge`를 통해 `dev` 브랜치에 병합합니다.
+3. 작업이 취소되면, `Revert`합니다.
+4. `dev` 서버에서 QA를 거친 후, 이상이 없다면 `prod` 브랜치로 병합합니다.
+5. 버그가 발생할 경우, `prod` 브랜치에서 `hotfix` 브랜치를 분기하고 수정한 후 `prod`에 병합합니다.
+
+<br/><br/><br/><br/>
+
+# 4. CI/CD
 
 PR이 생성되면 자동으로 정적 분석을 시작하며, Slack으로 결과를 보고받습니다. 팀원 간 코드 리뷰를 거친 후, dev 브랜치로 병합이 되면, 개발 서버로 배포가 되며, 인수 테스트가 시작됩니다. 이후 QA를
 진행하며 기능의 동작 유무, 버그 리포팅을 합니다. 마지막으로 main 브랜치로 병합이 되면 상용 서버로 배포가 되고 최종 결과를 보고받습니다.

@@ -1,21 +1,22 @@
 package project.dailyge.app.test.user.unittest;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
+import project.dailyge.app.common.exception.CommonException;
+import project.dailyge.app.user.persistence.UserCacheReadDao;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
-import project.dailyge.app.common.exception.ExternalServerException;
-import project.dailyge.app.user.persistence.UserCacheReadDao;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
 
 @DisplayName("[UnitTest] UserCacheReadDao Unit Test")
 class UserCacheReadDaoUnitTest {
@@ -49,14 +50,14 @@ class UserCacheReadDaoUnitTest {
     @DisplayName("Redis에서 오류가 발생하면 ExternalServerException을 발생시킨다.")
     void whenFindByIdThrowsRedisExceptionThenThrowExternalServerException() {
         when(valueOperations.get(anyString())).thenThrow(new RuntimeException("Redis Exception"));
-        assertThrows(ExternalServerException.class, () -> userCacheReadDao.findById(USER_ID));
+        assertThrows(CommonException.from(INTERNAL_SERVER_ERROR).getClass(), () -> userCacheReadDao.findById(USER_ID));
     }
 
     @Test
     @DisplayName("사용자 캐시 존재 여부 확인 시, RedisException 발생 시 ExternalServerException 발생")
     void whenExistsByIdThrowsRedisExceptionThenThrowExternalServerException() {
         when(redisTemplate.hasKey(CACHE_KEY)).thenThrow(new RuntimeException("Redis Exception"));
-        assertThrows(ExternalServerException.class, () -> userCacheReadDao.existsById(USER_ID));
+        assertThrows(CommonException.from(INTERNAL_SERVER_ERROR).getClass(), () -> userCacheReadDao.existsById(USER_ID));
     }
 
     @Test

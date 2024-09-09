@@ -2,16 +2,16 @@ package project.dailyge.app.user.persistence;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.lettuce.core.RedisException;
-import static java.time.Duration.ofDays;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
-import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_GATEWAY;
-import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
-import project.dailyge.app.common.exception.ExternalServerException;
-import static project.dailyge.common.configuration.CompressionHelper.compressAsByteArrayWithZstd;
+import project.dailyge.app.common.exception.CommonException;
 import project.dailyge.core.cache.user.UserCache;
 import project.dailyge.core.cache.user.UserCacheWriteRepository;
+import static java.time.Duration.ofDays;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_GATEWAY;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
+import static project.dailyge.common.configuration.CompressionHelper.compressAsByteArrayWithZstd;
 
 @Repository
 @RequiredArgsConstructor
@@ -48,9 +48,9 @@ public class UserCacheWriteDao implements UserCacheWriteRepository {
         try {
             command.run();
         } catch (RedisException ex) {
-            throw new ExternalServerException(ex.getMessage(), BAD_GATEWAY);
+            throw CommonException.from(ex.getMessage(), BAD_GATEWAY);
         } catch (Exception ex) {
-            throw new ExternalServerException(ex.getMessage(), INTERNAL_SERVER_ERROR);
+            throw CommonException.from(ex.getMessage(), INTERNAL_SERVER_ERROR);
         }
     }
 

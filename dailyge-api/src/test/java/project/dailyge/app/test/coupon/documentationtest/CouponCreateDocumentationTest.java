@@ -8,7 +8,7 @@ import project.dailyge.app.common.DatabaseTestBase;
 import static io.restassured.RestAssured.given;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-@DisplayName(" [DocumentationTest] 쿠폰 발급 신청 문서화 테스트")
+@DisplayName("[DocumentationTest] 쿠폰 발급 신청 문서화 테스트")
 class CouponCreateDocumentationTest extends DatabaseTestBase {
 
     @Test

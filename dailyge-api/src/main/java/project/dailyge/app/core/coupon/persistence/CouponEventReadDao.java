@@ -12,7 +12,7 @@ import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_S
 
 @Repository
 @RequiredArgsConstructor
-public class CouponEventReadDao implements CouponCacheReadRepository {
+class CouponEventReadDao implements CouponCacheReadRepository {
 
     private final RedisTemplate<String, byte[]> redisTemplate;
     private static final String COUPON_KEY = "coupon:cache";

@@ -9,7 +9,6 @@ import static org.springframework.restdocs.restassured.RestAssuredRestDocumentat
 import org.springframework.restdocs.restassured.RestDocumentationFilter;
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 import project.dailyge.app.common.DatabaseTestBase;
-import project.dailyge.app.core.task.application.TaskReadUseCase;
 import project.dailyge.app.core.task.application.TaskWriteUseCase;
 import project.dailyge.app.core.task.facade.TaskFacade;
 import project.dailyge.app.core.task.presentation.requesst.TaskCreateRequest;
@@ -25,20 +24,14 @@ import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippe
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASK_STATUS_READ_RESPONSE_FIELD_SNIPPET;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.createIdentifier;
 import static project.dailyge.app.test.task.fixture.TaskRequestFixture.createTaskRegisterRequest;
-import project.dailyge.entity.task.MonthlyTaskJpaEntity;
 
 import java.time.LocalDate;
 
 @DisplayName("[DocumentationTest] Task 조회 문서화 테스트")
 class TaskReadDocumentationTest extends DatabaseTestBase {
 
-    private MonthlyTaskJpaEntity monthlyTask;
-
     @Autowired
     private TaskFacade taskFacade;
-
-    @Autowired
-    private TaskReadUseCase taskReadUseCase;
 
     @Autowired
     private TaskWriteUseCase taskWriteUseCase;
@@ -47,7 +40,6 @@ class TaskReadDocumentationTest extends DatabaseTestBase {
     void setUp() {
         now = LocalDate.now();
         taskFacade.createMonthlyTasks(dailygeUser, now);
-        monthlyTask = taskReadUseCase.findMonthlyTaskByUserIdAndDate(dailygeUser, now);
     }
 
     /**

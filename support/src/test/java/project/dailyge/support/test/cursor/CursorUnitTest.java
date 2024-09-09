@@ -25,11 +25,11 @@ class CursorUnitTest {
     void whenCreateCursorThenInitializeCorrectly() {
         final Long index = 1L;
         final Integer limit = 10;
-        final Cursor cursor = Cursor.createCursor(index, limit);
+        final Cursor newCursor = Cursor.createCursor(index, limit);
 
-        assertNotNull(cursor);
-        assertEquals(index, cursor.getIndex());
-        assertEquals(limit, cursor.getLimit());
+        assertNotNull(newCursor);
+        assertEquals(index, newCursor.getIndex());
+        assertEquals(limit, newCursor.getLimit());
     }
 
     @Test
@@ -50,34 +50,34 @@ class CursorUnitTest {
     @Test
     @DisplayName("Cursor 객체가 동일한 속성을 가지는 경우 equals 메서드는 true를 반환한다.")
     void whenEqualCursorsThenReturnTrue() {
-        final Cursor cursor = Cursor.createCursor(1L, 10);
-        final boolean isEqual = this.cursor.equals(cursor);
+        final Cursor newCursor = Cursor.createCursor(1L, 10);
+        final boolean isEqual = this.cursor.equals(newCursor);
         assertTrue(isEqual);
     }
 
     @Test
     @DisplayName("Cursor 객체가 다른 속성을 가지는 경우 equals 메서드는 false를 반환한다.")
     void whenDifferentCursorsThenReturnFalse() {
-        final Cursor cursor = Cursor.createCursor(2L, 10);
-        final boolean isEqual = this.cursor.equals(cursor);
+        final Cursor newCursor = Cursor.createCursor(2L, 10);
+        final boolean isEqual = this.cursor.equals(newCursor);
         assertFalse(isEqual);
     }
 
     @Test
     @DisplayName("Cursor 객체가 동일한 속성을 가지는 경우 동일한 해시코드를 반환한다.")
     void whenEqualCursorsThenReturnSameHashCode() {
-        final Cursor cursor = Cursor.createCursor(1L, 10);
+        final Cursor newCursor = Cursor.createCursor(1L, 10);
         final int hashCode1 = this.cursor.hashCode();
-        final int hashCode2 = cursor.hashCode();
+        final int hashCode2 = newCursor.hashCode();
         assertEquals(hashCode1, hashCode2);
     }
 
     @Test
     @DisplayName("Cursor 객체가 다른 속성을 가지는 경우 다른 해시코드를 반환한다.")
     void whenDifferentCursorsThenReturnDifferentHashCode() {
-        final Cursor cursor = Cursor.createCursor(2L, 10);
+        final Cursor newCursor = Cursor.createCursor(2L, 10);
         final int hashCode1 = this.cursor.hashCode();
-        final int hashCode2 = cursor.hashCode();
+        final int hashCode2 = newCursor.hashCode();
         assertNotEquals(hashCode1, hashCode2);
     }
 

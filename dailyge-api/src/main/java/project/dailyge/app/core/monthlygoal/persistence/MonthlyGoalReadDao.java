@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-class MonthlyGoalReadDao implements MonthlyGoalEntityReadRepository {
+public class MonthlyGoalReadDao implements MonthlyGoalEntityReadRepository {
 
     private final JPAQueryFactory queryFactory;
 

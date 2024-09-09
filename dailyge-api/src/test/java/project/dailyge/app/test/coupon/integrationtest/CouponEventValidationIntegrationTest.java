@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import project.dailyge.app.common.DatabaseTestBase;
-import project.dailyge.app.core.coupon.persistence.CouponCacheReadDao;
+import project.dailyge.core.cache.coupon.CouponCacheReadRepository;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -14,16 +14,18 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @DisplayName("[IntegrationTest] 쿠폰 발급 유효성 검증 통합 테스트")
 class CouponEventValidationIntegrationTest extends DatabaseTestBase {
     private static final int USER_CAPACITY = 1_000_000;
-    private static final String KEY = "user:coupon";
+    private static final String KEY = "coupon:cache";
 
     @Autowired
     private RedisTemplate<String, byte[]> redisTemplate;
 
     @Autowired
-    private CouponCacheReadDao couponCacheReadDao;
+    private CouponCacheReadRepository couponCacheReadDao;
 
     @BeforeEach
     void setUp() {
+        redisTemplate.delete(KEY);
+        redisTemplate.opsForValue().set(KEY, "\0".getBytes());
         redisTemplate.execute(connection -> {
             connection.openPipeline();
             for (long participantId = 4L; participantId < USER_CAPACITY; participantId += 100L) {

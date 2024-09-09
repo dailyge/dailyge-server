@@ -24,6 +24,10 @@ allprojects {
 
 sonarqube {
     properties {
+        def exclusions = []
+        file("${rootDir}/config/jacoco/exclude-coverage.txt").eachLine {
+            exclusions.add(it)
+        }
         property("sonar.organization", "dailyge")
         property("sonar.host.url", "https://sonarcloud.io")
         property("sonar.token", System.getenv("SONAR_TOKEN"))
@@ -32,12 +36,10 @@ sonarqube {
         property("sonar.sourceEncoding", "UTF-8")
         property("sonar.test.inclusions", "**/*Test.java")
         property("sonar.scm.forceReloadAll", "true")
-        def exclusions = []
-        file("${rootDir}/config/jacoco/exclude-coverage.txt").eachLine {
-            exclusions.add(it)
-        }
         property("sonar.exclusions", exclusions.join(", "))
         property("sonar.java.coveragePlugin", "jacoco")
+        property("sonar.java.pmd.reportPaths", layout.buildDirectory.file("reports/pmd/main.xml").get().asFile.toString())
+        property("sonar.java.checkstyle.reportPaths", layout.buildDirectory.file("reports/checkstyle/main.xml").get().asFile.toString())
     }
 }
 

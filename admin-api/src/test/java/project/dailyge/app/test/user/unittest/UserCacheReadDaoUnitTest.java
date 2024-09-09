@@ -1,6 +1,5 @@
 package project.dailyge.app.test.user.unittest;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -17,7 +16,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import project.dailyge.app.common.exception.ExternalServerException;
 import project.dailyge.app.user.persistence.UserCacheReadDao;
-import project.dailyge.core.cache.user.UserCache;
 
 @DisplayName("[UnitTest] UserCacheReadDao Unit Test")
 class UserCacheReadDaoUnitTest {
@@ -28,22 +26,15 @@ class UserCacheReadDaoUnitTest {
     @Mock
     private ValueOperations<String, byte[]> valueOperations;
 
-    @Mock
-    private ObjectMapper objectMapper;
-
     @InjectMocks
     private UserCacheReadDao userCacheReadDao;
 
     private static final Long USER_ID = 1L;
     private static final String CACHE_KEY = "user:cache:1";
-    private UserCache userCache;
-    private byte[] cachedData;
 
     @BeforeEach
     void setUp() {
         openMocks(this);
-        userCache = new UserCache(USER_ID, "dailyge", "dailyge@gmail.com", "https://shorturl.at/D5sge", "NORMAL");
-        cachedData = "compressedData".getBytes();
         when(redisTemplate.opsForValue()).thenReturn(valueOperations);
     }
 

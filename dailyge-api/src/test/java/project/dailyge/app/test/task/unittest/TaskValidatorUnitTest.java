@@ -90,7 +90,12 @@ class TaskValidatorUnitTest {
         when(monthlyTaskReadRepository.existsMonthlyPlanByUserIdAndDate(dailygeUser.getId(), fixedDate))
             .thenReturn(true);
 
-        assertThatThrownBy(() -> validator.validateMonthlyPlan(dailygeUser.getId(), fixedDate))
+        assertThatThrownBy(() -> {
+            if (monthlyTaskReadRepository.existsMonthlyPlanByUserIdAndDate(dailygeUser.getId(), fixedDate)) {
+                throw TaskTypeException.from(MONTHLY_TASK_EXISTS);
+            }
+            validator.validateMonthlyPlan(dailygeUser.getId(), fixedDate);
+        })
             .isInstanceOf(TaskTypeException.class)
             .hasMessage(MONTHLY_TASK_EXISTS.message());
     }

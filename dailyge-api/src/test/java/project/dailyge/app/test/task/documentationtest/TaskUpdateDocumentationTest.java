@@ -9,7 +9,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.document;
 import org.springframework.restdocs.restassured.RestDocumentationFilter;
 import project.dailyge.app.common.DatabaseTestBase;
-import project.dailyge.app.core.task.application.TaskReadUseCase;
 import project.dailyge.app.core.task.application.TaskWriteUseCase;
 import project.dailyge.app.core.task.facade.TaskFacade;
 import project.dailyge.app.core.task.presentation.requesst.TaskCreateRequest;
@@ -26,7 +25,6 @@ import static project.dailyge.app.test.task.documentationtest.snippet.TaskUpdate
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskUpdateSnippet.createTaskUpdateFilter;
 import static project.dailyge.app.test.task.fixture.TaskRequestFixture.createTaskStatusUpdateRequest;
 import static project.dailyge.app.test.task.fixture.TaskRequestFixture.createTaskUpdateRequest;
-import project.dailyge.entity.task.MonthlyTaskJpaEntity;
 import static project.dailyge.entity.task.TaskColor.BLUE;
 import static project.dailyge.entity.task.TaskStatus.IN_PROGRESS;
 
@@ -36,13 +34,9 @@ import java.time.LocalDate;
 class TaskUpdateDocumentationTest extends DatabaseTestBase {
 
     private TaskCreateRequest taskCreateRequest;
-    private MonthlyTaskJpaEntity monthlyTask;
 
     @Autowired
     private TaskFacade taskFacade;
-
-    @Autowired
-    private TaskReadUseCase taskReadUseCase;
 
     @Autowired
     private TaskWriteUseCase taskWriteUseCase;
@@ -51,7 +45,6 @@ class TaskUpdateDocumentationTest extends DatabaseTestBase {
     void setUp() {
         now = LocalDate.now();
         taskFacade.createMonthlyTasks(dailygeUser, now);
-        monthlyTask = taskReadUseCase.findMonthlyTaskByUserIdAndDate(dailygeUser, now);
         taskCreateRequest = new TaskCreateRequest("주간 미팅", "Backend 팀과 Api 스펙 정의", BLUE, now);
     }
 

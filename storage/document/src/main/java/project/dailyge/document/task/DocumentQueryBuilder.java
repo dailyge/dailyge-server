@@ -64,7 +64,7 @@ public final class DocumentQueryBuilder {
             .set("tasks.$.year", date.getYear())
             .set("tasks.$.month", date.getMonthValue())
             .set("tasks.$.day", date.getDayOfMonth())
-            .set("tasks.$.status", status)
+            .set(TASKS_STATUS, status)
             .set("tasks.$.user_id", userId)
             .set(TASKS_LAST_MODIFIED_AT, now);
     }

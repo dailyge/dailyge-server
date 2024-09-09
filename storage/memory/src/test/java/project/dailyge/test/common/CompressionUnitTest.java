@@ -1,6 +1,7 @@
 package project.dailyge.test.common;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import static java.lang.System.nanoTime;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -119,33 +120,32 @@ class CompressionUnitTest {
         log.info("Compressed Data Size: {}", compressedData.length);
     }
 
-
     @Test
     @DisplayName("GZip과 Zstd 압축 및 해제 속도 비교")
     void whenCompareGZipAndZstdThenCheckPerformance() {
         for (int count = 1; count <= 5; count++) {
             // GZip Compression
-            final long gzipCompressStartTime = System.nanoTime();
+            final long gzipCompressStartTime = nanoTime();
             final byte[] gzipCompressedData = compressAsByteArrayWithGZip(userCache);
-            final long gzipCompressEndTime = System.nanoTime();
+            final long gzipCompressEndTime = nanoTime();
             final long gzipCompressionTime = gzipCompressEndTime - gzipCompressStartTime;
 
             // Zstd Compression
-            final long zstdCompressStartTime = System.nanoTime();
+            final long zstdCompressStartTime = nanoTime();
             final byte[] zstdCompressedData = compressAsByteArrayWithZstd(userCache, objectMapper);
-            final long zstdCompressEndTime = System.nanoTime();
+            final long zstdCompressEndTime = nanoTime();
             final long zstdCompressionTime = zstdCompressEndTime - zstdCompressStartTime;
 
             // GZip Decompression
-            final long gzipDecompressStartTime = System.nanoTime();
+            final long gzipDecompressStartTime = nanoTime();
             decompressAsObj(gzipCompressedData, UserCache.class);
-            final long gzipDecompressEndTime = System.nanoTime();
+            final long gzipDecompressEndTime = nanoTime();
             final long gzipDecompressionTime = gzipDecompressEndTime - gzipDecompressStartTime;
 
             // Zstd Decompression
-            final long zstdDecompressStartTime = System.nanoTime();
+            final long zstdDecompressStartTime = nanoTime();
             decompressAsObjWithZstd(zstdCompressedData, UserCache.class, objectMapper);
-            final long zstdDecompressEndTime = System.nanoTime();
+            final long zstdDecompressEndTime = nanoTime();
             final long zstdDecompressionTime = zstdDecompressEndTime - zstdDecompressStartTime;
 
             // Logging the results
@@ -154,6 +154,7 @@ class CompressionUnitTest {
             log.info("GZip Decompression Time: {} ms", gzipDecompressionTime / 1_000_000.0);
             log.info("Zstd Decompression Time: {} ms", zstdDecompressionTime / 1_000_000.0);
             log.info("--------------------------------------------------------x>");
+            assertTrue(gzipCompressedData.length > zstdCompressedData.length);
         }
     }
 

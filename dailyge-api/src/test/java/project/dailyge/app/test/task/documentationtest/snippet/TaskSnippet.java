@@ -1,13 +1,15 @@
 package project.dailyge.app.test.task.documentationtest.snippet;
 
+import static java.sql.JDBCType.ARRAY;
 import static javax.xml.xpath.XPathEvaluationResult.XPathResultType.NUMBER;
 import static javax.xml.xpath.XPathEvaluationResult.XPathResultType.STRING;
 import org.springframework.restdocs.cookies.CookieDescriptor;
-import org.springframework.restdocs.cookies.RequestCookiesSnippet;
 import static org.springframework.restdocs.cookies.CookieDocumentation.cookieWithName;
 import static org.springframework.restdocs.cookies.CookieDocumentation.requestCookies;
+import org.springframework.restdocs.cookies.RequestCookiesSnippet;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import static org.springframework.restdocs.payload.JsonFieldType.NULL;
+import static org.springframework.restdocs.payload.JsonFieldType.OBJECT;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
@@ -106,6 +108,15 @@ public interface TaskSnippet {
         )
     };
 
+    ParameterDescriptor[] WEEKLY_TASKS_STATISTIC_DATE_QUERY_PARAMETER_DESCRIPTORS = {
+        parameterWithName("startDate").description("시작 날짜").attributes(
+            key("constraints").value("- Must be not null.")
+        ),
+        parameterWithName("endDate").description("종료 날짜").attributes(
+            key("constraints").value("- Must be not null.")
+        )
+    };
+
     ParameterDescriptor[] DATE_QUERY_PARAMETER_DESCRIPTORS = {
         parameterWithName("date").description("날짜").attributes(
             key("constraints").value("- Must be not null.")
@@ -159,6 +170,18 @@ public interface TaskSnippet {
         fieldWithPath("message").type(STRING).description("응답 메시지")
     };
 
+    FieldDescriptor[] WEEKLY_TASKS_STATISTIC_RESPONSE_FIELD_DESCRIPTOR = {
+        fieldWithPath("data.startDate").type(STRING).description("시작 날짜"),
+        fieldWithPath("data.endDate").type(STRING).description("종료 날짜"),
+        fieldWithPath("data.keys").type(ARRAY).description("날짜 key"),
+        fieldWithPath("data.statistics").type(OBJECT).description("날짜별 통계"),
+        fieldWithPath("data.statistics.*..todo").type(NUMBER).description("TODO 상태의 작업 비율"),
+        fieldWithPath("data.statistics.*..inProgress").type(NUMBER).description("IN_PROGRESS 상태의 작업 비율"),
+        fieldWithPath("data.statistics.*.done").type(NUMBER).description("DONE 상태의 작업 비율"),
+        fieldWithPath("code").type(NUMBER).description("응답 코드"),
+        fieldWithPath("message").type(STRING).description("응답 메시지")
+    };
+
     FieldDescriptor[] TASK_STATUS_LIST_READ_RESPONSE_FIELD_DESCRIPTOR = {
         fieldWithPath("data.[].kr").type(STRING).description("Task 상태(국문)"),
         fieldWithPath("data.[].en").type(STRING).description("Task 상태(영문)"),
@@ -186,7 +209,9 @@ public interface TaskSnippet {
     QueryParametersSnippet DATE_SEARCH_QUERY_PARAMETER_SNIPPET = queryParameters(TASKS_SEARCH_DATE_QUERY_PARAMETER_DESCRIPTORS);
     PathParametersSnippet TASK_PATH_PARAMETER_SNIPPET = pathParameters(TASK_ID_PATH_PARAMETER_DESCRIPTORS);
     QueryParametersSnippet TASK_DATE_REQUEST_PARAMETER_SNIPPET = queryParameters(DATE_QUERY_PARAMETER_DESCRIPTORS);
+    QueryParametersSnippet WEEKLY_TASKS_STATISTIC_REQUEST_PARAMETER_SNIPPET = queryParameters(WEEKLY_TASKS_STATISTIC_DATE_QUERY_PARAMETER_DESCRIPTORS);
     ResponseFieldsSnippet TASK_DETAIL_SEARCH_RESPONSE_SNIPPET = responseFields(TASK_DETAIL_SEARCH_RESPONSE_FIELD_DESCRIPTOR);
+    ResponseFieldsSnippet WEEKLY_TASKS_STATISTIC_RESPONSE_SNIPPET = responseFields(WEEKLY_TASKS_STATISTIC_RESPONSE_FIELD_DESCRIPTOR);
 
     // TaskStatusRead Response Snippet
     ResponseFieldsSnippet TASK_STATUS_READ_RESPONSE_FIELD_SNIPPET = responseFields(TASK_STATUS_LIST_READ_RESPONSE_FIELD_DESCRIPTOR);

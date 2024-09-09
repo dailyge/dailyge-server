@@ -71,8 +71,8 @@ class MonthlyTasksUnitTest {
     @Test
     @DisplayName("year 값이 올바르지 않다면 예외가 발생한다.")
     void whenYearIsValidThenNoExceptionThrown() {
-        final int year = 0;
-        assertThatThrownBy(() -> MonthlyTasks.createMonthlyTasks(userId, year))
+        final int invalidYear = 0;
+        assertThatThrownBy(() -> MonthlyTasks.createMonthlyTasks(userId, invalidYear))
             .isExactlyInstanceOf(IllegalArgumentException.class);
     }
 

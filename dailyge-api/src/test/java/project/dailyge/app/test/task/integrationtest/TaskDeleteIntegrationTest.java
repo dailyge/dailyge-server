@@ -17,14 +17,11 @@ import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.TASK_NO
 import project.dailyge.app.core.task.exception.TaskTypeException;
 import project.dailyge.app.core.task.facade.TaskFacade;
 import static project.dailyge.app.test.task.fixture.TaskCommandFixture.createTaskCreationCommand;
-import project.dailyge.entity.task.MonthlyTaskEntityReadRepository;
-import project.dailyge.entity.task.MonthlyTaskJpaEntity;
 import static project.dailyge.entity.user.Role.NORMAL;
 
 @DisplayName("[IntegrationTest] Task 삭제 통합 테스트")
 class TaskDeleteIntegrationTest extends DatabaseTestBase {
 
-    private MonthlyTaskJpaEntity monthlyTask;
     private TaskCreateCommand taskCreateCommand;
 
     @Autowired
@@ -33,14 +30,10 @@ class TaskDeleteIntegrationTest extends DatabaseTestBase {
     @Autowired
     private TaskWriteUseCase taskWriteUseCase;
 
-    @Autowired
-    private MonthlyTaskEntityReadRepository monthlyTaskReadRepository;
-
     @BeforeEach
     void setUp() {
         now = now();
         taskFacade.createMonthlyTasks(dailygeUser, now);
-        monthlyTask = monthlyTaskReadRepository.findMonthlyTaskByUserIdAndDate(dailygeUser.getUserId(), now).get();
         taskCreateCommand = createTaskCreationCommand(now);
     }
 

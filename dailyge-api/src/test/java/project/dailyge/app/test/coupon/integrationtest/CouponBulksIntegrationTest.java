@@ -9,9 +9,9 @@ import org.springframework.data.redis.core.RedisTemplate;
 import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.core.coupon.persistence.CouponEventBulks;
 import project.dailyge.app.core.coupon.persistence.CouponEventParticipant;
-import project.dailyge.app.core.coupon.persistence.CouponEventReadDao;
 import project.dailyge.app.core.coupon.persistence.CouponInMemoryRepository;
 import project.dailyge.common.configuration.CompressionHelper;
+import project.dailyge.core.cache.coupon.CouponCacheReadRepository;
 import project.dailyge.core.cache.coupon.CouponCacheWriteUseCase;
 import project.dailyge.document.common.UuidGenerator;
 
@@ -30,7 +30,7 @@ class CouponBulksIntegrationTest extends DatabaseTestBase {
     private CouponInMemoryRepository couponInMemoryRepository;
 
     @Autowired
-    private CouponEventReadDao couponCacheReadDao;
+    private CouponCacheReadRepository couponCacheReadDao;
 
     @Autowired
     private RedisTemplate<String, byte[]> redisTemplate;
@@ -41,7 +41,7 @@ class CouponBulksIntegrationTest extends DatabaseTestBase {
     void whenCouponBulksExistsThenRedisSave() {
         final String targetKey = "coupon:queue:1";
         redisTemplate.delete(KEY);
-        redisTemplate.opsForValue().set(KEY, "\0" .getBytes());
+        redisTemplate.opsForValue().set(KEY, "\0".getBytes());
         redisTemplate.delete(targetKey);
         redisTemplate.delete("coupon:queue:count");
         couponInMemoryRepository.deleteAll();

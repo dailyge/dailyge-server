@@ -8,7 +8,7 @@ import java.time.LocalDate;
 @Component
 public class TaskClientValidator {
 
-    private static final long MAX_DAYS_DIFFERENCE = 36;
+    private static final long MAX_DAYS_DIFFERENCE = 43;
 
     public void validateFromStartDateToEndDate(
         final LocalDate startDate,

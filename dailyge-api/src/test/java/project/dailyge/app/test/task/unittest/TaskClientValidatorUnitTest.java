@@ -40,7 +40,7 @@ class TaskClientValidatorUnitTest {
 
     @ParameterizedTest
     @MethodSource("provideGreaterThan8Days")
-    @DisplayName("endDate와 startDate의 차이가 36일을 초과할 경우 IllegalArgumentException이 발생한다.")
+    @DisplayName("endDate와 startDate의 차이가 43일을 초과할 경우 IllegalArgumentException이 발생한다.")
     void whenEndDateExceedsMaxDaysDifference_thenThrowIllegalArgumentException(final int parameter) {
         final LocalDate startDate = LocalDate.of(2023, 8, 1);
         final LocalDate endDate = LocalDate.of(2023, 9, parameter);
@@ -49,7 +49,7 @@ class TaskClientValidatorUnitTest {
 
     @ParameterizedTest
     @MethodSource("provideAugustDays")
-    @DisplayName("endDate와 startDate의 차이가 36일 이하일 경우 예외가 발생하지 않는다.")
+    @DisplayName("endDate와 startDate의 차이가 43일 이하일 경우 예외가 발생하지 않는다.")
     void whenEndDateIsExactlyMaxDaysDifference_thenNoException(int parameter) {
         final LocalDate startDate = LocalDate.of(2023, 8, parameter);
         final LocalDate endDate = LocalDate.of(2023, 9, 6);
@@ -61,6 +61,6 @@ class TaskClientValidatorUnitTest {
     }
 
     private static IntStream provideGreaterThan8Days() {
-        return IntStream.rangeClosed(8, 30);
+        return IntStream.rangeClosed(14, 30);
     }
 }

@@ -3,6 +3,7 @@ package project.dailyge.entity.test.task;
 import static java.time.LocalDate.now;
 import static java.util.Collections.emptyList;
 import org.junit.jupiter.api.AfterEach;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
@@ -146,5 +147,45 @@ class TasksUnitTest {
     void whenNoTasksMatchStatusThenReturnZeroStatusCount() {
         final long count = Tasks.calculateAchievementRate(tasks, null);
         assertEquals(0, count);
+    }
+
+    @Test
+    @DisplayName("Task 전체 수가 소수라도 정확한 결과가 나온다.")
+    void whenTotalTaskCountIsPrimeThenResultShouldBeCorrectly() {
+        final List<TaskJpaEntity> newTasks = new ArrayList<>();
+        newTasks.add(new TaskJpaEntity("Task 1", "Content 1", now(), TODO, 1L));
+        newTasks.add(new TaskJpaEntity("Task 2", "Content 2", now(), TODO, 1L));
+        newTasks.add(new TaskJpaEntity("Task 3", "Content 3", now(), IN_PROGRESS, 1L));
+        newTasks.add(new TaskJpaEntity("Task 4", "Content 4", now(), IN_PROGRESS, 1L));
+        newTasks.add(new TaskJpaEntity("Task 5", "Content 5", now(), IN_PROGRESS, 1L));
+        newTasks.add(new TaskJpaEntity("Task 6", "Content 6", now(), DONE, 1L));
+        newTasks.add(new TaskJpaEntity("Task 7", "Content 7", now(), DONE, 1L));
+
+        assertAll(
+            () -> assertEquals(28.57, calculatePercentage(newTasks, TODO)),
+            () -> assertEquals(42.86, calculatePercentage(newTasks, IN_PROGRESS)),
+            () -> assertEquals(28.57, calculatePercentage(newTasks, DONE))
+        );
+    }
+
+    @Test
+    @DisplayName("Tasks에 3개의 TODO, IN_PROGRESS, DONE 작업이 있을 경우 각각 33.33%의 비율을 반환한다.")
+    void whenTasksHaveEqualStatusThenReturnCorrectPercentage() {
+        final List<TaskJpaEntity> newTasks = new ArrayList<>();
+        newTasks.add(new TaskJpaEntity("Task 1", "Content 1", now(), TODO, 1L));
+        newTasks.add(new TaskJpaEntity("Task 2", "Content 2", now(), TODO, 1L));
+        newTasks.add(new TaskJpaEntity("Task 3", "Content 3", now(), TODO, 1L));
+        newTasks.add(new TaskJpaEntity("Task 4", "Content 4", now(), IN_PROGRESS, 1L));
+        newTasks.add(new TaskJpaEntity("Task 5", "Content 5", now(), IN_PROGRESS, 1L));
+        newTasks.add(new TaskJpaEntity("Task 6", "Content 6", now(), IN_PROGRESS, 1L));
+        newTasks.add(new TaskJpaEntity("Task 7", "Content 7", now(), DONE, 1L));
+        newTasks.add(new TaskJpaEntity("Task 8", "Content 8", now(), DONE, 1L));
+        newTasks.add(new TaskJpaEntity("Task 9", "Content 9", now(), DONE, 1L));
+
+        assertAll(
+            () -> assertEquals(33.33, calculatePercentage(newTasks, TODO)),
+            () -> assertEquals(33.33, calculatePercentage(newTasks, IN_PROGRESS)),
+            () -> assertEquals(33.33, calculatePercentage(newTasks, DONE))
+        );
     }
 }

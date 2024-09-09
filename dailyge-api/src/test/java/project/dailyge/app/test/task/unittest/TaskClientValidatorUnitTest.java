@@ -5,9 +5,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import project.dailyge.app.core.task.presentation.validator.TaskClientValidator;
 
 import java.time.LocalDate;
+import java.util.stream.IntStream;
 
 @DisplayName("[UnitTest] TaskClientValidator 단위 테스트")
 class TaskClientValidatorUnitTest {
@@ -24,9 +27,7 @@ class TaskClientValidatorUnitTest {
     void whenEndDateIsBeforeStartDate_thenThrowIllegalArgumentException() {
         final LocalDate startDate = LocalDate.of(2023, 8, 25);
         final LocalDate endDate = LocalDate.of(2023, 8, 24);
-        assertThrows(IllegalArgumentException.class, () -> {
-            validator.validateFromStartDateToEndDate(startDate, endDate);
-        });
+        assertThrows(IllegalArgumentException.class, () -> validator.validateFromStartDateToEndDate(startDate, endDate));
     }
 
     @Test
@@ -34,8 +35,32 @@ class TaskClientValidatorUnitTest {
     void whenEndDateIsAfterOrEqualStartDate_thenNoException() {
         final LocalDate startDate = LocalDate.of(2023, 8, 24);
         final LocalDate endDate = LocalDate.of(2023, 8, 25);
-        assertDoesNotThrow(() -> {
-            validator.validateFromStartDateToEndDate(startDate, endDate);
-        });
+        assertDoesNotThrow(() -> validator.validateFromStartDateToEndDate(startDate, endDate));
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideGreaterThan8Days")
+    @DisplayName("endDate와 startDate의 차이가 36일을 초과할 경우 IllegalArgumentException이 발생한다.")
+    void whenEndDateExceedsMaxDaysDifference_thenThrowIllegalArgumentException(final int parameter) {
+        final LocalDate startDate = LocalDate.of(2023, 8, 1);
+        final LocalDate endDate = LocalDate.of(2023, 9, parameter);
+        assertThrows(IllegalArgumentException.class, () -> validator.validateFromStartDateToEndDate(startDate, endDate));
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideAugustDays")
+    @DisplayName("endDate와 startDate의 차이가 36일 이하일 경우 예외가 발생하지 않는다.")
+    void whenEndDateIsExactlyMaxDaysDifference_thenNoException(int parameter) {
+        final LocalDate startDate = LocalDate.of(2023, 8, parameter);
+        final LocalDate endDate = LocalDate.of(2023, 9, 6);
+        assertDoesNotThrow(() -> validator.validateFromStartDateToEndDate(startDate, endDate));
+    }
+
+    private static IntStream provideAugustDays() {
+        return IntStream.rangeClosed(1, 31);
+    }
+
+    private static IntStream provideGreaterThan8Days() {
+        return IntStream.rangeClosed(8, 30);
     }
 }

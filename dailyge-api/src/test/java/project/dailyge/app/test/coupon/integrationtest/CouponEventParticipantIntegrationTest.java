@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.core.coupon.application.CouponWriteUseCase;
-import project.dailyge.app.core.coupon.persistence.CouponEventParticipantRepository;
+import project.dailyge.app.core.coupon.persistence.CouponInMemoryRepository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -18,16 +18,16 @@ class CouponEventParticipantIntegrationTest extends DatabaseTestBase {
     private CouponWriteUseCase couponWriteUseCase;
 
     @Autowired
-    private CouponEventParticipantRepository couponEventParticipantRepository;
+    private CouponInMemoryRepository couponInMemoryRepository;
 
     @Test
     @DisplayName("쿠폰 발급 신청 정보를 저장하면 쿠폰 발급 저장소에 저장된다.")
     void whenCreateCouponEventParticipationThenSavedInMemoryQueue() {
-        couponEventParticipantRepository.deleteAll();
-        log.info("쿠폰 발급 전 count: {}", couponEventParticipantRepository.count());
+        couponInMemoryRepository.deleteAll();
+        log.info("쿠폰 발급 전 count: {}", couponInMemoryRepository.count());
         couponWriteUseCase.saveApply(dailygeUser);
-        log.info("쿠폰 발급 후 count: {}", couponEventParticipantRepository.count());
-        assertEquals(1, couponEventParticipantRepository.count());
+        log.info("쿠폰 발급 후 count: {}", couponInMemoryRepository.count());
+        assertEquals(1, couponInMemoryRepository.count());
 
     }
 }

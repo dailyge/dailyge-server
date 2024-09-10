@@ -21,4 +21,7 @@ public class GoogleAuthorizationResponse {
     @JsonProperty(value = "token_type")
     private String tokenType;
 
+    public GoogleAuthorizationResponse(final String accessToken) {
+        this.accessToken = accessToken;
+    }
 }

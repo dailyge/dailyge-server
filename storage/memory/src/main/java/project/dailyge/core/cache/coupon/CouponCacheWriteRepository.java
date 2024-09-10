@@ -4,4 +4,6 @@ import java.util.List;
 
 public interface CouponCacheWriteRepository {
     void saveBulks(final List<CouponCache> couponCaches);
+
+    void deleteAllBulks();
 }

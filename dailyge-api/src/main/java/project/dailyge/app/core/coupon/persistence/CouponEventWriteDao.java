@@ -9,7 +9,9 @@ import project.dailyge.app.common.exception.CommonException;
 import project.dailyge.core.cache.coupon.CouponCache;
 import project.dailyge.core.cache.coupon.CouponCacheWriteRepository;
 
+import java.nio.ByteBuffer;
 import java.util.List;
+import java.util.Objects;
 
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_GATEWAY;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
@@ -33,6 +35,27 @@ class CouponEventWriteDao implements CouponCacheWriteRepository {
                 couponCaches.forEach(couponCache -> redisTemplate.opsForValue().setBit(COUPON_KEY, couponCache.getUserId(), true));
                 final Long count = redisTemplate.opsForValue().increment(QUEUE_COUNT_KEY);
                 redisTemplate.opsForValue().set(getKey(count), compressAsByteArrayWithZstd(couponEventBulks, objectMapper));
+                connection.closePipeline();
+                return null;
+            }, true);
+        } catch (RedisException exception) {
+            throw CommonException.from(exception.getMessage(), BAD_GATEWAY);
+        } catch (Exception exception) {
+            throw CommonException.from(exception.getMessage(), INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public void deleteAllBulks() {
+        try {
+            redisTemplate.execute(connection -> {
+                connection.openPipeline();
+                long count = ByteBuffer.wrap(Objects.requireNonNull(redisTemplate.opsForValue().get(QUEUE_COUNT_KEY))).getLong();
+                for (long queueNumber = 1; queueNumber <= count; queueNumber++) {
+                    redisTemplate.delete(getKey(queueNumber));
+                }
+                redisTemplate.delete(QUEUE_COUNT_KEY);
+                redisTemplate.opsForValue().set(COUPON_KEY, "\0".getBytes());
                 connection.closePipeline();
                 return null;
             }, true);

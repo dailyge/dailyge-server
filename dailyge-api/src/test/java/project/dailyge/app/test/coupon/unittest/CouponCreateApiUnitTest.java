@@ -3,22 +3,26 @@ package project.dailyge.app.test.coupon.unittest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.core.coupon.application.CouponWriteUseCase;
 import project.dailyge.app.core.coupon.presentation.CouponCreateApi;
 import project.dailyge.entity.user.Role;
 
-import static org.mockito.Mockito.*;
-
 @DisplayName("[UnitTest] 쿠폰 발급 신청 API 테스트")
 class CouponCreateApiUnitTest {
+
     private CouponWriteUseCase couponWriteUseCase;
     private CouponCreateApi couponCreateApi;
+    private String env;
 
     @BeforeEach
     void setUp() {
         couponWriteUseCase = mock(CouponWriteUseCase.class);
-        couponCreateApi = new CouponCreateApi(couponWriteUseCase);
+        env = "dev";
+        couponCreateApi = new CouponCreateApi(env, couponWriteUseCase);
     }
 
     @Test

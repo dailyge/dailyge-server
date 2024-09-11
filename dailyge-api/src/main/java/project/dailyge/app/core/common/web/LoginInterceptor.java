@@ -74,7 +74,7 @@ public class LoginInterceptor implements HandlerInterceptor {
                 return true;
             }
 
-            final DailygeToken token = tokenProvider.createToken(userCache.getId(), userCache.getEmail());
+            final DailygeToken token = tokenProvider.createToken(userCache.getId());
             setLoggedInResponse(request, response, token.accessToken());
             return false;
         } catch (Exception ex) {

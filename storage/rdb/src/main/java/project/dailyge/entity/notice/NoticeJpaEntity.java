@@ -34,6 +34,20 @@ public class NoticeJpaEntity extends BaseEntity {
     private Long userId;
 
     public NoticeJpaEntity(
+        final Long id,
+        final String title,
+        final String content,
+        final NoticeType noticeType,
+        final Long userId
+    ) {
+        this.id = id;
+        this.title = title;
+        this.content = content;
+        this.noticeType = noticeType;
+        this.userId = userId;
+    }
+
+    public NoticeJpaEntity(
         final String title,
         final String content,
         final NoticeType noticeType,

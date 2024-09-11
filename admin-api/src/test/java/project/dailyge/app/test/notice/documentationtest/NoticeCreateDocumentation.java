@@ -107,7 +107,6 @@ class NoticeCreateDocumentation extends DatabaseTestBase {
     @Test
     @DisplayName("[Swagger] 어드민이 아니라면, 403 UN AUTHORIZED를 반환한다.")
     void whenSaveNoticeThenResultShouldBe_403_Swagger() throws JsonProcessingException {
-        final NoticeCreateRequest requestWithEmptyTitle = new NoticeCreateRequest("", CONTENT, UPDATE);
         final RestDocumentationFilter filter = createNoticeCreateFilter(
             createIdentifier("NoticeCreate", 403)
         );
@@ -116,7 +115,7 @@ class NoticeCreateDocumentation extends DatabaseTestBase {
             .filter(filter)
             .contentType(APPLICATION_JSON_VALUE)
             .cookie(AUTHORIZATION, getAccessTokenCookie())
-            .body(objectMapper.writeValueAsString(requestWithEmptyTitle))
+            .body(objectMapper.writeValueAsString(request))
             .when()
             .post("/api/notice")
             .then()

@@ -32,20 +32,15 @@ import java.util.Date;
 public class TokenProvider {
 
     private static final String ID = "id";
-    private static final String BEARER = "Bearer ";
-    private static final int TOKEN_BEGIN_INDEX = 7;
     private static final SecureRandom secureRandom = new SecureRandom();
     private static final int ARRAY_START_INDEX = 0;
     private static final int IV_SIZE = 16;
     private final JwtProperties jwtProperties;
     private final SecretKeyManager secretKeyManager;
 
-    public DailygeToken createToken(
-        final Long userId,
-        final String userEmail
-    ) {
-        final String accessToken = generateToken(userId, userEmail, getExpiry(jwtProperties.getAccessExpiredTime()));
-        final String refreshToken = generateToken(userId, userEmail, getExpiry(jwtProperties.getRefreshExpiredTime()));
+    public DailygeToken createToken(final Long userId) {
+        final String accessToken = generateToken(userId, getExpiry(jwtProperties.getAccessExpiredTime()));
+        final String refreshToken = generateToken(userId, getExpiry(jwtProperties.getRefreshExpiredTime()));
         return new DailygeToken(accessToken, refreshToken, jwtProperties.getAccessExpiredTime(), jwtProperties.getRefreshExpiredTime());
     }
 
@@ -56,14 +51,12 @@ public class TokenProvider {
 
     private String generateToken(
         final Long userId,
-        final String userEmail,
         final Date expiry
     ) {
         try {
             return Jwts.builder()
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
                 .setExpiration(expiry)
-                .setSubject(userEmail)
                 .claim(ID, encryptUserId(userId))
                 .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey())
                 .compact();

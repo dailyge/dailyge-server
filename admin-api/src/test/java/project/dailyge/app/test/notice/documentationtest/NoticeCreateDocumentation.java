@@ -44,7 +44,7 @@ class NoticeCreateDocumentation extends DatabaseTestBase {
     void setUp() {
         final UserCache adminUser = new UserCache(ADMIN_ID, "admin", ADMIN_EMAIL, "", Role.ADMIN.name());
         userCacheWriteUseCase.save(adminUser);
-        token = tokenProvider.createToken(ADMIN_ID, ADMIN_EMAIL);
+        token = tokenProvider.createToken(ADMIN_ID);
         request = new NoticeCreateRequest("공지사항 제목", CONTENT, UPDATE);
         adminCookie = new Cookie.Builder("Access-Token", token.accessToken()).build();
     }

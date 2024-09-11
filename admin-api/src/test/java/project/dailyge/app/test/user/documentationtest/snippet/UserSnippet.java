@@ -22,7 +22,7 @@ import static project.dailyge.app.common.SnippetUtils.getAttribute;
 
 public interface UserSnippet {
 
-    String TAG = "user";
+    String tag = "user";
 
     CookieDescriptor[] USER_BLACKLIST_ACCESS_TOKEN_COOKIE_DESCRIPTOR = {
         cookieWithName("Access-Token").description("사용자 토큰 쿠키")
@@ -44,7 +44,7 @@ public interface UserSnippet {
         fieldWithPath("message").type(STRING).description("응답 메시지")
     };
 
-    RequestFieldsSnippet USER_BLACKLIST_CREATE_RESPONSE_SNIPPET = requestFields(USER_BLACKLIST_CREATE_REQUEST_FIELDS_DESCRIPTORS);
+    RequestFieldsSnippet USER_BLACKLIST_CREATE_REQUEST_FIELDS_SNIPPET = requestFields(USER_BLACKLIST_CREATE_REQUEST_FIELDS_DESCRIPTORS);
     PathParametersSnippet USER_BLACKLIST_CREATE_PATH_PARAMETER_SNIPPET = pathParameters(USER_BLACKLIST_CREATE_PATH_DESCRIPTOR);
     ResponseFieldsSnippet USER_BLACKLIST_CREATE_RESPONSE_FIELDS_SNIPPET = responseFields(USER_BLACKLIST_CREATE_RESPONSE_FIELDS_DESCRIPTORS);
 

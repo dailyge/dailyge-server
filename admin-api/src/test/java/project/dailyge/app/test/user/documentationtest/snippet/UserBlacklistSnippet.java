@@ -16,17 +16,18 @@ import static org.springframework.restdocs.request.RequestDocumentation.pathPara
 public final class UserBlacklistSnippet implements UserSnippet {
 
     private static final String USER_BLACKLIST_CREATE_SUMMARY = "User 블랙리스트 생성 API";
-    private static final String USER_DETAIL_SEARCH_DESCRIPTION = "User 블랙리스트를 생성하는 API 입니다.";
+    private static final String USER_BLACKLIST_CREATE_DESCRIPTION = "User 블랙리스트를 생성하는 API 입니다.";
 
     public static RestDocumentationFilter createUserBlacklistCreateFilter(final String identifier) {
         return document(
             identifier,
             ResourceSnippetParameters.builder()
+                .tag(tag)
                 .pathParameters(USER_BLACKLIST_CREATE_PATH_DESCRIPTOR)
                 .requestFields(USER_BLACKLIST_CREATE_REQUEST_FIELDS_DESCRIPTORS)
                 .responseFields(USER_BLACKLIST_CREATE_RESPONSE_FIELDS_DESCRIPTORS)
                 .summary(USER_BLACKLIST_CREATE_SUMMARY)
-                .description(USER_DETAIL_SEARCH_DESCRIPTION),
+                .description(USER_BLACKLIST_CREATE_DESCRIPTION),
             preprocessRequest(prettyPrint()),
             preprocessResponse(prettyPrint()),
             snippets -> {

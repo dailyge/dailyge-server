@@ -12,12 +12,12 @@ public record DailygeToken(
     private static final String ACCESS_TOKEN = "Access-Token";
     private static final String REFRESH_TOKEN = "Refresh-Token";
 
-    public String getAccessTokenCookie() {
-        return createResponseCookie(ACCESS_TOKEN, accessToken, "/", accessTokenMaxAge, true);
+    public String getAccessTokenCookie(final String env) {
+        return createResponseCookie(ACCESS_TOKEN, accessToken, "/", accessTokenMaxAge, true, env);
     }
 
-    public String getRefreshTokenCookie() {
-        return createResponseCookie(REFRESH_TOKEN, refreshToken, "/", refreshTokenMaxAge, true);
+    public String getRefreshTokenCookie(final String env) {
+        return createResponseCookie(REFRESH_TOKEN, refreshToken, "/", refreshTokenMaxAge, true, env);
     }
 
     @Override

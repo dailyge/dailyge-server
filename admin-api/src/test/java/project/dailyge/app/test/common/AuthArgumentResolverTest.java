@@ -12,7 +12,7 @@ import project.dailyge.app.common.auth.JwtProperties;
 import project.dailyge.app.common.auth.SecretKeyManager;
 import project.dailyge.app.common.auth.TokenProvider;
 import project.dailyge.app.common.configuration.web.AuthArgumentResolver;
-import project.dailyge.app.common.exception.UnAuthorizedException;
+import project.dailyge.app.common.exception.CommonException;
 import project.dailyge.app.test.user.fixture.UserFixture;
 import project.dailyge.core.cache.user.UserCache;
 import project.dailyge.core.cache.user.UserCacheReadUseCase;
@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
 
 @DisplayName("[UnitTest] AuthArgumentResolver 검증 단위 테스트")
 class AuthArgumentResolverTest {
@@ -76,7 +77,7 @@ class AuthArgumentResolverTest {
     @DisplayName("토큰이 없다면, UnAuthorizedException이 발생한다.")
     void whenTokenIsEmptyThenUnAuthorizedExceptionShouldBeHappen() {
         assertThatThrownBy(() -> resolver.resolveArgument(null, null, webRequest, null))
-            .isExactlyInstanceOf(UnAuthorizedException.class)
+            .isExactlyInstanceOf(CommonException.from(UN_AUTHORIZED).getClass())
             .isInstanceOf(RuntimeException.class);
     }
 

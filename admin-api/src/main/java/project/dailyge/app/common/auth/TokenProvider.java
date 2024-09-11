@@ -19,10 +19,9 @@ import javax.crypto.spec.SecretKeySpec;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import project.dailyge.app.common.exception.UnAuthorizedException;
-import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
-import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_PARAMETERS;
+import project.dailyge.app.common.exception.CommonException;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_USER_TOKEN;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
 
 @Slf4j
 @Component
@@ -48,7 +47,7 @@ public class TokenProvider {
 
     private Date getExpiry(final int expiredTime) {
         final Date now = new Date();
-        return new Date(now.getTime() + Duration.ofSeconds(expiredTime).toMillis());
+        return new Date(now.getTime() + Duration.ofDays(expiredTime).toMillis());
     }
 
     private String generateToken(
@@ -65,19 +64,19 @@ public class TokenProvider {
                 .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey())
                 .compact();
         } catch (IllegalArgumentException ex) {
-            throw new UnAuthorizedException(ex.getMessage(), INVALID_PARAMETERS);
+            throw CommonException.from(ex.getMessage(), INVALID_USER_TOKEN);
         } catch (Exception ex) {
-            throw new UnAuthorizedException(ex.getMessage(), INTERNAL_SERVER_ERROR);
+            throw CommonException.from(ex.getMessage(), UN_AUTHORIZED);
         }
     }
 
     public Long getUserId(final String token) {
         final Claims claims = getClaims(token);
         if (claims == null) {
-            throw new UnAuthorizedException(INVALID_USER_TOKEN);
+            throw CommonException.from(INVALID_USER_TOKEN);
         }
         if (claims.get(ID) == null) {
-            throw new UnAuthorizedException(INVALID_USER_TOKEN);
+            throw CommonException.from(INVALID_USER_TOKEN);
         }
         final String encryptUserId = claims.get(ID, String.class);
         return decryptUserId(encryptUserId);
@@ -95,7 +94,7 @@ public class TokenProvider {
                  | UnsupportedJwtException
                  | RequiredTypeException ex
         ) {
-            throw new UnAuthorizedException(ex.getMessage(), INVALID_USER_TOKEN);
+            throw CommonException.from(ex.getMessage(), INVALID_USER_TOKEN);
         }
     }
 
@@ -115,7 +114,7 @@ public class TokenProvider {
 
             return Base64.getEncoder().encodeToString(encryptedUserIdWithIv);
         } catch (Exception ex) {
-            throw new UnAuthorizedException(ex.getMessage(), INVALID_USER_TOKEN);
+            throw CommonException.from(ex.getMessage(), INVALID_USER_TOKEN);
         }
     }
 
@@ -133,7 +132,7 @@ public class TokenProvider {
             final String decryptId = new String(decrypted, StandardCharsets.UTF_8);
             return Long.parseLong(decryptId);
         } catch (Exception ex) {
-            throw new UnAuthorizedException(ex.getMessage(), INVALID_USER_TOKEN);
+            throw CommonException.from(ex.getMessage(), INVALID_USER_TOKEN);
         }
     }
 
@@ -149,7 +148,7 @@ public class TokenProvider {
             cipher.init(operationMode, secretKeySpec, ivParameterSpec);
             return cipher.doFinal(cipherTarget);
         } catch (Exception ex) {
-            throw new UnAuthorizedException(ex.getMessage(), INVALID_USER_TOKEN);
+            throw CommonException.from(ex.getMessage(), INVALID_USER_TOKEN);
         }
     }
 }

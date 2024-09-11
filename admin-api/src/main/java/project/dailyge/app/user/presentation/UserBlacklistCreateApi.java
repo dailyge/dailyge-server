@@ -9,11 +9,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import project.dailyge.app.common.annotation.PresentationLayer;
 import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.common.auth.LoginUser;
-import project.dailyge.app.common.exception.UnAuthorizedException;
+import project.dailyge.app.common.exception.CommonException;
 import project.dailyge.app.common.response.ApiResponse;
 import project.dailyge.app.user.facade.UserFacade;
 import project.dailyge.app.user.presentation.request.UserBlacklistCreateRequest;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.OK;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
 
 @PresentationLayer
 @RequiredArgsConstructor
@@ -29,7 +30,7 @@ public class UserBlacklistCreateApi {
         @Valid @RequestBody final UserBlacklistCreateRequest request
     ) {
         if (!dailygeUser.isAdmin()) {
-            throw new UnAuthorizedException();
+            throw CommonException.from(UN_AUTHORIZED);
         }
         userFacade.invalidateUser(userId, request.toCommand());
         return ApiResponse.from(OK);

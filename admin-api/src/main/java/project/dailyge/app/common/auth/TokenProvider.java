@@ -47,7 +47,7 @@ public class TokenProvider {
 
     private Date getExpiry(final int expiredTime) {
         final Date now = new Date();
-        return new Date(now.getTime() + Duration.ofSeconds(expiredTime).toMillis());
+        return new Date(now.getTime() + Duration.ofDays(expiredTime).toMillis());
     }
 
     private String generateToken(

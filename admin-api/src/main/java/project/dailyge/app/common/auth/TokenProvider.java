@@ -36,12 +36,9 @@ public class TokenProvider {
     private final JwtProperties jwtProperties;
     private final SecretKeyManager secretKeyManager;
 
-    public DailygeToken createToken(
-        final Long userId,
-        final String userEmail
-    ) {
-        final String accessToken = generateToken(userId, userEmail, getExpiry(jwtProperties.getAccessExpiredTime()));
-        final String refreshToken = generateToken(userId, userEmail, getExpiry(jwtProperties.getRefreshExpiredTime()));
+    public DailygeToken createToken(final Long userId) {
+        final String accessToken = generateToken(userId, getExpiry(jwtProperties.getAccessExpiredTime()));
+        final String refreshToken = generateToken(userId, getExpiry(jwtProperties.getRefreshExpiredTime()));
         return new DailygeToken(accessToken, refreshToken, jwtProperties.getAccessExpiredTime(), jwtProperties.getRefreshExpiredTime());
     }
 
@@ -52,14 +49,12 @@ public class TokenProvider {
 
     private String generateToken(
         final Long userId,
-        final String userEmail,
         final Date expiry
     ) {
         try {
             return Jwts.builder()
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
                 .setExpiration(expiry)
-                .setSubject(userEmail)
                 .claim(ID, encryptUserId(userId))
                 .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey())
                 .compact();

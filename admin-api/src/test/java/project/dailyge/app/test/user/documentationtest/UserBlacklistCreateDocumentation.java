@@ -44,7 +44,7 @@ class UserBlacklistCreateDocumentation extends DatabaseTestBase {
     void setUp() {
         final UserCache admin = new UserCache(ADMIN_ID, "admin", ADMIN_EMAIL, "", Role.ADMIN.name());
         userCacheWriteUseCase.save(admin);
-        token = tokenProvider.createToken(ADMIN_ID, ADMIN_EMAIL);
+        token = tokenProvider.createToken(ADMIN_ID);
         request = new UserBlacklistCreateRequest("accessToken");
         adminCookie = new Cookie.Builder("Access-Token", token.accessToken()).build();
     }

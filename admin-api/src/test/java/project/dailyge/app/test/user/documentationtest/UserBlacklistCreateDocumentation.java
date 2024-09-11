@@ -50,7 +50,6 @@ class UserBlacklistCreateDocumentation extends DatabaseTestBase {
     }
 
     @Test
-    @Disabled
     @DisplayName("[RestDocs] 요청한 사용자를 블랙리스트에 넣는다.")
     void whenSaveUserBlacklistThenResultShouldBe_200_RestDocs() throws JsonProcessingException {
         given(this.specification)
@@ -70,7 +69,6 @@ class UserBlacklistCreateDocumentation extends DatabaseTestBase {
     }
 
     @Test
-    @Disabled
     @DisplayName("[Swagger] 요청한 사용자를 블랙리스트에 넣는다.")
     void whenSaveUserBlacklistThenResultShouldBe_200_Swagger() throws JsonProcessingException {
         final RestDocumentationFilter filter = UserBlacklistSnippet.createUserBlacklistCreateFilter(createIdentifier("UserBlacklistCreate", 200));
@@ -87,7 +85,6 @@ class UserBlacklistCreateDocumentation extends DatabaseTestBase {
     }
 
     @Test
-    @Disabled
     @DisplayName("[Swagger] 어드민이 아니라면, 403 UN AUTHORIZED를 반환한다.")
     void whenSaveUserBlacklistThenResultShouldBe_403_Swagger() throws JsonProcessingException {
         final RestDocumentationFilter filter = UserBlacklistSnippet.createUserBlacklistCreateFilter(createIdentifier("UserBlacklistCreate", 403));
@@ -104,7 +101,6 @@ class UserBlacklistCreateDocumentation extends DatabaseTestBase {
     }
 
     @Test
-    @Disabled
     @DisplayName("[Swagger] 요청한 사용자가 존재하지 않는다면, 404 NOT FOUND를 반환한다.")
     void whenSaveUserBlacklistThenResultShouldBe_404_Swagger() throws JsonProcessingException {
         final RestDocumentationFilter filter = UserBlacklistSnippet.createUserBlacklistCreateFilter(createIdentifier("UserBlacklistCreate", 404));

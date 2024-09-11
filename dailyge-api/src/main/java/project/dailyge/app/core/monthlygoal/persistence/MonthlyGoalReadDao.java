@@ -47,10 +47,14 @@ public class MonthlyGoalReadDao implements MonthlyGoalEntityReadRepository {
             .fetch();
     }
 
-    public List<MonthlyGoalJpaEntity> findMonthlyGoalsByCursor(final Cursor cursor) {
+    public List<MonthlyGoalJpaEntity> findMonthlyGoalsByCursor(
+        final Long userId,
+        final Cursor cursor
+    ) {
         return queryFactory.selectFrom(monthlyGoalJpaEntity)
             .where(
                 monthlyGoalJpaEntity.id.gt(cursor.getIndex())
+                    .and(monthlyGoalJpaEntity.userId.eq(userId))
                     .and(monthlyGoalJpaEntity.deleted.eq(false))
             )
             .limit(cursor.getLimit())

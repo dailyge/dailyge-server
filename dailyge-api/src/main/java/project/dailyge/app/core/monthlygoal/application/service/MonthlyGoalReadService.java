@@ -39,6 +39,6 @@ public class MonthlyGoalReadService implements MonthlyGoalReadUseCase {
             validator.validateYearAndMonth(year, month);
             return monthlyGoalReadDao.findByUserIdAndYearAndMonth(dailygeUser.getId(), year, month);
         }
-        return monthlyGoalReadDao.findMonthlyGoalsByCursor(cursor);
+        return monthlyGoalReadDao.findMonthlyGoalsByCursor(dailygeUser.getId(), cursor);
     }
 }

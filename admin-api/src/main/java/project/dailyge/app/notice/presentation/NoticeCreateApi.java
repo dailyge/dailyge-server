@@ -1,5 +1,6 @@
 package project.dailyge.app.notice.presentation;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,7 +26,7 @@ public class NoticeCreateApi {
     @PostMapping("/notice")
     public ApiResponse<NoticeCreateResponse> saveNotice(
         @LoginUser final DailygeUser dailygeUser,
-        @RequestBody final NoticeCreateRequest request
+        @Valid @RequestBody final NoticeCreateRequest request
     ) {
         if (!dailygeUser.isAdmin()) {
             throw CommonException.from(UN_AUTHORIZED);

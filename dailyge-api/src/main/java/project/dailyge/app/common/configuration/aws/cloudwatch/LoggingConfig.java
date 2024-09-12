@@ -8,31 +8,37 @@ import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 @Configuration
 public class LoggingConfig {
 
+    private final String env;
     private final String awsAccessKey;
     private final String awsSecretKey;
 
     public LoggingConfig(
+        @Value("${env}") final String env,
         @Value("${spring.cloud.aws.credentials.access-key}") final String awsAccessKey,
         @Value("${spring.cloud.aws.credentials.secret-key}") final String awsSecretKey
     ) {
+        this.env = env;
         this.awsAccessKey = awsAccessKey;
         this.awsSecretKey = awsSecretKey;
     }
 
     @Bean
+    @Profile("!local")
     public CloudWatchLogAppender dateBasedCloudWatchAppender() {
         final CloudWatchLogAppender appender = new CloudWatchLogAppender();
-        appender.init(awsAccessKey, awsSecretKey);
+        appender.init(env, awsAccessKey, awsSecretKey);
         final LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
         appender.setContext(loggerContext);
         return appender;
     }
 
     @Bean
+    @Profile("!local")
     public AsyncAppender asyncAppender(final CloudWatchLogAppender cloudWatchAppender) {
         cloudWatchAppender.start();
         final AsyncAppender asyncAppender = new AsyncAppender();
@@ -45,6 +51,7 @@ public class LoggingConfig {
     }
 
     @Bean
+    @Profile("!local")
     public ApplicationListener<ApplicationStartedEvent> logbackConfigListener(final AsyncAppender asyncAppender) {
         return event -> {
             final LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();

@@ -25,11 +25,12 @@ import java.util.concurrent.atomic.AtomicReference;
 @Getter
 public class CloudWatchLogAppender extends AppenderBase<ILoggingEvent> {
 
-    private static final String LOG_GROUP = "dailyge-ol";
-    private static final String LOG_GROUP_PREFIX = "dailyge-api-";
+    private static final String LOG_GROUP_PREFIX = "dailyge-ol-";
+    private static final String LOG_STREAM_PREFIX = "dailyge-api-";
     private static final CachingDateFormatter dateFormatter = new CachingDateFormatter("yyyy-MM-dd");
 
     private CloudWatchLogsAsyncClient client;
+    private String logGroup;
     private final AtomicReference<String> sequenceToken = new AtomicReference<>(null);
 
     /**
@@ -39,9 +40,11 @@ public class CloudWatchLogAppender extends AppenderBase<ILoggingEvent> {
     }
 
     public void init(
+        final String env,
         final String awsAccessKey,
         final String awsSecretKey
     ) {
+        this.logGroup = String.format("%s%s", LOG_GROUP_PREFIX, env);
         final StaticCredentialsProvider provider = StaticCredentialsProvider.create(
             AwsBasicCredentials.create(awsAccessKey, awsSecretKey)
         );
@@ -59,7 +62,7 @@ public class CloudWatchLogAppender extends AppenderBase<ILoggingEvent> {
     @Override
     protected void append(final ILoggingEvent event) {
         final String date = dateFormatter.format(currentTimeMillis());
-        final String logStreamName = String.format("%s%s", LOG_GROUP_PREFIX, date);
+        final String logStreamName = String.format("%s%s", LOG_STREAM_PREFIX, date);
 
         try {
             final InputLogEvent logEvent = InputLogEvent.builder()
@@ -67,7 +70,7 @@ public class CloudWatchLogAppender extends AppenderBase<ILoggingEvent> {
                 .timestamp(currentTimeMillis())
                 .build();
             final PutLogEventsRequest request = PutLogEventsRequest.builder()
-                .logGroupName(LOG_GROUP)
+                .logGroupName(logGroup)
                 .logStreamName(logStreamName)
                 .logEvents(singletonList(logEvent))
                 .sequenceToken(sequenceToken.get())

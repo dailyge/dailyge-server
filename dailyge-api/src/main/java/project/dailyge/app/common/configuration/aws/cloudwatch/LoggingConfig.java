@@ -43,7 +43,7 @@ public class LoggingConfig {
         cloudWatchAppender.start();
         final AsyncAppender asyncAppender = new AsyncAppender();
         asyncAppender.setContext((LoggerContext) LoggerFactory.getILoggerFactory());
-        asyncAppender.setQueueSize(8_000);
+        asyncAppender.setQueueSize(6_000);
         asyncAppender.setDiscardingThreshold(0);
         asyncAppender.addAppender(cloudWatchAppender);
         asyncAppender.start();

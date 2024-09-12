@@ -36,7 +36,7 @@ public class CloudWatchLogAppender extends AppenderBase<ILoggingEvent> {
     /**
      * 초기화를 위한 생성자로, 외부에서 호출하지 말 것.
      */
-    public CloudWatchLogAppender() {
+    CloudWatchLogAppender() {
     }
 
     public void init(

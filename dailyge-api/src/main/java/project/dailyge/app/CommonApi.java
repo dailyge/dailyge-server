@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.OK;
+import project.dailyge.app.common.annotation.PresentationLayer;
 import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.common.auth.LoginUser;
 import project.dailyge.app.common.response.ApiResponse;
@@ -13,7 +13,7 @@ import project.dailyge.app.core.codeandmessage.CodeAndMessageConfig;
 import project.dailyge.entity.codeandmessage.CodeAndMessageEntityWriteService;
 import project.dailyge.entity.codeandmessage.CodeAndMessages;
 
-@RestController
+@PresentationLayer
 @RequiredArgsConstructor
 @RequestMapping(path = {"/api"})
 public class CommonApi {

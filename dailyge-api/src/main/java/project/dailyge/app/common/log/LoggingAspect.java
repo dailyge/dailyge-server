@@ -1,6 +1,8 @@
 package project.dailyge.app.common.log;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.servlet.http.HttpServletRequest;
+import static java.time.temporal.ChronoUnit.MILLIS;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -8,31 +10,29 @@ import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.MDC;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import project.dailyge.app.common.auth.DailygeUser;
-import project.dailyge.app.utils.LogUtils;
-import static project.dailyge.app.utils.LogUtils.getGuest;
+import static project.dailyge.app.constant.LogConstant.APPLICATION;
+import static project.dailyge.app.constant.LogConstant.EXTERNAL;
+import static project.dailyge.app.constant.LogConstant.FACADE;
+import static project.dailyge.app.constant.LogConstant.IP;
+import static project.dailyge.app.constant.LogConstant.LAST_LAYER;
+import static project.dailyge.app.constant.LogConstant.LOG_ORDER;
+import static project.dailyge.app.constant.LogConstant.PRESENTATION;
+import static project.dailyge.app.constant.LogConstant.TRACE_ID;
+import static project.dailyge.app.utils.LogUtils.createLogMessage;
 
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 
 @Slf4j
-// @Aspect
-// @Component
-// @Profile("!test")
+@Aspect
+@Component
+@Profile("!test")
 public class LoggingAspect {
 
-    private static final String SERVER = "dailyge-api";
-    private static final String PRESENTATION = "PRESENTATION";
-    private static final String FACADE = "FACADE";
-    private static final String APPLICATION = "APPLICATION";
-    private static final String EXTERNAL = "EXTERNAL";
-    private static final String EVENT = "EVENT";
-    private static final String TRACE_ID = "traceId";
-    private static final String IP = "ip";
-    private static final int START_DURATION = 0;
+    private static final String DAILYGE_USER_KEY = "dailyge-user";
 
     @Around("@within(project.dailyge.app.common.annotation.PresentationLayer)")
     public Object writeLogAroundPresentation(final ProceedingJoinPoint joinPoint) throws Throwable {
@@ -58,63 +58,48 @@ public class LoggingAspect {
         final ProceedingJoinPoint joinPoint,
         final String layer
     ) throws Throwable {
-        final HttpServletRequest request = getRequest();
-        final String traceId = MDC.get(TRACE_ID);
         final LocalDateTime startTime = LocalDateTime.now();
-        final String args = Arrays.toString(joinPoint.getArgs());
-        final String beforeLog = LogUtils.createLogMessage(
-            SERVER,
-            getPath(request),
-            request.getMethod(),
-            traceId,
-            getIp(),
-            layer,
-            getDailygeUserAsString(request),
-            startTime,
-            START_DURATION,
-            args,
-            null
-        );
-        log.info(beforeLog);
-
         final Object result = joinPoint.proceed();
         final LocalDateTime endTime = LocalDateTime.now();
-        final long duration = ChronoUnit.MILLIS.between(startTime, endTime);
-        final String afterLog = LogUtils.createLogMessage(
-            SERVER,
-            getPath(request),
-            request.getMethod(),
-            traceId,
-            getIp(),
-            layer,
-            getDailygeUserAsString(request),
-            endTime,
-            duration,
-            args,
-            result
-        );
-        log.info(afterLog);
+        log(joinPoint, layer, startTime, endTime, result);
         return result;
     }
 
-    private String getIp() {
-        return MDC.get(IP);
-    }
+    private void log(
+        final ProceedingJoinPoint joinPoint,
+        final String layer,
+        final LocalDateTime startTime,
+        final LocalDateTime endTime,
+        final Object result
+    ) throws JsonProcessingException {
+        final HttpServletRequest request = getCurrentHttpRequest();
+        final String traceId = MDC.get(TRACE_ID);
+        final String ip = MDC.get(IP);
+        final String path = request.getRequestURI();
+        final String method = request.getMethod();
+        final String args = Arrays.toString(joinPoint.getArgs());
+        long duration = MILLIS.between(startTime, endTime);
 
-    private String getDailygeUserAsString(final HttpServletRequest request) {
-        final Object dailyObj = request.getAttribute("dailyge-user");
-        if (dailyObj != null) {
-            final DailygeUser dailygeUser = (DailygeUser) dailyObj;
-            return dailygeUser.toString();
+        if (MDC.get(LAST_LAYER) == null || !MDC.get(LAST_LAYER).equals(layer)) {
+            increaseOrder();
+            MDC.put(LAST_LAYER, layer);
         }
-        return getGuest();
+        int order = Integer.parseInt(MDC.get(LOG_ORDER));
+
+        log.info(createLogMessage(order, layer, path, method, traceId, ip, startTime, 0, args, null, request.getAttribute(DAILYGE_USER_KEY)));
+        log.info(createLogMessage(order, layer, path, method, traceId, ip, endTime, duration, args, result, request.getAttribute(DAILYGE_USER_KEY)));
     }
 
-    private HttpServletRequest getRequest() {
-        return ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+    private void increaseOrder() {
+        final int order = Integer.parseInt(MDC.get(LOG_ORDER));
+        MDC.put(LOG_ORDER, String.valueOf(order + 1));
     }
 
-    private String getPath(final HttpServletRequest request) {
-        return request.getRequestURI();
+    private HttpServletRequest getCurrentHttpRequest() {
+        final RequestAttributes attrs = RequestContextHolder.getRequestAttributes();
+        if (attrs instanceof ServletRequestAttributes) {
+            return ((ServletRequestAttributes) attrs).getRequest();
+        }
+        throw new IllegalStateException("No current request attributes.");
     }
 }

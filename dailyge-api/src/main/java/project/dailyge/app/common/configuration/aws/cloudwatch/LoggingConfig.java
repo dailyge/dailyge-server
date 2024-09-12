@@ -1,6 +1,7 @@
 package project.dailyge.app.common.configuration.aws.cloudwatch;
 
 import ch.qos.logback.classic.AsyncAppender;
+import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -55,7 +56,7 @@ public class LoggingConfig {
     public ApplicationListener<ApplicationStartedEvent> logbackConfigListener(final AsyncAppender asyncAppender) {
         return event -> {
             final LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
-            ch.qos.logback.classic.Logger rootLogger = loggerContext.getLogger("ROOT");
+            final Logger rootLogger = loggerContext.getLogger("ROOT");
             rootLogger.addAppender(asyncAppender);
         };
     }

@@ -12,7 +12,6 @@ configurations {
 }
 
 apply(from: "${rootDir}/jib/dailyge-api/jib.gradle")
-
 dependencies {
     implementation(project(":storage:common"))
     implementation(project(":storage:document"))
@@ -30,18 +29,17 @@ dependencies {
     implementation("javax.xml.bind:jaxb-api:2.3.1")
     implementation("com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4")
     implementation("org.liquibase:liquibase-core")
-    implementation("net.logstash.logback:logstash-logback-encoder:7.0")
-    implementation("org.springframework.cloud:spring-cloud-starter-aws-secrets-manager-config")
-    implementation("software.amazon.awssdk:http-client-netty:2.20.63")
 
-    implementation("software.amazon.awssdk:sns")
-    implementation(platform("software.amazon.awssdk:bom:2.20.63"))
-    implementation("software.amazon.awssdk:netty-nio-client:2.20.63") {
+    implementation("net.logstash.logback:logstash-logback-encoder:7.0")
+    implementation platform("software.amazon.awssdk:bom:2.20.63")
+    implementation("software.amazon.awssdk:netty-nio-client") {
         exclude group: "io.netty", module: "netty-codec-http"
     }
-    implementation("ca.pjer:logback-awslogs-appender:1.6.0")
     implementation("software.amazon.awssdk:cloudwatchlogs")
-    implementation(platform("io.awspring.cloud:spring-cloud-aws-dependencies:${property("awsSpringCloudVersion")}"))
+    implementation("ca.pjer:logback-awslogs-appender:1.6.0")
+
+    implementation platform("io.awspring.cloud:spring-cloud-aws-dependencies:${property("awsSpringCloudVersion")}")
+    implementation("software.amazon.awssdk:sns")
     implementation("io.awspring.cloud:spring-cloud-aws-starter-sqs")
 
     testImplementation("org.springframework.restdocs:spring-restdocs-restassured")

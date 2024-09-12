@@ -52,7 +52,7 @@ public class DailygeUser {
             if (obj != null) {
                 return (DailygeUser) obj;
             }
-        } catch (Exception ex) {
+        } catch (ClassCastException ex) {
             return null;
         }
         return null;

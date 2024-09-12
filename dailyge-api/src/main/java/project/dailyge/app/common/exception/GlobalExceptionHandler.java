@@ -15,6 +15,8 @@ import project.dailyge.app.codeandmessage.CommonCodeAndMessage;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_REQUEST;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_PARAMETERS;
+import static project.dailyge.app.constant.LogConstant.LOG_ORDER;
+import static project.dailyge.app.constant.LogConstant.TRACE_ID;
 import project.dailyge.app.response.ErrorResponse;
 
 import java.time.LocalDateTime;
@@ -22,8 +24,6 @@ import java.time.LocalDateTime;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-
-    private static final String TRACE_ID = "traceId";
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResponse> resolveIllegalArgumentException(final IllegalArgumentException exception) {
@@ -112,17 +112,24 @@ public class GlobalExceptionHandler {
         final CodeAndMessage codeAndMessage,
         final Exception exception
     ) {
+        incrementLogOrder();
         final int code = codeAndMessage.code();
         final String message = codeAndMessage.message();
         final String detailMessage = exception.getMessage();
         final LocalDateTime time = LocalDateTime.now();
         log.error(
-            "{\"traceId\": \"{}\", \"code\": \"{}\", \"message\": \"{}\", \"detailMessage\": \"{}\", \"time\": \"{}\"}",
+            "order: \"{}\", traceId: \"{}\", code: \"{}\", message: \"{}\", detailMessage: \"{}\", time: \"{}\"",
+            Integer.parseInt(MDC.get(LOG_ORDER)),
             MDC.get(TRACE_ID),
             code,
             message,
             detailMessage,
             time
         );
+    }
+
+    private void incrementLogOrder() {
+        int order = Integer.parseInt(MDC.get(LOG_ORDER));
+        MDC.put(LOG_ORDER, String.valueOf(order + 1));
     }
 }

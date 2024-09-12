@@ -30,8 +30,17 @@ dependencies {
     implementation("javax.xml.bind:jaxb-api:2.3.1")
     implementation("com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4")
     implementation("org.liquibase:liquibase-core")
+    implementation("net.logstash.logback:logstash-logback-encoder:7.0")
+    implementation("org.springframework.cloud:spring-cloud-starter-aws-secrets-manager-config")
+    implementation("software.amazon.awssdk:http-client-netty:2.20.63")
 
     implementation("software.amazon.awssdk:sns")
+    implementation(platform("software.amazon.awssdk:bom:2.20.63"))
+    implementation("software.amazon.awssdk:netty-nio-client:2.20.63") {
+        exclude group: "io.netty", module: "netty-codec-http"
+    }
+    implementation("ca.pjer:logback-awslogs-appender:1.6.0")
+    implementation("software.amazon.awssdk:cloudwatchlogs")
     implementation(platform("io.awspring.cloud:spring-cloud-aws-dependencies:${property("awsSpringCloudVersion")}"))
     implementation("io.awspring.cloud:spring-cloud-aws-starter-sqs")
 
@@ -83,7 +92,7 @@ tasks.register("copyDocument", Copy) {
 
 build {
     dependsOn copyDocument
-    dependsOn(':dailyge-api:openapi3')
+    dependsOn(":dailyge-api:openapi3")
 }
 
 bootJar {
@@ -117,7 +126,7 @@ tasks.named("jib").configure {
 
 openapi3 {
     def env = System.getenv("ENV")
-    setServer(env != null && env == 'prod' ? "https://api.dailyge.com" : "https://api-dev.dailyge.com")
+    setServer(env != null && env == "prod" ? "https://api.dailyge.com" : "https://api-dev.dailyge.com")
     title = "Dailyge Api"
     description = "Dailyge Api 문서 입니다."
     version = "1.0.0"

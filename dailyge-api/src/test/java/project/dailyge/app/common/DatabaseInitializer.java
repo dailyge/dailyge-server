@@ -11,11 +11,14 @@ import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import static org.springframework.util.ClassUtils.resolveClassName;
 import static org.testcontainers.shaded.com.google.common.base.CaseFormat.LOWER_UNDERSCORE;
 import static org.testcontainers.shaded.com.google.common.base.CaseFormat.UPPER_CAMEL;
+import project.dailyge.app.core.user.persistence.UserCacheWriteDao;
+import project.dailyge.core.cache.user.UserCache;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -31,16 +34,22 @@ public class DatabaseInitializer {
     private static final String SET_FOREIGN_KEY_CHECKS_TRUE = "SET FOREIGN_KEY_CHECKS = 1";
 
     private final Set<String> tableNames;
+    private final RedisTemplate<String, byte[]> redisTemplate;
     private static final Set<String> excludeTables = Set.of("databasechangelog", "databasechangeloglock");
     private final Set<String> collectionNames;
+    private final UserCacheWriteDao userCacheWriteDao;
     private final EntityManager entityManager;
     private final MongoTemplate mongoTemplate;
 
     public DatabaseInitializer(
         final EntityManager entityManager,
+        final RedisTemplate<String, byte[]> redisTemplate,
+        final UserCacheWriteDao userCacheWriteDao,
         final MongoTemplate mongoTemplate
     ) {
         this.entityManager = entityManager;
+        this.redisTemplate = redisTemplate;
+        this.userCacheWriteDao = userCacheWriteDao;
         this.mongoTemplate = mongoTemplate;
         this.tableNames = new HashSet<>();
         this.collectionNames = new HashSet<>();
@@ -60,6 +69,17 @@ public class DatabaseInitializer {
             .collect(Collectors.toSet());
         this.tableNames.addAll(tableNames);
         this.tableNames.removeAll(excludeTables);
+    }
+
+    /**
+     * 테스트를 위한 메서드로, 운영 환경에서 절대 keys 명령어를 사용하지 말 것.
+     */
+    private void initRedis() {
+        final Set<String> keys = redisTemplate.keys("*");
+        if (keys != null && !keys.isEmpty()) {
+            redisTemplate.delete(keys);
+        }
+        userCacheWriteDao.save(new UserCache(1L, "dailyge", "dailyge@gmail.com", "", "NORMAL"));
     }
 
     @NotNull
@@ -105,6 +125,7 @@ public class DatabaseInitializer {
     @Transactional
     public void initData() {
         initRdbData();
+        initRedis();
         initDocumentDbData();
     }
 
@@ -116,7 +137,6 @@ public class DatabaseInitializer {
         for (final String tableName : tableNames) {
             entityManager.createNativeQuery("TRUNCATE TABLE " + tableName).executeUpdate();
         }
-
         entityManager.createNativeQuery(SET_FOREIGN_KEY_CHECKS_TRUE).executeUpdate();
     }
 

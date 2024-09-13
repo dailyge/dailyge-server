@@ -43,9 +43,13 @@ Dailyge는 일정을 체계적으로 관리하고 하루를 효과적으로 계�
 
 ![image](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FbMcMbd%2FbtsJwPz8t9z%2FAzsBX8H0O9UbLmJJJug43k%2Fimg.png)
 
+![image](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fk453J%2FbtsJCKTOa26%2Fkf8atALK9P75qjb1YnE5c1%2Fimg.png)
+
 <br/><br/><br/><br/><br/><br/><br/>
 
 # 2. Contents.
+
+상세 내용은 연관 [PR](https://github.com/dailyge/dailyge-server/pulls)이나 [Discussion](https://github.com/dailyge/dailyge-server/discussions)을 참조해주세요.
 
 - [JWT 토큰을 발행할 때, 어떤 점을 고려해야 할까?](https://github.com/dailyge/dailyge-server/discussions/107)
 - [JWT 토큰을 파싱할 때, 어떤 예외가 발생할 수 있을까?](https://github.com/dailyge/dailyge-server/discussions/35)
@@ -83,7 +87,7 @@ Java/SpringBoot를 사용해 애플리케이션을 구축했습니다. Liquibase
 ## ☁️ Infra.
 
 서비스 구축을 위해 AWS를 활용했으며, Terraform을 사용해 자원을 프로비저닝 했습니다. Terraform으로 관리되는 자원은 Route53, CloudFront, S3, ALB, ECS, EC2(
-Application), RD 이며, 일부 자원들은 설치형으로 사용하고 있습니다. 모니터링은 Prometheus와 Grafana를 사용하고 있으며, 운영 및 시스템 로그는 모두 AWS CloudWatch로 관리하고
+Application), RDB 이며, 일부 자원들은 설치형으로 사용하고 있습니다. 모니터링은 Prometheus와 Grafana를 사용하고 있으며, 운영 및 시스템 로그는 모두 AWS CloudWatch로 관리하고
 있습니다. 운영 과정에서 발생하는 이슈는 Grafana Alert 또는 AWS Lambda를 통해 슬랙으로 보고받고 있습니다.
 
 ![image](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FY5ifk%2FbtsJeVnHEJH%2FyQlxRPikUxlOzPKbyUs2Fk%2Fimg.png)
@@ -109,7 +113,7 @@ Git branch 전략은 `Git-Flow`를 사용하고 있습니다.
 ![image](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FdgKiWN%2FbtsJwLxPhk4%2FNyEcaykO7gmRGKLPcNdD51%2Fimg.png)
 
 1. 새로운 기능을 추가할 때, `dev` 브랜치에서 `feature` 브랜치를 분기합니다.
-2. `feature` 브랜치에서 작업을 끝내면 코드리뷰를 한 후 `Squash Merge`를 통해 `dev` 브랜치에 병합합니다.
+2. `feature` 브랜치에서 작업을 끝내면 코드리뷰를 한 후 `Merge`를 통해 `dev` 브랜치에 병합합니다.
 3. 작업이 취소되면, `Revert`합니다.
 4. `dev` 서버에서 QA를 거친 후, 이상이 없다면 `prod` 브랜치로 병합합니다.
 5. 버그가 발생할 경우, `prod` 브랜치에서 `hotfix` 브랜치를 분기하고 수정한 후 `prod`에 병합합니다.

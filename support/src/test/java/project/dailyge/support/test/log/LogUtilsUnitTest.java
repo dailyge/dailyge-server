@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import static project.dailyge.app.constant.LogConstant.INFO;
 import project.dailyge.app.utils.LogUtils;
 import static project.dailyge.app.utils.LogUtils.createLogMessage;
 
@@ -40,7 +41,8 @@ class LogUtilsUnitTest {
             100L,
             null,
             null,
-            null
+            null,
+            INFO
         );
         assertEquals(objectMapper.readTree(expectedLog), objectMapper.readTree(actualLog));
     }
@@ -59,7 +61,8 @@ class LogUtilsUnitTest {
             LocalDateTime.of(2024, 9, 11, 12, 0),
             100L,
             null,
-            null
+            null,
+            INFO
         );
         assertEquals(objectMapper.readTree(expected), objectMapper.readTree(actual));
     }

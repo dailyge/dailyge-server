@@ -40,6 +40,9 @@ public class LoginInterceptor implements HandlerInterceptor {
     ) {
         try {
             final Cookies cookies = new Cookies(request.getCookies());
+            if (!cookies.isLoggedIn()) {
+                return true;
+            }
             final String accessToken = cookies.getValueByKey("Access-Token");
             final Long userId = tokenProvider.getUserId(accessToken);
             if (!userCacheReadUseCase.existsById(userId)) {

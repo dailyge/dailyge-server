@@ -1,4 +1,4 @@
-package project.dailyge.app.common.script;
+package project.dailyge.app.common.configuration.script;
 
 public interface LuaScript {
     String USER_CACHE_SEARCH_LUA_SCRIPT =

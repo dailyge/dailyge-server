@@ -61,6 +61,7 @@ Dailyge는 일정을 체계적으로 관리하고 하루를 효과적으로 계�
 - [부하 테스트 과정에서 어떤 지표들을 모니터링 해야 할까?](https://github.com/dailyge/dailyge-server/discussions/82)
 - [선착순 쿠폰 당첨자를 선정할 때, 응답 속도를 어떻게 빠르게 할 수 있을까?](https://github.com/dailyge/dailyge-server/discussions/117)
 - [Redis Bitmap 구조로 Redis 메모리 절약하기](https://github.com/dailyge/dailyge-server/discussions/137)
+- [레디스 호출 횟수를 줄여 조회 성능을 높여보자. (feat. LuaScript)](https://github.com/dailyge/dailyge-server/discussions/157)
 
 <br/><br/><br/><br/><br/><br/><br/>
 

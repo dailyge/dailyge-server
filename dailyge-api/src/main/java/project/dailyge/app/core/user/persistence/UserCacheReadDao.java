@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_GATEWAY;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
 import project.dailyge.app.common.exception.CommonException;
-import static project.dailyge.app.common.script.LuaScript.USER_CACHE_SEARCH_LUA_SCRIPT;
 import static project.dailyge.common.configuration.CompressionHelper.decompressAsObjWithZstd;
 import project.dailyge.core.cache.user.UserCache;
 import project.dailyge.core.cache.user.UserCacheReadRepository;
@@ -20,14 +19,12 @@ import project.dailyge.core.cache.user.UserCacheReadRepository;
 public class UserCacheReadDao implements UserCacheReadRepository {
 
     private final RedisTemplate<String, byte[]> redisTemplate;
+    private final DefaultRedisScript<byte[]> script;
     private final ObjectMapper objectMapper;
 
     @Override
     public UserCache findById(final Long userId) {
         try {
-            final DefaultRedisScript<byte[]> script = new DefaultRedisScript<>();
-            script.setScriptText(USER_CACHE_SEARCH_LUA_SCRIPT);
-            script.setResultType(byte[].class);
             final byte[] findCache = redisTemplate.execute(script, asList(getCacheKey(userId), getBlacklistKey(userId)));
             if (findCache == null || findCache.length == 0) {
                 return null;

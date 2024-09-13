@@ -10,12 +10,20 @@ public final class Cookies {
     private final Map<String, Cookie> cookieMap = new HashMap<>();
 
     public Cookies(final Cookie... cookies) {
-        if (cookies == null) {
+        if (cookies == null || cookies.length == 0) {
             return;
         }
         for (final Cookie cookie : cookies) {
             cookieMap.put(cookie.getName(), cookie);
         }
+    }
+
+    public boolean isLoggedIn() {
+        final String loggedIn = getValueByKey("Logged-In");
+        if (loggedIn == null || loggedIn.equals("no")) {
+            return false;
+        }
+        return true;
     }
 
     public String getValueByKey(final String key) {

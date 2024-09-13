@@ -1,16 +1,16 @@
 package project.dailyge.app.core.common.web;
 
 import jakarta.servlet.http.Cookie;
-
 import java.util.HashMap;
 import java.util.Map;
+import org.apache.commons.lang3.ObjectUtils;
 
 public final class Cookies {
 
     private final Map<String, Cookie> cookieMap = new HashMap<>();
 
     public Cookies(final Cookie... cookies) {
-        if (cookies == null || cookies.length == 0) {
+        if (ObjectUtils.isEmpty(cookies)) {
             return;
         }
         for (final Cookie cookie : cookies) {

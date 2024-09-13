@@ -32,6 +32,9 @@ public class OperationDataInitializer implements CommandLineRunner {
     @Value("${profile.email}")
     private String email;
 
+    @Value("${env}")
+    private String env;
+
     private final Set<String> tableNames;
     private final EntityManager entityManager;
     private final JdbcTemplate jdbcTemplate;
@@ -40,7 +43,7 @@ public class OperationDataInitializer implements CommandLineRunner {
     @Override
     @Transactional
     public void run(final String... args) {
-        if (isValidEnv()) {
+        if (isValidEnv(env)) {
             clearData();
             initData();
             log.info("Data initialized success.");
@@ -70,8 +73,9 @@ public class OperationDataInitializer implements CommandLineRunner {
         return entityType -> entityType.getName().toLowerCase();
     }
 
-    private boolean isValidEnv() {
-        return isEnv(LOCAL) || isEnv(DEV);
+    private boolean isValidEnv(final String env) {
+        return LOCAL.equals(env)
+            || DEV.equals(env);
     }
 
     public void initData() {
@@ -82,10 +86,5 @@ public class OperationDataInitializer implements CommandLineRunner {
         } catch (Exception ex) {
             log.error("Data initialization failed: {}", ex.getMessage());
         }
-    }
-
-    private boolean isEnv(final String env) {
-        return LOCAL.equals(env)
-            || DEV.equals(env);
     }
 }

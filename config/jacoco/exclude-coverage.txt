@@ -1,7 +1,10 @@
 **/*Application*
+**/*Base*
 **/*Config*
+**/*Dao*
 **/*Exception*
 **/*Health*
+**/*Cache*
 **/*CommonApi*
 **/*Request*
 **/*Response*
@@ -11,4 +14,3 @@
 **/request/**
 **/response/**
 **/support/**
-

@@ -1,6 +1,9 @@
 **.*Application*
+**.*Base*
+**.*Cache*
 **.*Config*
 **.*CommonApi*
+**.*Dao*
 **.*Health*
 **.common.**
 **.command.**

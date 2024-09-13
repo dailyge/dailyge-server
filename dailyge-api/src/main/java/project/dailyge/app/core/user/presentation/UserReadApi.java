@@ -14,9 +14,9 @@ import project.dailyge.core.cache.user.UserCacheReadUseCase;
 
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.OK;
 
-@PresentationLayer
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
+@PresentationLayer(value = "UserReadApi")
 public class UserReadApi {
 
     private final UserCacheReadUseCase userCacheReadUseCase;

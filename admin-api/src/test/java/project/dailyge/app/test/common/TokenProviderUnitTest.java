@@ -9,7 +9,7 @@ import project.dailyge.app.common.auth.DailygeToken;
 import project.dailyge.app.common.auth.JwtProperties;
 import project.dailyge.app.common.auth.SecretKeyManager;
 import project.dailyge.app.common.auth.TokenProvider;
-import project.dailyge.app.common.exception.UnAuthorizedException;
+import project.dailyge.app.common.exception.CommonException;
 import project.dailyge.app.test.user.fixture.UserFixture;
 import project.dailyge.entity.user.UserJpaEntity;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
 
 @DisplayName("[UnitTest] TokenProvider 단위 테스트")
 class TokenProviderUnitTest {
@@ -43,7 +44,7 @@ class TokenProviderUnitTest {
     @DisplayName("사용자 토큰을 생성하면, 토큰이 정상적으로 생성된다.")
     void whenCreateUserTokenThenResultShouldBeNotNull() {
         final UserJpaEntity user = UserFixture.createUser(1L);
-        final DailygeToken token = tokenProvider.createToken(user.getId(), user.getEmail());
+        final DailygeToken token = tokenProvider.createToken(user.getId());
 
         assertAll(
             () -> assertNotNull(token),
@@ -59,7 +60,7 @@ class TokenProviderUnitTest {
     @DisplayName("사용자 토큰이 올바르다면, 사용자 ID를 얻는다.")
     void whenUserTokenCorrectThenUserIdShouldBeNotNull() {
         final UserJpaEntity user = UserFixture.createUser(1L);
-        final DailygeToken token = tokenProvider.createToken(user.getId(), user.getEmail());
+        final DailygeToken token = tokenProvider.createToken(user.getId());
 
         assertEquals(user.getId(), tokenProvider.getUserId(token.accessToken()));
     }
@@ -68,7 +69,7 @@ class TokenProviderUnitTest {
     @DisplayName("빈 토큰을 검증하면, UnAuthorizedException 가 발생한다.")
     void whenEmptyTokenThenUnAuthorizedExceptionShouldBeHappen() {
         assertThatThrownBy(() -> tokenProvider.getUserId(null))
-            .isExactlyInstanceOf(UnAuthorizedException.class)
+            .isExactlyInstanceOf(CommonException.from(UN_AUTHORIZED).getClass())
             .isInstanceOf(RuntimeException.class);
     }
 
@@ -76,7 +77,7 @@ class TokenProviderUnitTest {
     @DisplayName("서명이 다른 토큰으로 검증하면, UnAuthorizedException 가 발생한다.")
     void whenDifferentSignatureThenUnAuthorizedExceptionShouldBeHappen() {
         assertThatThrownBy(() -> tokenProvider.getUserId("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.test.test"))
-            .isExactlyInstanceOf(UnAuthorizedException.class)
+            .isExactlyInstanceOf(CommonException.from(UN_AUTHORIZED).getClass())
             .isInstanceOf(RuntimeException.class);
     }
 
@@ -84,7 +85,7 @@ class TokenProviderUnitTest {
     @DisplayName("토큰 형식이 올바르지 않는다면, UnAuthorizedException 가 발생한다.")
     void whenTokenFormatIncorrectThenUnAuthorizedExceptionShouldBeHappen() {
         assertThatThrownBy(() -> tokenProvider.getUserId("test"))
-            .isExactlyInstanceOf(UnAuthorizedException.class)
+            .isExactlyInstanceOf(CommonException.from(UN_AUTHORIZED).getClass())
             .isInstanceOf(RuntimeException.class);
     }
 
@@ -92,7 +93,7 @@ class TokenProviderUnitTest {
     @DisplayName("지원되지 않는 형식의 JWT 일 경우, UnAuthorizedException 가 발생한다.")
     void whenUnsupportedTokenThenUnAuthorizedExceptionShouldBeHappen() {
         assertThatThrownBy(() -> tokenProvider.getUserId("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.test."))
-            .isExactlyInstanceOf(UnAuthorizedException.class)
+            .isExactlyInstanceOf(CommonException.from(UN_AUTHORIZED).getClass())
             .isInstanceOf(RuntimeException.class);
     }
 
@@ -122,7 +123,7 @@ class TokenProviderUnitTest {
         final String abnormalPayload = "jwtAbnormalPayloadData";
 
         assertThatThrownBy(() -> tokenProvider.decryptUserId(abnormalPayload))
-            .isExactlyInstanceOf(UnAuthorizedException.class)
+            .isExactlyInstanceOf(CommonException.from(UN_AUTHORIZED).getClass())
             .isInstanceOf(RuntimeException.class);
     }
 }

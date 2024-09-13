@@ -1,21 +1,25 @@
 package project.dailyge.app.common.log;
 
-import jakarta.validation.constraints.NotNull;
 import org.slf4j.MDC;
 import org.springframework.core.task.TaskDecorator;
+import org.springframework.lang.NonNull;
+import static org.springframework.web.context.request.RequestContextHolder.resetRequestAttributes;
 
 import java.util.Map;
 
 public class MdcTaskDecorator implements TaskDecorator {
 
     @Override
-    public Runnable decorate(@NotNull final Runnable runnable) {
-        final Map<String, String> contextMap = MDC.getCopyOfContextMap();
+    public Runnable decorate(@NonNull final Runnable runnable) {
+        final Map<String, String> context = MDC.getCopyOfContextMap();
         return () -> {
             try {
-                MDC.setContextMap(contextMap);
+                if (context != null) {
+                    MDC.setContextMap(context);
+                }
                 runnable.run();
             } finally {
+                resetRequestAttributes();
                 MDC.clear();
             }
         };

@@ -1,16 +1,17 @@
 package project.dailyge.app.user.persistence;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.lettuce.core.RedisException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
-import project.dailyge.app.common.exception.ExternalServerException;
+import project.dailyge.app.common.exception.CommonException;
 import project.dailyge.core.cache.user.UserCache;
 import project.dailyge.core.cache.user.UserCacheWriteRepository;
 import static java.time.Duration.ofDays;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_GATEWAY;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
-import static project.dailyge.common.configuration.CompressionHelper.compressAsByteArray;
+import static project.dailyge.common.configuration.CompressionHelper.compressAsByteArrayWithZstd;
 
 @Repository
 @RequiredArgsConstructor
@@ -19,10 +20,11 @@ public class UserCacheWriteDao implements UserCacheWriteRepository {
     private static final long CACHE_DURATION = 90;
 
     private final RedisTemplate<String, byte[]> redisTemplate;
+    private final ObjectMapper objectMapper;
 
     @Override
     public void save(final UserCache userCache) {
-        final byte[] compressedCache = compressAsByteArray(userCache);
+        final byte[] compressedCache = compressAsByteArrayWithZstd(userCache, objectMapper);
         executeRedisCommand(() ->
             redisTemplate.opsForValue().set(
                 getKey(userCache.getId()),
@@ -46,9 +48,9 @@ public class UserCacheWriteDao implements UserCacheWriteRepository {
         try {
             command.run();
         } catch (RedisException ex) {
-            throw new ExternalServerException(ex.getMessage(), BAD_GATEWAY);
+            throw CommonException.from(ex.getMessage(), BAD_GATEWAY);
         } catch (Exception ex) {
-            throw new ExternalServerException(ex.getMessage(), INTERNAL_SERVER_ERROR);
+            throw CommonException.from(ex.getMessage(), INTERNAL_SERVER_ERROR);
         }
     }
 

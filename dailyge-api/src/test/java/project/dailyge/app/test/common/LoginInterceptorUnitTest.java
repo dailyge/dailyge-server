@@ -67,13 +67,13 @@ class LoginInterceptorUnitTest {
     @DisplayName("로그인 사용자가 로그인 호출 시, false 를 반환한다.")
     void whenLoginUserCallsToLoginThenResultShouldBeFalse() {
         final UserJpaEntity user = createUser(1L);
-        final DailygeToken token = tokenProvider.createToken(user.getId(), user.getEmail());
+        final DailygeToken token = tokenProvider.createToken(user.getId());
 
-        final Cookie[] cookies = new Cookie[1];
-        cookies[0] = new Cookie("Access-Token", token.accessToken());
+        final Cookie[] cookies = new Cookie[2];
+        cookies[0] = new Cookie("Logged-In", "yes");
+        cookies[1] = new Cookie("Access-Token", token.accessToken());
         when(request.getCookies()).thenReturn(cookies);
-        when(userCacheReadUseCase.existsById(user.getId()))
-            .thenReturn(true);
+        when(userCacheReadUseCase.existsById(user.getId())).thenReturn(true);
 
         assertFalse(loginInterceptor.preHandle(request, response, null));
         assertEquals(BAD_REQUEST.code(), response.getStatus());
@@ -83,12 +83,13 @@ class LoginInterceptorUnitTest {
     @DisplayName("토큰 기간이 만료된 사용자는 재갱신하고, false 를 반환한다.")
     void whenSuccessRefreshForExpiredUserThenResultShouldBeFalse() throws UnsupportedEncodingException, JSONException {
         final UserJpaEntity user = createUser(1L);
-        final DailygeToken token = tokenProvider.createToken(user.getId(), user.getEmail());
+        final DailygeToken token = tokenProvider.createToken(user.getId());
         final TokenProvider expiredTokenProvider = new TokenProvider(expiredJwtProperties, secretKeyManager);
-        final DailygeToken expiredToken = expiredTokenProvider.createToken(user.getId(), user.getEmail());
-        final Cookie[] cookies = new Cookie[2];
-        cookies[0] = new Cookie("Refresh-Token", token.refreshToken());
-        cookies[1] = new Cookie("Access-Token", expiredToken.accessToken());
+        final DailygeToken expiredToken = expiredTokenProvider.createToken(user.getId());
+        final Cookie[] cookies = new Cookie[3];
+        cookies[0] = new Cookie("Logged-In", "yes");
+        cookies[1] = new Cookie("Refresh-Token", token.refreshToken());
+        cookies[2] = new Cookie("Access-Token", expiredToken.accessToken());
 
         when(request.getCookies()).thenReturn(cookies);
         when(userCacheReadUseCase.existsById(user.getId()))
@@ -116,12 +117,26 @@ class LoginInterceptorUnitTest {
     void whenFailedRefreshForExpiredUserThenResultShouldBeTrue() {
         final TokenProvider expiredTokenProvider = new TokenProvider(expiredJwtProperties, secretKeyManager);
         final UserJpaEntity user = createUser(1L);
-        final DailygeToken expiredToken = expiredTokenProvider.createToken(user.getId(), user.getEmail());
-        final Cookie[] cookies = new Cookie[2];
-        cookies[0] = new Cookie("Refresh-Token", null);
-        cookies[1] = new Cookie("Access-Token", expiredToken.accessToken());
-
+        final DailygeToken expiredToken = expiredTokenProvider.createToken(user.getId());
+        final Cookie[] cookies = new Cookie[3];
+        cookies[0] = new Cookie("Logged-In", "yes");
+        cookies[1] = new Cookie("Refresh-Token", expiredToken.refreshToken());
+        cookies[2] = new Cookie("Access-Token", expiredToken.accessToken());
         when(request.getCookies()).thenReturn(cookies);
+
+        assertTrue(loginInterceptor.preHandle(request, response, null));
+    }
+
+    @Test
+    @DisplayName("LoggedIn 쿠키가 없다면, true 를 반환한다.")
+    void whenLoggedInIsEmptyThenResultShouldBeTrue() {
+        final UserJpaEntity user = createUser(1L);
+        final DailygeToken token = tokenProvider.createToken(user.getId());
+
+        final Cookie[] cookies = new Cookie[1];
+        cookies[0] = new Cookie("Access-Token", token.accessToken());
+        when(request.getCookies()).thenReturn(cookies);
+        when(userCacheReadUseCase.existsById(user.getId())).thenReturn(true);
 
         assertTrue(loginInterceptor.preHandle(request, response, null));
     }

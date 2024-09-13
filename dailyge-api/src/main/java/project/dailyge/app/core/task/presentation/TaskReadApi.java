@@ -23,9 +23,9 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
-@PresentationLayer
 @RequiredArgsConstructor
 @RequestMapping(path = {"/api"})
+@PresentationLayer(value = "TaskReadApi")
 public class TaskReadApi {
 
     private final TaskClientValidator validator;

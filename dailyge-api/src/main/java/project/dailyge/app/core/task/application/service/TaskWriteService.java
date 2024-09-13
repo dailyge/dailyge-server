@@ -22,8 +22,8 @@ import project.dailyge.entity.task.TaskJpaEntity;
 import java.time.LocalDate;
 import java.util.List;
 
-@ApplicationLayer
 @RequiredArgsConstructor
+@ApplicationLayer(value = "TaskWriteService")
 class TaskWriteService implements TaskWriteUseCase {
 
     private final TaskValidator validator;

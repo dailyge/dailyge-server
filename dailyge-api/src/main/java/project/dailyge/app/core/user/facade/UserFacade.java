@@ -21,8 +21,8 @@ import project.dailyge.entity.user.UserEvent;
 import static project.dailyge.entity.user.UserEvent.createEvent;
 import project.dailyge.entity.user.UserJpaEntity;
 
-@FacadeLayer
 @RequiredArgsConstructor
+@FacadeLayer(value = "UserFacade")
 public class UserFacade {
 
     private static final String FIXED_IMAGE_URL = "https://shorturl.at/dejs2";
@@ -40,7 +40,7 @@ public class UserFacade {
         final GoogleUserInfoResponse response = googleOAuthManager.getUserInfo(code);
         final Long findUserId = userReadUseCase.findUserIdByEmail(response.getEmail());
         final Long userId = publishEvent(findUserId, response);
-        final DailygeToken token = tokenProvider.createToken(userId, response.getEmail());
+        final DailygeToken token = tokenProvider.createToken(userId);
         tokenManager.saveRefreshToken(userId, token.refreshToken());
         return token;
     }

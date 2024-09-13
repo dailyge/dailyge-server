@@ -1,6 +1,5 @@
 package project.dailyge.app.test.task.integrationtest;
 
-
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -16,7 +15,6 @@ import project.dailyge.app.core.task.application.command.TaskCreateCommand;
 import project.dailyge.app.core.task.facade.TaskFacade;
 import static project.dailyge.app.test.task.fixture.TaskCommandFixture.createTaskCreationCommand;
 import project.dailyge.entity.task.MonthlyTaskEntityReadRepository;
-import project.dailyge.entity.task.MonthlyTaskJpaEntity;
 
 import java.time.LocalDate;
 import java.util.concurrent.CountDownLatch;

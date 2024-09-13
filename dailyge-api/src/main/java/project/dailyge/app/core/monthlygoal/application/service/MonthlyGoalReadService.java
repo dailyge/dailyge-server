@@ -14,8 +14,8 @@ import project.dailyge.entity.monthlygoal.MonthlyGoalJpaEntity;
 
 import java.util.List;
 
-@ApplicationLayer
 @RequiredArgsConstructor
+@ApplicationLayer(value = "MonthlyGoalReadService")
 public class MonthlyGoalReadService implements MonthlyGoalReadUseCase {
 
     private final MonthlyGoalValidator validator;

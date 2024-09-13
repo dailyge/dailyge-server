@@ -12,7 +12,7 @@ import static project.dailyge.entity.common.EventType.CREATE;
 import project.dailyge.entity.task.TaskEvent;
 import static project.dailyge.entity.task.TaskEvent.createEventWithIncreasedPublishCount;
 
-@EventLayer
+@EventLayer(value = "TaskEventListener")
 @RequiredArgsConstructor
 public class TaskEventListener {
 

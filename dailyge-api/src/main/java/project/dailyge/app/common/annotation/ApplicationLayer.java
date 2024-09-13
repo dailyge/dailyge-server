@@ -8,4 +8,5 @@ import java.lang.annotation.RetentionPolicy;
 @Service
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ApplicationLayer {
+    String value() default "";
 }

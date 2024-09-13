@@ -13,8 +13,8 @@ import project.dailyge.lock.LockUseCase;
 
 import java.time.LocalDate;
 
-@FacadeLayer
 @RequiredArgsConstructor
+@FacadeLayer(value = "TaskFacade")
 public class TaskFacade {
 
     private final LockUseCase lockUseCase;

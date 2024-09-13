@@ -4,17 +4,18 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static project.dailyge.app.core.user.exception.UserCodeAndMessage.*;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.common.exception.CommonException;
+import static project.dailyge.app.core.user.exception.UserCodeAndMessage.USER_NOT_MATCH;
 import project.dailyge.entity.user.Role;
 
 @DisplayName("[UnitTest] DailygeUser 단위 테스트")
-class DailygeUserTest {
+class DailygeUserUnitTest {
     public static final String DETAIL_MESSAGE = "detailMessage";
 
     @Test
@@ -50,6 +51,22 @@ class DailygeUserTest {
         final DailygeUser dailygeUser = new DailygeUser(1L, Role.NORMAL);
 
         assertDoesNotThrow(() -> dailygeUser.validateAuth(1L));
+    }
+
+    @Test
+    @DisplayName("Object가 Null이 아니면 DailygeUser를 반환한다.")
+    void whenValidDailygeUserThenReturnsUser() {
+        final DailygeUser expectedUser = new DailygeUser(1L, Role.NORMAL);
+        final Object obj = expectedUser;
+        final DailygeUser result = DailygeUser.getDailygeUser(obj);
+        assertSame(expectedUser, result);
+    }
+
+    @Test
+    @DisplayName("Object가 Null이면 null을 반환한다.")
+    void whenInvalidObjectTypeThenReturnsNull() {
+        final Object obj = null;
+        assertNull(DailygeUser.getDailygeUser(obj));
     }
 
     @Test

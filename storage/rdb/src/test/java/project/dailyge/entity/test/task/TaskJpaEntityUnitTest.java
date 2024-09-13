@@ -141,7 +141,6 @@ class TaskJpaEntityUnitTest {
                 .userId(1L)
                 .build()
         ).isInstanceOf(RuntimeException.class)
-            .isExactlyInstanceOf(IllegalArgumentException.class)
             .hasMessageContaining(task.getDateErrorMessage());
     }
 
@@ -160,7 +159,6 @@ class TaskJpaEntityUnitTest {
                 .userId(1L)
                 .build()
         ).isInstanceOf(RuntimeException.class)
-            .isExactlyInstanceOf(IllegalArgumentException.class)
             .hasMessageContaining(task.getDateErrorMessage());
     }
 

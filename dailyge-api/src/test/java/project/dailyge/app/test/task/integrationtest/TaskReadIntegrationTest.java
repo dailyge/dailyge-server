@@ -1,7 +1,7 @@
 package project.dailyge.app.test.task.integrationtest;
 
-
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import org.junit.jupiter.api.Assertions;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -18,6 +18,7 @@ import project.dailyge.app.core.task.facade.TaskFacade;
 import static project.dailyge.app.test.task.fixture.TaskCommandFixture.createTaskCreationCommand;
 import project.dailyge.entity.task.MonthlyTaskJpaEntity;
 import project.dailyge.entity.task.TaskJpaEntity;
+import project.dailyge.entity.task.Tasks;
 
 import java.time.LocalDate;
 
@@ -25,7 +26,6 @@ import java.time.LocalDate;
 class TaskReadIntegrationTest extends DatabaseTestBase {
 
     private TaskCreateCommand taskCreateCommand;
-
 
     @Autowired
     private TaskFacade taskFacade;
@@ -91,5 +91,37 @@ class TaskReadIntegrationTest extends DatabaseTestBase {
             dailygeUser, invalidTaskId
         )).isInstanceOf(TaskTypeException.class)
             .hasMessage(TASK_NOT_FOUND.message());
+    }
+
+    @Test
+    @DisplayName("존재하는 유저와 날짜 범위로 주간 할 일을 조회하면 결과가 반환된다.")
+    void whenValidUserIdAndDatesProvidedThenReturnTasks() {
+        taskWriteUseCase.save(dailygeUser, taskCreateCommand);
+
+        final LocalDate startDate = now;
+        final LocalDate endDate = now.plusDays(10);
+        final Tasks tasks = taskReadUseCase.findWeeklyTasksStatisticByUserIdAndDate(dailygeUser, startDate, endDate);
+
+        Assertions.assertTrue(tasks.size() > 0);
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 MonthlyTaskIds가 있을 경우 빈 Tasks를 반환한다.")
+    void whenNoMonthlyTasksFoundThenReturnEmptyTasks() {
+        final LocalDate invalidStartDate = LocalDate.now().minusYears(10);
+        final LocalDate invalidEndDate = LocalDate.now().minusYears(10).plusDays(7);
+
+        final Tasks tasks = taskReadUseCase.findWeeklyTasksStatisticByUserIdAndDate(dailygeUser, invalidStartDate, invalidEndDate);
+        Assertions.assertEquals(0, tasks.size());
+    }
+
+    @Test
+    @DisplayName("날짜 범위에 맞는 Tasks가 없으면 빈 리스트를 반환한다.")
+    void whenNoTasksForDateRangeThenReturnEmptyTasks() {
+        final LocalDate futureStartDate = LocalDate.now().plusYears(15);
+        final LocalDate futureEndDate = futureStartDate.plusDays(7);
+
+        final Tasks tasks = taskReadUseCase.findWeeklyTasksStatisticByUserIdAndDate(dailygeUser, futureStartDate, futureEndDate);
+        Assertions.assertEquals(0, tasks.size());
     }
 }

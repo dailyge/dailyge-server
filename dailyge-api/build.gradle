@@ -12,7 +12,6 @@ configurations {
 }
 
 apply(from: "${rootDir}/jib/dailyge-api/jib.gradle")
-
 dependencies {
     implementation(project(":storage:common"))
     implementation(project(":storage:document"))
@@ -31,8 +30,16 @@ dependencies {
     implementation("com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4")
     implementation("org.liquibase:liquibase-core")
 
+    implementation("net.logstash.logback:logstash-logback-encoder:7.0")
+    implementation platform("software.amazon.awssdk:bom:2.20.63")
+    implementation("software.amazon.awssdk:netty-nio-client") {
+        exclude group: "io.netty", module: "netty-codec-http"
+    }
+    implementation("software.amazon.awssdk:cloudwatchlogs")
+    implementation("ca.pjer:logback-awslogs-appender:1.6.0")
+
+    implementation platform("io.awspring.cloud:spring-cloud-aws-dependencies:${property("awsSpringCloudVersion")}")
     implementation("software.amazon.awssdk:sns")
-    implementation(platform("io.awspring.cloud:spring-cloud-aws-dependencies:${property("awsSpringCloudVersion")}"))
     implementation("io.awspring.cloud:spring-cloud-aws-starter-sqs")
 
     testImplementation("org.springframework.restdocs:spring-restdocs-restassured")
@@ -83,7 +90,7 @@ tasks.register("copyDocument", Copy) {
 
 build {
     dependsOn copyDocument
-    dependsOn(':dailyge-api:openapi3')
+    dependsOn(":dailyge-api:openapi3")
 }
 
 bootJar {
@@ -96,6 +103,7 @@ bootJar {
 tasks.register("copySubmoduleConfig", Copy) {
     from("${rootDir}/config-module/dailyge-api")
     include("*.yml")
+    include("*.xml")
     into("${rootDir}/dailyge-api/src/main/resources")
 }
 
@@ -117,7 +125,7 @@ tasks.named("jib").configure {
 
 openapi3 {
     def env = System.getenv("ENV")
-    setServer(env != null && env == 'prod' ? "https://api.dailyge.com" : "https://api-dev.dailyge.com")
+    setServer(env != null && env == "prod" ? "https://api.dailyge.com" : "https://api-dev.dailyge.com")
     title = "Dailyge Api"
     description = "Dailyge Api 문서 입니다."
     version = "1.0.0"

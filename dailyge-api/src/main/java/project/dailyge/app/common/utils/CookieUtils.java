@@ -3,22 +3,36 @@ package project.dailyge.app.common.utils;
 import jakarta.servlet.http.Cookie;
 import org.springframework.http.ResponseCookie;
 
-public class CookieUtils {
+public final class CookieUtils {
 
-    private static final String DOMAIN = ".dailyge.com";
+    private static final String ROOT_DOMAIN = ".dailyge.com";
+
+    private CookieUtils() {
+        throw new AssertionError("올바른 형식으로 생성자를 호출해주세요.");
+    }
 
     public static String createResponseCookie(
         final String name,
         final String value,
         final String path,
         final long maxAge,
-        final boolean httpOnly
+        final boolean httpOnly,
+        final String env
     ) {
-        final ResponseCookie cookie =  ResponseCookie.from(name, value)
-            .domain(DOMAIN)
+        if (!"local".equals(env)) {
+            final ResponseCookie cookie = ResponseCookie.from(name, value)
+                .domain(ROOT_DOMAIN)
+                .path(path)
+                .httpOnly(httpOnly)
+                .secure(true)
+                .maxAge(maxAge)
+                .build();
+            return cookie.toString();
+        }
+        final ResponseCookie cookie = ResponseCookie.from(name, value)
+            .domain("")
             .path(path)
             .httpOnly(httpOnly)
-            .secure(true)
             .maxAge(maxAge)
             .build();
         return cookie.toString();
@@ -29,7 +43,7 @@ public class CookieUtils {
         final boolean httpOnly
     ) {
         final ResponseCookie clearCookie = ResponseCookie.from(name, null)
-            .domain(DOMAIN)
+            .domain(ROOT_DOMAIN)
             .path("/")
             .httpOnly(httpOnly)
             .secure(true)
@@ -45,7 +59,7 @@ public class CookieUtils {
         final int maxAge
     ) {
         final Cookie cookie = new Cookie(name, value);
-        cookie.setDomain(DOMAIN);
+        cookie.setDomain(ROOT_DOMAIN);
         cookie.setPath(path);
         cookie.setHttpOnly(true);
         cookie.setSecure(true);
@@ -55,7 +69,7 @@ public class CookieUtils {
 
     public static Cookie clearCookie(final String name) {
         final Cookie cookie = new Cookie(name, null);
-        cookie.setDomain(DOMAIN);
+        cookie.setDomain(ROOT_DOMAIN);
         cookie.setPath("/");
         cookie.setHttpOnly(true);
         cookie.setSecure(true);

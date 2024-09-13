@@ -15,6 +15,9 @@ import project.dailyge.app.codeandmessage.CommonCodeAndMessage;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_REQUEST;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_PARAMETERS;
+import static project.dailyge.app.constant.LogConstant.ERROR;
+import static project.dailyge.app.constant.LogConstant.LOG_ORDER;
+import static project.dailyge.app.constant.LogConstant.TRACE_ID;
 import project.dailyge.app.response.ErrorResponse;
 
 import java.time.LocalDateTime;
@@ -23,7 +26,8 @@ import java.time.LocalDateTime;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    private static final String TRACE_ID = "traceId";
+    private static final String ERROR_LOG_FORMAT =
+        "{\"order\":\"{}\", \"traceId\":\"{}\", \"code\":\"{}\", \"message\":\"{}\", \"detailMessage\":\"{}\", \"time\":\"{}\", \"level\":\"{}\"}";
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResponse> resolveIllegalArgumentException(final IllegalArgumentException exception) {
@@ -112,17 +116,26 @@ public class GlobalExceptionHandler {
         final CodeAndMessage codeAndMessage,
         final Exception exception
     ) {
+        incrementLogOrder();
         final int code = codeAndMessage.code();
         final String message = codeAndMessage.message();
         final String detailMessage = exception.getMessage();
         final LocalDateTime time = LocalDateTime.now();
         log.error(
-            "{\"traceId\": \"{}\", \"code\": \"{}\", \"message\": \"{}\", \"detailMessage\": \"{}\", \"time\": \"{}\"}",
+            ERROR_LOG_FORMAT,
+            Integer.parseInt(MDC.get(LOG_ORDER)),
             MDC.get(TRACE_ID),
             code,
             message,
             detailMessage,
-            time
+            time,
+            ERROR
         );
+    }
+
+    private void incrementLogOrder() {
+        final String logOrder = MDC.get(LOG_ORDER);
+        final int order = logOrder != null ? Integer.parseInt(logOrder) : 0;
+        MDC.put(LOG_ORDER, String.valueOf(order + 1));
     }
 }

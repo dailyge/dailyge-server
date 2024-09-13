@@ -8,4 +8,5 @@ import java.lang.annotation.RetentionPolicy;
 @RestController
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PresentationLayer {
+    String value() default "";
 }

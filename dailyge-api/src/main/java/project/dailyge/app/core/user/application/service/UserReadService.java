@@ -12,8 +12,8 @@ import project.dailyge.entity.user.UserJpaEntity;
 
 import java.util.Optional;
 
-@ApplicationLayer
 @RequiredArgsConstructor
+@ApplicationLayer(value = "UserReadService")
 class UserReadService implements UserReadUseCase {
 
     private final UserEntityReadRepository userReadRepository;

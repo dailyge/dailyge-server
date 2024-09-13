@@ -12,9 +12,9 @@ import project.dailyge.app.common.response.ApiResponse;
 import project.dailyge.app.core.task.application.TaskWriteUseCase;
 import project.dailyge.app.core.task.presentation.response.TaskCreateResponse;
 
-@PresentationLayer
 @RequiredArgsConstructor
 @RequestMapping("/api/tasks")
+@PresentationLayer(value = "TaskDeleteApi")
 public class TaskDeleteApi {
 
     private final TaskWriteUseCase taskWriteUseCase;

@@ -16,9 +16,9 @@ import project.dailyge.app.cursor.Cursor;
 
 import java.util.List;
 
-@PresentationLayer
 @RequiredArgsConstructor
 @RequestMapping(path = "/api/monthly-goals")
+@PresentationLayer(value = "MonthlyGoalReadApi")
 public class MonthlyGoalReadApi {
 
     private final MonthlyGoalReadUseCase monthlyGoalReadUseCase;

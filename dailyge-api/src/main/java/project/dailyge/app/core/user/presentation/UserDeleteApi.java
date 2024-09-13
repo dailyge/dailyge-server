@@ -14,9 +14,9 @@ import static org.springframework.http.HttpHeaders.SET_COOKIE;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.NO_CONTENT;
 import static project.dailyge.app.common.utils.CookieUtils.clearResponseCookie;
 
-@PresentationLayer
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
+@PresentationLayer(value = "UserDeleteApi")
 public class UserDeleteApi {
 
     private final UserFacade userFacade;

@@ -13,9 +13,9 @@ import project.dailyge.app.core.codeandmessage.CodeAndMessageConfig;
 import project.dailyge.entity.codeandmessage.CodeAndMessageEntityWriteService;
 import project.dailyge.entity.codeandmessage.CodeAndMessages;
 
-@PresentationLayer
 @RequiredArgsConstructor
 @RequestMapping(path = {"/api"})
+@PresentationLayer(value = "CommonApi")
 public class CommonApi {
 
     private final CodeAndMessageEntityWriteService codeAndMessageWriteService;

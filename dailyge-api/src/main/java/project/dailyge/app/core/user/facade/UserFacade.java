@@ -21,8 +21,8 @@ import project.dailyge.entity.user.UserEvent;
 import static project.dailyge.entity.user.UserEvent.createEvent;
 import project.dailyge.entity.user.UserJpaEntity;
 
-@FacadeLayer
 @RequiredArgsConstructor
+@FacadeLayer(value = "UserFacade")
 public class UserFacade {
 
     private static final String FIXED_IMAGE_URL = "https://shorturl.at/dejs2";

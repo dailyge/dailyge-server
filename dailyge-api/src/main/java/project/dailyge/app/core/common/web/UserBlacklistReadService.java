@@ -5,8 +5,8 @@ import project.dailyge.app.common.annotation.ApplicationLayer;
 import project.dailyge.core.cache.user.UserBlacklistReadRepository;
 import project.dailyge.core.cache.user.UserBlacklistReadUseCase;
 
-@ApplicationLayer
 @RequiredArgsConstructor
+@ApplicationLayer(value = "UserBlacklistReadService")
 public class UserBlacklistReadService implements UserBlacklistReadUseCase {
 
     private final UserBlacklistReadRepository userBlacklistReadRepository;

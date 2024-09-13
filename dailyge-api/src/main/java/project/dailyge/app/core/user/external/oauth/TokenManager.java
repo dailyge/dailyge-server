@@ -4,19 +4,17 @@ import io.lettuce.core.RedisException;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Service;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_GATEWAY;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
-
+import project.dailyge.app.common.annotation.ExternalLayer;
 import project.dailyge.app.common.exception.CommonException;
-
 import static project.dailyge.common.configuration.CompressionHelper.compressStringAsByteArray;
 import static project.dailyge.common.configuration.CompressionHelper.decompressAsString;
 
 import java.util.function.Supplier;
 
-@Service
 @RequiredArgsConstructor
+@ExternalLayer(value = "TokenManager")
 public class TokenManager {
 
     private final RedisTemplate<String, byte[]> redisTemplate;

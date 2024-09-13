@@ -16,9 +16,9 @@ import project.dailyge.entity.task.Tasks;
 
 import java.time.LocalDate;
 
-@PresentationLayer
 @RequiredArgsConstructor
 @RequestMapping(path = {"/api"})
+@PresentationLayer(value = "TaskStatisticApi")
 public class TaskStatisticApi {
 
     private final TaskClientValidator validator;

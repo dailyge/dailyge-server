@@ -14,9 +14,9 @@ import project.dailyge.app.core.monthlygoal.application.MonthlyGoalWriteUseCase;
 import project.dailyge.app.core.monthlygoal.presentation.request.MonthlyGoalCreateRequest;
 import project.dailyge.app.core.monthlygoal.presentation.response.MonthlyGoalCreateResponse;
 
-@PresentationLayer
 @RequiredArgsConstructor
 @RequestMapping(path = "/api/monthly-goals")
+@PresentationLayer(value = "MonthlyGoalCreateApi")
 public class MonthlyGoalCreateApi {
 
     private final MonthlyGoalWriteUseCase monthlyGoalWriteUseCase;

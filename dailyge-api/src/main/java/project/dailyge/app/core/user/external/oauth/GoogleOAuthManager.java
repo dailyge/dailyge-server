@@ -19,7 +19,7 @@ import project.dailyge.app.core.user.external.response.GoogleUserInfoResponse;
 
 import java.util.UUID;
 
-@ExternalLayer
+@ExternalLayer(value = "GoogleOAuthManager")
 public class GoogleOAuthManager {
 
     private static final String BEARER = "Bearer ";

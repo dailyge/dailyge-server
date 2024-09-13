@@ -10,8 +10,8 @@ import project.dailyge.core.cache.coupon.CouponCacheWriteUseCase;
 
 import java.util.List;
 
-@ApplicationLayer
 @RequiredArgsConstructor
+@ApplicationLayer(value = "CouponEventWriteService")
 class CouponEventWriteService implements CouponCacheWriteUseCase {
     private final CouponCacheWriteRepository couponCacheWriteRepository;
     private final CouponInMemoryRepository couponInMemoryRepository;

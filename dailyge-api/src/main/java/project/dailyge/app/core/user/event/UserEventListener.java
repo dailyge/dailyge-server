@@ -2,7 +2,6 @@ package project.dailyge.app.core.user.event;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
-import org.springframework.scheduling.annotation.Async;
 import project.dailyge.app.common.annotation.EventLayer;
 import project.dailyge.app.core.user.facade.UserFacade;
 import project.dailyge.document.event.EventDocument;
@@ -20,7 +19,6 @@ public class UserEventListener {
     private final EventPublisher<UserEvent> userEventPublisher;
     private final EventDocumentWriteRepository eventWriteRepository;
 
-    @Async
     @EventListener
     public void listenInternalEvent(final UserEvent event) {
         try {

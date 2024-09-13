@@ -18,9 +18,9 @@ import project.dailyge.app.core.task.application.command.TaskUpdateCommand;
 import project.dailyge.app.core.task.presentation.requesst.TaskStatusUpdateRequest;
 import project.dailyge.app.core.task.presentation.requesst.TaskUpdateRequest;
 
-@PresentationLayer
 @RequiredArgsConstructor
 @RequestMapping(path = {"/api/tasks"})
+@PresentationLayer(value = "TaskUpdateApi")
 public class TaskUpdateApi {
 
     private final TaskWriteUseCase taskWriteUseCase;

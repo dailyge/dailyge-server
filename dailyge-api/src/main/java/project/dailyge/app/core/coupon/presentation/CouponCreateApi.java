@@ -12,8 +12,8 @@ import project.dailyge.app.common.auth.LoginUser;
 import static project.dailyge.app.common.utils.CookieUtils.createResponseCookie;
 import project.dailyge.app.core.coupon.application.CouponWriteUseCase;
 
-@PresentationLayer
 @RequestMapping("/api")
+@PresentationLayer(value = "CouponCreateApi")
 public class CouponCreateApi {
 
     private final String env;

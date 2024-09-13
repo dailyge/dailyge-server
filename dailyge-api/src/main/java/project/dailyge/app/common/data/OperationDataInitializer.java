@@ -13,8 +13,12 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import project.dailyge.core.cache.user.UserCache;
+import project.dailyge.entity.task.MonthlyTaskJpaEntity;
+import static project.dailyge.entity.task.MonthlyTasks.createMonthlyTasks;
 import static project.dailyge.entity.user.Role.NORMAL;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -38,6 +42,7 @@ public class OperationDataInitializer implements CommandLineRunner {
     private final Set<String> tableNames;
     private final EntityManager entityManager;
     private final JdbcTemplate jdbcTemplate;
+
     private final OperationDataWriteDao operationWriteDao;
 
     @Override
@@ -78,11 +83,18 @@ public class OperationDataInitializer implements CommandLineRunner {
             || DEV.equals(env);
     }
 
+    @Transactional
     public void initData() {
         try {
-            final UserCache userCache = new UserCache(1L, email, email, "", NORMAL.name());
+            final Long initUserId = 1L;
+            final UserCache userCache = new UserCache(initUserId, email, email, "", NORMAL.name());
             operationWriteDao.save(userCache);
             operationWriteDao.save(email);
+
+            final List<MonthlyTaskJpaEntity> monthlyTasks = createMonthlyTasks(initUserId, LocalDate.now().getYear());
+            for (final MonthlyTaskJpaEntity monthlyTaskJpa : monthlyTasks) {
+                entityManager.persist(monthlyTaskJpa);
+            }
         } catch (Exception ex) {
             log.error("Data initialization failed: {}", ex.getMessage());
         }

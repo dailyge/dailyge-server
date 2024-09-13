@@ -49,6 +49,8 @@ Dailyge는 일정을 체계적으로 관리하고 하루를 효과적으로 계�
 
 # 2. Contents.
 
+상세 내용은 연관 [PR](https://github.com/dailyge/dailyge-server/pulls)이나 [Discussion](https://github.com/dailyge/dailyge-server/discussions)을 참조해주세요.
+
 - [JWT 토큰을 발행할 때, 어떤 점을 고려해야 할까?](https://github.com/dailyge/dailyge-server/discussions/107)
 - [JWT 토큰을 파싱할 때, 어떤 예외가 발생할 수 있을까?](https://github.com/dailyge/dailyge-server/discussions/35)
 - [JWT 토큰이 탈취 당한경우, 어떻게 해야 할까?](https://github.com/dailyge/dailyge-server/discussions/114)

@@ -179,7 +179,10 @@ public class MdcFilter implements Filter {
         }
     }
 
-    private boolean isValidUser(final String username, final String password) {
+    private boolean isValidUser(
+        final String username,
+        final String password
+    ) {
         return this.username.equals(username) && this.password.equals(password);
     }
 }

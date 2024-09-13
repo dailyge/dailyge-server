@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 @Configuration
+@Profile(value = {"prod", "dev",})
 public class LoggingConfig {
 
     private final String env;
@@ -29,7 +30,6 @@ public class LoggingConfig {
     }
 
     @Bean
-    @Profile("!local")
     public CloudWatchLogAppender dateBasedCloudWatchAppender() {
         final CloudWatchLogAppender appender = new CloudWatchLogAppender();
         appender.init(env, awsAccessKey, awsSecretKey);
@@ -39,7 +39,6 @@ public class LoggingConfig {
     }
 
     @Bean
-    @Profile("!local")
     public AsyncAppender asyncAppender(final CloudWatchLogAppender cloudWatchAppender) {
         cloudWatchAppender.start();
         final AsyncAppender asyncAppender = new AsyncAppender();

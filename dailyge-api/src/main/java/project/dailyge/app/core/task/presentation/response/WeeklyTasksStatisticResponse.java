@@ -7,15 +7,17 @@ import project.dailyge.entity.task.Tasks;
 
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Getter
 public class WeeklyTasksStatisticResponse {
 
     private String startDate;
     private String endDate;
-    private List<String> keys;
+    private Set<String> keys;
     private Map<String, TaskAchievementRateResponse> statistics;
 
     private WeeklyTasksStatisticResponse() {
@@ -28,7 +30,7 @@ public class WeeklyTasksStatisticResponse {
     ) {
         this.startDate = startDate.toString();
         this.endDate = endDate.toString();
-        this.keys = tasks.getKeysAsString();
+        this.keys = new HashSet<>(tasks.getKeysAsString());
         this.statistics = calculate(tasks.groupByDate());
     }
 

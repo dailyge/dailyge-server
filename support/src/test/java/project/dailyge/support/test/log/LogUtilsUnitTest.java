@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import static project.dailyge.app.constant.LogConstant.INFO;
 import project.dailyge.app.utils.LogUtils;
 import static project.dailyge.app.utils.LogUtils.createLogMessage;
 
@@ -26,9 +27,10 @@ class LogUtilsUnitTest {
     @Test
     @DisplayName("createLogMessage로 올바른 형식의 로그 메시지를 반환할 수 있다.")
     void whenCreateLogMessageCalledThenReturnCorrectLog() throws JsonProcessingException {
-        final String expectedLog = "{\"order\":\"1\", \"layer\":\"PRESENTATION\", \"path\":\"/api/test\", \"method\":\"GET\", \"traceId\":\"123\", "
-            + "\"ip\":\"127.0.0.1\", \"visitor\":{\"userId\":null, \"role\":\"GUEST\"}, "
-            + "\"time\":\"2024-09-11T12:00:00.000\", \"duration\":\"100ms\", \"context\":{\"args\":null, \"result\":null}}";
+        final String expectedLog = "{\"order\":\"1\",\"layer\":\"PRESENTATION\",\"path\":\"/api/test\",\"method\":\"GET\","
+            + "\"traceId\":\"123\",\"ip\":\"127.0.0.1\",\"visitor\":{\"userId\":null,\"role\":\"GUEST\"},"
+            + "\"time\":\"2024-09-11T12:00:00.000\",\"duration\":\"100ms\",\"context\":{\"args\":null,\"result\":null},"
+            + "\"level\":\"INFO\"}";
         final String actualLog = createLogMessage(
             1,
             "PRESENTATION",
@@ -40,7 +42,8 @@ class LogUtilsUnitTest {
             100L,
             null,
             null,
-            null
+            null,
+            INFO
         );
         assertEquals(objectMapper.readTree(expectedLog), objectMapper.readTree(actualLog));
     }
@@ -48,7 +51,10 @@ class LogUtilsUnitTest {
     @Test
     @DisplayName("createGuestLogMessage로 GUEST 로그 메시지를 반환할 수 있다.")
     void whenCreateGuestLogMessageThenReturnCorrectGuestLog() throws JsonProcessingException {
-        final String expected = "{\"order\":\"1\", \"layer\":\"PRESENTATION\", \"path\":\"/api/test\", \"method\":\"GET\", \"traceId\":\"123\", \"ip\":\"127.0.0.1\", \"visitor\":{\"userId\":null, \"role\":\"GUEST\"}, \"time\":\"2024-09-11T12:00:00.000\", \"duration\":\"100ms\", \"context\":{\"args\":null, \"result\":null}}";
+        final String expected = "{\"order\":\"1\",\"layer\":\"PRESENTATION\",\"path\":\"/api/test\",\"method\":\"GET\","
+            + "\"traceId\":\"123\",\"ip\":\"127.0.0.1\",\"visitor\":{\"userId\":null,\"role\":\"GUEST\"},"
+            + "\"time\":\"2024-09-11T12:00:00.000\",\"duration\":\"100ms\",\"context\":{\"args\":null,\"result\":null}," +
+            "\"level\":\"INFO\"}";
         final String actual = LogUtils.createGuestLogMessage(
             1,
             "PRESENTATION",
@@ -59,7 +65,8 @@ class LogUtilsUnitTest {
             LocalDateTime.of(2024, 9, 11, 12, 0),
             100L,
             null,
-            null
+            null,
+            INFO
         );
         assertEquals(objectMapper.readTree(expected), objectMapper.readTree(actual));
     }

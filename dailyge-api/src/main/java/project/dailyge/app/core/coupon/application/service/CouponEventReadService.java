@@ -5,8 +5,8 @@ import project.dailyge.app.common.annotation.ApplicationLayer;
 import project.dailyge.core.cache.coupon.CouponCacheReadRepository;
 import project.dailyge.core.cache.coupon.CouponCacheReadUseCase;
 
-@ApplicationLayer
 @RequiredArgsConstructor
+@ApplicationLayer(value = "CouponEventReadService")
 class CouponEventReadService implements CouponCacheReadUseCase {
 
     private final CouponCacheReadRepository couponCacheReadRepository;

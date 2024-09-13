@@ -8,8 +8,8 @@ import project.dailyge.app.core.coupon.persistence.CouponEventParticipant;
 import project.dailyge.app.core.coupon.persistence.CouponInMemoryRepository;
 import project.dailyge.document.common.UuidGenerator;
 
-@ApplicationLayer
 @RequiredArgsConstructor
+@ApplicationLayer(value = "CouponWriteService")
 class CouponWriteService implements CouponWriteUseCase {
 
     private final CouponInMemoryRepository couponInMemoryRepository;

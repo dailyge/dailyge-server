@@ -19,8 +19,8 @@ import project.dailyge.app.core.user.facade.UserFacade;
 import project.dailyge.app.core.user.presentation.response.LoginPageUrlResponse;
 import project.dailyge.app.core.user.presentation.response.OAuthLoginResponse;
 
-@PresentationLayer
 @RequestMapping("/api")
+@PresentationLayer(value = "LoginApi")
 public class LoginApi {
 
     private final String loginUrl;

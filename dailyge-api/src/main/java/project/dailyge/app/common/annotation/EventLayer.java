@@ -8,4 +8,5 @@ import java.lang.annotation.RetentionPolicy;
 @Component
 @Retention(RetentionPolicy.RUNTIME)
 public @interface EventLayer {
+    String value() default "";
 }

@@ -2,6 +2,7 @@ package project.dailyge.app.core.task.event;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import project.dailyge.app.common.annotation.EventLayer;
 import project.dailyge.app.core.event.application.EventWriteUseCase;

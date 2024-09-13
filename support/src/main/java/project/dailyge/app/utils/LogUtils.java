@@ -12,9 +12,9 @@ import java.util.Objects;
 public final class LogUtils {
 
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
-    private static final String EMPTY_STRING = "null";
+    private static final String NULL_STRING = "null";
     private static final String LOG_FORMAT = "{\"order\":\"%d\", \"layer\":\"%s\", \"path\":\"%s\", \"method\":\"%s\", \"traceId\":\"%s\", "
-        + "\"ip\":\"%s\", \"visitor\":%s, \"time\":\"%s\", \"duration\":\"%dms\", \"context\":{\"args\":%s, \"result\":%s}}";
+        + "\"ip\":\"%s\", \"visitor\":%s, \"time\":\"%s\", \"duration\":\"%dms\", \"context\":{\"args\":%s, \"result\":%s}, \"level\":\"%s\"}";
 
     private static final ObjectMapper objectMapper;
     private static final String GUEST_JSON;
@@ -44,12 +44,12 @@ public final class LogUtils {
         final long duration,
         final Object args,
         final Object result,
-        final Object visitor
+        final String visitor,
+        final String level
     ) throws JsonProcessingException {
         final String formattedTime = time.format(DATE_TIME_FORMATTER);
-        final String argsString = (args != null) ? objectMapper.writeValueAsString(args) : EMPTY_STRING;
-        final String resultString = (result != null) ? objectMapper.writeValueAsString(result) : EMPTY_STRING;
-        final String visitorString = (visitor != null) ? objectMapper.writeValueAsString(visitor) : GUEST_JSON;
+        final String argsString = (args != null) ? objectMapper.writeValueAsString(args) : NULL_STRING;
+        final String resultString = (result != null) ? objectMapper.writeValueAsString(result) : NULL_STRING;
         return String.format(
             LOG_FORMAT,
             order,
@@ -58,11 +58,12 @@ public final class LogUtils {
             method,
             traceId,
             ipAddress,
-            visitorString,
+            (visitor != null) ? visitor : GUEST_JSON,
             formattedTime,
             duration,
             argsString,
-            resultString
+            resultString,
+            level
         );
     }
 
@@ -76,11 +77,12 @@ public final class LogUtils {
         final LocalDateTime time,
         final long duration,
         final Object args,
-        final Object result
+        final Object result,
+        final String level
     ) {
         final String formattedTime = time.format(DATE_TIME_FORMATTER);
-        final String argsString = (args != null) ? args.toString() : EMPTY_STRING;
-        final String resultString = (result != null) ? result.toString() : EMPTY_STRING;
+        final String argsString = (args != null) ? args.toString() : NULL_STRING;
+        final String resultString = (result != null) ? result.toString() : NULL_STRING;
         return String.format(
             LOG_FORMAT,
             order,
@@ -93,7 +95,8 @@ public final class LogUtils {
             formattedTime,
             duration,
             argsString,
-            resultString
+            resultString,
+            level
         );
     }
 
@@ -102,10 +105,6 @@ public final class LogUtils {
             return GUEST_JSON;
         }
         return visitor;
-    }
-
-    public static String getGuestJson() {
-        return GUEST_JSON;
     }
 
     @Getter

@@ -1,8 +1,8 @@
 package project.dailyge.app.common.exception;
 
-import java.time.LocalDateTime;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -13,16 +13,23 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.NoHandlerFoundException;
 import project.dailyge.app.codeandmessage.CodeAndMessage;
 import project.dailyge.app.codeandmessage.CommonCodeAndMessage;
-import project.dailyge.app.response.ErrorResponse;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_REQUEST;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_PARAMETERS;
+import static project.dailyge.app.constant.LogConstant.TRACE_ID;
+import project.dailyge.app.response.ErrorResponse;
+
+import java.time.LocalDateTime;
 
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    private static final String TRACE_ID = "traceId";
+    private final String env;
+
+    public GlobalExceptionHandler(@Value("${env}") final String env) {
+        this.env = env;
+    }
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResponse> resolveIllegalArgumentException(final IllegalArgumentException exception) {
@@ -111,6 +118,9 @@ public class GlobalExceptionHandler {
         final CodeAndMessage codeAndMessage,
         final Exception exception
     ) {
+        if ("test".equals(env)) {
+            return;
+        }
         final int code = codeAndMessage.code();
         final String message = codeAndMessage.message();
         final String detailMessage = exception.getMessage();

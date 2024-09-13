@@ -13,8 +13,8 @@ import project.dailyge.entity.user.UserJpaEntity;
 
 import java.util.Optional;
 
-@ApplicationLayer
 @RequiredArgsConstructor
+@ApplicationLayer(value = "UserWriteService")
 public class UserWriteService implements UserWriteUseCase {
 
     private final UserEntityReadRepository userReadRepository;

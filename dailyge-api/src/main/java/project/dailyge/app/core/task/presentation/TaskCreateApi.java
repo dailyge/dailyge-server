@@ -16,9 +16,9 @@ import project.dailyge.app.core.task.presentation.requesst.MonthlyTasksCreateReq
 import project.dailyge.app.core.task.presentation.requesst.TaskCreateRequest;
 import project.dailyge.app.core.task.presentation.response.TaskCreateResponse;
 
-@PresentationLayer
 @RequiredArgsConstructor
 @RequestMapping(path = "/api")
+@PresentationLayer(value = "TaskCreateApi")
 public class TaskCreateApi {
 
     private final TaskFacade taskFacade;

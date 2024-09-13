@@ -3,6 +3,7 @@ package project.dailyge.app.common.configuration.web;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.MDC;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -48,7 +49,7 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
             }
             final UserCache user = userCacheReadUseCase.findById(userId);
             final DailygeUser dailygeUser = new DailygeUser(user.getId(), Role.valueOf(user.getRole()));
-            request.setAttribute("dailyge-user", dailygeUser);
+            MDC.put("dailyge-user", dailygeUser.toString());
             return dailygeUser;
         } catch (ExpiredJwtException ex) {
             throw CommonException.from(ex.getMessage(), INVALID_USER_TOKEN);

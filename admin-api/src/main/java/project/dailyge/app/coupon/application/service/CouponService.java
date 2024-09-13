@@ -4,9 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import project.dailyge.app.coupon.application.CouponUseCase;
 import project.dailyge.app.coupon.exception.CouponTypeException;
-import project.dailyge.core.cache.coupon.CouponCache;
-import project.dailyge.core.cache.coupon.CouponCacheReadRepository;
-import project.dailyge.core.cache.coupon.CouponCacheWriteRepository;
+import project.dailyge.core.cache.coupon.CouponEvent;
+import project.dailyge.core.cache.coupon.CouponEventReadRepository;
+import project.dailyge.core.cache.coupon.CouponEventWriteRepository;
 
 import java.util.List;
 import java.util.stream.IntStream;
@@ -16,24 +16,24 @@ import static project.dailyge.app.coupon.exception.CouponCodeAndMessage.DUPLICAT
 @Service
 @RequiredArgsConstructor
 class CouponService implements CouponUseCase {
-    private final CouponCacheWriteRepository couponCacheWriteRepository;
-    private final CouponCacheReadRepository couponCacheReadRepository;
+    private final CouponEventWriteRepository couponEventWriteRepository;
+    private final CouponEventReadRepository couponEventReadRepository;
 
     @Override
     public List<Long> findWinners(final int winnerCount, final Long couponCategoryId) {
-        if (couponCacheReadRepository.hasSelectionRun()) {
+        if (couponEventReadRepository.hasSelectionRun()) {
             throw CouponTypeException.from(DUPLICATED_WINNER_SELECTION);
         }
-        couponCacheWriteRepository.increaseSelectionRunCount();
+        couponEventWriteRepository.increaseSelectionRunCount();
         final List<Long> winnerIds = selectWinners(winnerCount);
-        couponCacheWriteRepository.deleteAllBulks();
+        couponEventWriteRepository.deleteAllBulks();
         return winnerIds;
     }
 
     private List<Long> selectWinners(final int winnerCount) {
-        final int queueCount = couponCacheReadRepository.findQueueCount();
-        final List<List<CouponCache>> sortedQueues = IntStream.rangeClosed(1, queueCount)
-            .mapToObj(couponCacheReadRepository::findBulks)
+        final int queueCount = couponEventReadRepository.findQueueCount();
+        final List<List<CouponEvent>> sortedQueues = IntStream.rangeClosed(1, queueCount)
+            .mapToObj(couponEventReadRepository::findBulks)
             .toList();
         final List<Long> userIds = WinnerSelectAlgorithm.mergeSortedQueues(sortedQueues, winnerCount);
         return userIds;

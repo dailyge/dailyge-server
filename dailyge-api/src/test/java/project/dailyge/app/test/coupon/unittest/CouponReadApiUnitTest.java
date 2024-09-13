@@ -3,24 +3,23 @@ package project.dailyge.app.test.coupon.unittest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.core.coupon.presentation.CouponReadApi;
-import project.dailyge.core.cache.coupon.CouponCacheReadUseCase;
+import project.dailyge.core.cache.coupon.CouponEventReadUseCase;
 import project.dailyge.entity.user.Role;
+
+import static org.mockito.Mockito.*;
 
 @DisplayName("[UnitTest] 쿠폰 발급 참여 확인 API 테스트")
 class CouponReadApiUnitTest {
 
-    private CouponCacheReadUseCase couponCacheReadUseCase;
+    private CouponEventReadUseCase couponEventReadUseCase;
     private CouponReadApi couponReadApi;
 
     @BeforeEach
     void setUp() {
-        couponCacheReadUseCase = mock(CouponCacheReadUseCase.class);
-        couponReadApi = new CouponReadApi(couponCacheReadUseCase);
+        couponEventReadUseCase = mock(CouponEventReadUseCase.class);
+        couponReadApi = new CouponReadApi(couponEventReadUseCase);
     }
 
     @Test
@@ -28,6 +27,6 @@ class CouponReadApiUnitTest {
     void whenCookieValueDoesNotExistThenCallCouponCacheReadUseCase() {
         DailygeUser user = new DailygeUser(1L, Role.NORMAL);
         couponReadApi.findCouponParticipationStatus(user);
-        verify(couponCacheReadUseCase, times(1)).existsByUserId(user.getUserId());
+        verify(couponEventReadUseCase, times(1)).existsByUserId(user.getUserId());
     }
 }

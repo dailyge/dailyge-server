@@ -6,8 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 import project.dailyge.app.common.exception.CommonException;
-import project.dailyge.core.cache.coupon.CouponCache;
-import project.dailyge.core.cache.coupon.CouponCacheReadRepository;
+import project.dailyge.core.cache.coupon.CouponEvent;
+import project.dailyge.core.cache.coupon.CouponEventReadRepository;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -19,7 +19,7 @@ import static project.dailyge.common.configuration.CompressionHelper.decompressA
 
 @Repository
 @RequiredArgsConstructor
-class CouponEventReadDao implements CouponCacheReadRepository {
+class CouponEventReadDao implements CouponEventReadRepository {
 
     private final RedisTemplate<String, byte[]> redisTemplate;
     private final ObjectMapper objectMapper;
@@ -40,7 +40,7 @@ class CouponEventReadDao implements CouponCacheReadRepository {
     }
 
     @Override
-    public List<CouponCache> findBulks(final int queueNumber) {
+    public List<CouponEvent> findBulks(final int queueNumber) {
         final CouponEventBulks couponEventBulks = decompressAsObjWithZstd(
             Objects.requireNonNull(redisTemplate.opsForValue().get(getKey(queueNumber))),
             CouponEventBulks.class, objectMapper);
@@ -48,7 +48,7 @@ class CouponEventReadDao implements CouponCacheReadRepository {
     }
 
     @Override
-    public List<CouponCache> findBulksByLimit(final int queueNumber, final int limit) {
+    public List<CouponEvent> findBulksByLimit(final int queueNumber, final int limit) {
         return findBulks(queueNumber).subList(0, limit);
     }
 

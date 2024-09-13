@@ -11,8 +11,8 @@ import project.dailyge.app.core.coupon.persistence.CouponEventBulks;
 import project.dailyge.app.core.coupon.persistence.CouponEventParticipant;
 import project.dailyge.app.core.coupon.persistence.CouponInMemoryRepository;
 import project.dailyge.common.configuration.CompressionHelper;
-import project.dailyge.core.cache.coupon.CouponCacheReadRepository;
-import project.dailyge.core.cache.coupon.CouponCacheWriteUseCase;
+import project.dailyge.core.cache.coupon.CouponEventReadRepository;
+import project.dailyge.core.cache.coupon.CouponEventWriteUseCase;
 import project.dailyge.document.common.UuidGenerator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -24,13 +24,13 @@ class CouponBulksIntegrationTest extends DatabaseTestBase {
     private static final String KEY = "coupon:cache";
 
     @Autowired
-    private CouponCacheWriteUseCase couponCacheWriteUseCase;
+    private CouponEventWriteUseCase couponEventWriteUseCase;
 
     @Autowired
     private CouponInMemoryRepository couponInMemoryRepository;
 
     @Autowired
-    private CouponCacheReadRepository couponCacheReadDao;
+    private CouponEventReadRepository couponCacheReadDao;
 
     @Autowired
     private RedisTemplate<String, byte[]> redisTemplate;
@@ -50,7 +50,7 @@ class CouponBulksIntegrationTest extends DatabaseTestBase {
         for (long id = 1; id <= maxId; id++) {
             couponInMemoryRepository.save(new CouponEventParticipant(id, UuidGenerator.createTimeStamp()));
         }
-        couponCacheWriteUseCase.saveBulks();
+        couponEventWriteUseCase.saveBulks();
         log.info("memory queue size:{}", couponInMemoryRepository.count());
         assertEquals(0, couponInMemoryRepository.count());
         for (long id = 1; id <= maxId; id++) {

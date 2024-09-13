@@ -6,8 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 import project.dailyge.app.common.exception.CommonException;
-import project.dailyge.core.cache.coupon.CouponCache;
-import project.dailyge.core.cache.coupon.CouponCacheWriteRepository;
+import project.dailyge.core.cache.coupon.CouponEvent;
+import project.dailyge.core.cache.coupon.CouponEventWriteRepository;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -18,7 +18,7 @@ import static project.dailyge.common.configuration.CompressionHelper.compressAsB
 
 @Repository
 @RequiredArgsConstructor
-class CouponEventWriteDao implements CouponCacheWriteRepository {
+class CouponEventWriteDao implements CouponEventWriteRepository {
 
     private static final String COUPON_KEY = "coupon:cache";
     private static final String QUEUE_COUNT_KEY = "coupon:queue:count";
@@ -27,7 +27,7 @@ class CouponEventWriteDao implements CouponCacheWriteRepository {
     private final ObjectMapper objectMapper;
 
     @Override
-    public void saveBulks(final List<CouponCache> couponCaches) {
+    public void saveBulks(final List<CouponEvent> couponCaches) {
         final CouponEventBulks couponEventBulks = new CouponEventBulks(couponCaches);
         try {
             redisTemplate.execute(connection -> {

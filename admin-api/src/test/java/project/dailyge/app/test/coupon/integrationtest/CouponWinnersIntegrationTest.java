@@ -10,8 +10,8 @@ import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.coupon.application.CouponUseCase;
 import project.dailyge.app.coupon.exception.CouponTypeException;
 import project.dailyge.app.test.coupon.fixture.CouponFixture;
-import project.dailyge.core.cache.coupon.CouponCache;
-import project.dailyge.core.cache.coupon.CouponCacheWriteRepository;
+import project.dailyge.core.cache.coupon.CouponEvent;
+import project.dailyge.core.cache.coupon.CouponEventWriteRepository;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ public class CouponWinnersIntegrationTest extends DatabaseTestBase {
     private CouponUseCase couponUseCase;
 
     @Autowired
-    private CouponCacheWriteRepository couponCacheWriteRepository;
+    private CouponEventWriteRepository couponEventWriteRepository;
 
     @Autowired
     private RedisTemplate<String, byte[]> redisTemplate;
@@ -36,9 +36,9 @@ public class CouponWinnersIntegrationTest extends DatabaseTestBase {
             return null;
         });
         //요청 벌크들이 Redis에 저장된 상태 구현
-        final List<List<CouponCache>> couponEventLists = CouponFixture.createCouponEventLists();
-        for (List<CouponCache> couponEvents : couponEventLists) {
-            couponCacheWriteRepository.saveBulks(couponEvents);
+        final List<List<CouponEvent>> couponEventLists = CouponFixture.createCouponEventLists();
+        for (List<CouponEvent> couponEvents : couponEventLists) {
+            couponEventWriteRepository.saveBulks(couponEvents);
         }
     }
 
@@ -52,7 +52,7 @@ public class CouponWinnersIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("이미 쿠폰 당첨자 선정을 진행했으면 CouponTypeException을 반환한다.")
     void whenAlreadyRunsWinnerSelectionThenThrows() {
-        couponCacheWriteRepository.increaseSelectionRunCount();
+        couponEventWriteRepository.increaseSelectionRunCount();
         assertThrows(CouponTypeException.class, () -> couponUseCase.findWinners(1000, 1L));
     }
 }

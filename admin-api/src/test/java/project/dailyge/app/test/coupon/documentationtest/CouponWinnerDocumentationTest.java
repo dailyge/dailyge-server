@@ -9,7 +9,7 @@ import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.coupon.presentation.request.CouponWinnerRequest;
-import project.dailyge.core.cache.coupon.CouponCacheWriteRepository;
+import project.dailyge.core.cache.coupon.CouponEventWriteRepository;
 
 import static io.restassured.RestAssured.given;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -17,7 +17,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @DisplayName("[DocumentationTest] 쿠폰 당첨자 선정 문서화 테스트")
 class CouponWinnerDocumentationTest extends DatabaseTestBase {
     @Autowired
-    private CouponCacheWriteRepository repository;
+    private CouponEventWriteRepository repository;
 
     @Autowired
     private RedisTemplate<String, byte[]> redisTemplate;

@@ -4,16 +4,16 @@ import lombok.RequiredArgsConstructor;
 import project.dailyge.app.common.annotation.ApplicationLayer;
 import project.dailyge.app.core.coupon.persistence.CouponEventParticipant;
 import project.dailyge.app.core.coupon.persistence.CouponInMemoryRepository;
-import project.dailyge.core.cache.coupon.CouponCache;
-import project.dailyge.core.cache.coupon.CouponCacheWriteRepository;
-import project.dailyge.core.cache.coupon.CouponCacheWriteUseCase;
+import project.dailyge.core.cache.coupon.CouponEvent;
+import project.dailyge.core.cache.coupon.CouponEventWriteRepository;
+import project.dailyge.core.cache.coupon.CouponEventWriteUseCase;
 
 import java.util.List;
 
 @RequiredArgsConstructor
 @ApplicationLayer(value = "CouponEventWriteService")
-class CouponEventWriteService implements CouponCacheWriteUseCase {
-    private final CouponCacheWriteRepository couponCacheWriteRepository;
+class CouponEventWriteService implements CouponEventWriteUseCase {
+    private final CouponEventWriteRepository couponEventWriteRepository;
     private final CouponInMemoryRepository couponInMemoryRepository;
 
     @Override
@@ -22,9 +22,9 @@ class CouponEventWriteService implements CouponCacheWriteUseCase {
         if (participants.isEmpty()) {
             return;
         }
-        final List<CouponCache> couponCaches = participants.stream()
-            .map(participant -> new CouponCache(participant.getUserId(), participant.getTimestamp()))
+        final List<CouponEvent> couponCaches = participants.stream()
+            .map(participant -> new CouponEvent(participant.getUserId(), participant.getTimestamp()))
             .toList();
-        couponCacheWriteRepository.saveBulks(couponCaches);
+        couponEventWriteRepository.saveBulks(couponCaches);
     }
 }

@@ -3,7 +3,7 @@ package project.dailyge.app.test.coupon.unittest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import project.dailyge.app.coupon.application.service.WinnerSelectAlgorithm;
-import project.dailyge.core.cache.coupon.CouponCache;
+import project.dailyge.core.cache.coupon.CouponEvent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,7 +20,7 @@ public class WinnerSelectionAlgorithmUnitTest {
     @Test
     @DisplayName("각 리스트들이 비어 있으면 빈 리스트를 반환한다.")
     void whenEventQueuesEmptyThenResultEmpty() {
-        final List<List<CouponCache>> emptyList = Arrays.asList(
+        final List<List<CouponEvent>> emptyList = Arrays.asList(
             List.of(),
             List.of(),
             List.of()
@@ -38,7 +38,7 @@ public class WinnerSelectionAlgorithmUnitTest {
         final List<Long> targetNumberList = LongStream.rangeClosed(1, 10000)
             .boxed()
             .toList();
-        final List<CouponCache> couponCaches = targetNumberList.stream().map(number -> new CouponCache(number, number)).toList();
+        final List<CouponEvent> couponCaches = targetNumberList.stream().map(number -> new CouponEvent(number, number)).toList();
         final List<Long> actualResult = WinnerSelectAlgorithm.mergeSortedQueues(List.of(couponCaches), 1000);
         assertEquals(expectedResult, actualResult);
     }
@@ -50,7 +50,7 @@ public class WinnerSelectionAlgorithmUnitTest {
         final int elementsPerList = 1000;
         final int limit = 1000;
         final int totalElements = numberOfLists * elementsPerList;
-        final List<List<CouponCache>> couponCaches = createCouponCaches();
+        final List<List<CouponEvent>> couponCaches = createCouponCaches();
         final List<Long> expectedResult = LongStream.rangeClosed(1, 1000)
             .boxed()
             .toList();
@@ -58,8 +58,8 @@ public class WinnerSelectionAlgorithmUnitTest {
         assertEquals(expectedResult, actualResult);
     }
 
-    private List<List<CouponCache>> createCouponCaches() {
-        final List<List<CouponCache>> couponCacheLists = new ArrayList<>();
+    private List<List<CouponEvent>> createCouponCaches() {
+        final List<List<CouponEvent>> couponCacheLists = new ArrayList<>();
         final int numberOfLists = 10;
         for (int idx = 0; idx < numberOfLists; idx++) {
             couponCacheLists.add(new ArrayList<>());
@@ -69,11 +69,11 @@ public class WinnerSelectionAlgorithmUnitTest {
         final int remained = elementsPerList * numberOfLists - limit;
         for (long timestamp = 1; timestamp <= limit; timestamp++) {
             final int order = (int) timestamp % numberOfLists;
-            couponCacheLists.get(order).add(new CouponCache(timestamp, timestamp));
+            couponCacheLists.get(order).add(new CouponEvent(timestamp, timestamp));
         }
         for (long timestamp = limit + 10000; timestamp <= limit + 10000 + remained; timestamp++) {
             final int order = (int) timestamp % numberOfLists;
-            couponCacheLists.get(order).add(new CouponCache(timestamp, timestamp));
+            couponCacheLists.get(order).add(new CouponEvent(timestamp, timestamp));
         }
         return couponCacheLists;
     }

@@ -31,7 +31,7 @@ public class BlockingQueueConfig {
             return new LinkedBlockingQueue<>();
         }
         if (PRIORITY_QUEUE.equals(queueType)) {
-            return new PriorityBlockingQueue<>();
+            return new PriorityBlockingQueue<>(queueCapacity);
         }
         return new LinkedBlockingQueue<>();
     }

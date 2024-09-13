@@ -1,4 +1,4 @@
-package project.dailyge.app.core.coupon.persistence;
+package project.dailyge.app.coupon.persistence;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.lettuce.core.RedisException;
@@ -54,7 +54,7 @@ class CouponEventWriteDao implements CouponCacheWriteRepository {
                 if (queueCountBytes == null) {
                     return null;
                 }
-                long count = Long.parseLong(new String(queueCountBytes, StandardCharsets.UTF_8));
+                final long count = Long.parseLong(new String(queueCountBytes, StandardCharsets.UTF_8));
                 for (long queueNumber = 1; queueNumber <= count; queueNumber++) {
                     redisTemplate.delete(getKey(queueNumber));
                 }

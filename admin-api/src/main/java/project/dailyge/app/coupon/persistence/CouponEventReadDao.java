@@ -1,4 +1,4 @@
-package project.dailyge.app.core.coupon.persistence;
+package project.dailyge.app.coupon.persistence;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.lettuce.core.RedisException;

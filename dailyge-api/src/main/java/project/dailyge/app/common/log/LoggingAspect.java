@@ -133,7 +133,8 @@ public class LoggingAspect {
     }
 
     private void increaseOrder() {
-        final int order = Integer.parseInt(MDC.get(LOG_ORDER));
+        final String logOrder = MDC.get(LOG_ORDER);
+        final int order = logOrder != null ? Integer.parseInt(logOrder) : 0;
         MDC.put(LOG_ORDER, String.valueOf(order + 1));
     }
 

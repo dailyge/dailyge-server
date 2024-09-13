@@ -12,6 +12,7 @@ public interface LogConstant {
     String TRACE_ID = "traceId";
     String PATH = "path";
     String METHOD = "method";
+    String LOG_ORDER_INI = "0";
     String LOG_ORDER = "logOrder";
     String ENTRANCE_LAYER = "Entrance";
     String IN_COMING = "(IN)";

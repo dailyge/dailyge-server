@@ -14,6 +14,7 @@ import static java.time.temporal.ChronoUnit.MILLIS;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
@@ -25,6 +26,7 @@ import static project.dailyge.app.constant.LogConstant.INFO;
 import static project.dailyge.app.constant.LogConstant.IN_COMING;
 import static project.dailyge.app.constant.LogConstant.IP;
 import static project.dailyge.app.constant.LogConstant.LOG_ORDER;
+import static project.dailyge.app.constant.LogConstant.LOG_ORDER_INI;
 import static project.dailyge.app.constant.LogConstant.METHOD;
 import static project.dailyge.app.constant.LogConstant.OUT_GOING;
 import static project.dailyge.app.constant.LogConstant.PATH;
@@ -40,6 +42,7 @@ import java.util.Base64;
 @Slf4j
 @Order(1)
 @Component
+@Profile("!test")
 public class MdcFilter implements Filter {
 
     private static final int USERNAME = 0;
@@ -82,7 +85,7 @@ public class MdcFilter implements Filter {
         try {
             MDC.put(TRACE_ID, traceId);
             MDC.put(IP, userIp);
-            MDC.put(LOG_ORDER, "0");
+            MDC.put(LOG_ORDER, LOG_ORDER_INI);
             MDC.put(METHOD, method);
             MDC.put(PATH, path);
 

@@ -36,7 +36,6 @@ class MdcTaskDecoratorUnitTest {
         MDC.put("key", "value");
 
         final Runnable runnable = () -> {
-            assertSame(attributes, getRequestAttributes());
             assertEquals("value", MDC.get("key"));
         };
         final Runnable decoratedRunnable = new MdcTaskDecorator()

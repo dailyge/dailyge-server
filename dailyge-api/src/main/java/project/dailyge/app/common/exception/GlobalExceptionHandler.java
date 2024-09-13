@@ -134,7 +134,8 @@ public class GlobalExceptionHandler {
     }
 
     private void incrementLogOrder() {
-        int order = Integer.parseInt(MDC.get(LOG_ORDER));
+        final String logOrder = MDC.get(LOG_ORDER);
+        final int order = logOrder != null ? Integer.parseInt(logOrder) : 0;
         MDC.put(LOG_ORDER, String.valueOf(order + 1));
     }
 }

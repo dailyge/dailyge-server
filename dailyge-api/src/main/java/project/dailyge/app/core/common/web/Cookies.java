@@ -20,10 +20,7 @@ public final class Cookies {
 
     public boolean isLoggedIn() {
         final String loggedIn = getValueByKey("Logged-In");
-        if (loggedIn == null || loggedIn.equals("no")) {
-            return false;
-        }
-        return true;
+        return loggedIn != null && loggedIn.equals("yes");
     }
 
     public String getValueByKey(final String key) {

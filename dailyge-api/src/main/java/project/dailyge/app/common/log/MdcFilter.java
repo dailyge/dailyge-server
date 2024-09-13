@@ -7,8 +7,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import static jakarta.servlet.http.HttpServletResponse.SC_UNAUTHORIZED;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.time.temporal.ChronoUnit.MILLIS;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +15,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
 import project.dailyge.app.common.auth.DailygeUser;
 import static project.dailyge.app.common.auth.DailygeUser.getDailygeUser;
 import static project.dailyge.app.common.utils.IpUtils.extractIpAddress;
@@ -50,16 +47,13 @@ public class MdcFilter implements Filter {
     private static final String DELIMITER = ":";
     private static final String DAILYGE_USER = "dailyge-user";
 
-    private final String env;
     private final String username;
     private final String password;
 
     public MdcFilter(
-        @Value("${env}") final String env,
         @Value("${basic-auth.username}") final String username,
         @Value("${basic-auth.password}") final String password
     ) {
-        this.env = env;
         this.username = username;
         this.password = password;
     }
@@ -70,12 +64,6 @@ public class MdcFilter implements Filter {
         final ServletResponse servletResponse,
         final FilterChain filterChain
     ) throws IOException, ServletException {
-        if ("dev".equals(env)) {
-            if (!isValidRequest(servletRequest)) {
-                ((HttpServletResponse) servletResponse).sendError(SC_UNAUTHORIZED, UN_AUTHORIZED.message());
-                return;
-            }
-        }
         final String traceId = createTimeBasedUUID();
         final String userIp = extractIpAddress((HttpServletRequest) servletRequest);
         final HttpServletRequest request = (HttpServletRequest) servletRequest;

@@ -38,7 +38,7 @@ class TaskWriteService implements TaskWriteUseCase {
         final DailygeUser dailygeUser,
         final LocalDate date
     ) {
-//        validator.validateMonthlyPlan(dailygeUser.getUserId(), date);
+        validator.validateMonthlyPlan(dailygeUser.getUserId(), date);
         final List<MonthlyTaskJpaEntity> monthlyTasks = createMonthlyTasks(dailygeUser.getId(), date.getYear());
         monthlyTaskWriteRepository.saveAll(monthlyTasks);
     }

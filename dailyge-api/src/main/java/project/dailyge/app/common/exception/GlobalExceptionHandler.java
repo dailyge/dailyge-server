@@ -2,6 +2,7 @@ package project.dailyge.app.common.exception;
 
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -28,6 +29,12 @@ public class GlobalExceptionHandler {
 
     private static final String ERROR_LOG_FORMAT =
         "{\"order\":\"{}\", \"traceId\":\"{}\", \"code\":\"{}\", \"message\":\"{}\", \"detailMessage\":\"{}\", \"time\":\"{}\", \"level\":\"{}\"}";
+
+    private final String env;
+
+    public GlobalExceptionHandler(@Value("${env}") final String env) {
+        this.env = env;
+    }
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResponse> resolveIllegalArgumentException(final IllegalArgumentException exception) {
@@ -116,21 +123,23 @@ public class GlobalExceptionHandler {
         final CodeAndMessage codeAndMessage,
         final Exception exception
     ) {
-        incrementLogOrder();
-        final int code = codeAndMessage.code();
-        final String message = codeAndMessage.message();
-        final String detailMessage = exception.getMessage();
-        final LocalDateTime time = LocalDateTime.now();
-        log.error(
-            ERROR_LOG_FORMAT,
-            Integer.parseInt(MDC.get(LOG_ORDER)),
-            MDC.get(TRACE_ID),
-            code,
-            message,
-            detailMessage,
-            time,
-            ERROR
-        );
+        if (!"test".equals(env)) {
+            incrementLogOrder();
+            final int code = codeAndMessage.code();
+            final String message = codeAndMessage.message();
+            final String detailMessage = exception.getMessage();
+            final LocalDateTime time = LocalDateTime.now();
+            log.error(
+                ERROR_LOG_FORMAT,
+                Integer.parseInt(MDC.get(LOG_ORDER)),
+                MDC.get(TRACE_ID),
+                code,
+                message,
+                detailMessage,
+                time,
+                ERROR
+            );
+        }
     }
 
     private void incrementLogOrder() {

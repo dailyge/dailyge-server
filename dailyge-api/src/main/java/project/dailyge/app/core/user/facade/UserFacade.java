@@ -16,7 +16,6 @@ import project.dailyge.core.cache.user.UserCacheWriteUseCase;
 import project.dailyge.entity.common.EventPublisher;
 import project.dailyge.entity.task.TaskEvent;
 import project.dailyge.entity.user.UserEvent;
-import project.dailyge.entity.user.UserJpaEntity;
 import static project.dailyge.document.common.UuidGenerator.createTimeBasedUUID;
 import static project.dailyge.entity.common.EventType.CREATE;
 import static project.dailyge.entity.common.EventType.UPDATE;
@@ -90,10 +89,6 @@ public class UserFacade {
             );
             userCacheWriteUseCase.save(userCache);
         }
-    }
-
-    public void updateCache(final Long userId) {
-        updateCache(userId, null);
     }
 
     public void updateCache(

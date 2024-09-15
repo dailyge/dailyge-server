@@ -5,14 +5,11 @@ public interface LuaScript {
         "local cache_key = KEYS[1] "
             + "local blacklist_key = KEYS[2] "
             + "local cache = redis.call('GET', cache_key) "
-            + "if cache then "
-            + "    local is_blacklisted = redis.call('EXISTS', blacklist_key) "
-            + "    if is_blacklisted == 1 then "
-            + "        return nil "
-            + "    else "
-            + "        return cache "
-            + "    end "
-            + "else "
+            + "if not cache then "
             + "    return nil "
-            + "end";
+            + "end "
+            + "if redis.call('EXISTS', blacklist_key) == 1 then "
+            + "    return nil "
+            + "end "
+            + "return cache ";
 }

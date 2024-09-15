@@ -11,7 +11,11 @@ public final class RedisExceptionUtils {
         final Runnable runnable
     ) {
         if (message.contains("NOSCRIPT")) {
-            runnable.run();
+            reRegisterSha1(runnable);
         }
+    }
+
+    private static void reRegisterSha1(final Runnable runnable) {
+        runnable.run();
     }
 }

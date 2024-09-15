@@ -12,7 +12,10 @@ public class WinnerSelectAlgorithm {
         private final int queueOrder;
         private final int positionInQueue;
 
-        private CouponNode(final CouponEvent couponEvent, final int queueOrder, final int positionInQueue) {
+        private CouponNode(final CouponEvent couponEvent,
+                           final int queueOrder,
+                           final int positionInQueue
+        ) {
             this.couponEvent = couponEvent;
             this.queueOrder = queueOrder;
             this.positionInQueue = positionInQueue;
@@ -24,13 +27,20 @@ public class WinnerSelectAlgorithm {
         }
     }
 
-    public static List<Long> mergeSortedQueues(List<List<CouponEvent>> sortedCouponQueues, int limit) {
+    public static List<Long> mergeSortedQueues(
+        final List<List<CouponEvent>> sortedCouponQueues,
+        final int limit
+    ) {
         final PriorityQueue<CouponNode> minHeap = new PriorityQueue<>();
         addAllFirstElements(sortedCouponQueues, minHeap);
         return findSmallestElements(sortedCouponQueues, limit, minHeap);
     }
 
-    private static List<Long> findSmallestElements(List<List<CouponEvent>> couponEvents, int limit, PriorityQueue<CouponNode> minHeap) {
+    private static List<Long> findSmallestElements(
+        final List<List<CouponEvent>> couponEvents,
+        final int limit,
+        final PriorityQueue<CouponNode> minHeap
+    ) {
         final List<Long> mergedResult = new ArrayList<>();
         while (mergedResult.size() < limit && !minHeap.isEmpty()) {
             final CouponNode topNode = minHeap.poll();

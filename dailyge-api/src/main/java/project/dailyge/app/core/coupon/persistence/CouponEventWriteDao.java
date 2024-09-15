@@ -9,9 +9,9 @@ import project.dailyge.app.common.exception.CommonException;
 import project.dailyge.core.cache.coupon.CouponEvent;
 import project.dailyge.core.cache.coupon.CouponEventWriteRepository;
 
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_GATEWAY;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
 import static project.dailyge.common.configuration.CompressionHelper.compressAsByteArrayWithZstd;
@@ -50,11 +50,11 @@ class CouponEventWriteDao implements CouponEventWriteRepository {
         try {
             redisTemplate.execute(connection -> {
                 connection.openPipeline();
-                byte[] queueCountBytes = redisTemplate.opsForValue().get(QUEUE_COUNT_KEY);
+                final byte[] queueCountBytes = redisTemplate.opsForValue().get(QUEUE_COUNT_KEY);
                 if (queueCountBytes == null) {
                     return null;
                 }
-                long count = Long.parseLong(new String(queueCountBytes, StandardCharsets.UTF_8));
+                final long count = Long.parseLong(new String(queueCountBytes, UTF_8));
                 for (long queueNumber = 1; queueNumber <= count; queueNumber++) {
                     redisTemplate.delete(getKey(queueNumber));
                 }

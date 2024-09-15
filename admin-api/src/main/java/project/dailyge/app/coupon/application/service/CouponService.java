@@ -20,7 +20,10 @@ class CouponService implements CouponUseCase {
     private final CouponEventReadRepository couponEventReadRepository;
 
     @Override
-    public List<Long> findWinners(final int winnerCount, final Long couponCategoryId) {
+    public List<Long> findWinners(
+        final int winnerCount,
+        final Long couponCategoryId
+    ) {
         if (couponEventReadRepository.hasSelectionRun()) {
             throw CouponTypeException.from(DUPLICATED_WINNER_SELECTION);
         }
@@ -38,5 +41,4 @@ class CouponService implements CouponUseCase {
         final List<Long> userIds = WinnerSelectAlgorithm.mergeSortedQueues(sortedQueues, winnerCount);
         return userIds;
     }
-
 }

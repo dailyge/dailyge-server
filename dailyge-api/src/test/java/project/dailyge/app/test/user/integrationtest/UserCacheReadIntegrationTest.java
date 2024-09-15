@@ -2,9 +2,9 @@ package project.dailyge.app.test.user.integrationtest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import static java.lang.System.nanoTime;
+import static java.util.Objects.requireNonNull;
 import static java.util.concurrent.Executors.newFixedThreadPool;
 import static java.util.concurrent.TimeUnit.NANOSECONDS;
-import static org.junit.Assert.assertNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -64,14 +64,15 @@ class UserCacheReadIntegrationTest extends DatabaseTestBase {
         + "return cache ";
 
     @AfterEach
-    void afterEach() {
+    @Override
+    protected void afterEach() {
         flushScript();
         loadScriptAndGetSha();
     }
 
     @Test
     @DisplayName("레디스 서버 다운으로 스크립트가 초기화가 된 후, 재 등록하면 해시 값은 언제나 동일하다.")
-    public void givenRedisServerDownAndFlushedScriptWhenReRegisterScriptThenHashMustBeEquals() {
+    void givenRedisServerDownAndFlushedScriptWhenReRegisterScriptThenHashMustBeEquals() {
         final String originSha1 = loadScriptAndGetSha();
         for (int index = 1; index <= 100; index++) {
             flushScript();
@@ -82,7 +83,7 @@ class UserCacheReadIntegrationTest extends DatabaseTestBase {
 
     @Test
     @DisplayName("LuaScript를 빈으로 등록하면, 레디스에 등록된다.")
-    public void whenRegisterLuaScriptThenResultShouldExists() {
+    void whenRegisterLuaScriptThenResultShouldExists() {
         final List<Boolean> result = redisTemplate.execute((RedisCallback<List<Boolean>>) connection ->
             connection.scriptingCommands().scriptExists(scriptSha)
         );
@@ -91,14 +92,14 @@ class UserCacheReadIntegrationTest extends DatabaseTestBase {
 
     @Test
     @DisplayName("존재하지 않는 루아 스크립트를 조회하면 false가 반환된다.")
-    public void whenNotRegisterLuaScriptThenResultShouldNull() {
+    void whenNotRegisterLuaScriptThenResultShouldNull() {
         final List<Boolean> invalidResult = redisTemplate.execute((RedisCallback<List<Boolean>>) connection ->
             connection.scriptingCommands().scriptExists("INVALID_SCRIPT")
         );
         assertAll(
             () -> Assertions.assertNotNull(invalidResult),
-            () -> Assertions.assertFalse(invalidResult.isEmpty()),
-            () -> Assertions.assertFalse(invalidResult.get(0))
+            () -> Assertions.assertFalse(requireNonNull(invalidResult).isEmpty()),
+            () -> Assertions.assertFalse(requireNonNull(invalidResult).get(0))
         );
     }
 
@@ -115,7 +116,7 @@ class UserCacheReadIntegrationTest extends DatabaseTestBase {
         userCacheWriteDao.save(userCache);
         final String blackListKey = String.format("user:blacklist:%d", userCache.getId());
         redisTemplate.opsForValue().set(blackListKey, compressAsByteArrayWithZstd(userCache, objectMapper));
-        assertNull(userCacheReadUseCase.findById(userCache.getId()));
+        Assertions.assertNull(userCacheReadUseCase.findById(userCache.getId()));
     }
 
     @Test

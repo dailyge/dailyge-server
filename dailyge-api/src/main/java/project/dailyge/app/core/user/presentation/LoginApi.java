@@ -44,14 +44,13 @@ public class LoginApi {
     }
 
     @GetMapping(path = "/oauth2")
-    public ApiResponse<OAuthLoginResponse> login(@RequestParam("code") final String code) {
+    public ApiResponse<Void> login(@RequestParam("code") final String code) {
         final DailygeToken dailygeToken = userFacade.login(code);
         final HttpHeaders headers = new HttpHeaders();
         headers.add(SET_COOKIE, dailygeToken.getAccessTokenCookie(env));
         headers.add(SET_COOKIE, dailygeToken.getRefreshTokenCookie(env));
         headers.add(SET_COOKIE, createResponseCookie("Logged-In", "yes", "/", dailygeToken.accessTokenMaxAge(), false, env));
-        final OAuthLoginResponse payload = new OAuthLoginResponse(dailygeToken.accessToken());
-        return ApiResponse.from(OK, headers, payload);
+        return ApiResponse.from(OK, headers, null);
     }
 
     @PostMapping(path = "/logout")

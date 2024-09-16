@@ -83,12 +83,21 @@ public class UserFacade {
 
     public void saveCache(final UserEvent event) {
         if (CREATE.equals(event.getEventType())) {
-            final String findEmail = userReadUseCase.findEmailByUserId(event.getPublisher());
-            final UserCache userCache = new UserCache(
-                event.getPublisher(), findEmail, findEmail, FIXED_IMAGE_URL, NORMAL.name()
-            );
-            userCacheWriteUseCase.save(userCache);
+            saveCache(event.getPublisher());
         }
+        if (UPDATE.equals(event.getEventType())) {
+            if (userCacheReadUseCase.existsById(event.getPublisher())) {
+                saveCache(event.getPublisher());
+            }
+        }
+    }
+
+    private void saveCache(final Long userId) {
+        final String findEmail = userReadUseCase.findEmailByUserId(userId);
+        final UserCache userCache = new UserCache(
+            userId, findEmail, findEmail, FIXED_IMAGE_URL, NORMAL.name()
+        );
+        userCacheWriteUseCase.save(userCache);
     }
 
     public void updateCache(

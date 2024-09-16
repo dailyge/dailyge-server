@@ -8,6 +8,7 @@ import project.dailyge.core.cache.coupon.CouponEvent;
 import project.dailyge.core.cache.coupon.CouponEventReadRepository;
 import project.dailyge.core.cache.coupon.CouponEventWriteRepository;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Queue;
 import java.util.stream.IntStream;
@@ -30,16 +31,20 @@ class CouponService implements CouponUseCase {
         }
         couponEventWriteRepository.increaseSelectionRunCount();
         final List<Long> winnerIds = selectWinners(winnerCount);
-        couponEventWriteRepository.deleteAllBulks();
+        if (!winnerIds.isEmpty()) {
+            couponEventWriteRepository.deleteAllBulks();
+        }
         return winnerIds;
     }
 
     private List<Long> selectWinners(final int winnerCount) {
         final int queueCount = couponEventReadRepository.findQueueCount();
+        if (queueCount == 0) {
+            return Collections.emptyList();
+        }
         final List<Queue<CouponEvent>> sortedQueues = IntStream.rangeClosed(1, queueCount)
             .mapToObj(couponEventReadRepository::findBulks)
             .toList();
-        final List<Long> userIds = KWayMergeAlgorithm.selectWinners(sortedQueues, winnerCount);
-        return userIds;
+        return KWayMergeAlgorithm.selectWinners(sortedQueues, winnerCount);
     }
 }

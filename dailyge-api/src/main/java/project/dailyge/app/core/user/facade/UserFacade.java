@@ -86,7 +86,7 @@ public class UserFacade {
             saveCache(event.getPublisher());
         }
         if (UPDATE.equals(event.getEventType())) {
-            if (userCacheReadUseCase.existsById(event.getPublisher())) {
+            if (!userCacheReadUseCase.existsById(event.getPublisher())) {
                 saveCache(event.getPublisher());
             }
         }

@@ -22,20 +22,18 @@ import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import project.dailyge.app.DailygeApplication;
+import static project.dailyge.app.common.RestAssureConfig.initObjectMapper;
+import static project.dailyge.app.common.RestAssureConfig.initSpecificationConfig;
 import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.core.user.application.UserWriteUseCase;
+import static project.dailyge.app.test.user.fixture.UserFixture.EMAIL;
+import static project.dailyge.app.test.user.fixture.UserFixture.createUser;
 import project.dailyge.core.cache.user.UserCache;
 import project.dailyge.core.cache.user.UserCacheWriteUseCase;
+import static project.dailyge.entity.user.Role.NORMAL;
 import project.dailyge.entity.user.UserJpaEntity;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-
-import static project.dailyge.app.common.RestAssureConfig.initObjectMapper;
-import static project.dailyge.app.common.RestAssureConfig.initSpecificationConfig;
-import static project.dailyge.app.test.user.fixture.UserFixture.EMAIL;
-import static project.dailyge.app.test.user.fixture.UserFixture.createUser;
-import static project.dailyge.entity.user.Role.NORMAL;
 
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs
@@ -50,7 +48,6 @@ public abstract class DatabaseTestBase {
 
     protected static final String IDENTIFIER = "{class_name}/{method_name}";
     protected static final String USER_ID_KEY = "dailyge_user_id";
-    protected static final String AUTHORIZATION = "Authorization";
 
     @LocalServerPort
     protected int port;
@@ -73,7 +70,6 @@ public abstract class DatabaseTestBase {
     protected DailygeUser dailygeUser;
     protected final DailygeUser invalidUser = new DailygeUser(Long.MAX_VALUE, NORMAL);
     protected LocalDate now;
-    protected LocalDateTime nowTime;
 
     protected DatabaseTestBase() {
         this.objectMapper = initObjectMapper();
@@ -93,7 +89,7 @@ public abstract class DatabaseTestBase {
     }
 
     @AfterEach
-    void afterEach() {
+    protected void afterEach() {
         RestAssured.reset();
     }
 
@@ -102,7 +98,7 @@ public abstract class DatabaseTestBase {
     }
 
     @Transactional
-    protected UserJpaEntity persist(final UserJpaEntity user) {
+    protected void persist(final UserJpaEntity user) {
         userWriteUseCase.save(user);
         newUser = user;
         final UserCache userCache = new UserCache(
@@ -114,7 +110,6 @@ public abstract class DatabaseTestBase {
         );
         userCacheWriteUseCase.save(userCache);
         dailygeUser = new DailygeUser(user.getId(), user.getRole());
-        return user;
     }
 
     protected Cookie getCouponCookie() {

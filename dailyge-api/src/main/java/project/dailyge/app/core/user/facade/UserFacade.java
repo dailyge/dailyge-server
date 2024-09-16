@@ -6,20 +6,21 @@ import project.dailyge.app.common.auth.DailygeToken;
 import project.dailyge.app.common.auth.TokenProvider;
 import project.dailyge.app.core.user.application.UserReadUseCase;
 import project.dailyge.app.core.user.application.UserWriteUseCase;
+import project.dailyge.app.core.user.application.command.UserUpdateCommand;
 import project.dailyge.app.core.user.external.oauth.GoogleOAuthManager;
 import project.dailyge.app.core.user.external.oauth.TokenManager;
 import project.dailyge.app.core.user.external.response.GoogleUserInfoResponse;
 import project.dailyge.core.cache.user.UserCache;
+import project.dailyge.core.cache.user.UserCacheReadUseCase;
 import project.dailyge.core.cache.user.UserCacheWriteUseCase;
-import static project.dailyge.document.common.UuidGenerator.createTimeBasedUUID;
 import project.dailyge.entity.common.EventPublisher;
+import project.dailyge.entity.task.TaskEvent;
+import project.dailyge.entity.user.UserEvent;
+import static project.dailyge.document.common.UuidGenerator.createTimeBasedUUID;
 import static project.dailyge.entity.common.EventType.CREATE;
 import static project.dailyge.entity.common.EventType.UPDATE;
-import project.dailyge.entity.task.TaskEvent;
 import static project.dailyge.entity.user.Role.NORMAL;
-import project.dailyge.entity.user.UserEvent;
 import static project.dailyge.entity.user.UserEvent.createEvent;
-import project.dailyge.entity.user.UserJpaEntity;
 
 @RequiredArgsConstructor
 @FacadeLayer(value = "UserFacade")
@@ -34,6 +35,7 @@ public class UserFacade {
     private final TokenManager tokenManager;
     private final EventPublisher<UserEvent> userEventPublisher;
     private final EventPublisher<TaskEvent> taskEventEventPublisher;
+    private final UserCacheReadUseCase userCacheReadUseCase;
     private final UserCacheWriteUseCase userCacheWriteUseCase;
 
     public DailygeToken login(final String code) {
@@ -86,12 +88,28 @@ public class UserFacade {
                 event.getPublisher(), findEmail, findEmail, FIXED_IMAGE_URL, NORMAL.name()
             );
             userCacheWriteUseCase.save(userCache);
-            return;
         }
-        final UserJpaEntity findUser = userReadUseCase.findActiveUserById(event.getPublisher());
-        final UserCache userCache = new UserCache(
-            event.getPublisher(), findUser.getNickname(), findUser.getEmail(), FIXED_IMAGE_URL, NORMAL.name()
+    }
+
+    public void updateCache(
+        final Long userId,
+        final String nickname
+    ) {
+        final UserCache userCache = userCacheReadUseCase.findById(userId);
+        final UserCache updateUserCache = new UserCache(
+            userId,
+            nickname != null ? nickname : userCache.getNickname(),
+            userCache.getEmail(),
+            userCache.getProfileImageUrl(),
+            userCache.getRole()
         );
-        userCacheWriteUseCase.save(userCache);
+        userCacheWriteUseCase.save(updateUserCache);
+    }
+
+    public void updateUser(
+        final Long userId,
+        final UserUpdateCommand command
+    ) {
+        updateCache(userId, command.nickname());
     }
 }

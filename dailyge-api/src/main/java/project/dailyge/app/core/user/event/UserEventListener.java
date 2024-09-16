@@ -7,8 +7,8 @@ import project.dailyge.app.core.user.facade.UserFacade;
 import project.dailyge.document.event.EventDocument;
 import project.dailyge.document.event.EventDocumentWriteRepository;
 import project.dailyge.entity.common.EventPublisher;
-import static project.dailyge.entity.common.EventType.CREATE;
 import project.dailyge.entity.user.UserEvent;
+import static project.dailyge.entity.common.EventType.CREATE;
 import static project.dailyge.entity.user.UserEvent.createEventWithIncreasedPublishCount;
 
 @EventLayer

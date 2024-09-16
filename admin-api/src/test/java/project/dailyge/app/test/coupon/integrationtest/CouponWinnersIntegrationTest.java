@@ -11,12 +11,13 @@ import project.dailyge.app.coupon.application.CouponUseCase;
 import project.dailyge.app.coupon.exception.CouponTypeException;
 import project.dailyge.app.test.coupon.fixture.CouponFixture;
 import project.dailyge.core.cache.coupon.CouponEvent;
+import project.dailyge.core.cache.coupon.CouponEventReadRepository;
 import project.dailyge.core.cache.coupon.CouponEventWriteRepository;
 
 import java.util.List;
+import java.util.Queue;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("[IntegrationTest] 선착순 쿠폰 당첨자 선정 통합테스트")
 public class CouponWinnersIntegrationTest extends DatabaseTestBase {
@@ -29,6 +30,9 @@ public class CouponWinnersIntegrationTest extends DatabaseTestBase {
     @Autowired
     private RedisTemplate<String, byte[]> redisTemplate;
 
+    @Autowired
+    private CouponEventReadRepository couponEventReadRepository;
+
     @BeforeEach
     void setUp() {
         redisTemplate.execute((RedisCallback<Object>) connection -> {
@@ -36,8 +40,8 @@ public class CouponWinnersIntegrationTest extends DatabaseTestBase {
             return null;
         });
         //요청 벌크들이 Redis에 저장된 상태 구현
-        final List<List<CouponEvent>> couponEventLists = CouponFixture.createCouponEventLists();
-        for (List<CouponEvent> couponEvents : couponEventLists) {
+        final List<Queue<CouponEvent>> couponEventLists = CouponFixture.createCouponEventLists();
+        for (Queue<CouponEvent> couponEvents : couponEventLists) {
             couponEventWriteRepository.saveBulks(couponEvents);
         }
     }
@@ -54,5 +58,12 @@ public class CouponWinnersIntegrationTest extends DatabaseTestBase {
     void whenAlreadyRunsWinnerSelectionThenThrows() {
         couponEventWriteRepository.increaseSelectionRunCount();
         assertThrows(CouponTypeException.class, () -> couponUseCase.findWinners(1000, 1L));
+    }
+
+    @Test
+    @DisplayName("쿠폰 발급 데이터 큐가 비어져 있으면 빈 큐를 반환한다.")
+    void whenQueueIsEmptyThenReturnEmptyList() {
+        final Queue<CouponEvent> bulks = couponEventReadRepository.findBulks(0);
+        assertTrue(bulks.isEmpty());
     }
 }

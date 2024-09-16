@@ -9,7 +9,7 @@ import project.dailyge.app.common.exception.CommonException;
 import project.dailyge.core.cache.coupon.CouponEvent;
 import project.dailyge.core.cache.coupon.CouponEventWriteRepository;
 
-import java.util.List;
+import java.util.Queue;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_GATEWAY;
@@ -27,7 +27,7 @@ class CouponEventWriteDao implements CouponEventWriteRepository {
     private final ObjectMapper objectMapper;
 
     @Override
-    public void saveBulks(final List<CouponEvent> couponCaches) {
+    public void saveBulks(final Queue<CouponEvent> couponCaches) {
         final CouponEventBulks couponEventBulks = new CouponEventBulks(couponCaches);
         try {
             redisTemplate.execute(connection -> {

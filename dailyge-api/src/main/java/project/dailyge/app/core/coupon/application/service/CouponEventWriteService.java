@@ -8,7 +8,10 @@ import project.dailyge.core.cache.coupon.CouponEvent;
 import project.dailyge.core.cache.coupon.CouponEventWriteRepository;
 import project.dailyge.core.cache.coupon.CouponEventWriteUseCase;
 
+import java.util.ArrayDeque;
 import java.util.List;
+import java.util.Queue;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @ApplicationLayer(value = "CouponEventWriteService")
@@ -22,9 +25,9 @@ class CouponEventWriteService implements CouponEventWriteUseCase {
         if (participants.isEmpty()) {
             return;
         }
-        final List<CouponEvent> couponCaches = participants.stream()
+        final Queue<CouponEvent> couponCaches = participants.stream()
             .map(participant -> new CouponEvent(participant.getUserId(), participant.getTimestamp()))
-            .toList();
+            .collect(Collectors.toCollection(ArrayDeque::new));
         couponEventWriteRepository.saveBulks(couponCaches);
     }
 }

@@ -9,6 +9,7 @@ import project.dailyge.core.cache.coupon.CouponEventReadRepository;
 import project.dailyge.core.cache.coupon.CouponEventWriteRepository;
 
 import java.util.List;
+import java.util.Queue;
 import java.util.stream.IntStream;
 
 import static project.dailyge.app.coupon.exception.CouponCodeAndMessage.DUPLICATED_WINNER_SELECTION;
@@ -35,7 +36,7 @@ class CouponService implements CouponUseCase {
 
     private List<Long> selectWinners(final int winnerCount) {
         final int queueCount = couponEventReadRepository.findQueueCount();
-        final List<List<CouponEvent>> sortedQueues = IntStream.rangeClosed(1, queueCount)
+        final List<Queue<CouponEvent>> sortedQueues = IntStream.rangeClosed(1, queueCount)
             .mapToObj(couponEventReadRepository::findBulks)
             .toList();
         final List<Long> userIds = WinnerSelectAlgorithm.mergeSortedQueues(sortedQueues, winnerCount);

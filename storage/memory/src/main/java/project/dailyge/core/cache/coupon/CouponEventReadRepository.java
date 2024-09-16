@@ -1,13 +1,11 @@
 package project.dailyge.core.cache.coupon;
 
-import java.util.List;
+import java.util.Queue;
 
 public interface CouponEventReadRepository {
     boolean existsByUserId(Long userId);
 
-    List<CouponEvent> findBulks(int count);
-
-    List<CouponEvent> findBulksByLimit(int queueNumber, int limit);
+    Queue<CouponEvent> findBulks(int count);
 
     Integer findQueueCount();
 

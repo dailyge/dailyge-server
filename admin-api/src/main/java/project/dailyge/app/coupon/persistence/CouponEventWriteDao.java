@@ -10,7 +10,7 @@ import project.dailyge.core.cache.coupon.CouponEvent;
 import project.dailyge.core.cache.coupon.CouponEventWriteRepository;
 
 import java.nio.charset.StandardCharsets;
-import java.util.List;
+import java.util.Queue;
 
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_GATEWAY;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
@@ -27,7 +27,7 @@ class CouponEventWriteDao implements CouponEventWriteRepository {
     private final ObjectMapper objectMapper;
 
     @Override
-    public void saveBulks(final List<CouponEvent> couponCaches) {
+    public void saveBulks(final Queue<CouponEvent> couponCaches) {
         final CouponEventBulks couponEventBulks = new CouponEventBulks(couponCaches);
         try {
             redisTemplate.execute(connection -> {
@@ -50,7 +50,7 @@ class CouponEventWriteDao implements CouponEventWriteRepository {
         try {
             redisTemplate.execute(connection -> {
                 connection.openPipeline();
-                byte[] queueCountBytes = redisTemplate.opsForValue().get(QUEUE_COUNT_KEY);
+                final byte[] queueCountBytes = redisTemplate.opsForValue().get(QUEUE_COUNT_KEY);
                 if (queueCountBytes == null) {
                     return null;
                 }

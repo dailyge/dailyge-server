@@ -5,20 +5,18 @@ import project.dailyge.core.cache.coupon.CouponEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
+import java.util.Queue;
 
 public class WinnerSelectAlgorithm {
     static class CouponNode implements Comparable<CouponNode> {
         private final CouponEvent couponEvent;
         private final int queueOrder;
-        private final int positionInQueue;
 
         private CouponNode(final CouponEvent couponEvent,
-                           final int queueOrder,
-                           final int positionInQueue
+                           final int queueOrder
         ) {
             this.couponEvent = couponEvent;
             this.queueOrder = queueOrder;
-            this.positionInQueue = positionInQueue;
         }
 
         @Override
@@ -28,7 +26,7 @@ public class WinnerSelectAlgorithm {
     }
 
     public static List<Long> mergeSortedQueues(
-        final List<List<CouponEvent>> sortedCouponQueues,
+        final List<Queue<CouponEvent>> sortedCouponQueues,
         final int limit
     ) {
         final PriorityQueue<CouponNode> minHeap = new PriorityQueue<>();
@@ -37,7 +35,7 @@ public class WinnerSelectAlgorithm {
     }
 
     private static List<Long> findSmallestElements(
-        final List<List<CouponEvent>> couponEvents,
+        final List<Queue<CouponEvent>> couponEvents,
         final int limit,
         final PriorityQueue<CouponNode> minHeap
     ) {
@@ -46,22 +44,21 @@ public class WinnerSelectAlgorithm {
             final CouponNode topNode = minHeap.poll();
             mergedResult.add(topNode.couponEvent.getUserId());
             final int currentQueueOrder = topNode.queueOrder;
-            final int nextPositionInQueue = topNode.positionInQueue + 1;
-            final List<CouponEvent> currentQueue = couponEvents.get(currentQueueOrder);
-            if (nextPositionInQueue < currentQueue.size()) {
-                final CouponEvent nextCoupon = currentQueue.get(nextPositionInQueue);
-                minHeap.offer(new CouponNode(nextCoupon, currentQueueOrder, nextPositionInQueue));
+            final Queue<CouponEvent> currentQueue = couponEvents.get(currentQueueOrder);
+            if (!currentQueue.isEmpty()) {
+                final CouponEvent nextCoupon = currentQueue.poll();
+                minHeap.offer(new CouponNode(nextCoupon, currentQueueOrder));
             }
         }
         return mergedResult;
     }
 
-    private static void addAllFirstElements(List<List<CouponEvent>> couponEvents, PriorityQueue<CouponNode> minHeap) {
-        for (int queueOrder = 0; queueOrder < couponEvents.size(); queueOrder++) {
-            final List<CouponEvent> currentQueue = couponEvents.get(queueOrder);
+    private static void addAllFirstElements(List<Queue<CouponEvent>> couponQueues, PriorityQueue<CouponNode> minHeap) {
+        for (int queueOrder = 0; queueOrder < couponQueues.size(); queueOrder++) {
+            final Queue<CouponEvent> currentQueue = couponQueues.get(queueOrder);
             if (!currentQueue.isEmpty()) {
-                final CouponEvent firstCoupon = currentQueue.get(0);
-                minHeap.offer(new CouponNode(firstCoupon, queueOrder, 0));
+                final CouponEvent firstCoupon = currentQueue.poll();
+                minHeap.offer(new CouponNode(firstCoupon, queueOrder));
             }
         }
     }

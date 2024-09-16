@@ -10,8 +10,8 @@ import project.dailyge.core.cache.coupon.CouponEvent;
 import project.dailyge.core.cache.coupon.CouponEventReadRepository;
 
 import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.Objects;
+import java.util.ArrayDeque;
+import java.util.Queue;
 
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_GATEWAY;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
@@ -40,16 +40,15 @@ class CouponEventReadDao implements CouponEventReadRepository {
     }
 
     @Override
-    public List<CouponEvent> findBulks(final int queueNumber) {
+    public Queue<CouponEvent> findBulks(final int queueNumber) {
+        final byte[] queueBytes = redisTemplate.opsForValue().get(getKey(queueNumber));
+        if (queueBytes == null) {
+            return new ArrayDeque<>();
+        }
         final CouponEventBulks couponEventBulks = decompressAsObjWithZstd(
-            Objects.requireNonNull(redisTemplate.opsForValue().get(getKey(queueNumber))),
+            queueBytes,
             CouponEventBulks.class, objectMapper);
         return couponEventBulks.couponCaches();
-    }
-
-    @Override
-    public List<CouponEvent> findBulksByLimit(final int queueNumber, final int limit) {
-        return findBulks(queueNumber).subList(0, limit);
     }
 
     @Override

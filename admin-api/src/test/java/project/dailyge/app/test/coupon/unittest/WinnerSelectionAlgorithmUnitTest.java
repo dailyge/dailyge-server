@@ -2,29 +2,34 @@ package project.dailyge.app.test.coupon.unittest;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import project.dailyge.app.coupon.application.service.WinnerSelectAlgorithm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import project.dailyge.app.coupon.application.service.KWayMergeAlgorithm;
+import project.dailyge.app.coupon.application.service.LimitedTopKMergeAlgorithm;
 import project.dailyge.app.test.coupon.fixture.CouponFixture;
 import project.dailyge.core.cache.coupon.CouponEvent;
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 
+import static java.lang.System.nanoTime;
+import static java.util.concurrent.TimeUnit.NANOSECONDS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
-@DisplayName("[UnitTest] WinnerSelectionAlgorithm 단위 테스트")
+@DisplayName("[UnitTest] 당첨자 선정 알고리즘 단위 테스트")
 public class WinnerSelectionAlgorithmUnitTest {
+    private static final Logger log = LoggerFactory.getLogger(WinnerSelectionAlgorithmUnitTest.class);
 
     @Test
     @DisplayName("각 리스트들이 비어 있으면 빈 리스트를 반환한다.")
     void whenEventQueuesEmptyThenResultEmpty() {
         final List<Queue<CouponEvent>> emptyList = List.of(new ArrayDeque<>(), new ArrayDeque<>(), new ArrayDeque<>());
-        final List<Long> result = WinnerSelectAlgorithm.mergeSortedQueues(emptyList, 5);
+        final List<Long> result = KWayMergeAlgorithm.selectWinners(emptyList, 5);
         assertTrue(result.isEmpty());
     }
 
@@ -39,7 +44,7 @@ public class WinnerSelectionAlgorithmUnitTest {
             .toList();
         final Queue<CouponEvent> couponCaches = targetNumberList.stream().map(number -> new CouponEvent(number, number))
             .collect(Collectors.toCollection(ArrayDeque::new));
-        final List<Long> actualResult = WinnerSelectAlgorithm.mergeSortedQueues(List.of(couponCaches), 1000);
+        final List<Long> actualResult = KWayMergeAlgorithm.selectWinners(List.of(couponCaches), 1000);
         assertEquals(expectedResult, actualResult);
     }
 
@@ -50,27 +55,31 @@ public class WinnerSelectionAlgorithmUnitTest {
         final List<Long> expectedResult = LongStream.rangeClosed(1, 1000)
             .boxed()
             .toList();
-        final List<Long> actualResult = WinnerSelectAlgorithm.mergeSortedQueues(couponCaches, 1000);
+        final List<Long> actualResult = KWayMergeAlgorithm.selectWinners(couponCaches, 1000);
         assertEquals(expectedResult, actualResult);
     }
 
-    private List<Queue<CouponEvent>> createCouponCaches() {
-        final List<Queue<CouponEvent>> couponCacheLists = new ArrayList<>();
-        final int numberOfLists = 10;
-        for (int idx = 0; idx < numberOfLists; idx++) {
-            couponCacheLists.add(new ArrayDeque<>());
-        }
-        final int elementsPerList = 1000;
-        final int limit = 1000;
-        final int remained = elementsPerList * numberOfLists - limit;
-        for (long timestamp = 1; timestamp <= limit; timestamp++) {
-            final int order = (int) timestamp % numberOfLists;
-            couponCacheLists.get(order).add(new CouponEvent(timestamp, timestamp));
-        }
-        for (long timestamp = limit + 10000; timestamp <= limit + 10000 + remained; timestamp++) {
-            final int order = (int) timestamp % numberOfLists;
-            couponCacheLists.get(order).add(new CouponEvent(timestamp, timestamp));
-        }
-        return couponCacheLists;
+    @Test
+    @DisplayName("K-way merge 알고리즘 성능 테스트")
+    void whenKWayMergeThenFindSmallestElements() {
+        final int limit = 10000;
+        final List<Queue<CouponEvent>> couponCaches = CouponFixture.createCouponEventLists(100, 100_000, limit);
+        long startTime = nanoTime();
+        final List<Long> actualUserIds = KWayMergeAlgorithm.selectWinners(couponCaches, limit);
+        long endTime = nanoTime();
+        assertEquals(CouponFixture.findExpectedUserIdList(limit), actualUserIds);
+        log.info("K-way Merge 알고리즘 : {}ms", NANOSECONDS.toMillis(endTime - startTime));
+    }
+
+    @Test
+    @DisplayName("상위 K개 merge 알고리즘 성능 테스트")
+    void whenLimitedTopKMergeThenFindSmallestElements() {
+        final int limit = 10000;
+        final List<Queue<CouponEvent>> couponCaches = CouponFixture.createCouponEventLists(100, 100_000, limit);
+        long startTime = nanoTime();
+        final List<Long> actualUserIds = LimitedTopKMergeAlgorithm.selectWinners(couponCaches, limit);
+        long endTime = nanoTime();
+        assertEquals(CouponFixture.findExpectedUserIdList(limit), actualUserIds.stream().sorted().toList());
+        log.info(" Merge and Trim 알고리즘 : {}ms", NANOSECONDS.toMillis(endTime - startTime));
     }
 }

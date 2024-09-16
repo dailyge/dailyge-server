@@ -36,7 +36,11 @@ public final class CouponFixture {
     }
 
     public static List<Long> findExpectedUserIdsList() {
-        final List<Long> expectedResult = LongStream.rangeClosed(1, 1000)
+        return findExpectedUserIdList(1000);
+    }
+
+    public static List<Long> findExpectedUserIdList(final int limit) {
+        final List<Long> expectedResult = LongStream.rangeClosed(1, limit)
             .boxed()
             .toList();
         return expectedResult;

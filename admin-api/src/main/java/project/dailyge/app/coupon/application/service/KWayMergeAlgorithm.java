@@ -7,16 +7,16 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
-public class WinnerSelectAlgorithm {
+public class KWayMergeAlgorithm {
     static class CouponNode implements Comparable<CouponNode> {
         private final CouponEvent couponEvent;
-        private final int queueOrder;
+        private final int queueNumber;
 
         private CouponNode(final CouponEvent couponEvent,
-                           final int queueOrder
+                           final int queueNumber
         ) {
             this.couponEvent = couponEvent;
-            this.queueOrder = queueOrder;
+            this.queueNumber = queueNumber;
         }
 
         @Override
@@ -25,11 +25,11 @@ public class WinnerSelectAlgorithm {
         }
     }
 
-    public static List<Long> mergeSortedQueues(
+    public static List<Long> selectWinners(
         final List<Queue<CouponEvent>> sortedCouponQueues,
         final int limit
     ) {
-        final PriorityQueue<CouponNode> minHeap = new PriorityQueue<>();
+        final PriorityQueue<CouponNode> minHeap = new PriorityQueue<>(sortedCouponQueues.size());
         addAllFirstElements(sortedCouponQueues, minHeap);
         return findSmallestElements(sortedCouponQueues, limit, minHeap);
     }
@@ -43,11 +43,11 @@ public class WinnerSelectAlgorithm {
         while (mergedResult.size() < limit && !minHeap.isEmpty()) {
             final CouponNode topNode = minHeap.poll();
             mergedResult.add(topNode.couponEvent.getUserId());
-            final int currentQueueOrder = topNode.queueOrder;
-            final Queue<CouponEvent> currentQueue = couponEvents.get(currentQueueOrder);
+            final int currentQueueNumber = topNode.queueNumber;
+            final Queue<CouponEvent> currentQueue = couponEvents.get(currentQueueNumber);
             if (!currentQueue.isEmpty()) {
                 final CouponEvent nextCoupon = currentQueue.poll();
-                minHeap.offer(new CouponNode(nextCoupon, currentQueueOrder));
+                minHeap.offer(new CouponNode(nextCoupon, currentQueueNumber));
             }
         }
         return mergedResult;

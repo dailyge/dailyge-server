@@ -39,7 +39,7 @@ class CouponService implements CouponUseCase {
         final List<Queue<CouponEvent>> sortedQueues = IntStream.rangeClosed(1, queueCount)
             .mapToObj(couponEventReadRepository::findBulks)
             .toList();
-        final List<Long> userIds = WinnerSelectAlgorithm.mergeSortedQueues(sortedQueues, winnerCount);
+        final List<Long> userIds = KWayMergeAlgorithm.selectWinners(sortedQueues, winnerCount);
         return userIds;
     }
 }

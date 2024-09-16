@@ -54,7 +54,7 @@ class CouponEventReadDao implements CouponEventReadRepository {
     @Override
     public Integer findQueueCount() {
         try {
-            byte[] queueCountBytes = redisTemplate.opsForValue().get(QUEUE_COUNT_KEY);
+            final byte[] queueCountBytes = redisTemplate.opsForValue().get(QUEUE_COUNT_KEY);
             if (queueCountBytes == null) {
                 return 0;
             }

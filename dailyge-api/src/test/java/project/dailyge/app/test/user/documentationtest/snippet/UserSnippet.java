@@ -46,7 +46,7 @@ public interface UserSnippet {
     ParameterDescriptor[] USER_UPDATE_PATH_DESCRIPTOR = {
         parameterWithName("userId").description("사용자 ID")
     };
-    
+
     FieldDescriptor[] USER_UPDATE_REQUEST_FIELD_DESCRIPTOR = {
         fieldWithPath("nickname").type(STRING).description("닉네임")
     };
@@ -56,7 +56,7 @@ public interface UserSnippet {
         fieldWithPath("code").type(NUMBER).description("응답 코드"),
         fieldWithPath("message").type(STRING).description("응답 메시지")
     };
-    
+
     ParameterDescriptor[] USER_DELETE_PATH_DESCRIPTOR = {
         parameterWithName("userId").description("사용자 ID")
     };
@@ -92,11 +92,11 @@ public interface UserSnippet {
     RequestFieldsSnippet USER_UPDATE_REQUEST_FIELD_SNIPPET = requestFields(USER_UPDATE_REQUEST_FIELD_DESCRIPTOR);
     PathParametersSnippet USER_UPDATE_PATH_PARAMETER_SNIPPET = pathParameters(USER_UPDATE_PATH_DESCRIPTOR);
     ResponseFieldsSnippet USER_UPDATE_RESPONSE_FIELD_SNIPPET = responseFields(USER_UPDATE_RESPONSE_FIELD_DESCRIPTOR);
-    
+
     // Delete
     PathParametersSnippet USER_DELETE_PATH_PARAMETER_SNIPPET = pathParameters(USER_DELETE_PATH_DESCRIPTOR);
     ResponseCookiesSnippet USER_DELETE_RESPONSE_COOKIE_SNIPPET = responseCookies(USER_DELETE_RESPONSE_COOKIE_DESCRIPTOR);
-    
+
     // Login
     ResponseFieldsSnippet LOGIN_PAGE_RESPONSE_SNIPPET = responseFields(LOGIN_PAGE_FIELD_DESCRIPTOR);
 

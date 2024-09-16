@@ -9,6 +9,7 @@ import project.dailyge.document.event.EventDocumentWriteRepository;
 import project.dailyge.entity.common.EventPublisher;
 import project.dailyge.entity.user.UserEvent;
 import static project.dailyge.entity.common.EventType.CREATE;
+import static project.dailyge.entity.common.EventType.UPDATE;
 import static project.dailyge.entity.user.UserEvent.createEventWithIncreasedPublishCount;
 
 @EventLayer
@@ -25,6 +26,9 @@ public class UserEventListener {
             if (event.isType(CREATE)) {
                 userFacade.saveCache(event);
                 eventWriteRepository.save(createEventDocument(event));
+            }
+            if (event.isType(UPDATE)) {
+                userFacade.saveCache(event);
             }
         } catch (Exception ex) {
             userEventPublisher.publishInternalEvent(createEventWithIncreasedPublishCount(event));

@@ -23,9 +23,9 @@ public class UserEventListener {
     public void listenInternalEvent(final UserEvent event) {
         try {
             if (event.isType(CREATE)) {
-                userFacade.saveCache(event);
                 eventWriteRepository.save(createEventDocument(event));
             }
+            userFacade.saveCache(event);
         } catch (Exception ex) {
             userEventPublisher.publishInternalEvent(createEventWithIncreasedPublishCount(event));
         }

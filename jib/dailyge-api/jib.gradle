@@ -1,20 +1,12 @@
 def env = System.getenv("ENV")
 def skipJib = System.getenv("SKIP_JIB")
 
-def ecrUri = ""
-def port = ""
-def profile = ""
-def label = ""
-def imageTag = System.getenv("IMAGE_TAG")
-
-if (env != null && (env == "dev" || env == "prod")) {
-    ecrUri = env == "prod" ? System.getenv("PROD_ECR_URI") : System.getenv("DEV_ECR_URI")
-    port = env == "prod" ? "8080" : "8081"
-    profile = env == "prod" ? "prod" : "dev"
-    label = "dailyge-api-${profile}"
-}
-
 if (env != null && (skipJib != null && skipJib == "false")) {
+    def ecrUri = env == "prod" ? System.getenv("PROD_ECR_URI") : System.getenv("DEV_ECR_URI")
+    def port = env == "prod" ? "8080" : "8081"
+    def profile = env == "prod" ? "prod" : "dev"
+    def label = "dailyge-api-${profile}"
+    def imageTag = System.getenv("IMAGE_TAG")
     jib {
         from {
             image = "openjdk:17-jdk-slim"
@@ -29,9 +21,6 @@ if (env != null && (skipJib != null && skipJib == "false")) {
             jvmFlags = [
                     "-Dspring.profiles.active=${profile}",
                     "-Dfile.encoding=UTF-8",
-                    "-Duser.timezone=Asia/Seoul",
-                    "-Duser.language=ko",
-                    "-Duser.country=KR",
                     "-Dlog4j2.formatMsgNoLookups=true",
                     "-XX:+PrintFlagsFinal",
                     "--add-opens=java.base/java.time=ALL-UNNAMED",
@@ -41,6 +30,9 @@ if (env != null && (skipJib != null && skipJib == "false")) {
                     "-XX:CICompilerCount=4",
                     "-Xms256m",
                     "-Xmx512m",
+                    "-XX:ParallelGCThreads=2",
+                    "-XX:MaxGCPauseMillis=200",
+                    "-XX:InitiatingHeapOccupancyPercent=40",
                     "-XX:+UseG1GC",
                     "-XX:+HeapDumpOnOutOfMemoryError",
                     "-XX:HeapDumpPath=/var/log/app/heapdump.hprof",

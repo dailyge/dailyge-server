@@ -2,8 +2,10 @@ package project.dailyge.app.common.data;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.Table;
 import jakarta.persistence.metamodel.EntityType;
 import jakarta.validation.constraints.NotNull;
+import static java.util.stream.Collectors.toSet;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,7 +24,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -32,6 +33,7 @@ public class OperationDataInitializer implements CommandLineRunner {
 
     private static final String LOCAL = "local";
     private static final String DEV = "dev";
+    private static final String PROD = "prod";
 
     @Value("${profile.email}")
     private String email;
@@ -56,15 +58,23 @@ public class OperationDataInitializer implements CommandLineRunner {
     }
 
     private void clearData() {
+        if (isProd()) {
+            return;
+        }
+        this.tableNames.clear();
         final Set<String> tableNames = entityManager.getMetamodel()
             .getEntities().stream()
             .filter(isEntityType())
             .map(toLowerCase())
-            .collect(Collectors.toSet());
+            .collect(toSet());
         this.tableNames.addAll(tableNames);
-        for (final String table : this.tableNames) {
-            final String query = String.format("TRUNCATE %s", table);
-            jdbcTemplate.execute(query);
+        try {
+            for (final String table : this.tableNames) {
+                final String query = String.format("TRUNCATE %s", table);
+                jdbcTemplate.execute(query);
+            }
+        } catch (Exception ex) {
+            log.error("RDB Data initialization failed: {}", ex.getMessage());
         }
     }
 
@@ -75,7 +85,14 @@ public class OperationDataInitializer implements CommandLineRunner {
 
     @NotNull
     private Function<EntityType<?>, String> toLowerCase() {
-        return entityType -> entityType.getName().toLowerCase();
+        return entityType -> {
+            final Table tableAnnotation = entityType.getJavaType().getAnnotation(Table.class);
+            return tableAnnotation != null ? tableAnnotation.name().toLowerCase() : entityType.getName().toLowerCase();
+        };
+    }
+
+    private boolean isProd() {
+        return PROD.equals(env);
     }
 
     private boolean isValidEnv(final String env) {

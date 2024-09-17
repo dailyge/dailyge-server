@@ -1,17 +1,17 @@
 package project.dailyge.entity.event;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import project.dailyge.entity.BaseEntity;
 
 import java.time.LocalDateTime;
 
+import static lombok.AccessLevel.PROTECTED;
+
 @Getter
 @Entity(name = "events")
+@NoArgsConstructor(access = PROTECTED)
 public class EventJpaEntity extends BaseEntity {
 
     @Id
@@ -38,4 +38,22 @@ public class EventJpaEntity extends BaseEntity {
 
     @Column(name = "participants")
     private long participants;
+
+    public EventJpaEntity(
+        final String name,
+        final String description,
+        final LocalDateTime startDate,
+        final LocalDateTime endDate,
+        final int couponQuantity,
+        final boolean couponIssuance,
+        final long participants
+    ) {
+        this.name = name;
+        this.description = description;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.couponQuantity = couponQuantity;
+        this.couponIssuance = couponIssuance;
+        this.participants = participants;
+    }
 }

@@ -31,7 +31,7 @@ import java.time.LocalDateTime;
 
 @Slf4j
 @Aspect
-@Component
+// @Component
 @Profile("!test")
 @RequiredArgsConstructor
 public class LoggingAspect {

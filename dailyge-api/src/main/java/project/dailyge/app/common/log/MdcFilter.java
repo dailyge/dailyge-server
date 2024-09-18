@@ -37,6 +37,7 @@ import java.util.Base64;
 
 @Slf4j
 @Order(1)
+//@Component
 @Profile("!test")
 public class MdcFilter implements Filter {
 

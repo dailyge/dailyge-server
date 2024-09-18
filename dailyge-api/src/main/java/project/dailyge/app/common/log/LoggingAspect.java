@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.MDC;
 import org.springframework.context.annotation.Profile;
 import project.dailyge.app.common.annotation.ApplicationLayer;
@@ -29,7 +28,6 @@ import java.lang.annotation.Annotation;
 import java.time.LocalDateTime;
 
 @Slf4j
-@Aspect
 @Profile("!test")
 @RequiredArgsConstructor
 public class LoggingAspect {

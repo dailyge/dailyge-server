@@ -14,7 +14,6 @@ import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
 import project.dailyge.app.common.auth.DailygeUser;
 import static project.dailyge.app.common.auth.DailygeUser.getDailygeUser;
 import static project.dailyge.app.common.utils.IpUtils.extractIpAddress;
@@ -38,7 +37,6 @@ import java.util.Base64;
 
 @Slf4j
 @Order(1)
-//@Component
 @Profile("!test")
 public class MdcFilter implements Filter {
 

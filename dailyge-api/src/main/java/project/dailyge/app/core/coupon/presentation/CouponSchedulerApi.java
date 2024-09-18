@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import project.dailyge.app.common.annotation.PresentationLayer;
 import project.dailyge.app.core.coupon.application.scheduler.CouponBulkScheduler;
 import project.dailyge.app.core.coupon.presentation.request.ScheduleRateRequest;
+import project.dailyge.core.cache.coupon.CouponCacheWriteUseCase;
 
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
@@ -18,10 +19,11 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 @RequiredArgsConstructor
 public class CouponSchedulerApi {
     private final CouponBulkScheduler couponBulkScheduler;
+    private final CouponCacheWriteUseCase couponCacheWriteUseCase;
 
     @PostMapping(path = "/coupons/scheduling")
     public ResponseEntity<Void> startScheduler(@RequestBody final ScheduleRateRequest schedulerRateRequest) {
-        couponBulkScheduler.startFixedTask(schedulerRateRequest.period());
+        couponBulkScheduler.startFixedTask(schedulerRateRequest.period(), couponCacheWriteUseCase::saveBulks);
         return ResponseEntity
             .status(CREATED)
             .build();

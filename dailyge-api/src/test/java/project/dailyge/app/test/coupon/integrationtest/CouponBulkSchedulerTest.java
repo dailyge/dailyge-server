@@ -10,6 +10,7 @@ import project.dailyge.app.core.coupon.application.scheduler.CouponBulkScheduler
 import project.dailyge.app.core.coupon.persistence.CouponEventParticipant;
 import project.dailyge.app.core.coupon.persistence.CouponInMemoryRepository;
 import project.dailyge.core.cache.coupon.CouponCacheReadUseCase;
+import project.dailyge.core.cache.coupon.CouponCacheWriteUseCase;
 
 import java.util.stream.LongStream;
 
@@ -27,6 +28,9 @@ public class CouponBulkSchedulerTest extends DatabaseTestBase {
     @Autowired
     private CouponCacheReadUseCase couponCacheReadUseCase;
 
+    @Autowired
+    private CouponCacheWriteUseCase couponCacheWriteUseCase;
+
     @BeforeEach
     void setUp() {
         LongStream.range(1L, 10000L)
@@ -37,7 +41,7 @@ public class CouponBulkSchedulerTest extends DatabaseTestBase {
     @Disabled
     @DisplayName("스케줄러가 시작하면 폴링 작업을 한다.")
     void whenStartSchedulerThenPollingRuns() throws InterruptedException {
-        couponBulkScheduler.startFixedTask(5);
+        couponBulkScheduler.startFixedTask(5, couponCacheWriteUseCase::saveBulks);
         Thread.sleep(30000);
         couponBulkScheduler.stop();
         assertTrue(couponCacheReadUseCase.existsByUserId(1L));

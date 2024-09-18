@@ -2,7 +2,6 @@ package project.dailyge.app.test.coupon.documentationtest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +35,6 @@ class CouponBulkSchedulerDocumentationTest extends DatabaseTestBase {
     }
 
     @Test
-    @Disabled
     @DisplayName("[RestDocs] 쿠폰 벌크 스케줄러 시작을 요청하면 201 응답을 받는다.")
     void whenStartCouponBulkSchedulerThenResponseShouldBe_201_RestDocs() throws JsonProcessingException {
         given(this.specification)

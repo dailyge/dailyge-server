@@ -130,6 +130,9 @@ public class DailygeLogAppender extends AppenderBase<ILoggingEvent> {
 
     @Scheduled(fixedDelay = 5_000)
     private void scheduler() {
+        if (queue.isEmpty()) {
+            return;
+        }
         final List<OperationLogDocument> logs = new ArrayList<>();
         queue.drainTo(logs);
         mongoTemplate.insertAll(logs);

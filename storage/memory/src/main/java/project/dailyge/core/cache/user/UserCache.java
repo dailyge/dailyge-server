@@ -47,4 +47,12 @@ public class UserCache implements Serializable {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+    @Override
+    public String toString() {
+        return String.format(
+            "{\"id\":%d, \"nickname\":\"%s\", \"email\":\"%s\", \"profileImageUrl\":\"%s\", \"role\":\"%s\"}",
+            id, nickname, email, profileImageUrl, role
+        );
+    }
 }

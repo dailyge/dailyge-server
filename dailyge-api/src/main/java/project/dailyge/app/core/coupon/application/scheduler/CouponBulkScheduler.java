@@ -19,7 +19,10 @@ public class CouponBulkScheduler {
     private ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
     private ScheduledFuture<?> future = null;
 
-    public synchronized void startFixedTask(final int period, Runnable runnable) {
+    public synchronized void startFixedTask(
+        final int period,
+        final Runnable runnable
+    ) {
         try {
             if (future == null || executorService.isShutdown()) {
                 executorService = Executors.newSingleThreadScheduledExecutor();

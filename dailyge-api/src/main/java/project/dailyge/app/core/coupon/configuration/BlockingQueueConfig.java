@@ -18,6 +18,7 @@ public class BlockingQueueConfig {
 
     @Value("${queue.capacity:10000}")
     private int queueCapacity;
+
     private static final String LINKED_QUEUE = "linked";
     private static final String ARRAY_QUEUE = "array";
     private static final String PRIORITY_QUEUE = "priority";

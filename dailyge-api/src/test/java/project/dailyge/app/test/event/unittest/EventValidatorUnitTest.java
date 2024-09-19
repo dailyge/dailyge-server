@@ -16,7 +16,7 @@ import static project.dailyge.app.core.event.exception.EventCodeAndMessage.EVENT
 import static project.dailyge.app.core.event.exception.EventCodeAndMessage.INVALID_EVENT;
 
 @DisplayName("[단위테스트] Event Validator 단위테스트")
-public class EventValidatorUnitTest {
+class EventValidatorUnitTest {
 
     private LocalEventCache localEventCache;
     private EventValidator eventValidator;

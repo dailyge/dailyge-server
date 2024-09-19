@@ -5,7 +5,8 @@ import project.dailyge.app.core.common.web.Cookies;
 
 @Component
 public class CouponClientValidator {
-    private final String TRUE = "true";
+
+    private static final String TRUE = "true";
 
     public boolean validateParticipant(final String cookieValue) {
         return TRUE.equals(cookieValue);

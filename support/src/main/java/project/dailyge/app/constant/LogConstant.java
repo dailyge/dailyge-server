@@ -1,6 +1,15 @@
 package project.dailyge.app.constant;
 
 public interface LogConstant {
+    String ORDER = "order";
+    String LAYER = "layer";
+    String DURATION = "duration";
+    String VISITOR = "visitor";
+    String CONTEXT = "context";
+    String ARGS = "args";
+    String RESULT = "result";
+    String TIME = "time";
+
     String DEBUG = "DEBUG";
     String INFO = "INFO";
     String ERROR = "ERROR";

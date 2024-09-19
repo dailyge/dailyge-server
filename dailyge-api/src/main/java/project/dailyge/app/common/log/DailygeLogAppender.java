@@ -129,7 +129,7 @@ public class DailygeLogAppender extends AppenderBase<ILoggingEvent> {
     }
 
     @Scheduled(fixedDelay = 5_000)
-    private void scheduler() {
+    private synchronized void scheduler() {
         if (queue.isEmpty()) {
             return;
         }

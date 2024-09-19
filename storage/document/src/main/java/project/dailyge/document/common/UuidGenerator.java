@@ -17,7 +17,6 @@ public final class UuidGenerator {
         long timeLow = leastSignificantBits >>> 32;
         long timeMid = (leastSignificantBits & 0xFFFF0000L) >>> 16;
         long timeHighAndVersion = (leastSignificantBits & 0x0FFF000000000000L) >>> 48;
-        long timestamp = (timeHighAndVersion << 48) | (timeMid << 32) | timeLow;
-        return timestamp;
+        return (timeHighAndVersion << 48) | (timeMid << 32) | timeLow;
     }
 }

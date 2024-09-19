@@ -13,8 +13,6 @@ import org.slf4j.MDC;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import project.dailyge.app.common.auth.DailygeUser;
-import static project.dailyge.app.common.auth.DailygeUser.getDailygeUser;
 import static project.dailyge.app.common.utils.IpUtils.extractIpAddress;
 import static project.dailyge.app.constant.LogConstant.ENTRANCE_LAYER;
 import static project.dailyge.app.constant.LogConstant.INFO;
@@ -26,6 +24,7 @@ import static project.dailyge.app.constant.LogConstant.METHOD;
 import static project.dailyge.app.constant.LogConstant.OUT_GOING;
 import static project.dailyge.app.constant.LogConstant.PATH;
 import static project.dailyge.app.constant.LogConstant.TRACE_ID;
+import static project.dailyge.app.constant.LogConstant.USER_ID;
 import static project.dailyge.app.utils.LogUtils.createGuestLogMessage;
 import static project.dailyge.app.utils.LogUtils.createLogMessage;
 import static project.dailyge.document.common.UuidGenerator.createTimeBasedUUID;
@@ -38,8 +37,6 @@ import java.time.LocalDateTime;
 @Component
 @Profile("!test")
 public class MdcFilter implements Filter {
-
-    private static final String DAILYGE_USER = "dailyge-user";
 
     @Override
     public void doFilter(
@@ -57,7 +54,8 @@ public class MdcFilter implements Filter {
             writeIncomingLog(traceId, userIp, method, path, startTime);
             filterChain.doFilter(servletRequest, servletResponse);
         } finally {
-            writeOutgoingLog(servletRequest, startTime, path, method, traceId, userIp);
+            writeOutgoingLog(startTime, path, method, traceId, userIp);
+            MDC.clear();
         }
     }
 
@@ -81,7 +79,6 @@ public class MdcFilter implements Filter {
     }
 
     private static void writeOutgoingLog(
-        final ServletRequest servletRequest,
         final LocalDateTime startTime,
         final String path,
         final String method,
@@ -92,11 +89,11 @@ public class MdcFilter implements Filter {
             final LocalDateTime endTime = LocalDateTime.now();
             final long duration = MILLIS.between(startTime, endTime);
 
-            final DailygeUser dailygeUser = getDailygeUser(servletRequest.getAttribute(DAILYGE_USER));
-            final String longMessage = createOutgoingLog(path, method, traceId, userIp, endTime, duration, dailygeUser);
-            servletRequest.removeAttribute(DAILYGE_USER);
+            final String userId = MDC.get(USER_ID);
+            final String longMessage = createOutgoingLog(
+                path, method, traceId, userIp, endTime, duration, userId != null ? userId : GUEST.name()
+            );
             log.info(longMessage);
-            MDC.clear();
         } catch (Exception ex) {
             log.error("Outgoing logging failed.");
         }
@@ -131,7 +128,7 @@ public class MdcFilter implements Filter {
         final String userIp,
         final LocalDateTime endTime,
         final long duration,
-        final DailygeUser dailygeUser
+        final String userId
     ) throws JsonProcessingException {
         return createLogMessage(
             increaseAndGet(),
@@ -144,7 +141,7 @@ public class MdcFilter implements Filter {
             duration,
             null,
             null,
-            dailygeUser != null ? dailygeUser.toString() : null,
+            userId,
             INFO
         );
     }

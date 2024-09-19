@@ -10,13 +10,13 @@ public interface LogConstant {
     String RESULT = "result";
     String TIME = "time";
 
-    String DEBUG = "DEBUG";
     String INFO = "INFO";
     String ERROR = "ERROR";
 
     String[] IP_HEADERS = {
         "X-Forwarded-For", "Proxy-Client-IP", "WL-Proxy-Client-IP", "HTTP_CLIENT_IP", "HTTP_X_FORWARDED_FOR"
     };
+    String USER_ID = "userId";
     String IP = "ip";
     String TRACE_ID = "traceId";
     String PATH = "path";

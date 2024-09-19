@@ -5,11 +5,13 @@ import project.dailyge.app.core.common.web.Cookies;
 
 @Component
 public class CouponClientValidator {
+    private final String TRUE = "true";
+
     public boolean validateParticipant(final String cookieValue) {
-        return "true".equals(cookieValue);
+        return TRUE.equals(cookieValue);
     }
 
     public boolean isParticipated(final Cookies cookies) {
-        return "true".equals(cookies.getValueByKey("isParticipated"));
+        return TRUE.equals(cookies.getValueByKey("isParticipated"));
     }
 }

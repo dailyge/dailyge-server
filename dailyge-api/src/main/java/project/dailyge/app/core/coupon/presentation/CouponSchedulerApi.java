@@ -15,19 +15,19 @@ import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.CREATED;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.NO_CONTENT;
 
 @PresentationLayer
-@RequestMapping("/api")
+@RequestMapping(path = "/api/coupons")
 @RequiredArgsConstructor
 public class CouponSchedulerApi {
     private final CouponBulkScheduler couponBulkScheduler;
     private final CouponCacheWriteUseCase couponCacheWriteUseCase;
 
-    @PostMapping(path = "/coupons/scheduling")
-    public ApiResponse<Void> startScheduler(@RequestBody final ScheduleRateRequest schedulerRateRequest) {
-        couponBulkScheduler.startFixedTask(schedulerRateRequest.period(), couponCacheWriteUseCase::saveBulks);
+    @PostMapping(path = "/scheduling")
+    public ApiResponse<Void> startScheduler(@RequestBody final ScheduleRateRequest request) {
+        couponBulkScheduler.startFixedTask(request.period(), couponCacheWriteUseCase::saveBulks);
         return ApiResponse.from(CREATED);
     }
 
-    @DeleteMapping(path = "/coupons/scheduling")
+    @DeleteMapping(path = "/scheduling")
     public ApiResponse<Void> stopScheduler() {
         couponBulkScheduler.stop();
         return ApiResponse.from(NO_CONTENT);

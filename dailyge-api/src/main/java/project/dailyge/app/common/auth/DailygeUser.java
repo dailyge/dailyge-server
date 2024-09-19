@@ -30,6 +30,10 @@ public class DailygeUser {
         return userId;
     }
 
+    public String getIdAsString() {
+        return userId.toString();
+    }
+
     public boolean isAdmin() {
         return ADMIN.equals(this.role);
     }

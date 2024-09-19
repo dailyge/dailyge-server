@@ -3,7 +3,6 @@ package project.dailyge.app.common.log;
 import org.slf4j.MDC;
 import org.springframework.core.task.TaskDecorator;
 import org.springframework.lang.NonNull;
-import static org.springframework.web.context.request.RequestContextHolder.resetRequestAttributes;
 
 import java.util.Map;
 
@@ -19,7 +18,6 @@ public class MdcTaskDecorator implements TaskDecorator {
                 }
                 runnable.run();
             } finally {
-                resetRequestAttributes();
                 MDC.clear();
             }
         };

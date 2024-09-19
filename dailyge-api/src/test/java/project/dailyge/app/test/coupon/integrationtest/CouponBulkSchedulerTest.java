@@ -22,7 +22,7 @@ import java.util.stream.LongStream;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("[통합 테스트] CouponBulkScheduler 동작 테스트")
-public class CouponBulkSchedulerTest extends DatabaseTestBase {
+class CouponBulkSchedulerTest extends DatabaseTestBase {
 
     private static final Logger log = LoggerFactory.getLogger(CouponBulkSchedulerTest.class);
 

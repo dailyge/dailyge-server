@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import static com.mongodb.MongoCompressor.LEVEL;
 import static io.netty.util.internal.StringUtil.EMPTY_STRING;
 import static java.time.LocalDateTime.now;
 import static java.util.concurrent.TimeUnit.DAYS;
@@ -17,6 +18,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import static project.dailyge.app.constant.LogConstant.ARGS;
 import static project.dailyge.app.constant.LogConstant.CONTEXT;
 import static project.dailyge.app.constant.LogConstant.DURATION;
+import static project.dailyge.app.constant.LogConstant.ERROR;
 import static project.dailyge.app.constant.LogConstant.IP;
 import static project.dailyge.app.constant.LogConstant.LAYER;
 import static project.dailyge.app.constant.LogConstant.METHOD;
@@ -52,6 +54,7 @@ public class DailygeLogAppender extends AppenderBase<ILoggingEvent> {
                 return;
             }
             final JsonObject jsonObject = JsonParser.parseString(message).getAsJsonObject();
+            final String level = event.getLevel().toString();
             final String order = getJsonValue(jsonObject, ORDER);
             final String layer = getJsonValue(jsonObject, LAYER);
             final String path = getJsonValue(jsonObject, PATH);
@@ -59,11 +62,17 @@ public class DailygeLogAppender extends AppenderBase<ILoggingEvent> {
             final String duration = getJsonValue(jsonObject, DURATION);
             final String traceId = getJsonValue(jsonObject, TRACE_ID);
             final String ip = getJsonValue(jsonObject, IP);
-            final String level = event.getLevel().toString();
             final String userId = getJsonValue(jsonObject, VISITOR);
+            if (ERROR.equals(level)) {
+                final String errorMessage = createErrorMessageContext(jsonObject);
+                final OperationLogDocument operationLog = createOperationLog(
+                    order, layer, path, method, traceId, ip, userId, duration, null, errorMessage, level
+                );
+                queue.add(operationLog);
+                return;
+            }
             final String args = jsonObject.has(CONTEXT) ? gson.toJson(jsonObject.getAsJsonObject(CONTEXT).get(ARGS)) : null;
             final String result = jsonObject.has(CONTEXT) ? gson.toJson(jsonObject.getAsJsonObject(CONTEXT).get(RESULT)) : null;
-
             final OperationLogDocument operationLog = createOperationLog(
                 order, layer, path, method, traceId, ip, userId, duration, args, result, level
             );
@@ -98,12 +107,20 @@ public class DailygeLogAppender extends AppenderBase<ILoggingEvent> {
         );
     }
 
+    private String createErrorMessageContext(final JsonObject jsonObject) {
+        final JsonObject errorContext = new JsonObject();
+        errorContext.addProperty("code", getJsonValue(jsonObject, "code"));
+        errorContext.addProperty("message", getJsonValue(jsonObject, "message"));
+        errorContext.addProperty("detailMessage", getJsonValue(jsonObject, "detailMessage"));
+        return gson.toJson(errorContext);
+    }
+
     private String createContextJson(
         final String args,
         final String result
     ) {
-        final JsonElement argsJson = JsonParser.parseString(args);
-        final JsonElement resultJson = JsonParser.parseString(result);
+        final JsonElement argsJson = (args != null) ? JsonParser.parseString(args) : new JsonObject();
+        final JsonElement resultJson = (result != null) ? JsonParser.parseString(result) : new JsonObject();
         final JsonObject contextJson = new JsonObject();
         contextJson.add(ARGS, argsJson);
         contextJson.add(RESULT, resultJson);
@@ -115,7 +132,7 @@ public class DailygeLogAppender extends AppenderBase<ILoggingEvent> {
         final String fieldName
     ) {
         final JsonElement field = jsonObject.get(fieldName);
-        return field != null ? field.getAsString() : EMPTY_STRING;
+        return (field != null && !field.isJsonNull()) ? field.getAsString() : EMPTY_STRING;
     }
 
     private boolean isOperationLog(final String message) {

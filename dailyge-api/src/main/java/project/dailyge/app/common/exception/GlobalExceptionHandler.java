@@ -17,9 +17,14 @@ import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_REQUES
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_PARAMETERS;
 import static project.dailyge.app.constant.LogConstant.ERROR;
+import static project.dailyge.app.constant.LogConstant.IP;
 import static project.dailyge.app.constant.LogConstant.LOG_ORDER;
+import static project.dailyge.app.constant.LogConstant.METHOD;
+import static project.dailyge.app.constant.LogConstant.PATH;
 import static project.dailyge.app.constant.LogConstant.TRACE_ID;
+import static project.dailyge.app.constant.LogConstant.USER_ID;
 import project.dailyge.app.response.ErrorResponse;
+import static project.dailyge.entity.user.Role.GUEST;
 
 import java.time.LocalDateTime;
 
@@ -28,7 +33,9 @@ import java.time.LocalDateTime;
 public class GlobalExceptionHandler {
 
     private static final String ERROR_LOG_FORMAT =
-        "{\"order\":\"{}\", \"traceId\":\"{}\", \"code\":\"{}\", \"message\":\"{}\", \"detailMessage\":\"{}\", \"time\":\"{}\", \"level\":\"{}\"}";
+        "{\"order\":\"{}\", \"traceId\":\"{}\", \"code\":\"{}\", \"message\":\"{}\", \"detailMessage\":\"{}\", "
+            + "\"time\":\"{}\", \"level\":\"{}\", \"ip\":\"{}\", \"method\":\"{}\", \"path\":\"{}\", \"visitor\":\"{}\", "
+            + "\"layer\":\"{}\"}";
 
     private final String env;
 
@@ -125,26 +132,40 @@ public class GlobalExceptionHandler {
     ) {
         if (!"test".equals(env)) {
             incrementLogOrder();
+            final String logOrder = MDC.get(LOG_ORDER);
             final int code = codeAndMessage.code();
             final String message = codeAndMessage.message();
             final String detailMessage = exception.getMessage();
             final LocalDateTime time = LocalDateTime.now();
+            final String ip = MDC.get(IP);
+            final String method = MDC.get(METHOD);
+            final String path = MDC.get(PATH);
+            final String userId = MDC.get(USER_ID);
             log.error(
                 ERROR_LOG_FORMAT,
-                Integer.parseInt(MDC.get(LOG_ORDER)),
+                logOrder,
                 MDC.get(TRACE_ID),
                 code,
                 message,
                 detailMessage,
                 time,
-                ERROR
+                ERROR,
+                ip,
+                method,
+                path,
+                userId != null ? userId : GUEST.name(),
+                "GlobalExceptionHandler"
             );
         }
     }
 
     private void incrementLogOrder() {
-        final String logOrder = MDC.get(LOG_ORDER);
-        final int order = logOrder != null ? Integer.parseInt(logOrder) : 0;
-        MDC.put(LOG_ORDER, String.valueOf(order + 1));
+        try {
+            final String logOrder = MDC.get(LOG_ORDER);
+            final int order = logOrder != null ? Integer.parseInt(logOrder) : 0;
+            MDC.put(LOG_ORDER, String.valueOf(order + 1));
+        } catch (Exception ex) {
+            log.error("Ordering failed");
+        }
     }
 }

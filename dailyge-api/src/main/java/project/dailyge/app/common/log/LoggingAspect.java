@@ -2,7 +2,6 @@ package project.dailyge.app.common.log;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import static java.lang.String.format;
-import static java.time.LocalDateTime.now;
 import static java.time.temporal.ChronoUnit.MILLIS;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +9,6 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.MDC;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import project.dailyge.app.common.annotation.ApplicationLayer;
 import project.dailyge.app.common.annotation.ExternalLayer;
@@ -24,6 +22,7 @@ import static project.dailyge.app.constant.LogConstant.METHOD;
 import static project.dailyge.app.constant.LogConstant.OUT_GOING;
 import static project.dailyge.app.constant.LogConstant.PATH;
 import static project.dailyge.app.constant.LogConstant.TRACE_ID;
+import static project.dailyge.app.constant.LogConstant.USER_ID;
 import static project.dailyge.app.utils.LogUtils.createLogMessage;
 
 import java.lang.annotation.Annotation;
@@ -32,14 +31,12 @@ import java.time.LocalDateTime;
 @Slf4j
 @Aspect
 @Component
-@Profile("!test")
 @RequiredArgsConstructor
 public class LoggingAspect {
 
     private static final String EMPTY_STRING = "";
     private static final String EMPTY_ARRAY = "[]";
     private static final String ANNOTATION_VALUE = "value";
-    private static final String DAILYGE_USER_KEY = "dailyge-user";
 
     private final ObjectMapper objectMapper;
 
@@ -83,10 +80,10 @@ public class LoggingAspect {
         final ProceedingJoinPoint joinPoint,
         final String layer
     ) throws Throwable {
-        final LocalDateTime startTime = now();
+        final LocalDateTime startTime = LocalDateTime.now();
         logStart(joinPoint, format("%s%s", layer, IN_COMING), startTime);
         final Object result = joinPoint.proceed();
-        final LocalDateTime endTime = now();
+        final LocalDateTime endTime = LocalDateTime.now();
         logEnd(joinPoint, format("%s%s", layer, OUT_GOING), startTime, endTime, result);
         return result;
     }
@@ -101,7 +98,7 @@ public class LoggingAspect {
             final String ip = MDC.get(IP);
             final String method = MDC.get(METHOD);
             final String path = MDC.get(PATH);
-            final String visitor = MDC.get(DAILYGE_USER_KEY);
+            final String visitor = MDC.get(USER_ID);
             final Object[] argsArray = joinPoint.getArgs();
             final String args = (argsArray != null) ? objectMapper.writeValueAsString(argsArray) : EMPTY_ARRAY;
             increaseOrder();
@@ -126,7 +123,7 @@ public class LoggingAspect {
             final String ip = MDC.get(IP);
             final String method = MDC.get(METHOD);
             final String path = MDC.get(PATH);
-            final String visitor = MDC.get(DAILYGE_USER_KEY);
+            final String visitor = MDC.get(USER_ID);
             final Object[] argsArray = joinPoint.getArgs();
             final String args = (argsArray != null) ? objectMapper.writeValueAsString(argsArray) : EMPTY_ARRAY;
             final long duration = MILLIS.between(startTime, endTime);

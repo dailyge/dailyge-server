@@ -2,6 +2,7 @@ package project.dailyge.document.log;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,7 +34,7 @@ class OperationLogDocumentUnitTest {
         assertAll(
             () -> assertNotNull(logDocument),
             () -> assertNotNull(logDocument.getId()),
-            () -> assertEquals(traceId, logDocument.getId()),
+            () -> assertNotEquals(traceId, logDocument.getId()),
             () -> assertEquals(order, logDocument.getOrder()),
             () -> assertEquals(layer, logDocument.getLayer()),
             () -> assertEquals(path, logDocument.getPath()),

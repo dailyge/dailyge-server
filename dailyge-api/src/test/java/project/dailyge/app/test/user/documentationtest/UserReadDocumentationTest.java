@@ -9,7 +9,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.document;
 import static project.dailyge.app.test.user.documentationtest.snippet.UserReadSnippet.createUserSearchFilter;
 import static project.dailyge.app.test.user.documentationtest.snippet.UserSnippet.USER_ACCESS_TOKEN_COOKIE_SNIPPET;
-import static project.dailyge.app.test.user.documentationtest.snippet.UserSnippet.USER_SEARCH_PATH_PARAMETER_SNIPPET;
 import static project.dailyge.app.test.user.documentationtest.snippet.UserSnippet.USER_SEARCH_RESPONSE_SNIPPET;
 import static project.dailyge.app.test.user.documentationtest.snippet.UserSnippet.createIdentifier;
 
@@ -22,13 +21,12 @@ class UserReadDocumentationTest extends DatabaseTestBase {
         given(this.specification)
             .filter(document(IDENTIFIER,
                 USER_ACCESS_TOKEN_COOKIE_SNIPPET,
-                USER_SEARCH_PATH_PARAMETER_SNIPPET,
                 USER_SEARCH_RESPONSE_SNIPPET
             ))
             .contentType(APPLICATION_JSON_VALUE)
             .cookie(getAccessTokenCookie())
             .when()
-            .get("/api/users/{userId}", newUser.getId())
+            .get("/api/users")
             .then()
             .statusCode(200)
             .log()
@@ -45,26 +43,9 @@ class UserReadDocumentationTest extends DatabaseTestBase {
             .contentType(APPLICATION_JSON_VALUE)
             .cookie(getAccessTokenCookie())
             .when()
-            .get("/api/users/{userId}", newUser.getId())
+            .get("/api/users")
             .then()
             .statusCode(200)
-            .log()
-            .all();
-    }
-
-    @Test
-    @DisplayName("[Swagger] 다른 사용자 정보를 조회하면, 403 UnAuthorized 응답을 받는다.")
-    void whenFindOtherUserThenStatusCodeShouldBe_403_UnAuthorized_Swagger() {
-        final RestDocumentationFilter filter = createUserSearchFilter(createIdentifier("UserSearch", 403));
-
-        given(this.specification)
-            .filter(filter)
-            .contentType(APPLICATION_JSON_VALUE)
-            .cookie(getAccessTokenCookie())
-            .when()
-            .get("/api/users/{userId}", Long.MAX_VALUE)
-            .then()
-            .statusCode(403)
             .log()
             .all();
     }
@@ -79,7 +60,7 @@ class UserReadDocumentationTest extends DatabaseTestBase {
             .contentType(APPLICATION_JSON_VALUE)
             .cookie("Access-Token", "ABCD")
             .when()
-            .get("/api/users/{userId}", Long.MAX_VALUE)
+            .get("/api/users")
             .then()
             .statusCode(403)
             .log()

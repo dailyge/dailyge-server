@@ -30,10 +30,6 @@ public interface UserSnippet {
 
     RequestCookiesSnippet USER_ACCESS_TOKEN_COOKIE_SNIPPET = requestCookies(USER_ACCESS_TOKEN_COOKIE_DESCRIPTOR);
 
-    ParameterDescriptor[] USER_SEARCH_PATH_DESCRIPTOR = {
-        parameterWithName("userId").description("사용자 ID")
-    };
-
     FieldDescriptor[] USER_SEARCH_RESPONSE_FIELD_DESCRIPTOR = {
         fieldWithPath("data.userId").type(NUMBER).description("사용자 ID"),
         fieldWithPath("data.email").type(STRING).description("이메일"),
@@ -85,7 +81,6 @@ public interface UserSnippet {
     };
 
     // Search
-    PathParametersSnippet USER_SEARCH_PATH_PARAMETER_SNIPPET = pathParameters(USER_SEARCH_PATH_DESCRIPTOR);
     ResponseFieldsSnippet USER_SEARCH_RESPONSE_SNIPPET = responseFields(USER_SEARCH_RESPONSE_FIELD_DESCRIPTOR);
 
     // Update

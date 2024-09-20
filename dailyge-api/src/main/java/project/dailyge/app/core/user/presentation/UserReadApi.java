@@ -21,13 +21,9 @@ public class UserReadApi {
 
     private final UserCacheReadUseCase userCacheReadUseCase;
 
-    @GetMapping(path = "/{userId}")
-    public ApiResponse<UserInfoResponse> findUserById(
-        @LoginUser final DailygeUser dailygeUser,
-        @PathVariable(value = "userId") final Long userId
-    ) {
-        dailygeUser.validateAuth(userId);
-        final UserCache findUser = userCacheReadUseCase.findById(userId);
+    @GetMapping
+    public ApiResponse<UserInfoResponse> findUserById(@LoginUser final DailygeUser dailygeUser) {
+        final UserCache findUser = userCacheReadUseCase.findById(dailygeUser.getUserId());
         final UserInfoResponse payload = new UserInfoResponse(findUser);
         return ApiResponse.from(OK, payload);
     }

@@ -28,6 +28,7 @@ import static project.dailyge.app.constant.LogConstant.USER_ID;
 import static project.dailyge.app.utils.LogUtils.createGuestLogMessage;
 import static project.dailyge.app.utils.LogUtils.createLogMessage;
 import static project.dailyge.document.common.UuidGenerator.createTimeBasedUUID;
+import static project.dailyge.entity.user.Role.GUEST;
 
 import java.io.IOException;
 import java.time.LocalDateTime;

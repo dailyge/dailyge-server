@@ -17,16 +17,12 @@ public final class LogUtils {
         + "\"ip\":\"%s\", \"visitor\":%s, \"time\":\"%s\", \"duration\":\"%dms\", \"context\":{\"args\":%s, \"result\":%s}, \"level\":\"%s\"}";
 
     private static final ObjectMapper objectMapper;
-    private static final String GUEST_JSON;
+    private static final String GUEST = "\"GUEST\"";
 
     static {
         objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
-        try {
-            GUEST_JSON = objectMapper.writeValueAsString(new Visitor());
-        } catch (JsonProcessingException ex) {
-            throw new RuntimeException(ex);
-        }
+
     }
 
     private LogUtils() {
@@ -58,7 +54,7 @@ public final class LogUtils {
             method,
             traceId,
             ipAddress,
-            (visitor != null) ? visitor : GUEST_JSON,
+            visitor != null ? visitor : GUEST,
             formattedTime,
             duration,
             argsString,
@@ -91,7 +87,7 @@ public final class LogUtils {
             method,
             traceId,
             ipAddress,
-            GUEST_JSON,
+            GUEST,
             formattedTime,
             duration,
             argsString,
@@ -102,7 +98,7 @@ public final class LogUtils {
 
     public static String getVisitor(final String visitor) {
         if (visitor == null || visitor.isBlank()) {
-            return GUEST_JSON;
+            return GUEST;
         }
         return visitor;
     }

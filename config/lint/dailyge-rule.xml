@@ -40,6 +40,10 @@ The following rules in the Naver coding convention cannot be checked by this con
     </module>
 
     <module name="TreeWalker">
+        <module name="ParameterNumber">
+            <property name="max" value="15"/>
+        </module>
+
         <message key="name.invalidPattern"
                  value="[1-top-level-class] one.top.level.class=Top-level class {0} has to reside in its own source file."/>
 

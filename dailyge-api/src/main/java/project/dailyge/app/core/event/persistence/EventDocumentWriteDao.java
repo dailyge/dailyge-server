@@ -8,7 +8,7 @@ import project.dailyge.document.event.EventDocumentWriteRepository;
 
 @Repository
 @RequiredArgsConstructor
-public class EventWriteDao implements EventDocumentWriteRepository {
+public class EventDocumentWriteDao implements EventDocumentWriteRepository {
 
     private final MongoTemplate mongoTemplate;
 

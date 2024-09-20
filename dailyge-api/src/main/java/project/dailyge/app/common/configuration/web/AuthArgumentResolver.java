@@ -9,6 +9,9 @@ import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_USER_ID;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_USER_TOKEN;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
 import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.common.auth.LoginUser;
 import project.dailyge.app.common.auth.TokenProvider;
@@ -17,9 +20,6 @@ import project.dailyge.app.core.common.web.Cookies;
 import project.dailyge.core.cache.user.UserCache;
 import project.dailyge.core.cache.user.UserCacheReadUseCase;
 import project.dailyge.entity.user.Role;
-import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_USER_ID;
-import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_USER_TOKEN;
-import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
 
 @RequiredArgsConstructor
 public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
@@ -49,7 +49,7 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
             }
             final UserCache user = userCacheReadUseCase.findById(userId);
             final DailygeUser dailygeUser = new DailygeUser(user.getId(), Role.valueOf(user.getRole()));
-            MDC.put("dailyge-user", dailygeUser.toString());
+            MDC.put("userId", dailygeUser.getIdAsString());
             return dailygeUser;
         } catch (ExpiredJwtException ex) {
             throw CommonException.from(ex.getMessage(), INVALID_USER_TOKEN);

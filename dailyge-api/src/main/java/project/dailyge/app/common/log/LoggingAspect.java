@@ -1,6 +1,5 @@
 package project.dailyge.app.common.log;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import static java.lang.String.format;
 import static java.time.temporal.ChronoUnit.MILLIS;
@@ -10,7 +9,6 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.MDC;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import project.dailyge.app.common.annotation.ApplicationLayer;
 import project.dailyge.app.common.annotation.ExternalLayer;
@@ -24,6 +22,7 @@ import static project.dailyge.app.constant.LogConstant.METHOD;
 import static project.dailyge.app.constant.LogConstant.OUT_GOING;
 import static project.dailyge.app.constant.LogConstant.PATH;
 import static project.dailyge.app.constant.LogConstant.TRACE_ID;
+import static project.dailyge.app.constant.LogConstant.USER_ID;
 import static project.dailyge.app.utils.LogUtils.createLogMessage;
 
 import java.lang.annotation.Annotation;
@@ -32,14 +31,12 @@ import java.time.LocalDateTime;
 @Slf4j
 @Aspect
 @Component
-@Profile("!test")
 @RequiredArgsConstructor
 public class LoggingAspect {
 
     private static final String EMPTY_STRING = "";
     private static final String EMPTY_ARRAY = "[]";
     private static final String ANNOTATION_VALUE = "value";
-    private static final String DAILYGE_USER_KEY = "dailyge-user";
 
     private final ObjectMapper objectMapper;
 
@@ -95,19 +92,23 @@ public class LoggingAspect {
         final ProceedingJoinPoint joinPoint,
         final String layer,
         final LocalDateTime startTime
-    ) throws JsonProcessingException {
-        final String traceId = MDC.get(TRACE_ID);
-        final String ip = MDC.get(IP);
-        final String method = MDC.get(METHOD);
-        final String path = MDC.get(PATH);
-        final String visitor = MDC.get(DAILYGE_USER_KEY);
-        final Object[] argsArray = joinPoint.getArgs();
-        final String args = (argsArray != null) ? objectMapper.writeValueAsString(argsArray) : EMPTY_ARRAY;
-        increaseOrder();
-        final int order = Integer.parseInt(MDC.get(LOG_ORDER));
-        log.info(
-            createLogMessage(order, layer, path, method, traceId, ip, startTime, 0, args, null, visitor, INFO)
-        );
+    ) {
+        try {
+            final String traceId = MDC.get(TRACE_ID);
+            final String ip = MDC.get(IP);
+            final String method = MDC.get(METHOD);
+            final String path = MDC.get(PATH);
+            final String visitor = MDC.get(USER_ID);
+            final Object[] argsArray = joinPoint.getArgs();
+            final String args = (argsArray != null) ? objectMapper.writeValueAsString(argsArray) : EMPTY_ARRAY;
+            increaseOrder();
+            final int order = Integer.parseInt(MDC.get(LOG_ORDER));
+            log.info(
+                createLogMessage(order, layer, path, method, traceId, ip, startTime, 0, args, null, visitor, INFO)
+            );
+        } catch (Exception ex) {
+            log.error("Logging failed");
+        }
     }
 
     private void logEnd(
@@ -116,26 +117,34 @@ public class LoggingAspect {
         final LocalDateTime startTime,
         final LocalDateTime endTime,
         final Object result
-    ) throws JsonProcessingException {
-        final String traceId = MDC.get(TRACE_ID);
-        final String ip = MDC.get(IP);
-        final String method = MDC.get(METHOD);
-        final String path = MDC.get(PATH);
-        final String visitor = MDC.get(DAILYGE_USER_KEY);
-        final Object[] argsArray = joinPoint.getArgs();
-        final String args = (argsArray != null) ? objectMapper.writeValueAsString(argsArray) : EMPTY_ARRAY;
-        final long duration = MILLIS.between(startTime, endTime);
-        increaseOrder();
-        final int order = Integer.parseInt(MDC.get(LOG_ORDER));
-        log.info(
-            createLogMessage(order, layer, path, method, traceId, ip, endTime, duration, args, result, visitor, INFO)
-        );
+    ) {
+        try {
+            final String traceId = MDC.get(TRACE_ID);
+            final String ip = MDC.get(IP);
+            final String method = MDC.get(METHOD);
+            final String path = MDC.get(PATH);
+            final String visitor = MDC.get(USER_ID);
+            final Object[] argsArray = joinPoint.getArgs();
+            final String args = (argsArray != null) ? objectMapper.writeValueAsString(argsArray) : EMPTY_ARRAY;
+            final long duration = MILLIS.between(startTime, endTime);
+            increaseOrder();
+            final int order = Integer.parseInt(MDC.get(LOG_ORDER));
+            log.info(
+                createLogMessage(order, layer, path, method, traceId, ip, endTime, duration, args, result, visitor, INFO)
+            );
+        } catch (Exception ex) {
+            log.error("Logging failed");
+        }
     }
 
     private void increaseOrder() {
-        final String logOrder = MDC.get(LOG_ORDER);
-        final int order = logOrder != null ? Integer.parseInt(logOrder) : 0;
-        MDC.put(LOG_ORDER, String.valueOf(order + 1));
+        try {
+            final String logOrder = MDC.get(LOG_ORDER);
+            final int order = logOrder != null ? Integer.parseInt(logOrder) : 0;
+            MDC.put(LOG_ORDER, String.valueOf(order + 1));
+        } catch (Exception ex) {
+            log.error("Ordering failed");
+        }
     }
 
     private <T extends Annotation> T getAnnotation(

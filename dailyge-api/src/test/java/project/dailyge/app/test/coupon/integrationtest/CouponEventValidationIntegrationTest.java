@@ -38,7 +38,7 @@ class CouponEventValidationIntegrationTest extends DatabaseTestBase {
 
     @Test
     @DisplayName("쿠폰 발급 신청 참여 여부를 확인한다.")
-    void whenCallCouponCacheReadDaoReturnParticipationStatus() {
+    void whenCallCouponCacheReadDaoThenReturnParticipationStatus() {
         final long participantId = 4L;
         final long invalidParticipantId = 3L;
         final boolean validBit = couponCacheReadDao.existsByUserId(participantId);

@@ -28,9 +28,8 @@ class LogUtilsUnitTest {
     @DisplayName("createLogMessage로 올바른 형식의 로그 메시지를 반환할 수 있다.")
     void whenCreateLogMessageCalledThenReturnCorrectLog() throws JsonProcessingException {
         final String expectedLog = "{\"order\":\"1\",\"layer\":\"PRESENTATION\",\"path\":\"/api/test\",\"method\":\"GET\","
-            + "\"traceId\":\"123\",\"ip\":\"127.0.0.1\",\"visitor\":{\"userId\":null,\"role\":\"GUEST\"},"
-            + "\"time\":\"2024-09-11T12:00:00.000\",\"duration\":\"100ms\",\"context\":{\"args\":null,\"result\":null},"
-            + "\"level\":\"INFO\"}";
+            + "\"traceId\":\"123\",\"ip\":\"127.0.0.1\",\"visitor\":\"GUEST\",\"time\":\"2024-09-11T12:00:00.000\","
+            + "\"duration\":\"100ms\",\"context\":{\"args\":null,\"result\":null},\"level\":\"INFO\"}";
         final String actualLog = createLogMessage(
             1,
             "PRESENTATION",
@@ -52,9 +51,8 @@ class LogUtilsUnitTest {
     @DisplayName("createGuestLogMessage로 GUEST 로그 메시지를 반환할 수 있다.")
     void whenCreateGuestLogMessageThenReturnCorrectGuestLog() throws JsonProcessingException {
         final String expected = "{\"order\":\"1\",\"layer\":\"PRESENTATION\",\"path\":\"/api/test\",\"method\":\"GET\","
-            + "\"traceId\":\"123\",\"ip\":\"127.0.0.1\",\"visitor\":{\"userId\":null,\"role\":\"GUEST\"},"
-            + "\"time\":\"2024-09-11T12:00:00.000\",\"duration\":\"100ms\",\"context\":{\"args\":null,\"result\":null},"
-            + "\"level\":\"INFO\"}";
+            + "\"traceId\":\"123\",\"ip\":\"127.0.0.1\",\"visitor\":\"GUEST\",\"time\":\"2024-09-11T12:00:00.000\","
+            + "\"duration\":\"100ms\",\"context\":{\"args\":null,\"result\":null},\"level\":\"INFO\"}";
         final String actual = LogUtils.createGuestLogMessage(
             1,
             "PRESENTATION",
@@ -74,7 +72,7 @@ class LogUtilsUnitTest {
     @Test
     @DisplayName("getVisitor가 null을 입력받았을 때 GUEST JSON을 반환한다.")
     void whenGetVisitorCalledWithNullThenReturnGuest() throws Exception {
-        final String expected = "{ \"userId\":null, \"role\":\"GUEST\" }";
+        final String expected = "\"GUEST\"";
         final String actual = LogUtils.getVisitor(null);
         assertEquals(objectMapper.readTree(expected), objectMapper.readTree(actual));
     }

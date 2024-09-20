@@ -5,4 +5,12 @@ import project.dailyge.core.cache.coupon.CouponCache;
 import java.util.List;
 
 public record CouponEventBulks(List<CouponCache> couponCaches) {
+
+    @Override
+    public String toString() {
+        return String.format(
+            "{\"couponCaches\":\"%s\"}",
+            couponCaches
+        );
+    }
 }

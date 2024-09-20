@@ -48,6 +48,9 @@ jobs:
             ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
             ${{ runner.os }}-gradle-
 
+      - name: Run Static Analysis
+        run: ./gradlew pmdMain pmdTest checkstyleMain checkstyleTest
+
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

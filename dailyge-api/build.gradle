@@ -35,12 +35,10 @@ dependencies {
     implementation("software.amazon.awssdk:netty-nio-client") {
         exclude group: "io.netty", module: "netty-codec-http"
     }
-    implementation("software.amazon.awssdk:cloudwatchlogs")
-    implementation("ca.pjer:logback-awslogs-appender:1.6.0")
-
     implementation platform("io.awspring.cloud:spring-cloud-aws-dependencies:${property("awsSpringCloudVersion")}")
     implementation("software.amazon.awssdk:sns")
     implementation("io.awspring.cloud:spring-cloud-aws-starter-sqs")
+    implementation("com.google.code.gson:gson:2.10")
 
     testImplementation("org.springframework.restdocs:spring-restdocs-restassured")
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
@@ -51,7 +49,6 @@ dependencies {
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.testcontainers:mysql")
     testImplementation("org.springframework.cloud:spring-cloud-contract-wiremock")
-
     asciidoctorExt("org.springframework.restdocs:spring-restdocs-asciidoctor")
 }
 

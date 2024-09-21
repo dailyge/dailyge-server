@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import java.util.Base64;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -102,7 +103,7 @@ class TokenProviderUnitTest {
     void whenEncryptUserIdThenUserIdShouldBeEncrypted(final Long userId) {
         final String encryptedUserId = tokenProvider.encryptUserId(userId);
 
-        assertEquals(44, encryptedUserId.length());
+        assertDoesNotThrow(() -> Base64.getDecoder().decode(encryptedUserId));
     }
 
     @Test

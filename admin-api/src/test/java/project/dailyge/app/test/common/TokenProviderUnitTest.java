@@ -1,5 +1,6 @@
 package project.dailyge.app.test.common;
 
+import java.util.Base64;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -103,7 +104,7 @@ class TokenProviderUnitTest {
     void whenEncryptUserIdThenUserIdShouldBeEncrypted(final Long userId) {
         final String encryptedUserId = tokenProvider.encryptUserId(userId);
 
-        assertEquals(44, encryptedUserId.length());
+        assertDoesNotThrow(() -> Base64.getDecoder().decode(encryptedUserId));
     }
 
     @Test

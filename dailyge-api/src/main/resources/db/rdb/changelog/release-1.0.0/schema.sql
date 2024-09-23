@@ -25,8 +25,8 @@ CREATE TABLE IF NOT EXISTS tasks
 (
     id               BIGINT AUTO_INCREMENT PRIMARY KEY    NOT NULL COMMENT '할 일 ID',
     user_id          BIGINT                               NOT NULL COMMENT '사용자 ID',
-    title            VARCHAR(255)                         NOT NULL COMMENT '제목',
-    content          VARCHAR(255)                         NOT NULL COMMENT '내용',
+    title            VARCHAR(150)                         NOT NULL COMMENT '제목',
+    content          VARCHAR(2500)                         NOT NULL COMMENT '내용',
     `month`          INT                                  NOT NULL COMMENT '월',
     `year`           INT                                  NOT NULL COMMENT '년',
     `date`           DATE                                 NOT NULL COMMENT '날짜',

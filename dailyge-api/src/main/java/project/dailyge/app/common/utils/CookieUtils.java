@@ -23,8 +23,8 @@ public final class CookieUtils {
             final ResponseCookie cookie = ResponseCookie.from(name, value)
                 .domain(ROOT_DOMAIN)
                 .path(path)
-                .httpOnly(httpOnly)
-                .secure(true)
+                .httpOnly(false)
+                .secure(false)
                 .maxAge(maxAge)
                 .build();
             return cookie.toString();
@@ -45,8 +45,8 @@ public final class CookieUtils {
         final ResponseCookie clearCookie = ResponseCookie.from(name, null)
             .domain(ROOT_DOMAIN)
             .path("/")
-            .httpOnly(httpOnly)
-            .secure(true)
+            .httpOnly(false)
+            .secure(false)
             .maxAge(0)
             .build();
         return clearCookie.toString();
@@ -61,8 +61,8 @@ public final class CookieUtils {
         final Cookie cookie = new Cookie(name, value);
         cookie.setDomain(ROOT_DOMAIN);
         cookie.setPath(path);
-        cookie.setHttpOnly(true);
-        cookie.setSecure(true);
+        cookie.setHttpOnly(false);
+        cookie.setSecure(false);
         cookie.setMaxAge(maxAge);
         return cookie;
     }
@@ -71,8 +71,8 @@ public final class CookieUtils {
         final Cookie cookie = new Cookie(name, null);
         cookie.setDomain(ROOT_DOMAIN);
         cookie.setPath("/");
-        cookie.setHttpOnly(true);
-        cookie.setSecure(true);
+        cookie.setHttpOnly(false);
+        cookie.setSecure(false);
         cookie.setMaxAge(0);
         return cookie;
     }

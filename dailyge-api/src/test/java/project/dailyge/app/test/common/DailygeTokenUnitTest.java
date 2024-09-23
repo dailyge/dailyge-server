@@ -1,12 +1,13 @@
 package project.dailyge.app.test.common;
 
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import project.dailyge.app.common.auth.DailygeToken;
+
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import project.dailyge.app.common.auth.DailygeToken;
 
 @DisplayName("[UnitTest] DailygeToken 단위 테스트")
 class DailygeTokenUnitTest {
@@ -27,8 +28,8 @@ class DailygeTokenUnitTest {
             () -> assertTrue(accessTokenCookie.contains("Access-Token=accessTokenValue")),
             () -> assertTrue(accessTokenCookie.contains("Max-Age=1800")),
             () -> assertTrue(accessTokenCookie.contains("Path=/")),
-            () -> assertTrue(accessTokenCookie.contains("Secure")),
-            () -> assertTrue(accessTokenCookie.contains("HttpOnly")),
+            () -> assertFalse(accessTokenCookie.contains("Secure")),
+            () -> assertFalse(accessTokenCookie.contains("HttpOnly")),
             () -> assertTrue(accessTokenCookie.contains("Domain=.dailyge.com"))
         );
     }
@@ -42,8 +43,8 @@ class DailygeTokenUnitTest {
             () -> assertTrue(refreshTokenCookie.contains("Refresh-Token=refreshTokenValue")),
             () -> assertTrue(refreshTokenCookie.contains("Max-Age=2592000")),
             () -> assertTrue(refreshTokenCookie.contains("Path=/")),
-            () -> assertTrue(refreshTokenCookie.contains("Secure")),
-            () -> assertTrue(refreshTokenCookie.contains("HttpOnly")),
+            () -> assertFalse(refreshTokenCookie.contains("Secure")),
+            () -> assertFalse(refreshTokenCookie.contains("HttpOnly")),
             () -> assertTrue(refreshTokenCookie.contains("Domain=.dailyge.com"))
         );
     }

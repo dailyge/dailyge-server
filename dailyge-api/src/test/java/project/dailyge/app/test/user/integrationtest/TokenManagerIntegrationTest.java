@@ -1,22 +1,23 @@
 package project.dailyge.app.test.user.integrationtest;
 
 import io.lettuce.core.RedisConnectionException;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.junit.jupiter.api.Assertions;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_GATEWAY;
-import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
 import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.common.exception.CommonException;
 import project.dailyge.app.core.user.external.oauth.TokenManager;
+
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_GATEWAY;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
 
 @DisplayName("[IntegrationTest] TokenManager 통합 테스트")
 class TokenManagerIntegrationTest extends DatabaseTestBase {
@@ -30,7 +31,7 @@ class TokenManagerIntegrationTest extends DatabaseTestBase {
     private TokenManager tokenManager;
 
     private TokenManager mockTokenManager;
-    private RedisTemplate<String, byte[]> mockStringRedisTemplate;
+    private RedisTemplate<String, String> mockStringRedisTemplate;
 
     @BeforeEach
     void setUp() {

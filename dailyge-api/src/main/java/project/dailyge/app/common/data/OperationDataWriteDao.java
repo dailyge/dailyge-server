@@ -2,9 +2,15 @@ package project.dailyge.app.common.data;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.lettuce.core.RedisException;
-import static java.time.Duration.ofDays;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Table;
+import jakarta.persistence.metamodel.EntityType;
+import jakarta.validation.constraints.NotNull;
+import static java.util.stream.Collectors.toSet;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -20,16 +26,53 @@ import project.dailyge.core.cache.user.UserCache;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class OperationDataWriteDao {
-    private static final long CACHE_DURATION = 90;
 
+    @Value("${profile.email}")
+    private String email;
+
+    private final EntityManager entityManager;
+    private final Set<String> tableNames;
     private final JdbcTemplate jdbcTemplate;
     private final RedisTemplate<String, byte[]> redisTemplate;
     private final ObjectMapper objectMapper;
+
+    public void initData() {
+        save();
+    }
+
+    public void save() {
+        try {
+            for (int index = 1; index <= 10_000; index++) {
+                insertCache(index);
+            }
+        } catch (Exception ex) {
+            log.error("Cache initialized failed.");
+        }
+    }
+
+    private void insertCache(int index) {
+        final UserCache userCache = createUserCache(index);
+        final byte[] compressedCache = compressAsByteArrayWithZstd(userCache, objectMapper);
+        try {
+            redisTemplate.opsForValue().set(getKey(userCache.getId()), compressedCache);
+        } catch (RedisException ex) {
+            throw CommonException.from(ex.getMessage(), BAD_GATEWAY);
+        } catch (Exception ex) {
+            throw CommonException.from(ex.getMessage(), INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    private UserCache createUserCache(final int index) {
+        return new UserCache((long) index, index + email, index + email, "", "NORMAL");
+    }
 
     public Long save(final String email) {
         final String sql = "INSERT INTO user_sequence (email, executed) VALUES (?, ?)";
@@ -54,29 +97,35 @@ public class OperationDataWriteDao {
         }
     }
 
-    public void save(final UserCache userCache) {
-        final byte[] compressedCache = compressAsByteArrayWithZstd(userCache, objectMapper);
+    public void clearData() {
+        this.tableNames.clear();
+        final Set<String> tableNames = entityManager.getMetamodel()
+            .getEntities().stream()
+            .filter(isEntityType())
+            .map(toLowerCase())
+            .collect(toSet());
+        this.tableNames.addAll(tableNames);
         try {
-            executeRedisCommand(() ->
-                redisTemplate.opsForValue().set(
-                    getKey(userCache.getId()),
-                    compressedCache,
-                    ofDays(CACHE_DURATION)
-                )
-            );
+            for (final String table : this.tableNames) {
+                final String query = String.format("TRUNCATE %s", table);
+                jdbcTemplate.execute(query);
+            }
         } catch (Exception ex) {
-            log.error("Cache initialized failed.");
+            log.error("RDB Data initialization failed: {}", ex.getMessage());
         }
     }
 
-    private void executeRedisCommand(final Runnable command) {
-        try {
-            command.run();
-        } catch (RedisException ex) {
-            throw CommonException.from(ex.getMessage(), BAD_GATEWAY);
-        } catch (Exception ex) {
-            throw CommonException.from(ex.getMessage(), INTERNAL_SERVER_ERROR);
-        }
+    @NotNull
+    private Predicate<EntityType<?>> isEntityType() {
+        return entityType -> entityType.getJavaType().getAnnotation(Entity.class) != null;
+    }
+
+    @NotNull
+    private Function<EntityType<?>, String> toLowerCase() {
+        return entityType -> {
+            final Table tableAnnotation = entityType.getJavaType().getAnnotation(Table.class);
+            return tableAnnotation != null ? tableAnnotation.name().toLowerCase() : entityType.getName().toLowerCase();
+        };
     }
 
     private String getKey(final Long userId) {

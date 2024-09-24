@@ -1,4 +1,4 @@
-package project.dailyge.app.common.configuration.web;
+package project.dailyge.app.core.common.web;
 
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +9,10 @@ import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import project.dailyge.app.common.auth.DailygeUser;
+import project.dailyge.app.core.coupon.presentation.CouponReadApi;
+import project.dailyge.app.core.event.presentation.EventCreateApi;
+import static project.dailyge.entity.user.Role.NORMAL;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +27,8 @@ public class ServerWarmUpRunner implements ApplicationRunner {
     private static final int START = 1;
     private static final int END = 10;
 
+    private final CouponReadApi couponReadApi;
+    private final EventCreateApi eventCreateApi;
     private final RestTemplate restTemplate;
     private final EntityManager entityManager;
     private final RedisConnectionFactory redisConnectionFactory;
@@ -33,6 +39,8 @@ public class ServerWarmUpRunner implements ApplicationRunner {
             warmUp("Database Selects", this::warmUpRdb);
             warmUp("Redis Pongs", this::warmUpRedis);
             warmUp("External API Call", this::warmUpExternalApiCaller);
+            warmUp("CouponRead Method Warm Up", this::warmUpCouponReadApi);
+            warmUp("Event Participate Method Warm Up", this::warmUpEventParticipantApi);
         } catch (Exception ex) {
             log.error("WarmUp Ex: {}", ex.getMessage());
         }
@@ -73,5 +81,19 @@ public class ServerWarmUpRunner implements ApplicationRunner {
 
     private String warmUpExternalApiCaller() {
         return restTemplate.getForObject("https://www.google.com", String.class);
+    }
+
+    private Supplier<?> warmUpCouponReadApi() {
+        for (int index = 1; index <= 1_000; index++) {
+            couponReadApi.findCouponParticipationStatus(new DailygeUser(1L, NORMAL));
+        }
+        return () -> "";
+    }
+
+    private Supplier<?> warmUpEventParticipantApi() {
+        for (int index = 1; index <= 1_000; index++) {
+            eventCreateApi.createCouponEvent(new DailygeUser(1L, NORMAL), 1L);
+        }
+        return () -> "";
     }
 }

@@ -7,12 +7,15 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
-import static java.time.temporal.ChronoUnit.MILLIS;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
+
+import java.io.IOException;
+import java.time.LocalDateTime;
+
+import static java.time.temporal.ChronoUnit.MILLIS;
 import static project.dailyge.app.common.utils.IpUtils.extractIpAddress;
 import static project.dailyge.app.constant.LogConstant.ENTRANCE_LAYER;
 import static project.dailyge.app.constant.LogConstant.INFO;
@@ -30,12 +33,9 @@ import static project.dailyge.app.utils.LogUtils.createLogMessage;
 import static project.dailyge.document.common.UuidGenerator.createTimeBasedUUID;
 import static project.dailyge.entity.user.Role.GUEST;
 
-import java.io.IOException;
-import java.time.LocalDateTime;
-
 @Slf4j
 @Order(1)
-@Component
+//@Component
 @Profile("!test")
 public class MdcFilter implements Filter {
 

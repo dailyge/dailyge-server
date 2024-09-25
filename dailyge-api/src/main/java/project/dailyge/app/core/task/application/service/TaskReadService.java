@@ -7,6 +7,7 @@ import project.dailyge.app.core.task.application.TaskReadUseCase;
 import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.MONTHLY_TASK_NOT_FOUND;
 import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.TASK_NOT_FOUND;
 import project.dailyge.app.core.task.exception.TaskTypeException;
+import project.dailyge.dto.task.TaskStatisticDto;
 import project.dailyge.entity.task.MonthlyTaskEntityReadRepository;
 import project.dailyge.entity.task.MonthlyTaskJpaEntity;
 import project.dailyge.entity.task.TaskEntityReadRepository;
@@ -87,6 +88,21 @@ class TaskReadService implements TaskReadUseCase {
         }
         final List<TaskJpaEntity> findTasks = taskReadRepository.findTasksByMonthlyTaskIdAndDates(dailygeUser.getId(), findMonthlyTaskIds, startDate, endDate);
         return new Tasks(findTasks);
+    }
+
+    @Override
+    public List<TaskStatisticDto> findMonthlyTasksStatisticByUserIdAndDate(
+        final DailygeUser dailygeUser,
+        final LocalDate startDate,
+        final LocalDate endDate
+    ) {
+        final Set<Long> findMonthlyTaskIds = monthlyTaskReadRepository.findMonthlyTasksByUserIdAndDates(dailygeUser.getId(), startDate, endDate);
+        if (findMonthlyTaskIds.isEmpty()) {
+            return Collections.emptyList();
+        }
+        final List<TaskStatisticDto> findTasks = taskReadRepository
+            .findTaskStatisticByMonthlyTaskIdAndDates(dailygeUser.getId(), findMonthlyTaskIds, startDate, endDate);
+        return findTasks;
     }
 
     @Override

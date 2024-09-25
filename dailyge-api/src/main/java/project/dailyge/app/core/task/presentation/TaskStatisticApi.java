@@ -1,5 +1,6 @@
 package project.dailyge.app.core.task.presentation;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,8 +11,10 @@ import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.common.auth.LoginUser;
 import project.dailyge.app.common.response.ApiResponse;
 import project.dailyge.app.core.task.application.TaskReadUseCase;
+import project.dailyge.app.core.task.presentation.response.MonthlyTasksStatisticResponse;
 import project.dailyge.app.core.task.presentation.response.WeeklyTasksStatisticResponse;
 import project.dailyge.app.core.task.presentation.validator.TaskClientValidator;
+import project.dailyge.dto.task.TaskStatisticDto;
 import project.dailyge.entity.task.Tasks;
 
 import java.time.LocalDate;
@@ -33,6 +36,18 @@ public class TaskStatisticApi {
         validator.validateFromStartDateToEndDate(startDate, endDate);
         final Tasks weeklyTasks = taskReadUseCase.findWeeklyTasksStatisticByUserIdAndDate(dailygeUser, startDate, endDate);
         final WeeklyTasksStatisticResponse payload = new WeeklyTasksStatisticResponse(startDate, endDate, weeklyTasks);
+        return ApiResponse.from(OK, payload);
+    }
+
+    @GetMapping(path = {"/tasks/statistic/monthly"})
+    public ApiResponse<MonthlyTasksStatisticResponse> findMonthlyTasksStatisticByUserIdAndDate(
+        @LoginUser final DailygeUser dailygeUser,
+        @RequestParam(value = "startDate") final LocalDate startDate,
+        @RequestParam(value = "endDate") final LocalDate endDate
+    ) {
+        validator.validateOneMonthDifference(startDate, endDate);
+        final List<TaskStatisticDto> monthlyTasks = taskReadUseCase.findMonthlyTasksStatisticByUserIdAndDate(dailygeUser, startDate, endDate);
+        final MonthlyTasksStatisticResponse payload = new MonthlyTasksStatisticResponse(startDate, endDate, monthlyTasks);
         return ApiResponse.from(OK, payload);
     }
 }

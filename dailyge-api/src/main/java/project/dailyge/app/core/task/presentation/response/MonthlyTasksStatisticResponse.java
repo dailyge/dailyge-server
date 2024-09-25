@@ -36,10 +36,10 @@ public class MonthlyTasksStatisticResponse {
                 collectingAndThen(
                     toList(),
                     oneDayTasks -> {
-                        final int successCount = (int) tasks.stream()
+                        final int successCount = (int) oneDayTasks.stream()
                             .filter(task -> task.status() == TaskStatus.DONE)
                             .count();
-                        final int failedCount = tasks.size() - successCount;
+                        final int failedCount = oneDayTasks.size() - successCount;
                         return new TaskCountByDateResponse(successCount, failedCount);
                     }
                 )

@@ -1,21 +1,19 @@
 package project.dailyge.app.common.log;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import static java.lang.String.format;
+import static java.time.temporal.ChronoUnit.MILLIS;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.MDC;
+import org.springframework.stereotype.Component;
 import project.dailyge.app.common.annotation.ApplicationLayer;
 import project.dailyge.app.common.annotation.ExternalLayer;
 import project.dailyge.app.common.annotation.FacadeLayer;
 import project.dailyge.app.common.annotation.PresentationLayer;
-
-import java.lang.annotation.Annotation;
-import java.time.LocalDateTime;
-
-import static java.lang.String.format;
-import static java.time.temporal.ChronoUnit.MILLIS;
 import static project.dailyge.app.constant.LogConstant.INFO;
 import static project.dailyge.app.constant.LogConstant.IN_COMING;
 import static project.dailyge.app.constant.LogConstant.IP;
@@ -27,9 +25,12 @@ import static project.dailyge.app.constant.LogConstant.TRACE_ID;
 import static project.dailyge.app.constant.LogConstant.USER_ID;
 import static project.dailyge.app.utils.LogUtils.createLogMessage;
 
+import java.lang.annotation.Annotation;
+import java.time.LocalDateTime;
+
 @Slf4j
-//@Aspect
-//@Component
+@Aspect
+@Component
 @RequiredArgsConstructor
 public class LoggingAspect {
 

@@ -100,7 +100,7 @@ class TaskReadIntegrationTest extends DatabaseTestBase {
 
         final LocalDate startDate = now;
         final LocalDate endDate = now.plusDays(10);
-        final Tasks tasks = taskReadUseCase.findWeeklyTasksStatisticByUserIdAndDate(dailygeUser, startDate, endDate);
+        final Tasks tasks = taskReadUseCase.findTasksStatisticByUserIdAndDate(dailygeUser, startDate, endDate);
 
         Assertions.assertTrue(tasks.size() > 0);
     }
@@ -111,7 +111,7 @@ class TaskReadIntegrationTest extends DatabaseTestBase {
         final LocalDate invalidStartDate = LocalDate.now().minusYears(10);
         final LocalDate invalidEndDate = LocalDate.now().minusYears(10).plusDays(7);
 
-        final Tasks tasks = taskReadUseCase.findWeeklyTasksStatisticByUserIdAndDate(dailygeUser, invalidStartDate, invalidEndDate);
+        final Tasks tasks = taskReadUseCase.findTasksStatisticByUserIdAndDate(dailygeUser, invalidStartDate, invalidEndDate);
         Assertions.assertEquals(0, tasks.size());
     }
 
@@ -121,7 +121,7 @@ class TaskReadIntegrationTest extends DatabaseTestBase {
         final LocalDate futureStartDate = LocalDate.now().plusYears(15);
         final LocalDate futureEndDate = futureStartDate.plusDays(7);
 
-        final Tasks tasks = taskReadUseCase.findWeeklyTasksStatisticByUserIdAndDate(dailygeUser, futureStartDate, futureEndDate);
+        final Tasks tasks = taskReadUseCase.findTasksStatisticByUserIdAndDate(dailygeUser, futureStartDate, futureEndDate);
         Assertions.assertEquals(0, tasks.size());
     }
 }

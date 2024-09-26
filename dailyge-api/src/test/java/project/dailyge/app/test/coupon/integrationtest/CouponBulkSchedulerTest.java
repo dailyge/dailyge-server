@@ -7,19 +7,21 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.core.coupon.application.scheduler.CouponBulkScheduler;
 import project.dailyge.app.core.coupon.persistence.CouponEventParticipant;
 import project.dailyge.app.core.coupon.persistence.CouponInMemoryRepository;
-import project.dailyge.core.cache.coupon.CouponCacheReadUseCase;
+import project.dailyge.core.cache.coupon.CouponCacheReadRepository;
 import project.dailyge.core.cache.coupon.CouponCacheWriteUseCase;
 
+import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.LongStream;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("[통합 테스트] CouponBulkScheduler 동작 테스트")
 class CouponBulkSchedulerTest extends DatabaseTestBase {
@@ -33,25 +35,33 @@ class CouponBulkSchedulerTest extends DatabaseTestBase {
     private CouponBulkScheduler couponBulkScheduler;
 
     @Autowired
-    private CouponCacheReadUseCase couponCacheReadUseCase;
+    private CouponCacheReadRepository couponCacheReadRepository;
 
     @Autowired
     private CouponCacheWriteUseCase couponCacheWriteUseCase;
 
+    @Autowired
+    private RedisTemplate<String, byte[]> redisTemplate;
+
     @BeforeEach
     void setUp() {
-        LongStream.range(1L, 10000L)
-            .forEach(number -> couponInMemoryRepository.save(new CouponEventParticipant(number, number)));
+        couponInMemoryRepository.deleteAll();
+        final Set<String> keys = redisTemplate.keys("*");
+        if (keys != null) {
+            redisTemplate.delete(keys);
+        }
     }
 
     @Test
     @Disabled
     @DisplayName("스케줄러가 시작하면 폴링 작업을 한다.")
     void whenStartSchedulerThenPollingRuns() throws InterruptedException {
+        LongStream.range(1L, 10001L)
+            .forEach(number -> couponInMemoryRepository.save(new CouponEventParticipant(number, number)));
         couponBulkScheduler.startFixedTask(5, couponCacheWriteUseCase::saveBulks);
         Thread.sleep(30000);
         couponBulkScheduler.stop();
-        assertTrue(couponCacheReadUseCase.existsByUserId(1L));
+        assertEquals(10000, couponCacheReadRepository.findBulks(1, 10000, 1L).size());
     }
 
     @Test

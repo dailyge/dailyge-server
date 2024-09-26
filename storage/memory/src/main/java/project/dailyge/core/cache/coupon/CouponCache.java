@@ -40,4 +40,13 @@ public class CouponCache implements Serializable {
         result = 31 * result + (timestamp != null ? timestamp.hashCode() : 0);
         return result;
     }
+
+    public boolean isFaster(final CouponCache other) {
+        return other.timestamp > this.timestamp;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("{\"userId\":\"%s\",\"timestamp\":\"%s\"}", userId, timestamp);
+    }
 }

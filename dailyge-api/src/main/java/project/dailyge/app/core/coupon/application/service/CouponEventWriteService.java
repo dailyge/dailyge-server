@@ -13,6 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @ApplicationLayer(value = "CouponEventWriteService")
 class CouponEventWriteService implements CouponCacheWriteUseCase {
+
     private final CouponCacheWriteRepository couponCacheWriteRepository;
     private final CouponInMemoryRepository couponInMemoryRepository;
 
@@ -25,6 +26,6 @@ class CouponEventWriteService implements CouponCacheWriteUseCase {
         final List<CouponCache> couponCaches = participants.stream()
             .map(participant -> new CouponCache(participant.getUserId(), participant.getTimestamp()))
             .toList();
-        couponCacheWriteRepository.saveBulks(couponCaches);
+        couponCacheWriteRepository.saveBulks(couponCaches, 1L);
     }
 }

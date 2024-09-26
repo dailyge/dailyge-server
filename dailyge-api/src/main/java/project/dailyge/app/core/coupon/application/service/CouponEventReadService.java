@@ -13,6 +13,6 @@ class CouponEventReadService implements CouponCacheReadUseCase {
 
     @Override
     public boolean existsByUserId(final Long userId) {
-        return couponCacheReadRepository.existsByUserId(userId);
+        return couponCacheReadRepository.existsByUserId(userId, 1L);
     }
 }

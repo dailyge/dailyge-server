@@ -1,7 +1,7 @@
 package project.dailyge.app.core.coupon.application;
 
 import org.springframework.stereotype.Component;
-import project.dailyge.core.cache.coupon.CouponCache;
+import project.dailyge.core.cache.coupon.CouponEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,17 +12,17 @@ import static java.lang.Long.compare;
 @Component
 public class WinnerAlgorithm {
 
-    private final PriorityQueue<CouponCache> priorityQueue = new PriorityQueue<>((x, y) -> compare(y.getTimestamp(), x.getTimestamp()));
+    private final PriorityQueue<CouponEvent> priorityQueue = new PriorityQueue<>((x, y) -> compare(y.getTimestamp(), x.getTimestamp()));
 
     public void addEvents(
-        final List<CouponCache> couponEvents,
+        final List<CouponEvent> couponEvents,
         final int winnerCount
     ) {
         couponEvents.forEach(event -> addEvent(event, winnerCount));
     }
 
     private void addEvent(
-        final CouponCache couponEvent,
+        final CouponEvent couponEvent,
         final int winnerCount
     ) {
         if (priorityQueue.size() < winnerCount) {
@@ -32,8 +32,8 @@ public class WinnerAlgorithm {
         }
     }
 
-    private void replaceEvent(final CouponCache couponEvent) {
-        final CouponCache comparedEvent = priorityQueue.peek();
+    private void replaceEvent(final CouponEvent couponEvent) {
+        final CouponEvent comparedEvent = priorityQueue.peek();
         if (couponEvent.isFaster(comparedEvent)) {
             priorityQueue.poll();
             priorityQueue.add(couponEvent);
@@ -43,8 +43,8 @@ public class WinnerAlgorithm {
     public List<Long> selectWinners() {
         final List<Long> userIds = new ArrayList<>();
         while (!priorityQueue.isEmpty()) {
-            final CouponCache couponCache = priorityQueue.poll();
-            userIds.add(couponCache.getUserId());
+            final CouponEvent couponEvent = priorityQueue.poll();
+            userIds.add(couponEvent.getUserId());
         }
         return userIds;
     }

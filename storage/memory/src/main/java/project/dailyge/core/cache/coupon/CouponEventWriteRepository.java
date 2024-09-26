@@ -2,9 +2,9 @@ package project.dailyge.core.cache.coupon;
 
 import java.util.List;
 
-public interface CouponCacheWriteRepository {
+public interface CouponEventWriteRepository {
 
-    void saveBulks(List<CouponCache> couponCaches, Long eventId);
+    void saveBulks(List<CouponEvent> couponCaches, Long eventId);
 
     void deleteAllBulks(Long eventId);
 

@@ -5,9 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import project.dailyge.app.core.coupon.application.CouponUseCase;
 import project.dailyge.app.core.coupon.application.WinnerAlgorithm;
-import project.dailyge.core.cache.coupon.CouponCache;
-import project.dailyge.core.cache.coupon.CouponCacheReadRepository;
-import project.dailyge.core.cache.coupon.CouponCacheWriteRepository;
+import project.dailyge.core.cache.coupon.CouponEvent;
+import project.dailyge.core.cache.coupon.CouponEventReadRepository;
+import project.dailyge.core.cache.coupon.CouponEventWriteRepository;
 
 import java.util.List;
 
@@ -18,8 +18,8 @@ public class CouponService implements CouponUseCase {
 
     private final CouponEventValidator validator;
     private final WinnerAlgorithm winnerAlgorithm;
-    private final CouponCacheReadRepository couponCacheReadRepository;
-    private final CouponCacheWriteRepository couponCacheWriteRepository;
+    private final CouponEventReadRepository couponEventReadRepository;
+    private final CouponEventWriteRepository couponEventWriteRepository;
 
     @Override
     public void findWinners(
@@ -27,13 +27,13 @@ public class CouponService implements CouponUseCase {
         final Long eventId
     ) {
         validator.validateEventRun(eventId);
-        couponCacheWriteRepository.saveEventRun(eventId);
-        final int totalCount = couponCacheReadRepository.findQueueCount(eventId);
+        couponEventWriteRepository.saveEventRun(eventId);
+        final int totalCount = couponEventReadRepository.findQueueCount(eventId);
         if (totalCount == 0) {
             return;
         }
         executeSelection(totalCount, winnerCount, eventId);
-        couponCacheWriteRepository.deleteAllBulks(eventId);
+        couponEventWriteRepository.deleteAllBulks(eventId);
     }
 
     private void executeSelection(
@@ -43,7 +43,7 @@ public class CouponService implements CouponUseCase {
     ) {
         int queueNumber = 0;
         while (queueNumber < totalCount) {
-            List<CouponCache> couponEvents = couponCacheReadRepository.findBulks(queueNumber, winnerCount, eventId);
+            List<CouponEvent> couponEvents = couponEventReadRepository.findBulks(queueNumber, winnerCount, eventId);
             if (couponEvents.isEmpty()) {
                 queueNumber++;
                 continue;

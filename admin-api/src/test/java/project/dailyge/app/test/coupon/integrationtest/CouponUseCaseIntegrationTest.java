@@ -8,8 +8,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.core.coupon.application.CouponUseCase;
 import project.dailyge.app.test.coupon.fixture.CouponWinnerFixture;
-import project.dailyge.core.cache.coupon.CouponCache;
-import project.dailyge.core.cache.coupon.CouponCacheWriteRepository;
+import project.dailyge.core.cache.coupon.CouponEvent;
+import project.dailyge.core.cache.coupon.CouponEventWriteRepository;
 
 import java.util.List;
 import java.util.Set;
@@ -21,7 +21,7 @@ class CouponUseCaseIntegrationTest extends DatabaseTestBase {
     private CouponUseCase couponUseCase;
 
     @Autowired
-    private CouponCacheWriteRepository couponCacheWriteRepository;
+    private CouponEventWriteRepository couponEventWriteRepository;
 
     @Autowired
     private RedisTemplate<String, byte[]> redisTemplate;
@@ -40,10 +40,10 @@ class CouponUseCaseIntegrationTest extends DatabaseTestBase {
         final int totalCount = 10000;
         final int queueCount = 10;
         final int winnerCount = 1000;
-        final List<CouponCache> couponWinners = CouponWinnerFixture.makeExpectedCouponEvents(winnerCount);
-        final List<List<CouponCache>> candidates = CouponWinnerFixture.makeRandomData(totalCount, queueCount, couponWinners);
-        for (List<CouponCache> couponEvents : candidates) {
-            couponCacheWriteRepository.saveBulks(couponEvents, 1L);
+        final List<CouponEvent> couponWinners = CouponWinnerFixture.makeExpectedCouponEvents(winnerCount);
+        final List<List<CouponEvent>> candidates = CouponWinnerFixture.makeRandomData(totalCount, queueCount, couponWinners);
+        for (List<CouponEvent> couponEvents : candidates) {
+            couponEventWriteRepository.saveBulks(couponEvents, 1L);
         }
         couponUseCase.findWinners(1000, 1L);
         //TODO: 당첨자에 대해 쿠폰 발급 추가 시 검증

@@ -8,9 +8,9 @@ import org.springframework.data.redis.core.RedisTemplate;
 import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.core.coupon.persistence.CouponEventParticipant;
 import project.dailyge.app.core.coupon.persistence.CouponInMemoryRepository;
-import project.dailyge.core.cache.coupon.CouponCache;
-import project.dailyge.core.cache.coupon.CouponCacheReadRepository;
-import project.dailyge.core.cache.coupon.CouponCacheWriteUseCase;
+import project.dailyge.core.cache.coupon.CouponEvent;
+import project.dailyge.core.cache.coupon.CouponEventReadRepository;
+import project.dailyge.core.cache.coupon.CouponEventWriteUseCase;
 import project.dailyge.document.common.UuidGenerator;
 
 import java.util.ArrayList;
@@ -24,13 +24,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class CouponBulksIntegrationTest extends DatabaseTestBase {
 
     @Autowired
-    private CouponCacheWriteUseCase couponCacheWriteUseCase;
+    private CouponEventWriteUseCase couponEventWriteUseCase;
 
     @Autowired
     private CouponInMemoryRepository couponInMemoryRepository;
 
     @Autowired
-    private CouponCacheReadRepository couponCacheReadDao;
+    private CouponEventReadRepository couponCacheReadDao;
 
     @Autowired
     private RedisTemplate<String, byte[]> redisTemplate;
@@ -48,13 +48,13 @@ class CouponBulksIntegrationTest extends DatabaseTestBase {
     @DisplayName("인메모리큐에 있던 쿠폰 요청 벌크들이 있으면 Redis에 저장된다.")
     void whenCouponBulksExistsThenRedisSave() {
         final long maxId = 10;
-        final List<CouponCache> expectedCouponEvents = new ArrayList<>();
+        final List<CouponEvent> expectedCouponEvents = new ArrayList<>();
         for (long id = 1; id <= maxId; id++) {
             final long timestamp = UuidGenerator.createTimeStamp();
             couponInMemoryRepository.save(new CouponEventParticipant(id, timestamp));
-            expectedCouponEvents.add(new CouponCache(id, timestamp));
+            expectedCouponEvents.add(new CouponEvent(id, timestamp));
         }
-        couponCacheWriteUseCase.saveBulks();
+        couponEventWriteUseCase.saveBulks();
         assertEquals(0, couponInMemoryRepository.count());
         for (long id = 1; id <= maxId; id++) {
             assertTrue(couponCacheReadDao.existsByUserId(id, 1L));
@@ -67,17 +67,17 @@ class CouponBulksIntegrationTest extends DatabaseTestBase {
     @DisplayName("인메모리에 있던 쿠폰 요청 벌크들이 있으면 Redis에 저장된다.")
     void whenMultipleCouponBulksExistsThenRedisShouldSave() {
         final long maxId = 10;
-        final List<List<CouponCache>> expectedCouponBulksQueues = new ArrayList<>();
+        final List<List<CouponEvent>> expectedCouponBulksQueues = new ArrayList<>();
         final int totalCount = 2;
         for (int count = 1; count <= totalCount; count++) {
-            final List<CouponCache> expectedCouponEvents = new ArrayList<>();
+            final List<CouponEvent> expectedCouponEvents = new ArrayList<>();
             for (long id = 1; id <= maxId; id++) {
                 final long timestamp = UuidGenerator.createTimeStamp();
                 couponInMemoryRepository.save(new CouponEventParticipant(id, timestamp));
-                expectedCouponEvents.add(new CouponCache(id, timestamp));
+                expectedCouponEvents.add(new CouponEvent(id, timestamp));
             }
             expectedCouponBulksQueues.add(expectedCouponEvents);
-            couponCacheWriteUseCase.saveBulks();
+            couponEventWriteUseCase.saveBulks();
         }
         for (int number = 1; number <= totalCount; number++) {
             assertEquals(expectedCouponBulksQueues.get(number - 1), couponCacheReadDao.findBulks(number, (int) maxId, 1L));

@@ -12,8 +12,8 @@ import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.core.coupon.application.scheduler.CouponBulkScheduler;
 import project.dailyge.app.core.coupon.persistence.CouponEventParticipant;
 import project.dailyge.app.core.coupon.persistence.CouponInMemoryRepository;
-import project.dailyge.core.cache.coupon.CouponCacheReadRepository;
-import project.dailyge.core.cache.coupon.CouponCacheWriteUseCase;
+import project.dailyge.core.cache.coupon.CouponEventReadRepository;
+import project.dailyge.core.cache.coupon.CouponEventWriteUseCase;
 
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
@@ -35,10 +35,10 @@ class CouponBulkSchedulerTest extends DatabaseTestBase {
     private CouponBulkScheduler couponBulkScheduler;
 
     @Autowired
-    private CouponCacheReadRepository couponCacheReadRepository;
+    private CouponEventReadRepository couponEventReadRepository;
 
     @Autowired
-    private CouponCacheWriteUseCase couponCacheWriteUseCase;
+    private CouponEventWriteUseCase couponEventWriteUseCase;
 
     @Autowired
     private RedisTemplate<String, byte[]> redisTemplate;
@@ -58,10 +58,10 @@ class CouponBulkSchedulerTest extends DatabaseTestBase {
     void whenStartSchedulerThenPollingRuns() throws InterruptedException {
         LongStream.range(1L, 10001L)
             .forEach(number -> couponInMemoryRepository.save(new CouponEventParticipant(number, number)));
-        couponBulkScheduler.startFixedTask(5, couponCacheWriteUseCase::saveBulks);
+        couponBulkScheduler.startFixedTask(5, couponEventWriteUseCase::saveBulks);
         Thread.sleep(30000);
         couponBulkScheduler.stop();
-        assertEquals(10000, couponCacheReadRepository.findBulks(1, 10000, 1L).size());
+        assertEquals(10000, couponEventReadRepository.findBulks(1, 10000, 1L).size());
     }
 
     @Test

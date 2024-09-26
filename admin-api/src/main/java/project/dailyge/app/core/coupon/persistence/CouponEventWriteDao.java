@@ -8,8 +8,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 import project.dailyge.app.common.exception.CommonException;
 import project.dailyge.common.configuration.CompressionHelper;
-import project.dailyge.core.cache.coupon.CouponCache;
-import project.dailyge.core.cache.coupon.CouponCacheWriteRepository;
+import project.dailyge.core.cache.coupon.CouponEvent;
+import project.dailyge.core.cache.coupon.CouponEventWriteRepository;
 
 import java.util.List;
 
@@ -19,14 +19,14 @@ import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_S
 
 @Repository
 @RequiredArgsConstructor
-public class CouponEventWriteDao implements CouponCacheWriteRepository {
+public class CouponEventWriteDao implements CouponEventWriteRepository {
 
     private final RedisTemplate<String, byte[]> redisTemplate;
     private final ObjectMapper objectMapper;
 
     @Override
     public void saveBulks(
-        final List<CouponCache> couponCaches,
+        final List<CouponEvent> couponCaches,
         final Long eventId
     ) {
         if (couponCaches == null || couponCaches.isEmpty()) {

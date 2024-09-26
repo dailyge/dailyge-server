@@ -8,8 +8,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 import project.dailyge.app.common.exception.CommonException;
 import project.dailyge.common.configuration.CompressionHelper;
-import project.dailyge.core.cache.coupon.CouponCache;
-import project.dailyge.core.cache.coupon.CouponCacheReadRepository;
+import project.dailyge.core.cache.coupon.CouponEvent;
+import project.dailyge.core.cache.coupon.CouponEventReadRepository;
 
 import java.util.Collections;
 import java.util.List;
@@ -21,7 +21,7 @@ import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_S
 
 @Repository
 @RequiredArgsConstructor
-class CouponEventReadDao implements CouponCacheReadRepository {
+class CouponEventReadDao implements CouponEventReadRepository {
 
     private final RedisTemplate<String, byte[]> redisTemplate;
     private final ObjectMapper objectMapper;
@@ -41,7 +41,7 @@ class CouponEventReadDao implements CouponCacheReadRepository {
     }
 
     @Override
-    public List<CouponCache> findBulks(
+    public List<CouponEvent> findBulks(
         final int queueIndex,
         final int limit,
         final Long eventId
@@ -53,7 +53,7 @@ class CouponEventReadDao implements CouponCacheReadRepository {
         }
         final List<byte[]> compressedList = listOperations.range(findCouponBulkKey(eventId, queueIndex), 0, limit - 1);
         return compressedList.stream()
-            .map(compressedData -> CompressionHelper.decompressAsObjWithZstd(compressedData, CouponCache.class, objectMapper))
+            .map(compressedData -> CompressionHelper.decompressAsObjWithZstd(compressedData, CouponEvent.class, objectMapper))
             .collect(Collectors.toList());
     }
 

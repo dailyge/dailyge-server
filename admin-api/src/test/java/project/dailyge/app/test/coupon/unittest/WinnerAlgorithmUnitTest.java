@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import project.dailyge.app.core.coupon.application.WinnerAlgorithm;
-import project.dailyge.core.cache.coupon.CouponCache;
+import project.dailyge.core.cache.coupon.CouponEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +27,7 @@ public class WinnerAlgorithmUnitTest {
     void whenUseSameTimeStampDataThenWinnerIdSizeShouldBeSameWithWinnerCount() {
         final int winnerCount = 4;
         final int queueCount = 2;
-        List<CouponCache> couponEvents = makeExpectedCouponEvents(winnerCount);
+        List<CouponEvent> couponEvents = makeExpectedCouponEvents(winnerCount);
         for (int i = 0; i < queueCount; i++) {
             winnerAlgorithm.addEvents(couponEvents, winnerCount);
         }
@@ -39,33 +39,33 @@ public class WinnerAlgorithmUnitTest {
     @DisplayName("랜덤 데이터를 넣으면 예상결과와 똑같아야 한다.")
     void whenUseRandomDataThenResultShouldBeSameWithExpectedData() {
         final int winnerCount = 1000;
-        final List<CouponCache> expectedWinCouponEvents = makeExpectedCouponEvents(winnerCount);
-        final List<List<CouponCache>> candidates = makeRandomData(100_000, 200, expectedWinCouponEvents);
+        final List<CouponEvent> expectedWinCouponEvents = makeExpectedCouponEvents(winnerCount);
+        final List<List<CouponEvent>> candidates = makeRandomData(100_000, 200, expectedWinCouponEvents);
         candidates.forEach(events -> winnerAlgorithm.addEvents(events, winnerCount));
         final List<Long> winnerIds = winnerAlgorithm.selectWinners();
         winnerIds.sort(Long::compare);
         final List<Long> expectedWinnerIds = expectedWinCouponEvents.stream()
-            .map(CouponCache::getUserId).toList();
+            .map(CouponEvent::getUserId).toList();
         assertEquals(expectedWinnerIds, winnerIds);
     }
 
-    private List<CouponCache> makeExpectedCouponEvents(final int winnerCount) {
+    private List<CouponEvent> makeExpectedCouponEvents(final int winnerCount) {
         return LongStream.range(1L, winnerCount + 1)
-            .mapToObj(number -> new CouponCache(2 * number, number))
+            .mapToObj(number -> new CouponEvent(2 * number, number))
             .toList();
     }
 
-    private List<List<CouponCache>> makeRandomData(
+    private List<List<CouponEvent>> makeRandomData(
         final int totalCount,
         final int queueCount,
-        final List<CouponCache> winners
+        final List<CouponEvent> winners
     ) {
         final Random random = new Random();
-        final List<List<CouponCache>> couponEventsList = new ArrayList<>();
+        final List<List<CouponEvent>> couponEventsList = new ArrayList<>();
         int remainedCount = totalCount - winners.size();
         int remainedWinner = winners.size();
         for (int number = 1; number <= queueCount; number++) {
-            final List<CouponCache> couponEvents = new ArrayList<>();
+            final List<CouponEvent> couponEvents = new ArrayList<>();
             int queueSize = random.nextInt(remainedCount + 1);
             int winnerSize = random.nextInt(remainedWinner + 1);
             if (number == queueCount) {
@@ -77,7 +77,7 @@ public class WinnerAlgorithmUnitTest {
             }
             for (int idx = 0; idx < queueSize; idx++) {
                 final long timestamp = random.nextLong(winners.size() + 1, Long.MAX_VALUE);
-                couponEvents.add(new CouponCache(2 * timestamp, timestamp));
+                couponEvents.add(new CouponEvent(2 * timestamp, timestamp));
             }
             remainedCount -= queueSize;
             remainedWinner -= winnerSize;

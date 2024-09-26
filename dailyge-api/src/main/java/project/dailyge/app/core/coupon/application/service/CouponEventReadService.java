@@ -2,17 +2,17 @@ package project.dailyge.app.core.coupon.application.service;
 
 import lombok.RequiredArgsConstructor;
 import project.dailyge.app.common.annotation.ApplicationLayer;
-import project.dailyge.core.cache.coupon.CouponCacheReadRepository;
-import project.dailyge.core.cache.coupon.CouponCacheReadUseCase;
+import project.dailyge.core.cache.coupon.CouponEventReadRepository;
+import project.dailyge.core.cache.coupon.CouponEventReadUseCase;
 
 @RequiredArgsConstructor
 @ApplicationLayer(value = "CouponEventReadService")
-class CouponEventReadService implements CouponCacheReadUseCase {
+class CouponEventReadService implements CouponEventReadUseCase {
 
-    private final CouponCacheReadRepository couponCacheReadRepository;
+    private final CouponEventReadRepository couponEventReadRepository;
 
     @Override
     public boolean existsByUserId(final Long userId) {
-        return couponCacheReadRepository.existsByUserId(userId, 1L);
+        return couponEventReadRepository.existsByUserId(userId, 1L);
     }
 }

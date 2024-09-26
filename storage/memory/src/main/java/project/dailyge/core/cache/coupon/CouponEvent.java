@@ -6,14 +6,14 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Getter
-public class CouponCache implements Serializable {
+public class CouponEvent implements Serializable {
     private Long userId;
     private Long timestamp;
 
-    private CouponCache() {
+    private CouponEvent() {
     }
 
-    public CouponCache(
+    public CouponEvent(
         final Long userId,
         final Long timestamp) {
         this.userId = userId;
@@ -25,7 +25,7 @@ public class CouponCache implements Serializable {
         if (this == object) {
             return true;
         }
-        if (!(object instanceof CouponCache that)) {
+        if (!(object instanceof CouponEvent that)) {
             return false;
         }
         if (!Objects.equals(userId, that.userId)) {
@@ -41,7 +41,7 @@ public class CouponCache implements Serializable {
         return result;
     }
 
-    public boolean isFaster(final CouponCache other) {
+    public boolean isFaster(final CouponEvent other) {
         return other.timestamp > this.timestamp;
     }
 

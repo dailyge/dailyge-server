@@ -14,7 +14,7 @@ import java.util.stream.LongStream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("[UnitTest] WinnerAlgorithm 단위테스트")
-public class WinnerAlgorithmUnitTest {
+class WinnerAlgorithmUnitTest {
     private WinnerAlgorithm winnerAlgorithm;
 
     @BeforeEach

@@ -14,7 +14,8 @@ import project.dailyge.core.cache.coupon.CouponEventWriteRepository;
 import static io.restassured.RestAssured.given;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-public class CouponWinnerDocumentationTest extends DatabaseTestBase {
+@DisplayName("[DocumentationTest] 쿠폰 당첨자 선정 문서화 테스트")
+class CouponWinnerDocumentationTest extends DatabaseTestBase {
 
     @Autowired
     private CouponEventWriteRepository repository;

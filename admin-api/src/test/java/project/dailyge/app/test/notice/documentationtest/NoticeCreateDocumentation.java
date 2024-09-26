@@ -10,10 +10,11 @@ import org.springframework.restdocs.restassured.RestDocumentationFilter;
 import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.common.auth.DailygeToken;
 import project.dailyge.app.common.auth.TokenProvider;
-import project.dailyge.app.notice.presentation.request.NoticeCreateRequest;
+import project.dailyge.app.core.notice.presentation.request.NoticeCreateRequest;
 import project.dailyge.core.cache.user.UserCache;
 import project.dailyge.core.cache.user.UserCacheWriteUseCase;
 import project.dailyge.entity.user.Role;
+
 import static io.restassured.RestAssured.given;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.document;

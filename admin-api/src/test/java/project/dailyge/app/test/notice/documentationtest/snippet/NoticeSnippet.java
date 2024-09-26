@@ -5,7 +5,8 @@ import org.springframework.restdocs.cookies.RequestCookiesSnippet;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
-import project.dailyge.app.notice.presentation.request.NoticeCreateRequest;
+import project.dailyge.app.core.notice.presentation.request.NoticeCreateRequest;
+
 import static javax.xml.xpath.XPathEvaluationResult.XPathResultType.NUMBER;
 import static javax.xml.xpath.XPathEvaluationResult.XPathResultType.STRING;
 import static org.springframework.restdocs.cookies.CookieDocumentation.cookieWithName;

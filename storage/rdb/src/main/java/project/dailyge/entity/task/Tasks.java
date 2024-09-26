@@ -2,6 +2,7 @@ package project.dailyge.entity.task;
 
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.groupingBy;
+import java.time.LocalDate;
 import lombok.Getter;
 
 import java.time.format.DateTimeFormatter;
@@ -27,6 +28,14 @@ public final class Tasks {
         }
         return taskEntities.stream()
             .collect(groupingBy(task -> task.getDate().format(formatter)));
+    }
+
+    public Map<LocalDate, List<TaskJpaEntity>> monthTaskGroupByDate(final LocalDate monthLocalDate) {
+        if (taskEntities.isEmpty()) {
+            return new HashMap<>();
+        }
+        return taskEntities.stream().filter(task -> task.getDate().getMonth() == monthLocalDate.getMonth())
+            .collect(groupingBy(task -> task.getDate()));
     }
 
     public List<String> getKeysAsString() {

@@ -1,7 +1,6 @@
 package project.dailyge.app.core.task.application;
 
 import project.dailyge.app.common.auth.DailygeUser;
-import project.dailyge.dto.task.TaskStatisticDto;
 import project.dailyge.entity.task.MonthlyTaskJpaEntity;
 import project.dailyge.entity.task.TaskJpaEntity;
 import project.dailyge.entity.task.Tasks;
@@ -22,7 +21,5 @@ public interface TaskReadUseCase {
 
     List<TaskJpaEntity> findTasksByMonthlyTasksIdAndDate(DailygeUser dailygeUser, LocalDate date);
 
-    Tasks findWeeklyTasksStatisticByUserIdAndDate(DailygeUser dailygeUser, LocalDate startDate, LocalDate endDate);
-
-    List<TaskStatisticDto> findMonthlyTasksStatisticByUserIdAndDate(DailygeUser dailygeUser, LocalDate startDate, LocalDate endDate);
+    Tasks findTasksStatisticByUserIdAndDate(DailygeUser dailygeUser, LocalDate startDate, LocalDate endDate);
 }

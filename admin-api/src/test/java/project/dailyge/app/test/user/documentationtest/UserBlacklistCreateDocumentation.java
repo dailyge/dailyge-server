@@ -3,7 +3,6 @@ package project.dailyge.app.test.user.documentationtest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.restassured.http.Cookie;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,18 +10,19 @@ import org.springframework.restdocs.restassured.RestDocumentationFilter;
 import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.common.auth.DailygeToken;
 import project.dailyge.app.common.auth.TokenProvider;
+import project.dailyge.app.core.user.presentation.request.UserBlacklistCreateRequest;
 import project.dailyge.app.test.user.documentationtest.snippet.UserBlacklistSnippet;
-import project.dailyge.app.user.presentation.request.UserBlacklistCreateRequest;
 import project.dailyge.core.cache.user.UserCache;
 import project.dailyge.core.cache.user.UserCacheWriteUseCase;
 import project.dailyge.entity.user.Role;
+
 import static io.restassured.RestAssured.given;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.document;
 import static project.dailyge.app.test.user.documentationtest.snippet.UserSnippet.USER_BLACKLIST_ACCESS_TOKEN_COOKIE_SNIPPET;
 import static project.dailyge.app.test.user.documentationtest.snippet.UserSnippet.USER_BLACKLIST_CREATE_PATH_PARAMETER_SNIPPET;
-import static project.dailyge.app.test.user.documentationtest.snippet.UserSnippet.USER_BLACKLIST_CREATE_RESPONSE_FIELDS_SNIPPET;
 import static project.dailyge.app.test.user.documentationtest.snippet.UserSnippet.USER_BLACKLIST_CREATE_REQUEST_FIELDS_SNIPPET;
+import static project.dailyge.app.test.user.documentationtest.snippet.UserSnippet.USER_BLACKLIST_CREATE_RESPONSE_FIELDS_SNIPPET;
 import static project.dailyge.app.test.user.documentationtest.snippet.UserSnippet.createIdentifier;
 
 @DisplayName("[DocumentationTest] User Blacklist 등록 문서화 테스트")

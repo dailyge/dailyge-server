@@ -22,7 +22,7 @@ public class CouponService implements CouponUseCase {
     private final CouponEventWriteRepository couponEventWriteRepository;
 
     @Override
-    public void findWinners(
+    public void pickWinners(
         final int winnerCount,
         final Long eventId
     ) {
@@ -43,7 +43,7 @@ public class CouponService implements CouponUseCase {
     ) {
         int queueNumber = 0;
         while (queueNumber < totalCount) {
-            List<CouponEvent> couponEvents = couponEventReadRepository.findBulks(queueNumber, winnerCount, eventId);
+            final List<CouponEvent> couponEvents = couponEventReadRepository.findBulks(queueNumber, winnerCount, eventId);
             if (couponEvents.isEmpty()) {
                 queueNumber++;
                 continue;

@@ -21,7 +21,7 @@ public class CouponWinnerApi {
 
     @PostMapping(path = "/winners")
     public ApiResponse<Void> findWinners(@Valid @RequestBody final CouponWinnerRequest request) {
-        couponUseCase.findWinners(request.winnerCount(), request.eventId());
+        couponUseCase.pickWinners(request.winnerCount(), request.eventId());
         return ApiResponse.from(OK);
     }
 }

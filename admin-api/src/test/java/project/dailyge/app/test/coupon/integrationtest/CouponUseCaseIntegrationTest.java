@@ -45,7 +45,7 @@ class CouponUseCaseIntegrationTest extends DatabaseTestBase {
         for (List<CouponEvent> couponEvents : candidates) {
             couponEventWriteRepository.saveBulks(couponEvents, 1L);
         }
-        couponUseCase.findWinners(1000, 1L);
+        couponUseCase.pickWinners(1000, 1L);
         //TODO: 당첨자에 대해 쿠폰 발급 추가 시 검증
     }
 }

@@ -45,8 +45,8 @@ class CouponBulksIntegrationTest extends DatabaseTestBase {
     }
 
     @Test
-    @DisplayName("인메모리큐에 있던 쿠폰 요청 벌크들이 있으면 Redis에 저장된다.")
-    void whenCouponBulksExistsThenRedisSave() {
+    @DisplayName("인메모리큐에 있던 쿠폰 요청 벌크들이 있으면 Redis 키로 쿠폰 요청 벌크들을 이동시키고 사용자 참여여부를 표시한다.")
+    void whenCouponBulksExistsThenRedisSaveBulks() {
         final long maxId = 10;
         final List<CouponEvent> expectedCouponEvents = new ArrayList<>();
         for (long id = 1; id <= maxId; id++) {
@@ -64,8 +64,8 @@ class CouponBulksIntegrationTest extends DatabaseTestBase {
     }
 
     @Test
-    @DisplayName("인메모리에 있던 쿠폰 요청 벌크들이 있으면 Redis에 저장된다.")
-    void whenMultipleCouponBulksExistsThenRedisShouldSave() {
+    @DisplayName("인메모리에 있던 다수의 쿠폰 요청 벌크들을 Redis 키들의 값으로 이동시킨다.")
+    void whenMultipleCouponBulksExistsThenRedisShouldSaveBulks() {
         final long maxId = 10;
         final List<List<CouponEvent>> expectedCouponBulksQueues = new ArrayList<>();
         final int totalCount = 2;

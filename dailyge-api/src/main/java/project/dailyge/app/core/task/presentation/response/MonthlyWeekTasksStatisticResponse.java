@@ -13,17 +13,17 @@ import project.dailyge.entity.task.TaskStatus;
 import project.dailyge.entity.task.Tasks;
 
 @Getter
-public class MonthlyWeeksStatisticResponse {
+public class MonthlyWeekTasksStatisticResponse {
 
     private LocalDate startDate;
     private LocalDate endDate;
     private Map<Integer, MonthlyWeeksRateResponse> beforeMonthlyStatistic;
     private Map<Integer, MonthlyWeeksRateResponse> currentMonthlyStatistic;
 
-    private MonthlyWeeksStatisticResponse() {
+    private MonthlyWeekTasksStatisticResponse() {
     }
 
-    public MonthlyWeeksStatisticResponse(
+    public MonthlyWeekTasksStatisticResponse(
         final LocalDate startDate,
         final LocalDate endDate,
         final Tasks tasks
@@ -35,15 +35,14 @@ public class MonthlyWeeksStatisticResponse {
         calculate(tasks);
     }
 
-    public Map<LocalDate, MonthlyWeeksRateResponse> calculate(final Tasks tasks) {
-        final Map<Integer, List<TaskJpaEntity>> beforeMonthTaskMap = getWeeklyTaskCounts(tasks.monthTaskGroupByDate(startDate));
-        final Map<Integer, List<TaskJpaEntity>> currentMonthTaskMap = getWeeklyTaskCounts(tasks.monthTaskGroupByDate(endDate));
+    private void calculate(final Tasks tasks) {
+        final Map<Integer, List<TaskJpaEntity>> beforeMonthlyTaskMap = getWeeklyTaskCounts(tasks.monthTaskGroupByDate(startDate));
+        final Map<Integer, List<TaskJpaEntity>> currentMonthlyTaskMap = getWeeklyTaskCounts(tasks.monthTaskGroupByDate(endDate));
 
         for (int i = 0; i < 5; i++) {
-            calculateWeekly(beforeMonthTaskMap.getOrDefault(i, List.of()), beforeMonthlyStatistic, i);
-            calculateWeekly(currentMonthTaskMap.getOrDefault(i, List.of()), currentMonthlyStatistic, i);
+            calculateWeekly(beforeMonthlyTaskMap.getOrDefault(i, List.of()), beforeMonthlyStatistic, i);
+            calculateWeekly(currentMonthlyTaskMap.getOrDefault(i, List.of()), currentMonthlyStatistic, i);
         }
-        return null;
     }
 
     private Map<Integer, List<TaskJpaEntity>> getWeeklyTaskCounts(final Map<LocalDate, List<TaskJpaEntity>> beforeMonthTaskMap) {

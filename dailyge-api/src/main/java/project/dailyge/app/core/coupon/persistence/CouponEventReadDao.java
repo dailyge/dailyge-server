@@ -7,6 +7,7 @@ import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 import project.dailyge.app.common.exception.CommonException;
+import project.dailyge.app.core.coupon.exception.CouponTypeException;
 import project.dailyge.common.configuration.CompressionHelper;
 import project.dailyge.core.cache.coupon.CouponEvent;
 import project.dailyge.core.cache.coupon.CouponEventReadRepository;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_GATEWAY;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
+import static project.dailyge.app.core.coupon.exception.CouponCodeAndMessage.COUPON_KEY_EXCEPTION;
 
 @Repository
 @RequiredArgsConstructor
@@ -61,7 +63,11 @@ class CouponEventReadDao implements CouponEventReadRepository {
             if (queueCountBytes == null) {
                 return 0;
             }
-            return Integer.parseInt(new String(queueCountBytes, UTF_8));
+            try {
+                return Integer.parseInt(new String(queueCountBytes, UTF_8));
+            } catch (NumberFormatException exception) {
+                throw CouponTypeException.from(COUPON_KEY_EXCEPTION);
+            }
         } catch (RedisException exception) {
             throw CommonException.from(exception.getMessage(), BAD_GATEWAY);
         } catch (Exception exception) {

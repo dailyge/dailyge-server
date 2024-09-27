@@ -43,7 +43,7 @@ public class MonthlyTasksStatisticResponse {
     }
 
     private int[] getCountsByRank(final Map<LocalDate, List<TaskJpaEntity>> beforeMonthlyTaskMap) {
-        if (beforeMonthlyTaskMap.size() == 0) {
+        if (beforeMonthlyTaskMap.isEmpty()) {
             return new int[0];
         }
         final int[] countsByRank = new int[5];
@@ -58,7 +58,7 @@ public class MonthlyTasksStatisticResponse {
 
     private void calculateMonthlyStatistic(
         final int[] monthlyCounts,
-        final double[] targetStatistic
+        final double... targetStatistic
     ) {
         if (monthlyCounts.length == 0) {
             return;

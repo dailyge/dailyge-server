@@ -12,7 +12,6 @@ import project.dailyge.core.cache.coupon.CouponEvent;
 import project.dailyge.core.cache.coupon.CouponEventWriteRepository;
 
 import java.util.List;
-import java.util.Objects;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_GATEWAY;
@@ -26,26 +25,23 @@ public class CouponEventWriteDao implements CouponEventWriteRepository {
     private final ObjectMapper objectMapper;
 
     @Override
-    public void saveBulks(final List<CouponEvent> couponCaches, final Long eventId) {
+    public void saveBulks(
+        final List<CouponEvent> couponCaches,
+        final Long eventId
+    ) {
         if (couponCaches == null || couponCaches.isEmpty()) {
             return;
         }
         final List<byte[]> compressedCouponEvents = couponCaches.stream()
             .map(data -> CompressionHelper.compressAsByteArrayWithZstd(data, objectMapper))
             .toList();
-        try {
-            redisTemplate.execute((RedisCallback<Void>) connection -> {
-                couponCaches.forEach(couponCache -> redisTemplate.opsForValue().setBit(findEventUserKey(eventId), couponCache.getUserId(), true));
-                final Long newQueueIndex = redisTemplate.opsForValue().increment(findCouponQueueCountKey(eventId));
-                byte[] keyBytes = redisTemplate.getStringSerializer().serialize(findCouponBulkKey(eventId, newQueueIndex));
-                connection.listCommands().rPush(Objects.requireNonNull(keyBytes), compressedCouponEvents.toArray(new byte[0][]));
-                return null;
-            });
-        } catch (RedisException exception) {
-            throw CommonException.from(exception.getMessage(), BAD_GATEWAY);
-        } catch (Exception exception) {
-            throw CommonException.from(exception.getMessage(), INTERNAL_SERVER_ERROR);
-        }
+        redisTemplate.execute((RedisCallback<Void>) connection -> {
+            couponCaches.forEach(couponCache -> redisTemplate.opsForValue().setBit(findEventUserKey(eventId), couponCache.getUserId(), true));
+            final Long newQueueIndex = redisTemplate.opsForValue().increment(findCouponQueueCountKey(eventId));
+            byte[] keyBytes = redisTemplate.getStringSerializer().serialize(findCouponBulkKey(eventId, newQueueIndex));
+            connection.listCommands().rPush(keyBytes, compressedCouponEvents.toArray(new byte[0][]));
+            return null;
+        });
     }
 
     @Override

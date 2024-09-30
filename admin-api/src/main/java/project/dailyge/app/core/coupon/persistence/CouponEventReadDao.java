@@ -29,7 +29,10 @@ class CouponEventReadDao implements CouponEventReadRepository {
     private final ObjectMapper objectMapper;
 
     @Override
-    public boolean existsByUserId(final Long userId, final Long eventId) {
+    public boolean existsByUserId(
+        final Long userId,
+        final Long eventId
+    ) {
         try {
             return Boolean.TRUE.equals(redisTemplate.opsForValue().getBit(findEventUserKey(eventId), userId));
         } catch (RedisException exception) {

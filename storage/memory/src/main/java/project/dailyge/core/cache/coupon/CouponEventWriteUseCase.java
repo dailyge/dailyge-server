@@ -1,5 +1,5 @@
 package project.dailyge.core.cache.coupon;
 
-public interface CouponCacheWriteUseCase {
+public interface CouponEventWriteUseCase {
     void saveBulks();
 }

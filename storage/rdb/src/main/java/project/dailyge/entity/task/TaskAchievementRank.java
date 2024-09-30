@@ -7,23 +7,23 @@ public enum TaskAchievementRank {
     D(3, 20.0),
     F(4, 0.0);
 
-    private int rankNumber;
-    private double minAchievementRate;
+    private final int rank;
+    private final double minAchievementRate;
 
     TaskAchievementRank(
-        final int rankNumber,
+        final int rank,
         final double minAchievementRate
     ) {
-        this.rankNumber = rankNumber;
+        this.rank = rank;
         this.minAchievementRate = minAchievementRate;
     }
 
     public static int getAchievementRank(final double achievementRate) {
         for (TaskAchievementRank rank : TaskAchievementRank.values()) {
             if (achievementRate >= rank.minAchievementRate) {
-                return rank.rankNumber;
+                return rank.rank;
             }
         }
-        return F.rankNumber;
+        return F.rank;
     }
 }

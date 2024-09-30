@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @DisplayName("[UnitTest] FreeCoupon 엔티티 테스트")
-public class FreeCouponUnitTest {
+class FreeCouponUnitTest {
 
     @Test
     @DisplayName("ID가 같다면 같은 객체로 여긴다.")

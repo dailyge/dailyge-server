@@ -2,19 +2,20 @@ package project.dailyge.app.core.coupon.application.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
+import project.dailyge.app.common.annotation.ApplicationLayer;
 import project.dailyge.app.core.coupon.application.CouponUseCase;
 import project.dailyge.app.core.coupon.application.WinnerAlgorithm;
 import project.dailyge.core.cache.coupon.CouponEvent;
 import project.dailyge.core.cache.coupon.CouponEventReadRepository;
 import project.dailyge.core.cache.coupon.CouponEventWriteRepository;
 
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
-@Service
+@ApplicationLayer(value = "CouponService")
 @RequiredArgsConstructor
-public class CouponService implements CouponUseCase {
+class CouponService implements CouponUseCase {
 
     private final CouponEventValidator validator;
     private final WinnerAlgorithm winnerAlgorithm;
@@ -22,7 +23,7 @@ public class CouponService implements CouponUseCase {
     private final CouponEventWriteRepository couponEventWriteRepository;
 
     @Override
-    public void pickWinners(
+    public List<Long> pickWinners(
         final int winnerCount,
         final Long eventId
     ) {
@@ -30,13 +31,14 @@ public class CouponService implements CouponUseCase {
         couponEventWriteRepository.saveEventRun(eventId);
         final int totalCount = couponEventReadRepository.findQueueCount(eventId);
         if (totalCount == 0) {
-            return;
+            return Collections.emptyList();
         }
-        executeSelection(totalCount, winnerCount, eventId);
+        final List<Long> userIds = executeSelection(totalCount, winnerCount, eventId);
         couponEventWriteRepository.deleteAllBulks(eventId);
+        return userIds;
     }
 
-    private void executeSelection(
+    private List<Long> executeSelection(
         final int totalCount,
         final int winnerCount,
         final Long eventId
@@ -51,8 +53,6 @@ public class CouponService implements CouponUseCase {
             winnerAlgorithm.addEvents(couponEvents, winnerCount);
             queueNumber++;
         }
-        //TODO: 쿠폰 발급 과정 처리
-        final List<Long> userIds = winnerAlgorithm.selectWinners();
-        log.info("winner count: {}", userIds.size());
+        return winnerAlgorithm.selectWinners();
     }
 }

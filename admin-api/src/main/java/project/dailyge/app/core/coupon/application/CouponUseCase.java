@@ -1,6 +1,8 @@
 package project.dailyge.app.core.coupon.application;
 
+import java.util.List;
+
 public interface CouponUseCase {
 
-    void pickWinners(int count, Long eventId);
+    List<Long> pickWinners(int count, Long eventId);
 }

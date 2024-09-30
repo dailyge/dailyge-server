@@ -39,15 +39,15 @@ public class FreeCouponJpaEntity extends BaseEntity {
     @Column(name = "event_id")
     private Long eventId;
 
-    public FreeCouponJpaEntity
-        (final Long id,
-         final String description,
-         final String serialNumber,
-         final LocalDate expiredAt,
-         final Long issuerId,
-         final Long userId,
-         final Long eventId
-        ) {
+    public FreeCouponJpaEntity(
+        final Long id,
+        final String description,
+        final String serialNumber,
+        final LocalDate expiredAt,
+        final Long issuerId,
+        final Long userId,
+        final Long eventId
+    ) {
         this.id = id;
         this.description = description;
         this.serialNumber = serialNumber;

@@ -19,7 +19,10 @@ class FreeCouponWriteService implements FreeCouponWriteUseCase {
 
     @Override
     @Transactional
-    public void saveAll(final List<Long> userIds, final Long eventId) {
+    public void saveAll(
+        final List<Long> userIds,
+        final Long eventId
+    ) {
         userIds.stream().forEach(userId -> {
             final FreeCouponJpaEntity coupon = new FreeCouponJpaEntity(
                 "300코인 할인 이벤트",

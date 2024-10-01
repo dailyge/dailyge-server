@@ -1,8 +1,6 @@
 package project.dailyge.app.test.task.integrationtest;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import org.junit.jupiter.api.Assertions;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,16 +9,18 @@ import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.core.task.application.TaskReadUseCase;
 import project.dailyge.app.core.task.application.TaskWriteUseCase;
 import project.dailyge.app.core.task.application.command.TaskCreateCommand;
-import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.MONTHLY_TASK_NOT_FOUND;
-import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.TASK_NOT_FOUND;
 import project.dailyge.app.core.task.exception.TaskTypeException;
 import project.dailyge.app.core.task.facade.TaskFacade;
-import static project.dailyge.app.test.task.fixture.TaskCommandFixture.createTaskCreationCommand;
 import project.dailyge.entity.task.MonthlyTaskJpaEntity;
 import project.dailyge.entity.task.TaskJpaEntity;
 import project.dailyge.entity.task.Tasks;
-
-import java.time.LocalDate;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.MONTHLY_TASK_NOT_FOUND;
+import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.TASK_NOT_FOUND;
+import static project.dailyge.app.test.task.fixture.TaskCommandFixture.createTaskCreationCommand;
 
 @DisplayName("[IntegrationTest] 할 일 조회 통합 테스트")
 class TaskReadIntegrationTest extends DatabaseTestBase {
@@ -101,8 +101,14 @@ class TaskReadIntegrationTest extends DatabaseTestBase {
         final LocalDate startDate = now;
         final LocalDate endDate = now.plusDays(10);
         final Tasks tasks = taskReadUseCase.findTasksStatisticByUserIdAndDate(dailygeUser, startDate, endDate);
+        final TaskJpaEntity findTask = tasks.getTaskEntities().get(0);
 
-        Assertions.assertTrue(tasks.size() > 0);
+        assertAll(
+            () -> assertEquals(taskCreateCommand.title(), findTask.getTitle()),
+            () -> assertEquals(taskCreateCommand.content(), findTask.getContent()),
+            () -> assertEquals(taskCreateCommand.date(), findTask.getDate()),
+            () -> assertEquals(taskCreateCommand.color(), findTask.getColor())
+        );
     }
 
     @Test
@@ -112,7 +118,7 @@ class TaskReadIntegrationTest extends DatabaseTestBase {
         final LocalDate invalidEndDate = LocalDate.now().minusYears(10).plusDays(7);
 
         final Tasks tasks = taskReadUseCase.findTasksStatisticByUserIdAndDate(dailygeUser, invalidStartDate, invalidEndDate);
-        Assertions.assertEquals(0, tasks.size());
+        assertEquals(0, tasks.size());
     }
 
     @Test
@@ -122,6 +128,6 @@ class TaskReadIntegrationTest extends DatabaseTestBase {
         final LocalDate futureEndDate = futureStartDate.plusDays(7);
 
         final Tasks tasks = taskReadUseCase.findTasksStatisticByUserIdAndDate(dailygeUser, futureStartDate, futureEndDate);
-        Assertions.assertEquals(0, tasks.size());
+        assertEquals(0, tasks.size());
     }
 }

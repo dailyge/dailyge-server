@@ -198,8 +198,8 @@ class TasksUnitTest {
     }
 
     @Test
-    @DisplayName("입력한 월의 Task를 반환 한다.")
-    void whenGetMonthTaskThenResultShouldBeOneMonthTasks() {
+    @DisplayName("입력한 월의 Task 그룹을 반환 한다.")
+    void whenGetMonthTaskThenResultShouldBeMonthTaskGroup() {
         final TaskJpaEntity beforeMonthTask = new TaskJpaEntity("Task 11", "Content 11", today.minusMonths(1), TODO, 1L);
         tasks.add(beforeMonthTask);
         final Tasks taskWrapper = new Tasks(tasks);
@@ -219,8 +219,8 @@ class TasksUnitTest {
     }
 
     @Test
-    @DisplayName("해당 달의 주간 별 Task를 반환 한다.")
-    void whenFindWeekTaskCountsThenResultShouldBeCorrectly() {
+    @DisplayName("해당 달의 주간 별 Task 그룹을 반환 한다.")
+    void whenFindWeekTaskCountsThenResultShouldBeWeekTaskGroup() {
         final Tasks taskWrapper = new Tasks(tasks);
         final Map<Integer, List<TaskJpaEntity>> expectedTasks = new HashMap<>();
         expectedTasks.put(getWeekOfMonth(today) - 1, tasks);
@@ -231,8 +231,8 @@ class TasksUnitTest {
     }
 
     @Test
-    @DisplayName("Tasks가 비어있을 경우 빈 그룹을 반환 한다.")
-    void whenFindWeekTaskCountsByEmptyTasksThenResultShouldBeCorrectly() {
+    @DisplayName("주간 별 그룹 시 Tasks가 비어있을 경우 빈 그룹을 반환 한다.")
+    void whenFindWeekTaskCountsByEmptyTasksThenResultShouldBeEmptyGroup() {
         final Tasks taskWrapper = new Tasks(emptyList());
 
         final Map<Integer, List<TaskJpaEntity>> groupedTasks = taskWrapper.groupByWeekOfMonth(today);
@@ -246,16 +246,16 @@ class TasksUnitTest {
         final Tasks taskWrapper = new Tasks(tasks);
         final List<Integer> expectedRanks = List.of(0, 0, 1, 0, 0);
 
-        final List<Integer> rankCounts = taskWrapper.monthTaskRankCounts(today);
+        final List<Integer> rankCounts = taskWrapper.countMonthTasksByRank(today);
 
         assertEquals(expectedRanks, rankCounts);
     }
 
     @Test
-    @DisplayName("Tasks가 비어있을 경우 빈 배열을 반환 한다.")
+    @DisplayName("Rank별 개수를 구할 시 Tasks가 비어있을 경우 빈 리스트를 반환 한다.")
     void whenFindTaskRankCountsByEmptyTasksThenResultShouldBeEmptyList() {
         final Tasks taskWrapper = new Tasks(emptyList());
-        final List<Integer> rankCounts = taskWrapper.monthTaskRankCounts(today);
+        final List<Integer> rankCounts = taskWrapper.countMonthTasksByRank(today);
 
         assertTrue(rankCounts.isEmpty());
     }
@@ -268,7 +268,7 @@ class TasksUnitTest {
         final int day
     ) {
         final LocalDate week = LocalDate.of(2024, 1, day);
-        int weekOfMonth = getWeekOfMonth(week);
+        final int weekOfMonth = getWeekOfMonth(week);
 
         assertEquals(expectedWeek, weekOfMonth);
     }
@@ -277,7 +277,7 @@ class TasksUnitTest {
     @DisplayName("목요일이 포함되지 않은 첫 주차는 1주차에 포함한다.")
     void whenFirstWeekNotIncludingThursdayThenResultShouldBeWeek1() {
         final LocalDate week = LocalDate.of(2024, 3, 1);
-        int weekOfMonth = getWeekOfMonth(week);
+        final int weekOfMonth = getWeekOfMonth(week);
 
         assertEquals(1, weekOfMonth);
     }

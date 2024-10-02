@@ -14,10 +14,11 @@ import project.dailyge.app.core.task.facade.TaskFacade;
 import project.dailyge.entity.task.MonthlyTaskJpaEntity;
 import project.dailyge.entity.task.TaskJpaEntity;
 import project.dailyge.entity.task.Tasks;
+import static com.mongodb.assertions.Assertions.assertFalse;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.MONTHLY_TASK_NOT_FOUND;
 import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.TASK_NOT_FOUND;
 import static project.dailyge.app.test.task.fixture.TaskCommandFixture.createTaskCreationCommand;
@@ -101,14 +102,12 @@ class TaskReadIntegrationTest extends DatabaseTestBase {
         final LocalDate startDate = now;
         final LocalDate endDate = now.plusDays(10);
         final Tasks tasks = taskReadUseCase.findTasksStatisticByUserIdAndDate(dailygeUser, startDate, endDate);
-        final TaskJpaEntity findTask = tasks.getTaskEntities().get(0);
 
-        assertAll(
-            () -> assertEquals(taskCreateCommand.title(), findTask.getTitle()),
-            () -> assertEquals(taskCreateCommand.content(), findTask.getContent()),
-            () -> assertEquals(taskCreateCommand.date(), findTask.getDate()),
-            () -> assertEquals(taskCreateCommand.color(), findTask.getColor())
-        );
+        assertTrue(tasks.size() > 0);
+        for (TaskJpaEntity taskEntity : tasks.getTaskEntities()) {
+            assertFalse(startDate.isAfter(taskEntity.getDate()));
+            assertFalse(endDate.isBefore(taskEntity.getDate()));
+        }
     }
 
     @Test

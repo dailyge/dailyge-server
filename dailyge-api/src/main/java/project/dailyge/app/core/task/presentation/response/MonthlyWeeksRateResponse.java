@@ -16,7 +16,7 @@ public class MonthlyWeeksRateResponse {
     }
 
     public MonthlyWeeksRateResponse(final List<TaskJpaEntity> weekTasks) {
-        if (weekTasks == null || weekTasks.isEmpty()) {
+        if (weekTasks.isEmpty()) {
             this.successRate = 0.0;
             this.failedRate = 0.0;
             return;

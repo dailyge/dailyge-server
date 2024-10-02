@@ -1,7 +1,5 @@
 package project.dailyge.entity.task;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -40,7 +38,7 @@ public final class Tasks {
         if (taskEntities.isEmpty()) {
             return new HashMap<>();
         }
-        return taskEntities.stream().filter(task -> task.getDate().getMonth() == monthLocalDate.getMonth())
+        return taskEntities.stream().filter(task -> task.isSameMonth(monthLocalDate))
             .collect(groupingBy(task -> task.getDate()));
     }
 
@@ -55,7 +53,7 @@ public final class Tasks {
         return tasksGroupByWeekMap;
     }
 
-    public List<Integer> monthTaskRankCounts(final LocalDate monthLocalDate) {
+    public List<Integer> countMonthTasksByRank(final LocalDate monthLocalDate) {
         final Map<LocalDate, List<TaskJpaEntity>> monthlyTaskMap = groupByDateOfMonth(monthLocalDate);
         if (monthlyTaskMap.isEmpty()) {
             return emptyList();
@@ -123,9 +121,9 @@ public final class Tasks {
         for (int i = rankCounts.size() - 1; i > 0; i--) {
             monthlyRanks.set(i, calculatePercentage(rankCounts.get(i), monthlySum));
         }
-        final Double lastRank = 100.0 - monthlyRanks.stream().mapToDouble(Double::doubleValue).sum();
-        final BigDecimal roundedLastRank = new BigDecimal(lastRank).setScale(2, RoundingMode.HALF_UP);
-        monthlyRanks.set(0, roundedLastRank.doubleValue());
+        final double lastRank = 100.0 - monthlyRanks.stream().mapToDouble(Double::doubleValue).sum();
+        final double roundedLastRank =  Math.round(lastRank * PERCENTAGE) / 100.0;
+        monthlyRanks.set(0, roundedLastRank);
         return monthlyRanks;
     }
 

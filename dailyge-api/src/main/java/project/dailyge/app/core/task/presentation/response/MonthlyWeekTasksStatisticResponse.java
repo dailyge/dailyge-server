@@ -27,20 +27,20 @@ public class MonthlyWeekTasksStatisticResponse {
     ) {
         this.startDate = startDate;
         this.endDate = endDate;
-        this.beforeMonthlyStatistic = new HashMap<>();
-        this.currentMonthlyStatistic = new HashMap<>();
-        calculate(tasks);
+        this.beforeMonthlyStatistic = calculate(tasks, startDate);
+        this.currentMonthlyStatistic = calculate(tasks, endDate);
     }
 
-    private void calculate(final Tasks tasks) {
-        final Map<Integer, List<TaskJpaEntity>> beforeMonthlyWeekTaskMap = tasks.groupByWeekOfMonth(startDate);
-        final Map<Integer, List<TaskJpaEntity>> currentMonthlyWeekTaskMap = tasks.groupByWeekOfMonth(endDate);
-
-        for (int i = 0; i < 5; i++) {
-            final List<TaskJpaEntity> beforeMonthTask = beforeMonthlyWeekTaskMap.getOrDefault(i, emptyList());
-            final List<TaskJpaEntity> currentMonthTask = currentMonthlyWeekTaskMap.getOrDefault(i, emptyList());
-            beforeMonthlyStatistic.put(i, new MonthlyWeeksRateResponse(beforeMonthTask));
-            currentMonthlyStatistic.put(i, new MonthlyWeeksRateResponse(currentMonthTask));
+    private Map<Integer, MonthlyWeeksRateResponse> calculate(
+        final Tasks tasks,
+        final LocalDate date
+    ) {
+        final Map<Integer, List<TaskJpaEntity>> monthlyWeekTaskMap = tasks.groupByWeekOfMonth(date);
+        final Map<Integer, MonthlyWeeksRateResponse> monthlyStatisticGroup = new HashMap<>();
+        for (int week = 0; week < 5; week++) {
+            final List<TaskJpaEntity> beforeMonthTask = monthlyWeekTaskMap.getOrDefault(week, emptyList());
+            monthlyStatisticGroup.put(week, new MonthlyWeeksRateResponse(beforeMonthTask));
         }
+        return monthlyStatisticGroup;
     }
 }

@@ -28,8 +28,8 @@ public class MonthlyTasksStatisticResponse {
     }
 
     private void calculate(final Tasks tasks) {
-        final List<Integer> beforeMonthlyRankCounts = tasks.monthTaskRankCounts(startDate);
-        final List<Integer> afterMonthlyRankCounts = tasks.monthTaskRankCounts(endDate);
+        final List<Integer> beforeMonthlyRankCounts = tasks.countMonthTasksByRank(startDate);
+        final List<Integer> afterMonthlyRankCounts = tasks.countMonthTasksByRank(endDate);
 
         beforeMonthlyStatistic = calculateMonthlyRanks(beforeMonthlyRankCounts);
         currentMonthlyStatistic = calculateMonthlyRanks(afterMonthlyRankCounts);

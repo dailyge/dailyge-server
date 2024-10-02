@@ -19,7 +19,7 @@ public enum TaskAchievementRank {
     }
 
     public static int getAchievementRank(final double achievementRate) {
-        for (TaskAchievementRank rank : TaskAchievementRank.values()) {
+        for (final TaskAchievementRank rank : TaskAchievementRank.values()) {
             if (achievementRate >= rank.minAchievementRate) {
                 return rank.rank;
             }

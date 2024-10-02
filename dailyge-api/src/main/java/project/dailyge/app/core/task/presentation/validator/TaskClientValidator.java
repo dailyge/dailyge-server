@@ -32,8 +32,8 @@ public class TaskClientValidator {
         if (endDate.isBefore(startDate)) {
             throw new IllegalArgumentException("올바른 날짜를 입력해주세요.");
         }
-        final LocalDate plusMonthDate = startDate.plusMonths(1);
-        if (!plusMonthDate.getMonth().equals(endDate.getMonth())) {
+        final LocalDate oneMonthPlusDate = startDate.plusMonths(1);
+        if (!oneMonthPlusDate.getMonth().equals(endDate.getMonth())) {
             throw new IllegalArgumentException("올바른 시작일과 종료일을 입력해 주세요.");
         }
     }

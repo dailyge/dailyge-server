@@ -24,14 +24,15 @@ public class MonthlyTasksStatisticResponse {
     ) {
         this.startDate = startDate;
         this.endDate = endDate;
-        calculate(tasks);
+        beforeMonthlyStatistic = calculate(tasks, startDate);
+        currentMonthlyStatistic = calculate(tasks, endDate);
     }
 
-    private void calculate(final Tasks tasks) {
-        final List<Integer> beforeMonthlyRankCounts = tasks.countMonthTasksByRank(startDate);
-        final List<Integer> afterMonthlyRankCounts = tasks.countMonthTasksByRank(endDate);
-
-        beforeMonthlyStatistic = calculateMonthlyRanks(beforeMonthlyRankCounts);
-        currentMonthlyStatistic = calculateMonthlyRanks(afterMonthlyRankCounts);
+    private List<Double> calculate(
+        final Tasks tasks,
+        final LocalDate date
+    ) {
+        final List<Integer> monthlyRankCounts = tasks.countMonthTasksByRank(date);
+        return calculateMonthlyRanks(monthlyRankCounts);
     }
 }

@@ -104,7 +104,7 @@ class TaskReadIntegrationTest extends DatabaseTestBase {
         final Tasks tasks = taskReadUseCase.findTasksStatisticByUserIdAndDate(dailygeUser, startDate, endDate);
 
         assertTrue(tasks.size() > 0);
-        for (TaskJpaEntity taskEntity : tasks.getTaskEntities()) {
+        for (final TaskJpaEntity taskEntity : tasks.getTaskEntities()) {
             assertFalse(startDate.isAfter(taskEntity.getDate()));
             assertFalse(endDate.isBefore(taskEntity.getDate()));
         }

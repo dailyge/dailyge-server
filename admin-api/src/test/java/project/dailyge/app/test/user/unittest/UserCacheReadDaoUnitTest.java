@@ -8,7 +8,8 @@ import org.mockito.Mock;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import project.dailyge.app.common.exception.CommonException;
-import project.dailyge.app.user.persistence.UserCacheReadDao;
+import project.dailyge.app.core.user.persistence.UserCacheReadDao;
+
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;

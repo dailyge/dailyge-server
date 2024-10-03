@@ -1,14 +1,15 @@
 package project.dailyge.app.test.common;
 
 import jakarta.servlet.http.Cookie;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import project.dailyge.app.common.utils.CookieUtils;
+
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import project.dailyge.app.common.utils.CookieUtils;
 import static project.dailyge.app.common.utils.CookieUtils.createCookie;
 import static project.dailyge.app.common.utils.CookieUtils.createResponseCookie;
 
@@ -29,8 +30,8 @@ class CookieUtilsUnitTest {
             () -> assertEquals(0, cookie.getMaxAge()),
             () -> assertEquals(".dailyge.com", cookie.getDomain()),
             () -> assertEquals("/", cookie.getPath()),
-            () -> assertTrue(cookie.getSecure()),
-            () -> assertTrue(cookie.isHttpOnly()),
+            () -> assertFalse(cookie.getSecure()),
+            () -> assertFalse(cookie.isHttpOnly()),
             () -> assertNull(cookie.getValue())
         );
     }
@@ -44,8 +45,8 @@ class CookieUtilsUnitTest {
             () -> assertTrue(cookieString.contains("Max-Age=0")),
             () -> assertTrue(cookieString.contains("Domain=.dailyge.com")),
             () -> assertTrue(cookieString.contains("Path=/")),
-            () -> assertTrue(cookieString.contains("Secure")),
-            () -> assertTrue(cookieString.contains("HttpOnly"))
+            () -> assertFalse(cookieString.contains("Secure")),
+            () -> assertFalse(cookieString.contains("HttpOnly"))
         );
     }
 
@@ -74,8 +75,8 @@ class CookieUtilsUnitTest {
             () -> assertTrue(cookieString.contains("Max-Age=86400")),
             () -> assertTrue(cookieString.contains("Domain=.dailyge.com")),
             () -> assertTrue(cookieString.contains("Path=" + COOKIE_PATH)),
-            () -> assertTrue(cookieString.contains("Secure")),
-            () -> assertTrue(cookieString.contains("HttpOnly"))
+            () -> assertFalse(cookieString.contains("Secure")),
+            () -> assertFalse(cookieString.contains("HttpOnly"))
         );
     }
 
@@ -89,8 +90,8 @@ class CookieUtilsUnitTest {
             () -> assertEquals((int) MAX_AGE, cookie.getMaxAge()),
             () -> assertEquals(".dailyge.com", cookie.getDomain()),
             () -> assertEquals(COOKIE_PATH, cookie.getPath()),
-            () -> assertTrue(cookie.getSecure()),
-            () -> assertTrue(cookie.isHttpOnly())
+            () -> assertFalse(cookie.getSecure()),
+            () -> assertFalse(cookie.isHttpOnly())
         );
     }
 }

@@ -1,25 +1,24 @@
 package project.dailyge.app.core.task.persistence;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Repository;
-import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.DATA_ACCESS_EXCEPTION;
-import project.dailyge.app.common.exception.CommonException;
-import project.dailyge.entity.task.MonthlyTaskEntityReadRepository;
-import project.dailyge.entity.task.MonthlyTaskJpaEntity;
-import static project.dailyge.entity.task.QMonthlyTaskJpaEntity.monthlyTaskJpaEntity;
-import static project.dailyge.entity.task.QTaskJpaEntity.taskJpaEntity;
-import project.dailyge.entity.task.TaskEntityReadRepository;
-import project.dailyge.entity.task.TaskJpaEntity;
-
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
+import project.dailyge.app.common.exception.CommonException;
+import project.dailyge.entity.task.MonthlyTaskEntityReadRepository;
+import project.dailyge.entity.task.MonthlyTaskJpaEntity;
+import project.dailyge.entity.task.TaskEntityReadRepository;
+import project.dailyge.entity.task.TaskJpaEntity;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.DATA_ACCESS_EXCEPTION;
+import static project.dailyge.entity.task.QMonthlyTaskJpaEntity.monthlyTaskJpaEntity;
+import static project.dailyge.entity.task.QTaskJpaEntity.taskJpaEntity;
 
 @Repository
 @RequiredArgsConstructor

@@ -14,6 +14,7 @@ import java.time.Duration;
 import java.util.Base64;
 import java.util.Date;
 import javax.crypto.Cipher;
+import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +31,7 @@ public class TokenProvider {
 
     private static final String ID = "id";
     private static final int ARRAY_START_INDEX = 0;
-    private static final int IV_SIZE = 16;
+    private static final int IV_SIZE = 12;
     private static final SecureRandom secureRandom = new SecureRandom();
 
     private final JwtProperties jwtProperties;
@@ -137,10 +138,10 @@ public class TokenProvider {
         final byte[] cipherTarget
     ) {
         try {
-            final IvParameterSpec ivParameterSpec = new IvParameterSpec(iv);
+            final GCMParameterSpec gcmParameterSpec = new GCMParameterSpec(128, iv);
             final SecretKeySpec secretKeySpec = secretKeyManager.getSecretKeySpec();
-            final Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-            cipher.init(operationMode, secretKeySpec, ivParameterSpec);
+            final Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
+            cipher.init(operationMode, secretKeySpec, gcmParameterSpec);
             return cipher.doFinal(cipherTarget);
         } catch (Exception ex) {
             throw CommonException.from(ex.getMessage(), INVALID_USER_TOKEN);

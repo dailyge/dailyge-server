@@ -7,7 +7,8 @@ import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.restdocs.request.ParameterDescriptor;
 import org.springframework.restdocs.request.PathParametersSnippet;
-import project.dailyge.app.user.presentation.request.UserBlacklistCreateRequest;
+import project.dailyge.app.core.user.presentation.request.UserBlacklistCreateRequest;
+
 import static javax.xml.xpath.XPathEvaluationResult.XPathResultType.NUMBER;
 import static javax.xml.xpath.XPathEvaluationResult.XPathResultType.STRING;
 import static org.springframework.restdocs.cookies.CookieDocumentation.cookieWithName;

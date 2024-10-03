@@ -76,7 +76,7 @@ class TaskReadService implements TaskReadUseCase {
     }
 
     @Override
-    public Tasks findWeeklyTasksStatisticByUserIdAndDate(
+    public Tasks findTasksStatisticByUserIdAndDate(
         final DailygeUser dailygeUser,
         final LocalDate startDate,
         final LocalDate endDate

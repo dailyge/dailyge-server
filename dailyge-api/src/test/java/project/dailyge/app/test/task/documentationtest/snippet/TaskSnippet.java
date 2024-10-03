@@ -182,6 +182,46 @@ public interface TaskSnippet {
         fieldWithPath("message").type(STRING).description("응답 메시지")
     };
 
+    ParameterDescriptor[] MONTHLY_TASKS_STATISTIC_DATE_QUERY_PARAMETER_DESCRIPTORS = {
+        parameterWithName("startDate").description("시작 날짜").attributes(
+            key("constraints").value("- Must be not null.")
+        ),
+        parameterWithName("endDate").description("종료 날짜").attributes(
+            key("constraints").value("- Must be not null.")
+        )
+    };
+
+    FieldDescriptor[] MONTHLY_TASKS_STATISTIC_RESPONSE_FIELD_DESCRIPTOR = {
+        fieldWithPath("data.startDate").type(STRING).description("시작 날짜"),
+        fieldWithPath("data.endDate").type(STRING).description("종료 날짜"),
+        fieldWithPath("data.beforeMonthlyStatistic").type(ARRAY).description("전달 통계 비율"),
+        fieldWithPath("data.currentMonthlyStatistic").type(ARRAY).description("이번달 통계 비율"),
+        fieldWithPath("code").type(NUMBER).description("응답 코드"),
+        fieldWithPath("message").type(STRING).description("응답 메시지")
+    };
+
+    ParameterDescriptor[] MONTHLY_WEEK_TASKS_STATISTIC_DATE_QUERY_PARAMETER_DESCRIPTORS = {
+        parameterWithName("startDate").description("시작 날짜").attributes(
+            key("constraints").value("- Must be not null.")
+        ),
+        parameterWithName("endDate").description("종료 날짜").attributes(
+            key("constraints").value("- Must be not null.")
+        )
+    };
+
+    FieldDescriptor[] MONTHLY_WEEK_TASKS_STATISTIC_RESPONSE_FIELD_DESCRIPTOR = {
+        fieldWithPath("data.startDate").type(STRING).description("시작 날짜"),
+        fieldWithPath("data.endDate").type(STRING).description("종료 날짜"),
+        fieldWithPath("data.beforeMonthlyStatistic").type(OBJECT).description("전달 통계"),
+        fieldWithPath("data.beforeMonthlyStatistic.*.successRate").type(NUMBER).description("전달 성공 비율"),
+        fieldWithPath("data.beforeMonthlyStatistic.*.failedRate").type(NUMBER).description("전달 실패 비율"),
+        fieldWithPath("data.currentMonthlyStatistic").type(OBJECT).description("이번달 통계"),
+        fieldWithPath("data.currentMonthlyStatistic.*.successRate").type(NUMBER).description("이번달 성공 비율"),
+        fieldWithPath("data.currentMonthlyStatistic.*.failedRate").type(NUMBER).description("이번달 실패 비율"),
+        fieldWithPath("code").type(NUMBER).description("응답 코드"),
+        fieldWithPath("message").type(STRING).description("응답 메시지")
+    };
+
     FieldDescriptor[] TASK_STATUS_LIST_READ_RESPONSE_FIELD_DESCRIPTOR = {
         fieldWithPath("data.[].kr").type(STRING).description("Task 상태(국문)"),
         fieldWithPath("data.[].en").type(STRING).description("Task 상태(영문)"),
@@ -212,6 +252,10 @@ public interface TaskSnippet {
     QueryParametersSnippet WEEKLY_TASKS_STATISTIC_REQUEST_PARAMETER_SNIPPET = queryParameters(WEEKLY_TASKS_STATISTIC_DATE_QUERY_PARAMETER_DESCRIPTORS);
     ResponseFieldsSnippet TASK_DETAIL_SEARCH_RESPONSE_SNIPPET = responseFields(TASK_DETAIL_SEARCH_RESPONSE_FIELD_DESCRIPTOR);
     ResponseFieldsSnippet WEEKLY_TASKS_STATISTIC_RESPONSE_SNIPPET = responseFields(WEEKLY_TASKS_STATISTIC_RESPONSE_FIELD_DESCRIPTOR);
+    QueryParametersSnippet MONTHLY_TASKS_STATISTIC_REQUEST_PARAMETER_SNIPPET = queryParameters(MONTHLY_TASKS_STATISTIC_DATE_QUERY_PARAMETER_DESCRIPTORS);
+    ResponseFieldsSnippet MONTHLY_TASKS_STATISTIC_RESPONSE_SNIPPET = responseFields(MONTHLY_TASKS_STATISTIC_RESPONSE_FIELD_DESCRIPTOR);
+    QueryParametersSnippet MONTHLY_WEEK_TASKS_STATISTIC_REQUEST_PARAMETER_SNIPPET = queryParameters(MONTHLY_WEEK_TASKS_STATISTIC_DATE_QUERY_PARAMETER_DESCRIPTORS);
+    ResponseFieldsSnippet MONTHLY_WEEK_TASKS_STATISTIC_RESPONSE_SNIPPET = responseFields(MONTHLY_WEEK_TASKS_STATISTIC_RESPONSE_FIELD_DESCRIPTOR);
 
     // TaskStatusRead Response Snippet
     ResponseFieldsSnippet TASK_STATUS_READ_RESPONSE_FIELD_SNIPPET = responseFields(TASK_STATUS_LIST_READ_RESPONSE_FIELD_DESCRIPTOR);

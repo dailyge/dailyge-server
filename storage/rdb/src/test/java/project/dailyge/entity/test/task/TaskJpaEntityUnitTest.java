@@ -241,6 +241,43 @@ class TaskJpaEntityUnitTest {
     }
 
     @Test
+    @DisplayName("Task와 동일한 달인 경우, True를 반환한다.")
+    void whenSameMonthTaskThenResultShouldBeTrue() {
+        final LocalDate now = LocalDate.now();
+        final TaskJpaEntity newTask = TaskJpaEntity.builder()
+            .id(1L)
+            .title("프로젝트 관리")
+            .content("프로젝트 진행 상황 점검")
+            .date(LocalDate.now().plusDays(10))
+            .status(TODO)
+            .userId(1L)
+            .deleted(false)
+            .build();
+
+        assertTrue(newTask.isSameMonth(now));
+    }
+
+    @Test
+    @DisplayName("Task와 다른 달일 경우, False를 반환한다.")
+    void whenDifferentMonthTaskThenResultShouldBeFalse() {
+        final LocalDate now = LocalDate.now();
+        final LocalDate differentMonth = now.plusMonths(1);
+        final LocalDate differentYear = now.plusYears(1);
+        final TaskJpaEntity newTask = TaskJpaEntity.builder()
+            .id(1L)
+            .title("프로젝트 관리")
+            .content("프로젝트 진행 상황 점검")
+            .date(LocalDate.now().plusDays(10))
+            .status(TODO)
+            .userId(1L)
+            .deleted(false)
+            .build();
+
+        assertFalse(newTask.isSameMonth(differentMonth));
+        assertFalse(newTask.isSameMonth(differentYear));
+    }
+
+    @Test
     @DisplayName("ID가 같다면 같은 객체로 여긴다.")
     void whenIdIsSameThenInstanceAreSameObj() {
         final TaskJpaEntity expectedTask = TaskJpaEntity.builder()

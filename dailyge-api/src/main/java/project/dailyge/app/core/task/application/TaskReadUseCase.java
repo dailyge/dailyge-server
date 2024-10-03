@@ -21,5 +21,5 @@ public interface TaskReadUseCase {
 
     List<TaskJpaEntity> findTasksByMonthlyTasksIdAndDate(DailygeUser dailygeUser, LocalDate date);
 
-    Tasks findWeeklyTasksStatisticByUserIdAndDate(DailygeUser dailygeUser, LocalDate startDate, LocalDate endDate);
+    Tasks findTasksStatisticByUserIdAndDate(DailygeUser dailygeUser, LocalDate startDate, LocalDate endDate);
 }

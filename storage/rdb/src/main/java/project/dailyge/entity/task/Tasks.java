@@ -6,6 +6,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +37,7 @@ public final class Tasks {
 
     public Map<LocalDate, List<TaskJpaEntity>> groupByDateOfMonth(final LocalDate monthLocalDate) {
         if (taskEntities.isEmpty()) {
-            return new HashMap<>();
+            return Collections.emptyMap();
         }
         return taskEntities.stream().filter(task -> task.isSameMonth(monthLocalDate))
             .collect(groupingBy(task -> task.getDate()));

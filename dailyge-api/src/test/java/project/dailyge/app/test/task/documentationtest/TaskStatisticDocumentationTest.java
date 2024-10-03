@@ -12,10 +12,15 @@ import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.core.task.application.TaskWriteUseCase;
 import project.dailyge.app.core.task.facade.TaskFacade;
 import project.dailyge.app.core.task.presentation.requesst.TaskCreateRequest;
+import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.MONTHLY_TASKS_STATISTIC_REQUEST_PARAMETER_SNIPPET;
+import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.MONTHLY_TASKS_STATISTIC_RESPONSE_SNIPPET;
+import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.MONTHLY_WEEK_TASKS_STATISTIC_REQUEST_PARAMETER_SNIPPET;
+import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.MONTHLY_WEEK_TASKS_STATISTIC_RESPONSE_SNIPPET;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASK_ACCESS_TOKEN_COOKIE_SNIPPET;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.WEEKLY_TASKS_STATISTIC_REQUEST_PARAMETER_SNIPPET;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.WEEKLY_TASKS_STATISTIC_RESPONSE_SNIPPET;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.createIdentifier;
+import static project.dailyge.app.test.task.documentationtest.snippet.TaskStatisticSnippet.createMonthlyTasksStatisticSearchFilter;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskStatisticSnippet.createWeeklyTasksStatisticSearchFilter;
 import static project.dailyge.app.test.task.fixture.TaskRequestFixture.createTaskRegisterRequest;
 
@@ -59,7 +64,7 @@ class TaskStatisticDocumentationTest extends DatabaseTestBase {
             .param("startDate", startDate.toString())
             .param("endDate", endDate.toString())
             .when()
-            .get("/api/tasks/statistic")
+            .get("/api/tasks/statistic/weekly")
             .then()
             .statusCode(200)
             .log()
@@ -84,7 +89,7 @@ class TaskStatisticDocumentationTest extends DatabaseTestBase {
             .param("startDate", startDate.toString())
             .param("endDate", endDate.toString())
             .when()
-            .get("/api/tasks/statistic")
+            .get("/api/tasks/statistic/weekly")
             .then()
             .statusCode(200)
             .log()
@@ -109,7 +114,172 @@ class TaskStatisticDocumentationTest extends DatabaseTestBase {
             .param("startDate", startDate.toString())
             .param("endDate", endDate.toString())
             .when()
-            .get("/api/tasks/statistic")
+            .get("/api/tasks/statistic/weekly")
+            .then()
+            .statusCode(400)
+            .log()
+            .all();
+    }
+
+    /**
+     * Monthly Tasks 통계
+     */
+    @Test
+    @DisplayName("[RestDocs] 월간 Tasks 통계를 조회하면 200 OK 응답을 받는다.")
+    void whenSearchMonthlyTasksStatisticsThenStatusCodeShouldBe200_OK_RestDocs() {
+        final TaskCreateRequest request = createTaskRegisterRequest(now);
+        taskWriteUseCase.save(dailygeUser, request.toCommand());
+        final LocalDate endDate = now.withDayOfMonth(now.lengthOfMonth());
+        final LocalDate minusMonthDate = now.minusMonths(1);
+        final LocalDate startDate = minusMonthDate.withDayOfMonth(1);
+
+        given(this.specification)
+            .relaxedHTTPSValidation()
+            .filter(document(IDENTIFIER,
+                TASK_ACCESS_TOKEN_COOKIE_SNIPPET,
+                MONTHLY_TASKS_STATISTIC_REQUEST_PARAMETER_SNIPPET,
+                MONTHLY_TASKS_STATISTIC_RESPONSE_SNIPPET
+            ))
+            .contentType(APPLICATION_JSON_VALUE)
+            .cookie(getAccessTokenCookie())
+            .param("startDate", startDate.toString())
+            .param("endDate", endDate.toString())
+            .when()
+            .get("/api/tasks/statistic/monthly")
+            .then()
+            .statusCode(200)
+            .log()
+            .all();
+    }
+
+    @Test
+    @DisplayName("[Swagger] 월간 Tasks 달성률을 조회하면 200 OK 응답을 받는다.")
+    void whenSearchMonthlyTasksStatisticsThenStatusCodeShouldBe200_OK_Swagger() {
+        final TaskCreateRequest request = createTaskRegisterRequest(now);
+        taskWriteUseCase.save(dailygeUser, request.toCommand());
+        final LocalDate startDate = now.withDayOfMonth(1);
+        final LocalDate plusMonthDate = now.plusMonths(1);
+        final LocalDate endDate = plusMonthDate.withDayOfMonth(plusMonthDate.lengthOfMonth());
+
+        final RestDocumentationFilter filter = createMonthlyTasksStatisticSearchFilter(createIdentifier("MonthlyTasksStatistic", 200));
+
+        given(this.specification)
+            .relaxedHTTPSValidation()
+            .filter(filter)
+            .contentType(APPLICATION_JSON_VALUE)
+            .cookie(getAccessTokenCookie())
+            .param("startDate", startDate.toString())
+            .param("endDate", endDate.toString())
+            .when()
+            .get("/api/tasks/statistic/monthly")
+            .then()
+            .statusCode(200)
+            .log()
+            .all();
+    }
+
+
+    @Test
+    @DisplayName("[Swagger] 올바르지 않은 날짜로 월간 Tasks 달성률을 조회하면 400 Bad Request 응답을 받는다.")
+    void whenSearchMonthlyTasksStatisticsWithInvalidParametersThenStatusCodeShouldBe400_OK_Swagger() {
+        final TaskCreateRequest request = createTaskRegisterRequest(now);
+        taskWriteUseCase.save(dailygeUser, request.toCommand());
+        final LocalDate startDate = now;
+        final LocalDate endDate = now.plusMonths(2);
+
+        final RestDocumentationFilter filter = createMonthlyTasksStatisticSearchFilter(createIdentifier("MonthlyTasksStatistic", 400));
+
+        given(this.specification)
+            .relaxedHTTPSValidation()
+            .filter(filter)
+            .contentType(APPLICATION_JSON_VALUE)
+            .cookie(getAccessTokenCookie())
+            .param("startDate", startDate.toString())
+            .param("endDate", endDate.toString())
+            .when()
+            .get("/api/tasks/statistic/monthly")
+            .then()
+            .statusCode(400)
+            .log()
+            .all();
+    }
+
+    /**
+     * Monthly Week Tasks 통계
+     */
+    @Test
+    @DisplayName("[RestDocs] 월간 주차 별 Tasks 통계를 조회하면 200 OK 응답을 받는다.")
+    void whenSearchMonthlyWeekTasksStatisticsThenStatusCodeShouldBe200_OK_RestDocs() {
+        final TaskCreateRequest request = createTaskRegisterRequest(now);
+        taskWriteUseCase.save(dailygeUser, request.toCommand());
+        final LocalDate endDate = now.withDayOfMonth(now.lengthOfMonth());
+        final LocalDate minusMonthDate = now.minusMonths(1);
+        final LocalDate startDate = minusMonthDate.withDayOfMonth(1);
+
+        given(this.specification)
+            .relaxedHTTPSValidation()
+            .filter(document(IDENTIFIER,
+                TASK_ACCESS_TOKEN_COOKIE_SNIPPET,
+                MONTHLY_WEEK_TASKS_STATISTIC_REQUEST_PARAMETER_SNIPPET,
+                MONTHLY_WEEK_TASKS_STATISTIC_RESPONSE_SNIPPET
+            ))
+            .contentType(APPLICATION_JSON_VALUE)
+            .cookie(getAccessTokenCookie())
+            .param("startDate", startDate.toString())
+            .param("endDate", endDate.toString())
+            .when()
+            .get("/api/tasks/statistic/monthly-weeks")
+            .then()
+            .statusCode(200)
+            .log()
+            .all();
+    }
+
+    @Test
+    @DisplayName("[Swagger] 월간 주차 별 Tasks 달성률을 조회하면 200 OK 응답을 받는다.")
+    void whenSearchMonthlyWeekTasksStatisticsThenStatusCodeShouldBe200_OK_Swagger() {
+        final TaskCreateRequest request = createTaskRegisterRequest(now);
+        taskWriteUseCase.save(dailygeUser, request.toCommand());
+        final LocalDate startDate = now.withDayOfMonth(1);
+        final LocalDate plusMonthDate = now.plusMonths(1);
+        final LocalDate endDate = plusMonthDate.withDayOfMonth(plusMonthDate.lengthOfMonth());
+
+        final RestDocumentationFilter filter = createMonthlyTasksStatisticSearchFilter(createIdentifier("MonthlyWeekTasksStatistic", 200));
+
+        given(this.specification)
+            .relaxedHTTPSValidation()
+            .filter(filter)
+            .contentType(APPLICATION_JSON_VALUE)
+            .cookie(getAccessTokenCookie())
+            .param("startDate", startDate.toString())
+            .param("endDate", endDate.toString())
+            .when()
+            .get("/api/tasks/statistic/monthly-weeks")
+            .then()
+            .statusCode(200)
+            .log()
+            .all();
+    }
+
+    @Test
+    @DisplayName("[Swagger] 올바르지 않은 날짜로 월간 주차 별 Tasks 달성률을 조회하면 400 Bad Request 응답을 받는다.")
+    void whenSearchMonthlyWeekTasksStatisticsWithInvalidParametersThenStatusCodeShouldBe400_OK_Swagger() {
+        final TaskCreateRequest request = createTaskRegisterRequest(now);
+        taskWriteUseCase.save(dailygeUser, request.toCommand());
+        final LocalDate startDate = now;
+        final LocalDate endDate = now.plusMonths(2);
+
+        final RestDocumentationFilter filter = createMonthlyTasksStatisticSearchFilter(createIdentifier("MonthlyWeekTasksStatistic", 400));
+
+        given(this.specification)
+            .relaxedHTTPSValidation()
+            .filter(filter)
+            .contentType(APPLICATION_JSON_VALUE)
+            .cookie(getAccessTokenCookie())
+            .param("startDate", startDate.toString())
+            .param("endDate", endDate.toString())
+            .when()
+            .get("/api/tasks/statistic/monthly-weeks")
             .then()
             .statusCode(400)
             .log()

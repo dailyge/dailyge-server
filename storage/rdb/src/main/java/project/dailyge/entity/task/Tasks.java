@@ -1,13 +1,19 @@
 package project.dailyge.entity.task;
 
-import static java.util.Collections.emptyList;
-import static java.util.stream.Collectors.groupingBy;
-import lombok.Getter;
-
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.WeekFields;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import lombok.Getter;
+import static java.util.Collections.emptyList;
+import static java.util.stream.Collectors.groupingBy;
+import static project.dailyge.entity.task.TaskAchievementRank.getAchievementRank;
 
 @Getter
 public final class Tasks {
@@ -27,6 +33,40 @@ public final class Tasks {
         }
         return taskEntities.stream()
             .collect(groupingBy(task -> task.getDate().format(formatter)));
+    }
+
+    public Map<LocalDate, List<TaskJpaEntity>> groupByDateOfMonth(final LocalDate monthLocalDate) {
+        if (taskEntities.isEmpty()) {
+            return Collections.emptyMap();
+        }
+        return taskEntities.stream().filter(task -> task.isSameMonth(monthLocalDate))
+            .collect(groupingBy(task -> task.getDate()));
+    }
+
+    public Map<Integer, List<TaskJpaEntity>> groupByWeekOfMonth(final LocalDate monthLocalDate) {
+        final Map<LocalDate, List<TaskJpaEntity>> monthTaskMap = groupByDateOfMonth(monthLocalDate);
+
+        final Map<Integer, List<TaskJpaEntity>> tasksGroupByWeekMap = new HashMap<>();
+        for (final LocalDate date : monthTaskMap.keySet()) {
+            final int weekOfMonth = getWeekOfMonth(date) - 1;
+            tasksGroupByWeekMap.computeIfAbsent(weekOfMonth, k -> new ArrayList<>()).addAll(monthTaskMap.get(date));
+        }
+        return tasksGroupByWeekMap;
+    }
+
+    public List<Integer> countMonthTasksByRank(final LocalDate monthLocalDate) {
+        final Map<LocalDate, List<TaskJpaEntity>> monthlyTaskMap = groupByDateOfMonth(monthLocalDate);
+        if (monthlyTaskMap.isEmpty()) {
+            return emptyList();
+        }
+        final List<Integer> rankCounts = Arrays.asList(0, 0, 0, 0, 0);
+        for (final LocalDate date : monthlyTaskMap.keySet()) {
+            final List<TaskJpaEntity> tasksByDate = monthlyTaskMap.get(date);
+            final double successRateByDate = calculatePercentage(tasksByDate, TaskStatus.DONE);
+            final int achievementRank = getAchievementRank(successRateByDate);
+            rankCounts.set(achievementRank, rankCounts.get(achievementRank) + 1);
+        }
+        return rankCounts;
     }
 
     public List<String> getKeysAsString() {
@@ -71,6 +111,27 @@ public final class Tasks {
         return tasks.stream()
             .filter(task -> task.getStatus() == status)
             .count();
+    }
+
+    public static List<Double> calculateMonthlyRanks(final List<Integer> rankCounts) {
+        final List<Double> monthlyRanks = Arrays.asList(0.0, 0.0, 0.0, 0.0, 0.0);
+        if (rankCounts.isEmpty()) {
+            return monthlyRanks;
+        }
+        final int monthlySum = rankCounts.stream().mapToInt(i -> i).sum();
+        for (int i = rankCounts.size() - 1; i > 0; i--) {
+            monthlyRanks.set(i, calculatePercentage(rankCounts.get(i), monthlySum));
+        }
+        final double lastRank = 100.0 - monthlyRanks.stream().mapToDouble(Double::doubleValue).sum();
+        final double roundedLastRank =  Math.round(lastRank * PERCENTAGE) / 100.0;
+        monthlyRanks.set(0, roundedLastRank);
+        return monthlyRanks;
+    }
+
+    public static int getWeekOfMonth(final LocalDate date) {
+        final WeekFields weekFields = WeekFields.of(DayOfWeek.MONDAY, 4);
+        final int weekOfMonth = date.get(weekFields.weekOfMonth());
+        return weekOfMonth == 0 ? 1 : weekOfMonth;
     }
 
     public int size() {

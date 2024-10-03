@@ -1,43 +1,51 @@
 package project.dailyge.entity.test.task;
 
-import static java.time.LocalDate.now;
-import static java.util.Collections.emptyList;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.AfterEach;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import project.dailyge.entity.task.TaskJpaEntity;
+import project.dailyge.entity.task.Tasks;
+import static java.time.LocalDate.now;
+import static java.util.Collections.emptyList;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static project.dailyge.entity.task.TaskStatus.DONE;
 import static project.dailyge.entity.task.TaskStatus.IN_PROGRESS;
 import static project.dailyge.entity.task.TaskStatus.TODO;
-import project.dailyge.entity.task.Tasks;
 import static project.dailyge.entity.task.Tasks.calculatePercentage;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import static project.dailyge.entity.task.Tasks.getWeekOfMonth;
 
 @DisplayName("[UnitTest] Tasks 단위 테스트")
 class TasksUnitTest {
 
     private List<TaskJpaEntity> tasks;
+    private LocalDate today;
 
     @BeforeEach
     void setUp() {
         tasks = new ArrayList<>();
-        tasks.add(new TaskJpaEntity("Task 1", "Content 1", now(), TODO, 1L));
-        tasks.add(new TaskJpaEntity("Task 2", "Content 2", now(), TODO, 1L));
-        tasks.add(new TaskJpaEntity("Task 3", "Content 3", now(), TODO, 1L));
-        tasks.add(new TaskJpaEntity("Task 4", "Content 4", now(), IN_PROGRESS, 1L));
-        tasks.add(new TaskJpaEntity("Task 5", "Content 5", now(), IN_PROGRESS, 1L));
-        tasks.add(new TaskJpaEntity("Task 6", "Content 6", now(), IN_PROGRESS, 1L));
-        tasks.add(new TaskJpaEntity("Task 7", "Content 7", now(), DONE, 1L));
-        tasks.add(new TaskJpaEntity("Task 8", "Content 8", now(), DONE, 1L));
-        tasks.add(new TaskJpaEntity("Task 9", "Content 9", now(), DONE, 1L));
-        tasks.add(new TaskJpaEntity("Task 10", "Content 10", now(), DONE, 1L));
+        today = now();
+        tasks.add(new TaskJpaEntity("Task 1", "Content 1", today, TODO, 1L));
+        tasks.add(new TaskJpaEntity("Task 2", "Content 2", today, TODO, 1L));
+        tasks.add(new TaskJpaEntity("Task 3", "Content 3", today, TODO, 1L));
+        tasks.add(new TaskJpaEntity("Task 4", "Content 4", today, IN_PROGRESS, 1L));
+        tasks.add(new TaskJpaEntity("Task 5", "Content 5", today, IN_PROGRESS, 1L));
+        tasks.add(new TaskJpaEntity("Task 6", "Content 6", today, IN_PROGRESS, 1L));
+        tasks.add(new TaskJpaEntity("Task 7", "Content 7", today, DONE, 1L));
+        tasks.add(new TaskJpaEntity("Task 8", "Content 8", today, DONE, 1L));
+        tasks.add(new TaskJpaEntity("Task 9", "Content 9", today, DONE, 1L));
+        tasks.add(new TaskJpaEntity("Task 10", "Content 10", today, DONE, 1L));
     }
 
     @AfterEach
@@ -143,7 +151,7 @@ class TasksUnitTest {
     }
 
     @Test
-    @DisplayName("Tasks에 일치하는 상태가 없을 경우 0을 반한 한다.")
+    @DisplayName("Tasks에 일치하는 상태가 없을 경우 0을 반환 한다.")
     void whenNoTasksMatchStatusThenReturnZeroStatusCount() {
         final long count = Tasks.calculateAchievementRate(tasks, null);
         assertEquals(0, count);
@@ -187,5 +195,109 @@ class TasksUnitTest {
             () -> assertEquals(33.33, calculatePercentage(newTasks, IN_PROGRESS)),
             () -> assertEquals(33.33, calculatePercentage(newTasks, DONE))
         );
+    }
+
+    @Test
+    @DisplayName("입력한 월의 Task 그룹을 반환 한다.")
+    void whenGetMonthTaskThenResultShouldBeMonthTaskGroup() {
+        final TaskJpaEntity beforeMonthTask = new TaskJpaEntity("Task 11", "Content 11", today.minusMonths(1), TODO, 1L);
+        tasks.add(beforeMonthTask);
+        final Tasks taskWrapper = new Tasks(tasks);
+
+        final Map<LocalDate, List<TaskJpaEntity>> groupedTasks = taskWrapper.groupByDateOfMonth(today);
+
+        assertNotNull(groupedTasks.get(today));
+        assertNull(groupedTasks.get(today.minusMonths(1)));
+    }
+
+    @Test
+    @DisplayName("Tasks가 비어있을 경우 빈 그룹을 반환 한다.")
+    void whenGetMonthTaskListIsEmptyThenResultShouldBeEmptyGroup() {
+        final Tasks taskWrapper = new Tasks(emptyList());
+        final Map<LocalDate, List<TaskJpaEntity>> monthTaskMap = taskWrapper.groupByDateOfMonth(today);
+        assertTrue(monthTaskMap.isEmpty());
+    }
+
+    @Test
+    @DisplayName("해당 달의 주간 별 Task 그룹을 반환 한다.")
+    void whenFindWeekTaskCountsThenResultShouldBeWeekTaskGroup() {
+        final Tasks taskWrapper = new Tasks(tasks);
+        final Map<Integer, List<TaskJpaEntity>> expectedTasks = new HashMap<>();
+        expectedTasks.put(getWeekOfMonth(today) - 1, tasks);
+
+        final Map<Integer, List<TaskJpaEntity>> groupedTasks = taskWrapper.groupByWeekOfMonth(today);
+
+        assertEquals(expectedTasks, groupedTasks);
+    }
+
+    @Test
+    @DisplayName("주간 별 그룹 시 Tasks가 비어있을 경우 빈 그룹을 반환 한다.")
+    void whenFindWeekTaskCountsByEmptyTasksThenResultShouldBeEmptyGroup() {
+        final Tasks taskWrapper = new Tasks(emptyList());
+
+        final Map<Integer, List<TaskJpaEntity>> groupedTasks = taskWrapper.groupByWeekOfMonth(today);
+
+        assertTrue(groupedTasks.isEmpty());
+    }
+
+    @Test
+    @DisplayName("해당 달의 Rank별 Task 개수를 반환 한다.")
+    void whenFindTaskRankCountsThenResultShouldBeCorrectly() {
+        final Tasks taskWrapper = new Tasks(tasks);
+        final List<Integer> expectedRanks = List.of(0, 0, 1, 0, 0);
+
+        final List<Integer> rankCounts = taskWrapper.countMonthTasksByRank(today);
+
+        assertEquals(expectedRanks, rankCounts);
+    }
+
+    @Test
+    @DisplayName("Rank별 개수를 구할 시 Tasks가 비어있을 경우 빈 리스트를 반환 한다.")
+    void whenFindTaskRankCountsByEmptyTasksThenResultShouldBeEmptyList() {
+        final Tasks taskWrapper = new Tasks(emptyList());
+        final List<Integer> rankCounts = taskWrapper.countMonthTasksByRank(today);
+
+        assertTrue(rankCounts.isEmpty());
+    }
+
+    @ParameterizedTest
+    @DisplayName("월의 주차를 구하면, 올바른 값이 나온다.")
+    @CsvSource({"1, 1", "2, 8", "3, 15", "4, 22", "5, 29"})
+    void whenFindWeekOfMonthThenResultShouldBeCorrectly(
+        final int expectedWeek,
+        final int day
+    ) {
+        final LocalDate week = LocalDate.of(2024, 1, day);
+        final int weekOfMonth = getWeekOfMonth(week);
+
+        assertEquals(expectedWeek, weekOfMonth);
+    }
+
+    @Test
+    @DisplayName("목요일이 포함되지 않은 첫 주차는 1주차에 포함한다.")
+    void whenFirstWeekNotIncludingThursdayThenResultShouldBeWeek1() {
+        final LocalDate week = LocalDate.of(2024, 3, 1);
+        final int weekOfMonth = getWeekOfMonth(week);
+
+        assertEquals(1, weekOfMonth);
+    }
+
+    @Test
+    @DisplayName("랭크 별 백분율을 계산한다.")
+    void whenCalculatePercentageByRankThenResultShouldBeCorrectly() {
+        final List<Integer> rankCounts = List.of(1, 2, 3, 4, 5);
+        final List<Double> expectedRates = List.of(6.67, 13.33, 20.0, 26.67, 33.33);
+        final List<Double> rankRates = Tasks.calculateMonthlyRanks(rankCounts);
+
+        assertEquals(expectedRates, rankRates);
+    }
+
+    @Test
+    @DisplayName("Task가 비어있다면, 모두 0.0을 반환한다.")
+    void whenGetThenResultShouldBeZero() {
+        final List<Double> expectedRates = List.of(0.0, 0.0, 0.0, 0.0, 0.0);
+        final List<Double> rankRates = Tasks.calculateMonthlyRanks(emptyList());
+
+        assertEquals(expectedRates, rankRates);
     }
 }

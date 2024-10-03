@@ -56,6 +56,33 @@ class TaskClientValidatorUnitTest {
         assertDoesNotThrow(() -> validator.validateFromStartDateToEndDate(startDate, endDate));
     }
 
+    @Test
+    @DisplayName("월간 통계 검증 시 endDate가 startDate보다 이전일 경우 예외가 발생 한다")
+    void whenEndDateIsBeforeStartDateByMonthlyStatistic_thenThrowIllegalArgumentException() {
+        final LocalDate startDate = LocalDate.now();
+        final LocalDate endDate = startDate.minusMonths(3);
+        assertThrows(IllegalArgumentException.class, () -> validator.validateOneMonthDifference(startDate, endDate));
+    }
+
+    @Test
+    @DisplayName("월간 통계 검증 시 한달의 차이가 나는지 확인한다.")
+    void whenDateDifferenceOneMonth_thenNoException() {
+        final LocalDate startDate = LocalDate.now();
+        final LocalDate endDate = startDate.plusMonths(1);
+        assertDoesNotThrow(() -> validator.validateOneMonthDifference(startDate, endDate));
+    }
+
+    @Test
+    @DisplayName("월간 통계 검증 시 한달의 차이가 아니면 예외가 발생한다.")
+    void whenDateNotDifferenceOneMonth_thenThrowIllegalArgumentException() {
+        final LocalDate startDate = LocalDate.now();
+        final LocalDate twoMonthPlusEndDate = startDate.plusMonths(2);
+        final LocalDate sameMonthEndDate = startDate.plusMonths(2);
+
+        assertThrows(IllegalArgumentException.class, () -> validator.validateOneMonthDifference(startDate, twoMonthPlusEndDate));
+        assertThrows(IllegalArgumentException.class, () -> validator.validateOneMonthDifference(startDate, sameMonthEndDate));
+    }
+
     private static IntStream provideAugustDays() {
         return IntStream.rangeClosed(1, 31);
     }

@@ -10,6 +10,8 @@ import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.common.auth.LoginUser;
 import project.dailyge.app.common.response.ApiResponse;
 import project.dailyge.app.core.task.application.TaskReadUseCase;
+import project.dailyge.app.core.task.presentation.response.MonthlyTasksStatisticResponse;
+import project.dailyge.app.core.task.presentation.response.MonthlyWeekTasksStatisticResponse;
 import project.dailyge.app.core.task.presentation.response.WeeklyTasksStatisticResponse;
 import project.dailyge.app.core.task.presentation.validator.TaskClientValidator;
 import project.dailyge.entity.task.Tasks;
@@ -17,22 +19,46 @@ import project.dailyge.entity.task.Tasks;
 import java.time.LocalDate;
 
 @RequiredArgsConstructor
-@RequestMapping(path = {"/api"})
+@RequestMapping(path = {"/api/tasks/statistic"})
 @PresentationLayer(value = "TaskStatisticApi")
 public class TaskStatisticApi {
 
     private final TaskClientValidator validator;
     private final TaskReadUseCase taskReadUseCase;
 
-    @GetMapping(path = {"/tasks/statistic"})
+    @GetMapping(path = {"/weekly"})
     public ApiResponse<WeeklyTasksStatisticResponse> findWeeklyTasksStatisticByUserIdAndDate(
         @LoginUser final DailygeUser dailygeUser,
         @RequestParam(value = "startDate") final LocalDate startDate,
         @RequestParam(value = "endDate") final LocalDate endDate
     ) {
         validator.validateFromStartDateToEndDate(startDate, endDate);
-        final Tasks weeklyTasks = taskReadUseCase.findWeeklyTasksStatisticByUserIdAndDate(dailygeUser, startDate, endDate);
+        final Tasks weeklyTasks = taskReadUseCase.findTasksStatisticByUserIdAndDate(dailygeUser, startDate, endDate);
         final WeeklyTasksStatisticResponse payload = new WeeklyTasksStatisticResponse(startDate, endDate, weeklyTasks);
+        return ApiResponse.from(OK, payload);
+    }
+
+    @GetMapping(path = {"/monthly"})
+    public ApiResponse<MonthlyTasksStatisticResponse> findMonthlyTasksStatisticByUserIdAndDate(
+        @LoginUser final DailygeUser dailygeUser,
+        @RequestParam(value = "startDate") final LocalDate startDate,
+        @RequestParam(value = "endDate") final LocalDate endDate
+    ) {
+        validator.validateOneMonthDifference(startDate, endDate);
+        final Tasks monthlyTasks = taskReadUseCase.findTasksStatisticByUserIdAndDate(dailygeUser, startDate, endDate);
+        final MonthlyTasksStatisticResponse payload = new MonthlyTasksStatisticResponse(startDate, endDate, monthlyTasks);
+        return ApiResponse.from(OK, payload);
+    }
+
+    @GetMapping(path = {"/monthly-weeks"})
+    public ApiResponse<MonthlyWeekTasksStatisticResponse> findMonthlyWeekTasksStatisticByUserIdAndDate(
+        @LoginUser final DailygeUser dailygeUser,
+        @RequestParam(value = "startDate") final LocalDate startDate,
+        @RequestParam(value = "endDate") final LocalDate endDate
+    ) {
+        validator.validateOneMonthDifference(startDate, endDate);
+        final Tasks monthlyTasks = taskReadUseCase.findTasksStatisticByUserIdAndDate(dailygeUser, startDate, endDate);
+        final MonthlyWeekTasksStatisticResponse payload = new MonthlyWeekTasksStatisticResponse(startDate, endDate, monthlyTasks);
         return ApiResponse.from(OK, payload);
     }
 }

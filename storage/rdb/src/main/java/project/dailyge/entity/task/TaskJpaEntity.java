@@ -201,6 +201,10 @@ public class TaskJpaEntity extends BaseEntity {
         return getId().equals(monthlyTaskId);
     }
 
+    public boolean isSameMonth(final LocalDate otherDate) {
+        return this.date.getMonth().equals(otherDate.getMonth()) && this.date.getYear() == otherDate.getYear();
+    }
+
     @Override
     public boolean equals(final Object obj) {
         if (this == obj) {

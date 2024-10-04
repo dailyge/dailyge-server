@@ -2,6 +2,7 @@ package project.dailyge.entity.test.anniversary;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -35,6 +36,20 @@ class AnniversaryJpaEntityUnitTest {
             () -> assertThat(anniversary.isRemind()).isTrue(),
             () -> assertThat(anniversary.getEmojiId()).isEqualTo(1L),
             () -> assertThat(anniversary.getUserId()).isEqualTo(1L)
+        );
+    }
+
+    @Test
+    @DisplayName("기념일을 수정하면 내용이 반영 된다.")
+    void whenUpdateThenFieldsShouldBeApplied() {
+        final String updatedName = "사진 찍기";
+        final LocalDateTime now = LocalDateTime.now();
+        final boolean updatedRemind = true;
+        anniversary.update(updatedName, now, updatedRemind, null);
+        assertAll(
+            () -> assertEquals(updatedName, anniversary.getName()),
+            () -> assertEquals(now, anniversary.getDate()),
+            () -> assertTrue(anniversary.isRemind())
         );
     }
 

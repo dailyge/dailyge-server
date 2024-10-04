@@ -4,12 +4,12 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
-import project.dailyge.app.core.anniversary.application.command.AnniversaryCreateCommand;
+import project.dailyge.app.core.anniversary.application.command.AnniversaryUpdateCommand;
 
 import java.time.LocalDate;
 
 @Getter
-public class AnniversaryCreateRequest {
+public class AnniversaryUpdateRequest {
 
     @NotBlank
     @Size(min = 1, max = 50, message = "")
@@ -21,10 +21,10 @@ public class AnniversaryCreateRequest {
     private boolean remind;
     private Long emojiId;
 
-    private AnniversaryCreateRequest() {
+    private AnniversaryUpdateRequest() {
     }
 
-    public AnniversaryCreateRequest(
+    public AnniversaryUpdateRequest(
         final String name,
         final LocalDate date,
         final boolean remind,
@@ -36,8 +36,8 @@ public class AnniversaryCreateRequest {
         this.emojiId = emojiId;
     }
 
-    public AnniversaryCreateCommand toCommand() {
-        return new AnniversaryCreateCommand(name, date.atTime(0, 0, 0, 0), remind, emojiId);
+    public AnniversaryUpdateCommand toCommand() {
+        return new AnniversaryUpdateCommand(name, date.atTime(0, 0, 0, 0), remind, emojiId);
     }
 
     @Override

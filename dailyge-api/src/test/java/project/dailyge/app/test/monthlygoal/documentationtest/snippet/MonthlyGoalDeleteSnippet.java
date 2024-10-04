@@ -9,6 +9,7 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import org.springframework.restdocs.restassured.RestDocumentationFilter;
+import static project.dailyge.app.common.CommonSnippet.COOKIE_HEADER_DESCRIPTORS;
 
 import java.util.Arrays;
 import java.util.List;
@@ -26,6 +27,7 @@ public final class MonthlyGoalDeleteSnippet implements MonthlyGoalSnippet {
         return document(
             identifier,
             ResourceSnippetParameters.builder()
+                .requestHeaders(COOKIE_HEADER_DESCRIPTORS)
                 .pathParameters(MONTHLY_GOAL_ID_PATH_PARAMETER_DESCRIPTORS)
                 .tag(tag)
                 .summary(SUMMARY)

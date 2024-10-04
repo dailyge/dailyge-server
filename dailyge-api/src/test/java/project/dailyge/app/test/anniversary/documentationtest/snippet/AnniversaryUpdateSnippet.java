@@ -8,6 +8,7 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import org.springframework.restdocs.restassured.RestDocumentationFilter;
 import static project.dailyge.app.common.CommonSnippet.COOKIE_HEADER_DESCRIPTORS;
 import static project.dailyge.app.common.CommonSnippet.TOKEN_COOKIE_DESCRIPTORS;
@@ -16,22 +17,23 @@ import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippe
 import java.util.Arrays;
 import java.util.List;
 
-public final class AnniversaryCreateSnippet implements AnniversarySnippet {
+public final class AnniversaryUpdateSnippet implements AnniversarySnippet {
 
-    private static final String SUMMARY = "Anniversary 등록 API";
-    private static final String DESCRIPTION = "Anniversary를 등록합니다.";
+    private static final String SUMMARY = "Anniversary 수정 API";
+    private static final String DESCRIPTION = "Anniversary를 수정합니다.";
 
-    private AnniversaryCreateSnippet() {
+    private AnniversaryUpdateSnippet() {
         throw new AssertionError("올바른 방식으로 생성자를 호출해주세요.");
     }
 
-    public static RestDocumentationFilter createAnniversaryFilter(final String identifier) {
+    public static RestDocumentationFilter createUpdateAnniversaryFilter(final String identifier) {
         return document(
             identifier,
             ResourceSnippetParameters.builder()
                 .requestHeaders(COOKIE_HEADER_DESCRIPTORS)
-                .requestFields(ANNIVERSARY_CREATE_REQUEST_FIELDS)
-                .responseFields(ANNIVERSARY_CREATE_RESPONSE)
+                .pathParameters(ANNIVERSARY_ID_PATH_PARAMETER_DESCRIPTORS)
+                .requestFields(ANNIVERSARY_UPDATE_REQUEST_FIELDS)
+                .responseFields(ANNIVERSARY_RESPONSE)
                 .tag(TAG)
                 .summary(SUMMARY)
                 .privateResource(false)
@@ -42,8 +44,9 @@ public final class AnniversaryCreateSnippet implements AnniversarySnippet {
             snippets -> {
                 List.of(
                     requestCookies(TOKEN_COOKIE_DESCRIPTORS),
-                    requestFields(Arrays.stream(ANNIVERSARY_CREATE_REQUEST_FIELDS).toList()),
-                    responseFields(Arrays.stream(ANNIVERSARY_CREATE_RESPONSE).toList()),
+                    pathParameters(Arrays.stream(ANNIVERSARY_ID_PATH_PARAMETER_DESCRIPTORS).toList()),
+                    requestFields(ANNIVERSARY_UPDATE_REQUEST_FIELDS),
+                    responseFields(Arrays.stream(ANNIVERSARY_RESPONSE).toList()),
                     responseFields(Arrays.stream(ERROR_RESPONSE).toList())
                 );
             }

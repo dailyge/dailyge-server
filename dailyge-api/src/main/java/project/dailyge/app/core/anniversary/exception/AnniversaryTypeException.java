@@ -6,7 +6,6 @@ import project.dailyge.app.common.exception.BusinessException;
 import static project.dailyge.app.core.anniversary.exception.AnniversaryCodeAndMessage.ANNIVERSARY_NOT_FOUND;
 import static project.dailyge.app.core.anniversary.exception.AnniversaryCodeAndMessage.ANNIVERSARY_UN_RESOLVED_EXCEPTION;
 import static project.dailyge.app.core.anniversary.exception.AnniversaryCodeAndMessage.DUPLICATED_ANNIVERSARY;
-import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.TASK_UN_RESOLVED_EXCEPTION;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -46,7 +45,7 @@ public sealed class AnniversaryTypeException extends BusinessException {
         if (findAnniversaryTypeException != null) {
             return findAnniversaryTypeException;
         }
-        return factory.get(TASK_UN_RESOLVED_EXCEPTION);
+        return factory.get(ANNIVERSARY_UN_RESOLVED_EXCEPTION);
     }
 
     @Override

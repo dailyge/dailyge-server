@@ -60,4 +60,8 @@ public class AnniversaryJpaEntity extends BaseEntity {
         this.emojiId = emojiId;
         this.userId = userId;
     }
+
+    public void delete() {
+        this.deleted = true;
+    }
 }

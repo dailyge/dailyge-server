@@ -127,7 +127,7 @@ CREATE TABLE IF NOT EXISTS anniversaries
     name             VARCHAR(50)                       NOT NULL COMMENT '이름',
     date             TIMESTAMP                         NOT NULL COMMENT '기념일 날짜',
     remind           BIT                               NOT NULL COMMENT '알림 여부',
-    emoji_id         BIGINT                            NULL COMMENT '이모지 ID',
+    emoji_id         BIGINT                            NULL COMMENT '이모티콘 ID',
     user_id          BIGINT                            NOT NULL COMMENT '사용자 ID',
     created_at       TIMESTAMP                         NOT NULL COMMENT '생성일',
     created_by       BIGINT                            NULL COMMENT '생성한 사람',

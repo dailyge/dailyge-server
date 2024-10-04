@@ -48,6 +48,9 @@ public class DailygeUser {
     }
 
     public boolean isValid(final Long userId) {
+        if (isAdmin()) {
+            return true;
+        }
         return this.userId.equals(userId);
     }
 

@@ -5,4 +5,6 @@ import project.dailyge.app.core.anniversary.application.command.AnniversaryCreat
 
 public interface AnniversaryWriteService {
     Long save(DailygeUser dailygeUser, AnniversaryCreateCommand command);
+
+    void delete(DailygeUser dailygeUser, Long anniversaryId);
 }

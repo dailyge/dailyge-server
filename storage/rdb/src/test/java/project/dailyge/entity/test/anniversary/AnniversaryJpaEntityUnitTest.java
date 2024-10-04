@@ -2,6 +2,7 @@ package project.dailyge.entity.test.anniversary;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,7 +27,7 @@ class AnniversaryJpaEntityUnitTest {
     }
 
     @Test
-    @DisplayName("올바른 인자로 객체가 생성되었는지 검증")
+    @DisplayName("올바른 파라미터가 들어왔다면 객체가 생성된다.")
     void whenValidParameterThenAnniversaryShouldBeCreated() {
         assertAll(
             () -> assertThat(anniversary.getName()).isEqualTo("생일"),
@@ -35,5 +36,12 @@ class AnniversaryJpaEntityUnitTest {
             () -> assertThat(anniversary.getEmojiId()).isEqualTo(1L),
             () -> assertThat(anniversary.getUserId()).isEqualTo(1L)
         );
+    }
+
+    @Test
+    @DisplayName("기념일을 삭제하면 deleted 필드가 True가 된다.")
+    void whenDeletedThenDeleteStatusShouldBeTrue() {
+        anniversary.delete();
+        assertTrue(anniversary.getDeleted());
     }
 }

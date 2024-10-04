@@ -2,7 +2,6 @@ package project.dailyge.entity.retrospect;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -10,11 +9,10 @@ import java.time.LocalDate;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import project.dailyge.entity.BaseEntity;
-import static jakarta.persistence.EnumType.STRING;
 
 @Getter
 @NoArgsConstructor
-@Entity(name = "retrospect")
+@Entity(name = "retrospects")
 public class RetrospectJpaEntity extends BaseEntity {
 
     @Id
@@ -27,12 +25,11 @@ public class RetrospectJpaEntity extends BaseEntity {
     @Column(name = "content")
     private String content;
 
-    @Enumerated(STRING)
-    @Column(name = "retrospect_type")
-    private RetrospectType retrospectType;
+    @Column(name = "start_date")
+    private LocalDate startDate;
 
-    @Column(name = "date")
-    private LocalDate date;
+    @Column(name = "end_date")
+    private LocalDate endDate;
 
     @Column(name = "is_public")
     private boolean isPublic;
@@ -43,14 +40,34 @@ public class RetrospectJpaEntity extends BaseEntity {
     public RetrospectJpaEntity(
         final String title,
         final String content,
-        final RetrospectType retrospectType,
-        final LocalDate date,
+        final LocalDate startDate,
+        final LocalDate endDate,
+        final boolean isPublic,
         final Long userId
     ) {
         this.title = title;
         this.content = content;
-        this.retrospectType = retrospectType;
-        this.date = date;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.isPublic = isPublic;
+        this.userId = userId;
+    }
+
+    public RetrospectJpaEntity(
+        final Long id,
+        final String title,
+        final String content,
+        final LocalDate startDate,
+        final LocalDate endDate,
+        final boolean isPublic,
+        final Long userId
+    ) {
+        this.id = id;
+        this.title = title;
+        this.content = content;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.isPublic = isPublic;
         this.userId = userId;
     }
 }

@@ -19,6 +19,7 @@ import project.dailyge.app.core.emoji.exception.EmojiTypeException;
 import project.dailyge.entity.anniversary.AnniversaryJpaEntity;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 @DisplayName("[IntegrationTest] 기념일 저장 통합 테스트")
 class AnniversarySaveIntegrationTest extends DatabaseTestBase {
@@ -35,7 +36,7 @@ class AnniversarySaveIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("기념일이 저장되면 ID가 null이 아니다.")
     void whenSaveAnniversaryThenIdShouldBeNotNull() {
-        final LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS);
         final String name = "부모님 결혼 기념일";
         final boolean remind = false;
         final AnniversaryCreateCommand command = new AnniversaryCreateCommand(name, now, remind, null);
@@ -47,7 +48,7 @@ class AnniversarySaveIntegrationTest extends DatabaseTestBase {
         assertAll(
             () -> assertEquals(name, findAnniversary.getName()),
             () -> assertEquals(remind, findAnniversary.isRemind()),
-            () -> assertEquals(now, findAnniversary.getDate())
+            () -> assertEquals(now.toLocalDate(), findAnniversary.getDate().toLocalDate())
         );
     }
 

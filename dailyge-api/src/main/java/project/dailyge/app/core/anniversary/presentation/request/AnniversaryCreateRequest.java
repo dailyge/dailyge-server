@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import project.dailyge.app.core.anniversary.application.command.AnniversaryCreateCommand;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 public class AnniversaryCreateRequest {
@@ -14,7 +14,7 @@ public class AnniversaryCreateRequest {
     private String name;
 
     @NotNull
-    private LocalDateTime date;
+    private LocalDate date;
 
     private boolean remind;
     private Long emojiId;
@@ -24,7 +24,7 @@ public class AnniversaryCreateRequest {
 
     public AnniversaryCreateRequest(
         final String name,
-        final LocalDateTime date,
+        final LocalDate date,
         final boolean remind,
         final Long emojiId
     ) {
@@ -35,7 +35,7 @@ public class AnniversaryCreateRequest {
     }
 
     public AnniversaryCreateCommand toCommand() {
-        return new AnniversaryCreateCommand(name, date, remind, emojiId);
+        return new AnniversaryCreateCommand(name, date.atTime(0, 0), remind, emojiId);
     }
 
     @Override

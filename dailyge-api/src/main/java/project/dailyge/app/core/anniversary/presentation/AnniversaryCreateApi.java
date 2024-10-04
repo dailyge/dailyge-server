@@ -23,8 +23,8 @@ public class AnniversaryCreateApi {
 
     @PostMapping
     public ApiResponse<AnniversaryCreateResponse> createAnniversary(
-        @LoginUser DailygeUser dailygeUser,
-        @Valid @RequestBody AnniversaryCreateRequest request
+        @LoginUser final DailygeUser dailygeUser,
+        @Valid @RequestBody final AnniversaryCreateRequest request
     ) {
         final Long newAnniversaryId = anniversaryFacade.save(dailygeUser, request.toCommand());
         final AnniversaryCreateResponse payload = new AnniversaryCreateResponse(newAnniversaryId);

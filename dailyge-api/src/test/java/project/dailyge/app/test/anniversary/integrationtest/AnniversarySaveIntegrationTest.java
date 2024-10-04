@@ -36,7 +36,7 @@ class AnniversarySaveIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("기념일이 저장되면 ID가 null이 아니다.")
     void whenSaveAnniversaryThenIdShouldBeNotNull() {
-        LocalDateTime now = LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS);
+        final LocalDateTime now = LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS);
         final String name = "부모님 결혼 기념일";
         final boolean remind = false;
         final AnniversaryCreateCommand command = new AnniversaryCreateCommand(name, now, remind, null);

@@ -27,6 +27,7 @@ public final class AnniversaryCreateSnippet implements AnniversarySnippet {
         return document(
             identifier,
             ResourceSnippetParameters.builder()
+                .requestHeaders(COOKIE_HEADER_DESCRIPTORS)
                 .requestFields(ANNIVERSARY_CREATE_REQUEST_FIELDS)
                 .responseFields(ANNIVERSARY_CREATE_RESPONSE)
                 .tag(TAG)

@@ -25,8 +25,8 @@ CREATE TABLE IF NOT EXISTS tasks
 (
     id               BIGINT AUTO_INCREMENT PRIMARY KEY    NOT NULL COMMENT '할 일 ID',
     user_id          BIGINT                               NOT NULL COMMENT '사용자 ID',
-    title            VARCHAR(255)                         NOT NULL COMMENT '제목',
-    content          VARCHAR(255)                         NOT NULL COMMENT '내용',
+    title            VARCHAR(150)                         NOT NULL COMMENT '제목',
+    content          VARCHAR(2500)                        NOT NULL COMMENT '내용',
     `month`          INT                                  NOT NULL COMMENT '월',
     `year`           INT                                  NOT NULL COMMENT '년',
     `date`           DATE                                 NOT NULL COMMENT '날짜',
@@ -119,3 +119,33 @@ CREATE TABLE IF NOT EXISTS monthly_goals
     last_modified_by BIGINT                            NULL COMMENT '최종 수정한 사람',
     deleted          BIT                               NOT NULL COMMENT '삭제 유무'
 ) engine = 'InnoDB' COMMENT '월간 목표';
+
+DROP TABLE IF EXISTS anniversaries;
+CREATE TABLE IF NOT EXISTS anniversaries
+(
+    id               BIGINT AUTO_INCREMENT PRIMARY KEY NOT NULL COMMENT '기념일 ID',
+    name             VARCHAR(50)                       NOT NULL COMMENT '이름',
+    date             TIMESTAMP                         NOT NULL COMMENT '기념일 날짜',
+    remind           BIT                               NOT NULL COMMENT '알림 여부',
+    emoji_id         BIGINT                            NULL COMMENT '이모지 ID',
+    user_id          BIGINT                            NOT NULL COMMENT '사용자 ID',
+    created_at       TIMESTAMP                         NOT NULL COMMENT '생성일',
+    created_by       BIGINT                            NULL COMMENT '생성한 사람',
+    last_modified_at TIMESTAMP                         NOT NULL COMMENT '최종 수정일',
+    last_modified_by BIGINT                            NULL COMMENT '최종 수정한 사람',
+    deleted          BIT                               NOT NULL COMMENT '삭제 유무'
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4 COMMENT '기념일';
+
+DROP TABLE IF EXISTS emojis;
+CREATE TABLE IF NOT EXISTS emojis
+(
+    id               BIGINT AUTO_INCREMENT PRIMARY KEY NOT NULL COMMENT '이모티콘 ID',
+    emoji            VARCHAR(255)                      NOT NULL COMMENT '이모티콘',
+    created_at       TIMESTAMP                         NOT NULL COMMENT '생성일',
+    created_by       BIGINT                            NULL COMMENT '생성한 사람',
+    last_modified_at TIMESTAMP                         NOT NULL COMMENT '최종 수정일',
+    last_modified_by BIGINT                            NULL COMMENT '최종 수정한 사람',
+    deleted          BIT                               NOT NULL COMMENT '삭제 유무'
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4 COMMENT '이모티콘';

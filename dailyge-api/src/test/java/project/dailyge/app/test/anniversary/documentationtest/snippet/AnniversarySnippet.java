@@ -31,7 +31,7 @@ public interface AnniversarySnippet {
         fieldWithPath("date").description("날짜")
             .attributes(getAttribute(AnniversaryCreateRequest.class, "date")),
         fieldWithPath("remind").description("리마인드"),
-        fieldWithPath("emojiId").description("리마인드")
+        fieldWithPath("emojiId").description("이모티콘 ID")
             .attributes(getAttribute(AnniversaryCreateRequest.class, "emojiId")),
     };
 

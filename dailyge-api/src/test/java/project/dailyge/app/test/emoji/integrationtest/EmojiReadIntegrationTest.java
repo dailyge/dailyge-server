@@ -9,7 +9,7 @@ import project.dailyge.app.core.emoji.application.EmojiReadService;
 import project.dailyge.app.core.emoji.exception.EmojiCodeAndMessage;
 import project.dailyge.app.core.emoji.exception.EmojiTypeException;
 
-@DisplayName("[IntegrationTest] Emoji 저장 통합 테스트")
+@DisplayName("[IntegrationTest] Emoji 조회 통합 테스트")
 class EmojiReadIntegrationTest extends DatabaseTestBase {
 
     @Autowired

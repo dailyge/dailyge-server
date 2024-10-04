@@ -38,7 +38,7 @@ class AnniversaryReadIntegrationTest extends DatabaseTestBase {
     }
 
     @Test
-    @DisplayName("기념일이 존재하지 않으면 AnniversaryTypeException이 발생한다..")
+    @DisplayName("기념일이 존재하지 않으면 AnniversaryTypeException이 발생한다.")
     void whenAnniversaryNotExistsThenAnniversaryTypeExceptionShouldBeHappen() {
         final Long invalidAnniversaryId = Long.MAX_VALUE;
         assertThatThrownBy(() -> anniversaryReadService.findById(invalidAnniversaryId))

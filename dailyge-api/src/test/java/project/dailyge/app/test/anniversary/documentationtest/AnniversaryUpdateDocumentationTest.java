@@ -22,7 +22,7 @@ import static project.dailyge.app.test.anniversary.documentationtest.snippet.Ann
 
 import java.time.LocalDate;
 
-@DisplayName("[DocumentationTest] 기념일 삭제 문서화 테스트")
+@DisplayName("[DocumentationTest] 기념일 수정 문서화 테스트")
 class AnniversaryUpdateDocumentationTest extends DatabaseTestBase {
 
     @Autowired

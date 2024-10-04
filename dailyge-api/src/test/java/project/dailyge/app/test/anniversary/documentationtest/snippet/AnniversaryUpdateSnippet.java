@@ -19,8 +19,8 @@ import java.util.List;
 
 public final class AnniversaryUpdateSnippet implements AnniversarySnippet {
 
-    private static final String SUMMARY = "Anniversary 삭제 API";
-    private static final String DESCRIPTION = "Anniversary를 삭제합니다.";
+    private static final String SUMMARY = "Anniversary 수정 API";
+    private static final String DESCRIPTION = "Anniversary를 수정합니다.";
 
     private AnniversaryUpdateSnippet() {
         throw new AssertionError("올바른 방식으로 생성자를 호출해주세요.");

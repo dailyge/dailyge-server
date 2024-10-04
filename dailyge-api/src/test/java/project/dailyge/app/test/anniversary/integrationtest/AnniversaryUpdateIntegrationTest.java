@@ -26,7 +26,7 @@ import static project.dailyge.entity.user.Role.NORMAL;
 
 import java.time.LocalDateTime;
 
-@DisplayName("[IntegrationTest] 기념일 삭제 통합 테스트")
+@DisplayName("[IntegrationTest] 기념일 수정 통합 테스트")
 class AnniversaryUpdateIntegrationTest extends DatabaseTestBase {
 
     @Autowired

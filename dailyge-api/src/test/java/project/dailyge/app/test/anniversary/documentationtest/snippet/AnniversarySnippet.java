@@ -18,7 +18,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.paramete
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static project.dailyge.app.common.CommonSnippet.TOKEN_COOKIE_DESCRIPTORS;
 import static project.dailyge.app.common.SnippetUtils.getAttribute;
-import project.dailyge.app.core.anniversary.presentation.request.AnniversaryCreateRequest;
+import project.dailyge.app.core.anniversary.presentation.request.AnniversaryUpdateRequest;
 
 public interface AnniversarySnippet {
 
@@ -27,22 +27,22 @@ public interface AnniversarySnippet {
 
     FieldDescriptor[] ANNIVERSARY_CREATE_REQUEST_FIELDS = {
         fieldWithPath("name").description("기념일")
-            .attributes(getAttribute(AnniversaryCreateRequest.class, "name")),
+            .attributes(getAttribute(AnniversaryUpdateRequest.class, "name")),
         fieldWithPath("date").description("날짜")
-            .attributes(getAttribute(AnniversaryCreateRequest.class, "date")),
+            .attributes(getAttribute(AnniversaryUpdateRequest.class, "date")),
         fieldWithPath("remind").description("리마인드"),
         fieldWithPath("emojiId").description("이모티콘 ID")
-            .attributes(getAttribute(AnniversaryCreateRequest.class, "emojiId")),
+            .attributes(getAttribute(AnniversaryUpdateRequest.class, "emojiId")),
     };
 
     FieldDescriptor[] ANNIVERSARY_UPDATE_REQUEST_FIELDS = {
         fieldWithPath("name").description("기념일")
-            .attributes(getAttribute(AnniversaryCreateRequest.class, "name")),
+            .attributes(getAttribute(AnniversaryUpdateRequest.class, "name")),
         fieldWithPath("date").description("날짜")
-            .attributes(getAttribute(AnniversaryCreateRequest.class, "date")),
+            .attributes(getAttribute(AnniversaryUpdateRequest.class, "date")),
         fieldWithPath("remind").description("리마인드"),
         fieldWithPath("emojiId").description("이모티콘 ID")
-            .attributes(getAttribute(AnniversaryCreateRequest.class, "emojiId")),
+            .attributes(getAttribute(AnniversaryUpdateRequest.class, "emojiId")),
     };
 
     FieldDescriptor[] ANNIVERSARY_RESPONSE = {

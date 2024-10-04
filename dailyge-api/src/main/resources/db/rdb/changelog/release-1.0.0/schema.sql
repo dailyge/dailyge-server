@@ -126,7 +126,7 @@ CREATE TABLE IF NOT EXISTS retrospect
     id                  BIGINT AUTO_INCREMENT PRIMARY KEY            NOT NULL COMMENT '회고 ID',
     title               VARCHAR(50)                                  NOT NULL COMMENT '제목',
     content             VARCHAR(3000)                                NOT NULL COMMENT '내용',
-    retrospect_date     TIMESTAMP                                    NOT NULL COMMENT '회고일',
+    `date`              TIMESTAMP                                    NOT NULL COMMENT '회고일',
     retrospect_type     ENUM('YEARLY', 'MONTHLY', 'WEEKLY', 'DAILY') NOT NULL COMMENT '회고 유형'
     user_id             BIGINT                                       NOT NULL COMMENT '사용자 ID',
     created_at          TIMESTAMP                                    NOT NULL COMMENT '생성일',

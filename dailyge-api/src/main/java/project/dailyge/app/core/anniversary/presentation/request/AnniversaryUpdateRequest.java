@@ -4,7 +4,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
-import project.dailyge.app.core.anniversary.application.command.AnniversaryCreateCommand;
 import project.dailyge.app.core.anniversary.application.command.AnniversaryUpdateCommand;
 
 import java.time.LocalDate;

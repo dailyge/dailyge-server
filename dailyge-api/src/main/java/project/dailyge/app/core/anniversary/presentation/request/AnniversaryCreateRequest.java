@@ -1,6 +1,5 @@
 package project.dailyge.app.core.anniversary.presentation.request;
 
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -15,7 +14,6 @@ public class AnniversaryCreateRequest {
     private String name;
 
     @NotNull
-    @Column(name = "date")
     private LocalDateTime date;
 
     private boolean remind;

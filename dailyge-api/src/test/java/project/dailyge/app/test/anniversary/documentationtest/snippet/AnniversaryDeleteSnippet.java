@@ -6,11 +6,11 @@ import static org.springframework.restdocs.cookies.CookieDocumentation.requestCo
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import org.springframework.restdocs.restassured.RestDocumentationFilter;
+import static project.dailyge.app.common.CommonSnippet.COOKIE_HEADER_DESCRIPTORS;
+import static project.dailyge.app.common.CommonSnippet.TOKEN_COOKIE_DESCRIPTORS;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.ERROR_RESPONSE;
 
 import java.util.Arrays;
@@ -29,6 +29,7 @@ public final class AnniversaryDeleteSnippet implements AnniversarySnippet {
         return document(
             identifier,
             ResourceSnippetParameters.builder()
+                .requestHeaders(COOKIE_HEADER_DESCRIPTORS)
                 .pathParameters(ANNIVERSARY_ID_PATH_PARAMETER_DESCRIPTORS)
                 .tag(TAG)
                 .summary(SUMMARY)

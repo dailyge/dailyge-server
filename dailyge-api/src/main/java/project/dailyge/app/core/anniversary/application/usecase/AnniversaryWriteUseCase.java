@@ -8,6 +8,7 @@ import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.common.exception.CommonException;
 import project.dailyge.app.core.anniversary.application.AnniversaryWriteService;
 import project.dailyge.app.core.anniversary.application.command.AnniversaryCreateCommand;
+import project.dailyge.app.core.anniversary.application.command.AnniversaryUpdateCommand;
 import static project.dailyge.app.core.anniversary.exception.AnniversaryCodeAndMessage.ANNIVERSARY_NOT_FOUND;
 import static project.dailyge.app.core.anniversary.exception.AnniversaryCodeAndMessage.DUPLICATED_ANNIVERSARY;
 import project.dailyge.app.core.anniversary.exception.AnniversaryTypeException;
@@ -33,6 +34,21 @@ class AnniversaryWriteUseCase implements AnniversaryWriteService {
         }
         final AnniversaryJpaEntity newAnniversary = command.toEntity(dailygeUser);
         return anniversaryEntityWriteRepository.save(newAnniversary);
+    }
+
+    @Override
+    @Transactional
+    public void update(
+        final DailygeUser dailygeUser,
+        final Long anniversaryId,
+        final AnniversaryUpdateCommand command
+    ) {
+        final AnniversaryJpaEntity findAnniversary = anniversaryEntityReadRepository.findById(anniversaryId)
+            .orElseThrow(() -> AnniversaryTypeException.from(ANNIVERSARY_NOT_FOUND));
+        if (!dailygeUser.isValid(findAnniversary.getUserId())) {
+            throw CommonException.from(UN_AUTHORIZED);
+        }
+        findAnniversary.update(command.name(), command.date(), command.remind(), command.emojiId());
     }
 
     @Override

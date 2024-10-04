@@ -61,6 +61,18 @@ public class AnniversaryJpaEntity extends BaseEntity {
         this.userId = userId;
     }
 
+    public void update(
+        final String name,
+        final LocalDateTime date,
+        final boolean remind,
+        final Long emojiId
+    ) {
+        this.name = name;
+        this.date = date;
+        this.remind = remind;
+        this.emojiId = emojiId;
+    }
+
     public void delete() {
         this.deleted = true;
     }

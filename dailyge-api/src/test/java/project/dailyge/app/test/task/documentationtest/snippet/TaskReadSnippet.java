@@ -10,6 +10,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.response
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import org.springframework.restdocs.restassured.RestDocumentationFilter;
+import static project.dailyge.app.common.CommonSnippet.COOKIE_HEADER_DESCRIPTORS;
 
 import java.util.Arrays;
 import java.util.List;
@@ -39,6 +40,7 @@ public final class TaskReadSnippet implements TaskSnippet {
         return document(
             identifier,
             ResourceSnippetParameters.builder()
+                .requestHeaders(COOKIE_HEADER_DESCRIPTORS)
                 .pathParameters(TASK_ID_PATH_PARAMETER_DESCRIPTORS)
                 .queryParameters(DATE_QUERY_PARAMETER_DESCRIPTORS)
                 .responseFields(TASK_DETAIL_SEARCH_RESPONSE_FIELD_DESCRIPTOR)

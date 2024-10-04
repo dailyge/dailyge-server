@@ -9,6 +9,7 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import org.springframework.restdocs.restassured.RestDocumentationFilter;
+import static project.dailyge.app.common.CommonSnippet.COOKIE_HEADER_DESCRIPTORS;
 
 import java.util.Arrays;
 import java.util.List;
@@ -34,6 +35,7 @@ public final class TaskStatisticSnippet implements TaskSnippet {
         return document(
             identifier,
             ResourceSnippetParameters.builder()
+                .requestHeaders(COOKIE_HEADER_DESCRIPTORS)
                 .pathParameters(TASK_ID_PATH_PARAMETER_DESCRIPTORS)
                 .queryParameters(WEEKLY_TASKS_STATISTIC_DATE_QUERY_PARAMETER_DESCRIPTORS)
                 .responseFields(WEEKLY_TASKS_STATISTIC_RESPONSE_FIELD_DESCRIPTOR)

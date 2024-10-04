@@ -2,12 +2,8 @@ package project.dailyge.app.test.anniversary.documentationtest.snippet;
 
 import static javax.xml.xpath.XPathEvaluationResult.XPathResultType.NUMBER;
 import static javax.xml.xpath.XPathEvaluationResult.XPathResultType.STRING;
-import org.springframework.restdocs.cookies.CookieDescriptor;
-import static org.springframework.restdocs.cookies.CookieDocumentation.cookieWithName;
 import static org.springframework.restdocs.cookies.CookieDocumentation.requestCookies;
 import org.springframework.restdocs.cookies.RequestCookiesSnippet;
-import org.springframework.restdocs.headers.HeaderDescriptor;
-import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import static org.springframework.restdocs.payload.JsonFieldType.NULL;
 import static org.springframework.restdocs.payload.JsonFieldType.OBJECT;
@@ -20,6 +16,7 @@ import org.springframework.restdocs.request.ParameterDescriptor;
 import org.springframework.restdocs.request.PathParametersSnippet;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static project.dailyge.app.common.CommonSnippet.TOKEN_COOKIE_DESCRIPTORS;
 import static project.dailyge.app.common.SnippetUtils.getAttribute;
 import project.dailyge.app.core.anniversary.presentation.request.AnniversaryCreateRequest;
 
@@ -27,14 +24,6 @@ public interface AnniversarySnippet {
 
     String TAG = "Anniversary";
     String identifier = "{class_name}/{method_name}/";
-
-    CookieDescriptor[] TOKEN_COOKIE_DESCRIPTORS = {
-        cookieWithName("Access-Token").description("인증 토큰")
-    };
-
-    HeaderDescriptor[] COOKIE_HEADER_DESCRIPTORS = {
-        headerWithName("Cookie").description("Access-Token=인증 토큰")
-    };
 
     FieldDescriptor[] ANNIVERSARY_CREATE_REQUEST_FIELDS = {
         fieldWithPath("name").description("기념일")

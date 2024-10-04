@@ -151,3 +151,21 @@ CREATE TABLE IF NOT EXISTS emojis
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4 COMMENT '이모티콘',
   COLLATE utf8mb4_general_ci;
+
+DROP TABLE IF EXISTS retrospects;
+CREATE TABLE IF NOT EXISTS retrospects
+(
+    id                  BIGINT AUTO_INCREMENT PRIMARY KEY            NOT NULL COMMENT '회고 ID',
+    title               VARCHAR(50)                                  NOT NULL COMMENT '제목',
+    content             VARCHAR(3000)                                NOT NULL COMMENT '내용',
+    `date`              TIMESTAMP                                    NOT NULL COMMENT '회고일',
+    is_public           BIT                                          NOT NULL COMMENT '공개 여부',
+    user_id             BIGINT                                       NOT NULL COMMENT '사용자 ID',
+    created_at          TIMESTAMP                                    NOT NULL COMMENT '생성일',
+    created_by          BIGINT                                       NULL COMMENT '생성한 사람',
+    last_modified_at    TIMESTAMP                                    NOT NULL COMMENT '최종 수정일',
+    last_modified_by    BIGINT                                       NULL COMMENT '최종 수정한 사람',
+    deleted             BIT                                          NOT NULL COMMENT '삭제 유무'
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4 COMMENT '회고',
+  COLLATE utf8mb4_general_ci;

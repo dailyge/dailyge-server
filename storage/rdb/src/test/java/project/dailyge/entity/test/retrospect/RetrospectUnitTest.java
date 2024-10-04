@@ -1,6 +1,6 @@
 package project.dailyge.entity.test.retrospect;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import project.dailyge.entity.retrospect.RetrospectJpaEntity;
@@ -20,15 +20,29 @@ class RetrospectUnitTest {
     @Test
     @DisplayName("올바른 인자가 들어오면 회고가 생성된다.")
     void whenValidArgumentsProvidedThenRetrospectIsCreated() {
-        final LocalDate now = LocalDate.now();
-        final RetrospectJpaEntity newRetrospect = new RetrospectJpaEntity(ID, TITLE, CONTENT, now, now, false, USER_ID);
+        final LocalDateTime now = LocalDateTime.now();
+        final RetrospectJpaEntity newRetrospect = new RetrospectJpaEntity(TITLE, CONTENT, now, false, USER_ID);
+
+        assertAll(
+            () -> assertEquals(TITLE, newRetrospect.getTitle()),
+            () -> assertEquals(CONTENT, newRetrospect.getContent()),
+            () -> assertEquals(now, newRetrospect.getDate()),
+            () -> assertFalse(newRetrospect.isPublic()),
+            () -> assertEquals(USER_ID, newRetrospect.getUserId())
+        );
+    }
+
+    @Test
+    @DisplayName("ID를 포함한 올바른 인자가 들어오면 회고가 생성된다.")
+    void whenValidArgumentsProvidedIncludingIdThenRetrospectIsCreated() {
+        final LocalDateTime now = LocalDateTime.now();
+        final RetrospectJpaEntity newRetrospect = new RetrospectJpaEntity(ID, TITLE, CONTENT, now, false, USER_ID);
 
         assertAll(
             () -> assertEquals(ID, newRetrospect.getId()),
             () -> assertEquals(TITLE, newRetrospect.getTitle()),
             () -> assertEquals(CONTENT, newRetrospect.getContent()),
-            () -> assertEquals(now, newRetrospect.getStartDate()),
-            () -> assertEquals(now, newRetrospect.getEndDate()),
+            () -> assertEquals(now, newRetrospect.getDate()),
             () -> assertFalse(newRetrospect.isPublic()),
             () -> assertEquals(USER_ID, newRetrospect.getUserId())
         );
@@ -43,8 +57,7 @@ class RetrospectUnitTest {
             () -> assertNull(newRetrospect.getId()),
             () -> assertNull(newRetrospect.getTitle()),
             () -> assertNull(newRetrospect.getContent()),
-            () -> assertNull(newRetrospect.getStartDate()),
-            () -> assertNull(newRetrospect.getEndDate()),
+            () -> assertNull(newRetrospect.getDate()),
             () -> assertFalse(newRetrospect.isPublic()),
             () -> assertNull(newRetrospect.getUserId())
         );

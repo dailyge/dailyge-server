@@ -5,7 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import project.dailyge.entity.BaseEntity;
@@ -25,11 +25,8 @@ public class RetrospectJpaEntity extends BaseEntity {
     @Column(name = "content")
     private String content;
 
-    @Column(name = "start_date")
-    private LocalDate startDate;
-
-    @Column(name = "end_date")
-    private LocalDate endDate;
+    @Column(name = "date")
+    private LocalDateTime date;
 
     @Column(name = "is_public")
     private boolean isPublic;
@@ -40,15 +37,13 @@ public class RetrospectJpaEntity extends BaseEntity {
     public RetrospectJpaEntity(
         final String title,
         final String content,
-        final LocalDate startDate,
-        final LocalDate endDate,
+        final LocalDateTime date,
         final boolean isPublic,
         final Long userId
     ) {
         this.title = title;
         this.content = content;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.date = date;
         this.isPublic = isPublic;
         this.userId = userId;
     }
@@ -57,16 +52,14 @@ public class RetrospectJpaEntity extends BaseEntity {
         final Long id,
         final String title,
         final String content,
-        final LocalDate startDate,
-        final LocalDate endDate,
+        final LocalDateTime date,
         final boolean isPublic,
         final Long userId
     ) {
         this.id = id;
         this.title = title;
         this.content = content;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.date = date;
         this.isPublic = isPublic;
         this.userId = userId;
     }

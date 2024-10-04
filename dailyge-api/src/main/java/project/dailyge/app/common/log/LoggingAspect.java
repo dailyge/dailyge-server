@@ -9,6 +9,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.MDC;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import project.dailyge.app.common.annotation.ApplicationLayer;
 import project.dailyge.app.common.annotation.ExternalLayer;
@@ -31,6 +32,7 @@ import java.time.LocalDateTime;
 @Slf4j
 @Aspect
 @Component
+@Profile("!test")
 @RequiredArgsConstructor
 public class LoggingAspect {
 

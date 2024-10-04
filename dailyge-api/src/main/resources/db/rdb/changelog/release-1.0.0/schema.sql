@@ -136,7 +136,7 @@ CREATE TABLE IF NOT EXISTS anniversaries
     deleted          BIT                               NOT NULL COMMENT '삭제 유무'
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4 COMMENT '기념일',
-  COLLATE utf8mb4_0900_ai_ci;;
+  COLLATE utf8mb4_general_ci;;
 
 DROP TABLE IF EXISTS emojis;
 CREATE TABLE IF NOT EXISTS emojis
@@ -150,4 +150,4 @@ CREATE TABLE IF NOT EXISTS emojis
     deleted          BIT                               NOT NULL COMMENT '삭제 유무'
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4 COMMENT '이모티콘',
-  COLLATE utf8mb4_0900_ai_ci;
+  COLLATE utf8mb4_general_ci;

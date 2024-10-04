@@ -22,7 +22,14 @@ public class EmojiJpaEntity extends BaseEntity {
     private String emoji;
 
     public EmojiJpaEntity(final String emoji) {
+        validate(emoji);
         this.emoji = emoji;
+    }
+
+    private void validate(final String emoji) {
+        if (emoji.isBlank()) {
+            throw new IllegalArgumentException("올바른 이모티콘을 입력해주세요.");
+        }
     }
 
     public EmojiJpaEntity(

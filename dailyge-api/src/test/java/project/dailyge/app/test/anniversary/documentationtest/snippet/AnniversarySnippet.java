@@ -13,6 +13,10 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
+import org.springframework.restdocs.request.ParameterDescriptor;
+import org.springframework.restdocs.request.PathParametersSnippet;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static project.dailyge.app.common.SnippetUtils.getAttribute;
 import project.dailyge.app.core.anniversary.presentation.request.AnniversaryCreateRequest;
 
@@ -42,9 +46,14 @@ public interface AnniversarySnippet {
         fieldWithPath("message").type(STRING).description("응답 메시지")
     };
 
+    ParameterDescriptor[] ANNIVERSARY_ID_PATH_PARAMETER_DESCRIPTORS = {
+        parameterWithName("anniversaryId").description("Anniversary ID")
+    };
+
     RequestCookiesSnippet ACCESS_TOKEN_COOKIE_SNIPPET = requestCookies(TOKEN_COOKIE_DESCRIPTORS);
     RequestFieldsSnippet ANNIVERSARY_CREATE_REQUEST_SNIPPET = requestFields(ANNIVERSARY_CREATE_REQUEST_FIELDS);
     ResponseFieldsSnippet ANNIVERSARY_CREATE_RESPONSE_SNIPPET = responseFields(ANNIVERSARY_CREATE_RESPONSE);
+    PathParametersSnippet ANNIVERSARY_PATH_PARAMETER_SNIPPET = pathParameters(ANNIVERSARY_ID_PATH_PARAMETER_DESCRIPTORS);
 
     static String createIdentifier(
         final String name,

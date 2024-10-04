@@ -34,6 +34,9 @@ public class RetrospectJpaEntity extends BaseEntity {
     @Column(name = "date")
     private LocalDate date;
 
+    @Column(name = "is_public")
+    private boolean isPublic;
+
     @Column(name = "user_id")
     private Long userId;
 

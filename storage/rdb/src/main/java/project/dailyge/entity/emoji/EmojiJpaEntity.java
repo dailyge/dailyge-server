@@ -20,4 +20,16 @@ public class EmojiJpaEntity extends BaseEntity {
 
     @Column(name = "emoji")
     private String emoji;
+
+    public EmojiJpaEntity(final String emoji) {
+        this.emoji = emoji;
+    }
+
+    public EmojiJpaEntity(
+        final Long id,
+        final String emoji
+    ) {
+        this.id = id;
+        this.emoji = emoji;
+    }
 }

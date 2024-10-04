@@ -1,4 +1,4 @@
-package project.dailyge.app.core.anniversary.application.useecase;
+package project.dailyge.app.core.anniversary.application.usecase;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;

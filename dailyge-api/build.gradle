@@ -66,8 +66,8 @@ tasks.register("authOpenApiSpec", task -> {
         final File apiSpecFile = new File(filePath)
         if (apiSpecFile.exists()) {
             try {
-                String apiSpec = apiSpecFile.text
-                String updatedApiSpec = CommonUtilsKt.addAuthOption(apiSpec)
+                final String apiSpec = apiSpecFile.text
+                final String updatedApiSpec = CommonUtilsKt.addAuthOption(apiSpec)
                 apiSpecFile.write(updatedApiSpec)
             } catch (Exception e) {
                 e.printStackTrace()

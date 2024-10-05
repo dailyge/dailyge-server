@@ -106,7 +106,6 @@ tasks.register("copyDocument", Copy) {
 build {
     dependsOn copyDocument
     dependsOn(":dailyge-api:openapi3")
-    finalizedBy("authOpenApiSpec")
 }
 
 bootJar {
@@ -136,6 +135,7 @@ tasks.named("jib").configure {
     dependsOn("copySubmoduleConfig")
     dependsOn("openapi3")
     dependsOn("copyDocument")
+    finalizedBy("authOpenApiSpec")
     enabled = true
 }
 

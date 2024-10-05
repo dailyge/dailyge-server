@@ -7,7 +7,9 @@ import project.dailyge.entity.anniversary.AnniversaryEntityReadRepository;
 import project.dailyge.entity.anniversary.AnniversaryJpaEntity;
 import static project.dailyge.entity.anniversary.QAnniversaryJpaEntity.anniversaryJpaEntity;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -39,5 +41,22 @@ class AnniversaryEntityReadDao implements AnniversaryEntityReadRepository {
                 .and(anniversaryJpaEntity.deleted.eq(false))
             ).fetchFirst();
         return findAnniversary != null;
+    }
+
+    @Override
+    public List<AnniversaryJpaEntity> findByDates(
+        final Long userId,
+        final LocalDate startDate,
+        final LocalDate endDate
+    ) {
+        return queryFactory.selectFrom(anniversaryJpaEntity)
+            .where(anniversaryJpaEntity.userId.eq(userId)
+                .and(anniversaryJpaEntity.date.between(convertLocalDateTime(startDate), convertLocalDateTime(endDate)))
+            )
+            .fetch();
+    }
+
+    private LocalDateTime convertLocalDateTime(final LocalDate date) {
+        return date.atTime(0, 0, 0, 0);
     }
 }

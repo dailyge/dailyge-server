@@ -2,6 +2,7 @@ package project.dailyge.app.test.anniversary.documentationtest;
 
 import static io.restassured.RestAssured.given;
 import static java.time.LocalDate.now;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,12 +26,19 @@ class AnniversaryReadDocumentationTest extends DatabaseTestBase {
     @Autowired
     private AnniversaryFacade anniversaryFacade;
 
+    private LocalDate date;
+    private AnniversaryCreateCommand createCommand;
+
+    @BeforeEach
+    void setUp() {
+        date = now();
+        createCommand = new AnniversaryCreateCommand("부모님 결혼 기념일", date.atTime(0, 0, 0, 0), false, null);
+    }
+
     @Test
     @DisplayName("[RestDocs] 기념일이 일정 기간 내에 존재하면 200 OK 응답 코드를 받는다.")
     void whenReadAnniversariesBetweenDatesThenStatusCodeShouldBe_200_OK_RestDocs() {
-        final LocalDate date = now();
         final LocalDate endDate = date.plusDays(30);
-        final AnniversaryCreateCommand createCommand = new AnniversaryCreateCommand("부모님 결혼 기념일", date.atTime(0, 0), false, null);
         anniversaryFacade.save(dailygeUser, createCommand);
 
         given(this.specification)
@@ -55,9 +63,7 @@ class AnniversaryReadDocumentationTest extends DatabaseTestBase {
     @Test
     @DisplayName("[Swagger] 기념일이 일정 기간 내에 존재하면 200 OK 응답 코드를 받는다.")
     void whenReadAnniversariesBetweenDatesThenStatusCodeShouldBe_200_OK_Swagger() {
-        final LocalDate date = now();
         final LocalDate endDate = date.plusDays(30);
-        final AnniversaryCreateCommand createCommand = new AnniversaryCreateCommand("부모님 결혼 기념일", date.atTime(0, 0), false, null);
         anniversaryFacade.save(dailygeUser, createCommand);
 
         final RestDocumentationFilter filter = createAnniversariesReadFilter(createIdentifier("AnniversariesRead", 200));
@@ -79,8 +85,6 @@ class AnniversaryReadDocumentationTest extends DatabaseTestBase {
     @Test
     @DisplayName("[Swagger] 올바르지 않은 파라미터가 입력되면 400 Bad Request가 반환된다.")
     void whenReadAnniversariesBetweenDatesThenStatusCodeShouldBe_400_Bad_Request_Swagger() {
-        final LocalDate date = now();
-        final AnniversaryCreateCommand createCommand = new AnniversaryCreateCommand("부모님 결혼 기념일", date.atTime(0, 0), false, null);
         anniversaryFacade.save(dailygeUser, createCommand);
 
         final RestDocumentationFilter filter = createAnniversariesReadFilter(createIdentifier("AnniversariesRead", 400));

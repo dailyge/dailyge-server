@@ -25,7 +25,7 @@ public class AnniversaryReadApi {
     private final AnniversaryReadService anniversaryReadService;
 
     @GetMapping
-    public ApiResponse<List<AnniversaryResponse>> createAnniversary(
+    public ApiResponse<List<AnniversaryResponse>> searchAnniversaries(
         @LoginUser final DailygeUser dailygeUser,
         @RequestParam(name = "startDate", required = false) final LocalDate startDate,
         @RequestParam(name = "endDate", required = false) final LocalDate endDate

@@ -16,8 +16,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @DisplayName("[IntegrationTest] 회고 저장 통합 테스트")
 public class RetrospectCreateIntegrationTest extends DatabaseTestBase {
 
-    private final String TITLE = "회고 제목";
-    private final String CONTENT = "회고 내용";
+    private static final String TITLE = "회고 제목";
+    private static final String CONTENT = "회고 내용";
 
     @Autowired
     private RetrospectWriteService retrospectWriteService;

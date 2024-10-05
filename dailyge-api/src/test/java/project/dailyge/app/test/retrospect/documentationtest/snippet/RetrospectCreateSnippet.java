@@ -11,6 +11,7 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static project.dailyge.app.common.CommonSnippet.COOKIE_HEADER_DESCRIPTORS;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.ERROR_RESPONSE;
 
 public final class RetrospectCreateSnippet implements RetrospectSnippet {
@@ -26,6 +27,7 @@ public final class RetrospectCreateSnippet implements RetrospectSnippet {
         return document(
             identifier,
             ResourceSnippetParameters.builder()
+                .requestHeaders(COOKIE_HEADER_DESCRIPTORS)
                 .requestFields(RETROSPECT_CREATE_REQUEST_FIELDS)
                 .responseFields(RETROSPECT_CREATE_RESPONSE)
                 .tag(TAG)

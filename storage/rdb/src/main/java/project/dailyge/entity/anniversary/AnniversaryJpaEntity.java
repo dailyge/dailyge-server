@@ -61,6 +61,10 @@ public class AnniversaryJpaEntity extends BaseEntity {
         this.userId = userId;
     }
 
+    public String getDateAsString() {
+        return date.toLocalDate().toString();
+    }
+
     public void update(
         final String name,
         final LocalDateTime date,

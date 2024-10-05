@@ -60,6 +60,24 @@ ext {
     snippetsDir = file("build/generated-snippets")
 }
 
+tasks.register("authOpenApiSpec", task -> {
+    task.doLast {
+        final String filePath = file("$buildDir/api-spec/openapi3.json").toString()
+        final File apiSpecFile = new File(filePath)
+        if (apiSpecFile.exists()) {
+            try {
+                String apiSpec = apiSpecFile.text
+                String updatedApiSpec = CommonUtilsKt.addAuthOption(apiSpec)
+                apiSpecFile.write(updatedApiSpec)
+            } catch (Exception e) {
+                e.printStackTrace()
+            }
+        } else {
+            println("Can't find filePath: " + filePath)
+        }
+    }
+})
+
 test {
     dependsOn("copySubmoduleConfig")
     outputs.dir snippetsDir
@@ -88,6 +106,7 @@ tasks.register("copyDocument", Copy) {
 build {
     dependsOn copyDocument
     dependsOn(":dailyge-api:openapi3")
+    finalizedBy("authOpenApiSpec")
 }
 
 bootJar {

@@ -1,4 +1,4 @@
-package project.dailyge.app;
+package project.dailyge.app.core.common.web;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;

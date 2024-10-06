@@ -14,16 +14,26 @@ public class DailygeUser {
 
     private Long userId;
     private Role role;
+    private Long countryId;
 
     private DailygeUser() {
     }
 
     public DailygeUser(
         final Long userId,
-        final Role role
+        final Role role,
+        final Long countryId
     ) {
         this.userId = userId;
         this.role = role;
+        this.countryId = countryId;
+    }
+
+    public DailygeUser(
+        final Long userId,
+        final Role role
+    ) {
+        this(userId, role, 1L);
     }
 
     public Long getId() {

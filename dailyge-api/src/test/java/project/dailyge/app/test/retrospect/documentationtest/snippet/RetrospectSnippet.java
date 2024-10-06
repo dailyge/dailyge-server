@@ -1,0 +1,56 @@
+package project.dailyge.app.test.retrospect.documentationtest.snippet;
+
+import org.springframework.restdocs.cookies.CookieDescriptor;
+import org.springframework.restdocs.cookies.RequestCookiesSnippet;
+import org.springframework.restdocs.payload.FieldDescriptor;
+import org.springframework.restdocs.payload.RequestFieldsSnippet;
+import org.springframework.restdocs.payload.ResponseFieldsSnippet;
+import project.dailyge.app.core.retrospect.presentation.request.RetrospectCreateRequest;
+import static javax.xml.xpath.XPathEvaluationResult.XPathResultType.NUMBER;
+import static javax.xml.xpath.XPathEvaluationResult.XPathResultType.STRING;
+import static org.springframework.restdocs.cookies.CookieDocumentation.cookieWithName;
+import static org.springframework.restdocs.cookies.CookieDocumentation.requestCookies;
+import static org.springframework.restdocs.payload.JsonFieldType.OBJECT;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static project.dailyge.app.common.SnippetUtils.getAttribute;
+
+public interface RetrospectSnippet {
+
+    String TAG = "Retrospect";
+    String identifier = "{class_name}/{method_name}/";
+
+    CookieDescriptor[] TOKEN_COOKIE_DESCRIPTORS = {
+        cookieWithName("Access-Token").description("인증 토큰")
+    };
+
+    FieldDescriptor[] RETROSPECT_CREATE_REQUEST_FIELDS = {
+        fieldWithPath("title").description("회고 제목")
+            .attributes(getAttribute(RetrospectCreateRequest.class, "title")),
+        fieldWithPath("content").description("회고 내용")
+            .attributes(getAttribute(RetrospectCreateRequest.class, "content")),
+        fieldWithPath("date").description("날짜")
+            .attributes(getAttribute(RetrospectCreateRequest.class, "date")),
+        fieldWithPath("isPublic").description("공개 여부")
+            .attributes(getAttribute(RetrospectCreateRequest.class, "isPublic")),
+    };
+
+    FieldDescriptor[] RETROSPECT_CREATE_RESPONSE = {
+        fieldWithPath("data").type(OBJECT).description("데이터"),
+        fieldWithPath("data.retrospectId").type(NUMBER).description("회고 ID"),
+        fieldWithPath("code").type(NUMBER).description("응답 코드"),
+        fieldWithPath("message").type(STRING).description("응답 메시지")
+    };
+
+    RequestCookiesSnippet ACCESS_TOKEN_COOKIE_SNIPPET = requestCookies(TOKEN_COOKIE_DESCRIPTORS);
+    RequestFieldsSnippet RETROSPECT_CREATE_REQUEST_SNIPPET = requestFields(RETROSPECT_CREATE_REQUEST_FIELDS);
+    ResponseFieldsSnippet RETROSPECT_CREATE_RESPONSE_SNIPPET = responseFields(RETROSPECT_CREATE_RESPONSE);
+
+    static String createIdentifier(
+        final String name,
+        final int code
+    ) {
+        return String.format("%s/%d", name, code);
+    }
+}

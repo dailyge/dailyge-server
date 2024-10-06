@@ -56,7 +56,9 @@ public class Country extends BaseEntity {
         if (this == obj) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) return false;
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
         final Country country = (Country) obj;
         return Objects.equals(code, country.code);
     }

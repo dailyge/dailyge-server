@@ -2,31 +2,32 @@ package project.dailyge.app.test.common;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import org.springframework.web.context.request.NativeWebRequest;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_USER_TOKEN;
 import project.dailyge.app.common.auth.DailygeToken;
 import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.common.auth.JwtProperties;
 import project.dailyge.app.common.auth.SecretKeyManager;
 import project.dailyge.app.common.auth.TokenProvider;
-import project.dailyge.app.common.configuration.web.AuthArgumentResolver;
 import project.dailyge.app.common.exception.CommonException;
+import project.dailyge.app.core.common.web.AuthArgumentResolver;
 import project.dailyge.app.test.user.fixture.UserFixture;
 import project.dailyge.core.cache.user.UserCache;
 import project.dailyge.core.cache.user.UserCacheReadUseCase;
 import project.dailyge.entity.user.UserJpaEntity;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_USER_TOKEN;
 
 @DisplayName("[UnitTest] AuthArgumentResolver 검증 단위 테스트")
 class AuthArgumentResolverTest {
 
+    private static final String env = "";
     private TokenProvider tokenProvider;
     private AuthArgumentResolver resolver;
     private UserCacheReadUseCase userCacheReadUseCase;
@@ -45,7 +46,7 @@ class AuthArgumentResolverTest {
         final SecretKeyManager secretKeyManager = new SecretKeyManager(jwtProperties);
         tokenProvider = new TokenProvider(jwtProperties, secretKeyManager);
         userCacheReadUseCase = mock(UserCacheReadUseCase.class);
-        resolver = new AuthArgumentResolver(userCacheReadUseCase, tokenProvider);
+        resolver = new AuthArgumentResolver(env, userCacheReadUseCase, tokenProvider);
         request = mock(HttpServletRequest.class);
         webRequest = mock(NativeWebRequest.class);
         when(webRequest.getNativeRequest())

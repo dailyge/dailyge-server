@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import project.dailyge.entity.BaseEntity;
 
+import java.util.Objects;
+
 @Getter
 @NoArgsConstructor
 @Entity(name = "countries")
@@ -47,5 +49,20 @@ public class Country extends BaseEntity {
         this.code = code;
         this.alpha2 = alpha2;
         this.alpha3 = alpha3;
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) return false;
+        final Country country = (Country) obj;
+        return Objects.equals(code, country.code);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(code);
     }
 }

@@ -1,8 +1,7 @@
-package project.dailyge.app.common.configuration.web;
+package project.dailyge.app.core.common.web;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
 import org.slf4j.MDC;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -16,16 +15,25 @@ import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.common.auth.LoginUser;
 import project.dailyge.app.common.auth.TokenProvider;
 import project.dailyge.app.common.exception.CommonException;
-import project.dailyge.app.core.common.web.Cookies;
 import project.dailyge.core.cache.user.UserCache;
 import project.dailyge.core.cache.user.UserCacheReadUseCase;
 import project.dailyge.entity.user.Role;
 
-@RequiredArgsConstructor
 public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
 
+    private final String env;
     private final UserCacheReadUseCase userCacheReadUseCase;
     private final TokenProvider tokenProvider;
+
+    public AuthArgumentResolver(
+        final String env,
+        final UserCacheReadUseCase userCacheReadUseCase,
+        final TokenProvider tokenProvider
+    ) {
+        this.env = env;
+        this.userCacheReadUseCase = userCacheReadUseCase;
+        this.tokenProvider = tokenProvider;
+    }
 
     @Override
     public boolean supportsParameter(final MethodParameter parameter) {

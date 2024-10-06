@@ -136,6 +136,7 @@ tasks.named("jib").configure {
     dependsOn("copySubmoduleConfig")
     dependsOn("openapi3")
     dependsOn("copyDocument")
+    finalizedBy("authOpenApiSpec")
     enabled = true
 }
 

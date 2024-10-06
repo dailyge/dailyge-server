@@ -201,4 +201,4 @@ CREATE TABLE IF NOT EXISTS holidays
     deleted          BIT                               NOT NULL COMMENT '삭제 유무'
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_general_ci COMMENT ='휴일 정보';
+  COLLATE = utf8mb4_general_ci COMMENT ='휴일';

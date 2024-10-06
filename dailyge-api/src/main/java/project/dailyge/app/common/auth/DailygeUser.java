@@ -33,7 +33,7 @@ public class DailygeUser {
         final Long userId,
         final Role role
     ) {
-        this(userId, role, null);
+        this(userId, role, 1L);
     }
 
     public Long getId() {

@@ -2,7 +2,7 @@ package project.dailyge.entity.weeklygoal;
 
 import java.time.LocalDateTime;
 
-public class WeeklyGoalFixture {
+public final class WeeklyGoalFixture extends WeeklyGoalJpaEntity {
 
     private WeeklyGoalFixture() {
         throw new AssertionError("올바른 방식으로 생성자를 호출해주세요.");
@@ -15,4 +15,6 @@ public class WeeklyGoalFixture {
         LocalDateTime.now(),
         1L
     );
+
+    public static final WeeklyGoalJpaEntity defaultWeeklyGoal = new WeeklyGoalJpaEntity();
 }

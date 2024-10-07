@@ -6,8 +6,7 @@ import org.junit.jupiter.api.Test;
 import project.dailyge.entity.weeklygoal.WeeklyGoalFixture;
 import project.dailyge.entity.weeklygoal.WeeklyGoalJpaEntity;
 
-import java.time.LocalDateTime;
-
+import static java.time.LocalDateTime.now;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -30,7 +29,7 @@ class WeeklyGoalJpaEntityUnitTest {
             1L,
             "달성 주간 목표",
             "주간 목표 내용",
-            LocalDateTime.now(),
+            now(),
             1L
         );
 
@@ -46,7 +45,7 @@ class WeeklyGoalJpaEntityUnitTest {
     @Test
     @DisplayName("기본 생성자를 통해 주간 목표를 생성할 수 있다.")
     void whenDefaultConstructorIsUsedThenWeeklyGoalHasDefaultValues() {
-        final WeeklyGoalJpaEntity newWeeklyGoal = new WeeklyGoalJpaEntity();
+        final WeeklyGoalJpaEntity newWeeklyGoal = WeeklyGoalFixture.defaultWeeklyGoal;
 
         assertAll(
             () -> assertThat(newWeeklyGoal.getId()).isNull(),
@@ -75,7 +74,6 @@ class WeeklyGoalJpaEntityUnitTest {
     @Test
     @DisplayName("주간 목표를 삭제하면 상태가 바뀐다.")
     void whenDeleteThenStatusShouldBeChanged() {
-        final WeeklyGoalJpaEntity weeklyGoal = new WeeklyGoalJpaEntity(1L, "달성 주간 목표", "주간 목표 내용", LocalDateTime.now(), 1L);
         weeklyGoal.delete();
         assertTrue(weeklyGoal.getDeleted());
     }
@@ -87,56 +85,35 @@ class WeeklyGoalJpaEntityUnitTest {
             1L,
             "달성 목표",
             "주간 목표 내용",
-            LocalDateTime.now(),
+            now(),
             1L
         );
-        final WeeklyGoalJpaEntity newWeeklyGoal = new WeeklyGoalJpaEntity(
-            1L,
-            "달성 목표",
-            "주간 목표 내용",
-            LocalDateTime.now(),
-            1L
-        );
-        assertThat(newWeeklyGoal).isEqualTo(expectedWeeklyGoal);
+        assertThat(weeklyGoal).isEqualTo(expectedWeeklyGoal);
     }
 
     @Test
     @DisplayName("ID가 다르면 다른 객체로 여긴다.")
     void whenIdIsDifferentThenInstancesAreNotEqual() {
-        final WeeklyGoalJpaEntity expectedWeeklyGoal = new WeeklyGoalJpaEntity(
-            1L,
-            "달성 목표",
-            "주간 목표 내용",
-            LocalDateTime.now(),
-            1L
-        );
         final WeeklyGoalJpaEntity differentWeeklyGoal = new WeeklyGoalJpaEntity(
             2L,
             "달성 목표",
             "주간 목표 내용",
-            LocalDateTime.now(),
+            now(),
             1L
         );
-        assertThat(differentWeeklyGoal).isNotEqualTo(expectedWeeklyGoal);
+        assertThat(differentWeeklyGoal).isNotEqualTo(weeklyGoal);
     }
 
     @Test
     @DisplayName("ID가 같다면 해시코드가 동일하다.")
     void whenIdIsSameThenHashCodeIsSame() {
-        final WeeklyGoalJpaEntity expectedWeeklyGoal = new WeeklyGoalJpaEntity(
-            1L,
-            "달성 목표",
-            "주간 목표 내용",
-            LocalDateTime.now(),
-            1L
-        );
         final WeeklyGoalJpaEntity newWeeklyGoal = new WeeklyGoalJpaEntity(
             1L,
             "달성 목표",
             "주간 목표 내용",
-            LocalDateTime.now(),
+            now(),
             1L
         );
-        assertEquals(newWeeklyGoal.hashCode(), expectedWeeklyGoal.hashCode());
+        assertEquals(newWeeklyGoal.hashCode(), weeklyGoal.hashCode());
     }
 }

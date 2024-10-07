@@ -56,19 +56,21 @@ public class WeeklyGoalJpaEntity extends BaseEntity {
         final Long id,
         final String title,
         final String content,
-        final Long userId) {
+        final Long userId
+    ) {
         this(id, title, content, false, LocalDateTime.now().with(DayOfWeek.MONDAY), userId);
     }
 
     public WeeklyGoalJpaEntity(
         final String title,
         final String content,
-        final Long userId) {
+        final Long userId
+    ) {
         this(null, title, content, userId);
     }
 
     @Override
-    public boolean equals(Object object) {
+    public boolean equals(final Object object) {
         if (this == object) {
             return true;
         }

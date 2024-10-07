@@ -43,8 +43,8 @@ class CouponEventEventService implements CouponEventUseCase {
         final int winnerCount,
         final Long eventId
     ) {
-        int queueNumber = 0;
-        while (queueNumber < totalCount) {
+        int queueNumber = 1;
+        while (queueNumber <= totalCount) {
             final List<CouponEvent> couponEvents = couponEventReadRepository.findBulks(queueNumber, winnerCount, eventId);
             if (couponEvents.isEmpty()) {
                 queueNumber++;

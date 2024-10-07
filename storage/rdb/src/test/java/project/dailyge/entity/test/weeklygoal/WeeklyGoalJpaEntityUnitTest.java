@@ -26,7 +26,13 @@ class WeeklyGoalJpaEntityUnitTest {
     @Test
     @DisplayName("올바른 인자가 들어오면 주간 목표가 생성된다.")
     void whenValidArgumentsProvidedThenWeeklyGoalIsCreated() {
-        final WeeklyGoalJpaEntity newWeeklyGoal = weeklyGoal;
+        final WeeklyGoalJpaEntity newWeeklyGoal = new WeeklyGoalJpaEntity(
+            1L,
+            "달성 주간 목표",
+            "주간 목표 내용",
+            LocalDateTime.now(),
+            1L
+        );
 
         assertAll(
             () -> assertThat(newWeeklyGoal.getId()).isEqualTo(1L),
@@ -80,14 +86,14 @@ class WeeklyGoalJpaEntityUnitTest {
         final WeeklyGoalJpaEntity expectedWeeklyGoal = new WeeklyGoalJpaEntity(
             1L,
             "달성 목표",
-            "월간 목표 내용",
+            "주간 목표 내용",
             LocalDateTime.now(),
             1L
         );
         final WeeklyGoalJpaEntity newWeeklyGoal = new WeeklyGoalJpaEntity(
             1L,
             "달성 목표",
-            "월간 목표 내용",
+            "주간 목표 내용",
             LocalDateTime.now(),
             1L
         );
@@ -100,14 +106,14 @@ class WeeklyGoalJpaEntityUnitTest {
         final WeeklyGoalJpaEntity expectedWeeklyGoal = new WeeklyGoalJpaEntity(
             1L,
             "달성 목표",
-            "월간 목표 내용",
+            "주간 목표 내용",
             LocalDateTime.now(),
             1L
         );
         final WeeklyGoalJpaEntity differentWeeklyGoal = new WeeklyGoalJpaEntity(
             2L,
             "달성 목표",
-            "월간 목표 내용",
+            "주간 목표 내용",
             LocalDateTime.now(),
             1L
         );
@@ -120,14 +126,14 @@ class WeeklyGoalJpaEntityUnitTest {
         final WeeklyGoalJpaEntity expectedWeeklyGoal = new WeeklyGoalJpaEntity(
             1L,
             "달성 목표",
-            "월간 목표 내용",
+            "주간 목표 내용",
             LocalDateTime.now(),
             1L
         );
         final WeeklyGoalJpaEntity newWeeklyGoal = new WeeklyGoalJpaEntity(
             1L,
             "달성 목표",
-            "월간 목표 내용",
+            "주간 목표 내용",
             LocalDateTime.now(),
             1L
         );

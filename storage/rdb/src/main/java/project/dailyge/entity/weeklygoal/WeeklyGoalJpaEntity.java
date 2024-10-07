@@ -71,7 +71,10 @@ public class WeeklyGoalJpaEntity extends BaseEntity {
         this(null, title, content, dateTime, userId);
     }
 
-    public void update(final String updatedTitle, final String updatedContent) {
+    public void update(
+        final String updatedTitle,
+        final String updatedContent
+    ) {
         this.title = updatedTitle;
         this.content = updatedContent;
         this.done = true;

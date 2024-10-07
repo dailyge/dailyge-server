@@ -56,17 +56,29 @@ public class WeeklyGoalJpaEntity extends BaseEntity {
         final Long id,
         final String title,
         final String content,
+        final LocalDateTime dateTime,
         final Long userId
     ) {
-        this(id, title, content, false, LocalDateTime.now().with(DayOfWeek.MONDAY), userId);
+        this(id, title, content, false, dateTime.with(DayOfWeek.MONDAY), userId);
     }
 
     public WeeklyGoalJpaEntity(
         final String title,
         final String content,
+        final LocalDateTime dateTime,
         final Long userId
     ) {
-        this(null, title, content, userId);
+        this(null, title, content, dateTime, userId);
+    }
+
+    public void update(final String updatedTitle, final String updatedContent) {
+        this.title = updatedTitle;
+        this.content = updatedContent;
+        this.done = true;
+    }
+
+    public void delete() {
+        super.deleted = true;
     }
 
     @Override

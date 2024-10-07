@@ -13,8 +13,10 @@ import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+import static lombok.AccessLevel.PROTECTED;
+
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = PROTECTED)
 @Entity(name = "weekly_goals")
 public class WeeklyGoalJpaEntity extends BaseEntity {
 
@@ -81,7 +83,7 @@ public class WeeklyGoalJpaEntity extends BaseEntity {
     }
 
     public void delete() {
-        super.deleted = true;
+        this.deleted = true;
     }
 
     @Override

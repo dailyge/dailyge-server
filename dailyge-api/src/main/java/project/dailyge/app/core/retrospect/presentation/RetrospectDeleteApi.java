@@ -18,7 +18,7 @@ public class RetrospectDeleteApi {
 
     private final RetrospectWriteService retrospectWriteService;
 
-    @DeleteMapping(path = "{retrospectId}")
+    @DeleteMapping(path = "/{retrospectId}")
     public ApiResponse<Void> delete(
         @LoginUser final DailygeUser dailygeUser,
         @PathVariable(name = "retrospectId") final Long retrospectId

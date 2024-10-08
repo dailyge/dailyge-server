@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.restdocs.restassured.RestDocumentationFilter;
 import project.dailyge.app.common.DatabaseTestBase;
-import project.dailyge.app.core.user.application.UserWriteUseCase;
+import project.dailyge.app.core.user.application.UserWriteService;
 import static io.restassured.RestAssured.given;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.document;
@@ -22,7 +22,7 @@ class UserDeleteDocumentationTest extends DatabaseTestBase {
     private static final String REFRESH_TOKEN = "Refresh-Token";
 
     @Autowired
-    private UserWriteUseCase userWriteUseCase;
+    private UserWriteService userWriteService;
 
     @Test
     @DisplayName("[RestDocs] 사용자를 삭제하면, 204 NO_CONTENT 응답을 받는다.")
@@ -68,7 +68,7 @@ class UserDeleteDocumentationTest extends DatabaseTestBase {
     @DisplayName("[Swagger] 이미 삭제되었다면, 404 NOT FOUND 응답을 받는다.")
     void whenUserAlreadyDeletedThenStatusCodeShouldBe_404_NotFound_Swagger() {
         final RestDocumentationFilter filter = createUserDeleteFilter(createIdentifier("UserDelete", 404));
-        userWriteUseCase.delete(newUser.getId());
+        userWriteService.delete(newUser.getId());
 
         given(this.specification)
             .filter(filter)

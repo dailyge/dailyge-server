@@ -6,17 +6,17 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import project.dailyge.app.common.auth.TokenProvider;
-import project.dailyge.core.cache.user.UserCacheReadUseCase;
+import project.dailyge.core.cache.user.UserCacheReadService;
 
 @Configuration
 @RequiredArgsConstructor
 public class WebConfiguration implements WebMvcConfigurer {
 
-    private final UserCacheReadUseCase userCacheReadUseCase;
+    private final UserCacheReadService userCacheReadService;
     private final TokenProvider tokenProvider;
 
     @Override
     public void addArgumentResolvers(final List<HandlerMethodArgumentResolver> resolvers) {
-        resolvers.add(new AuthArgumentResolver(userCacheReadUseCase, tokenProvider));
+        resolvers.add(new AuthArgumentResolver(userCacheReadService, tokenProvider));
     }
 }

@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import project.dailyge.app.common.DatabaseTestBase;
-import project.dailyge.app.core.task.application.TaskWriteUseCase;
+import project.dailyge.app.core.task.application.TaskWriteService;
 import project.dailyge.app.core.task.application.command.TaskCreateCommand;
 import project.dailyge.app.core.task.facade.TaskFacade;
 import static project.dailyge.app.test.task.fixture.TaskCommandFixture.createTaskCreationCommand;
@@ -29,7 +29,7 @@ class TaskSaveIntegrationTest extends DatabaseTestBase {
     private TaskFacade taskFacade;
 
     @Autowired
-    private TaskWriteUseCase taskWriteUseCase;
+    private TaskWriteService taskWriteService;
 
     @Autowired
     private MonthlyTaskEntityReadRepository monthlyTaskReadRepository;
@@ -42,7 +42,7 @@ class TaskSaveIntegrationTest extends DatabaseTestBase {
         taskFacade.createMonthlyTasks(dailygeUser, now);
         final TaskCreateCommand command = createTaskCreationCommand(now);
 
-        final Long newTaskId = taskWriteUseCase.save(dailygeUser, command);
+        final Long newTaskId = taskWriteService.save(dailygeUser, command);
         assertNotNull(newTaskId);
     }
 

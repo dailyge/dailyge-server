@@ -13,7 +13,7 @@ import project.dailyge.app.common.auth.LoginUser;
 import project.dailyge.app.common.auth.TokenProvider;
 import project.dailyge.app.common.exception.CommonException;
 import project.dailyge.core.cache.user.UserCache;
-import project.dailyge.core.cache.user.UserCacheReadUseCase;
+import project.dailyge.core.cache.user.UserCacheReadService;
 import project.dailyge.entity.user.Role;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_USER_TOKEN;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
@@ -21,7 +21,7 @@ import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.UN_AUTHORI
 @RequiredArgsConstructor
 public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
 
-    private final UserCacheReadUseCase userCacheReadUseCase;
+    private final UserCacheReadService userCacheReadService;
     private final TokenProvider tokenProvider;
 
     @Override
@@ -44,7 +44,7 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
             if (userId == null) {
                 throw CommonException.from(UN_AUTHORIZED);
             }
-            final UserCache user = userCacheReadUseCase.findById(userId);
+            final UserCache user = userCacheReadService.findById(userId);
             final DailygeUser dailygeUser = new DailygeUser(user.getId(), Role.valueOf(user.getRole()));
             request.setAttribute("dailyge-user", dailygeUser);
             return dailygeUser;

@@ -6,8 +6,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import project.dailyge.app.common.DatabaseTestBase;
-import project.dailyge.app.core.user.application.UserReadUseCase;
-import project.dailyge.app.core.user.application.UserWriteUseCase;
+import project.dailyge.app.core.user.application.UserReadService;
+import project.dailyge.app.core.user.application.UserWriteService;
 import static project.dailyge.app.core.user.exception.UserCodeAndMessage.USER_NOT_FOUND;
 import project.dailyge.app.core.user.exception.UserTypeException;
 import static project.dailyge.app.test.user.fixture.UserFixture.createUser;
@@ -17,16 +17,16 @@ import project.dailyge.entity.user.UserJpaEntity;
 class UserDeleteIntegrationTest extends DatabaseTestBase {
 
     @Autowired
-    private UserReadUseCase userReadUseCase;
+    private UserReadService userReadService;
 
     @Autowired
-    private UserWriteUseCase userWriteUseCase;
+    private UserWriteService userWriteService;
 
     @Test
     @DisplayName("존재하는 사용자를 삭제하면, deleted true로 논리삭제 된다.")
     void whenDeleteAnExistingUserThenUserShouldDeletedBeTrue() {
-        userWriteUseCase.delete(dailygeUser.getId());
-        final UserJpaEntity findUser = userReadUseCase.findById(dailygeUser.getId());
+        userWriteService.delete(dailygeUser.getId());
+        final UserJpaEntity findUser = userReadService.findById(dailygeUser.getId());
 
         assertTrue(findUser.getDeleted());
     }
@@ -34,10 +34,10 @@ class UserDeleteIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("이미 삭제된 사용자를 삭제하면, IllegalArgumentException이 발생한다.")
     void whenDeleteAlreadyDeletedUserThenIllegalArgumentExceptionShouldBeHappen() {
-        final UserJpaEntity saveUser = userWriteUseCase.save(createUser(2L, "dailyges", "dailyges@gmail.com"));
-        userWriteUseCase.delete(saveUser.getId());
+        final UserJpaEntity saveUser = userWriteService.save(createUser(2L, "dailyges", "dailyges@gmail.com"));
+        userWriteService.delete(saveUser.getId());
 
-        assertThatThrownBy(() -> userWriteUseCase.delete(saveUser.getId()))
+        assertThatThrownBy(() -> userWriteService.delete(saveUser.getId()))
             .isExactlyInstanceOf(UserTypeException.from(USER_NOT_FOUND).getClass())
             .isInstanceOf(UserTypeException.class)
             .hasMessage(USER_NOT_FOUND.message());
@@ -46,7 +46,7 @@ class UserDeleteIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("존재하지 않는 사용자를 삭제하면, UserNotFoundException이 발생한다.")
     void whenDeleteNonExistentUserThenUserNotFoundExceptionShouldBeHappen() {
-        assertThatThrownBy(() -> userWriteUseCase.delete(999L))
+        assertThatThrownBy(() -> userWriteService.delete(999L))
             .isExactlyInstanceOf(UserTypeException.from(USER_NOT_FOUND).getClass())
             .isInstanceOf(UserTypeException.class)
             .hasMessage(USER_NOT_FOUND.message());

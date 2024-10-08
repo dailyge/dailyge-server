@@ -11,7 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import project.dailyge.app.common.auth.DailygeUser;
+import project.dailyge.app.core.common.auth.DailygeUser;
 import project.dailyge.app.common.exception.CommonException;
 import static project.dailyge.app.core.user.exception.UserCodeAndMessage.USER_NOT_MATCH;
 import project.dailyge.entity.user.Role;

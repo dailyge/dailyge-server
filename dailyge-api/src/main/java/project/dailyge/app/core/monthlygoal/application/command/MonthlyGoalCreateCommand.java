@@ -1,6 +1,6 @@
 package project.dailyge.app.core.monthlygoal.application.command;
 
-import project.dailyge.app.common.auth.DailygeUser;
+import project.dailyge.app.core.common.auth.DailygeUser;
 import project.dailyge.entity.monthlygoal.MonthlyGoalJpaEntity;
 
 import java.time.LocalDate;

@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
 import project.dailyge.app.common.DatabaseTestBase;
-import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.common.exception.CommonException;
 import project.dailyge.app.core.anniversary.application.AnniversaryReadService;
 import project.dailyge.app.core.anniversary.application.AnniversaryWriteService;
@@ -20,6 +19,7 @@ import project.dailyge.app.core.anniversary.application.command.AnniversaryUpdat
 import static project.dailyge.app.core.anniversary.exception.AnniversaryCodeAndMessage.ANNIVERSARY_NOT_FOUND;
 import project.dailyge.app.core.anniversary.exception.AnniversaryTypeException;
 import project.dailyge.app.core.anniversary.facade.AnniversaryFacade;
+import project.dailyge.app.core.common.auth.DailygeUser;
 import project.dailyge.entity.anniversary.AnniversaryJpaEntity;
 import static project.dailyge.entity.user.Role.ADMIN;
 import static project.dailyge.entity.user.Role.NORMAL;

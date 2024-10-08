@@ -11,7 +11,7 @@ import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.app.common.auth.LoginUser;
 import project.dailyge.app.common.exception.CommonException;
 import project.dailyge.app.common.response.ApiResponse;
-import project.dailyge.app.core.notice.application.service.NoticeWriteService;
+import project.dailyge.app.core.notice.application.usecase.NoticeWriteUseCase;
 import project.dailyge.app.core.notice.presentation.request.NoticeCreateRequest;
 import project.dailyge.app.core.notice.presentation.response.NoticeCreateResponse;
 
@@ -22,7 +22,7 @@ import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.UN_AUTHORI
 @RequestMapping(path = "/api")
 public class NoticeCreateApi {
 
-    private final NoticeWriteService noticeWriteService;
+    private final NoticeWriteUseCase noticeWriteUseCase;
 
     @PostMapping("/notice")
     public ApiResponse<NoticeCreateResponse> saveNotice(
@@ -32,7 +32,7 @@ public class NoticeCreateApi {
         if (!dailygeUser.isAdmin()) {
             throw CommonException.from(UN_AUTHORIZED);
         }
-        final Long noticeId = noticeWriteService.save(request.toCommand(dailygeUser.getUserId()));
+        final Long noticeId = noticeWriteUseCase.save(request.toCommand(dailygeUser.getUserId()));
         final NoticeCreateResponse payload = new NoticeCreateResponse(noticeId);
         return ApiResponse.from(CommonCodeAndMessage.CREATED, payload);
     }

@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.OK;
+import project.dailyge.app.common.annotation.LoginUser;
 import project.dailyge.app.common.annotation.PresentationLayer;
-import project.dailyge.app.common.auth.DailygeUser;
-import project.dailyge.app.common.auth.LoginUser;
 import project.dailyge.app.common.response.ApiResponse;
-import project.dailyge.app.core.monthlygoal.application.MonthlyGoalWriteUseCase;
+import project.dailyge.app.core.common.auth.DailygeUser;
+import project.dailyge.app.core.monthlygoal.application.MonthlyGoalWriteService;
 import project.dailyge.app.core.monthlygoal.presentation.request.MonthlyGoalStatusUpdateRequest;
 import project.dailyge.app.core.monthlygoal.presentation.request.MonthlyGoalUpdateRequest;
 
@@ -21,7 +21,7 @@ import project.dailyge.app.core.monthlygoal.presentation.request.MonthlyGoalUpda
 @PresentationLayer(value = "MonthlyGoalUpdateApi")
 public class MonthlyGoalUpdateApi {
 
-    private final MonthlyGoalWriteUseCase monthlyGoalWriteUseCase;
+    private final MonthlyGoalWriteService monthlyGoalWriteService;
 
     @PutMapping(path = {"/{monthlyGoalId}"})
     public ApiResponse<Void> updateMonthlyGoalById(
@@ -29,7 +29,7 @@ public class MonthlyGoalUpdateApi {
         @PathVariable(name = "monthlyGoalId") final Long monthlyGoalId,
         @Valid @RequestBody MonthlyGoalUpdateRequest request
     ) {
-        monthlyGoalWriteUseCase.update(dailygeUser, monthlyGoalId, request.toCommand());
+        monthlyGoalWriteService.update(dailygeUser, monthlyGoalId, request.toCommand());
         return ApiResponse.from(OK);
     }
 
@@ -39,7 +39,7 @@ public class MonthlyGoalUpdateApi {
         @PathVariable(name = "monthlyGoalId") final Long monthlyGoalId,
         @Valid @RequestBody MonthlyGoalStatusUpdateRequest request
     ) {
-        monthlyGoalWriteUseCase.update(dailygeUser, monthlyGoalId, request.toCommand());
+        monthlyGoalWriteService.update(dailygeUser, monthlyGoalId, request.toCommand());
         return ApiResponse.from(OK);
     }
 }

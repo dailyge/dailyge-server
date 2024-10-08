@@ -13,7 +13,7 @@ import project.dailyge.app.common.auth.TokenProvider;
 import project.dailyge.app.core.user.presentation.request.UserBlacklistCreateRequest;
 import project.dailyge.app.test.user.documentationtest.snippet.UserBlacklistSnippet;
 import project.dailyge.core.cache.user.UserCache;
-import project.dailyge.core.cache.user.UserCacheWriteUseCase;
+import project.dailyge.core.cache.user.UserCacheWriteService;
 import project.dailyge.entity.user.Role;
 
 import static io.restassured.RestAssured.given;
@@ -35,7 +35,7 @@ class UserBlacklistCreateDocumentation extends DatabaseTestBase {
     private UserBlacklistCreateRequest request;
 
     @Autowired
-    private UserCacheWriteUseCase userCacheWriteUseCase;
+    private UserCacheWriteService userCacheWriteService;
 
     @Autowired
     private TokenProvider tokenProvider;
@@ -43,7 +43,7 @@ class UserBlacklistCreateDocumentation extends DatabaseTestBase {
     @BeforeEach
     void setUp() {
         final UserCache admin = new UserCache(ADMIN_ID, "admin", ADMIN_EMAIL, "", Role.ADMIN.name());
-        userCacheWriteUseCase.save(admin);
+        userCacheWriteService.save(admin);
         token = tokenProvider.createToken(ADMIN_ID);
         request = new UserBlacklistCreateRequest("accessToken");
         adminCookie = new Cookie.Builder("Access-Token", token.accessToken()).build();

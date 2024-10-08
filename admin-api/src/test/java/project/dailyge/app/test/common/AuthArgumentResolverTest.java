@@ -15,7 +15,7 @@ import project.dailyge.app.common.configuration.web.AuthArgumentResolver;
 import project.dailyge.app.common.exception.CommonException;
 import project.dailyge.app.test.user.fixture.UserFixture;
 import project.dailyge.core.cache.user.UserCache;
-import project.dailyge.core.cache.user.UserCacheReadUseCase;
+import project.dailyge.core.cache.user.UserCacheReadService;
 import project.dailyge.entity.user.UserJpaEntity;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -29,7 +29,7 @@ class AuthArgumentResolverTest {
 
     private TokenProvider tokenProvider;
     private AuthArgumentResolver resolver;
-    private UserCacheReadUseCase userCacheReadUseCase;
+    private UserCacheReadService userCacheReadService;
     private NativeWebRequest webRequest;
     private HttpServletRequest request;
 
@@ -44,8 +44,8 @@ class AuthArgumentResolverTest {
         );
         final SecretKeyManager secretKeyManager = new SecretKeyManager(jwtProperties);
         tokenProvider = new TokenProvider(jwtProperties, secretKeyManager);
-        userCacheReadUseCase = mock(UserCacheReadUseCase.class);
-        resolver = new AuthArgumentResolver(userCacheReadUseCase, tokenProvider);
+        userCacheReadService = mock(UserCacheReadService.class);
+        resolver = new AuthArgumentResolver(userCacheReadService, tokenProvider);
         request = mock(HttpServletRequest.class);
         webRequest = mock(NativeWebRequest.class);
         when(webRequest.getNativeRequest()).thenReturn(request);
@@ -59,7 +59,7 @@ class AuthArgumentResolverTest {
         final Cookie[] cookies = new Cookie[1];
         cookies[0] = new Cookie("Access-Token", token.accessToken());
         when(request.getCookies()).thenReturn(cookies);
-        when(userCacheReadUseCase.findById(user.getId()))
+        when(userCacheReadService.findById(user.getId()))
             .thenReturn(new UserCache(
                 user.getId(),
                 user.getNickname(),
@@ -90,7 +90,7 @@ class AuthArgumentResolverTest {
         final Cookie[] cookies = new Cookie[1];
         cookies[0] = new Cookie("Access-Token", token.accessToken());
         when(request.getCookies()).thenReturn(cookies);
-        when(userCacheReadUseCase.findById(validUserId))
+        when(userCacheReadService.findById(validUserId))
             .thenReturn(new UserCache(
                 expectedUser.getId(),
                 expectedUser.getNickname(),

@@ -14,22 +14,22 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.response
 import static project.dailyge.app.common.CommonSnippet.COOKIE_HEADER_DESCRIPTORS;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.ERROR_RESPONSE;
 
-public final class RetrospectCreateSnippet implements RetrospectSnippet {
+public final class RetrospectUpdateSnippet implements RetrospectSnippet {
 
-    private static final String SUMMARY = "Retrospect 등록 API";
-    private static final String DESCRIPTION = "Retrospect를 등록합니다.";
+    private static final String SUMMARY = "Retrospect 수정 API";
+    private static final String DESCRIPTION = "Retrospect를 수정합니다.";
 
-    private RetrospectCreateSnippet() {
+    private RetrospectUpdateSnippet() {
         throw new AssertionError("올바른 방식으로 생성자를 호출해주세요.");
     }
 
-    public static RestDocumentationFilter createRetrospectFilter(final String identifier) {
+    public static RestDocumentationFilter createUpdateRetrospectFilter(final String identifier) {
         return document(
             identifier,
             ResourceSnippetParameters.builder()
                 .requestHeaders(COOKIE_HEADER_DESCRIPTORS)
-                .requestFields(RETROSPECT_CREATE_REQUEST_FIELDS)
-                .responseFields(RETROSPECT_CREATE_RESPONSE_FIELDS)
+                .requestFields(RETROSPECT_UPDATE_REQUEST_FIELDS)
+                .responseFields(RETROSPECT_UPDATE_RESPONSE_FIELDS)
                 .tag(TAG)
                 .summary(SUMMARY)
                 .privateResource(false)
@@ -40,8 +40,8 @@ public final class RetrospectCreateSnippet implements RetrospectSnippet {
             snippets -> {
                 List.of(
                     requestCookies(TOKEN_COOKIE_DESCRIPTORS),
-                    requestFields(Arrays.stream(RETROSPECT_CREATE_REQUEST_FIELDS).toList()),
-                    responseFields(Arrays.stream(RETROSPECT_CREATE_RESPONSE_FIELDS).toList()),
+                    requestFields(Arrays.stream(RETROSPECT_UPDATE_REQUEST_FIELDS).toList()),
+                    responseFields(Arrays.stream(RETROSPECT_UPDATE_RESPONSE_FIELDS).toList()),
                     responseFields(Arrays.stream(ERROR_RESPONSE).toList())
                 );
             }

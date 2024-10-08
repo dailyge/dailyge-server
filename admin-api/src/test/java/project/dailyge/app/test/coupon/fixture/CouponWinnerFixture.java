@@ -42,7 +42,7 @@ public class CouponWinnerFixture {
             }
             for (int idx = 0; idx < queueSize; idx++) {
                 final long timestamp = random.nextLong(winners.size() + 1, Long.MAX_VALUE);
-                couponEvents.add(new CouponEvent(Long.MAX_VALUE % 100_001 + 1, timestamp));
+                couponEvents.add(new CouponEvent(timestamp % 100_001 + 1, timestamp));
             }
             remainedCount -= queueSize;
             remainedWinner -= winnerSize;

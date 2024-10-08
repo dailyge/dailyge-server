@@ -10,7 +10,7 @@ import static project.dailyge.app.core.retrospect.exception.RetrospectCodeAndMes
 
 @RequiredArgsConstructor
 @ApplicationLayer(value = "RetrospectReadUseCase")
-public class RetrospectReadUseCase implements RetrospectReadService {
+class RetrospectReadUseCase implements RetrospectReadService {
 
     private final RetrospectEntityReadRepository retrospectEntityReadRepository;
 

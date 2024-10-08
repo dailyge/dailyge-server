@@ -63,4 +63,16 @@ public class RetrospectJpaEntity extends BaseEntity {
         this.isPublic = isPublic;
         this.userId = userId;
     }
+
+    public void update(
+        final String title,
+        final String content,
+        final LocalDateTime date,
+        final boolean isPublic
+    ) {
+        this.title = title;
+        this.content = content;
+        this.date = date;
+        this.isPublic = isPublic;
+    }
 }

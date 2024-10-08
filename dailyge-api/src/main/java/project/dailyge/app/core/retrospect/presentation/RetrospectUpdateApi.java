@@ -24,7 +24,7 @@ public class RetrospectUpdateApi {
     @PutMapping(path = "{retrospectId}")
     public ApiResponse<Void> update(
         @LoginUser final DailygeUser dailygeUser,
-        @PathVariable(name = "retrospectId") Long retrospectId,
+        @PathVariable(name = "retrospectId") final Long retrospectId,
         @Valid @RequestBody final RetrospectUpdateRequest request
     ) {
         retrospectWriteService.update(dailygeUser, request.toCommand(), retrospectId);

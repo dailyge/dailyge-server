@@ -75,4 +75,8 @@ public class RetrospectJpaEntity extends BaseEntity {
         this.date = date;
         this.isPublic = isPublic;
     }
+
+    public void delete() {
+        this.deleted = true;
+    }
 }

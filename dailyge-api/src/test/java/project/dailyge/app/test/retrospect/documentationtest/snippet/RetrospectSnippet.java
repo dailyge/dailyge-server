@@ -5,6 +5,8 @@ import org.springframework.restdocs.cookies.RequestCookiesSnippet;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
+import org.springframework.restdocs.request.ParameterDescriptor;
+import org.springframework.restdocs.request.PathParametersSnippet;
 import project.dailyge.app.core.retrospect.presentation.request.RetrospectCreateRequest;
 import project.dailyge.app.core.retrospect.presentation.request.RetrospectUpdateRequest;
 import static javax.xml.xpath.XPathEvaluationResult.XPathResultType.NUMBER;
@@ -16,6 +18,8 @@ import static org.springframework.restdocs.payload.JsonFieldType.OBJECT;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static project.dailyge.app.common.SnippetUtils.getAttribute;
 
 public interface RetrospectSnippet {
@@ -25,6 +29,10 @@ public interface RetrospectSnippet {
 
     CookieDescriptor[] TOKEN_COOKIE_DESCRIPTORS = {
         cookieWithName("Access-Token").description("인증 토큰")
+    };
+
+    ParameterDescriptor[] RETROSPECT_ID_PATH_PARAMETER_DESCRIPTORS = {
+        parameterWithName("retrospectId").description("Retrospect ID")
     };
 
     FieldDescriptor[] RETROSPECT_CREATE_REQUEST_FIELDS = {
@@ -63,6 +71,7 @@ public interface RetrospectSnippet {
     };
 
     RequestCookiesSnippet ACCESS_TOKEN_COOKIE_SNIPPET = requestCookies(TOKEN_COOKIE_DESCRIPTORS);
+    PathParametersSnippet RETROSPECT_PATH_PARAMETER_SNIPPET = pathParameters(RETROSPECT_ID_PATH_PARAMETER_DESCRIPTORS);
 
     RequestFieldsSnippet RETROSPECT_CREATE_REQUEST_SNIPPET = requestFields(RETROSPECT_CREATE_REQUEST_FIELDS);
     ResponseFieldsSnippet RETROSPECT_CREATE_RESPONSE_SNIPPET = responseFields(RETROSPECT_CREATE_RESPONSE_FIELDS);

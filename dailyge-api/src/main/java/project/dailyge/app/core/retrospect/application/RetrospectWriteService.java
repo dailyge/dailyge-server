@@ -8,4 +8,6 @@ public interface RetrospectWriteService {
     Long save(DailygeUser dailygeUser, RetrospectCreateCommand command);
 
     void update(DailygeUser dailygeUser, RetrospectUpdateCommand command, Long retrospectId);
+
+    void delete(DailygeUser dailygeUser, Long retrospectId);
 }

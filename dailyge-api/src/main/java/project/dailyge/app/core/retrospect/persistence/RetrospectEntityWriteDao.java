@@ -6,8 +6,8 @@ import org.springframework.stereotype.Repository;
 import project.dailyge.entity.retrospect.RetrospectEntityWriteRepository;
 import project.dailyge.entity.retrospect.RetrospectJpaEntity;
 
+@Repository
 @RequiredArgsConstructor
-@Repository(value = "RetrospectEntityWriteDao")
 class RetrospectEntityWriteDao implements RetrospectEntityWriteRepository {
 
     private final EntityManager entityManager;

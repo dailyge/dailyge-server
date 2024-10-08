@@ -46,4 +46,18 @@ class RetrospectWriteUseCase implements RetrospectWriteService {
         }
         findRetrospect.update(command.title(), command.content(), command.date(), command.isPublic());
     }
+
+    @Override
+    @Transactional
+    public void delete(
+        final DailygeUser dailygeUser,
+        final Long retrospectId
+    ) {
+        final RetrospectJpaEntity findRetrospect = retrospectEntityReadRepository.findById(retrospectId)
+            .orElseThrow(() -> RetrospectTypeException.from(RETROSPECT_NOT_FOUND));
+        if (!dailygeUser.isValid(findRetrospect.getUserId())) {
+            throw CommonException.from(UN_AUTHORIZED);
+        }
+        findRetrospect.delete();
+    }
 }

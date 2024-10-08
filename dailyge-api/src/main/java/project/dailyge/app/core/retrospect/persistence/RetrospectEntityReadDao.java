@@ -9,8 +9,8 @@ import project.dailyge.entity.retrospect.RetrospectJpaEntity;
 import static java.util.Optional.ofNullable;
 import static project.dailyge.entity.retrospect.QRetrospectJpaEntity.retrospectJpaEntity;
 
+@Repository
 @RequiredArgsConstructor
-@Repository(value = "RetrospectEntityReadDao")
 class RetrospectEntityReadDao implements RetrospectEntityReadRepository {
 
     private final JPAQueryFactory jpaQueryFactory;

@@ -1,24 +1,23 @@
 package project.dailyge.app.test.codeandmessage.documentationtest;
 
+import static io.restassured.RestAssured.given;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.document;
 import org.springframework.restdocs.restassured.RestDocumentationFilter;
 import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.response.CodeAndMessagesResponse;
+import static project.dailyge.app.test.codeandmessage.documentationtest.snippet.CodeAndMessageReadSnippet.createMonthlyTasksFilter;
+import static project.dailyge.app.test.codeandmessage.documentationtest.snippet.CodeAndMessageSnippet.CODE_AND_MESSAGE_RESPONSE_FIELD_SNIPPET;
+import static project.dailyge.app.test.codeandmessage.documentationtest.snippet.CodeAndMessageSnippet.createIdentifier;
 import project.dailyge.entity.codeandmessage.CodeAndMessageEntityWriteService;
 import project.dailyge.entity.codeandmessage.CodeAndMessageJpaEntity;
 import project.dailyge.entity.codeandmessage.CodeAndMessages;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static io.restassured.RestAssured.given;
-import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.document;
-import static project.dailyge.app.test.codeandmessage.documentationtest.snippet.CodeAndMessageReadSnippet.createMonthlyTasksFilter;
-import static project.dailyge.app.test.codeandmessage.documentationtest.snippet.CodeAndMessageSnippet.CODE_AND_MESSAGE_RESPONSE_FIELD_SNIPPET;
-import static project.dailyge.app.test.codeandmessage.documentationtest.snippet.CodeAndMessageSnippet.createIdentifier;
 
 @DisplayName("[DocumentationTest] 코드&메시지 조회 문서화 테스트")
 class CodeAndMessageReadDocumentationTest extends DatabaseTestBase {

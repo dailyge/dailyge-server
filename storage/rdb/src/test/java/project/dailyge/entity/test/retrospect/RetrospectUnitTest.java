@@ -85,4 +85,11 @@ class RetrospectUnitTest {
             () -> assertTrue(retrospect.isPublic())
         );
     }
+
+    @Test
+    @DisplayName("회고를 삭제하면 deleted 필드가 True가 된다.")
+    void whenDeletedThenDeleteStatusShouldBeTrue() {
+        retrospect.delete();
+        assertTrue(retrospect.getDeleted());
+    }
 }

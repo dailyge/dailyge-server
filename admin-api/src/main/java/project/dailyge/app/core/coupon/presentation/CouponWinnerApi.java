@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import project.dailyge.app.common.annotation.PresentationLayer;
 import project.dailyge.app.common.response.ApiResponse;
-import project.dailyge.app.core.coupon.application.CouponUseCase;
+import project.dailyge.app.core.coupon.application.CouponWriteService;
 import project.dailyge.app.core.coupon.presentation.request.CouponWinnerRequest;
 
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.OK;
@@ -17,11 +17,11 @@ import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.OK;
 @RequestMapping("/api/coupons")
 public class CouponWinnerApi {
 
-    private final CouponUseCase couponUseCase;
+    private final CouponWriteService couponUseCaseff;
 
     @PostMapping(path = "/winners")
     public ApiResponse<Void> findWinners(@Valid @RequestBody final CouponWinnerRequest request) {
-        couponUseCase.pickWinners(request.winnerCount(), request.eventId());
+        couponUseCaseff.pickWinners(request.winnerCount(), request.eventId());
         return ApiResponse.from(OK);
     }
 }

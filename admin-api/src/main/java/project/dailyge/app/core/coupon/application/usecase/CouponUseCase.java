@@ -3,7 +3,7 @@ package project.dailyge.app.core.coupon.application.usecase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import project.dailyge.app.core.coupon.application.CouponUseCase;
+import project.dailyge.app.core.coupon.application.CouponWriteService;
 import project.dailyge.app.core.coupon.application.WinnerAlgorithm;
 import project.dailyge.core.cache.coupon.CouponEvent;
 import project.dailyge.core.cache.coupon.CouponEventReadRepository;
@@ -14,7 +14,7 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class CouponService implements CouponUseCase {
+public class CouponUseCase implements CouponWriteService {
 
     private final CouponEventValidator validator;
     private final WinnerAlgorithm winnerAlgorithm;

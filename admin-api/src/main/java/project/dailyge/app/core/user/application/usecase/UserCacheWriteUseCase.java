@@ -4,10 +4,11 @@ import lombok.RequiredArgsConstructor;
 import project.dailyge.app.common.annotation.ApplicationLayer;
 import project.dailyge.core.cache.user.UserCache;
 import project.dailyge.core.cache.user.UserCacheWriteRepository;
+import project.dailyge.core.cache.user.UserCacheWriteService;
 
 @ApplicationLayer
 @RequiredArgsConstructor
-public class UserCacheWriteService implements project.dailyge.core.cache.user.UserCacheWriteService {
+public class UserCacheWriteUseCase implements UserCacheWriteService {
 
     private final UserCacheWriteRepository userWriteRepository;
 

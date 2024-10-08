@@ -1,15 +1,15 @@
-package project.dailyge.app.core.notice.application.service;
+package project.dailyge.app.core.notice.application.usecase;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import project.dailyge.app.core.notice.application.NoticeWriteUseCase;
+import project.dailyge.app.core.notice.application.NoticeWriteService;
 import project.dailyge.app.core.notice.application.command.NoticeCreateCommand;
 import project.dailyge.entity.notice.NoticeEntityWriteRepository;
 
 @Service
 @RequiredArgsConstructor
-public class NoticeWriteService implements NoticeWriteUseCase {
+public class NoticeWriteUseCase implements NoticeWriteService {
 
     private final NoticeEntityWriteRepository noticeEntityWriteRepository;
 

@@ -14,7 +14,7 @@ import java.util.List;
 
 @ApplicationLayer
 @RequiredArgsConstructor
-class CodeAndMessageService implements CodeAndMessageReadService, CodeAndMessageEntityWriteService {
+class CodeAndMessageUseCase implements CodeAndMessageReadService, CodeAndMessageEntityWriteService {
 
     private final CodeAndMessageEntityReadRepository codeAndMessageReadRepository;
     private final CodeAndMessageEntityWriteRepository codeAndMessageWriteRepository;

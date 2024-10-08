@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import project.dailyge.app.common.DatabaseTestBase;
-import project.dailyge.app.core.coupon.application.CouponUseCase;
+import project.dailyge.app.core.coupon.application.CouponWriteService;
 import project.dailyge.app.test.coupon.fixture.CouponWinnerFixture;
 import project.dailyge.core.cache.coupon.CouponEvent;
 import project.dailyge.core.cache.coupon.CouponEventWriteRepository;
@@ -15,10 +15,10 @@ import java.util.List;
 import java.util.Set;
 
 @DisplayName("[IntegrationTest] 당첨자 선정 통합 테스트 ")
-class CouponUseCaseIntegrationTest extends DatabaseTestBase {
+class CouponWriteServiceIntegrationTest extends DatabaseTestBase {
 
     @Autowired
-    private CouponUseCase couponUseCase;
+    private CouponWriteService couponUseCaseff;
 
     @Autowired
     private CouponEventWriteRepository couponEventWriteRepository;
@@ -45,7 +45,7 @@ class CouponUseCaseIntegrationTest extends DatabaseTestBase {
         for (List<CouponEvent> couponEvents : candidates) {
             couponEventWriteRepository.saveBulks(couponEvents, 1L);
         }
-        couponUseCase.pickWinners(1000, 1L);
+        couponUseCaseff.pickWinners(1000, 1L);
         //TODO: 당첨자에 대해 쿠폰 발급 추가 시 검증
     }
 }

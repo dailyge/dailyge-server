@@ -17,7 +17,7 @@ import static project.dailyge.app.core.retrospect.exception.RetrospectCodeAndMes
 
 @RequiredArgsConstructor
 @ApplicationLayer("RetrospectWriteUseCase")
-public class RetrospectWriteUseCase implements RetrospectWriteService {
+class RetrospectWriteUseCase implements RetrospectWriteService {
 
     private final RetrospectEntityWriteRepository retrospectEntityWriteRepository;
     private final RetrospectEntityReadRepository retrospectEntityReadRepository;

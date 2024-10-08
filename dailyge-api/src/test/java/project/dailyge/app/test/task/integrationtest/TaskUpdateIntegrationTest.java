@@ -10,9 +10,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import project.dailyge.app.common.DatabaseTestBase;
-import project.dailyge.app.common.auth.DailygeUser;
-import project.dailyge.app.core.task.application.TaskReadUseCase;
-import project.dailyge.app.core.task.application.TaskWriteUseCase;
+import project.dailyge.app.core.common.auth.DailygeUser;
+import project.dailyge.app.core.task.application.TaskReadService;
+import project.dailyge.app.core.task.application.TaskWriteService;
 import project.dailyge.app.core.task.application.command.TaskCreateCommand;
 import project.dailyge.app.core.task.application.command.TaskUpdateCommand;
 import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.MONTHLY_TASK_NOT_FOUND;
@@ -32,10 +32,10 @@ class TaskUpdateIntegrationTest extends DatabaseTestBase {
     private TaskFacade taskFacade;
 
     @Autowired
-    private TaskReadUseCase taskReadUseCase;
+    private TaskReadService taskReadService;
 
     @Autowired
-    private TaskWriteUseCase taskWriteUseCase;
+    private TaskWriteService taskWriteService;
 
     @BeforeEach
     void setUp() {
@@ -47,11 +47,11 @@ class TaskUpdateIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("Task를 업데이트하면, 내용이 반영된다.")
     void whenTaskUpdateThenContentsShouldBeHappen() {
-        final Long newTaskId = taskWriteUseCase.save(dailygeUser, taskCreateCommand);
+        final Long newTaskId = taskWriteService.save(dailygeUser, taskCreateCommand);
         final TaskUpdateCommand taskUpdateCommand = createTaskUpdateCommand(now);
-        taskWriteUseCase.update(dailygeUser, newTaskId, taskUpdateCommand);
+        taskWriteService.update(dailygeUser, newTaskId, taskUpdateCommand);
 
-        final TaskJpaEntity findTask = taskReadUseCase.findTaskById(dailygeUser, newTaskId);
+        final TaskJpaEntity findTask = taskReadService.findTaskById(dailygeUser, newTaskId);
 
         assertAll(
             () -> assertEquals(taskUpdateCommand.title(), findTask.getTitle()),
@@ -66,11 +66,11 @@ class TaskUpdateIntegrationTest extends DatabaseTestBase {
     @DisplayName("존재하지 않는 사용자 ID가 입력되면, TaskTypeException이 발생한다.")
     void whenInvalidUserIdThenUnAuthorizedExceptionShouldBeHappen() {
         final Long invalidUserId = 100_000L;
-        final Long newTaskId = taskWriteUseCase.save(dailygeUser, taskCreateCommand);
+        final Long newTaskId = taskWriteService.save(dailygeUser, taskCreateCommand);
         final DailygeUser dailygeUser = new DailygeUser(invalidUserId, NORMAL);
 
         final TaskUpdateCommand taskUpdateCommand = createTaskUpdateCommand(now);
-        assertThatThrownBy(() -> taskWriteUseCase.update(dailygeUser, newTaskId, taskUpdateCommand))
+        assertThatThrownBy(() -> taskWriteService.update(dailygeUser, newTaskId, taskUpdateCommand))
             .isInstanceOf(TaskTypeException.class)
             .hasMessage(MONTHLY_TASK_NOT_FOUND.message());
     }

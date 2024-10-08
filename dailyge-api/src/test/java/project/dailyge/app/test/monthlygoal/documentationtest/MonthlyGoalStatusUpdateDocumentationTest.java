@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.restdocs.restassured.RestDocumentationFilter;
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 import project.dailyge.app.common.DatabaseTestBase;
-import project.dailyge.app.core.monthlygoal.application.MonthlyGoalWriteUseCase;
+import project.dailyge.app.core.monthlygoal.application.MonthlyGoalWriteService;
 import project.dailyge.app.core.monthlygoal.application.command.MonthlyGoalCreateCommand;
 import project.dailyge.app.core.monthlygoal.presentation.request.MonthlyGoalStatusUpdateRequest;
 import static project.dailyge.app.test.monthlygoal.documentationtest.snippet.MonthlyGoalSnippet.createIdentifier;
@@ -21,7 +21,7 @@ import java.time.LocalDate;
 class MonthlyGoalStatusUpdateDocumentationTest extends DatabaseTestBase {
 
     @Autowired
-    private MonthlyGoalWriteUseCase monthlyGoalWriteUseCase;
+    private MonthlyGoalWriteService monthlyGoalWriteService;
 
     @BeforeEach
     void setUp() {
@@ -32,7 +32,7 @@ class MonthlyGoalStatusUpdateDocumentationTest extends DatabaseTestBase {
     @DisplayName("[RestDocs] 월간 목표 상태를 수정하면 200 OK 응답을 받는다.")
     void whenUpdateMonthlyGoalStatusThenStatusCodeShouldBe200_RestDocs() throws JsonProcessingException {
         final MonthlyGoalCreateCommand createCommand = new MonthlyGoalCreateCommand("메인 페이지 개발 완료", "서비스 출시.", now);
-        final Long monthlyGoalId = monthlyGoalWriteUseCase.save(dailygeUser, createCommand);
+        final Long monthlyGoalId = monthlyGoalWriteService.save(dailygeUser, createCommand);
 
         final MonthlyGoalStatusUpdateRequest request = new MonthlyGoalStatusUpdateRequest(true);
 
@@ -53,7 +53,7 @@ class MonthlyGoalStatusUpdateDocumentationTest extends DatabaseTestBase {
     void whenUpdateMonthlyGoalStatusThenStatusCodeShouldBe200_Swagger() throws JsonProcessingException {
         final RestDocumentationFilter filter = updateMonthlyGoalStatusFilter(createIdentifier("MonthlyGoalStatus", 200));
         final MonthlyGoalCreateCommand createCommand = new MonthlyGoalCreateCommand("메인 페이지 개발 완료", "서비스 출시.", now);
-        final Long monthlyGoalId = monthlyGoalWriteUseCase.save(dailygeUser, createCommand);
+        final Long monthlyGoalId = monthlyGoalWriteService.save(dailygeUser, createCommand);
 
         final MonthlyGoalStatusUpdateRequest request = new MonthlyGoalStatusUpdateRequest(true);
 

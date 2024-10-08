@@ -2,18 +2,17 @@ package project.dailyge.app.core.event.presentation;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
+import static org.springframework.http.HttpHeaders.SET_COOKIE;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import project.dailyge.app.codeandmessage.CommonCodeAndMessage;
+import project.dailyge.app.common.annotation.LoginUser;
 import project.dailyge.app.common.annotation.PresentationLayer;
-import project.dailyge.app.common.auth.DailygeUser;
-import project.dailyge.app.common.auth.LoginUser;
 import project.dailyge.app.common.response.ApiResponse;
-import project.dailyge.app.core.event.facade.EventFacade;
-
-import static org.springframework.http.HttpHeaders.SET_COOKIE;
 import static project.dailyge.app.common.utils.CookieUtils.createResponseCookie;
+import project.dailyge.app.core.common.auth.DailygeUser;
+import project.dailyge.app.core.event.facade.EventFacade;
 
 @PresentationLayer
 @RequestMapping("/api")

@@ -6,8 +6,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import project.dailyge.app.common.DatabaseTestBase;
-import project.dailyge.app.core.task.application.TaskReadUseCase;
-import project.dailyge.app.core.task.application.TaskWriteUseCase;
+import project.dailyge.app.core.task.application.TaskReadService;
+import project.dailyge.app.core.task.application.TaskWriteService;
 import project.dailyge.app.core.task.application.command.TaskCreateCommand;
 import project.dailyge.app.core.task.exception.TaskTypeException;
 import project.dailyge.app.core.task.facade.TaskFacade;
@@ -32,10 +32,10 @@ class TaskReadIntegrationTest extends DatabaseTestBase {
     private TaskFacade taskFacade;
 
     @Autowired
-    private TaskReadUseCase taskReadUseCase;
+    private TaskReadService taskReadService;
 
     @Autowired
-    private TaskWriteUseCase taskWriteUseCase;
+    private TaskWriteService taskWriteService;
 
     @BeforeEach
     void setUp() {
@@ -47,7 +47,7 @@ class TaskReadIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("MonthlyTask가 존재하면, Id와 Date로 조회할 수 있다.")
     void whenMonthlyTaskExistsThenResultShouldNotBeNull() {
-        final MonthlyTaskJpaEntity findMonthlyTask = taskReadUseCase.findMonthlyTaskByUserIdAndDate(dailygeUser, now);
+        final MonthlyTaskJpaEntity findMonthlyTask = taskReadService.findMonthlyTaskByUserIdAndDate(dailygeUser, now);
 
         assertNotNull(findMonthlyTask);
     }
@@ -55,13 +55,13 @@ class TaskReadIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("MonthlyTask가 존재하면, Id를 조회할 수 있다.")
     void whenMonthlyTaskExistsThenIdShouldNotBeNull() {
-        assertNotNull(taskReadUseCase.findTasksByMonthlyTasksIdAndDate(dailygeUser, now));
+        assertNotNull(taskReadService.findTasksByMonthlyTasksIdAndDate(dailygeUser, now));
     }
 
     @Test
     @DisplayName("존재하지 않는 MonthlyTaskId를 조회하면 TaskTypeException이 발생한다.")
     void whenMonthlyTaskIdNotExistsThenThrowTaskTypeException() {
-        assertThatThrownBy(() -> taskReadUseCase.findMonthlyTaskById(Long.MAX_VALUE))
+        assertThatThrownBy(() -> taskReadService.findMonthlyTaskById(Long.MAX_VALUE))
             .isInstanceOf(TaskTypeException.class)
             .hasMessage(MONTHLY_TASK_NOT_FOUND.message());
     }
@@ -69,7 +69,7 @@ class TaskReadIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("존재하지 않는 MonthlyTask를 조회하면 TaskTypeException이 발생한다.")
     void whenMonthlyTaskNotExistsThenThrowTaskTypeException() {
-        assertThatThrownBy(() -> taskReadUseCase.findMonthlyTaskByUserIdAndDate(invalidUser, now))
+        assertThatThrownBy(() -> taskReadService.findMonthlyTaskByUserIdAndDate(invalidUser, now))
             .isInstanceOf(TaskTypeException.class)
             .hasMessage(MONTHLY_TASK_NOT_FOUND.message());
     }
@@ -77,8 +77,8 @@ class TaskReadIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("Task가 존재하면, Id와 Date로 조회할 수 있다.")
     void whenTaskExistsThenIdShouldNotBeNull() {
-        final Long newTaskId = taskWriteUseCase.save(dailygeUser, taskCreateCommand);
-        final TaskJpaEntity findTask = taskReadUseCase.findTaskById(dailygeUser, newTaskId);
+        final Long newTaskId = taskWriteService.save(dailygeUser, taskCreateCommand);
+        final TaskJpaEntity findTask = taskReadService.findTaskById(dailygeUser, newTaskId);
 
         assertNotNull(findTask);
     }
@@ -88,7 +88,7 @@ class TaskReadIntegrationTest extends DatabaseTestBase {
     void whenTaskNotExistsThenThrowTaskTypeException() {
         final Long invalidTaskId = Long.MAX_VALUE;
 
-        assertThatThrownBy(() -> taskReadUseCase.findTaskById(
+        assertThatThrownBy(() -> taskReadService.findTaskById(
             dailygeUser, invalidTaskId
         )).isInstanceOf(TaskTypeException.class)
             .hasMessage(TASK_NOT_FOUND.message());
@@ -97,11 +97,11 @@ class TaskReadIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("존재하는 유저와 날짜 범위로 주간 할 일을 조회하면 결과가 반환된다.")
     void whenValidUserIdAndDatesProvidedThenReturnTasks() {
-        taskWriteUseCase.save(dailygeUser, taskCreateCommand);
+        taskWriteService.save(dailygeUser, taskCreateCommand);
 
         final LocalDate startDate = now;
         final LocalDate endDate = now.plusDays(10);
-        final Tasks tasks = taskReadUseCase.findTasksStatisticByUserIdAndDate(dailygeUser, startDate, endDate);
+        final Tasks tasks = taskReadService.findTasksStatisticByUserIdAndDate(dailygeUser, startDate, endDate);
 
         assertTrue(tasks.size() > 0);
         for (final TaskJpaEntity taskEntity : tasks.getTaskEntities()) {
@@ -116,7 +116,7 @@ class TaskReadIntegrationTest extends DatabaseTestBase {
         final LocalDate invalidStartDate = LocalDate.now().minusYears(10);
         final LocalDate invalidEndDate = LocalDate.now().minusYears(10).plusDays(7);
 
-        final Tasks tasks = taskReadUseCase.findTasksStatisticByUserIdAndDate(dailygeUser, invalidStartDate, invalidEndDate);
+        final Tasks tasks = taskReadService.findTasksStatisticByUserIdAndDate(dailygeUser, invalidStartDate, invalidEndDate);
         assertEquals(0, tasks.size());
     }
 
@@ -126,7 +126,7 @@ class TaskReadIntegrationTest extends DatabaseTestBase {
         final LocalDate futureStartDate = LocalDate.now().plusYears(15);
         final LocalDate futureEndDate = futureStartDate.plusDays(7);
 
-        final Tasks tasks = taskReadUseCase.findTasksStatisticByUserIdAndDate(dailygeUser, futureStartDate, futureEndDate);
+        final Tasks tasks = taskReadService.findTasksStatisticByUserIdAndDate(dailygeUser, futureStartDate, futureEndDate);
         assertEquals(0, tasks.size());
     }
 }

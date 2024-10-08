@@ -17,8 +17,10 @@ import org.springframework.stereotype.Component;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_PARAMETERS;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_USER_TOKEN;
-
 import project.dailyge.app.common.exception.CommonException;
+import project.dailyge.app.core.common.auth.DailygeToken;
+import project.dailyge.app.core.common.auth.JwtProperties;
+import project.dailyge.app.core.common.auth.SecretKeyManager;
 
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;

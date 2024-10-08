@@ -6,7 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import project.dailyge.app.common.DatabaseTestBase;
-import project.dailyge.app.core.monthlygoal.application.MonthlyGoalWriteUseCase;
+import project.dailyge.app.core.monthlygoal.application.MonthlyGoalWriteService;
 import project.dailyge.app.core.monthlygoal.application.command.MonthlyGoalCreateCommand;
 
 import java.time.LocalDate;
@@ -15,7 +15,7 @@ import java.time.LocalDate;
 class MonthlyGoalCreateIntegrationTest extends DatabaseTestBase {
 
     @Autowired
-    private MonthlyGoalWriteUseCase monthlyGoalWriteUseCase;
+    private MonthlyGoalWriteService monthlyGoalWriteService;
 
     @BeforeEach
     void setUp() {
@@ -26,6 +26,6 @@ class MonthlyGoalCreateIntegrationTest extends DatabaseTestBase {
     @DisplayName("월간 목표가 생성되면 Id가 Null이 아니다.")
     void whenCreateMonthlyGoalThenIdShouldBeNotNull() {
         final MonthlyGoalCreateCommand createCommand = new MonthlyGoalCreateCommand("메인 페이지 개발 완료", "서비스 출시.", now);
-        assertNotNull(monthlyGoalWriteUseCase.save(dailygeUser, createCommand));
+        assertNotNull(monthlyGoalWriteService.save(dailygeUser, createCommand));
     }
 }

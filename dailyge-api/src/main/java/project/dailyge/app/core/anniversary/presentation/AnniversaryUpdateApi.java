@@ -7,13 +7,13 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.OK;
+import project.dailyge.app.common.annotation.LoginUser;
 import project.dailyge.app.common.annotation.PresentationLayer;
-import project.dailyge.app.common.auth.DailygeUser;
-import project.dailyge.app.common.auth.LoginUser;
 import project.dailyge.app.common.response.ApiResponse;
 import project.dailyge.app.core.anniversary.facade.AnniversaryFacade;
 import project.dailyge.app.core.anniversary.presentation.request.AnniversaryUpdateRequest;
 import project.dailyge.app.core.anniversary.presentation.response.AnniversaryCreateResponse;
+import project.dailyge.app.core.common.auth.DailygeUser;
 
 @RequiredArgsConstructor
 @RequestMapping(path = "/api/anniversaries")

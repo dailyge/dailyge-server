@@ -11,7 +11,7 @@ import org.redisson.api.RedissonClient;
 import org.redisson.client.RedisException;
 
 import project.dailyge.app.common.exception.CommonException;
-import project.dailyge.app.core.common.external.conccurent.LockService;
+import project.dailyge.app.core.common.external.redis.LockService;
 import project.dailyge.lock.LockUseCase;
 
 @DisplayName("[UnitTest] RedisUtils 단위 테스트")

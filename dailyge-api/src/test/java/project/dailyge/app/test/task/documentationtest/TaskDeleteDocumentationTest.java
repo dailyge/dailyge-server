@@ -9,8 +9,8 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.document;
 import org.springframework.restdocs.restassured.RestDocumentationFilter;
 import project.dailyge.app.common.DatabaseTestBase;
-import project.dailyge.app.core.task.application.TaskReadUseCase;
-import project.dailyge.app.core.task.application.TaskWriteUseCase;
+import project.dailyge.app.core.task.application.TaskReadService;
+import project.dailyge.app.core.task.application.TaskWriteService;
 import project.dailyge.app.core.task.facade.TaskFacade;
 import project.dailyge.app.core.task.presentation.requesst.TaskCreateRequest;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskDeleteSnippet.createTaskDeleteFilter;
@@ -28,10 +28,10 @@ class TaskDeleteDocumentationTest extends DatabaseTestBase {
     private TaskFacade taskFacade;
 
     @Autowired
-    private TaskWriteUseCase taskWriteUseCase;
+    private TaskWriteService taskWriteService;
 
     @Autowired
-    private TaskReadUseCase taskReadUseCase;
+    private TaskReadService taskReadService;
 
     @BeforeEach
     void setUp() {
@@ -45,7 +45,7 @@ class TaskDeleteDocumentationTest extends DatabaseTestBase {
         final TaskCreateRequest request = new TaskCreateRequest(
             "주간 미팅", "Backend 팀과 Api 스펙 정의", BLUE, now
         );
-        final Long newTaskId = taskWriteUseCase.save(dailygeUser, request.toCommand());
+        final Long newTaskId = taskWriteService.save(dailygeUser, request.toCommand());
 
         given(this.specification)
             .relaxedHTTPSValidation()
@@ -70,7 +70,7 @@ class TaskDeleteDocumentationTest extends DatabaseTestBase {
         final TaskCreateRequest request = new TaskCreateRequest(
             "주간 미팅", "Backend 팀과 Api 스펙 정의", BLUE, now
         );
-        final Long newTaskId = taskWriteUseCase.save(dailygeUser, request.toCommand());
+        final Long newTaskId = taskWriteService.save(dailygeUser, request.toCommand());
         final RestDocumentationFilter filter = createTaskDeleteFilter(
             createIdentifier("MonthlyTaskDelete", 204)
         );

@@ -1,6 +1,6 @@
 package project.dailyge.app.core.anniversary.application;
 
-import project.dailyge.app.common.auth.DailygeUser;
+import project.dailyge.app.core.common.auth.DailygeUser;
 import project.dailyge.entity.anniversary.AnniversaryJpaEntity;
 
 import java.time.LocalDate;

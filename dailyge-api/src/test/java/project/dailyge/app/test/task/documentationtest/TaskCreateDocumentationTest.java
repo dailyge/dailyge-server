@@ -9,7 +9,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.document;
 import org.springframework.restdocs.restassured.RestDocumentationFilter;
 import project.dailyge.app.common.DatabaseTestBase;
-import project.dailyge.app.core.task.application.TaskReadUseCase;
+import project.dailyge.app.core.task.application.TaskReadService;
 import project.dailyge.app.core.task.facade.TaskFacade;
 import project.dailyge.app.core.task.presentation.requesst.TaskCreateRequest;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskCreateSnippet.createTasksFilter;
@@ -28,7 +28,7 @@ class TaskCreateDocumentationTest extends DatabaseTestBase {
     private TaskFacade taskFacade;
 
     @Autowired
-    private TaskReadUseCase taskReadUseCase;
+    private TaskReadService taskReadService;
 
     @BeforeEach
     void setUp() {

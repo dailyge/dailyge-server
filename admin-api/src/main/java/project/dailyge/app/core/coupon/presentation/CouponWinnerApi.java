@@ -5,23 +5,22 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.OK;
 import project.dailyge.app.common.annotation.PresentationLayer;
 import project.dailyge.app.common.response.ApiResponse;
-import project.dailyge.app.core.coupon.application.facade.CouponFacade;
+import project.dailyge.app.core.coupon.application.CouponEventWriteService;
 import project.dailyge.app.core.coupon.presentation.request.CouponWinnerRequest;
-
-import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.OK;
 
 @PresentationLayer
 @RequiredArgsConstructor
 @RequestMapping("/api/coupons")
 public class CouponWinnerApi {
 
-    private final CouponFacade couponFacade;
+    private final CouponEventWriteService couponEventWriteService;
 
     @PostMapping(path = "/winners")
     public ApiResponse<Void> findWinners(@Valid @RequestBody final CouponWinnerRequest request) {
-        couponFacade.pickWinners(request.winnerCount(), request.eventId());
+        couponEventWriteService.pickWinners(request.winnerCount(), request.eventId());
         return ApiResponse.from(OK);
     }
 }

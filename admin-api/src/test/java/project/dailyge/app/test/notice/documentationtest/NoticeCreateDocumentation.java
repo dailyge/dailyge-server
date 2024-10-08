@@ -12,7 +12,7 @@ import project.dailyge.app.common.auth.DailygeToken;
 import project.dailyge.app.common.auth.TokenProvider;
 import project.dailyge.app.core.notice.presentation.request.NoticeCreateRequest;
 import project.dailyge.core.cache.user.UserCache;
-import project.dailyge.core.cache.user.UserCacheWriteUseCase;
+import project.dailyge.core.cache.user.UserCacheWriteService;
 import project.dailyge.entity.user.Role;
 
 import static io.restassured.RestAssured.given;
@@ -36,7 +36,7 @@ class NoticeCreateDocumentation extends DatabaseTestBase {
     private NoticeCreateRequest request;
 
     @Autowired
-    private UserCacheWriteUseCase userCacheWriteUseCase;
+    private UserCacheWriteService userCacheWriteService;
 
     @Autowired
     private TokenProvider tokenProvider;
@@ -44,7 +44,7 @@ class NoticeCreateDocumentation extends DatabaseTestBase {
     @BeforeEach
     void setUp() {
         final UserCache adminUser = new UserCache(ADMIN_ID, "admin", ADMIN_EMAIL, "", Role.ADMIN.name());
-        userCacheWriteUseCase.save(adminUser);
+        userCacheWriteService.save(adminUser);
         token = tokenProvider.createToken(ADMIN_ID);
         request = new NoticeCreateRequest("공지사항 제목", CONTENT, UPDATE);
         adminCookie = new Cookie.Builder("Access-Token", token.accessToken()).build();

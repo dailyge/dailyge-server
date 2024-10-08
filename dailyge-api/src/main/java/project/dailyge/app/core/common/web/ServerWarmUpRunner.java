@@ -10,7 +10,7 @@ import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import project.dailyge.app.common.auth.DailygeUser;
+import project.dailyge.app.core.common.auth.DailygeUser;
 import project.dailyge.app.core.coupon.presentation.CouponReadApi;
 import project.dailyge.app.core.event.presentation.EventCreateApi;
 import static project.dailyge.entity.user.Role.NORMAL;

@@ -28,6 +28,7 @@ class RetrospectUpdateIntegrationTest extends DatabaseTestBase {
     private static final String UPDATE_TITLE = "회고 제목 수정";
     private static final String UPDATE_CONTENT = "회고 내용 수정";
     private RetrospectCreateCommand createCommand;
+    private RetrospectUpdateCommand updateCommand;
     private LocalDate now;
 
     @Autowired
@@ -40,6 +41,7 @@ class RetrospectUpdateIntegrationTest extends DatabaseTestBase {
     void setUp() {
         now = LocalDate.now();
         createCommand = new RetrospectCreateCommand("회고 제목", "회고 내용", now.atTime(0, 0, 0, 0), false);
+        updateCommand = new RetrospectUpdateCommand(UPDATE_TITLE, UPDATE_CONTENT, now.atTime(0, 0, 0, 0), true);
     }
 
     @Test
@@ -47,9 +49,6 @@ class RetrospectUpdateIntegrationTest extends DatabaseTestBase {
     void whenUpdateRetrospectThenResultShouldBeUpdate() {
         final LocalDate now = LocalDate.now();
         final Long retrospectId = retrospectWriteService.save(dailygeUser, createCommand);
-
-        final RetrospectUpdateCommand updateCommand = new RetrospectUpdateCommand(
-            UPDATE_TITLE, UPDATE_CONTENT, now.atTime(0, 0, 0, 0), true);
 
         retrospectWriteService.update(dailygeUser, updateCommand, retrospectId);
         final RetrospectJpaEntity findRetrospect = retrospectReadService.findById(retrospectId);
@@ -66,11 +65,8 @@ class RetrospectUpdateIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("권한이 존재하지 않으면, CommonException이 발생한다.")
     void whenUnAuthorizedThenCommonExceptionShouldBeHappen() {
-        final LocalDate now = LocalDate.now();
         final Long retrospectId = retrospectWriteService.save(dailygeUser, createCommand);
 
-        final RetrospectUpdateCommand updateCommand = new RetrospectUpdateCommand(
-            UPDATE_TITLE, UPDATE_CONTENT, now.atTime(0, 0, 0, 0), true);
         final DailygeUser otherUser = new DailygeUser(Long.MAX_VALUE, NORMAL);
 
         assertThatThrownBy(() -> retrospectWriteService.update(otherUser, updateCommand, retrospectId))
@@ -81,11 +77,8 @@ class RetrospectUpdateIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("관리자가 사용자의 회고를 수정하면, CommonException이 발생하지 않는다.")
     void whenUpdateOtherUserRetrospectByAdminThenExceptionShouldNotBeHappen() {
-        final LocalDate now = LocalDate.now();
         final Long retrospectId = retrospectWriteService.save(dailygeUser, createCommand);
 
-        final RetrospectUpdateCommand updateCommand = new RetrospectUpdateCommand(
-            UPDATE_TITLE, UPDATE_CONTENT, now.atTime(0, 0, 0, 0), true);
         final DailygeUser adminUser = new DailygeUser(Long.MAX_VALUE, ADMIN);
 
         assertDoesNotThrow(() -> retrospectWriteService.update(adminUser, updateCommand, retrospectId));

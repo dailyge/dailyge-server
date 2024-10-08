@@ -12,6 +12,7 @@ import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_US
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_USER_TOKEN;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
 import project.dailyge.app.common.annotation.LoginUser;
+import project.dailyge.app.common.auth.TokenProvider;
 import project.dailyge.app.common.exception.CommonException;
 import project.dailyge.app.core.common.web.Cookies;
 import project.dailyge.core.cache.user.UserCache;

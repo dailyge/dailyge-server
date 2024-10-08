@@ -2,17 +2,17 @@ package project.dailyge.app.core.user.presentation;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import static org.springframework.http.HttpHeaders.SET_COOKIE;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import project.dailyge.app.common.annotation.PresentationLayer;
-import project.dailyge.app.common.auth.DailygeUser;
-import project.dailyge.app.common.auth.LoginUser;
-import project.dailyge.app.common.response.ApiResponse;
-import project.dailyge.app.core.user.facade.UserFacade;
-import static org.springframework.http.HttpHeaders.SET_COOKIE;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.NO_CONTENT;
+import project.dailyge.app.common.annotation.LoginUser;
+import project.dailyge.app.common.annotation.PresentationLayer;
+import project.dailyge.app.common.response.ApiResponse;
 import static project.dailyge.app.common.utils.CookieUtils.clearResponseCookie;
+import project.dailyge.app.core.common.auth.DailygeUser;
+import project.dailyge.app.core.user.facade.UserFacade;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/users")

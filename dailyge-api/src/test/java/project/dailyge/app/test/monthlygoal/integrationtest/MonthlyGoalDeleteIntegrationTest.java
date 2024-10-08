@@ -6,8 +6,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import project.dailyge.app.common.DatabaseTestBase;
-import project.dailyge.app.core.monthlygoal.application.MonthlyGoalReadUseCase;
-import project.dailyge.app.core.monthlygoal.application.MonthlyGoalWriteUseCase;
+import project.dailyge.app.core.monthlygoal.application.MonthlyGoalReadService;
+import project.dailyge.app.core.monthlygoal.application.MonthlyGoalWriteService;
 import project.dailyge.app.core.monthlygoal.application.command.MonthlyGoalCreateCommand;
 import project.dailyge.app.core.monthlygoal.exception.MonthlyGoalCodeAndMessage;
 import project.dailyge.app.core.monthlygoal.exception.MonthlyGoalTypeException;
@@ -18,10 +18,10 @@ import java.time.LocalDate;
 class MonthlyGoalDeleteIntegrationTest extends DatabaseTestBase {
 
     @Autowired
-    private MonthlyGoalReadUseCase monthlyGoalReadUseCase;
+    private MonthlyGoalReadService monthlyGoalReadService;
 
     @Autowired
-    private MonthlyGoalWriteUseCase monthlyGoalWriteUseCase;
+    private MonthlyGoalWriteService monthlyGoalWriteService;
 
     @BeforeEach
     void setUp() {
@@ -32,10 +32,10 @@ class MonthlyGoalDeleteIntegrationTest extends DatabaseTestBase {
     @DisplayName("삭제된 월간 목표를 조회하면 MonthlyGoalTypeException이 발생한다.")
     void whenSearchDeletedMonthlyGoalThenNotFoundExceptionShouldBeHappen() {
         final MonthlyGoalCreateCommand createCommand = new MonthlyGoalCreateCommand("메인 페이지 개발 완료", "서비스 출시.", now);
-        final Long newMonthlyGoalId = monthlyGoalWriteUseCase.save(dailygeUser, createCommand);
-        monthlyGoalWriteUseCase.delete(dailygeUser, newMonthlyGoalId);
+        final Long newMonthlyGoalId = monthlyGoalWriteService.save(dailygeUser, createCommand);
+        monthlyGoalWriteService.delete(dailygeUser, newMonthlyGoalId);
 
-        assertThatThrownBy(() -> monthlyGoalReadUseCase.findById(newMonthlyGoalId))
+        assertThatThrownBy(() -> monthlyGoalReadService.findById(newMonthlyGoalId))
             .isInstanceOf(MonthlyGoalTypeException.class)
             .hasMessage(MonthlyGoalCodeAndMessage.MONTHLY_GOAL_NOT_FOUND.getMessage());
     }

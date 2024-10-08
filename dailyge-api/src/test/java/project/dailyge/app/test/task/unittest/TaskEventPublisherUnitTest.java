@@ -10,7 +10,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.openMocks;
 import org.springframework.context.ApplicationEventPublisher;
-import project.dailyge.app.core.event.application.EventWriteUseCase;
+import project.dailyge.app.core.event.application.EventWriteService;
 import project.dailyge.app.core.task.event.TaskEventPublisher;
 import static project.dailyge.document.common.UuidGenerator.createTimeBasedUUID;
 import static project.dailyge.entity.common.EventType.CREATE;
@@ -25,14 +25,14 @@ class TaskEventPublisherUnitTest {
     private ApplicationEventPublisher eventPublisher;
 
     @Mock
-    private EventWriteUseCase eventWriteUseCase;
+    private EventWriteService eventWriteService;
 
     private TaskEventPublisher taskEventPublisher;
 
     @BeforeEach
     void setUp() {
         openMocks(this);
-        taskEventPublisher = new TaskEventPublisher(eventPublisher, eventWriteUseCase);
+        taskEventPublisher = new TaskEventPublisher(eventPublisher, eventWriteService);
     }
 
     @Test
@@ -47,7 +47,7 @@ class TaskEventPublisherUnitTest {
 
         taskEventPublisher.publishInternalEvent(thirdEvent);
 
-        verify(eventWriteUseCase, times(1))
+        verify(eventWriteService, times(1))
             .saveDeadLetter(thirdEvent);
         verify(eventPublisher, never())
             .publishEvent(any());
@@ -62,7 +62,7 @@ class TaskEventPublisherUnitTest {
 
         taskEventPublisher.publishInternalEvent(event);
 
-        verify(eventWriteUseCase, never()).saveDeadLetter(any());
+        verify(eventWriteService, never()).saveDeadLetter(any());
         verify(eventPublisher, times(1)).publishEvent(any(TaskEvent.class));
     }
 }

@@ -9,8 +9,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import project.dailyge.app.common.DatabaseTestBase;
-import project.dailyge.app.core.monthlygoal.application.MonthlyGoalReadUseCase;
-import project.dailyge.app.core.monthlygoal.application.MonthlyGoalWriteUseCase;
+import project.dailyge.app.core.monthlygoal.application.MonthlyGoalReadService;
+import project.dailyge.app.core.monthlygoal.application.MonthlyGoalWriteService;
 import project.dailyge.app.core.monthlygoal.application.command.MonthlyGoalCreateCommand;
 import project.dailyge.app.core.monthlygoal.application.command.MonthlyGoalStatusUpdateCommand;
 import project.dailyge.app.core.monthlygoal.application.command.MonthlyGoalUpdateCommand;
@@ -24,10 +24,10 @@ import java.time.LocalDate;
 class MonthlyGoalUpdateIntegrationTest extends DatabaseTestBase {
 
     @Autowired
-    private MonthlyGoalReadUseCase monthlyGoalReadUseCase;
+    private MonthlyGoalReadService monthlyGoalReadService;
 
     @Autowired
-    private MonthlyGoalWriteUseCase monthlyGoalWriteUseCase;
+    private MonthlyGoalWriteService monthlyGoalWriteService;
 
     @BeforeEach
     void setUp() {
@@ -38,11 +38,11 @@ class MonthlyGoalUpdateIntegrationTest extends DatabaseTestBase {
     @DisplayName("MonthlyGoal 상태를 업데이트하면, 상태가 변경된다.")
     void whenUpdateMonthlyGoalStatusThenStatusShouldBeChanged() {
         final MonthlyGoalCreateCommand createCommand = new MonthlyGoalCreateCommand("메인 페이지 개발 완료", "서비스 출시.", now);
-        final Long newMonthlyGoalId = monthlyGoalWriteUseCase.save(dailygeUser, createCommand);
+        final Long newMonthlyGoalId = monthlyGoalWriteService.save(dailygeUser, createCommand);
         final MonthlyGoalStatusUpdateCommand statusUpdateCommand = new MonthlyGoalStatusUpdateCommand(true);
-        monthlyGoalWriteUseCase.update(dailygeUser, newMonthlyGoalId, statusUpdateCommand);
+        monthlyGoalWriteService.update(dailygeUser, newMonthlyGoalId, statusUpdateCommand);
 
-        final MonthlyGoalJpaEntity findMonthlyGoal = monthlyGoalReadUseCase.findById(newMonthlyGoalId);
+        final MonthlyGoalJpaEntity findMonthlyGoal = monthlyGoalReadService.findById(newMonthlyGoalId);
         assertTrue(findMonthlyGoal.isDone());
     }
 
@@ -50,13 +50,13 @@ class MonthlyGoalUpdateIntegrationTest extends DatabaseTestBase {
     @DisplayName("MonthlyGoal 내용을 업데이트하면, 내용이 변경된다.")
     void whenUpdateMonthlyGoalThenContentsShouldBeChanged() {
         final MonthlyGoalCreateCommand createCommand = new MonthlyGoalCreateCommand("메인 페이지 개발 완료", "서비스 출시.", now);
-        final Long newMonthlyGoalId = monthlyGoalWriteUseCase.save(dailygeUser, createCommand);
+        final Long newMonthlyGoalId = monthlyGoalWriteService.save(dailygeUser, createCommand);
         final String changedTitle = "마라톤 참여";
         final String changedContent = "가족들과 한강 마라톤 참여";
         final MonthlyGoalUpdateCommand statusUpdateCommand = new MonthlyGoalUpdateCommand(changedTitle, changedContent);
-        monthlyGoalWriteUseCase.update(dailygeUser, newMonthlyGoalId, statusUpdateCommand);
+        monthlyGoalWriteService.update(dailygeUser, newMonthlyGoalId, statusUpdateCommand);
 
-        final MonthlyGoalJpaEntity findMonthlyGoal = monthlyGoalReadUseCase.findById(newMonthlyGoalId);
+        final MonthlyGoalJpaEntity findMonthlyGoal = monthlyGoalReadService.findById(newMonthlyGoalId);
         assertAll(
             () -> assertEquals(changedTitle, findMonthlyGoal.getTitle()),
             () -> assertEquals(changedContent, findMonthlyGoal.getContent())
@@ -69,7 +69,7 @@ class MonthlyGoalUpdateIntegrationTest extends DatabaseTestBase {
         final Long invalidId = Long.MAX_VALUE;
         final MonthlyGoalStatusUpdateCommand statusUpdateCommand = new MonthlyGoalStatusUpdateCommand(true);
 
-        assertThatThrownBy(() -> monthlyGoalWriteUseCase.update(dailygeUser, invalidId, statusUpdateCommand))
+        assertThatThrownBy(() -> monthlyGoalWriteService.update(dailygeUser, invalidId, statusUpdateCommand))
             .isInstanceOf(MonthlyGoalTypeException.class)
             .hasMessage(MonthlyGoalCodeAndMessage.MONTHLY_GOAL_NOT_FOUND.getMessage());
     }
@@ -82,7 +82,7 @@ class MonthlyGoalUpdateIntegrationTest extends DatabaseTestBase {
         final String changedContent = "가족들과 한강 마라톤 참여";
         final MonthlyGoalUpdateCommand statusUpdateCommand = new MonthlyGoalUpdateCommand(changedTitle, changedContent);
 
-        assertThatThrownBy(() -> monthlyGoalWriteUseCase.update(dailygeUser, invalidId, statusUpdateCommand))
+        assertThatThrownBy(() -> monthlyGoalWriteService.update(dailygeUser, invalidId, statusUpdateCommand))
             .isInstanceOf(MonthlyGoalTypeException.class)
             .hasMessage(MonthlyGoalCodeAndMessage.MONTHLY_GOAL_NOT_FOUND.getMessage());
     }

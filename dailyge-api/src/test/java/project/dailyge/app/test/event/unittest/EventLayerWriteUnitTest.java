@@ -13,7 +13,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.openMocks;
-import project.dailyge.app.core.event.application.EventWriteUseCase;
+import project.dailyge.app.core.event.application.EventWriteService;
 import project.dailyge.app.core.user.event.UserEventListener;
 import project.dailyge.app.core.user.facade.UserFacade;
 import project.dailyge.document.event.EventDocumentWriteRepository;
@@ -33,7 +33,7 @@ class EventLayerWriteUnitTest {
     private EventDocumentWriteRepository eventDocumentWriteRepository;
 
     @Mock
-    private EventWriteUseCase eventWriteUseCase;
+    private EventWriteService eventWriteService;
 
     @Mock
     private EventPublisher<UserEvent> userEventPublisher;
@@ -87,7 +87,7 @@ class EventLayerWriteUnitTest {
 
         latch.await(3, SECONDS);
 
-        verify(eventWriteUseCase, never()).saveDeadLetter(any(UserEvent.class));
+        verify(eventWriteService, never()).saveDeadLetter(any(UserEvent.class));
         verify(eventDocumentWriteRepository, atLeastOnce()).save(any());
     }
 }

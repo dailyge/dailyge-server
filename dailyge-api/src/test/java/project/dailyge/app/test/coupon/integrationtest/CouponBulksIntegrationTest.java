@@ -10,7 +10,7 @@ import project.dailyge.app.core.coupon.persistence.CouponEventParticipant;
 import project.dailyge.app.core.coupon.persistence.CouponInMemoryRepository;
 import project.dailyge.core.cache.coupon.CouponEvent;
 import project.dailyge.core.cache.coupon.CouponEventReadRepository;
-import project.dailyge.core.cache.coupon.CouponEventWriteUseCase;
+import project.dailyge.core.cache.coupon.CouponEventWriteService;
 import project.dailyge.document.common.UuidGenerator;
 
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class CouponBulksIntegrationTest extends DatabaseTestBase {
 
     @Autowired
-    private CouponEventWriteUseCase couponEventWriteUseCase;
+    private CouponEventWriteService couponEventWriteService;
 
     @Autowired
     private CouponInMemoryRepository couponInMemoryRepository;
@@ -54,7 +54,7 @@ class CouponBulksIntegrationTest extends DatabaseTestBase {
             couponInMemoryRepository.save(new CouponEventParticipant(id, timestamp));
             expectedCouponEvents.add(new CouponEvent(id, timestamp));
         }
-        couponEventWriteUseCase.saveBulks();
+        couponEventWriteService.saveBulks();
         assertEquals(0, couponInMemoryRepository.count());
         for (long id = 1; id <= maxId; id++) {
             assertTrue(couponCacheReadDao.existsByUserId(id, 1L));
@@ -77,7 +77,7 @@ class CouponBulksIntegrationTest extends DatabaseTestBase {
                 expectedCouponEvents.add(new CouponEvent(id, timestamp));
             }
             expectedCouponBulksQueues.add(expectedCouponEvents);
-            couponEventWriteUseCase.saveBulks();
+            couponEventWriteService.saveBulks();
         }
         for (int number = 1; number <= totalCount; number++) {
             assertEquals(expectedCouponBulksQueues.get(number - 1), couponCacheReadDao.findBulks(number, (int) maxId, 1L));

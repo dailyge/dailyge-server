@@ -6,11 +6,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.CREATED;
+import project.dailyge.app.common.annotation.LoginUser;
 import project.dailyge.app.common.annotation.PresentationLayer;
-import project.dailyge.app.common.auth.DailygeUser;
-import project.dailyge.app.common.auth.LoginUser;
 import project.dailyge.app.common.response.ApiResponse;
-import project.dailyge.app.core.task.application.TaskWriteUseCase;
+import project.dailyge.app.core.common.auth.DailygeUser;
+import project.dailyge.app.core.task.application.TaskWriteService;
 import project.dailyge.app.core.task.facade.TaskFacade;
 import project.dailyge.app.core.task.presentation.requesst.MonthlyTasksCreateRequest;
 import project.dailyge.app.core.task.presentation.requesst.TaskCreateRequest;
@@ -22,7 +22,7 @@ import project.dailyge.app.core.task.presentation.response.TaskCreateResponse;
 public class TaskCreateApi {
 
     private final TaskFacade taskFacade;
-    private final TaskWriteUseCase taskWriteUseCase;
+    private final TaskWriteService taskWriteService;
 
     @PostMapping(path = {"/monthly-tasks"})
     public ApiResponse<Void> createMonthlyTasks(
@@ -38,7 +38,7 @@ public class TaskCreateApi {
         @LoginUser final DailygeUser dailygeUser,
         @Valid @RequestBody final TaskCreateRequest request
     ) {
-        final Long newTaskId = taskWriteUseCase.save(dailygeUser, request.toCommand());
+        final Long newTaskId = taskWriteService.save(dailygeUser, request.toCommand());
         final TaskCreateResponse payload = new TaskCreateResponse(newTaskId);
         return ApiResponse.from(CREATED, payload);
     }

@@ -3,7 +3,7 @@ package project.dailyge.app.test.coupon.unittest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import project.dailyge.app.core.coupon.application.service.CouponEventValidator;
+import project.dailyge.app.core.coupon.application.usecase.CouponEventValidator;
 import project.dailyge.app.core.coupon.exception.CouponTypeException;
 import project.dailyge.core.cache.coupon.CouponEventReadRepository;
 

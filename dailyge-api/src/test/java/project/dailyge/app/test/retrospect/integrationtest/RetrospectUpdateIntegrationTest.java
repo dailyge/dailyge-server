@@ -1,26 +1,27 @@
 package project.dailyge.app.test.retrospect.integrationtest;
 
-import java.time.LocalDate;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import project.dailyge.app.common.DatabaseTestBase;
-import project.dailyge.app.common.auth.DailygeUser;
-import project.dailyge.app.common.exception.CommonException;
-import project.dailyge.app.core.retrospect.application.RetrospectReadService;
-import project.dailyge.app.core.retrospect.application.RetrospectWriteService;
-import project.dailyge.app.core.retrospect.application.command.RetrospectCreateCommand;
-import project.dailyge.app.core.retrospect.application.command.RetrospectUpdateCommand;
-import project.dailyge.entity.retrospect.RetrospectJpaEntity;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
+import project.dailyge.app.common.DatabaseTestBase;
+import project.dailyge.app.common.exception.CommonException;
+import project.dailyge.app.core.common.auth.DailygeUser;
+import project.dailyge.app.core.retrospect.application.RetrospectReadService;
+import project.dailyge.app.core.retrospect.application.RetrospectWriteService;
+import project.dailyge.app.core.retrospect.application.command.RetrospectCreateCommand;
+import project.dailyge.app.core.retrospect.application.command.RetrospectUpdateCommand;
+import project.dailyge.entity.retrospect.RetrospectJpaEntity;
 import static project.dailyge.entity.user.Role.ADMIN;
 import static project.dailyge.entity.user.Role.NORMAL;
+
+import java.time.LocalDate;
 
 @DisplayName("[IntegrationTest] 회고 수정 통합 테스트")
 class RetrospectUpdateIntegrationTest extends DatabaseTestBase {

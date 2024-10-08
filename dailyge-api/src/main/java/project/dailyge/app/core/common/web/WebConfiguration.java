@@ -1,4 +1,4 @@
-package project.dailyge.app.common.configuration.web;
+package project.dailyge.app.core.common.web;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -9,12 +9,10 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import project.dailyge.app.common.auth.TokenProvider;
-import project.dailyge.app.core.common.web.AuthArgumentResolver;
-import project.dailyge.app.core.common.web.CouponApplyInterceptor;
-import project.dailyge.app.core.common.web.CursorPagingArgumentResolver;
-import project.dailyge.app.core.common.web.LoginInterceptor;
-import project.dailyge.core.cache.user.UserCacheReadUseCase;
+import project.dailyge.app.core.common.auth.AuthArgumentResolver;
+import project.dailyge.app.core.common.auth.TokenProvider;
+import project.dailyge.app.core.common.auth.LoginInterceptor;
+import project.dailyge.core.cache.user.UserCacheReadService;
 
 import java.util.List;
 
@@ -22,20 +20,20 @@ import java.util.List;
 public class WebConfiguration implements WebMvcConfigurer {
 
     private final String env;
-    private final UserCacheReadUseCase userCacheReadUseCase;
+    private final UserCacheReadService userCacheReadService;
     private final TokenProvider tokenProvider;
     private final LoginInterceptor loginInterceptor;
     private final CouponApplyInterceptor couponApplyInterceptor;
 
     public WebConfiguration(
         @Value("${env}") final String env,
-        final UserCacheReadUseCase userCacheReadUseCase,
+        final UserCacheReadService userCacheReadService,
         final TokenProvider tokenProvider,
         final LoginInterceptor loginInterceptor,
         final CouponApplyInterceptor couponApplyInterceptor
     ) {
         this.env = env;
-        this.userCacheReadUseCase = userCacheReadUseCase;
+        this.userCacheReadService = userCacheReadService;
         this.tokenProvider = tokenProvider;
         this.loginInterceptor = loginInterceptor;
         this.couponApplyInterceptor = couponApplyInterceptor;
@@ -43,7 +41,7 @@ public class WebConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addArgumentResolvers(final List<HandlerMethodArgumentResolver> resolvers) {
-        resolvers.add(new AuthArgumentResolver(env, userCacheReadUseCase, tokenProvider));
+        resolvers.add(new AuthArgumentResolver(env, userCacheReadService, tokenProvider));
         resolvers.add(new CursorPagingArgumentResolver());
     }
 

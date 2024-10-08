@@ -1,4 +1,4 @@
-package project.dailyge.app.core.common.web;
+package project.dailyge.app.core.common.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
@@ -12,11 +12,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
-import project.dailyge.app.common.auth.DailygeToken;
-import project.dailyge.app.common.auth.TokenProvider;
+import project.dailyge.app.core.common.web.Cookies;
 import project.dailyge.app.core.user.external.oauth.TokenManager;
 import project.dailyge.core.cache.user.UserCache;
-import project.dailyge.core.cache.user.UserCacheReadUseCase;
+import project.dailyge.core.cache.user.UserCacheReadService;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_REQUEST;
@@ -27,7 +26,7 @@ import static project.dailyge.app.common.utils.CookieUtils.createCookie;
 @RequiredArgsConstructor
 public class LoginInterceptor implements HandlerInterceptor {
 
-    private final UserCacheReadUseCase userCacheReadUseCase;
+    private final UserCacheReadService userCacheReadService;
     private final TokenProvider tokenProvider;
     private final TokenManager tokenManager;
     private final ObjectMapper objectMapper;
@@ -45,7 +44,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             }
             final String accessToken = cookies.getValueByKey("Access-Token");
             final Long userId = tokenProvider.getUserId(accessToken);
-            if (!userCacheReadUseCase.existsById(userId)) {
+            if (!userCacheReadService.existsById(userId)) {
                 return true;
             }
             setLoggedInResponse(request, response, accessToken);
@@ -67,7 +66,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             final Claims claims = expiredJwtException.getClaims();
             final String encryptedUserId = claims.get("id", String.class);
             final Long userId = tokenProvider.decryptUserId(encryptedUserId);
-            final UserCache userCache = userCacheReadUseCase.findById(userId);
+            final UserCache userCache = userCacheReadService.findById(userId);
             if (userCache == null) {
                 return true;
             }

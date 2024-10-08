@@ -24,12 +24,12 @@ import org.springframework.transaction.annotation.Transactional;
 import project.dailyge.app.DailygeApplication;
 import static project.dailyge.app.common.RestAssureConfig.initObjectMapper;
 import static project.dailyge.app.common.RestAssureConfig.initSpecificationConfig;
-import project.dailyge.app.common.auth.DailygeUser;
-import project.dailyge.app.core.user.application.UserWriteUseCase;
+import project.dailyge.app.core.common.auth.DailygeUser;
+import project.dailyge.app.core.user.application.UserWriteService;
 import static project.dailyge.app.test.user.fixture.UserFixture.EMAIL;
 import static project.dailyge.app.test.user.fixture.UserFixture.createUser;
 import project.dailyge.core.cache.user.UserCache;
-import project.dailyge.core.cache.user.UserCacheWriteUseCase;
+import project.dailyge.core.cache.user.UserCacheWriteService;
 import static project.dailyge.entity.user.Role.NORMAL;
 import project.dailyge.entity.user.UserJpaEntity;
 
@@ -59,10 +59,10 @@ public abstract class DatabaseTestBase {
     private DatabaseInitializer databaseInitialization;
 
     @Autowired
-    private UserWriteUseCase userWriteUseCase;
+    private UserWriteService userWriteService;
 
     @Autowired
-    private UserCacheWriteUseCase userCacheWriteUseCase;
+    private UserCacheWriteService userCacheWriteService;
 
     protected RequestSpecification specification;
     protected ObjectMapper objectMapper;
@@ -84,7 +84,7 @@ public abstract class DatabaseTestBase {
     @Transactional
     void setUp(final RestDocumentationContextProvider restDocumentation) {
         databaseInitialization.initData();
-        persist(createUser(userWriteUseCase.save(EMAIL)));
+        persist(createUser(userWriteService.save(EMAIL)));
         this.specification = initSpecificationConfig(restDocumentation, port);
     }
 
@@ -99,7 +99,7 @@ public abstract class DatabaseTestBase {
 
     @Transactional
     protected void persist(final UserJpaEntity user) {
-        userWriteUseCase.save(user);
+        userWriteService.save(user);
         newUser = user;
         final UserCache userCache = new UserCache(
             user.getId(),
@@ -108,7 +108,7 @@ public abstract class DatabaseTestBase {
             user.getProfileImageUrl(),
             user.getRoleAsString()
         );
-        userCacheWriteUseCase.save(userCache);
+        userCacheWriteService.save(userCache);
         dailygeUser = new DailygeUser(user.getId(), user.getRole());
     }
 

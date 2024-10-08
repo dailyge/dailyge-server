@@ -1,4 +1,4 @@
-package project.dailyge.app.core.common.web;
+package project.dailyge.app.core.common.auth;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,27 +11,26 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_USER_ID;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_USER_TOKEN;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
-import project.dailyge.app.common.auth.DailygeUser;
-import project.dailyge.app.common.auth.LoginUser;
-import project.dailyge.app.common.auth.TokenProvider;
+import project.dailyge.app.common.annotation.LoginUser;
 import project.dailyge.app.common.exception.CommonException;
+import project.dailyge.app.core.common.web.Cookies;
 import project.dailyge.core.cache.user.UserCache;
-import project.dailyge.core.cache.user.UserCacheReadUseCase;
+import project.dailyge.core.cache.user.UserCacheReadService;
 import project.dailyge.entity.user.Role;
 
 public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
 
     private final String env;
-    private final UserCacheReadUseCase userCacheReadUseCase;
+    private final UserCacheReadService userCacheReadService;
     private final TokenProvider tokenProvider;
 
     public AuthArgumentResolver(
         final String env,
-        final UserCacheReadUseCase userCacheReadUseCase,
+        final UserCacheReadService userCacheReadService,
         final TokenProvider tokenProvider
     ) {
         this.env = env;
-        this.userCacheReadUseCase = userCacheReadUseCase;
+        this.userCacheReadService = userCacheReadService;
         this.tokenProvider = tokenProvider;
     }
 
@@ -55,7 +54,7 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
             if (userId == null) {
                 throw CommonException.from(INVALID_USER_ID);
             }
-            final UserCache user = userCacheReadUseCase.findById(userId);
+            final UserCache user = userCacheReadService.findById(userId);
             final DailygeUser dailygeUser = new DailygeUser(user.getId(), Role.valueOf(user.getRole()));
             MDC.put("userId", dailygeUser.getIdAsString());
             return dailygeUser;

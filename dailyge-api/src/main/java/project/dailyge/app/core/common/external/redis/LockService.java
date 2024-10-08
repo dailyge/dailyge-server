@@ -1,9 +1,8 @@
-package project.dailyge.app.core.common.external.conccurent;
+package project.dailyge.app.core.common.external.redis;
 
 import lombok.RequiredArgsConstructor;
 import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Service;
-import project.dailyge.app.core.common.external.redis.RedisUtils;
 import project.dailyge.lock.Lock;
 import project.dailyge.lock.LockUseCase;
 

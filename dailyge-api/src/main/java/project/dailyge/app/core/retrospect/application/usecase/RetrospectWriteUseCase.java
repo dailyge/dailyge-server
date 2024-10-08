@@ -16,8 +16,8 @@ import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.UN_AUTHORI
 import static project.dailyge.app.core.retrospect.exception.RetrospectCodeAndMessage.RETROSPECT_NOT_FOUND;
 
 @RequiredArgsConstructor
-@ApplicationLayer("RetrospectWriteUserCase")
-public class RetrospectWriteUserCase implements RetrospectWriteService {
+@ApplicationLayer("RetrospectWriteUseCase")
+public class RetrospectWriteUseCase implements RetrospectWriteService {
 
     private final RetrospectEntityWriteRepository retrospectEntityWriteRepository;
     private final RetrospectEntityReadRepository retrospectEntityReadRepository;

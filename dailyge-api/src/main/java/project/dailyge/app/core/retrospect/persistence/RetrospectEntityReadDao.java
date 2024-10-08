@@ -11,7 +11,7 @@ import static project.dailyge.entity.retrospect.QRetrospectJpaEntity.retrospectJ
 
 @RequiredArgsConstructor
 @Repository(value = "RetrospectEntityReadDao")
-public class RetrospectEntityReadDao implements RetrospectEntityReadRepository {
+class RetrospectEntityReadDao implements RetrospectEntityReadRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 

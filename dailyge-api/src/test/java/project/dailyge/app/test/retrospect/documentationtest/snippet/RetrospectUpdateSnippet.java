@@ -11,6 +11,7 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static project.dailyge.app.common.CommonSnippet.COOKIE_HEADER_DESCRIPTORS;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.ERROR_RESPONSE;
 
@@ -28,6 +29,7 @@ public final class RetrospectUpdateSnippet implements RetrospectSnippet {
             identifier,
             ResourceSnippetParameters.builder()
                 .requestHeaders(COOKIE_HEADER_DESCRIPTORS)
+                .pathParameters(RETROSPECT_ID_PATH_PARAMETER_DESCRIPTORS)
                 .requestFields(RETROSPECT_UPDATE_REQUEST_FIELDS)
                 .responseFields(RETROSPECT_UPDATE_RESPONSE_FIELDS)
                 .tag(TAG)
@@ -40,6 +42,7 @@ public final class RetrospectUpdateSnippet implements RetrospectSnippet {
             snippets -> {
                 List.of(
                     requestCookies(TOKEN_COOKIE_DESCRIPTORS),
+                    pathParameters(Arrays.stream(RETROSPECT_ID_PATH_PARAMETER_DESCRIPTORS).toList()),
                     requestFields(Arrays.stream(RETROSPECT_UPDATE_REQUEST_FIELDS).toList()),
                     responseFields(Arrays.stream(RETROSPECT_UPDATE_RESPONSE_FIELDS).toList()),
                     responseFields(Arrays.stream(ERROR_RESPONSE).toList())

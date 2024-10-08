@@ -15,6 +15,7 @@ import static io.restassured.RestAssured.given;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.document;
 import static project.dailyge.app.test.retrospect.documentationtest.snippet.RetrospectSnippet.ACCESS_TOKEN_COOKIE_SNIPPET;
+import static project.dailyge.app.test.retrospect.documentationtest.snippet.RetrospectSnippet.RETROSPECT_PATH_PARAMETER_SNIPPET;
 import static project.dailyge.app.test.retrospect.documentationtest.snippet.RetrospectSnippet.RETROSPECT_UPDATE_REQUEST_SNIPPET;
 import static project.dailyge.app.test.retrospect.documentationtest.snippet.RetrospectSnippet.RETROSPECT_UPDATE_RESPONSE_SNIPPET;
 import static project.dailyge.app.test.retrospect.documentationtest.snippet.RetrospectSnippet.createIdentifier;
@@ -43,6 +44,7 @@ class RetrospectUpdateDocumentationTest extends DatabaseTestBase {
             .relaxedHTTPSValidation()
             .filter(document(IDENTIFIER,
                 ACCESS_TOKEN_COOKIE_SNIPPET,
+                RETROSPECT_PATH_PARAMETER_SNIPPET,
                 RETROSPECT_UPDATE_REQUEST_SNIPPET,
                 RETROSPECT_UPDATE_RESPONSE_SNIPPET
             ))

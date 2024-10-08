@@ -1,4 +1,4 @@
-package project.dailyge.app.test.weeklygoal;
+package project.dailyge.app.test.weeklygoal.integrationtest;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

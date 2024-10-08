@@ -50,7 +50,7 @@ class RetrospectDeleteDocumentationTest extends DatabaseTestBase {
 
     @Test
     @DisplayName("[Swagger] 회고를 삭제하면 204 응답 코드를 받는다.")
-    void whenDeleteRetrospectThenStatusCodeShouldBe_200_Swagger() {
+    void whenDeleteRetrospectThenStatusCodeShouldBe_204_Swagger() {
         final RestDocumentationFilter filter = createDeleteRetrospectFilter(createIdentifier("RetrospectDelete", 204));
 
         given(this.specification)

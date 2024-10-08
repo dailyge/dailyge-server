@@ -63,7 +63,7 @@ class RetrospectDeleteIntegrationTest extends DatabaseTestBase {
 
     @Test
     @DisplayName("관리자가 사용자의 회고를 삭제하면, CommonException이 발생하지 않는다.")
-    void whenUpdateOtherUserRetrospectByAdminThenExceptionShouldNotBeHappen() {
+    void whenDeleteOtherUserRetrospectByAdminThenExceptionShouldNotBeHappen() {
         final Long retrospectId = retrospectWriteService.save(dailygeUser, createCommand);
 
         final DailygeUser adminUser = new DailygeUser(Long.MAX_VALUE, ADMIN);

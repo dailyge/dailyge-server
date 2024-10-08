@@ -10,7 +10,6 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 
 public final class UserReadSnippet implements UserSnippet {
 
@@ -28,7 +27,6 @@ public final class UserReadSnippet implements UserSnippet {
         return document(
             identifier,
             ResourceSnippetParameters.builder()
-                .pathParameters(USER_SEARCH_PATH_DESCRIPTOR)
                 .responseFields(USER_SEARCH_RESPONSE_FIELD_DESCRIPTOR)
                 .tag(TAG)
                 .summary(USER_DETAIL_SEARCH_SUMMARY)
@@ -40,7 +38,6 @@ public final class UserReadSnippet implements UserSnippet {
             snippets -> {
                 List.of(
                     requestCookies(USER_ACCESS_TOKEN_COOKIE_DESCRIPTOR),
-                    pathParameters(USER_SEARCH_PATH_DESCRIPTOR),
                     responseFields(Arrays.stream(USER_SEARCH_RESPONSE_FIELD_DESCRIPTOR).toList()),
                     responseFields(Arrays.stream(RESPONSE_STATUS).toList())
                 );

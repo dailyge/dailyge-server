@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Set;
 
 @DisplayName("[IntegrationTest] 당첨자 선정 통합 테스트 ")
-class CouponWriteServiceIntegrationTest extends DatabaseTestBase {
+class CouponWriteUseCaseIntegrationTest extends DatabaseTestBase {
 
     @Autowired
     private CouponEventWriteService couponEventWriteService;

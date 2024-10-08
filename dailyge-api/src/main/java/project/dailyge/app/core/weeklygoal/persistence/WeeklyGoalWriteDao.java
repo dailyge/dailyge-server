@@ -8,7 +8,7 @@ import project.dailyge.entity.weeklygoal.WeeklyGoalJpaEntity;
 
 @Repository
 @RequiredArgsConstructor
-public class WeeklyGoalWriteDao implements WeeklyGoalEntityWriteRepository {
+class WeeklyGoalWriteDao implements WeeklyGoalEntityWriteRepository {
 
     private final EntityManager entityManager;
 

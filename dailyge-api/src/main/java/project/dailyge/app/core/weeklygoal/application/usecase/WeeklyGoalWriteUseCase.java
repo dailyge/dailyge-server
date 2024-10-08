@@ -11,7 +11,7 @@ import project.dailyge.entity.weeklygoal.WeeklyGoalJpaEntity;
 
 @RequiredArgsConstructor
 @ApplicationLayer(value = "WeeklyGoalWriteUseCase")
-public class WeeklyGoalWriteUseCase implements WeeklyGoalWriteService {
+class WeeklyGoalWriteUseCase implements WeeklyGoalWriteService {
 
     private final WeeklyGoalEntityWriteRepository weeklyGoalEntityWriteRepository;
 

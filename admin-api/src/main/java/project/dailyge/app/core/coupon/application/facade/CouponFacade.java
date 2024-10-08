@@ -2,7 +2,7 @@ package project.dailyge.app.core.coupon.application.facade;
 
 import lombok.RequiredArgsConstructor;
 import project.dailyge.app.common.annotation.FacadeLayer;
-import project.dailyge.app.core.coupon.application.CouponEventUseCase;
+import project.dailyge.app.core.coupon.application.CouponEventWriteService;
 import project.dailyge.app.core.coupon.application.FreeCouponWriteUseCase;
 
 import java.util.List;
@@ -11,14 +11,14 @@ import java.util.List;
 @FacadeLayer(value = "CouponFacade")
 public class CouponFacade {
 
-    private final CouponEventUseCase couponEventUseCase;
+    private final CouponEventWriteService couponEventWriteService;
     private final FreeCouponWriteUseCase freeCouponWriteUseCase;
 
     public void pickWinners(
         final int winnerCount,
         final Long eventId
     ) {
-        final List<Long> userIds = couponEventUseCase.pickWinners(winnerCount, eventId);
+        final List<Long> userIds = couponEventWriteService.pickWinners(winnerCount, eventId);
         freeCouponWriteUseCase.saveAll(userIds, eventId);
     }
 }

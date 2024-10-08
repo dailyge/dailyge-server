@@ -2,13 +2,8 @@ package project.dailyge.app.core.coupon.application.usecase;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-<<<<<<<< HEAD:admin-api/src/main/java/project/dailyge/app/core/coupon/application/usecase/CouponUseCase.java
-import org.springframework.stereotype.Service;
-import project.dailyge.app.core.coupon.application.CouponWriteService;
-========
 import project.dailyge.app.common.annotation.ApplicationLayer;
-import project.dailyge.app.core.coupon.application.CouponEventUseCase;
->>>>>>>> dev:admin-api/src/main/java/project/dailyge/app/core/coupon/application/usecase/CouponEventEventService.java
+import project.dailyge.app.core.coupon.application.CouponEventWriteService;
 import project.dailyge.app.core.coupon.application.WinnerAlgorithm;
 import project.dailyge.core.cache.coupon.CouponEvent;
 import project.dailyge.core.cache.coupon.CouponEventReadRepository;
@@ -20,11 +15,7 @@ import java.util.List;
 @Slf4j
 @ApplicationLayer(value = "CouponService")
 @RequiredArgsConstructor
-<<<<<<<< HEAD:admin-api/src/main/java/project/dailyge/app/core/coupon/application/usecase/CouponUseCase.java
-public class CouponUseCase implements CouponWriteService {
-========
-class CouponEventEventService implements CouponEventUseCase {
->>>>>>>> dev:admin-api/src/main/java/project/dailyge/app/core/coupon/application/usecase/CouponEventEventService.java
+public class CouponWriteWriteService implements CouponEventWriteService {
 
     private final CouponEventValidator validator;
     private final WinnerAlgorithm winnerAlgorithm;

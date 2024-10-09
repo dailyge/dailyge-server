@@ -3,6 +3,8 @@ package project.dailyge.entity.test.weeklygoal;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import project.dailyge.entity.weeklygoal.WeeklyGoalFixture;
 import project.dailyge.entity.weeklygoal.WeeklyGoalJpaEntity;
 
@@ -66,9 +68,16 @@ class WeeklyGoalJpaEntityUnitTest {
 
         assertAll(
             () -> assertThat(weeklyGoal.getTitle()).isEqualTo(updatedTitle),
-            () -> assertThat(weeklyGoal.getContent()).isEqualTo(updatedContent),
-            () -> assertTrue(weeklyGoal.isDone())
+            () -> assertThat(weeklyGoal.getContent()).isEqualTo(updatedContent)
         );
+    }
+
+    @ParameterizedTest
+    @DisplayName("인자의 완료상태 여부가 주간 목표의 완료 상태가 업데이트 된다.")
+    @ValueSource(booleans = {true, false})
+    void whenUpdateDoneThenDoneShouldBeChanged(final boolean done) {
+        weeklyGoal.updateDone(done);
+        assertEquals(done, weeklyGoal.isDone());
     }
 
     @Test

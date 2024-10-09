@@ -79,11 +79,14 @@ public class WeeklyGoalJpaEntity extends BaseEntity {
     ) {
         this.title = updatedTitle;
         this.content = updatedContent;
-        this.done = true;
     }
 
     public void delete() {
         this.deleted = true;
+    }
+
+    public void updateDone(final Boolean done) {
+        this.done = done;
     }
 
     @Override

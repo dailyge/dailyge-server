@@ -34,10 +34,11 @@ public class RetrospectEntityReadDao implements RetrospectEntityReadRepository {
     ) {
         return jpaQueryFactory.selectFrom(retrospectJpaEntity)
             .where(
-                retrospectJpaEntity.id.gt(page.getOffset())
-                .and(retrospectJpaEntity.userId.eq(userId))
+                retrospectJpaEntity.userId.eq(userId)
                 .and(retrospectJpaEntity.deleted.eq(false))
             )
+            .orderBy(retrospectJpaEntity.date.desc())
+            .offset(page.getOffset())
             .limit(page.getLimit())
             .fetch();
     }

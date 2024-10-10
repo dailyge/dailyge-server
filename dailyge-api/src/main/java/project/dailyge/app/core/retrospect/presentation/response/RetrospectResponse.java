@@ -1,10 +1,8 @@
 package project.dailyge.app.core.retrospect.presentation.response;
 
 import java.time.LocalDateTime;
-import lombok.Getter;
 import project.dailyge.entity.retrospect.RetrospectJpaEntity;
 
-@Getter
 public class RetrospectResponse {
 
     private final Long id;
@@ -19,6 +17,26 @@ public class RetrospectResponse {
         this.content = retrospect.getContent();
         this.date = retrospect.getDate();
         this.isPublic = retrospect.isPublic();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public boolean getIsPublic() {
+        return isPublic;
     }
 
     @Override

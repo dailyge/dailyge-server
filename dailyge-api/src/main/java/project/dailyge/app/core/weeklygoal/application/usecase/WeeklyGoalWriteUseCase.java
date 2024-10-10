@@ -53,7 +53,7 @@ class WeeklyGoalWriteUseCase implements WeeklyGoalWriteService {
     public void update(
         final DailygeUser dailygeUser,
         final Long weeklyGoalId,
-        final Boolean done
+        final boolean done
     ) {
         final WeeklyGoalJpaEntity findWeeklyGoal = weeklyGoalReadRepository.findById(weeklyGoalId)
             .orElseThrow(() -> WeeklyGoalTypeException.from(WEEKLY_GOAL_NOT_FOUND));

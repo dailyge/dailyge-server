@@ -1,8 +1,6 @@
 package project.dailyge.app.core.weeklygoal.request;
 
-public record WeeklyGoalStatusUpdateRequest(
-    Boolean done
-) {
+public record WeeklyGoalStatusUpdateRequest(boolean done) {
 
     @Override
     public String toString() {

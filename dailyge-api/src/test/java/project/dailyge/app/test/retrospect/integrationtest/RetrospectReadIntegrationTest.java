@@ -27,8 +27,8 @@ class RetrospectReadIntegrationTest extends DatabaseTestBase {
     @BeforeEach
     void setUp() {
         now = LocalDate.now();
-        final RetrospectCreateCommand createCommand = new RetrospectCreateCommand("회고 제목", "회고 내용", now.atTime(0, 0, 0, 0), false);
         for (int i = 0; i < 10; i++) {
+            final RetrospectCreateCommand createCommand = new RetrospectCreateCommand("회고 제목", "회고 내용", now.atTime(i, 0, 0, 0), false);
             retrospectWriteService.save(dailygeUser, createCommand);
         }
     }
@@ -43,15 +43,15 @@ class RetrospectReadIntegrationTest extends DatabaseTestBase {
     }
 
     @Test
-    @DisplayName("회고 조회 시 페이징에 맞는 데이터를 반환한다.")
-    void whenFindRetrospectThenResultShouldBePagingCorrectly() {
+    @DisplayName("회고 조회 시 페이징을 최신 데이터 순으로 반환한다.")
+    void whenFindRetrospectThenResultShouldBeRecentDatePagingReturned() {
         final Page page = Page.createPage(3, 1);
         final List<RetrospectJpaEntity> findRetrospects = retrospectReadService.findRetrospectByPage(dailygeUser, page);
 
         assertEquals(1, findRetrospects.size());
 
         final RetrospectJpaEntity findRetrospect = findRetrospects.get(0);
-        assertEquals(3, findRetrospect.getId());
+        assertEquals(8, findRetrospect.getId());
     }
 
 

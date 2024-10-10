@@ -43,6 +43,7 @@ public class WebConfiguration implements WebMvcConfigurer {
     public void addArgumentResolvers(final List<HandlerMethodArgumentResolver> resolvers) {
         resolvers.add(new AuthArgumentResolver(env, userCacheReadService, tokenProvider));
         resolvers.add(new CursorPagingArgumentResolver());
+        resolvers.add(new OffsetPagingArgumentResolver());
     }
 
     @Override

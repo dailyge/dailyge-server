@@ -9,10 +9,12 @@ import org.springframework.restdocs.request.ParameterDescriptor;
 import org.springframework.restdocs.request.PathParametersSnippet;
 import project.dailyge.app.core.retrospect.presentation.request.RetrospectCreateRequest;
 import project.dailyge.app.core.retrospect.presentation.request.RetrospectUpdateRequest;
+import static javax.xml.xpath.XPathEvaluationResult.XPathResultType.BOOLEAN;
 import static javax.xml.xpath.XPathEvaluationResult.XPathResultType.NUMBER;
 import static javax.xml.xpath.XPathEvaluationResult.XPathResultType.STRING;
 import static org.springframework.restdocs.cookies.CookieDocumentation.cookieWithName;
 import static org.springframework.restdocs.cookies.CookieDocumentation.requestCookies;
+import static org.springframework.restdocs.payload.JsonFieldType.ARRAY;
 import static org.springframework.restdocs.payload.JsonFieldType.NULL;
 import static org.springframework.restdocs.payload.JsonFieldType.OBJECT;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -33,6 +35,11 @@ public interface RetrospectSnippet {
 
     ParameterDescriptor[] RETROSPECT_ID_PATH_PARAMETER_DESCRIPTORS = {
         parameterWithName("retrospectId").description("Retrospect ID")
+    };
+
+    ParameterDescriptor[] RETROSPECT_PAGING_PATH_PARAMETER_DESCRIPTORS = {
+        parameterWithName("page").description("페이지 번호").optional(),
+        parameterWithName("limit").description("최대 개수").optional(),
     };
 
     FieldDescriptor[] RETROSPECT_CREATE_REQUEST_FIELDS = {
@@ -70,6 +77,17 @@ public interface RetrospectSnippet {
         fieldWithPath("message").type(STRING).description("응답 메시지")
     };
 
+    FieldDescriptor[] RETROSPECT_READ_RESPONSE_FIELDS = {
+        fieldWithPath("data").type(ARRAY).description("데이터"),
+        fieldWithPath("data.[].id").type(NUMBER).description("회고 ID"),
+        fieldWithPath("data.[].title").type(STRING).description("회고 제목"),
+        fieldWithPath("data.[].content").type(STRING).description("회고 내용"),
+        fieldWithPath("data.[].date").type(STRING).description("날짜"),
+        fieldWithPath("data.[].isPublic").type(BOOLEAN).description("공개 여부"),
+        fieldWithPath("code").type(NUMBER).description("응답 코드"),
+        fieldWithPath("message").type(STRING).description("응답 메시지")
+    };
+
     RequestCookiesSnippet ACCESS_TOKEN_COOKIE_SNIPPET = requestCookies(TOKEN_COOKIE_DESCRIPTORS);
     PathParametersSnippet RETROSPECT_PATH_PARAMETER_SNIPPET = pathParameters(RETROSPECT_ID_PATH_PARAMETER_DESCRIPTORS);
 
@@ -78,6 +96,9 @@ public interface RetrospectSnippet {
 
     RequestFieldsSnippet RETROSPECT_UPDATE_REQUEST_SNIPPET = requestFields(RETROSPECT_UPDATE_REQUEST_FIELDS);
     ResponseFieldsSnippet RETROSPECT_UPDATE_RESPONSE_SNIPPET = responseFields(RETROSPECT_UPDATE_RESPONSE_FIELDS);
+
+    PathParametersSnippet RETROSPECT_PAGING_PATH_PARAMETER_SNIPPET = pathParameters(RETROSPECT_PAGING_PATH_PARAMETER_DESCRIPTORS);
+    ResponseFieldsSnippet RETROSPECT_READ_RESPONSE_SNIPPET = responseFields(RETROSPECT_READ_RESPONSE_FIELDS);
 
     static String createIdentifier(
         final String name,

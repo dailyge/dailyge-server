@@ -13,12 +13,12 @@ import java.time.LocalDate;
 import static io.restassured.RestAssured.given;
 import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.document;
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
-import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.createIdentifier;
 import static project.dailyge.app.test.weeklygoal.documentationtest.snippet.WeeklyGoalCreateSnippet.createWeeklyGoalErrorFilter;
 import static project.dailyge.app.test.weeklygoal.documentationtest.snippet.WeeklyGoalCreateSnippet.createWeeklyGoalFilter;
 import static project.dailyge.app.test.weeklygoal.documentationtest.snippet.WeeklyGoalSnippet.WEEKLY_GOAL_ACCESS_TOKEN_COOKIE_SNIPPET;
 import static project.dailyge.app.test.weeklygoal.documentationtest.snippet.WeeklyGoalSnippet.WEEKLY_GOAL_CREATE_REQUEST_SNIPPET;
 import static project.dailyge.app.test.weeklygoal.documentationtest.snippet.WeeklyGoalSnippet.WEEKLY_GOAL_CREATE_RESPONSE_SNIPPET;
+import static project.dailyge.app.test.weeklygoal.documentationtest.snippet.WeeklyGoalSnippet.createIdentifier;
 
 @DisplayName("[DocumentationTest] 주간 목표 작성 문서화 테스트")
 class WeeklyGoalCreateDocumentationTest extends DatabaseTestBase {

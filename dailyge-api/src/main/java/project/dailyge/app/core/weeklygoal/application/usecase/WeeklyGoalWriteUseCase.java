@@ -13,7 +13,7 @@ import project.dailyge.entity.weeklygoal.WeeklyGoalEntityReadRepository;
 import project.dailyge.entity.weeklygoal.WeeklyGoalEntityWriteRepository;
 import project.dailyge.entity.weeklygoal.WeeklyGoalJpaEntity;
 
-import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_USER_ID;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
 import static project.dailyge.app.core.weeklygoal.exception.WeeklyGoalCodeAndMessage.WEEKLY_GOAL_NOT_FOUND;
 
 @RequiredArgsConstructor
@@ -43,7 +43,7 @@ class WeeklyGoalWriteUseCase implements WeeklyGoalWriteService {
         final WeeklyGoalJpaEntity findWeeklyGoal = weeklyGoalReadRepository.findById(weeklyGoalId)
             .orElseThrow(() -> WeeklyGoalTypeException.from(WEEKLY_GOAL_NOT_FOUND));
         if (!dailygeUser.isValid(findWeeklyGoal.getUserId())) {
-            throw CommonException.from(INVALID_USER_ID);
+            throw CommonException.from(UN_AUTHORIZED);
         }
         findWeeklyGoal.update(command.title(), command.content());
     }
@@ -58,7 +58,7 @@ class WeeklyGoalWriteUseCase implements WeeklyGoalWriteService {
         final WeeklyGoalJpaEntity findWeeklyGoal = weeklyGoalReadRepository.findById(weeklyGoalId)
             .orElseThrow(() -> WeeklyGoalTypeException.from(WEEKLY_GOAL_NOT_FOUND));
         if (!dailygeUser.isValid(findWeeklyGoal.getUserId())) {
-            throw CommonException.from(INVALID_USER_ID);
+            throw CommonException.from(UN_AUTHORIZED);
         }
         findWeeklyGoal.updateDone(done);
     }

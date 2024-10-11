@@ -10,4 +10,6 @@ public interface WeeklyGoalWriteService {
     void update(DailygeUser dailygeUser, Long weeklyGoalId, WeeklyGoalUpdateCommand command);
 
     void update(DailygeUser dailygeUser, Long weeklyGoalId, boolean done);
+
+    void delete(DailygeUser dailygeUser, Long weeklyGoalId);
 }

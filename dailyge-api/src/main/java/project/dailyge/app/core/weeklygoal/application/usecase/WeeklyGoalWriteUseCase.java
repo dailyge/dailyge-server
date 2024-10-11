@@ -62,4 +62,18 @@ class WeeklyGoalWriteUseCase implements WeeklyGoalWriteService {
         }
         findWeeklyGoal.updateDone(done);
     }
+
+    @Override
+    @Transactional
+    public void delete(
+        final DailygeUser dailygeUser,
+        final Long weeklyGoalId
+    ) {
+        final WeeklyGoalJpaEntity findWeeklyGoal = weeklyGoalReadRepository.findById(weeklyGoalId)
+            .orElseThrow(() -> WeeklyGoalTypeException.from(WEEKLY_GOAL_NOT_FOUND));
+        if (!dailygeUser.isValid(findWeeklyGoal.getUserId())) {
+            throw CommonException.from(UN_AUTHORIZED);
+        }
+        findWeeklyGoal.delete();
+    }
 }

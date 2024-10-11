@@ -25,7 +25,7 @@ import static project.dailyge.entity.user.Role.NORMAL;
 @DisplayName("[DocumentationTest] 주간 목표 삭제 문서화 테스트")
 class WeeklyGoalDeleteDocumentationTest extends DatabaseTestBase {
 
-    private static final String DEFAULT_TITLE = "주간 목표 수정 API 개발";
+    private static final String DEFAULT_TITLE = "주간 목표 삭제 API 개발";
     private static final String DEFAULT_CONTENT = "원격 저장소 올리기 전에 셀프 리뷰";
 
     @Autowired

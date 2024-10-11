@@ -4,13 +4,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import project.dailyge.app.codeandmessage.CommonCodeAndMessage;
 import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.common.exception.CommonException;
 import project.dailyge.app.core.weeklygoal.application.WeeklyGoalWriteService;
 import project.dailyge.app.core.weeklygoal.application.command.WeeklyGoalCreateCommand;
 import project.dailyge.app.core.weeklygoal.application.command.WeeklyGoalUpdateCommand;
-import project.dailyge.app.core.weeklygoal.exception.WeeklyGoalCodeAndMessage;
 import project.dailyge.app.core.weeklygoal.exception.WeeklyGoalTypeException;
 import project.dailyge.entity.weeklygoal.WeeklyGoalEntityReadRepository;
 import project.dailyge.entity.weeklygoal.WeeklyGoalJpaEntity;
@@ -21,6 +19,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
+import static project.dailyge.app.core.weeklygoal.exception.WeeklyGoalCodeAndMessage.WEEKLY_GOAL_NOT_FOUND;
 
 @DisplayName("[IntegrationTest] 주간 목표 수정 통합 테스트")
 class WeeklyGoalUpdateIntegrationTest extends DatabaseTestBase {
@@ -60,7 +60,7 @@ class WeeklyGoalUpdateIntegrationTest extends DatabaseTestBase {
 
         assertThatThrownBy(() -> weeklyGoalWriteService.update(invalidUser, newWeeklyGoalId, true))
             .isInstanceOf(CommonException.class)
-            .hasMessage(CommonCodeAndMessage.INVALID_USER_ID.message());
+            .hasMessage(UN_AUTHORIZED.message());
     }
 
     @Test
@@ -87,7 +87,7 @@ class WeeklyGoalUpdateIntegrationTest extends DatabaseTestBase {
 
         assertThatThrownBy(() -> weeklyGoalWriteService.update(invalidUser, newWeeklyGoalId, statusUpdateCommand))
             .isInstanceOf(CommonException.class)
-            .hasMessage(CommonCodeAndMessage.INVALID_USER_ID.message());
+            .hasMessage(UN_AUTHORIZED.message());
     }
 
     @Test
@@ -96,7 +96,7 @@ class WeeklyGoalUpdateIntegrationTest extends DatabaseTestBase {
         final Long invalidId = Long.MAX_VALUE;
         assertThatThrownBy(() -> weeklyGoalWriteService.update(dailygeUser, invalidId, true))
             .isInstanceOf(WeeklyGoalTypeException.class)
-            .hasMessage(WeeklyGoalCodeAndMessage.WEEKLY_GOAL_NOT_FOUND.getMessage());
+            .hasMessage(WEEKLY_GOAL_NOT_FOUND.getMessage());
     }
 
     @Test
@@ -107,6 +107,6 @@ class WeeklyGoalUpdateIntegrationTest extends DatabaseTestBase {
 
         assertThatThrownBy(() -> weeklyGoalWriteService.update(dailygeUser, invalidId, statusUpdateCommand))
             .isInstanceOf(WeeklyGoalTypeException.class)
-            .hasMessage(WeeklyGoalCodeAndMessage.WEEKLY_GOAL_NOT_FOUND.getMessage());
+            .hasMessage(WEEKLY_GOAL_NOT_FOUND.getMessage());
     }
 }

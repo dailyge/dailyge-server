@@ -11,7 +11,7 @@ import project.dailyge.app.common.response.ApiResponse;
 import project.dailyge.app.core.common.auth.DailygeUser;
 import project.dailyge.app.core.retrospect.application.RetrospectReadService;
 import project.dailyge.app.core.retrospect.presentation.response.RetrospectResponse;
-import project.dailyge.app.page.Page;
+import project.dailyge.app.page.CustomPageable;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.OK;
 
 @RequiredArgsConstructor
@@ -24,7 +24,7 @@ public class RetrospectReadApi {
     @GetMapping
     public ApiResponse<List<RetrospectResponse>> findMonthlyGoalsByCursor(
         @LoginUser final DailygeUser dailygeUser,
-        @OffsetPageable final Page page
+        @OffsetPageable final CustomPageable page
     ) {
         final List<RetrospectResponse> payload = retrospectReadService.findRetrospectByPage(dailygeUser, page).stream()
             .map(RetrospectResponse::new)

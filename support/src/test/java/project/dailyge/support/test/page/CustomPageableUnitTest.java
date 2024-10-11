@@ -5,20 +5,20 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import project.dailyge.app.page.Page;
+import project.dailyge.app.page.CustomPageable;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @DisplayName("[UnitTest] Page 단위 테스트")
-class PageUnitTest {
+class CustomPageableUnitTest {
 
     private static final int PAGE = 1;
     private static final int LIMIT = 10;
-    private Page page;
+    private CustomPageable page;
 
     @BeforeEach
     void setUp() {
-        page = Page.createPage(PAGE, LIMIT);
+        page = CustomPageable.createPage(PAGE, LIMIT);
     }
 
     @Test
@@ -33,7 +33,7 @@ class PageUnitTest {
     @ValueSource(ints = {1, 2, 3, 10, 100})
     @DisplayName("Page를 통한 offset이 정확하게 계산이 된다.")
     void whenCalculatePageOffsetThenResultShouldBeCorrectly(final int page) {
-        final Page newPage = Page.createPage(page, LIMIT);
+        final CustomPageable newPage = CustomPageable.createPage(page, LIMIT);
 
         assertEquals((page - 1) * LIMIT, newPage.getOffset());
     }

@@ -3,12 +3,12 @@ package project.dailyge.app.page;
 import lombok.Getter;
 
 @Getter
-public class Page {
+public class CustomPageable {
 
     private final Integer page;
     private final Integer limit;
 
-    private Page(
+    private CustomPageable(
         final Integer page,
         final Integer limit
     ) {
@@ -16,11 +16,11 @@ public class Page {
         this.limit = limit;
     }
 
-    public static Page createPage(
+    public static CustomPageable createPage(
         final Integer page,
         final Integer limit
     ) {
-        return new Page(page, limit);
+        return new CustomPageable(page, limit);
     }
 
     public int getOffset() {

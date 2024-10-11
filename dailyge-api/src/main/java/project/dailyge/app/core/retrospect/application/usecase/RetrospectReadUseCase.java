@@ -8,7 +8,7 @@ import project.dailyge.app.core.common.auth.DailygeUser;
 import project.dailyge.app.core.retrospect.application.RetrospectReadService;
 import project.dailyge.app.core.retrospect.exception.RetrospectTypeException;
 import project.dailyge.app.core.retrospect.persistence.RetrospectEntityReadDao;
-import project.dailyge.app.page.Page;
+import project.dailyge.app.page.CustomPageable;
 import project.dailyge.entity.retrospect.RetrospectEntityReadRepository;
 import project.dailyge.entity.retrospect.RetrospectJpaEntity;
 import static project.dailyge.app.core.retrospect.exception.RetrospectCodeAndMessage.RETROSPECT_NOT_FOUND;
@@ -29,7 +29,7 @@ class RetrospectReadUseCase implements RetrospectReadService {
     @Override
     public List<RetrospectJpaEntity> findRetrospectByPage(
         final DailygeUser dailygeUser,
-        final @OffsetPageable Page page
+        final @OffsetPageable CustomPageable page
     ) {
         return retrospectEntityReadDao.findRetrospectByPage(dailygeUser.getId(), page);
     }

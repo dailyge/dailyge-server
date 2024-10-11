@@ -7,7 +7,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import project.dailyge.app.common.annotation.OffsetPageable;
-import project.dailyge.app.page.Page;
+import project.dailyge.app.page.CustomPageable;
 import project.dailyge.app.page.PageFactory;
 
 @Order(3)
@@ -31,7 +31,7 @@ public class OffsetPagingArgumentResolver implements HandlerMethodArgumentResolv
         return createPage(webRequest);
     }
 
-    private Page createPage(final NativeWebRequest webRequest) {
+    private CustomPageable createPage(final NativeWebRequest webRequest) {
         return PageFactory.createPage(
             webRequest.getParameter(PAGE),
             webRequest.getParameter(LIMIT)

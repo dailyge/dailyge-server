@@ -10,7 +10,7 @@ import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.core.retrospect.application.RetrospectReadService;
 import project.dailyge.app.core.retrospect.application.RetrospectWriteService;
 import project.dailyge.app.core.retrospect.application.command.RetrospectCreateCommand;
-import project.dailyge.app.page.Page;
+import project.dailyge.app.page.CustomPageable;
 import project.dailyge.entity.retrospect.RetrospectJpaEntity;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -36,7 +36,7 @@ class RetrospectReadIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("회고 조회 시 정상적으로 반환한다.")
     void whenFindRetrospectThenResultShouldBeCorrectly() {
-        final Page page = Page.createPage(1, 10);
+        final CustomPageable page = CustomPageable.createPage(1, 10);
         final List<RetrospectJpaEntity> findRetrospects = retrospectReadService.findRetrospectByPage(dailygeUser, page);
 
         assertEquals(10, findRetrospects.size());
@@ -45,7 +45,7 @@ class RetrospectReadIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("회고 조회 시 페이징을 최신 데이터 순으로 반환한다.")
     void whenFindRetrospectThenResultShouldBeRecentDatePagingReturned() {
-        final Page page = Page.createPage(3, 1);
+        final CustomPageable page = CustomPageable.createPage(3, 1);
         final List<RetrospectJpaEntity> findRetrospects = retrospectReadService.findRetrospectByPage(dailygeUser, page);
 
         assertEquals(1, findRetrospects.size());
@@ -58,7 +58,7 @@ class RetrospectReadIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("페이지 이후의 데이터가 없다면, 빈 리스트을 반환한다.")
     void whenNoDataAfterThePageThenResultShouldBeEmptyList() {
-        final Page page = Page.createPage(2, 10);
+        final CustomPageable page = CustomPageable.createPage(2, 10);
         final List<RetrospectJpaEntity> findRetrospects = retrospectReadService.findRetrospectByPage(dailygeUser, page);
 
         assertTrue(findRetrospects.isEmpty());

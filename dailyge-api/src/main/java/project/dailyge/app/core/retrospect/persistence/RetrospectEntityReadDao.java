@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import project.dailyge.app.page.Page;
+import project.dailyge.app.page.CustomPageable;
 import project.dailyge.entity.retrospect.RetrospectEntityReadRepository;
 import project.dailyge.entity.retrospect.RetrospectJpaEntity;
 import static java.util.Optional.ofNullable;
@@ -30,7 +30,7 @@ public class RetrospectEntityReadDao implements RetrospectEntityReadRepository {
 
     public List<RetrospectJpaEntity> findRetrospectByPage(
         final Long userId,
-        final Page page
+        final CustomPageable page
     ) {
         return jpaQueryFactory.selectFrom(retrospectJpaEntity)
             .where(

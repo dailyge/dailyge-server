@@ -2,7 +2,7 @@ package project.dailyge.support.test.page;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import project.dailyge.app.page.Page;
+import project.dailyge.app.page.CustomPageable;
 import project.dailyge.app.page.PageFactory;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -18,7 +18,7 @@ class PageFactoryUnitTest {
     void whenCreatePageWithValidArgumentThenCorrectlyCreatedPage() {
         final String page = "10";
         final String limit = "20";
-        final Page newPage = PageFactory.createPage(page, limit);
+        final CustomPageable newPage = PageFactory.createPage(page, limit);
 
         assertNotNull(newPage);
         assertEquals(Integer.parseInt(page), newPage.getPage());
@@ -30,7 +30,7 @@ class PageFactoryUnitTest {
     void whenCreatePageWithInvalidArgumentThenDefaultSettingsUsed() {
         final String page = "-1";
         final String limit = "-1";
-        final Page newPage = PageFactory.createPage(page, limit);
+        final CustomPageable newPage = PageFactory.createPage(page, limit);
 
         assertNotNull(newPage);
         assertEquals(DEFAULT_PAGE, newPage.getPage());
@@ -40,7 +40,7 @@ class PageFactoryUnitTest {
     @Test
     @DisplayName("page와 limit가 null이면, 기본 설정값으로 생성된다.")
     void whenPageAndLimitIsNullThenDefaultSettingsUsed() {
-        final Page newPage = PageFactory.createPage(null, null);
+        final CustomPageable newPage = PageFactory.createPage(null, null);
 
         assertNotNull(newPage);
         assertEquals(DEFAULT_PAGE, newPage.getPage());
@@ -52,7 +52,7 @@ class PageFactoryUnitTest {
     void whenLimitGreaterMaximumLimitThenDefaultLimitUsed() {
         final String page = "5";
         final String limit = "500";
-        final Page newPage = PageFactory.createPage(page, limit);
+        final CustomPageable newPage = PageFactory.createPage(page, limit);
 
         assertNotNull(newPage);
         assertEquals(Integer.parseInt(page), newPage.getPage());

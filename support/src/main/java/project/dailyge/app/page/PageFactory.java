@@ -10,11 +10,11 @@ public final class PageFactory {
         throw new AssertionError("올바른 방식으로 생성자를 호출해주세요.");
     }
 
-    public static Page createPage(
+    public static CustomPageable createPage(
         final String page,
         final String limit
     ) {
-        return Page.createPage(
+        return CustomPageable.createPage(
             getPage(page),
             getLimit(limit)
         );

@@ -28,7 +28,7 @@ public class CustomPageable {
     }
 
     public int getTotalPageCount(final int totalCount) {
-        return (int) Math.ceil((double) totalCount / limit);
+        return (totalCount - 1) / limit + 1;
     }
 
     @Override

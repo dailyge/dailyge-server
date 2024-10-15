@@ -1,5 +1,6 @@
 package project.dailyge.app.test.weeklygoal.integrationtest;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,14 +30,21 @@ class WeeklyGoalReadIntegrationTest extends DatabaseTestBase {
     @Autowired
     private WeeklyGoalWriteService weeklyGoalWriteService;
 
+    @BeforeEach
+    void setUp() {
+        now = LocalDate.now();
+    }
+
     @Test
     @DisplayName("index가 존재하지 않으면, 가장 오래된 데이터를 반환한다.")
     void whenIndexNotExistsThenTheOldestDataShouldBeReturned() {
         final WeeklyGoalCreateCommand createCommand = new WeeklyGoalCreateCommand(DEFAULT_TITLE, DEFAULT_CONTENT, now);
         weeklyGoalWriteService.save(dailygeUser, createCommand);
+
         final Cursor cursor = createCursor(null, 10);
         final LocalDateTime weekStartDate = LocalDate.now().atTime(0, 0, 0, 0).with(DayOfWeek.MONDAY);
         final List<WeeklyGoalJpaEntity> findWeeklyGoals = weeklyGoalReadService.findPageByCursor(dailygeUser, cursor, weekStartDate);
+
         assertEquals(1, findWeeklyGoals.size());
     }
 
@@ -45,10 +53,12 @@ class WeeklyGoalReadIntegrationTest extends DatabaseTestBase {
     void whenIndexExistsThenAfterIndexDataShouldBeReturned() {
         final WeeklyGoalCreateCommand createCommand = new WeeklyGoalCreateCommand(DEFAULT_TITLE, DEFAULT_CONTENT, now);
         final Long firstWeeklyGoalId = weeklyGoalWriteService.save(dailygeUser, createCommand);
+
         weeklyGoalWriteService.save(dailygeUser, createCommand);
         final LocalDateTime weekStartDate = LocalDate.now().atTime(0, 0, 0, 0).with(DayOfWeek.MONDAY);
         final Cursor cursor = createCursor(firstWeeklyGoalId, 10);
         final List<WeeklyGoalJpaEntity> findWeeklyGoals = weeklyGoalReadService.findPageByCursor(dailygeUser, cursor, weekStartDate);
+
         assertEquals(1, findWeeklyGoals.size());
     }
 }

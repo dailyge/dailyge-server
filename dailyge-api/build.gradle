@@ -1,6 +1,3 @@
-https://stackoverflow.com/questions/36924317/how-to-use-cookies-in-swagger-editor
-
-
 plugins {
     id("org.liquibase.gradle")
     id("org.asciidoctor.jvm.convert")

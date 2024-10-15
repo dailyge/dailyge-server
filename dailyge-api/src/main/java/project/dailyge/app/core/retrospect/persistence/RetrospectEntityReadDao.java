@@ -42,4 +42,13 @@ public class RetrospectEntityReadDao implements RetrospectEntityReadRepository {
             .limit(page.getLimit())
             .fetch();
     }
+
+    public int findTotalCount(final Long userId) {
+        return jpaQueryFactory.selectFrom(retrospectJpaEntity)
+            .where(
+                retrospectJpaEntity.userId.eq(userId)
+                    .and(retrospectJpaEntity.deleted.eq(false))
+            )
+            .fetch().size();
+    }
 }

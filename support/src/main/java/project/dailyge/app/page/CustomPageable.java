@@ -27,6 +27,10 @@ public class CustomPageable {
         return (page - 1) * limit;
     }
 
+    public int getTotalPageCount(final int totalCount) {
+        return (int) Math.ceil((double) totalCount / limit);
+    }
+
     @Override
     public String toString() {
         return String.format("{\"page\": \"%s\", \"limit\": \"%s\"}", page, limit);

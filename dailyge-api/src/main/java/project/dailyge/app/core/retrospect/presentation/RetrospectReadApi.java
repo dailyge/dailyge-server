@@ -10,6 +10,7 @@ import project.dailyge.app.common.annotation.PresentationLayer;
 import project.dailyge.app.common.response.ApiResponse;
 import project.dailyge.app.core.common.auth.DailygeUser;
 import project.dailyge.app.core.retrospect.application.RetrospectReadService;
+import project.dailyge.app.core.retrospect.presentation.response.RetrospectPageResponse;
 import project.dailyge.app.core.retrospect.presentation.response.RetrospectResponse;
 import project.dailyge.app.page.CustomPageable;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.OK;
@@ -22,13 +23,15 @@ public class RetrospectReadApi {
     private final RetrospectReadService retrospectReadService;
 
     @GetMapping
-    public ApiResponse<List<RetrospectResponse>> findMonthlyGoalsByCursor(
+    public ApiResponse<RetrospectPageResponse> findMonthlyGoalsByCursor(
         @LoginUser final DailygeUser dailygeUser,
         @OffsetPageable final CustomPageable page
     ) {
-        final List<RetrospectResponse> payload = retrospectReadService.findRetrospectByPage(dailygeUser, page).stream()
+        final List<RetrospectResponse> retrospects = retrospectReadService.findRetrospectByPage(dailygeUser, page).stream()
             .map(RetrospectResponse::new)
             .toList();
+        final int totalPageCount = retrospectReadService.findTotalCount(dailygeUser);
+        final RetrospectPageResponse payload = new RetrospectPageResponse(retrospects, page.getTotalPageCount(totalPageCount));
         return ApiResponse.from(OK, payload);
     }
 }

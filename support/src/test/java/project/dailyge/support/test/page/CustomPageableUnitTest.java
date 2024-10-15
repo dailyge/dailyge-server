@@ -39,6 +39,14 @@ class CustomPageableUnitTest {
     }
 
     @Test
+    @DisplayName("limit에 따른 전체 페이지 개수를 올림하여 계산한다.")
+    void whenCalculateTotalPageCountThenResultShouldBeCorrectly() {
+        final CustomPageable newPage = CustomPageable.createPage(PAGE, LIMIT);
+
+        assertEquals(4, newPage.getTotalPageCount(33));
+    }
+
+    @Test
     @DisplayName("Page 객체의 toString 메서드는 올바른 JSON 형식의 문자열을 반환한다.")
     void whenToStringCalledThenReturnJsonFormatString() {
         assertEquals("{\"page\": \"1\", \"limit\": \"10\"}", page.toString());

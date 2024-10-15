@@ -18,8 +18,8 @@ import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 import static project.dailyge.app.test.weeklygoal.documentationtest.snippet.WeeklyGoalSearchSnippet.createWeeklyGoalSearchFilter;
 import static project.dailyge.app.test.weeklygoal.documentationtest.snippet.WeeklyGoalSnippet.createIdentifier;
 
-@DisplayName("[DocumentationTest] 월간 목표 조회 문서화 테스트")
-public class WeeklyGoalReadDocumentationTest extends DatabaseTestBase {
+@DisplayName("[DocumentationTest] 주간 목표 조회 문서화 테스트")
+class WeeklyGoalReadDocumentationTest extends DatabaseTestBase {
 
     private static final String DEFAULT_TITLE = "주간 목표 수정 API 개발";
     private static final String DEFAULT_CONTENT = "원격 저장소 올리기 전에 셀프 리뷰";

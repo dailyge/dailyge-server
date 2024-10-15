@@ -4,9 +4,8 @@ import lombok.RequiredArgsConstructor;
 import project.dailyge.app.common.annotation.ApplicationLayer;
 import project.dailyge.app.core.common.auth.DailygeUser;
 import project.dailyge.app.core.weeklygoal.application.WeeklyGoalReadService;
-import project.dailyge.app.core.weeklygoal.application.validator.WeeklyGoalValidator;
+import project.dailyge.app.core.weeklygoal.persistence.WeeklyGoalReadDao;
 import project.dailyge.app.cursor.Cursor;
-import project.dailyge.entity.weeklygoal.WeeklyGoalEntityReadRepository;
 import project.dailyge.entity.weeklygoal.WeeklyGoalJpaEntity;
 
 import java.time.LocalDateTime;
@@ -16,8 +15,7 @@ import java.util.List;
 @ApplicationLayer(value = "WeeklyGoalReadUseCase")
 class WeeklyGoalReadUseCase implements WeeklyGoalReadService {
 
-    private final WeeklyGoalValidator validator;
-    private final WeeklyGoalEntityReadRepository weeklyGoalEntityReadRepository;
+    private final WeeklyGoalReadDao weeklyGoalReadDao;
 
     @Override
     public List<WeeklyGoalJpaEntity> findPageByCursor(
@@ -25,11 +23,6 @@ class WeeklyGoalReadUseCase implements WeeklyGoalReadService {
         final Cursor cursor,
         final LocalDateTime weekStartDate
     ) {
-        validator.validateWeekStartDate(weekStartDate);
-        if (cursor.isNull()) {
-            return weeklyGoalEntityReadRepository.findByUserIdAndWeekStartDateByLimit(dailygeUser.getUserId(),
-                weekStartDate, cursor.getLimit());
-        }
-        return weeklyGoalEntityReadRepository.findByCursor(dailygeUser.getUserId(), cursor.getIndex(), cursor.getLimit(), weekStartDate);
+        return weeklyGoalReadDao.findByCursor(dailygeUser.getUserId(), cursor, weekStartDate);
     }
 }

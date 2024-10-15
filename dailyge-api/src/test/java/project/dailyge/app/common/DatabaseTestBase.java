@@ -70,7 +70,7 @@ public abstract class DatabaseTestBase {
     protected UserJpaEntity newUser;
     protected DailygeUser dailygeUser;
     protected final DailygeUser invalidUser = new DailygeUser(Long.MAX_VALUE, NORMAL);
-    protected LocalDate now = LocalDate.now();
+    protected LocalDate now;
 
     protected DatabaseTestBase() {
         this.objectMapper = initObjectMapper();

@@ -63,4 +63,16 @@ class RetrospectReadIntegrationTest extends DatabaseTestBase {
 
         assertTrue(findRetrospects.isEmpty());
     }
+
+
+    @Test
+    @DisplayName("자신의 회고 전체 개수만 반환한다.")
+    void whenFindTotalCountThenResultShouldBeMyTotalRetrospectCount() {
+        final RetrospectCreateCommand createCommand = new RetrospectCreateCommand("회고 제목", "회고 내용", now.atTime(0, 0, 0, 0), false);
+        retrospectWriteService.save(invalidUser, createCommand);
+
+        final int totalCount = retrospectReadService.findTotalCount(dailygeUser);
+
+        assertEquals(10, totalCount);
+    }
 }

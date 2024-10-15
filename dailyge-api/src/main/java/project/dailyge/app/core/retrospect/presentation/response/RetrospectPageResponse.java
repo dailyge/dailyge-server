@@ -7,4 +7,11 @@ public record RetrospectPageResponse(
     int totalPageCount
 ) {
 
+    @Override
+    public String toString() {
+        return String.format(
+            "{\"retrospects\":\"%s\",\"totalPageCount\":\"%s\"}",
+            retrospects, totalPageCount
+        );
+    }
 }

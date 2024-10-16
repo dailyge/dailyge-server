@@ -3,7 +3,7 @@ package project.dailyge.app.core.weeklygoal.response;
 import lombok.Getter;
 import project.dailyge.entity.weeklygoal.WeeklyGoalJpaEntity;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 public class WeeklyGoalResponse {
@@ -12,7 +12,7 @@ public class WeeklyGoalResponse {
     private final String title;
     private final String content;
     private final boolean done;
-    private final LocalDate startWeekDate;
+    private final LocalDateTime startWeekDate;
     private final Long userId;
     private final String createdAt;
 
@@ -21,7 +21,7 @@ public class WeeklyGoalResponse {
         this.title = weeklyGoal.getTitle();
         this.content = weeklyGoal.getContent();
         this.done = weeklyGoal.isDone();
-        this.startWeekDate = weeklyGoal.getWeekStartDate().toLocalDate();
+        this.startWeekDate = weeklyGoal.getWeekStartDate();
         this.userId = weeklyGoal.getUserId();
         this.createdAt = weeklyGoal.getCreatedAtAsString();
     }

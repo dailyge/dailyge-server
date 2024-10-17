@@ -33,4 +33,9 @@ class RetrospectReadUseCase implements RetrospectReadService {
     ) {
         return retrospectEntityReadDao.findRetrospectByPage(dailygeUser.getId(), page);
     }
+
+    @Override
+    public long findTotalCount(final DailygeUser dailygeUser) {
+        return retrospectEntityReadDao.findTotalCount(dailygeUser.getId());
+    }
 }

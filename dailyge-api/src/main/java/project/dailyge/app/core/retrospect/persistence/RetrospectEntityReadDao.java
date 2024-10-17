@@ -39,7 +39,17 @@ public class RetrospectEntityReadDao implements RetrospectEntityReadRepository {
             )
             .orderBy(retrospectJpaEntity.date.desc())
             .offset(page.getOffset())
-            .limit(page.getLimit())
+            .limit(page.getPageSize())
             .fetch();
+    }
+
+    public long findTotalCount(final Long userId) {
+        return jpaQueryFactory.from(retrospectJpaEntity)
+            .select(retrospectJpaEntity.id.count())
+            .where(
+                retrospectJpaEntity.userId.eq(userId)
+                    .and(retrospectJpaEntity.deleted.eq(false))
+            )
+            .fetchOne();
     }
 }

@@ -45,7 +45,7 @@ public class RetrospectReadApi {
                 final Long totalPageCount = page.getTotalPageCount(totalCountFuture.join());
                 return new RetrospectPageResponse(retrospects, totalPageCount);
             }).exceptionally(ex -> {
-                throw RetrospectTypeException.from(RETROSPECT_UN_RESOLVED_EXCEPTION);
+                throw RetrospectTypeException.from(ex.getMessage(), RETROSPECT_UN_RESOLVED_EXCEPTION);
             });
 
         return ApiResponse.from(OK, payloadFuture.join());

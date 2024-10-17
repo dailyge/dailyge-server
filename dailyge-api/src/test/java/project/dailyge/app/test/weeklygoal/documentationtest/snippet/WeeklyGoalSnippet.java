@@ -71,8 +71,27 @@ public interface WeeklyGoalSnippet {
         fieldWithPath("message").type(STRING).description("응답 메시지")
     };
 
+    FieldDescriptor[] WEEKLY_GOAL_PAGING_RESPONSE_FIELD_DESCRIPTORS = {
+        fieldWithPath("data.[].weeklyGoalId").description("The ID of the weekly goal"),
+        fieldWithPath("data.[].title").description("제목"),
+        fieldWithPath("data.[].content").description("내용"),
+        fieldWithPath("data.[].done").description("완료 여부"),
+        fieldWithPath("data.[].weekStartDae").description("주간 시작 날짜"),
+        fieldWithPath("data.[].userId").description("사용자 PK"),
+        fieldWithPath("data.[].createdAt").description("생성 일"),
+        fieldWithPath("code").type(NUMBER).description("응답 코드"),
+        fieldWithPath("message").type(STRING).description("응답 메시지")
+    };
+
     ParameterDescriptor[] WEEKLY_GOAL_ID_PATH_PARAMETER_DESCRIPTORS = {
         parameterWithName("weeklyGoalId").description("Weekly Goal ID")
+    };
+
+    ParameterDescriptor[] WEEKLY_GOAL_CURSOR_PAGING_PARAMETER_DESCRIPTORS = {
+        parameterWithName("index").description("WeeklyTaskId PK").optional(),
+        parameterWithName("limit").description("최대 개수").optional(),
+        parameterWithName("year").description("년").optional(),
+        parameterWithName("month").description("월").optional()
     };
 
     PathParametersSnippet WEEKLY_GOAL_PATH_PARAMETER_SNIPPET = pathParameters(WEEKLY_GOAL_ID_PATH_PARAMETER_DESCRIPTORS);

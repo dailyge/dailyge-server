@@ -38,8 +38,8 @@ public interface RetrospectSnippet {
     };
 
     ParameterDescriptor[] RETROSPECT_PAGING_PATH_PARAMETER_DESCRIPTORS = {
-        parameterWithName("page").description("페이지 번호").optional(),
-        parameterWithName("limit").description("최대 개수").optional(),
+        parameterWithName("pageNumber").description("페이지 번호").optional(),
+        parameterWithName("pageSize").description("페이지 크기").optional(),
     };
 
     FieldDescriptor[] RETROSPECT_CREATE_REQUEST_FIELDS = {
@@ -78,12 +78,14 @@ public interface RetrospectSnippet {
     };
 
     FieldDescriptor[] RETROSPECT_READ_RESPONSE_FIELDS = {
-        fieldWithPath("data").type(ARRAY).description("데이터"),
-        fieldWithPath("data.[].id").type(NUMBER).description("회고 ID"),
-        fieldWithPath("data.[].title").type(STRING).description("회고 제목"),
-        fieldWithPath("data.[].content").type(STRING).description("회고 내용"),
-        fieldWithPath("data.[].date").type(STRING).description("날짜"),
-        fieldWithPath("data.[].isPublic").type(BOOLEAN).description("공개 여부"),
+        fieldWithPath("data").type(OBJECT).description("데이터"),
+        fieldWithPath("data.retrospects").type(ARRAY).description("데이터"),
+        fieldWithPath("data.retrospects.[].id").type(NUMBER).description("회고 ID"),
+        fieldWithPath("data.retrospects.[].title").type(STRING).description("회고 제목"),
+        fieldWithPath("data.retrospects.[].content").type(STRING).description("회고 내용"),
+        fieldWithPath("data.retrospects.[].date").type(STRING).description("날짜"),
+        fieldWithPath("data.retrospects.[].isPublic").type(BOOLEAN).description("공개 여부"),
+        fieldWithPath("data.totalPageCount").type(NUMBER).description("공개 여부"),
         fieldWithPath("code").type(NUMBER).description("응답 코드"),
         fieldWithPath("message").type(STRING).description("응답 메시지")
     };

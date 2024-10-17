@@ -13,8 +13,8 @@ import project.dailyge.app.page.PageFactory;
 @Order(3)
 public class OffsetPagingArgumentResolver implements HandlerMethodArgumentResolver {
 
-    private static final String PAGE = "page";
-    private static final String LIMIT = "limit";
+    private static final String PAGE_NUMBER = "pageNumber";
+    private static final String PAGE_SIZE = "pageSize";
 
     @Override
     public boolean supportsParameter(final MethodParameter parameter) {
@@ -33,8 +33,8 @@ public class OffsetPagingArgumentResolver implements HandlerMethodArgumentResolv
 
     private CustomPageable createPage(final NativeWebRequest webRequest) {
         return PageFactory.createPage(
-            webRequest.getParameter(PAGE),
-            webRequest.getParameter(LIMIT)
+            webRequest.getParameter(PAGE_NUMBER),
+            webRequest.getParameter(PAGE_SIZE)
         );
     }
 }

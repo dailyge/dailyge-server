@@ -42,7 +42,7 @@ public final class PageFactory {
 
     private static int getPageSize(final String pageSize) {
         final int parsedPageSize = parsePageSize(pageSize);
-        if (parsedPageSize < 1 || parsedPageSize > MAX_PAGE_SIZE || parsedPageSize < MIN_PAGE_SIZE) {
+        if (parsedPageSize < MIN_PAGE_SIZE || parsedPageSize > MAX_PAGE_SIZE) {
             return DEFAULT_PAGE_SIZE;
         }
         return parsedPageSize;

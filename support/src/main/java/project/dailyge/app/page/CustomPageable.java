@@ -5,20 +5,20 @@ import lombok.Getter;
 @Getter
 public class CustomPageable {
 
-    private final Integer pageNumber;
-    private final Integer pageSize;
+    private final int pageNumber;
+    private final int pageSize;
 
     private CustomPageable(
-        final Integer pageNumber,
-        final Integer pageSize
+        final int pageNumber,
+        final int pageSize
     ) {
         this.pageNumber = pageNumber;
         this.pageSize = pageSize;
     }
 
     public static CustomPageable createPage(
-        final Integer page,
-        final Integer limit
+        final int page,
+        final int limit
     ) {
         return new CustomPageable(page, limit);
     }

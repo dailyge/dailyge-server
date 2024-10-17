@@ -2,59 +2,60 @@ package project.dailyge.app.page;
 
 public final class PageFactory {
 
-    private static final int DEFAULT_PAGE = 1;
-    private static final int DEFAULT_LIMIT = 10;
-    private static final int MAX_LIMIT = 30;
+    private static final int DEFAULT_PAGE_NUMBER = 1;
+    private static final int DEFAULT_PAGE_SIZE = 10;
+    private static final int MIN_PAGE_SIZE = 5;
+    private static final int MAX_PAGE_SIZE = 30;
 
     private PageFactory() {
         throw new AssertionError("올바른 방식으로 생성자를 호출해주세요.");
     }
 
     public static CustomPageable createPage(
-        final String page,
-        final String limit
+        final String pageNumber,
+        final String pageSize
     ) {
         return CustomPageable.createPage(
-            getPage(page),
-            getLimit(limit)
+            getPageNumber(pageNumber),
+            getPageSize(pageSize)
         );
     }
 
-    private static Integer getPage(final String page) {
-        final Integer parsedPage = parsePage(page);
-        if (parsedPage < DEFAULT_PAGE) {
-            return DEFAULT_PAGE;
+    private static int getPageNumber(final String pageNumber) {
+        final int parsedPageNumber = parsePageNumber(pageNumber);
+        if (parsedPageNumber < DEFAULT_PAGE_NUMBER) {
+            return DEFAULT_PAGE_NUMBER;
         }
-        return parsedPage;
+        return parsedPageNumber;
     }
 
-    private static Integer parsePage(final String page) {
-        if (page == null) {
-            return DEFAULT_PAGE;
+    private static int parsePageNumber(final String pageNumber) {
+        if (pageNumber == null) {
+            return DEFAULT_PAGE_NUMBER;
         }
         try {
-            return Integer.parseInt(page);
+            return Integer.parseInt(pageNumber);
         } catch (NumberFormatException exception) {
-            return DEFAULT_PAGE;
+            return DEFAULT_PAGE_NUMBER;
         }
     }
 
-    private static Integer getLimit(final String limit) {
-        final Integer pageSizeLimit = parseLimit(limit);
-        if (pageSizeLimit < 1 || pageSizeLimit > MAX_LIMIT) {
-            return DEFAULT_LIMIT;
+    private static int getPageSize(final String pageSize) {
+        final int parsedPageSize = parsePageSize(pageSize);
+        if (parsedPageSize < 1 || parsedPageSize > MAX_PAGE_SIZE || parsedPageSize < MIN_PAGE_SIZE) {
+            return DEFAULT_PAGE_SIZE;
         }
-        return pageSizeLimit;
+        return parsedPageSize;
     }
 
-    private static Integer parseLimit(final String limit) {
-        if (limit == null) {
-            return DEFAULT_LIMIT;
+    private static int parsePageSize(final String pageSize) {
+        if (pageSize == null) {
+            return DEFAULT_PAGE_SIZE;
         }
         try {
-            return Integer.parseInt(limit);
+            return Integer.parseInt(pageSize);
         } catch (NumberFormatException exception) {
-            return DEFAULT_LIMIT;
+            return DEFAULT_PAGE_SIZE;
         }
     }
 }

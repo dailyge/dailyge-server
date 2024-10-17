@@ -10,52 +10,52 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @DisplayName("[UnitTest] PageFactory 단위 테스트")
 class PageFactoryUnitTest {
 
-    private static final int DEFAULT_PAGE = 1;
-    private static final int DEFAULT_LIMIT = 10;
+    private static final int DEFAULT_PAGE_NUMBER = 1;
+    private static final int DEFAULT_PAGE_SIZE = 10;
 
     @Test
-    @DisplayName("유효한 page와 limit로 Page를 생성하면, 올바르게 생성된다.")
+    @DisplayName("유효한 page와 pageSize로 Page를 생성하면, 올바르게 생성된다.")
     void whenCreatePageWithValidArgumentThenCorrectlyCreatedPage() {
-        final String page = "10";
-        final String limit = "20";
-        final CustomPageable newPage = PageFactory.createPage(page, limit);
+        final String pageNumber = "10";
+        final String pageSize = "20";
+        final CustomPageable newPage = PageFactory.createPage(pageNumber, pageSize);
 
         assertNotNull(newPage);
-        assertEquals(Integer.parseInt(page), newPage.getPage());
-        assertEquals(Integer.parseInt(limit), newPage.getLimit());
+        assertEquals(Integer.parseInt(pageNumber), newPage.getPageNumber());
+        assertEquals(Integer.parseInt(pageSize), newPage.getPageSize());
     }
 
     @Test
-    @DisplayName("유효하지 않는 page와 limit이면, 기본 설정값으로 생성된다.")
+    @DisplayName("유효하지 않는 page와 pageSize이면, 기본 설정값으로 생성된다.")
     void whenCreatePageWithInvalidArgumentThenDefaultSettingsUsed() {
-        final String page = "-1";
-        final String limit = "-1";
-        final CustomPageable newPage = PageFactory.createPage(page, limit);
+        final String pageNumber = "-1";
+        final String pageSize = "-1";
+        final CustomPageable newPage = PageFactory.createPage(pageNumber, pageSize);
 
         assertNotNull(newPage);
-        assertEquals(DEFAULT_PAGE, newPage.getPage());
-        assertEquals(DEFAULT_LIMIT, newPage.getLimit());
+        assertEquals(DEFAULT_PAGE_NUMBER, newPage.getPageNumber());
+        assertEquals(DEFAULT_PAGE_SIZE, newPage.getPageSize());
     }
 
     @Test
-    @DisplayName("page와 limit가 null이면, 기본 설정값으로 생성된다.")
-    void whenPageAndLimitIsNullThenDefaultSettingsUsed() {
+    @DisplayName("page와 pageSize가 null이면, 기본 설정값으로 생성된다.")
+    void whenPageAndpageSizeIsNullThenDefaultSettingsUsed() {
         final CustomPageable newPage = PageFactory.createPage(null, null);
 
         assertNotNull(newPage);
-        assertEquals(DEFAULT_PAGE, newPage.getPage());
-        assertEquals(DEFAULT_LIMIT, newPage.getLimit());
+        assertEquals(DEFAULT_PAGE_NUMBER, newPage.getPageNumber());
+        assertEquals(DEFAULT_PAGE_SIZE, newPage.getPageSize());
     }
 
     @Test
-    @DisplayName("limit가 최대 limit 보다 크면, 기본 limit값으로 설정된다.")
-    void whenLimitGreaterMaximumLimitThenDefaultLimitUsed() {
-        final String page = "5";
-        final String limit = "500";
-        final CustomPageable newPage = PageFactory.createPage(page, limit);
+    @DisplayName("pageSize가 최대 pageSize 보다 크면, 기본 pageSize값으로 설정된다.")
+    void whenpageSizeGreaterMaximumpageSizeThenDefaultpageSizeUsed() {
+        final String pageNumber = "5";
+        final String pageSize = "500";
+        final CustomPageable newPage = PageFactory.createPage(pageNumber, pageSize);
 
         assertNotNull(newPage);
-        assertEquals(Integer.parseInt(page), newPage.getPage());
-        assertEquals(DEFAULT_LIMIT, newPage.getLimit());
+        assertEquals(Integer.parseInt(pageNumber), newPage.getPageNumber());
+        assertEquals(DEFAULT_PAGE_SIZE, newPage.getPageSize());
     }
 }

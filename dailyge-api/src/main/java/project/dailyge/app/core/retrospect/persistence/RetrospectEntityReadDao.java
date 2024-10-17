@@ -39,7 +39,7 @@ public class RetrospectEntityReadDao implements RetrospectEntityReadRepository {
             )
             .orderBy(retrospectJpaEntity.date.desc())
             .offset(page.getOffset())
-            .limit(page.getLimit())
+            .limit(page.getPageSize())
             .fetch();
     }
 

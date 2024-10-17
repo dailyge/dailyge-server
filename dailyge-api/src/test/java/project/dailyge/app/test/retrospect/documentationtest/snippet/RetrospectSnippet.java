@@ -38,8 +38,8 @@ public interface RetrospectSnippet {
     };
 
     ParameterDescriptor[] RETROSPECT_PAGING_PATH_PARAMETER_DESCRIPTORS = {
-        parameterWithName("page").description("페이지 번호").optional(),
-        parameterWithName("limit").description("최대 개수").optional(),
+        parameterWithName("pageNumber").description("페이지 번호").optional(),
+        parameterWithName("pageSize").description("페이지 크기").optional(),
     };
 
     FieldDescriptor[] RETROSPECT_CREATE_REQUEST_FIELDS = {

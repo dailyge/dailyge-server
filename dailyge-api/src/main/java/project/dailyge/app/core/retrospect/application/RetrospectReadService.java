@@ -10,5 +10,5 @@ public interface RetrospectReadService {
 
     List<RetrospectJpaEntity> findRetrospectByPage(DailygeUser dailygeUser, CustomPageable page);
 
-    int findTotalCount(DailygeUser dailygeUser);
+    long findTotalCount(DailygeUser dailygeUser);
 }

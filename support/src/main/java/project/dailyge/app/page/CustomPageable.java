@@ -27,7 +27,7 @@ public class CustomPageable {
         return (pageNumber - 1) * pageSize;
     }
 
-    public int getTotalPageCount(final int totalCount) {
+    public long getTotalPageCount(final long totalCount) {
         return (totalCount - 1) / pageSize + 1;
     }
 

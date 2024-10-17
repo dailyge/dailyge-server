@@ -4,7 +4,7 @@ import java.util.List;
 
 public record RetrospectPageResponse(
     List<RetrospectResponse> retrospects,
-    int totalPageCount
+    long totalPageCount
 ) {
 
     @Override

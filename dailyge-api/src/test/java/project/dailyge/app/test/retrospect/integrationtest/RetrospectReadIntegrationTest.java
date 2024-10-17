@@ -71,7 +71,7 @@ class RetrospectReadIntegrationTest extends DatabaseTestBase {
         final RetrospectCreateCommand createCommand = new RetrospectCreateCommand("회고 제목", "회고 내용", now.atTime(0, 0, 0, 0), false);
         retrospectWriteService.save(invalidUser, createCommand);
 
-        final int totalCount = retrospectReadService.findTotalCount(dailygeUser);
+        final long totalCount = retrospectReadService.findTotalCount(dailygeUser);
 
         assertEquals(10, totalCount);
     }

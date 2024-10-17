@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("[UnitTest] WeeklyGoalClientValidator 단위 테스트")
 class WeeklyGoalClientValidatorUnitTest {
+
     private WeeklyGoalClientValidator weeklyGoalClientValidator;
 
     @BeforeEach

@@ -4,7 +4,7 @@ import java.util.List;
 
 public record AsyncPagingResponse<T>(
     List<T> data,
-    Long totalCount
+    int totalCount
 ) {
 
 }

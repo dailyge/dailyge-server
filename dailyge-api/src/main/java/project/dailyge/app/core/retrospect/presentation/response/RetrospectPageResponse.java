@@ -8,11 +8,11 @@ import project.dailyge.entity.retrospect.RetrospectJpaEntity;
 public class RetrospectPageResponse {
 
     final List<RetrospectResponse> retrospects;
-    final long totalPageCount;
+    final int totalPageCount;
 
     public RetrospectPageResponse(
         final List<RetrospectJpaEntity> retrospects,
-        final long totalPageCount
+        final int totalPageCount
     ) {
         this.retrospects = retrospects.stream()
             .map(RetrospectResponse::new)

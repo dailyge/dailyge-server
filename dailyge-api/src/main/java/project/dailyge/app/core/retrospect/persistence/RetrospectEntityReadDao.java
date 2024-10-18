@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import project.dailyge.app.common.exception.CommonException;
 import project.dailyge.app.page.CustomPageable;
@@ -20,6 +22,7 @@ import static project.dailyge.entity.retrospect.QRetrospectJpaEntity.retrospectJ
 public class RetrospectEntityReadDao implements RetrospectEntityReadRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
+    private final JdbcTemplate jdbcTemplate;
 
     @Override
     public Optional<RetrospectJpaEntity> findById(final Long retrospectId) {
@@ -39,14 +42,14 @@ public class RetrospectEntityReadDao implements RetrospectEntityReadRepository {
         final CompletableFuture<List<RetrospectJpaEntity>> retrospectsFuture = CompletableFuture.supplyAsync(() ->
             this.findRetrospectByPage(userId, page)
         );
-        final CompletableFuture<Long> totalCountFuture = CompletableFuture.supplyAsync(() ->
+        final CompletableFuture<Integer> totalCountFuture = CompletableFuture.supplyAsync(() ->
             this.findTotalCount(userId)
         );
 
         final CompletableFuture<AsyncPagingResponse> asyncPagingResponseFuture = CompletableFuture.allOf(retrospectsFuture, totalCountFuture)
             .thenApply(ignored -> {
                 final List<RetrospectJpaEntity> retrospects = retrospectsFuture.join();
-                final Long totalCount = totalCountFuture.join();
+                final int totalCount = totalCountFuture.join();
                 return new AsyncPagingResponse(retrospects, totalCount);
             }).exceptionally(ex -> {
                 throw CommonException.from(ex.getMessage(), DATA_ACCESS_EXCEPTION);
@@ -69,13 +72,12 @@ public class RetrospectEntityReadDao implements RetrospectEntityReadRepository {
             .fetch();
     }
 
-    private Long findTotalCount(final Long userId) {
-        return jpaQueryFactory.from(retrospectJpaEntity)
-            .select(retrospectJpaEntity.id.count())
-            .where(
-                retrospectJpaEntity.userId.eq(userId)
-                    .and(retrospectJpaEntity.deleted.eq(false))
-            )
-            .fetchOne();
+    private int findTotalCount(final Long userId) {
+        final String sql = "SELECT count(id) FROM retrospects WHERE user_id = ? AND deleted = false";
+        try {
+            return jdbcTemplate.queryForObject(sql, Integer.class, userId);
+        } catch (DataAccessException ex) {
+            return 0;
+        }
     }
 }

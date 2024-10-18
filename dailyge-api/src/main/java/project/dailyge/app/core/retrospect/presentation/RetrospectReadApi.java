@@ -28,7 +28,7 @@ public class RetrospectReadApi {
         @OffsetPageable final CustomPageable page
     ) {
         final AsyncPagingResponse<RetrospectJpaEntity> retrospectByPage = retrospectReadService.findRetrospectAndTotalCountByPage(dailygeUser, page);
-        final long totalPageCount = page.getTotalPageCount(retrospectByPage.totalCount());
+        final int totalPageCount = page.getTotalPageCount(retrospectByPage.totalCount());
         final RetrospectPageResponse payload = new RetrospectPageResponse(retrospectByPage.data(), totalPageCount);
 
         return ApiResponse.from(OK, payload);

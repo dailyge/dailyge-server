@@ -40,10 +40,10 @@ public class RetrospectEntityReadDao implements RetrospectEntityReadRepository {
         final CustomPageable page
     ) {
         final CompletableFuture<List<RetrospectJpaEntity>> retrospectsFuture = CompletableFuture.supplyAsync(() ->
-            this.findRetrospectByPage(userId, page)
+            findRetrospectByPage(userId, page)
         );
         final CompletableFuture<Integer> totalCountFuture = CompletableFuture.supplyAsync(() ->
-            this.findTotalCount(userId)
+            findTotalCount(userId)
         );
 
         final CompletableFuture<AsyncPagingResponse> asyncPagingResponseFuture = CompletableFuture.allOf(retrospectsFuture, totalCountFuture)

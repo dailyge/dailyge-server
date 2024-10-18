@@ -6,5 +6,4 @@ public record AsyncPagingResponse<T>(
     List<T> data,
     int totalCount
 ) {
-
 }

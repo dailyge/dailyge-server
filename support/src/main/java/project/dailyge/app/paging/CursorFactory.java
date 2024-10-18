@@ -1,4 +1,4 @@
-package project.dailyge.app.cursor;
+package project.dailyge.app.paging;
 
 public final class CursorFactory {
 

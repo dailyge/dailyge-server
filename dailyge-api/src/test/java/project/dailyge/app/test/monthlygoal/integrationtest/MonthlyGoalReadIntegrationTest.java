@@ -9,8 +9,8 @@ import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.core.monthlygoal.application.MonthlyGoalReadService;
 import project.dailyge.app.core.monthlygoal.application.MonthlyGoalWriteService;
 import project.dailyge.app.core.monthlygoal.application.command.MonthlyGoalCreateCommand;
-import project.dailyge.app.cursor.Cursor;
-import static project.dailyge.app.cursor.Cursor.createCursor;
+import project.dailyge.app.paging.Cursor;
+import static project.dailyge.app.paging.Cursor.createCursor;
 import project.dailyge.entity.monthlygoal.MonthlyGoalJpaEntity;
 
 import java.time.LocalDate;

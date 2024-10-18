@@ -7,8 +7,8 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import project.dailyge.app.common.annotation.CursorPageable;
-import project.dailyge.app.cursor.Cursor;
-import project.dailyge.app.cursor.CursorFactory;
+import project.dailyge.app.paging.Cursor;
+import project.dailyge.app.paging.CursorFactory;
 
 @Order(2)
 public class CursorPagingArgumentResolver implements HandlerMethodArgumentResolver {

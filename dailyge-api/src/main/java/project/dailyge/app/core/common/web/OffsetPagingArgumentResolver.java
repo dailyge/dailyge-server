@@ -7,8 +7,8 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import project.dailyge.app.common.annotation.OffsetPageable;
-import project.dailyge.app.page.CustomPageable;
-import project.dailyge.app.page.PageFactory;
+import project.dailyge.app.paging.CustomPageable;
+import project.dailyge.app.paging.PageFactory;
 
 @Order(3)
 public class OffsetPagingArgumentResolver implements HandlerMethodArgumentResolver {

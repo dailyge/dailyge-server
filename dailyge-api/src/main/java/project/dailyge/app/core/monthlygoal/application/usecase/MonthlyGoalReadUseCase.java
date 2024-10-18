@@ -8,7 +8,7 @@ import project.dailyge.app.core.monthlygoal.application.validator.MonthlyGoalVal
 import static project.dailyge.app.core.monthlygoal.exception.MonthlyGoalCodeAndMessage.MONTHLY_GOAL_NOT_FOUND;
 import project.dailyge.app.core.monthlygoal.exception.MonthlyGoalTypeException;
 import project.dailyge.app.core.monthlygoal.persistence.MonthlyGoalReadDao;
-import project.dailyge.app.cursor.Cursor;
+import project.dailyge.app.paging.Cursor;
 import project.dailyge.entity.monthlygoal.MonthlyGoalEntityReadRepository;
 import project.dailyge.entity.monthlygoal.MonthlyGoalJpaEntity;
 

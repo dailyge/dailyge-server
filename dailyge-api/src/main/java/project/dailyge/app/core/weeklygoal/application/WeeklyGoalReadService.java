@@ -1,7 +1,7 @@
 package project.dailyge.app.core.weeklygoal.application;
 
 import project.dailyge.app.core.common.auth.DailygeUser;
-import project.dailyge.app.cursor.Cursor;
+import project.dailyge.app.paging.Cursor;
 import project.dailyge.entity.weeklygoal.WeeklyGoalJpaEntity;
 
 import java.time.LocalDateTime;

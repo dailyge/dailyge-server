@@ -1,14 +1,13 @@
 package project.dailyge.app.core.retrospect.application.usecase;
 
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import project.dailyge.app.common.annotation.ApplicationLayer;
-import project.dailyge.app.common.annotation.OffsetPageable;
 import project.dailyge.app.core.common.auth.DailygeUser;
 import project.dailyge.app.core.retrospect.application.RetrospectReadService;
 import project.dailyge.app.core.retrospect.exception.RetrospectTypeException;
 import project.dailyge.app.core.retrospect.persistence.RetrospectEntityReadDao;
-import project.dailyge.app.page.CustomPageable;
+import project.dailyge.app.paging.CustomPageable;
+import project.dailyge.app.response.AsyncPagingResponse;
 import project.dailyge.entity.retrospect.RetrospectEntityReadRepository;
 import project.dailyge.entity.retrospect.RetrospectJpaEntity;
 import static project.dailyge.app.core.retrospect.exception.RetrospectCodeAndMessage.RETROSPECT_NOT_FOUND;
@@ -27,15 +26,10 @@ class RetrospectReadUseCase implements RetrospectReadService {
     }
 
     @Override
-    public List<RetrospectJpaEntity> findRetrospectByPage(
+    public AsyncPagingResponse<RetrospectJpaEntity> findRetrospectAndTotalCountByPage(
         final DailygeUser dailygeUser,
-        final @OffsetPageable CustomPageable page
+        final CustomPageable page
     ) {
-        return retrospectEntityReadDao.findRetrospectByPage(dailygeUser.getId(), page);
-    }
-
-    @Override
-    public long findTotalCount(final DailygeUser dailygeUser) {
-        return retrospectEntityReadDao.findTotalCount(dailygeUser.getId());
+        return retrospectEntityReadDao.findRetrospectAndTotalCountByPage(dailygeUser.getId(), page);
     }
 }

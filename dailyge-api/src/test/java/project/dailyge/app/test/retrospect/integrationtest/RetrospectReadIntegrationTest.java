@@ -1,20 +1,34 @@
 package project.dailyge.app.test.retrospect.integrationtest;
 
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.concurrent.CompletionException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
 import project.dailyge.app.common.DatabaseTestBase;
+import project.dailyge.app.common.exception.CommonException;
 import project.dailyge.app.core.retrospect.application.RetrospectReadService;
 import project.dailyge.app.core.retrospect.application.RetrospectWriteService;
 import project.dailyge.app.core.retrospect.application.command.RetrospectCreateCommand;
+import project.dailyge.app.core.retrospect.persistence.RetrospectEntityReadDao;
 import project.dailyge.app.paging.CustomPageable;
 import project.dailyge.app.response.AsyncPagingResponse;
 import project.dailyge.entity.retrospect.RetrospectJpaEntity;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.DATA_ACCESS_EXCEPTION;
 
 @DisplayName("[IntegrationTest] 회고 조회 통합 테스트")
 class RetrospectReadIntegrationTest extends DatabaseTestBase {
@@ -80,5 +94,39 @@ class RetrospectReadIntegrationTest extends DatabaseTestBase {
         final int totalCount = asyncPagingResponse.totalCount();
 
         assertEquals(10, totalCount);
+    }
+
+    @Test
+    @DisplayName("비동기 조회 시 JdbcTemplate 장애가 발생하면, CommonException이 발생한다.")
+    void whenJdbcTemplateFailedInAsyncPagingThenCommonExceptionShouldBeHappen() {
+        final CustomPageable page = CustomPageable.createPage(1, 10);
+        final JdbcTemplate mockJdbcTemplate = mock(JdbcTemplate.class);
+        final JPAQueryFactory mockJPAQueryFactory = mock(JPAQueryFactory.class);
+        final RetrospectEntityReadDao retrospectEntityReadDao = new RetrospectEntityReadDao(mockJPAQueryFactory, mockJdbcTemplate);
+
+        when(mockJdbcTemplate.queryForObject(anyString(), eq(Integer.class), anyLong()))
+            .thenThrow(new DataAccessException("Query execution exception"){});
+
+        assertThatThrownBy(() -> retrospectEntityReadDao.findRetrospectAndTotalCountByPage(dailygeUser.getUserId(), page))
+            .isInstanceOf(CompletionException.class)
+            .hasCauseInstanceOf(CommonException.class)
+            .hasMessageContaining(DATA_ACCESS_EXCEPTION.message());
+    }
+
+    @Test
+    @DisplayName("비동기 조회 시 JPAQueryFactory 장애가 발생하면, CommonException이 발생한다.")
+    void whenJPAQueryFactoryFailedInAsyncPagingThenCommonExceptionShouldBeHappen() {
+        final CustomPageable page = CustomPageable.createPage(1, 10);
+        final JdbcTemplate mockJdbcTemplate = mock(JdbcTemplate.class);
+        final JPAQueryFactory mockJPAQueryFactory = mock(JPAQueryFactory.class);
+        final RetrospectEntityReadDao retrospectEntityReadDao = new RetrospectEntityReadDao(mockJPAQueryFactory, mockJdbcTemplate);
+
+        when(mockJPAQueryFactory.selectFrom(any()))
+            .thenThrow(new DataAccessException("Query execution exception"){});
+
+        assertThatThrownBy(() -> retrospectEntityReadDao.findRetrospectAndTotalCountByPage(dailygeUser.getUserId(), page))
+            .isInstanceOf(CompletionException.class)
+            .hasCauseInstanceOf(CommonException.class)
+            .hasMessageContaining(DATA_ACCESS_EXCEPTION.message());
     }
 }

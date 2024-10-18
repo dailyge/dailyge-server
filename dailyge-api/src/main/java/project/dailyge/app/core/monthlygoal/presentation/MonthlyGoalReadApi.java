@@ -12,7 +12,7 @@ import project.dailyge.app.common.response.ApiResponse;
 import project.dailyge.app.core.common.auth.DailygeUser;
 import project.dailyge.app.core.monthlygoal.application.MonthlyGoalReadService;
 import project.dailyge.app.core.monthlygoal.presentation.response.MonthlyGoalResponse;
-import project.dailyge.app.cursor.Cursor;
+import project.dailyge.app.paging.Cursor;
 
 import java.util.List;
 

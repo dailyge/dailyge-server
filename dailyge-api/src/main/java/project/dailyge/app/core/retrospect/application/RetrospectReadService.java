@@ -1,14 +1,12 @@
 package project.dailyge.app.core.retrospect.application;
 
-import java.util.List;
 import project.dailyge.app.core.common.auth.DailygeUser;
-import project.dailyge.app.page.CustomPageable;
+import project.dailyge.app.paging.CustomPageable;
+import project.dailyge.app.response.AsyncPagingResponse;
 import project.dailyge.entity.retrospect.RetrospectJpaEntity;
 
 public interface RetrospectReadService {
     RetrospectJpaEntity findById(Long retrospectId);
 
-    List<RetrospectJpaEntity> findRetrospectByPage(DailygeUser dailygeUser, CustomPageable page);
-
-    long findTotalCount(DailygeUser dailygeUser);
+    AsyncPagingResponse<RetrospectJpaEntity> findRetrospectAndTotalCountByPage(DailygeUser dailygeUser, CustomPageable page);
 }

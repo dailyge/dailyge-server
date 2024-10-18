@@ -5,7 +5,7 @@ import project.dailyge.app.common.annotation.ApplicationLayer;
 import project.dailyge.app.core.common.auth.DailygeUser;
 import project.dailyge.app.core.weeklygoal.application.WeeklyGoalReadService;
 import project.dailyge.app.core.weeklygoal.persistence.WeeklyGoalReadDao;
-import project.dailyge.app.cursor.Cursor;
+import project.dailyge.app.paging.Cursor;
 import project.dailyge.entity.weeklygoal.WeeklyGoalJpaEntity;
 
 import java.time.LocalDateTime;

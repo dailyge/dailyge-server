@@ -8,7 +8,7 @@ import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.core.weeklygoal.application.WeeklyGoalReadService;
 import project.dailyge.app.core.weeklygoal.application.WeeklyGoalWriteService;
 import project.dailyge.app.core.weeklygoal.application.command.WeeklyGoalCreateCommand;
-import project.dailyge.app.cursor.Cursor;
+import project.dailyge.app.paging.Cursor;
 import project.dailyge.entity.weeklygoal.WeeklyGoalJpaEntity;
 
 import java.time.DayOfWeek;
@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static project.dailyge.app.cursor.Cursor.createCursor;
+import static project.dailyge.app.paging.Cursor.createCursor;
 
 @DisplayName("[IntegrationTest] 주간 목표 조회 통합 테스트")
 class WeeklyGoalReadIntegrationTest extends DatabaseTestBase {

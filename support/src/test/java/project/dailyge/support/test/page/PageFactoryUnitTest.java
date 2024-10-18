@@ -2,8 +2,8 @@ package project.dailyge.support.test.page;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import project.dailyge.app.page.CustomPageable;
-import project.dailyge.app.page.PageFactory;
+import project.dailyge.app.paging.CustomPageable;
+import project.dailyge.app.paging.PageFactory;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 

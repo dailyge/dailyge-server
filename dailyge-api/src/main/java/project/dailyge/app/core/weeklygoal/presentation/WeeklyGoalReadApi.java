@@ -13,7 +13,7 @@ import project.dailyge.app.core.common.auth.DailygeUser;
 import project.dailyge.app.core.weeklygoal.application.WeeklyGoalReadService;
 import project.dailyge.app.core.weeklygoal.presentation.validator.WeeklyGoalClientValidator;
 import project.dailyge.app.core.weeklygoal.response.WeeklyGoalResponse;
-import project.dailyge.app.cursor.Cursor;
+import project.dailyge.app.paging.Cursor;
 
 import java.time.LocalDate;
 import java.util.List;

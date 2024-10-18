@@ -1,4 +1,4 @@
-package project.dailyge.app.page;
+package project.dailyge.app.paging;
 
 import lombok.Getter;
 

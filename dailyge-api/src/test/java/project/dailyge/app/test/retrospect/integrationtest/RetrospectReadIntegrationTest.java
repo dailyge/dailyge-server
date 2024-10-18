@@ -10,7 +10,7 @@ import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.core.retrospect.application.RetrospectReadService;
 import project.dailyge.app.core.retrospect.application.RetrospectWriteService;
 import project.dailyge.app.core.retrospect.application.command.RetrospectCreateCommand;
-import project.dailyge.app.page.CustomPageable;
+import project.dailyge.app.paging.CustomPageable;
 import project.dailyge.app.response.AsyncPagingResponse;
 import project.dailyge.entity.retrospect.RetrospectJpaEntity;
 import static org.junit.jupiter.api.Assertions.assertEquals;

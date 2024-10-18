@@ -9,7 +9,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import project.dailyge.app.common.exception.CommonException;
-import project.dailyge.app.page.CustomPageable;
+import project.dailyge.app.paging.CustomPageable;
 import project.dailyge.app.response.AsyncPagingResponse;
 import project.dailyge.entity.retrospect.RetrospectEntityReadRepository;
 import project.dailyge.entity.retrospect.RetrospectJpaEntity;

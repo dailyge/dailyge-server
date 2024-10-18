@@ -3,7 +3,7 @@ package project.dailyge.app.core.weeklygoal.persistence;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import project.dailyge.app.cursor.Cursor;
+import project.dailyge.app.paging.Cursor;
 import project.dailyge.entity.weeklygoal.WeeklyGoalEntityReadRepository;
 import project.dailyge.entity.weeklygoal.WeeklyGoalJpaEntity;
 

@@ -6,7 +6,7 @@ import project.dailyge.app.core.common.auth.DailygeUser;
 import project.dailyge.app.core.retrospect.application.RetrospectReadService;
 import project.dailyge.app.core.retrospect.exception.RetrospectTypeException;
 import project.dailyge.app.core.retrospect.persistence.RetrospectEntityReadDao;
-import project.dailyge.app.page.CustomPageable;
+import project.dailyge.app.paging.CustomPageable;
 import project.dailyge.app.response.AsyncPagingResponse;
 import project.dailyge.entity.retrospect.RetrospectEntityReadRepository;
 import project.dailyge.entity.retrospect.RetrospectJpaEntity;

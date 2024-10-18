@@ -4,7 +4,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import static java.util.Optional.ofNullable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import project.dailyge.app.cursor.Cursor;
+import project.dailyge.app.paging.Cursor;
 import project.dailyge.entity.monthlygoal.MonthlyGoalEntityReadRepository;
 import project.dailyge.entity.monthlygoal.MonthlyGoalJpaEntity;
 import static project.dailyge.entity.monthlygoal.QMonthlyGoalJpaEntity.monthlyGoalJpaEntity;

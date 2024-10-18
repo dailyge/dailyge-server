@@ -5,8 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import project.dailyge.app.cursor.Cursor;
-import project.dailyge.app.cursor.CursorFactory;
+import project.dailyge.app.paging.Cursor;
+import project.dailyge.app.paging.CursorFactory;
 
 @DisplayName("[UnitTest] CursorFactory 단위 테스트")
 class CursorFactoryUnitTest {

@@ -10,7 +10,7 @@ import project.dailyge.app.common.response.ApiResponse;
 import project.dailyge.app.core.common.auth.DailygeUser;
 import project.dailyge.app.core.retrospect.application.RetrospectReadService;
 import project.dailyge.app.core.retrospect.presentation.response.RetrospectPageResponse;
-import project.dailyge.app.page.CustomPageable;
+import project.dailyge.app.paging.CustomPageable;
 import project.dailyge.app.response.AsyncPagingResponse;
 import project.dailyge.entity.retrospect.RetrospectJpaEntity;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.OK;

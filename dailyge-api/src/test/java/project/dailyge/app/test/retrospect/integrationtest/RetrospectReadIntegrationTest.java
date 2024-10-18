@@ -52,8 +52,7 @@ class RetrospectReadIntegrationTest extends DatabaseTestBase {
     @DisplayName("회고 조회 시 정상적으로 반환한다.")
     void whenFindRetrospectThenResultShouldBeCorrectly() {
         final CustomPageable page = CustomPageable.createPage(1, 10);
-        final AsyncPagingResponse<RetrospectJpaEntity> asyncPagingResponse = retrospectReadService.findRetrospectAndTotalCountByPage(dailygeUser,
-            page);
+        final AsyncPagingResponse<RetrospectJpaEntity> asyncPagingResponse = retrospectReadService.findRetrospectAndTotalCountByPage(dailygeUser, page);
         final List<RetrospectJpaEntity> findRetrospects = asyncPagingResponse.data();
         final int totalCount = asyncPagingResponse.totalCount();
 
@@ -65,8 +64,7 @@ class RetrospectReadIntegrationTest extends DatabaseTestBase {
     @DisplayName("회고 조회 시 페이징을 최신 데이터 순으로 반환한다.")
     void whenFindRetrospectThenResultShouldBeRecentDatePagingReturned() {
         final CustomPageable page = CustomPageable.createPage(3, 1);
-        final AsyncPagingResponse<RetrospectJpaEntity> asyncPagingResponse = retrospectReadService.findRetrospectAndTotalCountByPage(dailygeUser,
-            page);
+        final AsyncPagingResponse<RetrospectJpaEntity> asyncPagingResponse = retrospectReadService.findRetrospectAndTotalCountByPage(dailygeUser, page);
 
         final List<RetrospectJpaEntity> findRetrospects = asyncPagingResponse.data();
         assertEquals(1, findRetrospects.size());
@@ -79,8 +77,7 @@ class RetrospectReadIntegrationTest extends DatabaseTestBase {
     @DisplayName("페이지 이후의 데이터가 없다면, 빈 리스트을 반환한다.")
     void whenNoDataAfterThePageThenResultShouldBeEmptyList() {
         final CustomPageable page = CustomPageable.createPage(2, 10);
-        final AsyncPagingResponse<RetrospectJpaEntity> asyncPagingResponse = retrospectReadService.findRetrospectAndTotalCountByPage(dailygeUser,
-            page);
+        final AsyncPagingResponse<RetrospectJpaEntity> asyncPagingResponse = retrospectReadService.findRetrospectAndTotalCountByPage(dailygeUser, page);
         final List<RetrospectJpaEntity> findRetrospects = asyncPagingResponse.data();
 
         assertTrue(findRetrospects.isEmpty());
@@ -93,8 +90,7 @@ class RetrospectReadIntegrationTest extends DatabaseTestBase {
         final RetrospectCreateCommand createCommand = new RetrospectCreateCommand("회고 제목", "회고 내용", now.atTime(0, 0, 0, 0), false);
         retrospectWriteService.save(invalidUser, createCommand);
 
-        final AsyncPagingResponse<RetrospectJpaEntity> asyncPagingResponse = retrospectReadService.findRetrospectAndTotalCountByPage(dailygeUser,
-            page);
+        final AsyncPagingResponse<RetrospectJpaEntity> asyncPagingResponse = retrospectReadService.findRetrospectAndTotalCountByPage(dailygeUser, page);
         final int totalCount = asyncPagingResponse.totalCount();
 
         assertEquals(10, totalCount);

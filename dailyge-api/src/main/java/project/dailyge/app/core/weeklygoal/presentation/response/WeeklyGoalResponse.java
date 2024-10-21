@@ -1,4 +1,4 @@
-package project.dailyge.app.core.weeklygoal.response;
+package project.dailyge.app.core.weeklygoal.presentation.response;
 
 import lombok.Getter;
 import project.dailyge.entity.weeklygoal.WeeklyGoalJpaEntity;

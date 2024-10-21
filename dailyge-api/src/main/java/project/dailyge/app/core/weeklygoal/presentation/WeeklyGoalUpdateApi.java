@@ -12,8 +12,8 @@ import project.dailyge.app.common.annotation.PresentationLayer;
 import project.dailyge.app.common.response.ApiResponse;
 import project.dailyge.app.core.common.auth.DailygeUser;
 import project.dailyge.app.core.weeklygoal.application.WeeklyGoalWriteService;
-import project.dailyge.app.core.weeklygoal.request.WeeklyGoalStatusUpdateRequest;
-import project.dailyge.app.core.weeklygoal.request.WeeklyGoalUpdateRequest;
+import project.dailyge.app.core.weeklygoal.presentation.request.WeeklyGoalStatusUpdateRequest;
+import project.dailyge.app.core.weeklygoal.presentation.request.WeeklyGoalUpdateRequest;
 
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.OK;
 

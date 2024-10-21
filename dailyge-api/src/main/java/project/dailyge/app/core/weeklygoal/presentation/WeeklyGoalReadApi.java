@@ -11,8 +11,8 @@ import project.dailyge.app.common.annotation.PresentationLayer;
 import project.dailyge.app.common.response.ApiResponse;
 import project.dailyge.app.core.common.auth.DailygeUser;
 import project.dailyge.app.core.weeklygoal.application.WeeklyGoalReadService;
+import project.dailyge.app.core.weeklygoal.presentation.response.WeeklyGoalResponse;
 import project.dailyge.app.core.weeklygoal.presentation.validator.WeeklyGoalClientValidator;
-import project.dailyge.app.core.weeklygoal.response.WeeklyGoalResponse;
 import project.dailyge.app.paging.Cursor;
 
 import java.time.LocalDate;

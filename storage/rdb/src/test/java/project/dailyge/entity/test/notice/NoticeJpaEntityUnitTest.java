@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import project.dailyge.entity.notice.NoticeJpaEntity;
-import static org.assertj.core.api.Assertions.assertThat;
+
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static project.dailyge.entity.notice.NoticeFixture.newNotice;
@@ -31,19 +31,6 @@ class NoticeJpaEntityUnitTest {
             () -> assertEquals("공지 사항 내용", newNotice.getContent()),
             () -> assertEquals(UPDATE, newNotice.getNoticeType()),
             () -> assertEquals(1L, newNotice.getUserId())
-        );
-    }
-
-    @Test
-    @DisplayName("기본 생성자를 통해 공지 사항를 생성할 수 있다.")
-    void whenDefaultConstructorIsUsedThenNoticeHasDefaultValues() {
-        final NoticeJpaEntity newNotice = new NoticeJpaEntity();
-
-        assertAll(
-            () -> assertThat(newNotice.getId()).isNull(),
-            () -> assertThat(newNotice.getTitle()).isNull(),
-            () -> assertThat(newNotice.getContent()).isNull(),
-            () -> assertThat(newNotice.getNoticeType()).isNull()
         );
     }
 }

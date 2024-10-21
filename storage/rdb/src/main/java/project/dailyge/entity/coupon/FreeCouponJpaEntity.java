@@ -12,8 +12,10 @@ import project.dailyge.entity.BaseEntity;
 import java.time.LocalDate;
 import java.util.Objects;
 
+import static lombok.AccessLevel.PROTECTED;
+
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = PROTECTED)
 @Entity(name = "free_coupons")
 public class FreeCouponJpaEntity extends BaseEntity {
 

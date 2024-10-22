@@ -10,9 +10,12 @@ import lombok.NoArgsConstructor;
 import project.dailyge.entity.BaseEntity;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
+
+import static lombok.AccessLevel.PROTECTED;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = PROTECTED)
 @Entity(name = "task_recurrences")
 public class TaskRecurrenceJpaEntity extends BaseEntity {
 
@@ -49,5 +52,22 @@ public class TaskRecurrenceJpaEntity extends BaseEntity {
         this.content = content;
         this.startDate = startDate;
         this.endDate = endDate;
+    }
+
+    @Override
+    public boolean equals(final Object object) {
+        if (this == object) {
+            return true;
+        }
+        if (!(object instanceof TaskRecurrenceJpaEntity that)) {
+            return false;
+        }
+        ;
+        return Objects.equals(getId(), that.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }

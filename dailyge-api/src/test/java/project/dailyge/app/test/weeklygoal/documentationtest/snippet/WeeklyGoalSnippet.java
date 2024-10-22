@@ -9,7 +9,7 @@ import org.springframework.restdocs.request.ParameterDescriptor;
 import org.springframework.restdocs.request.PathParametersSnippet;
 import project.dailyge.app.core.monthlygoal.presentation.request.MonthlyGoalStatusUpdateRequest;
 import project.dailyge.app.core.monthlygoal.presentation.request.MonthlyGoalUpdateRequest;
-import project.dailyge.app.core.weeklygoal.request.WeeklyGoalCreateRequest;
+import project.dailyge.app.core.weeklygoal.presentation.request.WeeklyGoalCreateRequest;
 
 import static javax.xml.xpath.XPathEvaluationResult.XPathResultType.NUMBER;
 import static javax.xml.xpath.XPathEvaluationResult.XPathResultType.STRING;

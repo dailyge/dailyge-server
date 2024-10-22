@@ -11,8 +11,10 @@ import project.dailyge.entity.BaseEntity;
 
 import java.util.Objects;
 
+import static lombok.AccessLevel.PROTECTED;
+
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = PROTECTED)
 @Entity(name = "countries")
 public class Country extends BaseEntity {
 

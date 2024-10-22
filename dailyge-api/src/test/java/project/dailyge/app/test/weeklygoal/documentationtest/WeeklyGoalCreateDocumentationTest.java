@@ -6,7 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.restdocs.restassured.RestDocumentationFilter;
 import project.dailyge.app.common.DatabaseTestBase;
-import project.dailyge.app.core.weeklygoal.request.WeeklyGoalCreateRequest;
+import project.dailyge.app.core.weeklygoal.presentation.request.WeeklyGoalCreateRequest;
 
 import java.time.LocalDate;
 

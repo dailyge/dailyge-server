@@ -12,8 +12,10 @@ import project.dailyge.entity.BaseEntity;
 import java.time.LocalDate;
 import java.util.Objects;
 
+import static lombok.AccessLevel.PROTECTED;
+
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = PROTECTED)
 @Entity(name = "monthly_goals")
 public class MonthlyGoalJpaEntity extends BaseEntity {
 

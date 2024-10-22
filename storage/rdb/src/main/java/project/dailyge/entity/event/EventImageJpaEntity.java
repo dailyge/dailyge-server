@@ -8,11 +8,15 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import project.dailyge.entity.BaseEntity;
 import project.dailyge.entity.common.FileExtension;
 
+import static lombok.AccessLevel.PROTECTED;
+
 @Getter
 @Entity(name = "event_image")
+@NoArgsConstructor(access = PROTECTED)
 public class EventImageJpaEntity extends BaseEntity {
 
     @Id

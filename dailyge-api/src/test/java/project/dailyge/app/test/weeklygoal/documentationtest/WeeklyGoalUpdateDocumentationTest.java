@@ -11,7 +11,7 @@ import project.dailyge.app.core.common.auth.DailygeUser;
 import project.dailyge.app.core.weeklygoal.application.WeeklyGoalWriteService;
 import project.dailyge.app.core.weeklygoal.application.command.WeeklyGoalCreateCommand;
 import project.dailyge.app.core.weeklygoal.application.command.WeeklyGoalUpdateCommand;
-import project.dailyge.app.core.weeklygoal.request.WeeklyGoalUpdateRequest;
+import project.dailyge.app.core.weeklygoal.presentation.request.WeeklyGoalUpdateRequest;
 
 import java.time.LocalDate;
 

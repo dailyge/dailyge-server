@@ -1,15 +1,16 @@
 package project.dailyge.entity.test.monthlygoal;
 
-import static java.time.LocalDate.now;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import project.dailyge.entity.monthlygoal.MonthlyGoalFixture;
 import project.dailyge.entity.monthlygoal.MonthlyGoalJpaEntity;
+
+import static java.time.LocalDate.now;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("[UnitTest] 월간 목표 엔티티 테스트")
 class MonthlyGoalJpaEntityUnitTest {
@@ -32,20 +33,6 @@ class MonthlyGoalJpaEntityUnitTest {
             () -> assertThat(newMonthlyGoal.getContent()).isEqualTo("월간 목표 내용"),
             () -> assertThat(newMonthlyGoal.isDone()).isFalse(),
             () -> assertThat(newMonthlyGoal.getUserId()).isEqualTo(1L)
-        );
-    }
-
-    @Test
-    @DisplayName("기본 생성자를 통해 월간 목표를 생성할 수 있다.")
-    void whenDefaultConstructorIsUsedThenMonthlyGoalHasDefaultValues() {
-        final MonthlyGoalJpaEntity newMonthlyGoal = new MonthlyGoalJpaEntity();
-
-        assertAll(
-            () -> assertThat(newMonthlyGoal.getId()).isNull(),
-            () -> assertThat(newMonthlyGoal.getTitle()).isNull(),
-            () -> assertThat(newMonthlyGoal.getContent()).isNull(),
-            () -> assertThat(newMonthlyGoal.isDone()).isFalse(),
-            () -> assertThat(newMonthlyGoal.getUserId()).isNull()
         );
     }
 

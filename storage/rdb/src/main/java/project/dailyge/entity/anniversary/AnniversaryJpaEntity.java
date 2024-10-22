@@ -11,8 +11,10 @@ import project.dailyge.entity.BaseEntity;
 
 import java.time.LocalDateTime;
 
+import static lombok.AccessLevel.PROTECTED;
+
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = PROTECTED)
 @Entity(name = "anniversaries")
 public class AnniversaryJpaEntity extends BaseEntity {
 

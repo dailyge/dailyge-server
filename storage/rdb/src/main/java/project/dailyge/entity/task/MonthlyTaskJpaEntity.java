@@ -9,8 +9,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import project.dailyge.entity.BaseEntity;
 
+import static lombok.AccessLevel.PROTECTED;
+
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = PROTECTED)
 @Entity(name = "monthly_tasks")
 public class MonthlyTaskJpaEntity extends BaseEntity {
 

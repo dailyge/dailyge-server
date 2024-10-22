@@ -1,14 +1,15 @@
 package project.dailyge.entity.test.retrospect;
 
-import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import project.dailyge.entity.retrospect.RetrospectJpaEntity;
+
+import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("[UnitTest] Retrospect 단위 테스트")
@@ -52,21 +53,6 @@ class RetrospectUnitTest {
             () -> assertEquals(now, newRetrospect.getDate()),
             () -> assertFalse(newRetrospect.isPublic()),
             () -> assertEquals(USER_ID, newRetrospect.getUserId())
-        );
-    }
-
-    @Test
-    @DisplayName("기본 생성자를 통해 회고를 생성할 수 있다.")
-    void whenDefaultConstructorIsUsedThenRetrospectHasDefaultValues() {
-        final RetrospectJpaEntity newRetrospect = new RetrospectJpaEntity();
-
-        assertAll(
-            () -> assertNull(newRetrospect.getId()),
-            () -> assertNull(newRetrospect.getTitle()),
-            () -> assertNull(newRetrospect.getContent()),
-            () -> assertNull(newRetrospect.getDate()),
-            () -> assertFalse(newRetrospect.isPublic()),
-            () -> assertNull(newRetrospect.getUserId())
         );
     }
 

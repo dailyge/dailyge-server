@@ -1,4 +1,4 @@
-package project.dailyge.app.core.weeklygoal.request;
+package project.dailyge.app.core.weeklygoal.presentation.request;
 
 
 import jakarta.validation.constraints.NotBlank;

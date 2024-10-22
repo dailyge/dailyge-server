@@ -10,7 +10,7 @@ import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.core.common.auth.DailygeUser;
 import project.dailyge.app.core.weeklygoal.application.WeeklyGoalWriteService;
 import project.dailyge.app.core.weeklygoal.application.command.WeeklyGoalCreateCommand;
-import project.dailyge.app.core.weeklygoal.request.WeeklyGoalStatusUpdateRequest;
+import project.dailyge.app.core.weeklygoal.presentation.request.WeeklyGoalStatusUpdateRequest;
 
 import java.time.LocalDate;
 

@@ -1,4 +1,4 @@
-package project.dailyge.app.core.weeklygoal.request;
+package project.dailyge.app.core.weeklygoal.presentation.request;
 
 public record WeeklyGoalStatusUpdateRequest(boolean done) {
 

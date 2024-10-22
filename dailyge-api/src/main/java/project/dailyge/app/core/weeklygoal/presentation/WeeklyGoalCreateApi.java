@@ -10,8 +10,8 @@ import project.dailyge.app.common.annotation.PresentationLayer;
 import project.dailyge.app.common.response.ApiResponse;
 import project.dailyge.app.core.common.auth.DailygeUser;
 import project.dailyge.app.core.weeklygoal.application.WeeklyGoalWriteService;
-import project.dailyge.app.core.weeklygoal.request.WeeklyGoalCreateRequest;
-import project.dailyge.app.core.weeklygoal.response.WeeklyGoalCreateResponse;
+import project.dailyge.app.core.weeklygoal.presentation.request.WeeklyGoalCreateRequest;
+import project.dailyge.app.core.weeklygoal.presentation.response.WeeklyGoalCreateResponse;
 
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.CREATED;
 

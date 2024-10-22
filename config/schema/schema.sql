@@ -218,3 +218,19 @@ CREATE TABLE IF NOT EXISTS weekly_goals
     last_modified_by BIGINT                            NULL COMMENT '최종 수정한 사람',
     deleted          BIT                               NOT NULL COMMENT '삭제 유무'
 ) engine = 'InnoDB' COMMENT '주간 목표';
+
+DROP TABLE IF EXISTS task_recurrences;
+CREATE TABLE IF NOT EXISTS task_recurrences
+(
+    id               BIGINT AUTO_INCREMENT PRIMARY KEY NOT NULL COMMENT '주간 목표 ID',
+    cron_expression  VARCHAR(50)                       NOT NULL COMMENT '반복 일정 cron 표현식',
+    title            VARCHAR(50)                       NOT NULL COMMENT '제목',
+    content          VARCHAR(1500)                     NOT NULL COMMENT '내용',
+    start_date       TIMESTAMP                         NOT NULL COMMENT '시작 날짜',
+    end_date         TIMESTAMP                         NOT NULL COMMENT '끝나는 날짜',
+    created_at       TIMESTAMP                         NOT NULL COMMENT '생성일',
+    created_by       BIGINT                            NULL COMMENT '생성한 사람',
+    last_modified_at TIMESTAMP                         NOT NULL COMMENT '최종 수정일',
+    last_modified_by BIGINT                            NULL COMMENT '최종 수정한 사람',
+    deleted          BIT                               NOT NULL COMMENT '삭제 유무'
+)

@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import project.dailyge.entity.emoji.EmojiJpaEntity;
+import project.dailyge.entity.emoji.EmojiType;
 
 @DisplayName("[UnitTest] 이모티콘 엔티티 테스트")
 class EmojiJpaEntityUnitTest {
@@ -15,15 +16,16 @@ class EmojiJpaEntityUnitTest {
 
     @BeforeEach
     void setUp() {
-        emoji = new EmojiJpaEntity("😀");
+        emoji = new EmojiJpaEntity(null, "😀", EmojiType.PEOPLE);
     }
 
     @Test
-    @DisplayName("올바른 이모티콘을 입력하면 객체가 생성된다.")
-    void whenValidEmojiThenObjectIsCreated() {
-        final EmojiJpaEntity validEmoji = new EmojiJpaEntity("😀");
+    @DisplayName("올바른 이모티콘과 유형을 입력하면 객체가 생성된다.")
+    void whenValidEmojiAndTypeThenObjectIsCreated() {
+        final EmojiJpaEntity validEmoji = new EmojiJpaEntity(null, "😀", EmojiType.PEOPLE);
         assertAll(
             () -> assertThat(validEmoji.getEmoji()).isEqualTo("😀"),
+            () -> assertThat(validEmoji.getEmojiType()).isEqualTo(EmojiType.PEOPLE),
             () -> assertThat(validEmoji.getId()).isNull()
         );
     }
@@ -32,8 +34,17 @@ class EmojiJpaEntityUnitTest {
     @DisplayName("빈 문자열을 입력하면 IllegalArgumentException이 발생한다.")
     void whenEmojiIsBlankThenThrowIllegalArgumentException() {
         assertThatThrownBy(() ->
-            new EmojiJpaEntity(" ")
+            new EmojiJpaEntity(null, " ", EmojiType.PEOPLE)
         ).isInstanceOf(IllegalArgumentException.class)
             .hasMessageContaining("올바른 이모티콘을 입력해주세요.");
+    }
+
+    @Test
+    @DisplayName("이모티콘 유형이 null일 때 IllegalArgumentException이 발생한다.")
+    void whenEmojiTypeIsNullThenThrowIllegalArgumentException() {
+        assertThatThrownBy(() ->
+            new EmojiJpaEntity(null, "😀", null)
+        ).isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("올바른 이모티콘 유형을 입력해주세요.");
     }
 }

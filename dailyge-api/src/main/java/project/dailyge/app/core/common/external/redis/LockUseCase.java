@@ -2,13 +2,13 @@ package project.dailyge.app.core.common.external.redis;
 
 import lombok.RequiredArgsConstructor;
 import org.redisson.api.RedissonClient;
-import org.springframework.stereotype.Service;
+import project.dailyge.app.common.annotation.ApplicationLayer;
 import project.dailyge.lock.Lock;
-import project.dailyge.lock.LockUseCase;
+import project.dailyge.lock.LockService;
 
-@Service
 @RequiredArgsConstructor
-public class LockService implements LockUseCase {
+@ApplicationLayer(value = "LockUseCase")
+public class LockUseCase implements LockService {
 
     private final RedissonClient redissonClient;
 

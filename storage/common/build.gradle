@@ -2,20 +2,6 @@ dependencies {
     api("org.redisson:redisson-spring-boot-starter:3.16.5")
 }
 
-tasks.named("processResources") {
-    dependsOn("compileJava")
-}
-
-tasks.named("checkstyleMain") {
-    dependsOn("compileTestJava")
-}
-
-project(":storage:rdb") {
-    tasks.named("pmdMain") {
-        dependsOn "compileTestJava"
-    }
-}
-
 jar {
     enabled = true
 }

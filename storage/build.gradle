@@ -1,13 +1,3 @@
-tasks.named("checkstyleMain") {
-    dependsOn("compileTestJava")
-}
-
-project(":storage:rdb") {
-    tasks.named("pmdMain") {
-        dependsOn "compileTestJava"
-    }
-}
-
 jar {
     enabled = true
 }

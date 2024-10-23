@@ -2,6 +2,8 @@ package project.dailyge.entity.emoji;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -23,22 +25,29 @@ public class EmojiJpaEntity extends BaseEntity {
     @Column(name = "emoji")
     private String emoji;
 
-    public EmojiJpaEntity(final String emoji) {
-        validate(emoji);
-        this.emoji = emoji;
-    }
-
-    private void validate(final String emoji) {
-        if (emoji.isBlank()) {
-            throw new IllegalArgumentException("올바른 이모티콘을 입력해주세요.");
-        }
-    }
+    @Enumerated(EnumType.STRING)
+    private EmojiType emojiType;
 
     public EmojiJpaEntity(
         final Long id,
-        final String emoji
+        final String emoji,
+        final EmojiType emojiType
     ) {
+        validate(emoji, emojiType);
         this.id = id;
         this.emoji = emoji;
+        this.emojiType = emojiType;
+    }
+
+    private void validate(
+        final String emoji,
+        final EmojiType emojiType
+    ) {
+        if (emoji.isBlank()) {
+            throw new IllegalArgumentException("올바른 이모티콘을 입력해주세요.");
+        }
+        if (emojiType == null) {
+            throw new IllegalArgumentException("올바른 이모티콘 유형을 입력해주세요.");
+        }
     }
 }

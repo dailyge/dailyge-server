@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Set;
 
 @RequiredArgsConstructor
-@ApplicationLayer(value = "TaskReadService")
+@ApplicationLayer(value = "TaskReadUseCase")
 class TaskReadUseCase implements TaskReadService {
 
     private final TaskEntityReadRepository taskReadRepository;

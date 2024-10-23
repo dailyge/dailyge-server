@@ -8,13 +8,15 @@ plugins {
 dependencies {
     // JPA
     api("org.springframework.boot:spring-boot-starter-data-jpa")
+    api("com.querydsl:querydsl-jpa:${queryDslVersion}:jakarta")
 
     // MySQL
     runtimeOnly("mysql:mysql-connector-java:${property("mysqlVersion")}")
-}
 
-tasks.named("processResources") {
-    dependsOn "compileJava", "compileTestJava", "compileTestFixturesJava"
+    // AnnotationProcessor
+    annotationProcessor("com.querydsl:querydsl-apt:${queryDslVersion}:jakarta")
+    annotationProcessor("jakarta.annotation:jakarta.annotation-api")
+    annotationProcessor("jakarta.persistence:jakarta.persistence-api")
 }
 
 def querydslDir = "src/main/generated"
@@ -29,16 +31,6 @@ tasks.withType(JavaCompile).configureEach {
 
 clean.doLast {
     file(querydslDir).deleteDir()
-}
-
-tasks.named("checkstyleMain") {
-    dependsOn("compileTestJava")
-}
-
-project(":storage:rdb") {
-    tasks.named("pmdMain") {
-        dependsOn "compileTestJava"
-    }
 }
 
 jar {

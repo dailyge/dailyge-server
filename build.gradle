@@ -70,17 +70,9 @@ subprojects {
         // Test
         testImplementation("org.springframework.boot:spring-boot-starter-test")
 
-        // QueryDsl
-        implementation("com.querydsl:querydsl-jpa:${queryDslVersion}:jakarta")
-
         // Lombok
         compileOnly("org.projectlombok:lombok:${lombokVersion}")
         annotationProcessor("org.projectlombok:lombok:${lombokVersion}")
-
-        // AnnotationProcessor
-        annotationProcessor("com.querydsl:querydsl-apt:${queryDslVersion}:jakarta")
-        annotationProcessor("jakarta.annotation:jakarta.annotation-api")
-        annotationProcessor("jakarta.persistence:jakarta.persistence-api")
     }
 
     jacocoTestReport {
@@ -100,6 +92,18 @@ subprojects {
                 fileTree(dir: it, exclude: exclusions)
             }))
         }
+    }
+
+    tasks.named("checkstyleMain") {
+        dependsOn("compileTestJava")
+    }
+
+    tasks.named("pmdMain") {
+        dependsOn("compileTestJava")
+    }
+
+    tasks.named("processResources") {
+        dependsOn("compileJava", "compileTestJava")
     }
 
     tasks.test {

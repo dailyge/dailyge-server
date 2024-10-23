@@ -143,6 +143,7 @@ CREATE TABLE IF NOT EXISTS emojis
 (
     id               BIGINT AUTO_INCREMENT PRIMARY KEY NOT NULL COMMENT '이모티콘 ID',
     emoji            VARCHAR(255)                      NOT NULL COMMENT '이모티콘',
+    emoji_type       VARCHAR(25)                       NOT NULL COMMENT '이모티콘 유형',
     created_at       TIMESTAMP                         NOT NULL COMMENT '생성일',
     created_by       BIGINT                            NULL COMMENT '생성한 사람',
     last_modified_at TIMESTAMP                         NOT NULL COMMENT '최종 수정일',

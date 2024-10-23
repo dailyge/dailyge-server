@@ -8,6 +8,7 @@ import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.core.emoji.application.EmojiReadService;
 import project.dailyge.app.core.emoji.application.EmojiWriteService;
 import project.dailyge.entity.emoji.EmojiJpaEntity;
+import project.dailyge.entity.emoji.EmojiType;
 
 @DisplayName("[IntegrationTest] Emoji 저장 통합 테스트")
 class EmojiSaveIntegrationTest extends DatabaseTestBase {
@@ -21,7 +22,7 @@ class EmojiSaveIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("이모티콘이 존재하면 예외가 발생하지 않는다.")
     void whenSaveEmojiThenCanFindById() {
-        final EmojiJpaEntity emoji = new EmojiJpaEntity(":+1::skin-tone-6:");
+        final EmojiJpaEntity emoji = new EmojiJpaEntity(null, "😀", EmojiType.PEOPLE);
         final Long newEmojiId = emojiWriteService.save(emoji);
         assertDoesNotThrow(() -> emojiReadService.validateExists(newEmojiId));
     }

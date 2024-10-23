@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import project.dailyge.app.common.annotation.ApplicationLayer;
 import project.dailyge.app.core.common.auth.DailygeUser;
+import project.dailyge.app.core.task.application.TaskWriteService;
 import project.dailyge.app.core.task.application.command.TaskCreateCommand;
 import project.dailyge.app.core.task.application.command.TaskStatusUpdateCommand;
 import project.dailyge.app.core.task.application.command.TaskUpdateCommand;
@@ -22,8 +23,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RequiredArgsConstructor
-@ApplicationLayer(value = "TaskWriteService")
-class TaskWriteService implements project.dailyge.app.core.task.application.TaskWriteService {
+@ApplicationLayer(value = "TaskWriteUseCase")
+class TaskWriteUseCase implements TaskWriteService {
 
     private final TaskValidator validator;
     private final TaskEntityReadRepository taskReadRepository;

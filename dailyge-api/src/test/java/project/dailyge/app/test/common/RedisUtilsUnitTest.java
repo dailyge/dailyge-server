@@ -11,19 +11,19 @@ import org.redisson.api.RedissonClient;
 import org.redisson.client.RedisException;
 
 import project.dailyge.app.common.exception.CommonException;
-import project.dailyge.app.core.common.external.redis.LockService;
-import project.dailyge.lock.LockUseCase;
+import project.dailyge.app.core.common.external.redis.LockUseCase;
+import project.dailyge.lock.LockService;
 
 @DisplayName("[UnitTest] RedisUtils 단위 테스트")
 class RedisUtilsUnitTest {
 
     private RedissonClient redissonClient;
-    private LockUseCase lockUseCase;
+    private LockService lockService;
 
     @BeforeEach
     void setUp() {
         redissonClient = mock(RedissonClient.class);
-        lockUseCase = new LockService(redissonClient);
+        lockService = new LockUseCase(redissonClient);
     }
 
     @Test
@@ -33,7 +33,7 @@ class RedisUtilsUnitTest {
         when(redissonClient.getLock(anyString()))
             .thenThrow(IllegalArgumentException.class);
 
-        assertThatThrownBy(() -> lockUseCase.getLock(userId))
+        assertThatThrownBy(() -> lockService.getLock(userId))
             .isInstanceOf(RuntimeException.class)
             .isInstanceOf(CommonException.class);
     }
@@ -44,7 +44,7 @@ class RedisUtilsUnitTest {
         when(redissonClient.getLock(anyString()))
             .thenThrow(RedisException.class);
 
-        assertThatThrownBy(() -> lockUseCase.getLock(1L))
+        assertThatThrownBy(() -> lockService.getLock(1L))
             .isInstanceOf(RuntimeException.class)
             .isInstanceOf(CommonException.class);
     }

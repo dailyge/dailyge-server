@@ -202,7 +202,7 @@ public class TaskJpaEntity extends BaseEntity {
     }
 
     public boolean isSameMonth(final LocalDate otherDate) {
-        return this.date.getMonth().equals(otherDate.getMonth()) && this.date.getYear() == otherDate.getYear();
+        return this.date.getMonthValue() == otherDate.getMonthValue();
     }
 
     @Override

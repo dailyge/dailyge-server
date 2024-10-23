@@ -62,7 +62,6 @@ public class TaskRecurrenceJpaEntity extends BaseEntity {
         if (!(object instanceof TaskRecurrenceJpaEntity that)) {
             return false;
         }
-        ;
         return Objects.equals(getId(), that.getId());
     }
 

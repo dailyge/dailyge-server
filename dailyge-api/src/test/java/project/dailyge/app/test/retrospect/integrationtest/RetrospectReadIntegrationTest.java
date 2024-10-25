@@ -15,7 +15,7 @@ import project.dailyge.app.common.exception.CommonException;
 import project.dailyge.app.core.retrospect.application.RetrospectReadService;
 import project.dailyge.app.core.retrospect.application.RetrospectWriteService;
 import project.dailyge.app.core.retrospect.application.command.RetrospectCreateCommand;
-import project.dailyge.app.core.retrospect.persistence.RetrospectEntityReadDao;
+import project.dailyge.app.core.retrospect.persistence.RetrospectReadDao;
 import project.dailyge.app.paging.CustomPageable;
 import project.dailyge.app.response.AsyncPagingResponse;
 import project.dailyge.entity.retrospect.RetrospectJpaEntity;
@@ -102,13 +102,13 @@ class RetrospectReadIntegrationTest extends DatabaseTestBase {
         final CustomPageable page = CustomPageable.createPage(1, 10);
         final JdbcTemplate mockJdbcTemplate = mock(JdbcTemplate.class);
         final JPAQueryFactory mockJPAQueryFactory = mock(JPAQueryFactory.class);
-        final RetrospectEntityReadDao retrospectEntityReadDao = new RetrospectEntityReadDao(mockJPAQueryFactory, mockJdbcTemplate);
+        final RetrospectReadDao retrospectReadDao = new RetrospectReadDao(mockJPAQueryFactory, mockJdbcTemplate);
 
         when(mockJdbcTemplate.queryForObject(anyString(), eq(Integer.class), anyLong()))
             .thenThrow(new DataAccessException("Query execution exception") {
             });
 
-        assertThatThrownBy(() -> retrospectEntityReadDao.findRetrospectAndTotalCountByPage(dailygeUser.getUserId(), page))
+        assertThatThrownBy(() -> retrospectReadDao.findRetrospectAndTotalCountByPage(dailygeUser.getUserId(), page))
             .isInstanceOf(CompletionException.class)
             .hasCauseInstanceOf(CommonException.class)
             .hasMessageContaining(DATA_ACCESS_EXCEPTION.message());
@@ -120,13 +120,13 @@ class RetrospectReadIntegrationTest extends DatabaseTestBase {
         final CustomPageable page = CustomPageable.createPage(1, 10);
         final JdbcTemplate mockJdbcTemplate = mock(JdbcTemplate.class);
         final JPAQueryFactory mockJPAQueryFactory = mock(JPAQueryFactory.class);
-        final RetrospectEntityReadDao retrospectEntityReadDao = new RetrospectEntityReadDao(mockJPAQueryFactory, mockJdbcTemplate);
+        final RetrospectReadDao retrospectReadDao = new RetrospectReadDao(mockJPAQueryFactory, mockJdbcTemplate);
 
         when(mockJPAQueryFactory.selectFrom(any()))
             .thenThrow(new DataAccessException("Query execution exception") {
             });
 
-        assertThatThrownBy(() -> retrospectEntityReadDao.findRetrospectAndTotalCountByPage(dailygeUser.getUserId(), page))
+        assertThatThrownBy(() -> retrospectReadDao.findRetrospectAndTotalCountByPage(dailygeUser.getUserId(), page))
             .isInstanceOf(CompletionException.class)
             .hasCauseInstanceOf(CommonException.class)
             .hasMessageContaining(DATA_ACCESS_EXCEPTION.message());

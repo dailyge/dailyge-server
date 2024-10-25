@@ -8,7 +8,7 @@ import project.dailyge.entity.retrospect.RetrospectJpaEntity;
 
 @Repository
 @RequiredArgsConstructor
-class RetrospectEntityWriteDao implements RetrospectEntityWriteRepository {
+class RetrospectWriteDao implements RetrospectEntityWriteRepository {
 
     private final EntityManager entityManager;
 

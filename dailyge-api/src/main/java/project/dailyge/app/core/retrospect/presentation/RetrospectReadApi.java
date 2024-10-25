@@ -23,7 +23,7 @@ public class RetrospectReadApi {
     private final RetrospectReadService retrospectReadService;
 
     @GetMapping
-    public ApiResponse<RetrospectPageResponse> findMonthlyGoalsByCursor(
+    public ApiResponse<RetrospectPageResponse> findRetrospectByPage(
         @LoginUser final DailygeUser dailygeUser,
         @OffsetPageable final CustomPageable page
     ) {

@@ -19,7 +19,7 @@ import static project.dailyge.entity.retrospect.QRetrospectJpaEntity.retrospectJ
 
 @Repository
 @RequiredArgsConstructor
-public class RetrospectEntityReadDao implements RetrospectEntityReadRepository {
+public class RetrospectReadDao implements RetrospectEntityReadRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
     private final JdbcTemplate jdbcTemplate;
@@ -66,7 +66,10 @@ public class RetrospectEntityReadDao implements RetrospectEntityReadRepository {
                 retrospectJpaEntity.userId.eq(userId)
                     .and(retrospectJpaEntity.deleted.eq(false))
             )
-            .orderBy(retrospectJpaEntity.date.desc())
+            .orderBy(
+                retrospectJpaEntity.date.desc(),
+                retrospectJpaEntity.id.desc()
+            )
             .offset(page.getOffset())
             .limit(page.getPageSize())
             .fetch();

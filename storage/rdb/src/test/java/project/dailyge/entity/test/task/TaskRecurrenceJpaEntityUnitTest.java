@@ -6,11 +6,13 @@ import org.junit.jupiter.api.Test;
 import project.dailyge.entity.task.TaskRecurrenceJpaEntity;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static project.dailyge.entity.task.RecurrenceType.WEEKLY;
 
 @DisplayName("[UnitTest] 반복 일정 엔티티 테스트")
 class TaskRecurrenceJpaEntityUnitTest {
@@ -22,7 +24,8 @@ class TaskRecurrenceJpaEntityUnitTest {
         final LocalDateTime now = LocalDateTime.now();
         taskRecurrence = new TaskRecurrenceJpaEntity(
             1L,
-            "0 0 1,15 * *",
+            WEEKLY,
+            List.of(1),
             "수영",
             "자유형 배우기",
             now,
@@ -36,7 +39,8 @@ class TaskRecurrenceJpaEntityUnitTest {
         final LocalDateTime now = LocalDateTime.now();
         final TaskRecurrenceJpaEntity newTaskRecurrence = new TaskRecurrenceJpaEntity(
             1L,
-            "0 0 1,15 * *",
+            WEEKLY,
+            List.of(1),
             "수영",
             "자유형 배우기",
             now,
@@ -46,7 +50,8 @@ class TaskRecurrenceJpaEntityUnitTest {
             () -> assertThat(newTaskRecurrence.getId()).isEqualTo(1L),
             () -> assertThat(newTaskRecurrence.getTitle()).isEqualTo("수영"),
             () -> assertThat(newTaskRecurrence.getContent()).isEqualTo("자유형 배우기"),
-            () -> assertThat(newTaskRecurrence.getCronExpression()).isEqualTo("0 0 1,15 * *"),
+            () -> assertThat(newTaskRecurrence.getDatePattern()).isEqualTo(List.of(1)),
+            () -> assertThat(newTaskRecurrence.getRecurrenceType()).isEqualTo(WEEKLY),
             () -> assertThat(newTaskRecurrence.getStartDate()).isEqualTo(now),
             () -> assertThat(newTaskRecurrence.getEndDate()).isEqualTo(now.plusMonths(3))
         );
@@ -58,7 +63,8 @@ class TaskRecurrenceJpaEntityUnitTest {
         final LocalDateTime now = LocalDateTime.now();
         final TaskRecurrenceJpaEntity newTaskRecurrence = new TaskRecurrenceJpaEntity(
             1L,
-            "0 0 1,15 * *",
+            WEEKLY,
+            List.of(1),
             "수영",
             "자유형 배우기",
             now,
@@ -73,7 +79,8 @@ class TaskRecurrenceJpaEntityUnitTest {
         final LocalDateTime now = LocalDateTime.now();
         final TaskRecurrenceJpaEntity newTaskRecurrence = new TaskRecurrenceJpaEntity(
             2L,
-            "0 0 1,15 * *",
+            WEEKLY,
+            List.of(1),
             "수영",
             "자유형 배우기",
             now,
@@ -88,7 +95,8 @@ class TaskRecurrenceJpaEntityUnitTest {
         final LocalDateTime now = LocalDateTime.now();
         final TaskRecurrenceJpaEntity newTaskRecurrence = new TaskRecurrenceJpaEntity(
             1L,
-            "0 0 1,15 * *",
+            WEEKLY,
+            List.of(1),
             "수영",
             "자유형 배우기",
             now,
@@ -103,7 +111,8 @@ class TaskRecurrenceJpaEntityUnitTest {
         final LocalDateTime now = LocalDateTime.now();
         final TaskRecurrenceJpaEntity newTaskRecurrence = new TaskRecurrenceJpaEntity(
             2L,
-            "0 0 1,15 * *",
+            WEEKLY,
+            List.of(1),
             "수영",
             "자유형 배우기",
             now,

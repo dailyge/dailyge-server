@@ -12,6 +12,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import project.dailyge.app.common.exception.CommonException;
+import static project.dailyge.entity.retrospect.QRetrospectJpaEntity.retrospectJpaEntity;
 import project.dailyge.entity.task.MonthlyTaskEntityReadRepository;
 import project.dailyge.entity.task.MonthlyTaskJpaEntity;
 import project.dailyge.entity.task.TaskEntityReadRepository;
@@ -26,6 +27,17 @@ class TaskReadDao implements TaskEntityReadRepository, MonthlyTaskEntityReadRepo
 
     private final JdbcTemplate jdbcTemplate;
     private final JPAQueryFactory queryFactory;
+
+    public Long findTotalCount(final Long userId) {
+        return queryFactory
+            .select(retrospectJpaEntity.id.count())
+            .from(retrospectJpaEntity)
+            .where(
+                retrospectJpaEntity.userId.eq(userId)
+                    .and(retrospectJpaEntity.deleted.eq(false))
+            )
+            .fetchOne();
+    }
 
     @Override
     public Optional<TaskJpaEntity> findTaskById(final Long taskId) {

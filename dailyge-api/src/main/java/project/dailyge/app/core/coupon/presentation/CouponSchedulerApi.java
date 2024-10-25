@@ -9,7 +9,7 @@ import project.dailyge.app.common.annotation.PresentationLayer;
 import project.dailyge.app.common.response.ApiResponse;
 import project.dailyge.app.core.coupon.application.scheduler.CouponBulkScheduler;
 import project.dailyge.app.core.coupon.presentation.request.ScheduleRateRequest;
-import project.dailyge.core.cache.coupon.CouponEventWriteUseCase;
+import project.dailyge.core.cache.coupon.CouponEventWriteService;
 
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.CREATED;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.NO_CONTENT;
@@ -19,11 +19,11 @@ import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.NO_CONTENT
 @RequiredArgsConstructor
 public class CouponSchedulerApi {
     private final CouponBulkScheduler couponBulkScheduler;
-    private final CouponEventWriteUseCase couponEventWriteUseCase;
+    private final CouponEventWriteService couponEventWriteService;
 
     @PostMapping(path = "/scheduling")
     public ApiResponse<Void> startScheduler(@RequestBody final ScheduleRateRequest request) {
-        couponBulkScheduler.startFixedTask(request.period(), couponEventWriteUseCase::saveBulks);
+        couponBulkScheduler.startFixedTask(request.period(), couponEventWriteService::saveBulks);
         return ApiResponse.from(CREATED);
     }
 

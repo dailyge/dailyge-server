@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import project.dailyge.app.cursor.Cursor;
+import project.dailyge.app.paging.Cursor;
 
 @DisplayName("[UnitTest] Cursor 단위 테스트")
 class CursorUnitTest {

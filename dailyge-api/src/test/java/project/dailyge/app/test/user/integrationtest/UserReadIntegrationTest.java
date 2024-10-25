@@ -6,8 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.common.exception.CommonException;
-import project.dailyge.app.core.user.application.UserReadUseCase;
-import project.dailyge.app.core.user.application.UserWriteUseCase;
+import project.dailyge.app.core.user.application.UserReadService;
+import project.dailyge.app.core.user.application.UserWriteService;
 import project.dailyge.app.core.user.exception.UserTypeException;
 import project.dailyge.entity.user.UserJpaEntity;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -30,16 +30,16 @@ class UserReadIntegrationTest extends DatabaseTestBase {
 
 
     @Autowired
-    private UserReadUseCase userReadUseCase;
+    private UserReadService userReadService;
 
     @Autowired
-    private UserWriteUseCase userWriteUseCase;
+    private UserWriteService userWriteService;
 
     @Test
     @DisplayName("등록된 사용자를 조회하면, Null이 아니다.")
     void whenFindUserThenUserShouldBeNotNull() {
-        final UserJpaEntity user = userWriteUseCase.save(createUser(2L, NAME, EMAIL));
-        final UserJpaEntity findUser = userReadUseCase.findById(user.getId());
+        final UserJpaEntity user = userWriteService.save(createUser(2L, NAME, EMAIL));
+        final UserJpaEntity findUser = userReadService.findById(user.getId());
 
         assertNotNull(findUser);
     }
@@ -47,7 +47,7 @@ class UserReadIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("등록된 사용자가 없다면, UserNotFoundException이 발생한다.")
     void whenFindNonExistentUserThenUserNotFoundExceptionShouldBeHappen() {
-        assertThatThrownBy(() -> userReadUseCase.findById(Long.MAX_VALUE))
+        assertThatThrownBy(() -> userReadService.findById(Long.MAX_VALUE))
             .isExactlyInstanceOf(UserTypeException.from(USER_NOT_FOUND).getClass())
             .isInstanceOf(UserTypeException.class)
             .hasMessage(USER_NOT_FOUND.message());
@@ -56,8 +56,8 @@ class UserReadIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("사용자를 조회하면, Null이 아니다.")
     void whenActiveUserFindThenUserShouldBeNotNull() {
-        final UserJpaEntity saveUser = userWriteUseCase.save(createUser(2L, NAME, EMAIL));
-        final UserJpaEntity findUser = userReadUseCase.findActiveUserById(saveUser.getId());
+        final UserJpaEntity saveUser = userWriteService.save(createUser(2L, NAME, EMAIL));
+        final UserJpaEntity findUser = userReadService.findActiveUserById(saveUser.getId());
 
         assertNotNull(findUser);
     }
@@ -65,7 +65,7 @@ class UserReadIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("사용자 조회 시 없다면, UserActiveNotFoundException이 발생한다.")
     void whenFindNonActiveUserThenUserActiveNotFoundExceptionShouldBeHappen() {
-        assertThatThrownBy(() -> userReadUseCase.findById(Long.MAX_VALUE))
+        assertThatThrownBy(() -> userReadService.findById(Long.MAX_VALUE))
             .isExactlyInstanceOf(UserTypeException.from(USER_NOT_FOUND).getClass())
             .isInstanceOf(UserTypeException.class)
             .hasMessage(USER_NOT_FOUND.message());
@@ -74,7 +74,7 @@ class UserReadIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("사용자 조회 시 없다면, UnAuthorizedException이 발생한다.")
     void whenFindLoggedUserNonExistentThenUnAuthorizedExceptionShouldBeHappen() {
-        assertThatThrownBy(() -> userReadUseCase.findAuthorizedUserById(Long.MAX_VALUE))
+        assertThatThrownBy(() -> userReadService.findAuthorizedUserById(Long.MAX_VALUE))
             .isExactlyInstanceOf(CommonException.from(INVALID_USER_ID).getClass())
             .extracting(DETAIL_MESSAGE)
             .isEqualTo(USER_NOT_FOUND.message());
@@ -83,8 +83,8 @@ class UserReadIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("이메일로 사용자를 조회 시, 값이 존재한다.")
     void whenFindUserByRegisteredEmailThenResultShouldBeTrue() {
-        final UserJpaEntity user = userWriteUseCase.save(createUser(2L, NAME, EMAIL));
-        final Optional<UserJpaEntity> findUser = userReadUseCase.findActiveUserByEmail(user.getEmail());
+        final UserJpaEntity user = userWriteService.save(createUser(2L, NAME, EMAIL));
+        final Optional<UserJpaEntity> findUser = userReadService.findActiveUserByEmail(user.getEmail());
 
         assertTrue(findUser.isPresent());
     }
@@ -92,7 +92,7 @@ class UserReadIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("존재하지 않은 이메일로 조회 시, 값이 나오지 않는다.")
     void whenFindUserByUnregisteredEmailThenResultShouldBeFalse() {
-        final Optional<UserJpaEntity> findUser = userReadUseCase.findActiveUserByEmail("notExist@gmail.com");
+        final Optional<UserJpaEntity> findUser = userReadService.findActiveUserByEmail("notExist@gmail.com");
 
         assertFalse(findUser.isPresent());
     }
@@ -100,11 +100,11 @@ class UserReadIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("동일한 이메일로 재 가입 시, 삭제 되지 않은 정보만 검색된다.")
     void whenFindUserReRegisteredBySameEmailThenActiveUserShouldBeOne() {
-        final UserJpaEntity deleteUser = userWriteUseCase.save(createUser(2L, NAME, EMAIL));
-        userWriteUseCase.delete(deleteUser.getId());
+        final UserJpaEntity deleteUser = userWriteService.save(createUser(2L, NAME, EMAIL));
+        userWriteService.delete(deleteUser.getId());
 
-        final UserJpaEntity activeUser = userWriteUseCase.save(createUser(3L, NAME, EMAIL));
-        final Optional<UserJpaEntity> findUser = userReadUseCase.findActiveUserByEmail(EMAIL);
+        final UserJpaEntity activeUser = userWriteService.save(createUser(3L, NAME, EMAIL));
+        final Optional<UserJpaEntity> findUser = userReadService.findActiveUserByEmail(EMAIL);
 
         assertAll(
             () -> assertTrue(findUser.isPresent()),
@@ -116,14 +116,14 @@ class UserReadIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("사용자가 존재할 경우, true 를 반환한다.")
     void whenUserExistentUserThenResultShouldBeTrue() {
-        final UserJpaEntity user = userWriteUseCase.save(createUser(2L, NAME, EMAIL));
+        final UserJpaEntity user = userWriteService.save(createUser(2L, NAME, EMAIL));
 
-        assertTrue(userReadUseCase.existsById(user.getId()));
+        assertTrue(userReadService.existsById(user.getId()));
     }
 
     @Test
     @DisplayName("사용자가 존재하지 않는 경우, false 를 반환한다.")
     void whenUserNonExistentThenResultShouldBeTrue() {
-        assertFalse(userReadUseCase.existsById(Long.MAX_VALUE));
+        assertFalse(userReadService.existsById(Long.MAX_VALUE));
     }
 }

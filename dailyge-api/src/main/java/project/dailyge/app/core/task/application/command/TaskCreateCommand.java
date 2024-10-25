@@ -1,6 +1,6 @@
 package project.dailyge.app.core.task.application.command;
 
-import project.dailyge.app.common.auth.DailygeUser;
+import project.dailyge.app.core.common.auth.DailygeUser;
 import project.dailyge.entity.task.TaskColor;
 import project.dailyge.entity.task.TaskJpaEntity;
 import static project.dailyge.entity.task.TaskStatus.TODO;

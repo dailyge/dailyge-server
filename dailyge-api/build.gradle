@@ -12,6 +12,7 @@ configurations {
 }
 
 apply(from: "${rootDir}/jib/dailyge-api/jib.gradle")
+
 dependencies {
     implementation(project(":storage:common"))
     implementation(project(":storage:document"))
@@ -60,47 +61,47 @@ ext {
     snippetsDir = file("build/generated-snippets")
 }
 
+tasks.register("authOpenApiSpec", task -> {
+    task.doLast {
+        final String filePath = file("$buildDir/api-spec/openapi3.json").toString()
+        final File apiSpecFile = new File(filePath)
+        if (apiSpecFile.exists()) {
+            try {
+                final String apiSpec = apiSpecFile.text
+                final String updatedApiSpec = CommonUtilsKt.addAuthOption(apiSpec)
+                apiSpecFile.write(updatedApiSpec)
+            } catch (Exception e) {
+                e.printStackTrace()
+            }
+        } else {
+            println("Can't find filePath: " + filePath)
+        }
+    }
+})
+
 test {
     dependsOn("copySubmoduleConfig")
     outputs.dir snippetsDir
-    dependsOn(":storage:rdb:test")
-    dependsOn(":storage:document:test")
+    dependsOn(":storage:rdb:test", ":storage:document:test")
     jvmArgs "--add-opens=java.base/java.time=ALL-UNNAMED"
 }
 
 asciidoctor {
-    attributes "snippets": snippetsDir
     inputs.dir snippetsDir
     dependsOn test
-    onlyIf { test.state.executed && test.state.failure == null }
+    outputDir = file("${buildDir}/docs/asciidoc")
 }
-
-tasks.build.dependsOn(":storage:rdb:test")
-tasks.build.dependsOn(":storage:document:test")
 
 tasks.register("copyDocument", Copy) {
     dependsOn asciidoctor
-    from file("build/docs/asciidoc")
-    into file("src/main/resources/static/docs")
-    onlyIf { test.state.executed && test.state.failure == null }
-}
-
-build {
-    dependsOn copyDocument
-    dependsOn(":dailyge-api:openapi3")
-}
-
-bootJar {
-    dependsOn asciidoctor
-    from("${asciidoctor.outputDir}/html5") {
-        into "static/docs"
-    }
+    mustRunAfter asciidoctor
+    from("${buildDir}/docs/asciidoc/")
+    into file("${rootDir}/dailyge-api/src/main/resources/static/docs")
 }
 
 tasks.register("copySubmoduleConfig", Copy) {
     from("${rootDir}/config-module/dailyge-api")
-    include("*.yml")
-    include("*.xml")
+    include("*.yml", "*.xml")
     into("${rootDir}/dailyge-api/src/main/resources")
 }
 
@@ -114,11 +115,12 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 tasks.named("jib").configure {
-    dependsOn("copySubmoduleConfig")
-    dependsOn("openapi3")
-    dependsOn("copyDocument")
+    dependsOn("copySubmoduleConfig", "openapi3", "copyDocument")
+    finalizedBy("authOpenApiSpec")
     enabled = true
 }
+
+tasks.build.dependsOn("copyDocument")
 
 openapi3 {
     def env = System.getenv("ENV")

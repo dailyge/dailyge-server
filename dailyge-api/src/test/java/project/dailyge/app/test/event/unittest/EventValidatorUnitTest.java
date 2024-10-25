@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import project.dailyge.app.core.event.application.service.EventValidator;
+import project.dailyge.app.core.event.application.usecase.EventValidator;
 import static project.dailyge.app.core.event.exception.EventCodeAndMessage.EVENT_NOT_FOUND;
 import static project.dailyge.app.core.event.exception.EventCodeAndMessage.INVALID_EVENT;
 import project.dailyge.app.core.event.exception.EventTypeException;

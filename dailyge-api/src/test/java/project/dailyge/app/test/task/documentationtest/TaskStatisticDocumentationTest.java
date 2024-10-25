@@ -9,7 +9,7 @@ import static org.springframework.restdocs.restassured.RestAssuredRestDocumentat
 import org.springframework.restdocs.restassured.RestDocumentationFilter;
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 import project.dailyge.app.common.DatabaseTestBase;
-import project.dailyge.app.core.task.application.TaskWriteUseCase;
+import project.dailyge.app.core.task.application.TaskWriteService;
 import project.dailyge.app.core.task.facade.TaskFacade;
 import project.dailyge.app.core.task.presentation.requesst.TaskCreateRequest;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.MONTHLY_TASKS_STATISTIC_REQUEST_PARAMETER_SNIPPET;
@@ -33,7 +33,7 @@ class TaskStatisticDocumentationTest extends DatabaseTestBase {
     private TaskFacade taskFacade;
 
     @Autowired
-    private TaskWriteUseCase taskWriteUseCase;
+    private TaskWriteService taskWriteService;
 
     @BeforeEach
     void setUp() {
@@ -48,7 +48,7 @@ class TaskStatisticDocumentationTest extends DatabaseTestBase {
     @DisplayName("[RestDocs] 주간 Tasks 통계를 조회하면 200 OK 응답을 받는다.")
     void whenSearchWeeklyTasksStatisticsThenStatusCodeShouldBe200_OK_RestDocs() {
         final TaskCreateRequest request = createTaskRegisterRequest(now);
-        taskWriteUseCase.save(dailygeUser, request.toCommand());
+        taskWriteService.save(dailygeUser, request.toCommand());
         final LocalDate startDate = now;
         final LocalDate endDate = now.plusDays(10);
 
@@ -75,7 +75,7 @@ class TaskStatisticDocumentationTest extends DatabaseTestBase {
     @DisplayName("[Swagger] 주간 Tasks 달성률을 조회하면 200 OK 응답을 받는다.")
     void whenSearchWeeklyTasksStatisticsThenStatusCodeShouldBe200_OK_Swagger() {
         final TaskCreateRequest request = createTaskRegisterRequest(now);
-        taskWriteUseCase.save(dailygeUser, request.toCommand());
+        taskWriteService.save(dailygeUser, request.toCommand());
         final LocalDate startDate = now;
         final LocalDate endDate = now.plusDays(10);
 
@@ -100,7 +100,7 @@ class TaskStatisticDocumentationTest extends DatabaseTestBase {
     @DisplayName("[Swagger] 올바르지 않은 날짜로 주간 Tasks 달성률을 조회하면 400 Bad Request 응답을 받는다.")
     void whenSearchWeeklyTasksStatisticsWithInvalidParametersThenStatusCodeShouldBe400_OK_Swagger() {
         final TaskCreateRequest request = createTaskRegisterRequest(now);
-        taskWriteUseCase.save(dailygeUser, request.toCommand());
+        taskWriteService.save(dailygeUser, request.toCommand());
         final LocalDate startDate = now;
         final LocalDate endDate = now.plusDays(600);
 
@@ -128,7 +128,7 @@ class TaskStatisticDocumentationTest extends DatabaseTestBase {
     @DisplayName("[RestDocs] 월간 Tasks 통계를 조회하면 200 OK 응답을 받는다.")
     void whenSearchMonthlyTasksStatisticsThenStatusCodeShouldBe200_OK_RestDocs() {
         final TaskCreateRequest request = createTaskRegisterRequest(now);
-        taskWriteUseCase.save(dailygeUser, request.toCommand());
+        taskWriteService.save(dailygeUser, request.toCommand());
         final LocalDate endDate = now.withDayOfMonth(now.lengthOfMonth());
         final LocalDate minusMonthDate = now.minusMonths(1);
         final LocalDate startDate = minusMonthDate.withDayOfMonth(1);
@@ -156,7 +156,7 @@ class TaskStatisticDocumentationTest extends DatabaseTestBase {
     @DisplayName("[Swagger] 월간 Tasks 달성률을 조회하면 200 OK 응답을 받는다.")
     void whenSearchMonthlyTasksStatisticsThenStatusCodeShouldBe200_OK_Swagger() {
         final TaskCreateRequest request = createTaskRegisterRequest(now);
-        taskWriteUseCase.save(dailygeUser, request.toCommand());
+        taskWriteService.save(dailygeUser, request.toCommand());
         final LocalDate startDate = now.withDayOfMonth(1);
         final LocalDate plusMonthDate = now.plusMonths(1);
         final LocalDate endDate = plusMonthDate.withDayOfMonth(plusMonthDate.lengthOfMonth());
@@ -183,7 +183,7 @@ class TaskStatisticDocumentationTest extends DatabaseTestBase {
     @DisplayName("[Swagger] 올바르지 않은 날짜로 월간 Tasks 달성률을 조회하면 400 Bad Request 응답을 받는다.")
     void whenSearchMonthlyTasksStatisticsWithInvalidParametersThenStatusCodeShouldBe400_OK_Swagger() {
         final TaskCreateRequest request = createTaskRegisterRequest(now);
-        taskWriteUseCase.save(dailygeUser, request.toCommand());
+        taskWriteService.save(dailygeUser, request.toCommand());
         final LocalDate startDate = now;
         final LocalDate endDate = now.plusMonths(2);
 
@@ -211,7 +211,7 @@ class TaskStatisticDocumentationTest extends DatabaseTestBase {
     @DisplayName("[RestDocs] 월간 주차 별 Tasks 통계를 조회하면 200 OK 응답을 받는다.")
     void whenSearchMonthlyWeekTasksStatisticsThenStatusCodeShouldBe200_OK_RestDocs() {
         final TaskCreateRequest request = createTaskRegisterRequest(now);
-        taskWriteUseCase.save(dailygeUser, request.toCommand());
+        taskWriteService.save(dailygeUser, request.toCommand());
         final LocalDate endDate = now.withDayOfMonth(now.lengthOfMonth());
         final LocalDate minusMonthDate = now.minusMonths(1);
         final LocalDate startDate = minusMonthDate.withDayOfMonth(1);
@@ -239,7 +239,7 @@ class TaskStatisticDocumentationTest extends DatabaseTestBase {
     @DisplayName("[Swagger] 월간 주차 별 Tasks 달성률을 조회하면 200 OK 응답을 받는다.")
     void whenSearchMonthlyWeekTasksStatisticsThenStatusCodeShouldBe200_OK_Swagger() {
         final TaskCreateRequest request = createTaskRegisterRequest(now);
-        taskWriteUseCase.save(dailygeUser, request.toCommand());
+        taskWriteService.save(dailygeUser, request.toCommand());
         final LocalDate startDate = now.withDayOfMonth(1);
         final LocalDate plusMonthDate = now.plusMonths(1);
         final LocalDate endDate = plusMonthDate.withDayOfMonth(plusMonthDate.lengthOfMonth());
@@ -265,7 +265,7 @@ class TaskStatisticDocumentationTest extends DatabaseTestBase {
     @DisplayName("[Swagger] 올바르지 않은 날짜로 월간 주차 별 Tasks 달성률을 조회하면 400 Bad Request 응답을 받는다.")
     void whenSearchMonthlyWeekTasksStatisticsWithInvalidParametersThenStatusCodeShouldBe400_OK_Swagger() {
         final TaskCreateRequest request = createTaskRegisterRequest(now);
-        taskWriteUseCase.save(dailygeUser, request.toCommand());
+        taskWriteService.save(dailygeUser, request.toCommand());
         final LocalDate startDate = now;
         final LocalDate endDate = now.plusMonths(2);
 

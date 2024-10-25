@@ -9,7 +9,9 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import project.dailyge.app.common.auth.DailygeUser;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+import project.dailyge.app.core.common.auth.DailygeUser;
 import project.dailyge.app.common.exception.CommonException;
 import static project.dailyge.app.core.user.exception.UserCodeAndMessage.USER_NOT_MATCH;
 import project.dailyge.entity.user.Role;
@@ -24,6 +26,15 @@ class DailygeUserUnitTest {
         final DailygeUser dailygeUser = new DailygeUser(1L, Role.ADMIN);
 
         assertTrue(dailygeUser.isAdmin());
+    }
+
+    @ParameterizedTest
+    @ValueSource(longs = {1L, 2L, 3L, 4L, 5L, 6L, 7L, 1999L, 200000L})
+    @DisplayName("권한 체크 시 관리자일 경우, True를 반환한다.")
+    void whenAdminThenAuthCheckMustBeAlwaysTrue(final Long parameter) {
+        final DailygeUser dailygeUser = new DailygeUser(1L, Role.ADMIN);
+
+        assertTrue(dailygeUser.isValid(parameter));
     }
 
     @Test

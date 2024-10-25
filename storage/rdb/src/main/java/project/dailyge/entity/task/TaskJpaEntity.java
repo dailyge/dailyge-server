@@ -62,6 +62,9 @@ public class TaskJpaEntity extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private TaskColor color;
 
+    @Column(name = "task_recurrence_id")
+    private Long taskRecurrenceId;
+
     public TaskJpaEntity(
         final String title,
         final String content,
@@ -81,6 +84,19 @@ public class TaskJpaEntity extends BaseEntity {
         final Long monthlyTaskId,
         final Long userId
     ) {
+        this(title, content, date, status, color, monthlyTaskId, userId, null);
+    }
+
+    public TaskJpaEntity(
+        final String title,
+        final String content,
+        final LocalDate date,
+        final TaskStatus status,
+        final TaskColor color,
+        final Long monthlyTaskId,
+        final Long userId,
+        final Long taskRecurrenceId
+    ) {
         validate(title, content, date);
         this.title = title;
         this.content = content;
@@ -93,6 +109,7 @@ public class TaskJpaEntity extends BaseEntity {
         this.userId = userId;
         this.createdBy = userId;
         this.createdAt = LocalDateTime.now();
+        this.taskRecurrenceId = taskRecurrenceId;
     }
 
     @Builder
@@ -202,7 +219,7 @@ public class TaskJpaEntity extends BaseEntity {
     }
 
     public boolean isSameMonth(final LocalDate otherDate) {
-        return this.date.getMonth().equals(otherDate.getMonth()) && this.date.getYear() == otherDate.getYear();
+        return this.date.getMonthValue() == otherDate.getMonthValue();
     }
 
     @Override

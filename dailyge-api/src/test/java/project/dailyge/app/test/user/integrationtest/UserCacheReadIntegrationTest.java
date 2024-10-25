@@ -24,7 +24,7 @@ import project.dailyge.app.core.user.persistence.UserCacheWriteDao;
 import static project.dailyge.common.configuration.CompressionHelper.compressAsByteArrayWithZstd;
 import static project.dailyge.common.configuration.CompressionHelper.decompressAsObjWithZstd;
 import project.dailyge.core.cache.user.UserCache;
-import project.dailyge.core.cache.user.UserCacheReadUseCase;
+import project.dailyge.core.cache.user.UserCacheReadService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +41,7 @@ class UserCacheReadIntegrationTest extends DatabaseTestBase {
     private UserCacheWriteDao userCacheWriteDao;
 
     @Autowired
-    private UserCacheReadUseCase userCacheReadUseCase;
+    private UserCacheReadService userCacheReadService;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -116,7 +116,7 @@ class UserCacheReadIntegrationTest extends DatabaseTestBase {
         userCacheWriteDao.save(userCache);
         final String blackListKey = String.format("user:blacklist:%d", userCache.getId());
         redisTemplate.opsForValue().set(blackListKey, compressAsByteArrayWithZstd(userCache, objectMapper));
-        Assertions.assertNull(userCacheReadUseCase.findById(userCache.getId()));
+        Assertions.assertNull(userCacheReadService.findById(userCache.getId()));
     }
 
     @Test
@@ -131,7 +131,7 @@ class UserCacheReadIntegrationTest extends DatabaseTestBase {
         );
         userCacheWriteDao.save(userCache);
         assertAll(
-            () -> Assertions.assertNotNull(userCacheReadUseCase.findById(userCache.getId())),
+            () -> Assertions.assertNotNull(userCacheReadService.findById(userCache.getId())),
             () -> assertEquals(1L, userCache.getId()),
             () -> assertEquals("dailyge", userCache.getNickname()),
             () -> assertEquals("dailyge@gmail.com", userCache.getEmail()),
@@ -143,13 +143,13 @@ class UserCacheReadIntegrationTest extends DatabaseTestBase {
     @DisplayName("등록된 루아 스크립트가 존재하지 않으면 CommonException이 발생한다.")
     void whenScriptNotExistsThenCommonExceptionShouldBeHappen() {
         flushScript();
-        assertThrows(CommonException.class, () -> userCacheReadUseCase.findById(1L));
+        assertThrows(CommonException.class, () -> userCacheReadService.findById(1L));
     }
 
     @Test
     @DisplayName("캐시가 존재하지 않으면, null이 반환된다.")
     void whenNormalUserAndCacheNotExistsThenResultShouldBeNull() {
-        Assertions.assertNull(userCacheReadUseCase.findById(Long.MAX_VALUE));
+        Assertions.assertNull(userCacheReadService.findById(Long.MAX_VALUE));
     }
 
     @Test
@@ -168,7 +168,7 @@ class UserCacheReadIntegrationTest extends DatabaseTestBase {
             final long userId = random.nextLong();
             executorService.submit(() -> {
                 try {
-                    userCacheReadUseCase.findById(userId);
+                    userCacheReadService.findById(userId);
                 } finally {
                     latch.countDown();
                 }

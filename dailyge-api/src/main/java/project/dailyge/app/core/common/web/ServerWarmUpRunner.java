@@ -5,11 +5,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import project.dailyge.app.common.auth.DailygeUser;
+import project.dailyge.app.core.common.auth.DailygeUser;
 import project.dailyge.app.core.coupon.presentation.CouponReadApi;
 import project.dailyge.app.core.event.presentation.EventCreateApi;
 import static project.dailyge.entity.user.Role.NORMAL;
@@ -21,6 +22,7 @@ import java.util.stream.IntStream;
 
 @Slf4j
 @Component
+@Profile({"dev"})
 @RequiredArgsConstructor
 public class ServerWarmUpRunner implements ApplicationRunner {
 

@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import project.dailyge.app.common.DatabaseTestBase;
-import project.dailyge.app.core.coupon.application.CouponWriteUseCase;
+import project.dailyge.app.core.coupon.application.CouponWriteService;
 import project.dailyge.app.core.coupon.persistence.CouponInMemoryRepository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class CouponEventParticipantIntegrationTest extends DatabaseTestBase {
     private static final Logger log = LoggerFactory.getLogger(CouponEventParticipantIntegrationTest.class);
     @Autowired
-    private CouponWriteUseCase couponWriteUseCase;
+    private CouponWriteService couponWriteService;
 
     @Autowired
     private CouponInMemoryRepository couponInMemoryRepository;
@@ -25,7 +25,7 @@ class CouponEventParticipantIntegrationTest extends DatabaseTestBase {
     void whenCreateCouponEventParticipationThenSavedInMemoryQueue() {
         couponInMemoryRepository.deleteAll();
         log.info("쿠폰 발급 전 count: {}", couponInMemoryRepository.count());
-        couponWriteUseCase.saveApply(dailygeUser);
+        couponWriteService.saveApply(dailygeUser);
         log.info("쿠폰 발급 후 count: {}", couponInMemoryRepository.count());
         assertEquals(1, couponInMemoryRepository.count());
 

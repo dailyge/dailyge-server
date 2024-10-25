@@ -3,8 +3,8 @@ package project.dailyge.app.test.common;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import project.dailyge.app.common.auth.JwtProperties;
-import project.dailyge.app.common.auth.SecretKeyManager;
+import project.dailyge.app.core.common.auth.JwtProperties;
+import project.dailyge.app.core.common.auth.SecretKeyManager;
 
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;

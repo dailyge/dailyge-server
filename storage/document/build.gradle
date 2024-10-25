@@ -7,16 +7,6 @@ dependencies {
     implementation("com.fasterxml.uuid:java-uuid-generator:4.0")
 }
 
-tasks.named("checkstyleMain") {
-    dependsOn("compileTestJava")
-}
-
-project(":storage:rdb") {
-    tasks.named("pmdMain") {
-        dependsOn "compileTestJava"
-    }
-}
-
 jar {
     enabled = true
 }

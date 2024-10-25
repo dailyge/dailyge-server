@@ -6,5 +6,5 @@ import java.util.Optional;
 public interface MonthlyGoalEntityReadRepository {
     Optional<MonthlyGoalJpaEntity> findById(Long monthlyGoalId);
 
-    List<MonthlyGoalJpaEntity> findByUserIdAndYearAndMonth(final Long userId, final int year, final int month);
+    List<MonthlyGoalJpaEntity> findByUserIdAndYearAndMonth(Long userId, int year, int month);
 }

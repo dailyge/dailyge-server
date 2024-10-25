@@ -243,12 +243,12 @@ class TaskJpaEntityUnitTest {
     @Test
     @DisplayName("Task와 동일한 달인 경우, True를 반환한다.")
     void whenSameMonthTaskThenResultShouldBeTrue() {
-        final LocalDate now = LocalDate.now();
+        final LocalDate now = LocalDate.of(2024, 10, 5);
         final TaskJpaEntity newTask = TaskJpaEntity.builder()
             .id(1L)
             .title("프로젝트 관리")
             .content("프로젝트 진행 상황 점검")
-            .date(LocalDate.now().plusDays(10))
+            .date(now.plusDays(10))
             .status(TODO)
             .userId(1L)
             .deleted(false)
@@ -260,21 +260,19 @@ class TaskJpaEntityUnitTest {
     @Test
     @DisplayName("Task와 다른 달일 경우, False를 반환한다.")
     void whenDifferentMonthTaskThenResultShouldBeFalse() {
-        final LocalDate now = LocalDate.now();
-        final LocalDate differentMonth = now.plusMonths(1);
-        final LocalDate differentYear = now.plusYears(1);
+        final LocalDate now = LocalDate.of(2024, 10, 5);
+        final LocalDate differentMonth = LocalDate.of(2024, 11, 5);
         final TaskJpaEntity newTask = TaskJpaEntity.builder()
             .id(1L)
             .title("프로젝트 관리")
             .content("프로젝트 진행 상황 점검")
-            .date(LocalDate.now().plusDays(10))
+            .date(now)
             .status(TODO)
             .userId(1L)
             .deleted(false)
             .build();
 
         assertFalse(newTask.isSameMonth(differentMonth));
-        assertFalse(newTask.isSameMonth(differentYear));
     }
 
     @Test

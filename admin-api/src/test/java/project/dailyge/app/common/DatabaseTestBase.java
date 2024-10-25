@@ -23,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import project.dailyge.app.DailygeAdminApplication;
 import project.dailyge.app.common.auth.DailygeUser;
 import project.dailyge.core.cache.user.UserCache;
-import project.dailyge.core.cache.user.UserCacheWriteUseCase;
+import project.dailyge.core.cache.user.UserCacheWriteService;
 import project.dailyge.entity.user.UserJpaEntity;
 
 import java.time.LocalDate;
@@ -57,7 +57,7 @@ public abstract class DatabaseTestBase {
     private DatabaseInitializer databaseInitialization;
 
     @Autowired
-    private UserCacheWriteUseCase userCacheWriteUseCase;
+    private UserCacheWriteService userCacheWriteService;
 
     protected RequestSpecification specification;
     protected ObjectMapper objectMapper;
@@ -101,7 +101,7 @@ public abstract class DatabaseTestBase {
             user.getProfileImageUrl(),
             user.getRoleAsString()
         );
-        userCacheWriteUseCase.save(userCache);
+        userCacheWriteService.save(userCache);
         dailygeUser = new DailygeUser(user.getId(), user.getRole());
         return user;
     }

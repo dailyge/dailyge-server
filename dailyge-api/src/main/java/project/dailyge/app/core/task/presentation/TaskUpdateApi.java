@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.OK;
+import project.dailyge.app.common.annotation.LoginUser;
 import project.dailyge.app.common.annotation.PresentationLayer;
-import project.dailyge.app.common.auth.DailygeUser;
-import project.dailyge.app.common.auth.LoginUser;
 import project.dailyge.app.common.response.ApiResponse;
-import project.dailyge.app.core.task.application.TaskWriteUseCase;
+import project.dailyge.app.core.common.auth.DailygeUser;
+import project.dailyge.app.core.task.application.TaskWriteService;
 import project.dailyge.app.core.task.application.command.TaskStatusUpdateCommand;
 import project.dailyge.app.core.task.application.command.TaskUpdateCommand;
 import project.dailyge.app.core.task.presentation.requesst.TaskStatusUpdateRequest;
@@ -23,7 +23,7 @@ import project.dailyge.app.core.task.presentation.requesst.TaskUpdateRequest;
 @PresentationLayer(value = "TaskUpdateApi")
 public class TaskUpdateApi {
 
-    private final TaskWriteUseCase taskWriteUseCase;
+    private final TaskWriteService taskWriteService;
 
     @PutMapping(path = {"/{taskId}"})
     public ApiResponse<Void> update(
@@ -32,7 +32,7 @@ public class TaskUpdateApi {
         @Valid @RequestBody final TaskUpdateRequest request
     ) {
         final TaskUpdateCommand command = request.toCommand();
-        taskWriteUseCase.update(dailygeUser, taskId, command);
+        taskWriteService.update(dailygeUser, taskId, command);
         return ApiResponse.from(OK);
     }
 
@@ -43,7 +43,7 @@ public class TaskUpdateApi {
         @Valid @RequestBody final TaskStatusUpdateRequest request
     ) {
         final TaskStatusUpdateCommand command = request.toCommand();
-        taskWriteUseCase.updateStatus(dailygeUser, taskId, command);
+        taskWriteService.updateStatus(dailygeUser, taskId, command);
         return ApiResponse.from(OK);
     }
 }

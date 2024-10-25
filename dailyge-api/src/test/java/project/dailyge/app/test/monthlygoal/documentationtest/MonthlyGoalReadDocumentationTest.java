@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.restdocs.restassured.RestDocumentationFilter;
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 import project.dailyge.app.common.DatabaseTestBase;
-import project.dailyge.app.core.monthlygoal.application.MonthlyGoalWriteUseCase;
+import project.dailyge.app.core.monthlygoal.application.MonthlyGoalWriteService;
 import project.dailyge.app.core.monthlygoal.presentation.request.MonthlyGoalCreateRequest;
 import static project.dailyge.app.test.monthlygoal.documentationtest.snippet.MonthlyGoalSearchSnippet.createMonthlyGoalSearchFilter;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.createIdentifier;
@@ -22,13 +22,13 @@ class MonthlyGoalReadDocumentationTest extends DatabaseTestBase {
     private MonthlyGoalCreateRequest request;
 
     @Autowired
-    private MonthlyGoalWriteUseCase monthlyGoalWriteUseCase;
+    private MonthlyGoalWriteService monthlyGoalWriteService;
 
     @BeforeEach
     void setUp() {
         now = LocalDate.now();
         request = new MonthlyGoalCreateRequest("메인 페이지 개발 완료", "서비스 출시.", now);
-        monthlyGoalWriteUseCase.save(dailygeUser, request.toCommand());
+        monthlyGoalWriteService.save(dailygeUser, request.toCommand());
     }
 
     @Test

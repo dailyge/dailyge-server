@@ -222,7 +222,7 @@ CREATE TABLE IF NOT EXISTS weekly_goals
 
 DROP TABLE IF EXISTS task_recurrences;
 CREATE TABLE IF NOT EXISTS task_recurrences (
-    id                      BIGINT AUTO_INCREMENT PRIMARY KEY NOT NULL COMMENT '주간 목표 ID',
+    id                      BIGINT AUTO_INCREMENT PRIMARY KEY NOT NULL COMMENT '반복 일정 ID',
     recurrence_type         ENUM('WEEKLY', 'DAILY', 'WEEKDAY', 'MONTHLY', 'CUSTOM') NOT NULL COMMENT '반복 일정 종류',
     date_pattern            JSON NOT NULL COMMENT '반복 날짜 패턴 ([1,2,3,4] or [1,31])',
     title                   VARCHAR(50) NOT NULL COMMENT '제목',

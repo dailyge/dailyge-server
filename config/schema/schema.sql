@@ -23,21 +23,22 @@ CREATE TABLE IF NOT EXISTS user_sequence
 DROP TABLE IF EXISTS tasks;
 CREATE TABLE IF NOT EXISTS tasks
 (
-    id               BIGINT AUTO_INCREMENT PRIMARY KEY    NOT NULL COMMENT '할 일 ID',
-    user_id          BIGINT                               NOT NULL COMMENT '사용자 ID',
-    title            VARCHAR(150)                         NOT NULL COMMENT '제목',
-    content          VARCHAR(2500)                        NOT NULL COMMENT '내용',
-    `month`          INT                                  NOT NULL COMMENT '월',
-    `year`           INT                                  NOT NULL COMMENT '년',
-    `date`           DATE                                 NOT NULL COMMENT '날짜',
-    status           ENUM ('TODO', 'IN_PROGRESS', 'DONE') NOT NULL COMMENT '할 일 상태',
-    color            varchar(255)                         NOT NULL COMMENT '할 일 색상',
-    monthly_task_id  BIGINT                               NOT NULL COMMENT '월간 일정',
-    created_at       TIMESTAMP                            NOT NULL COMMENT '생성일',
-    created_by       BIGINT                               NULL COMMENT '생성한 사람',
-    last_modified_at TIMESTAMP                            NULL COMMENT '최종 수정일',
-    last_modified_by BIGINT                               NULL COMMENT '최종 수정한 사람',
-    deleted          BIT                                  NOT NULL COMMENT '삭제 유무'
+    id                  BIGINT AUTO_INCREMENT PRIMARY KEY    NOT NULL COMMENT '할 일 ID',
+    user_id             BIGINT                               NOT NULL COMMENT '사용자 ID',
+    title               VARCHAR(150)                         NOT NULL COMMENT '제목',
+    content             VARCHAR(2500)                        NOT NULL COMMENT '내용',
+    `month`             INT                                  NOT NULL COMMENT '월',
+    `year`              INT                                  NOT NULL COMMENT '년',
+    `date`              DATE                                 NOT NULL COMMENT '날짜',
+    status              ENUM ('TODO', 'IN_PROGRESS', 'DONE') NOT NULL COMMENT '할 일 상태',
+    color               varchar(255)                         NOT NULL COMMENT '할 일 색상',
+    monthly_task_id     BIGINT                               NOT NULL COMMENT '월간 일정',
+    task_recurrence_id  BIGINT                               NULL COMMENT '반복 일정 규칙 ID',
+    created_at          TIMESTAMP                            NOT NULL COMMENT '생성일',
+    created_by          BIGINT                               NULL COMMENT '생성한 사람',
+    last_modified_at    TIMESTAMP                            NULL COMMENT '최종 수정일',
+    last_modified_by    BIGINT                               NULL COMMENT '최종 수정한 사람',
+    deleted             BIT                                  NOT NULL COMMENT '삭제 유무'
 ) engine 'InnoDB' COMMENT '할 일';
 
 DROP TABLE IF EXISTS users;
@@ -219,3 +220,21 @@ CREATE TABLE IF NOT EXISTS weekly_goals
     last_modified_by BIGINT                            NULL COMMENT '최종 수정한 사람',
     deleted          BIT                               NOT NULL COMMENT '삭제 유무'
 ) engine = 'InnoDB' COMMENT '주간 목표';
+
+DROP TABLE IF EXISTS task_recurrences;
+CREATE TABLE IF NOT EXISTS task_recurrences (
+    id                      BIGINT AUTO_INCREMENT PRIMARY KEY NOT NULL COMMENT '반복 일정 ID',
+    recurrence_type         ENUM('WEEKLY', 'DAILY', 'WEEKDAY', 'MONTHLY', 'CUSTOM') NOT NULL COMMENT '반복 일정 종류',
+    date_pattern            JSON NOT NULL COMMENT '반복 날짜 패턴 ([1,2,3,4] or [1,31])',
+    title                   VARCHAR(50) NOT NULL COMMENT '제목',
+    content                 VARCHAR(1500) NOT NULL COMMENT '내용',
+    start_date              TIMESTAMP NOT NULL COMMENT '시작 날짜',
+    end_date                TIMESTAMP NOT NULL COMMENT '끝나는 날짜',
+    created_at              TIMESTAMP NOT NULL COMMENT '생성일',
+    created_by              BIGINT NULL COMMENT '생성한 사람',
+    last_modified_at        TIMESTAMP NOT NULL COMMENT '최종 수정일',
+    last_modified_by        BIGINT NULL COMMENT '최종 수정한 사람',
+    deleted BIT NOT NULL    COMMENT '삭제 유무'
+) engine = 'InnoDB'
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_general_ci COMMENT '반복 일정 규칙';

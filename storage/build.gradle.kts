@@ -1,7 +1,7 @@
-jar {
+tasks.jar {
     enabled = true
 }
 
-bootJar {
+tasks.bootJar {
     enabled = false
 }

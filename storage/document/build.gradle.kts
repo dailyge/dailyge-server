@@ -7,10 +7,10 @@ dependencies {
     implementation("com.fasterxml.uuid:java-uuid-generator:4.0")
 }
 
-jar {
+tasks.jar {
     enabled = true
 }
 
-bootJar {
+tasks.bootJar {
     enabled = false
 }

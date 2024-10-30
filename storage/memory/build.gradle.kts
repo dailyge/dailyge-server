@@ -4,10 +4,10 @@ dependencies {
     implementation("com.github.luben:zstd-jni:1.5.2-4")
 }
 
-jar {
+tasks.jar {
     enabled = true
 }
 
-bootJar {
+tasks.bootJar {
     enabled = false
 }

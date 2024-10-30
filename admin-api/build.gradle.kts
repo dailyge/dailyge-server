@@ -5,10 +5,7 @@ plugins {
 }
 
 configurations {
-    asciidoctorExt
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
+    create("asciidoctorExt")
 }
 
 dependencies {
@@ -17,13 +14,12 @@ dependencies {
     implementation(project(":storage:memory"))
     implementation(project(":support"))
 
-    testImplementation project(":storage:rdb")
-    testImplementation project(":storage:document")
+    testImplementation(project(":storage:rdb"))
+    testImplementation(project(":storage:document"))
 
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
-
     implementation("io.jsonwebtoken:jjwt:0.9.1")
     implementation("javax.xml.bind:jaxb-api:2.3.1")
     implementation("com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4")
@@ -31,59 +27,54 @@ dependencies {
 
     testImplementation("org.springframework.restdocs:spring-restdocs-restassured")
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
-    testImplementation("com.epages:restdocs-api-spec-mockmvc:${restdocsApiSpecVersion}")
-    testImplementation("com.epages:restdocs-api-spec-restassured:${restdocsApiSpecVersion}")
+    testImplementation("com.epages:restdocs-api-spec-mockmvc:${property("restdocsApiSpecVersion")}")
+    testImplementation("com.epages:restdocs-api-spec-restassured:${property("restdocsApiSpecVersion")}")
     testImplementation("org.testcontainers:testcontainers")
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.testcontainers:mysql")
 
-    asciidoctorExt("org.springframework.restdocs:spring-restdocs-asciidoctor")
+    "asciidoctorExt"("org.springframework.restdocs:spring-restdocs-asciidoctor")
 }
 
 springBoot {
-    mainClassName = "project.dailyge.app.DailygeAdminApplication"
+    mainClass.set("project.dailyge.app.DailygeAdminApplication")
 }
 
-ext {
-    snippetsDir = file("build/generated-snippets")
-}
+val snippetsDir = file("build/generated-snippets")
 
-test {
+tasks.test {
     dependsOn("copySubmoduleConfig")
-    outputs.dir snippetsDir
+    outputs.dir(snippetsDir)
     dependsOn(":storage:rdb:test")
 }
 
-asciidoctor {
-    attributes "snippets": snippetsDir
-    inputs.dir snippetsDir
-    dependsOn test
-    onlyIf { test.state.executed && test.state.failure == null }
+tasks.asciidoctor {
+    attributes(mapOf("snippets" to snippetsDir))
+    inputs.dir(snippetsDir)
+    dependsOn(tasks.test)
+    onlyIf { tasks.test.get().state.executed && tasks.test.get().state.failure == null }
 }
 
-tasks.build.dependsOn(":storage:rdb:test")
-tasks.build.dependsOn(":storage:document:test")
-
-tasks.register("copyDocument", Copy) {
-    dependsOn asciidoctor
-    from file("build/docs/asciidoc")
-    into file("src/main/resources/static/docs")
-    onlyIf { test.state.executed && test.state.failure == null }
-}
-
-build {
-    dependsOn copyDocument
+tasks.build {
+    dependsOn(tasks.named("copyDocument"))
     dependsOn(":admin-api:openapi3")
 }
 
-bootJar {
-    dependsOn asciidoctor
-    from("${asciidoctor.outputDir}/html5") {
-        into "static/docs"
+tasks.bootJar {
+    dependsOn(tasks.asciidoctor)
+    from("${tasks.asciidoctor.get().outputDir}/html5") {
+        into("static/docs")
     }
 }
 
-tasks.register("copySubmoduleConfig", Copy) {
+tasks.register<Copy>("copyDocument") {
+    dependsOn(tasks.asciidoctor)
+    from(file("build/docs/asciidoc"))
+    into(file("src/main/resources/static/docs"))
+    onlyIf { tasks.test.get().state.executed && tasks.test.get().state.failure == null }
+}
+
+tasks.register<Copy>("copySubmoduleConfig") {
     from("${rootDir}/config-module/admin-api")
     include("*.yml")
     into("${rootDir}/admin-api/src/main/resources")
@@ -94,13 +85,12 @@ tasks.named("processResources") {
     dependsOn(":storage:rdb:compileTestJava")
 }
 
-tasks.withType(JavaCompile).configureEach {
+tasks.withType<JavaCompile>().configureEach {
     outputs.cacheIf { true }
 }
 
 openapi3 {
-    def env = System.getenv("ENV")
-    setServer(env != null && env == "prod" ? "https://api.dailyge.com" : "https://api-dev.dailyge.com")
+    setServer("https://api-dev.dailyge.com")
     title = "Dailyge Admin Api"
     description = "Dailyge Admin Api 문서 입니다."
     version = "1.0.0"

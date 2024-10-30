@@ -2,10 +2,10 @@ dependencies {
     api("org.redisson:redisson-spring-boot-starter:3.16.5")
 }
 
-jar {
+tasks.jar {
     enabled = true
 }
 
-bootJar {
+tasks.bootJar {
     enabled = false
 }

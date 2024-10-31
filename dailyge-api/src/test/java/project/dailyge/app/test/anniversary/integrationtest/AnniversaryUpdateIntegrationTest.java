@@ -39,7 +39,7 @@ class AnniversaryUpdateIntegrationTest extends DatabaseTestBase {
     private AnniversaryReadService anniversaryReadService;
 
     @Test
-    @DisplayName("업데이트를 하면 내용이 반영된다.")
+    @DisplayName("기념일을 업데이트를 하면 내용이 반영된다.")
     void whenUpdateAnniversaryThenStatusShouldBeApplied() {
         final LocalDateTime now = now().truncatedTo(MILLIS);
         final String name = "부모님 결혼 기념일";
@@ -59,7 +59,7 @@ class AnniversaryUpdateIntegrationTest extends DatabaseTestBase {
             () -> assertEquals(updatedDate.getYear(), findAnniversary.getDate().getYear()),
             () -> assertEquals(updatedDate.getMonth(), findAnniversary.getDate().getMonth()),
             () -> assertEquals(updatedDate.getDayOfMonth(), findAnniversary.getDate().getDayOfMonth()),
-            () -> assertEquals(updatedRemind, findAnniversary.isRemind())
+            () -> assertEquals(updatedRemind, findAnniversary.getRemind())
         );
     }
 

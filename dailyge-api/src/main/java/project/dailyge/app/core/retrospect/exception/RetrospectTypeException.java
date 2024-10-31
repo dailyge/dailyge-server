@@ -1,15 +1,14 @@
 package project.dailyge.app.core.retrospect.exception;
 
-import java.util.HashMap;
-import java.util.Map;
-import lombok.Getter;
 import project.dailyge.app.codeandmessage.CodeAndMessage;
 import project.dailyge.app.common.exception.BusinessException;
 import static project.dailyge.app.core.retrospect.exception.RetrospectCodeAndMessage.DUPLICATED_RETROSPECT;
 import static project.dailyge.app.core.retrospect.exception.RetrospectCodeAndMessage.RETROSPECT_NOT_FOUND;
 import static project.dailyge.app.core.retrospect.exception.RetrospectCodeAndMessage.RETROSPECT_UN_RESOLVED_EXCEPTION;
 
-@Getter
+import java.util.HashMap;
+import java.util.Map;
+
 public sealed class RetrospectTypeException extends BusinessException {
 
     private static final Map<CodeAndMessage, RetrospectTypeException> factory = new HashMap<>();

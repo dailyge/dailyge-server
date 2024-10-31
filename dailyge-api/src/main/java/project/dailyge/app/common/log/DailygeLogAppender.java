@@ -6,11 +6,11 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import static com.mongodb.MongoCompressor.LEVEL;
 import static io.netty.util.internal.StringUtil.EMPTY_STRING;
 import static java.time.LocalDateTime.now;
 import static java.util.concurrent.TimeUnit.DAYS;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import static org.springframework.data.domain.Sort.Direction.ASC;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.index.Index;
@@ -37,8 +37,9 @@ import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-@Slf4j
 public class DailygeLogAppender extends AppenderBase<ILoggingEvent> {
+
+    private static final Logger log = LoggerFactory.getLogger(DailygeLogAppender.class);
 
     private final BlockingQueue<OperationLogDocument> queue = new LinkedBlockingQueue<>();
     private MongoTemplate mongoTemplate;

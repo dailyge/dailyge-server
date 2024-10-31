@@ -1,7 +1,6 @@
 package project.dailyge.app.core.monthlygoal.presentation;
 
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -16,12 +15,15 @@ import project.dailyge.app.core.monthlygoal.application.MonthlyGoalWriteService;
 import project.dailyge.app.core.monthlygoal.presentation.request.MonthlyGoalStatusUpdateRequest;
 import project.dailyge.app.core.monthlygoal.presentation.request.MonthlyGoalUpdateRequest;
 
-@RequiredArgsConstructor
 @RequestMapping(path = "/api/monthly-goals")
 @PresentationLayer(value = "MonthlyGoalUpdateApi")
 public class MonthlyGoalUpdateApi {
 
     private final MonthlyGoalWriteService monthlyGoalWriteService;
+
+    public MonthlyGoalUpdateApi(final MonthlyGoalWriteService monthlyGoalWriteService) {
+        this.monthlyGoalWriteService = monthlyGoalWriteService;
+    }
 
     @PutMapping(path = {"/{monthlyGoalId}"})
     public ApiResponse<Void> updateMonthlyGoalById(

@@ -1,8 +1,5 @@
 package project.dailyge.app.core.coupon.persistence;
 
-import lombok.Getter;
-
-@Getter
 public class CouponEventParticipant {
 
     private Long userId;
@@ -17,6 +14,14 @@ public class CouponEventParticipant {
     ) {
         this.userId = userId;
         this.timestamp = timestamp;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public Long getTimestamp() {
+        return timestamp;
     }
 
     @Override

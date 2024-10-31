@@ -3,11 +3,11 @@ package project.dailyge.app.common.log;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import static java.lang.String.format;
 import static java.time.temporal.ChronoUnit.MILLIS;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
@@ -29,18 +29,22 @@ import static project.dailyge.app.utils.LogUtils.createLogMessage;
 import java.lang.annotation.Annotation;
 import java.time.LocalDateTime;
 
-@Slf4j
 @Aspect
 @Component
 @Profile("!test")
-@RequiredArgsConstructor
 public class LoggingAspect {
+
+    private static final Logger log = LoggerFactory.getLogger(LoggingAspect.class);
 
     private static final String EMPTY_STRING = "";
     private static final String EMPTY_ARRAY = "[]";
     private static final String ANNOTATION_VALUE = "value";
 
     private final ObjectMapper objectMapper;
+
+    public LoggingAspect(final ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
+    }
 
     @Around("@within(project.dailyge.app.common.annotation.PresentationLayer)")
     public Object writeLogAroundPresentation(final ProceedingJoinPoint joinPoint) throws Throwable {

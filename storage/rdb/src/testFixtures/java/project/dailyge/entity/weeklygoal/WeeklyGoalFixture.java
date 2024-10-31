@@ -1,5 +1,7 @@
 package project.dailyge.entity.weeklygoal;
 
+import project.dailyge.entity.goal.WeeklyGoalJpaEntity;
+
 import java.time.LocalDateTime;
 
 public final class WeeklyGoalFixture extends WeeklyGoalJpaEntity {

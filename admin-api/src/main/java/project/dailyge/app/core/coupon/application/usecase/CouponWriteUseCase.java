@@ -1,8 +1,6 @@
 package project.dailyge.app.core.coupon.application.usecase;
 
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import project.dailyge.app.common.annotation.ApplicationLayer;
 import project.dailyge.app.core.coupon.application.FreeCouponWriteService;
 import project.dailyge.document.common.UuidGenerator;
@@ -12,12 +10,14 @@ import project.dailyge.entity.coupon.FreeCouponWriteRepository;
 import java.time.LocalDate;
 import java.util.List;
 
-@Slf4j
-@RequiredArgsConstructor
 @ApplicationLayer(value = "CouponWriteService")
 class CouponWriteUseCase implements FreeCouponWriteService {
 
     private final FreeCouponWriteRepository freeCouponWriteRepository;
+
+    public CouponWriteUseCase(final FreeCouponWriteRepository freeCouponWriteRepository) {
+        this.freeCouponWriteRepository = freeCouponWriteRepository;
+    }
 
     @Override
     @Transactional

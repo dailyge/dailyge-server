@@ -1,8 +1,5 @@
 package project.dailyge.app.core.monthlygoal.presentation.response;
 
-import lombok.Getter;
-
-@Getter
 public class MonthlyGoalCreateResponse {
 
     private Long monthlyGoalId;
@@ -12,6 +9,10 @@ public class MonthlyGoalCreateResponse {
 
     public MonthlyGoalCreateResponse(final Long monthlyGoalId) {
         this.monthlyGoalId = monthlyGoalId;
+    }
+
+    public Long getMonthlyGoalId() {
+        return monthlyGoalId;
     }
 
     @Override

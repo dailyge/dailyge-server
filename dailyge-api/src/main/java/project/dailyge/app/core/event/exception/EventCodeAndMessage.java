@@ -1,9 +1,7 @@
 package project.dailyge.app.core.event.exception;
 
-import lombok.Getter;
 import project.dailyge.app.codeandmessage.CodeAndMessage;
 
-@Getter
 public enum EventCodeAndMessage implements CodeAndMessage {
 
     INVALID_EVENT(400, "유효하지 않은 이벤트입니다."),
@@ -21,6 +19,13 @@ public enum EventCodeAndMessage implements CodeAndMessage {
         this.message = message;
     }
 
+    public int getCode() {
+        return code;
+    }
+
+    public String getMessage() {
+        return message;
+    }
 
     @Override
     public int code() {

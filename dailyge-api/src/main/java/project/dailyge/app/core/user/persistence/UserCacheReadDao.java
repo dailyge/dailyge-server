@@ -2,7 +2,6 @@ package project.dailyge.app.core.user.persistence;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.lettuce.core.RedisException;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.RedisSystemException;
 import static org.springframework.data.redis.connection.ReturnType.VALUE;
 import org.springframework.data.redis.core.RedisCallback;
@@ -18,12 +17,21 @@ import project.dailyge.core.cache.user.UserCache;
 import project.dailyge.core.cache.user.UserCacheReadRepository;
 
 @Repository
-@RequiredArgsConstructor
 public class UserCacheReadDao implements UserCacheReadRepository {
 
     private final RedisTemplate<String, byte[]> redisTemplate;
     private final String scriptSha;
     private final ObjectMapper objectMapper;
+
+    public UserCacheReadDao(
+        final RedisTemplate<String, byte[]> redisTemplate,
+        final String scriptSha,
+        final ObjectMapper objectMapper
+    ) {
+        this.redisTemplate = redisTemplate;
+        this.scriptSha = scriptSha;
+        this.objectMapper = objectMapper;
+    }
 
     @Override
     public UserCache findById(final Long userId) {

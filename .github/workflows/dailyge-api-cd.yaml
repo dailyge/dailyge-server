@@ -147,9 +147,9 @@ jobs:
           fields: project,ref,commit,author,action,eventName,job,took
           text: |
             :white_check_mark: *배포를 성공적으로 완료했습니다.*
-            *Contributor:* ${{ github.actor }}
+            *Requestor:* ${{ github.actor }}
             *Reviewers:* ${{ join(github.event.pull_request.requested_reviewers.*.login, ', ') }}
-            *PR:* <${{ github.event.pull_request.html_url }}|PR>
+            *Link:* <${{ github.event.pull_request.html_url }}|PR>
             *Env:* ${{ github.event.pull_request.base.ref }}
           username: PR_Bot
           icon_emoji: ":robot_face:"
@@ -165,11 +165,10 @@ jobs:
           fields: project,ref,commit,author,action,eventName,job,took
           text: |
             :x: *배포에 실패했습니다.*
-            *Contributor:* ${{ github.actor }}
+            *Requestor:* ${{ github.actor }}
             *Reviewers:* ${{ join(github.event.pull_request.requested_reviewers.*.login, ', ') }}
-            *PR:* <${{ github.event.pull_request.html_url }}|PR>
+            *Link:* <${{ github.event.pull_request.html_url }}|PR>
             *Env:* ${{ github.event.pull_request.base.ref }}
-            *Description:* PR 채널을 확인해주세요.
           username: PR_Bot
           icon_emoji: ":robot_face:"
           channel: pr

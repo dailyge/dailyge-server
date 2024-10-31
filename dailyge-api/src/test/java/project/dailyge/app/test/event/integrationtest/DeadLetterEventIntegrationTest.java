@@ -8,7 +8,7 @@ import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.core.event.application.EventWriteService;
 import project.dailyge.app.core.event.persistence.DeadLetterQueue;
 import static project.dailyge.document.common.UuidGenerator.createTimeBasedUUID;
-import project.dailyge.entity.common.Event;
+import project.dailyge.entity.common.DomainEvent;
 import static project.dailyge.entity.common.EventType.CREATE;
 import static project.dailyge.entity.user.UserEvent.createEvent;
 
@@ -24,7 +24,7 @@ class DeadLetterEventIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("유실된 이벤트를 저장하면 In-Memory 데드레터에 저장된다.")
     void whenWriteEventThenSavedInMemoryDeadLetter() {
-        final Event event = createEvent(1L, createTimeBasedUUID(), CREATE);
+        final DomainEvent event = createEvent(1L, createTimeBasedUUID(), CREATE);
         eventWriteService.saveDeadLetter(event);
 
         assertFalse(deadLetterQueue.isEmpty());

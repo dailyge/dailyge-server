@@ -1,10 +1,8 @@
 package project.dailyge.app.core.monthlygoal.presentation.request;
 
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
 import project.dailyge.app.core.monthlygoal.application.command.MonthlyGoalStatusUpdateCommand;
 
-@Getter
 public class MonthlyGoalStatusUpdateRequest {
 
     @NotNull
@@ -15,6 +13,10 @@ public class MonthlyGoalStatusUpdateRequest {
 
     public MonthlyGoalStatusUpdateRequest(final Boolean done) {
         this.done = done;
+    }
+
+    public Boolean getDone() {
+        return done;
     }
 
     public MonthlyGoalStatusUpdateCommand toCommand() {

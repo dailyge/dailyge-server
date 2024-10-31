@@ -1,13 +1,11 @@
 package project.dailyge.document;
 
-import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.time.LocalDateTime;
 
-@Getter
 public abstract class DocumentBaseEntity {
 
     @CreatedDate
@@ -33,5 +31,25 @@ public abstract class DocumentBaseEntity {
         this.createdBy = userId;
         this.lastModifiedAt = now;
         this.lastModifiedBy = userId;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public Long getCreatedBy() {
+        return createdBy;
+    }
+
+    public LocalDateTime getLastModifiedAt() {
+        return lastModifiedAt;
+    }
+
+    public Long getLastModifiedBy() {
+        return lastModifiedBy;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
     }
 }

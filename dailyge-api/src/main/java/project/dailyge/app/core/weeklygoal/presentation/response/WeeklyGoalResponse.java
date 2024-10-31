@@ -1,11 +1,9 @@
 package project.dailyge.app.core.weeklygoal.presentation.response;
 
-import lombok.Getter;
-import project.dailyge.entity.weeklygoal.WeeklyGoalJpaEntity;
+import project.dailyge.entity.goal.WeeklyGoalJpaEntity;
 
 import java.time.LocalDateTime;
 
-@Getter
 public class WeeklyGoalResponse {
 
     private final Long id;
@@ -24,6 +22,34 @@ public class WeeklyGoalResponse {
         this.startWeekDate = weeklyGoal.getWeekStartDate();
         this.userId = weeklyGoal.getUserId();
         this.createdAt = weeklyGoal.getCreatedAtAsString();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public boolean isDone() {
+        return done;
+    }
+
+    public LocalDateTime getStartWeekDate() {
+        return startWeekDate;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
     }
 
     @Override

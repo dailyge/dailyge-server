@@ -2,10 +2,12 @@ package project.dailyge.app.core.coupon.persistence;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.lettuce.core.RedisException;
-import lombok.RequiredArgsConstructor;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_GATEWAY;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
 import project.dailyge.app.common.exception.CommonException;
 import project.dailyge.common.configuration.CompressionHelper;
 import project.dailyge.core.cache.coupon.CouponEvent;
@@ -14,16 +16,19 @@ import project.dailyge.core.cache.coupon.CouponEventWriteRepository;
 import java.util.List;
 import java.util.Objects;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_GATEWAY;
-import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
-
 @Repository
-@RequiredArgsConstructor
 public class CouponEventWriteDao implements CouponEventWriteRepository {
 
     private final RedisTemplate<String, byte[]> redisTemplate;
     private final ObjectMapper objectMapper;
+
+    public CouponEventWriteDao(
+        final RedisTemplate<String, byte[]> redisTemplate,
+        final ObjectMapper objectMapper
+    ) {
+        this.redisTemplate = redisTemplate;
+        this.objectMapper = objectMapper;
+    }
 
     @Override
     public void saveBulks(final List<CouponEvent> couponCaches, final Long eventId) {

@@ -59,35 +59,6 @@ class CodeAndMessageReadDocumentationTest extends DatabaseTestBase {
     }
 
     private List<CodeAndMessageJpaEntity> createCodeAndMessages() {
-        final CodeAndMessageJpaEntity badRequest = CodeAndMessageJpaEntity.builder()
-            .domain("common")
-            .name("BAD_REQUEST")
-            .message("올바른 파라미터를 입력해주세요.")
-            .code(400)
-            .build();
-        final CodeAndMessageJpaEntity internalServer = CodeAndMessageJpaEntity.builder()
-            .domain("common")
-            .name("INTERNAL_SERVER_ERROR")
-            .message("서버 내부 오류입니다.")
-            .code(500)
-            .build();
-        final CodeAndMessageJpaEntity taskNotFound = CodeAndMessageJpaEntity.builder()
-            .domain("tasks")
-            .name("TASK_NOT_FOUND")
-            .message("일정을 찾을 수 없습니다.")
-            .code(404)
-            .build();
-        final CodeAndMessageJpaEntity userNotFound = CodeAndMessageJpaEntity.builder()
-            .domain("users")
-            .name("USER_NOT_FOUND")
-            .message("존재하지 않는 사용자 정보 입니다.")
-            .code(404)
-            .build();
-        final List<CodeAndMessageJpaEntity> entities = new ArrayList<>();
-        entities.add(badRequest);
-        entities.add(internalServer);
-        entities.add(taskNotFound);
-        entities.add(userNotFound);
-        return entities;
+        return new ArrayList<>();
     }
 }

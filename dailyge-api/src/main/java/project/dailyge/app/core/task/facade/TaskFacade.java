@@ -1,6 +1,5 @@
 package project.dailyge.app.core.task.facade;
 
-import lombok.RequiredArgsConstructor;
 import project.dailyge.app.common.annotation.FacadeLayer;
 import project.dailyge.app.core.common.auth.DailygeUser;
 import project.dailyge.app.core.task.application.TaskWriteService;
@@ -13,12 +12,19 @@ import project.dailyge.lock.LockService;
 
 import java.time.LocalDate;
 
-@RequiredArgsConstructor
 @FacadeLayer(value = "TaskFacade")
 public class TaskFacade {
 
     private final LockService lockService;
     private final TaskWriteService taskWriteService;
+
+    public TaskFacade(
+        final LockService lockService,
+        final TaskWriteService taskWriteService
+    ) {
+        this.lockService = lockService;
+        this.taskWriteService = taskWriteService;
+    }
 
     public void createMonthlyTasks(
         final DailygeUser dailygeUser,

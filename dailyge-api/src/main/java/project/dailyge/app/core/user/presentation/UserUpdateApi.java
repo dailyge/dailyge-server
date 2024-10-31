@@ -1,7 +1,6 @@
 package project.dailyge.app.core.user.presentation;
 
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,11 +14,14 @@ import project.dailyge.app.core.user.facade.UserFacade;
 import project.dailyge.app.core.user.presentation.request.UserUpdateRequest;
 
 @PresentationLayer
-@RequiredArgsConstructor
 @RequestMapping(path = "/api/users")
 public class UserUpdateApi {
 
     private final UserFacade userFacade;
+
+    public UserUpdateApi(final UserFacade userFacade) {
+        this.userFacade = userFacade;
+    }
 
     @PatchMapping(path = "/{userId}")
     public ApiResponse<Void> updateUser(

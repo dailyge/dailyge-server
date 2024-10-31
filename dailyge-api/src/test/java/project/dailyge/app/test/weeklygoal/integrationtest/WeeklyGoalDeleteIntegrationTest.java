@@ -8,7 +8,7 @@ import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.common.exception.CommonException;
 import project.dailyge.app.core.weeklygoal.application.WeeklyGoalWriteService;
 import project.dailyge.app.core.weeklygoal.application.command.WeeklyGoalCreateCommand;
-import project.dailyge.entity.weeklygoal.WeeklyGoalEntityReadRepository;
+import project.dailyge.entity.goal.WeeklyGoalEntityReadRepository;
 
 import java.time.LocalDate;
 

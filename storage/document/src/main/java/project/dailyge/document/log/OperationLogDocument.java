@@ -1,6 +1,5 @@
 package project.dailyge.document.log;
 
-import lombok.Getter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -8,7 +7,6 @@ import static project.dailyge.document.common.UuidGenerator.createTimeBasedUUID;
 
 import java.time.LocalDateTime;
 
-@Getter
 @Document(collection = "operation_logs")
 public class OperationLogDocument {
 
@@ -52,5 +50,53 @@ public class OperationLogDocument {
         this.duration = duration;
         this.context = context;
         this.level = level;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getOrder() {
+        return order;
+    }
+
+    public String getLayer() {
+        return layer;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public String getMethod() {
+        return method;
+    }
+
+    public String getTraceId() {
+        return traceId;
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public String getVisitor() {
+        return visitor;
+    }
+
+    public LocalDateTime getTime() {
+        return time;
+    }
+
+    public String getDuration() {
+        return duration;
+    }
+
+    public Object getContext() {
+        return context;
+    }
+
+    public String getLevel() {
+        return level;
     }
 }

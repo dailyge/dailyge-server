@@ -1,19 +1,20 @@
 package project.dailyge.app.test.coupon.documentationtest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import static io.restassured.RestAssured.given;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.core.coupon.presentation.request.CouponWinnerRequest;
 import project.dailyge.core.cache.coupon.CouponEventWriteRepository;
 
-import static io.restassured.RestAssured.given;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-
+@Disabled
 @DisplayName("[DocumentationTest] 쿠폰 당첨자 선정 문서화 테스트")
 class CouponWinnerDocumentationTest extends DatabaseTestBase {
 

@@ -1,15 +1,5 @@
 package project.dailyge.app.test.user.integrationtest;
 
-import java.util.Optional;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import project.dailyge.app.common.DatabaseTestBase;
-import project.dailyge.app.common.exception.CommonException;
-import project.dailyge.app.core.user.application.UserReadService;
-import project.dailyge.app.core.user.application.UserWriteService;
-import project.dailyge.app.core.user.exception.UserTypeException;
-import project.dailyge.entity.user.UserJpaEntity;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -17,10 +7,21 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.*;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_USER_ID;
+import project.dailyge.app.common.DatabaseTestBase;
+import project.dailyge.app.common.exception.CommonException;
+import project.dailyge.app.core.user.application.UserReadService;
+import project.dailyge.app.core.user.application.UserWriteService;
 import static project.dailyge.app.core.user.exception.UserCodeAndMessage.USER_NOT_FOUND;
+import project.dailyge.app.core.user.exception.UserTypeException;
 import static project.dailyge.app.test.user.fixture.UserFixture.createUser;
-import static project.dailyge.app.test.user.integrationtest.TokenManagerIntegrationTest.*;
+import static project.dailyge.app.test.user.integrationtest.TokenManagerIntegrationTest.DETAIL_MESSAGE;
+import project.dailyge.entity.user.UserJpaEntity;
+
+import java.util.Optional;
 
 @DisplayName("[IntegrationTest] 사용자 조회 통합 테스트")
 class UserReadIntegrationTest extends DatabaseTestBase {

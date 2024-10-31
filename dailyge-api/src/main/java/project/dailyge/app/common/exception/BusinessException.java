@@ -1,9 +1,7 @@
 package project.dailyge.app.common.exception;
 
-import lombok.Getter;
 import project.dailyge.app.codeandmessage.CodeAndMessage;
 
-@Getter
 public class BusinessException extends RuntimeException {
 
     private String detailMessage;
@@ -21,6 +19,14 @@ public class BusinessException extends RuntimeException {
         super(codeAndMessage.message());
         this.detailMessage = detailMessage;
         this.codeAndMessage = codeAndMessage;
+    }
+
+    public String getDetailMessage() {
+        return detailMessage;
+    }
+
+    public CodeAndMessage getCodeAndMessage() {
+        return codeAndMessage;
     }
 
     protected void addDetailMessage(final String detailMessage) {

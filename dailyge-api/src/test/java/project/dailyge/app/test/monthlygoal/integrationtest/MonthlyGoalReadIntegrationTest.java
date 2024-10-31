@@ -11,7 +11,7 @@ import project.dailyge.app.core.monthlygoal.application.MonthlyGoalWriteService;
 import project.dailyge.app.core.monthlygoal.application.command.MonthlyGoalCreateCommand;
 import project.dailyge.app.paging.Cursor;
 import static project.dailyge.app.paging.Cursor.createCursor;
-import project.dailyge.entity.monthlygoal.MonthlyGoalJpaEntity;
+import project.dailyge.entity.goal.MonthlyGoalJpaEntity;
 
 import java.time.LocalDate;
 import java.util.List;

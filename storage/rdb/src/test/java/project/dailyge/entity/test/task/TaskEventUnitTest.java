@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -52,7 +51,7 @@ class TaskEventUnitTest {
     @ValueSource(strings = {"CREATE", "UPDATE", "DELETE"})
     void whenDetermineEventTypeThenCanCheckEventType(final String parameter) {
         final TaskEvent newEvent = createEvent(1L, UUID.randomUUID().toString(), EventType.valueOf(parameter));
-        assertTrue(newEvent.isType(EventType.valueOf(parameter)));
+        assertEquals(EventType.valueOf(parameter), newEvent.getEventType());
     }
 
     @Test

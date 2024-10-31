@@ -1,6 +1,5 @@
 package project.dailyge.app.core.user.presentation;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import static org.springframework.http.HttpHeaders.SET_COOKIE;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,12 +13,15 @@ import static project.dailyge.app.common.utils.CookieUtils.clearResponseCookie;
 import project.dailyge.app.core.common.auth.DailygeUser;
 import project.dailyge.app.core.user.facade.UserFacade;
 
-@RequiredArgsConstructor
 @RequestMapping("/api/users")
 @PresentationLayer(value = "UserDeleteApi")
 public class UserDeleteApi {
 
     private final UserFacade userFacade;
+
+    public UserDeleteApi(final UserFacade userFacade) {
+        this.userFacade = userFacade;
+    }
 
     @DeleteMapping(path = "/{userId}")
     public ApiResponse<Void> userDelete(

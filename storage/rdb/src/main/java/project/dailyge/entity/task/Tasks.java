@@ -1,5 +1,9 @@
 package project.dailyge.entity.task;
 
+import static java.util.Collections.emptyList;
+import static java.util.stream.Collectors.groupingBy;
+import static project.dailyge.entity.task.TaskAchievementRank.getAchievementRank;
+
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -10,12 +14,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import lombok.Getter;
-import static java.util.Collections.emptyList;
-import static java.util.stream.Collectors.groupingBy;
-import static project.dailyge.entity.task.TaskAchievementRank.getAchievementRank;
 
-@Getter
 public final class Tasks {
 
     private static final int PERCENTAGE = 100;
@@ -25,6 +24,10 @@ public final class Tasks {
 
     public Tasks(final List<TaskJpaEntity> taskEntities) {
         this.taskEntities = taskEntities;
+    }
+
+    public List<TaskJpaEntity> getTaskEntities() {
+        return taskEntities;
     }
 
     public Map<String, List<TaskJpaEntity>> groupByDate() {
@@ -123,7 +126,7 @@ public final class Tasks {
             monthlyRanks.set(i, calculatePercentage(rankCounts.get(i), monthlySum));
         }
         final double lastRank = 100.0 - monthlyRanks.stream().mapToDouble(Double::doubleValue).sum();
-        final double roundedLastRank =  Math.round(lastRank * PERCENTAGE) / 100.0;
+        final double roundedLastRank = Math.round(lastRank * PERCENTAGE) / 100.0;
         monthlyRanks.set(0, roundedLastRank);
         return monthlyRanks;
     }

@@ -1,6 +1,5 @@
 package project.dailyge.app.core.task.application.usecase;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
 import project.dailyge.app.common.exception.CommonException;
@@ -15,11 +14,18 @@ import project.dailyge.entity.task.TaskJpaEntity;
 import java.time.LocalDate;
 
 @Component
-@RequiredArgsConstructor
 public class TaskValidator {
 
     private final MonthlyTaskEntityReadRepository monthlyTaskReadRepository;
     private final TaskEntityReadRepository taskReadRepository;
+
+    public TaskValidator(
+        final MonthlyTaskEntityReadRepository monthlyTaskReadRepository,
+        final TaskEntityReadRepository taskReadRepository
+    ) {
+        this.monthlyTaskReadRepository = monthlyTaskReadRepository;
+        this.taskReadRepository = taskReadRepository;
+    }
 
     public void validateAuth(
         final DailygeUser dailygeUser,

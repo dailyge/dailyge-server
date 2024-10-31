@@ -1,6 +1,5 @@
 package project.dailyge.app.core.task.application.usecase;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import project.dailyge.app.common.annotation.ApplicationLayer;
 import project.dailyge.app.core.common.auth.DailygeUser;
@@ -22,7 +21,6 @@ import project.dailyge.entity.task.TaskJpaEntity;
 import java.time.LocalDate;
 import java.util.List;
 
-@RequiredArgsConstructor
 @ApplicationLayer(value = "TaskWriteUseCase")
 class TaskWriteUseCase implements TaskWriteService {
 
@@ -31,6 +29,20 @@ class TaskWriteUseCase implements TaskWriteService {
     private final TaskEntityWriteRepository taskWriteRepository;
     private final MonthlyTaskEntityReadRepository monthlyTaskReadRepository;
     private final MonthlyTaskEntityWriteRepository monthlyTaskWriteRepository;
+
+    public TaskWriteUseCase(
+        final TaskValidator validator,
+        final TaskEntityReadRepository taskReadRepository,
+        final TaskEntityWriteRepository taskWriteRepository,
+        final MonthlyTaskEntityReadRepository monthlyTaskReadRepository,
+        final MonthlyTaskEntityWriteRepository monthlyTaskWriteRepository
+    ) {
+        this.validator = validator;
+        this.taskReadRepository = taskReadRepository;
+        this.taskWriteRepository = taskWriteRepository;
+        this.monthlyTaskReadRepository = monthlyTaskReadRepository;
+        this.monthlyTaskWriteRepository = monthlyTaskWriteRepository;
+    }
 
     @Override
     @Transactional

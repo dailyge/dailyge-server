@@ -1,6 +1,5 @@
 package project.dailyge.app.core.common.auth;
 
-import lombok.Getter;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
 import project.dailyge.app.common.exception.CommonException;
 import static project.dailyge.app.core.user.exception.UserCodeAndMessage.USER_NOT_MATCH;
@@ -9,7 +8,6 @@ import static project.dailyge.entity.user.Role.ADMIN;
 
 import java.util.Objects;
 
-@Getter
 public class DailygeUser {
 
     private Long userId;
@@ -42,6 +40,18 @@ public class DailygeUser {
 
     public String getIdAsString() {
         return userId.toString();
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public Long getCountryId() {
+        return countryId;
     }
 
     public boolean isAdmin() {

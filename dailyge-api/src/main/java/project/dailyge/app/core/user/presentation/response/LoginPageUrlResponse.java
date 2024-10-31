@@ -1,11 +1,14 @@
 package project.dailyge.app.core.user.presentation.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
-@Getter
-@AllArgsConstructor
 public class LoginPageUrlResponse {
 
-    private String url;
+    private final String url;
+
+    public LoginPageUrlResponse(final String url) {
+        this.url = url;
+    }
+
+    public String getUrl() {
+        return url;
+    }
 }

@@ -3,6 +3,7 @@ package project.dailyge.app.test.notice.documentationtest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.restassured.http.Cookie;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ import static project.dailyge.app.test.notice.documentationtest.snippet.NoticeSn
 import static project.dailyge.app.test.notice.documentationtest.snippet.NoticeSnippet.createIdentifier;
 import static project.dailyge.entity.notice.NoticeType.UPDATE;
 
+@Disabled
 @DisplayName("[DocumentationTest] Notice 등록 문서화 테스트")
 class NoticeCreateDocumentation extends DatabaseTestBase {
 

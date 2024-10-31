@@ -9,7 +9,7 @@ import project.dailyge.app.core.weeklygoal.application.WeeklyGoalReadService;
 import project.dailyge.app.core.weeklygoal.application.WeeklyGoalWriteService;
 import project.dailyge.app.core.weeklygoal.application.command.WeeklyGoalCreateCommand;
 import project.dailyge.app.paging.Cursor;
-import project.dailyge.entity.weeklygoal.WeeklyGoalJpaEntity;
+import project.dailyge.entity.goal.WeeklyGoalJpaEntity;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;

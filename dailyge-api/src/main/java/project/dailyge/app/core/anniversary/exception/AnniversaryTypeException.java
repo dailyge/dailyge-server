@@ -1,6 +1,5 @@
 package project.dailyge.app.core.anniversary.exception;
 
-import lombok.Getter;
 import project.dailyge.app.codeandmessage.CodeAndMessage;
 import project.dailyge.app.common.exception.BusinessException;
 import static project.dailyge.app.core.anniversary.exception.AnniversaryCodeAndMessage.ANNIVERSARY_NOT_FOUND;
@@ -10,7 +9,6 @@ import static project.dailyge.app.core.anniversary.exception.AnniversaryCodeAndM
 import java.util.HashMap;
 import java.util.Map;
 
-@Getter
 public sealed class AnniversaryTypeException extends BusinessException {
 
     private static final Map<CodeAndMessage, AnniversaryTypeException> factory = new HashMap<>();

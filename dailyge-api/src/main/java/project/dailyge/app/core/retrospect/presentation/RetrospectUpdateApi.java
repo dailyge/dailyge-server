@@ -1,7 +1,6 @@
 package project.dailyge.app.core.retrospect.presentation;
 
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,12 +13,15 @@ import project.dailyge.app.core.common.auth.DailygeUser;
 import project.dailyge.app.core.retrospect.application.RetrospectWriteService;
 import project.dailyge.app.core.retrospect.presentation.request.RetrospectUpdateRequest;
 
-@RequiredArgsConstructor
 @RequestMapping(path = "/api/retrospects")
 @PresentationLayer(value = "RetrospectUpdateApi")
 public class RetrospectUpdateApi {
 
     private final RetrospectWriteService retrospectWriteService;
+
+    public RetrospectUpdateApi(final RetrospectWriteService retrospectWriteService) {
+        this.retrospectWriteService = retrospectWriteService;
+    }
 
     @PutMapping(path = "/{retrospectId}")
     public ApiResponse<Void> updateRetrospectById(

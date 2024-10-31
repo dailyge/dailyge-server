@@ -1,9 +1,7 @@
 package project.dailyge.app.response;
 
-import lombok.Getter;
 import project.dailyge.app.codeandmessage.CodeAndMessage;
 
-@Getter
 public class ErrorResponse {
 
     private int code;
@@ -19,5 +17,13 @@ public class ErrorResponse {
 
     public static ErrorResponse from(final CodeAndMessage codeAndMessage) {
         return new ErrorResponse(codeAndMessage);
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public String getMessage() {
+        return message;
     }
 }

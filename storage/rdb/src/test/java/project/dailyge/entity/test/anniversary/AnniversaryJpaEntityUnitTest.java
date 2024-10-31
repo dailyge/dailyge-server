@@ -33,7 +33,7 @@ class AnniversaryJpaEntityUnitTest {
         assertAll(
             () -> assertThat(anniversary.getName()).isEqualTo("생일"),
             () -> assertThat(anniversary.getDate()).isEqualTo(LocalDateTime.of(2024, 10, 10, 0, 0)),
-            () -> assertThat(anniversary.isRemind()).isTrue(),
+            () -> assertThat(anniversary.getRemind()).isTrue(),
             () -> assertThat(anniversary.getEmojiId()).isEqualTo(1L),
             () -> assertThat(anniversary.getUserId()).isEqualTo(1L)
         );
@@ -49,7 +49,7 @@ class AnniversaryJpaEntityUnitTest {
         assertAll(
             () -> assertEquals(updatedName, anniversary.getName()),
             () -> assertEquals(now, anniversary.getDate()),
-            () -> assertTrue(anniversary.isRemind())
+            () -> assertTrue(anniversary.getRemind())
         );
     }
 

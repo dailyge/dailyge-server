@@ -1,11 +1,10 @@
 package project.dailyge.app.test.common;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import project.dailyge.app.core.common.auth.JwtProperties;
-
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 @DisplayName("[UnitTest] JwtProperties 단위 테스트")
 class JwtPropertiesUnitTest {

@@ -1,16 +1,15 @@
 package project.dailyge.entity.test.monthlygoal;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import project.dailyge.entity.monthlygoal.MonthlyGoalFixture;
-import project.dailyge.entity.monthlygoal.MonthlyGoalJpaEntity;
-
 import static java.time.LocalDate.now;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import project.dailyge.entity.monthlygoal.MonthlyGoalFixture;
+import project.dailyge.entity.goal.MonthlyGoalJpaEntity;
 
 @DisplayName("[UnitTest] 월간 목표 엔티티 테스트")
 class MonthlyGoalJpaEntityUnitTest {

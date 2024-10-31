@@ -21,7 +21,7 @@ public class RetrospectDeleteApi {
     }
 
     @DeleteMapping(path = "/{retrospectId}")
-    public ApiResponse<Void> delete(
+    public ApiResponse<Void> deleteRetrospectById(
         @LoginUser final DailygeUser dailygeUser,
         @PathVariable(name = "retrospectId") final Long retrospectId
     ) {

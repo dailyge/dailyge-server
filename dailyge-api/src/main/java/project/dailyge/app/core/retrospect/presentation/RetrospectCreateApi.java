@@ -24,7 +24,7 @@ public class RetrospectCreateApi {
     }
 
     @PostMapping
-    public ApiResponse<RetrospectCreateResponse> create(
+    public ApiResponse<RetrospectCreateResponse> createRetrospect(
         @LoginUser final DailygeUser dailygeUser,
         @Valid @RequestBody final RetrospectCreateRequest request
     ) {

@@ -38,9 +38,19 @@ public class NoteCreateRequest {
         final String content,
         final String nickname
     ) {
+        this(title, content, nickname, LocalDateTime.now());
+    }
+
+    public NoteCreateRequest(
+        final String title,
+        final String content,
+        final String nickname,
+        final LocalDateTime sendAt
+    ) {
         this.title = title;
         this.content = content;
         this.nickname = nickname;
+        this.sendAt = sendAt;
     }
 
     public String getTitle() {

@@ -15,7 +15,7 @@ class NoteWriteDao implements NoteEntityWriteRepository {
     }
 
     @Override
-    public Long save(final NoteJpaEntity note) {
+    public long save(final NoteJpaEntity note) {
         entityManager.persist(note);
         return note.getId();
     }

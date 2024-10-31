@@ -28,7 +28,7 @@ public class NoteCreateApi {
         @LoginUser final DailygeUser dailygeUser,
         @Valid @RequestBody final NoteCreateRequest request
     ) {
-        final Long newNoteId = noteFacade.save(dailygeUser, request.toCommand(dailygeUser));
+        final Long newNoteId = noteFacade.save(dailygeUser, request.toCommand(dailygeUser), 30);
         final NoteCreateResponse payload = new NoteCreateResponse(newNoteId);
         return ApiResponse.from(CREATED, payload);
     }

@@ -23,7 +23,7 @@ class HolidayJpaEntityUnitTest {
             () -> assertEquals(1L, holiday.getId()),
             () -> assertEquals("New Year's Day", holiday.getName()),
             () -> assertEquals(holidayDate, holiday.getDate()),
-            () -> assertTrue(holiday.isHoliday()),
+            () -> assertTrue(holiday.getHoliday()),
             () -> assertEquals(410L, holiday.getCountryId())
         );
     }

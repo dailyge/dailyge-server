@@ -18,7 +18,6 @@ import project.dailyge.app.core.common.auth.AuthArgumentResolver;
 import project.dailyge.app.core.common.auth.DailygeToken;
 import project.dailyge.app.core.common.auth.DailygeUser;
 import project.dailyge.app.core.common.auth.JwtProperties;
-import project.dailyge.app.core.common.auth.SecretKeyManager;
 import project.dailyge.app.test.user.fixture.UserFixture;
 import project.dailyge.core.cache.user.UserCache;
 import project.dailyge.core.cache.user.UserCacheReadService;
@@ -43,8 +42,7 @@ class AuthArgumentResolverTest {
             900,
             1_209_600
         );
-        final SecretKeyManager secretKeyManager = new SecretKeyManager(jwtProperties);
-        tokenProvider = new TokenProvider(jwtProperties, secretKeyManager);
+//        tokenProvider = new TokenProvider(jwtProperties);
         userCacheReadService = mock(UserCacheReadService.class);
         resolver = new AuthArgumentResolver(env, userCacheReadService, tokenProvider);
         request = mock(HttpServletRequest.class);

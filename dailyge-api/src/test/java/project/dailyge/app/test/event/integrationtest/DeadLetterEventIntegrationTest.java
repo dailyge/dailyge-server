@@ -8,7 +8,6 @@ import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.core.event.application.EventWriteService;
 import project.dailyge.app.core.event.persistence.DeadLetterQueue;
 import static project.dailyge.document.common.UuidGenerator.createTimeBasedUUID;
-import project.dailyge.entity.common.Event;
 import static project.dailyge.entity.common.EventType.CREATE;
 import static project.dailyge.entity.user.UserEvent.createEvent;
 

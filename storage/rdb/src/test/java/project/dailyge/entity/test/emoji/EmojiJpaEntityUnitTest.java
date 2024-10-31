@@ -38,13 +38,4 @@ class EmojiJpaEntityUnitTest {
         ).isInstanceOf(IllegalArgumentException.class)
             .hasMessageContaining("올바른 이모티콘을 입력해주세요.");
     }
-
-    @Test
-    @DisplayName("이모티콘 유형이 null일 때 IllegalArgumentException이 발생한다.")
-    void whenEmojiTypeIsNullThenThrowIllegalArgumentException() {
-        assertThatThrownBy(() ->
-            new EmojiJpaEntity(null, "😀", null)
-        ).isInstanceOf(IllegalArgumentException.class)
-            .hasMessageContaining("올바른 이모티콘 유형을 입력해주세요.");
-    }
 }

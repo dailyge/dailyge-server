@@ -1,11 +1,16 @@
 package project.dailyge.app.test.common;
 
-import java.util.Base64;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
 import project.dailyge.app.common.auth.DailygeToken;
 import project.dailyge.app.common.auth.JwtProperties;
 import project.dailyge.app.common.auth.SecretKeyManager;
@@ -13,12 +18,8 @@ import project.dailyge.app.common.auth.TokenProvider;
 import project.dailyge.app.common.exception.CommonException;
 import project.dailyge.app.test.user.fixture.UserFixture;
 import project.dailyge.entity.user.UserJpaEntity;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
+
+import java.util.Base64;
 
 @DisplayName("[UnitTest] TokenProvider 단위 테스트")
 class TokenProviderUnitTest {

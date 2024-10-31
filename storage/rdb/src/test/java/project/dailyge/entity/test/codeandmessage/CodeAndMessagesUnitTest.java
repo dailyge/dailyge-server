@@ -35,8 +35,8 @@ class CodeAndMessagesUnitTest {
     @DisplayName("CodeAndMessages가 올바르게 초기화 될 경우 필드가 올바르게 설정된다.")
     void whenCodeAndMessagesIsInitializedThenFieldShouldBeSetProperly() {
         final List<CodeAndMessageJpaEntity> entities = Arrays.asList(
-            CodeAndMessageJpaEntity.create("common", "OK", 200, "OK"),
-            CodeAndMessageJpaEntity.create("common", "CREATED", 201, "Created")
+            CodeAndMessageJpaEntity.Companion.create("common", "OK", 200, "OK"),
+            CodeAndMessageJpaEntity.Companion.create("common", "CREATED", 201, "Created")
         );
         final CodeAndMessages codeAndMessages = new CodeAndMessages(entities);
 
@@ -50,8 +50,8 @@ class CodeAndMessagesUnitTest {
     @DisplayName("CodeAndMessages를 Map으로 변환할 수 있다.")
     void whenConvertToMapThenResultShouldBeMap() {
         final List<CodeAndMessageJpaEntity> entities = Arrays.asList(
-            CodeAndMessageJpaEntity.create("common", "OK", 200, "OK"),
-            CodeAndMessageJpaEntity.create("common", "CREATED", 201, "Created")
+            CodeAndMessageJpaEntity.Companion.create("common", "OK", 200, "OK"),
+            CodeAndMessageJpaEntity.Companion.create("common", "CREATED", 201, "Created")
         );
         final CodeAndMessages codeAndMessages = new CodeAndMessages(entities);
         final Map<String, CodeAndMessageJpaEntity> map = codeAndMessages.convertToMap(entities);
@@ -68,14 +68,14 @@ class CodeAndMessagesUnitTest {
     @DisplayName("CodeAndMessages를 업데이트하면 기존 엔티티가 업데이트된다.")
     void whenUpdateAllThenEntitiesShouldBeUpdated() {
         final List<CodeAndMessageJpaEntity> initialEntities = Arrays.asList(
-            CodeAndMessageJpaEntity.create("common", "OK", 200, "OK"),
-            CodeAndMessageJpaEntity.create("common", "CREATED", 201, "Created")
+            CodeAndMessageJpaEntity.Companion.create("common", "OK", 200, "OK"),
+            CodeAndMessageJpaEntity.Companion.create("common", "CREATED", 201, "Created")
         );
         final CodeAndMessages codeAndMessages = new CodeAndMessages(initialEntities);
 
         final List<CodeAndMessageJpaEntity> newEntities = Arrays.asList(
-            CodeAndMessageJpaEntity.create("common", "OK", 200, "OK"),
-            CodeAndMessageJpaEntity.create("common", "CREATED", 201, "Created")
+            CodeAndMessageJpaEntity.Companion.create("common", "OK", 200, "OK"),
+            CodeAndMessageJpaEntity.Companion.create("common", "CREATED", 201, "Created")
         );
         codeAndMessages.updateAll(newEntities);
 
@@ -89,12 +89,12 @@ class CodeAndMessagesUnitTest {
     @DisplayName("CodeAndMessages에 새로운 엔티티들을 추가하면 기존 엔티티가 유지된다.")
     void whenUpdateAllWithNewEntitiesThenExistingEntitiesAreMaintained() {
         final List<CodeAndMessageJpaEntity> initialEntities = List.of(
-            CodeAndMessageJpaEntity.create("common", "OK", 200, "OK")
+            CodeAndMessageJpaEntity.Companion.create("common", "OK", 200, "OK")
         );
         final CodeAndMessages codeAndMessages = new CodeAndMessages(initialEntities);
 
         final List<CodeAndMessageJpaEntity> newEntities = List.of(
-            CodeAndMessageJpaEntity.create("common", "CREATED", 201, "Created")
+            CodeAndMessageJpaEntity.Companion.create("common", "CREATED", 201, "Created")
         );
         codeAndMessages.updateAll(newEntities);
 
@@ -108,12 +108,12 @@ class CodeAndMessagesUnitTest {
     @DisplayName("존재하지 않는 엔티티를 업데이트하려고 하면 아무 것도 하지 않는다.")
     void whenUpdateAllWithNonExistingEntitiesThenNoChanges() {
         final List<CodeAndMessageJpaEntity> initialEntities = List.of(
-            CodeAndMessageJpaEntity.create("common", "OK", 200, "OK")
+            CodeAndMessageJpaEntity.Companion.create("common", "OK", 200, "OK")
         );
         final CodeAndMessages codeAndMessages = new CodeAndMessages(initialEntities);
 
         final List<CodeAndMessageJpaEntity> newEntities = List.of(
-            CodeAndMessageJpaEntity.create("common", "NEW", 202, "New Entry")
+            CodeAndMessageJpaEntity.Companion.create("common", "NEW", 202, "New Entry")
         );
         codeAndMessages.updateAll(newEntities);
 
@@ -126,9 +126,9 @@ class CodeAndMessagesUnitTest {
     @Test
     @DisplayName("CodeAndMessages가 초기화될 때 올바른 엔티티가 설정된다.")
     void whenInitializeThenEntitiesAreSetProperly() {
-        final List<CodeAndMessageJpaEntity> entities = Arrays.asList(
-            CodeAndMessageJpaEntity.create("common", "OK", 200, "OK"),
-            CodeAndMessageJpaEntity.create("tasks", "TASK_NOT_FOUND", 404, "Task not found")
+        final List<CodeAndMessageJpaEntity> entities = List.of(
+            CodeAndMessageJpaEntity.Companion.create("common", "OK", 200, "OK"),
+            CodeAndMessageJpaEntity.Companion.create("tasks", "TASK_NOT_FOUND", 404, "Task not found")
         );
         final CodeAndMessages codeAndMessages = new CodeAndMessages(entities);
 
@@ -145,8 +145,8 @@ class CodeAndMessagesUnitTest {
         final CodeAndMessages codeAndMessages = new CodeAndMessages(new ArrayList<>());
 
         final List<CodeAndMessageJpaEntity> newEntities = Arrays.asList(
-            CodeAndMessageJpaEntity.create("common", "OK", 200, "OK"),
-            CodeAndMessageJpaEntity.create("tasks", "TASK_NOT_FOUND", 404, "Task not found")
+            CodeAndMessageJpaEntity.Companion.create("common", "OK", 200, "OK"),
+            CodeAndMessageJpaEntity.Companion.create("tasks", "TASK_NOT_FOUND", 404, "Task not found")
         );
         codeAndMessages.updateAll(newEntities);
 
@@ -161,7 +161,7 @@ class CodeAndMessagesUnitTest {
     @DisplayName("updateAll 호출 시 null을 인자로 전달하면 업데이트를 수행하지 않는다.")
     void whenUpdateAllWithNullThenDoNothing() {
         final List<CodeAndMessageJpaEntity> initialEntities = List.of(
-            CodeAndMessageJpaEntity.create("common", "OK", 200, "OK")
+            CodeAndMessageJpaEntity.Companion.create("common", "OK", 200, "OK")
         );
         final CodeAndMessages codeAndMessages = new CodeAndMessages(initialEntities);
 

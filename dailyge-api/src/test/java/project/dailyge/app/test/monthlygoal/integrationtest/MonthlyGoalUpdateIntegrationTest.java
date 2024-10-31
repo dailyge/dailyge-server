@@ -16,7 +16,7 @@ import project.dailyge.app.core.monthlygoal.application.command.MonthlyGoalStatu
 import project.dailyge.app.core.monthlygoal.application.command.MonthlyGoalUpdateCommand;
 import project.dailyge.app.core.monthlygoal.exception.MonthlyGoalCodeAndMessage;
 import project.dailyge.app.core.monthlygoal.exception.MonthlyGoalTypeException;
-import project.dailyge.entity.monthlygoal.MonthlyGoalJpaEntity;
+import project.dailyge.entity.goal.MonthlyGoalJpaEntity;
 
 import java.time.LocalDate;
 

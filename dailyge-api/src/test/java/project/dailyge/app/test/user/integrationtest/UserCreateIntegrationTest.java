@@ -7,10 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.core.user.application.UserWriteService;
 import project.dailyge.app.core.user.exception.UserTypeException;
-import project.dailyge.entity.user.UserJpaEntity;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static project.dailyge.app.core.user.exception.UserCodeAndMessage.DUPLICATED_EMAIL;
 import static project.dailyge.app.test.user.fixture.UserFixture.createUser;
+import project.dailyge.entity.user.UserJpaEntity;
 
 @DisplayName("[IntegrationTest] 사용자 저장 통합 테스트")
 class UserCreateIntegrationTest extends DatabaseTestBase {

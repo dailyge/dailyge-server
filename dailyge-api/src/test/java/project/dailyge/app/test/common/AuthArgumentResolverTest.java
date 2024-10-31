@@ -12,6 +12,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import org.springframework.web.context.request.NativeWebRequest;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_USER_TOKEN;
+import project.dailyge.app.common.auth.SecretKeyManager;
 import project.dailyge.app.common.auth.TokenProvider;
 import project.dailyge.app.common.exception.CommonException;
 import project.dailyge.app.core.common.auth.AuthArgumentResolver;
@@ -42,7 +43,8 @@ class AuthArgumentResolverTest {
             900,
             1_209_600
         );
-//        tokenProvider = new TokenProvider(jwtProperties);
+        final SecretKeyManager secretKeyManager = new SecretKeyManager(jwtProperties);
+        tokenProvider = new TokenProvider(jwtProperties, secretKeyManager);
         userCacheReadService = mock(UserCacheReadService.class);
         resolver = new AuthArgumentResolver(env, userCacheReadService, tokenProvider);
         request = mock(HttpServletRequest.class);

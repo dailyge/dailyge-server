@@ -47,6 +47,9 @@ rootProject.name = "dailyge"
 include(
     "admin-api",
     "dailyge-api",
+    "modules:auth",
+    "modules:security",
+    "modules:api",
     "storage:common",
     "storage:document",
     "storage:rdb",

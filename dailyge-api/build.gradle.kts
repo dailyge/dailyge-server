@@ -12,41 +12,21 @@ configurations {
 apply(from = "${rootDir}/jib/dailyge-api/jib.gradle")
 
 dependencies {
+    implementation(project(":modules:api"))
+    implementation(project(":modules:auth"))
+    implementation(project(":modules:security"))
     implementation(project(":storage:common"))
     implementation(project(":storage:rdb"))
     implementation(project(":storage:memory"))
     implementation(project(":storage:document"))
     implementation(project(":support"))
 
-    implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
-    implementation("org.springframework.boot:spring-boot-starter-validation")
-    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
-
-    implementation("io.jsonwebtoken:jjwt:0.9.1")
-    implementation("javax.xml.bind:jaxb-api:2.3.1")
-
-    implementation("org.liquibase:liquibase-core")
-    implementation("com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4")
-
-    implementation("net.logstash.logback:logstash-logback-encoder:7.0")
     implementation(platform("software.amazon.awssdk:bom:2.20.63"))
     implementation(platform("io.awspring.cloud:spring-cloud-aws-dependencies:${property("awsSpringCloudVersion")}"))
     implementation("software.amazon.awssdk:sns")
     implementation("io.awspring.cloud:spring-cloud-aws-starter-sqs")
-    implementation("com.google.code.gson:gson:2.10")
-
-    testImplementation("org.springframework.restdocs:spring-restdocs-restassured")
-    testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
-    testImplementation("com.epages:restdocs-api-spec-mockmvc:${property("restdocsApiSpecVersion")}")
-    testImplementation("com.epages:restdocs-api-spec-restassured:${property("restdocsApiSpecVersion")}")
-    testImplementation("org.testcontainers:testcontainers")
-    testImplementation("org.testcontainers:localstack")
-    testImplementation("org.testcontainers:junit-jupiter")
-    testImplementation("org.testcontainers:mysql")
-    testImplementation("org.springframework.cloud:spring-cloud-contract-wiremock")
-
     add(
         configurationName = "asciidoctorExt",
         dependencyNotation = "org.springframework.restdocs:spring-restdocs-asciidoctor"

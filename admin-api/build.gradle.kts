@@ -9,30 +9,17 @@ configurations {
 }
 
 dependencies {
+    implementation(project(":modules:api"))
+    implementation(project(":modules:auth"))
+    implementation(project(":modules:security"))
     implementation(project(":storage:document"))
     implementation(project(":storage:rdb"))
     implementation(project(":storage:memory"))
     implementation(project(":support"))
-
     testImplementation(project(":storage:rdb"))
     testImplementation(project(":storage:document"))
 
-    implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("org.springframework.boot:spring-boot-starter-validation")
-    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
-    implementation("io.jsonwebtoken:jjwt:0.9.1")
-    implementation("javax.xml.bind:jaxb-api:2.3.1")
-    implementation("com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4")
     implementation("org.liquibase:liquibase-core")
-
-    testImplementation("org.springframework.restdocs:spring-restdocs-restassured")
-    testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
-    testImplementation("com.epages:restdocs-api-spec-mockmvc:${property("restdocsApiSpecVersion")}")
-    testImplementation("com.epages:restdocs-api-spec-restassured:${property("restdocsApiSpecVersion")}")
-    testImplementation("org.testcontainers:testcontainers")
-    testImplementation("org.testcontainers:junit-jupiter")
-    testImplementation("org.testcontainers:mysql")
-
     "asciidoctorExt"("org.springframework.restdocs:spring-restdocs-asciidoctor")
 }
 

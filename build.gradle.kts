@@ -119,7 +119,9 @@ subprojects {
     sonarqube {
         properties {
             property("sonar.java.binaries", "$buildDir/classes/java/main")
-            property("sonar.sources", "src/main/java")
+            if (file("${projectDir}/src/main/java").exists()) {
+                property("sonar.sources", "src/main/java")
+            }
             if (file("${projectDir}/src/test/java").exists()) {
                 property("sonar.tests", "src/test/java")
             }

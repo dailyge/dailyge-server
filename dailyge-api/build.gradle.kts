@@ -79,7 +79,7 @@ tasks.register<Copy>("copySubmoduleConfig") {
 }
 
 tasks.named("processResources") {
-    dependsOn("copySubmoduleConfig")
+    dependsOn("copySubmoduleConfig", "copyDocument")
 }
 
 tasks.withType<JavaCompile>().configureEach {
@@ -94,6 +94,7 @@ tasks.named("jib") {
 
 tasks.build {
     dependsOn("asciidoctor")
+    finalizedBy("copyDocument")
 }
 
 openapi3 {

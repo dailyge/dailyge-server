@@ -64,6 +64,20 @@ class TaskWriteUseCase implements TaskWriteService {
         this.monthlyTaskWriteRepository = monthlyTaskWriteRepository;
     }
 
+    public TaskWriteUseCase(
+        final TaskValidator validator,
+        final TaskEntityReadRepository taskReadRepository,
+        final TaskEntityWriteRepository taskWriteRepository,
+        final MonthlyTaskEntityReadRepository monthlyTaskReadRepository,
+        final MonthlyTaskEntityWriteRepository monthlyTaskWriteRepository
+    ) {
+        this.validator = validator;
+        this.taskReadRepository = taskReadRepository;
+        this.taskWriteRepository = taskWriteRepository;
+        this.monthlyTaskReadRepository = monthlyTaskReadRepository;
+        this.monthlyTaskWriteRepository = monthlyTaskWriteRepository;
+    }
+
     @Override
     @Transactional
     public void saveAll(

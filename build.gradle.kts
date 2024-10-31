@@ -87,7 +87,6 @@ subprojects {
         val exclusions = extractQClass().toMutableSet()
         file("${rootDir}/config/jacoco/exclude-coverage.txt").forEachLine {
             exclusions.add(it)
-            println("Exclusion Pattern: $it")
         }
 
         classDirectories.setFrom(

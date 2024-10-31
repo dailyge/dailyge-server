@@ -64,6 +64,7 @@ tasks.named("asciidoctor") {
     dependsOn(tasks.test)
     inputs.dir(snippetsDir)
     outputs.dir(file("$buildDir/docs/asciidoc"))
+    finalizedBy("copyDocument")
 }
 
 tasks.register<Copy>("copyDocument") {
@@ -79,7 +80,7 @@ tasks.register<Copy>("copySubmoduleConfig") {
 }
 
 tasks.named("processResources") {
-    dependsOn("copySubmoduleConfig", "copyDocument")
+    dependsOn("copySubmoduleConfig")
 }
 
 tasks.withType<JavaCompile>().configureEach {
@@ -94,7 +95,6 @@ tasks.named("jib") {
 
 tasks.build {
     dependsOn("asciidoctor")
-    finalizedBy("copyDocument")
 }
 
 openapi3 {

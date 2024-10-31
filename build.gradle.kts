@@ -88,6 +88,7 @@ subprojects {
         file("${rootDir}/config/jacoco/exclude-coverage.txt").forEachLine {
             exclusions.add(it)
         }
+        exclusions.add("project/dailyge/app/DailygeApplicationKt.class")
 
         classDirectories.setFrom(
             fileTree("$buildDir/classes/java/main") {

@@ -1,6 +1,5 @@
 package project.dailyge.app;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Import;
@@ -14,7 +13,6 @@ import project.dailyge.document.configuration.MongoConfig;
 @EnableAsync
 @EnableScheduling
 @SpringBootApplication
-@RequiredArgsConstructor
 @Import(value = {JpaConfig.class, MongoConfig.class, RedisConfig.class, QueryDslConfig.class})
 public class DailygeAdminApplication {
 

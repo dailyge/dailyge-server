@@ -16,7 +16,7 @@ import project.dailyge.lock.configuration.RedissonConfig
 @EnableAsync
 @EnableWebMvc
 @EnableScheduling
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = ["project.dailyge"])
 @Import(JpaConfig::class, MongoConfig::class, RedisConfig::class, RedissonConfig::class, QueryDslConfig::class)
 open class DailygeApplication
 

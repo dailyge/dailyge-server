@@ -79,22 +79,24 @@ subprojects {
         dependsOn(tasks.test)
         reports {
             xml.required.set(true)
-            html.required.set(false)
+            html.required.set(true)
             csv.required.set(false)
             xml.outputLocation.set(file("$buildDir/reports/jacoco/test/jacocoTestReport.xml"))
         }
 
-        val exclusions = extractQClass().toMutableList()
+        val exclusions = extractQClass().toMutableSet()
         file("${rootDir}/config/jacoco/exclude-coverage.txt").forEachLine {
             exclusions.add(it)
+            println("Exclusion Pattern: $it")
         }
 
-        classDirectories.from(
-            files(classDirectories.files.map {
-                fileTree(it) {
-                    exclude(exclusions)
-                }
-            })
+        classDirectories.setFrom(
+            fileTree("$buildDir/classes/java/main") {
+                exclude(exclusions)
+            },
+            fileTree("$buildDir/classes/kotlin/main") {
+                exclude(exclusions)
+            }
         )
     }
 

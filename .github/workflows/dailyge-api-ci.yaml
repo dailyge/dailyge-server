@@ -50,7 +50,7 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - name: Run Static Analysis
-        run: ./gradlew dailyge-api:pmdMain pmdTest checkstyleMain checkstyleTest
+        run: ./gradlew pmdMain pmdTest checkstyleMain checkstyleTest
         
       - name: Test and analyze
         env:

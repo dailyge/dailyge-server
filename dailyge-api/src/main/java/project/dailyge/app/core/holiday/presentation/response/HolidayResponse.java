@@ -1,9 +1,7 @@
 package project.dailyge.app.core.holiday.presentation.response;
 
-import lombok.Getter;
 import project.dailyge.entity.holiday.HolidayJpaEntity;
 
-@Getter
 public class HolidayResponse {
 
     private Long holidayId;
@@ -17,6 +15,18 @@ public class HolidayResponse {
         this.holidayId = holiday.getId();
         this.name = holiday.getName();
         this.date = holiday.getDateAsString();
+    }
+
+    public Long getHolidayId() {
+        return holidayId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDate() {
+        return date;
     }
 
     @Override

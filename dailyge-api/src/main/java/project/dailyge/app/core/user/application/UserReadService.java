@@ -13,6 +13,8 @@ public interface UserReadService {
 
     Optional<UserJpaEntity> findActiveUserByEmail(String email);
 
+    UserJpaEntity findByNickname(String nickname);
+
     Long findUserIdByEmail(String email);
 
     String findEmailByUserId(Long userId);

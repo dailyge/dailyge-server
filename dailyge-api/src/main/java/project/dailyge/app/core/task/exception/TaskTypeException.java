@@ -1,6 +1,5 @@
 package project.dailyge.app.core.task.exception;
 
-import lombok.Getter;
 import project.dailyge.app.codeandmessage.CodeAndMessage;
 import project.dailyge.app.common.exception.BusinessException;
 import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.MONTHLY_TASK_EXISTS;
@@ -12,7 +11,6 @@ import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.TOO_MAN
 import java.util.HashMap;
 import java.util.Map;
 
-@Getter
 public sealed class TaskTypeException extends BusinessException {
 
     private static final Map<CodeAndMessage, TaskTypeException> factory = new HashMap<>();

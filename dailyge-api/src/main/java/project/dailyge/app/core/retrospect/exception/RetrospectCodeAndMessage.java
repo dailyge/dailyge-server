@@ -1,9 +1,7 @@
 package project.dailyge.app.core.retrospect.exception;
 
-import lombok.Getter;
 import project.dailyge.app.codeandmessage.CodeAndMessage;
 
-@Getter
 public enum RetrospectCodeAndMessage implements CodeAndMessage {
     RETROSPECT_NOT_FOUND(404, "회고가 존재하지 않습니다."),
     DUPLICATED_RETROSPECT(409, "동일한 회고가 존재합니다."),
@@ -18,6 +16,14 @@ public enum RetrospectCodeAndMessage implements CodeAndMessage {
     ) {
         this.code = code;
         this.message = message;
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public String getMessage() {
+        return message;
     }
 
     @Override

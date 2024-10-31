@@ -8,8 +8,8 @@ import jakarta.persistence.Table;
 import jakarta.persistence.metamodel.EntityType;
 import jakarta.validation.constraints.NotNull;
 import static java.util.stream.Collectors.toSet;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -30,10 +30,10 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-@Slf4j
 @Component
-@RequiredArgsConstructor
 public class OperationDataWriteDao {
+
+    private static final Logger log = LoggerFactory.getLogger(OperationDataWriteDao.class);
 
     @Value("${profile.email}")
     private String email;
@@ -43,6 +43,20 @@ public class OperationDataWriteDao {
     private final JdbcTemplate jdbcTemplate;
     private final RedisTemplate<String, byte[]> redisTemplate;
     private final ObjectMapper objectMapper;
+
+    public OperationDataWriteDao(
+        final EntityManager entityManager,
+        final Set<String> tableNames,
+        final JdbcTemplate jdbcTemplate,
+        final RedisTemplate<String, byte[]> redisTemplate,
+        final ObjectMapper objectMapper
+    ) {
+        this.entityManager = entityManager;
+        this.tableNames = tableNames;
+        this.jdbcTemplate = jdbcTemplate;
+        this.redisTemplate = redisTemplate;
+        this.objectMapper = objectMapper;
+    }
 
     public void initData() {
         save();

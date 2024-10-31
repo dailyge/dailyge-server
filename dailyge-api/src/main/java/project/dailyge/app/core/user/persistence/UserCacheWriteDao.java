@@ -3,7 +3,6 @@ package project.dailyge.app.core.user.persistence;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.lettuce.core.RedisException;
 import static java.time.Duration.ofDays;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
@@ -17,13 +16,20 @@ import project.dailyge.core.cache.user.UserCacheWriteRepository;
 import java.util.List;
 
 @Repository
-@RequiredArgsConstructor
 public class UserCacheWriteDao implements UserCacheWriteRepository {
 
     private static final long CACHE_DURATION = 90;
 
     private final RedisTemplate<String, byte[]> redisTemplate;
     private final ObjectMapper objectMapper;
+
+    public UserCacheWriteDao(
+        final RedisTemplate<String, byte[]> redisTemplate,
+        final ObjectMapper objectMapper
+    ) {
+        this.redisTemplate = redisTemplate;
+        this.objectMapper = objectMapper;
+    }
 
     @Override
     public void save(final UserCache userCache) {

@@ -1,24 +1,25 @@
 package project.dailyge.app.core.weeklygoal.persistence;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.RequiredArgsConstructor;
+import static java.util.Optional.ofNullable;
 import org.springframework.stereotype.Repository;
 import project.dailyge.app.paging.Cursor;
-import project.dailyge.entity.weeklygoal.WeeklyGoalEntityReadRepository;
-import project.dailyge.entity.weeklygoal.WeeklyGoalJpaEntity;
+import static project.dailyge.entity.goal.QWeeklyGoalJpaEntity.weeklyGoalJpaEntity;
+import project.dailyge.entity.goal.WeeklyGoalEntityReadRepository;
+import project.dailyge.entity.goal.WeeklyGoalJpaEntity;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import static java.util.Optional.ofNullable;
-import static project.dailyge.entity.weeklygoal.QWeeklyGoalJpaEntity.weeklyGoalJpaEntity;
-
 @Repository
-@RequiredArgsConstructor
 public class WeeklyGoalReadDao implements WeeklyGoalEntityReadRepository {
 
     private final JPAQueryFactory queryFactory;
+
+    public WeeklyGoalReadDao(final JPAQueryFactory queryFactory) {
+        this.queryFactory = queryFactory;
+    }
 
     @Override
     public Optional<WeeklyGoalJpaEntity> findById(final Long weeklyGoalId) {
@@ -26,7 +27,7 @@ public class WeeklyGoalReadDao implements WeeklyGoalEntityReadRepository {
             queryFactory.selectFrom(weeklyGoalJpaEntity)
                 .where(
                     weeklyGoalJpaEntity.id.eq(weeklyGoalId)
-                        .and(weeklyGoalJpaEntity.deleted.eq(false))
+                        .and(weeklyGoalJpaEntity._deleted.eq(false))
                 ).fetchOne()
         );
     }
@@ -41,9 +42,9 @@ public class WeeklyGoalReadDao implements WeeklyGoalEntityReadRepository {
             .where(
                 weeklyGoalJpaEntity.userId.eq(userId)
                     .and(weeklyGoalJpaEntity.weekStartDate.eq(weekStartDate))
-                    .and(weeklyGoalJpaEntity.deleted.eq(false))
+                    .and(weeklyGoalJpaEntity._deleted.eq(false))
             )
-            .orderBy(weeklyGoalJpaEntity.createdAt.asc())
+            .orderBy(weeklyGoalJpaEntity._createdAt.asc())
             .limit(limit)
             .fetch();
     }
@@ -59,9 +60,9 @@ public class WeeklyGoalReadDao implements WeeklyGoalEntityReadRepository {
             .where(
                 weeklyGoalJpaEntity.id.gt(index)
                     .and(weeklyGoalJpaEntity.weekStartDate.eq(weekStartDate))
-                    .and(weeklyGoalJpaEntity.deleted.eq(false))
+                    .and(weeklyGoalJpaEntity._deleted.eq(false))
             )
-            .orderBy(weeklyGoalJpaEntity.createdAt.asc())
+            .orderBy(weeklyGoalJpaEntity._createdAt.asc())
             .limit(limit)
             .fetch();
     }

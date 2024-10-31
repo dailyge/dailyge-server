@@ -1,9 +1,7 @@
 package project.dailyge.app.core.task.exception;
 
-import lombok.Getter;
 import project.dailyge.app.codeandmessage.CodeAndMessage;
 
-@Getter
 public enum TaskCodeAndMessage implements CodeAndMessage {
     INVALID_MONTHLY_TASK(400, "올바르지 않은 Task 입니다."),
     TOO_MANY_TASKS(400, "등록 가능한 일정 개수를 초과했습니다."),
@@ -21,6 +19,14 @@ public enum TaskCodeAndMessage implements CodeAndMessage {
     ) {
         this.code = code;
         this.message = message;
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public String getMessage() {
+        return message;
     }
 
     @Override

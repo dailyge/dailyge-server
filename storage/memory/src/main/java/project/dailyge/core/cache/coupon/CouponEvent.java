@@ -1,11 +1,8 @@
 package project.dailyge.core.cache.coupon;
 
-import lombok.Getter;
-
 import java.io.Serializable;
 import java.util.Objects;
 
-@Getter
 public class CouponEvent implements Serializable {
     private Long userId;
     private Long timestamp;
@@ -18,6 +15,14 @@ public class CouponEvent implements Serializable {
         final Long timestamp) {
         this.userId = userId;
         this.timestamp = timestamp;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public Long getTimestamp() {
+        return timestamp;
     }
 
     @Override

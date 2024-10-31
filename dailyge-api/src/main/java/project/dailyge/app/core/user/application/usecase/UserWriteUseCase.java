@@ -1,6 +1,5 @@
 package project.dailyge.app.core.user.application.usecase;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import project.dailyge.app.common.annotation.ApplicationLayer;
 import project.dailyge.app.core.user.application.UserWriteService;
@@ -13,12 +12,19 @@ import project.dailyge.entity.user.UserJpaEntity;
 
 import java.util.Optional;
 
-@RequiredArgsConstructor
 @ApplicationLayer(value = "UserWriteService")
 public class UserWriteUseCase implements UserWriteService {
 
     private final UserEntityReadRepository userReadRepository;
     private final UserEntityWriteRepository userWriteRepository;
+
+    public UserWriteUseCase(
+        final UserEntityReadRepository userReadRepository,
+        final UserEntityWriteRepository userWriteRepository
+    ) {
+        this.userReadRepository = userReadRepository;
+        this.userWriteRepository = userWriteRepository;
+    }
 
     @Override
     @Transactional

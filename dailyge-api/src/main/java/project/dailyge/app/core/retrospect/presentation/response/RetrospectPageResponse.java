@@ -1,10 +1,9 @@
 package project.dailyge.app.core.retrospect.presentation.response;
 
-import java.util.List;
-import lombok.Getter;
 import project.dailyge.entity.retrospect.RetrospectJpaEntity;
 
-@Getter
+import java.util.List;
+
 public class RetrospectPageResponse {
 
     final List<RetrospectResponse> retrospects;
@@ -18,6 +17,14 @@ public class RetrospectPageResponse {
             .map(RetrospectResponse::new)
             .toList();
         this.totalPageCount = totalPageCount;
+    }
+
+    public List<RetrospectResponse> getRetrospects() {
+        return retrospects;
+    }
+
+    public int getTotalPageCount() {
+        return totalPageCount;
     }
 
     @Override

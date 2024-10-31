@@ -1,9 +1,7 @@
 package project.dailyge.app.core.user.external.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Getter;
 
-@Getter
 public class GoogleUserInfoResponse {
 
     private String id;
@@ -27,6 +25,26 @@ public class GoogleUserInfoResponse {
         this.email = email;
         this.picture = picture;
         this.verifiedEmail = verifiedEmail;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public boolean isVerifiedEmail() {
+        return verifiedEmail;
     }
 
     @Override

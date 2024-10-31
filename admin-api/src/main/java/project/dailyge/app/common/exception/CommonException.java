@@ -1,8 +1,5 @@
 package project.dailyge.app.common.exception;
 
-import java.util.HashMap;
-import java.util.Map;
-import lombok.Getter;
 import project.dailyge.app.codeandmessage.CodeAndMessage;
 import project.dailyge.app.codeandmessage.CommonCodeAndMessage;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_GATEWAY;
@@ -18,7 +15,9 @@ import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_US
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.SERVICE_UNAVAILABLE;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
 
-@Getter
+import java.util.HashMap;
+import java.util.Map;
+
 public sealed class CommonException extends RuntimeException {
     private static final Map<CodeAndMessage, CommonException> factory = new HashMap<>();
     private String detailMessage;
@@ -37,9 +36,11 @@ public sealed class CommonException extends RuntimeException {
         this.detailMessage = detailMessage;
         this.codeAndMessage = codeAndMessage;
     }
+
     static {
         initializeFactory();
     }
+
     private static void initializeFactory() {
         factory.put(BAD_REQUEST, new InvalidParameterException(BAD_REQUEST));
         factory.put(INVALID_PARAMETERS, new InvalidParameterException(INVALID_PARAMETERS));
@@ -72,6 +73,14 @@ public sealed class CommonException extends RuntimeException {
 
     public int getCode() {
         return codeAndMessage.code();
+    }
+
+    public String getDetailMessage() {
+        return detailMessage;
+    }
+
+    public CodeAndMessage getCodeAndMessage() {
+        return codeAndMessage;
     }
 
     private static CommonException getException(final CodeAndMessage codeAndMessage) {

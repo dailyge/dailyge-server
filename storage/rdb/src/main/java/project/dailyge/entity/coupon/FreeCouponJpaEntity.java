@@ -5,17 +5,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import project.dailyge.entity.BaseEntity;
 
 import java.time.LocalDate;
 import java.util.Objects;
 
-import static lombok.AccessLevel.PROTECTED;
-
-@Getter
-@NoArgsConstructor(access = PROTECTED)
 @Entity(name = "free_coupons")
 public class FreeCouponJpaEntity extends BaseEntity {
 
@@ -40,6 +34,9 @@ public class FreeCouponJpaEntity extends BaseEntity {
 
     @Column(name = "event_id")
     private Long eventId;
+
+    protected FreeCouponJpaEntity() {
+    }
 
     public FreeCouponJpaEntity(
         final Long id,
@@ -68,6 +65,34 @@ public class FreeCouponJpaEntity extends BaseEntity {
         final Long eventId
     ) {
         this(null, description, serialNumber, expiredAt, issuerId, userId, eventId);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getSerialNumber() {
+        return serialNumber;
+    }
+
+    public LocalDate getExpiredAt() {
+        return expiredAt;
+    }
+
+    public Long getIssuerId() {
+        return issuerId;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public Long getEventId() {
+        return eventId;
     }
 
     @Override

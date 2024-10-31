@@ -1,35 +1,42 @@
 package project.dailyge.app.core.retrospect.persistence;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
-import lombok.RequiredArgsConstructor;
+import static java.util.Optional.ofNullable;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.DATA_ACCESS_EXCEPTION;
 import project.dailyge.app.common.exception.CommonException;
 import project.dailyge.app.paging.CustomPageable;
 import project.dailyge.app.response.AsyncPagingResponse;
+import static project.dailyge.entity.retrospect.QRetrospectJpaEntity.retrospectJpaEntity;
 import project.dailyge.entity.retrospect.RetrospectEntityReadRepository;
 import project.dailyge.entity.retrospect.RetrospectJpaEntity;
-import static java.util.Optional.ofNullable;
-import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.DATA_ACCESS_EXCEPTION;
-import static project.dailyge.entity.retrospect.QRetrospectJpaEntity.retrospectJpaEntity;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 @Repository
-@RequiredArgsConstructor
 public class RetrospectEntityReadDao implements RetrospectEntityReadRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
     private final JdbcTemplate jdbcTemplate;
+
+    public RetrospectEntityReadDao(
+        final JPAQueryFactory jpaQueryFactory,
+        final JdbcTemplate jdbcTemplate
+    ) {
+        this.jpaQueryFactory = jpaQueryFactory;
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     @Override
     public Optional<RetrospectJpaEntity> findById(final Long retrospectId) {
         return ofNullable(jpaQueryFactory.selectFrom(retrospectJpaEntity)
             .where(
                 retrospectJpaEntity.id.eq(retrospectId)
-                    .and(retrospectJpaEntity.deleted.eq(false))
+                    .and(retrospectJpaEntity._deleted.eq(false))
             )
             .fetchOne()
         );
@@ -64,7 +71,7 @@ public class RetrospectEntityReadDao implements RetrospectEntityReadRepository {
         return jpaQueryFactory.selectFrom(retrospectJpaEntity)
             .where(
                 retrospectJpaEntity.userId.eq(userId)
-                    .and(retrospectJpaEntity.deleted.eq(false))
+                    .and(retrospectJpaEntity._deleted.eq(false))
             )
             .orderBy(retrospectJpaEntity.date.desc())
             .offset(page.getOffset())

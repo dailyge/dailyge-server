@@ -1,6 +1,5 @@
 package project.dailyge.app.core.monthlygoal.application.usecase;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_USER_ID;
 import project.dailyge.app.common.annotation.ApplicationLayer;
@@ -12,16 +11,23 @@ import project.dailyge.app.core.monthlygoal.application.command.MonthlyGoalStatu
 import project.dailyge.app.core.monthlygoal.application.command.MonthlyGoalUpdateCommand;
 import static project.dailyge.app.core.monthlygoal.exception.MonthlyGoalCodeAndMessage.MONTHLY_GOAL_NOT_FOUND;
 import project.dailyge.app.core.monthlygoal.exception.MonthlyGoalTypeException;
-import project.dailyge.entity.monthlygoal.MonthlyGoalEntityReadRepository;
-import project.dailyge.entity.monthlygoal.MonthlyGoalEntityWriteRepository;
-import project.dailyge.entity.monthlygoal.MonthlyGoalJpaEntity;
+import project.dailyge.entity.goal.MonthlyGoalEntityReadRepository;
+import project.dailyge.entity.goal.MonthlyGoalEntityWriteRepository;
+import project.dailyge.entity.goal.MonthlyGoalJpaEntity;
 
-@RequiredArgsConstructor
-@ApplicationLayer(value = "MonthlyGoalWriteService")
+@ApplicationLayer(value = "MonthlyGoalWriteUseCase")
 public class MonthlyGoalWriteUseCase implements MonthlyGoalWriteService {
 
     private final MonthlyGoalEntityReadRepository monthlyGoalReadRepository;
     private final MonthlyGoalEntityWriteRepository monthlyGoalWriteRepository;
+
+    public MonthlyGoalWriteUseCase(
+        final MonthlyGoalEntityReadRepository monthlyGoalReadRepository,
+        final MonthlyGoalEntityWriteRepository monthlyGoalWriteRepository
+    ) {
+        this.monthlyGoalReadRepository = monthlyGoalReadRepository;
+        this.monthlyGoalWriteRepository = monthlyGoalWriteRepository;
+    }
 
     @Override
     @Transactional

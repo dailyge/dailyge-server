@@ -1,8 +1,5 @@
 package project.dailyge.app.core.task.presentation.response;
 
-import lombok.Getter;
-
-@Getter
 public class MonthlyTaskIdResponse {
 
     private Long monthlyTaskId;
@@ -12,6 +9,10 @@ public class MonthlyTaskIdResponse {
 
     public MonthlyTaskIdResponse(final Long monthlyTaskId) {
         this.monthlyTaskId = monthlyTaskId;
+    }
+
+    public Long getMonthlyTaskId() {
+        return monthlyTaskId;
     }
 
     @Override

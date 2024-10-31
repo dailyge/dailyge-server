@@ -1,6 +1,5 @@
 package project.dailyge.app.core.task.presentation.response;
 
-import lombok.Getter;
 import project.dailyge.entity.task.TaskJpaEntity;
 import static project.dailyge.entity.task.TaskStatus.DONE;
 import static project.dailyge.entity.task.TaskStatus.IN_PROGRESS;
@@ -9,7 +8,6 @@ import static project.dailyge.entity.task.Tasks.calculatePercentage;
 
 import java.util.List;
 
-@Getter
 public class TaskAchievementRateResponse {
 
     private static final int PERCENTAGE = 100;
@@ -36,5 +34,17 @@ public class TaskAchievementRateResponse {
         if (totalPercentage != PERCENTAGE) {
             this.done += PERCENTAGE - totalPercentage;
         }
+    }
+
+    public double getTodo() {
+        return todo;
+    }
+
+    public double getInProgress() {
+        return inProgress;
+    }
+
+    public double getDone() {
+        return done;
     }
 }

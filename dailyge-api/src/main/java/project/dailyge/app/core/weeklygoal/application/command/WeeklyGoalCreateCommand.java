@@ -1,7 +1,7 @@
 package project.dailyge.app.core.weeklygoal.application.command;
 
 import project.dailyge.app.core.common.auth.DailygeUser;
-import project.dailyge.entity.weeklygoal.WeeklyGoalJpaEntity;
+import project.dailyge.entity.goal.WeeklyGoalJpaEntity;
 
 import java.time.LocalDate;
 

@@ -1,11 +1,9 @@
 package project.dailyge.app.core.event.persistence;
 
-import lombok.Getter;
 import project.dailyge.entity.event.EventJpaEntity;
 
 import java.time.LocalDateTime;
 
-@Getter
 public class EventCache {
 
     private final Long id;
@@ -23,6 +21,22 @@ public class EventCache {
         this.startTime = startTime;
         this.endTime = endTime;
         this.participants = participants;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    public Long getParticipants() {
+        return participants;
     }
 
     public static EventCache entityToCache(final EventJpaEntity eventJpaEntity) {

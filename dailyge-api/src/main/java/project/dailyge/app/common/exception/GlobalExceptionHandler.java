@@ -1,6 +1,7 @@
 package project.dailyge.app.common.exception;
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -27,10 +28,12 @@ import project.dailyge.app.response.ErrorResponse;
 import static project.dailyge.entity.user.Role.GUEST;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 
-@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     private static final String ERROR_LOG_FORMAT =
         "{\"order\":\"{}\", \"traceId\":\"{}\", \"code\":\"{}\", \"message\":\"{}\", \"detailMessage\":\"{}\", "
@@ -61,7 +64,7 @@ public class GlobalExceptionHandler {
             .body(ErrorResponse.from(codeAndMessage));
     }
 
-    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    @ExceptionHandler({DateTimeParseException.class, MethodArgumentTypeMismatchException.class})
     public ResponseEntity<ErrorResponse> resolveMethodArgumentTypeMismatchException(
         final MethodArgumentTypeMismatchException exception
     ) {

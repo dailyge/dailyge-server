@@ -1,7 +1,6 @@
 package project.dailyge.app.core.task.persistence;
 
 import jakarta.persistence.EntityManager;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import project.dailyge.entity.task.MonthlyTaskEntityWriteRepository;
@@ -12,10 +11,13 @@ import project.dailyge.entity.task.TaskJpaEntity;
 import java.util.List;
 
 @Repository
-@RequiredArgsConstructor
 class TaskWriteDao implements TaskEntityWriteRepository, MonthlyTaskEntityWriteRepository {
 
     private final EntityManager entityManager;
+
+    public TaskWriteDao(final EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
 
     @Override
     public Long save(final TaskJpaEntity task) {

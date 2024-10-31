@@ -1,11 +1,9 @@
 package project.dailyge.app.core.task.presentation.response;
 
-import lombok.Getter;
 
 import java.time.LocalDate;
 import java.util.List;
 
-@Getter
 public class MonthlyTasksResponse {
 
     private Long monthlyTaskId;
@@ -39,6 +37,22 @@ public class MonthlyTasksResponse {
         final List<TaskDetailResponse> tasks
     ) {
         return new MonthlyTasksResponse(date, tasks);
+    }
+
+    public Long getMonthlyTaskId() {
+        return monthlyTaskId;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public int getMonth() {
+        return month;
+    }
+
+    public List<TaskDetailResponse> getTasks() {
+        return tasks;
     }
 
     @Override

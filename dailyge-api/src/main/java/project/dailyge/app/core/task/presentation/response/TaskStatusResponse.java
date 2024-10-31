@@ -1,9 +1,7 @@
 package project.dailyge.app.core.task.presentation.response;
 
-import lombok.Getter;
 import project.dailyge.entity.task.TaskStatus;
 
-@Getter
 public class TaskStatusResponse {
 
     private final String kr;
@@ -16,6 +14,14 @@ public class TaskStatusResponse {
 
     public static TaskStatusResponse from(final TaskStatus status) {
         return new TaskStatusResponse(status);
+    }
+
+    public String getKr() {
+        return kr;
+    }
+
+    public String getEn() {
+        return en;
     }
 
     @Override

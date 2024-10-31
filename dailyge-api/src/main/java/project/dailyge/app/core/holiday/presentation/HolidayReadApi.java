@@ -1,6 +1,5 @@
 package project.dailyge.app.core.holiday.presentation;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,13 +16,20 @@ import project.dailyge.app.core.holiday.presentation.validator.HolidayClientVali
 
 import java.util.List;
 
-@RequiredArgsConstructor
 @RequestMapping(path = "/api/holidays")
 @PresentationLayer(value = "HolidayReadApi")
 public class HolidayReadApi {
 
     private final HolidayClientValidator validator;
     private final HolidayReadService holidayReadService;
+
+    public HolidayReadApi(
+        final HolidayClientValidator validator,
+        final HolidayReadService holidayReadService
+    ) {
+        this.validator = validator;
+        this.holidayReadService = holidayReadService;
+    }
 
     @GetMapping
     public ApiResponse<List<HolidayResponse>> searchHolidays(

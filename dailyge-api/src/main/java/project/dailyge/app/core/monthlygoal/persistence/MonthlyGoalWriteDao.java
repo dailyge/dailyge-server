@@ -1,16 +1,18 @@
 package project.dailyge.app.core.monthlygoal.persistence;
 
 import jakarta.persistence.EntityManager;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import project.dailyge.entity.monthlygoal.MonthlyGoalEntityWriteRepository;
-import project.dailyge.entity.monthlygoal.MonthlyGoalJpaEntity;
+import project.dailyge.entity.goal.MonthlyGoalEntityWriteRepository;
+import project.dailyge.entity.goal.MonthlyGoalJpaEntity;
 
 @Repository
-@RequiredArgsConstructor
 class MonthlyGoalWriteDao implements MonthlyGoalEntityWriteRepository {
 
     private final EntityManager entityManager;
+
+    public MonthlyGoalWriteDao(final EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
 
     @Override
     public Long save(final MonthlyGoalJpaEntity monthlyGoal) {

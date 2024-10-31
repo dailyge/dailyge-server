@@ -1,9 +1,7 @@
 package project.dailyge.app.response;
 
-import lombok.Getter;
 import project.dailyge.app.codeandmessage.CodeAndMessage;
 
-@Getter
 public class Payload<T> {
 
     protected final int code;
@@ -17,6 +15,18 @@ public class Payload<T> {
         this.code = codeAndMessage.code();
         this.message = codeAndMessage.message();
         this.data = data;
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public T getData() {
+        return data;
     }
 
     @Override

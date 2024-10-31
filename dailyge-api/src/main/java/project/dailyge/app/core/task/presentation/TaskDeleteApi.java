@@ -1,6 +1,5 @@
 package project.dailyge.app.core.task.presentation;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,12 +11,15 @@ import project.dailyge.app.core.common.auth.DailygeUser;
 import project.dailyge.app.core.task.application.TaskWriteService;
 import project.dailyge.app.core.task.presentation.response.TaskCreateResponse;
 
-@RequiredArgsConstructor
 @RequestMapping("/api/tasks")
 @PresentationLayer(value = "TaskDeleteApi")
 public class TaskDeleteApi {
 
     private final TaskWriteService taskWriteService;
+
+    public TaskDeleteApi(final TaskWriteService taskWriteService) {
+        this.taskWriteService = taskWriteService;
+    }
 
     @DeleteMapping(path = {"/{taskId}"})
     public ApiResponse<TaskCreateResponse> deleteTaskById(

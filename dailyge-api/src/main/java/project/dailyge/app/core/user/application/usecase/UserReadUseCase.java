@@ -1,9 +1,9 @@
 package project.dailyge.app.core.user.application.usecase;
 
-import lombok.RequiredArgsConstructor;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_USER_ID;
 import project.dailyge.app.common.annotation.ApplicationLayer;
 import project.dailyge.app.common.exception.CommonException;
+import project.dailyge.app.core.user.application.UserReadService;
 import static project.dailyge.app.core.user.exception.UserCodeAndMessage.USER_NOT_FOUND;
 import project.dailyge.app.core.user.exception.UserTypeException;
 import project.dailyge.entity.user.UserEntityReadRepository;
@@ -11,11 +11,14 @@ import project.dailyge.entity.user.UserJpaEntity;
 
 import java.util.Optional;
 
-@RequiredArgsConstructor
-@ApplicationLayer(value = "UserReadService")
-class UserReadUseCase implements project.dailyge.app.core.user.application.UserReadService {
+@ApplicationLayer(value = "UserReadUseCase")
+class UserReadUseCase implements UserReadService {
 
     private final UserEntityReadRepository userReadRepository;
+
+    public UserReadUseCase(final UserEntityReadRepository userReadRepository) {
+        this.userReadRepository = userReadRepository;
+    }
 
     @Override
     public UserJpaEntity findById(final Long userId) {
@@ -38,6 +41,12 @@ class UserReadUseCase implements project.dailyge.app.core.user.application.UserR
     @Override
     public Optional<UserJpaEntity> findActiveUserByEmail(final String email) {
         return userReadRepository.findActiveUserByEmail(email);
+    }
+
+    @Override
+    public UserJpaEntity findByNickname(final String nickname) {
+        return userReadRepository.findByNickname(nickname)
+            .orElseThrow(() -> UserTypeException.from(USER_NOT_FOUND));
     }
 
     @Override

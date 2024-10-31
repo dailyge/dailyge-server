@@ -1,9 +1,7 @@
 package project.dailyge.app.core.monthlygoal.presentation.response;
 
-import lombok.Getter;
-import project.dailyge.entity.monthlygoal.MonthlyGoalJpaEntity;
+import project.dailyge.entity.goal.MonthlyGoalJpaEntity;
 
-@Getter
 public class MonthlyGoalResponse {
 
     private final Long id;
@@ -24,6 +22,38 @@ public class MonthlyGoalResponse {
         this.month = monthlyGoal.getMonth();
         this.userId = monthlyGoal.getUserId();
         this.createdAt = monthlyGoal.getCreatedAtAsString();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public boolean isDone() {
+        return done;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public int getMonth() {
+        return month;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
     }
 
     @Override

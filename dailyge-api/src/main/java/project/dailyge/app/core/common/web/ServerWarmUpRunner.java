@@ -1,8 +1,8 @@
 package project.dailyge.app.core.common.web;
 
 import jakarta.persistence.EntityManager;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Profile;
@@ -20,11 +20,11 @@ import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
 
-@Slf4j
 @Component
 @Profile({"dev"})
-@RequiredArgsConstructor
 public class ServerWarmUpRunner implements ApplicationRunner {
+
+    private static final Logger log = LoggerFactory.getLogger(ServerWarmUpRunner.class);
 
     private static final int START = 1;
     private static final int END = 10;
@@ -34,6 +34,20 @@ public class ServerWarmUpRunner implements ApplicationRunner {
     private final RestTemplate restTemplate;
     private final EntityManager entityManager;
     private final RedisConnectionFactory redisConnectionFactory;
+
+    public ServerWarmUpRunner(
+        final CouponReadApi couponReadApi,
+        final EventCreateApi eventCreateApi,
+        final RestTemplate restTemplate,
+        final EntityManager entityManager,
+        final RedisConnectionFactory redisConnectionFactory
+    ) {
+        this.couponReadApi = couponReadApi;
+        this.eventCreateApi = eventCreateApi;
+        this.restTemplate = restTemplate;
+        this.entityManager = entityManager;
+        this.redisConnectionFactory = redisConnectionFactory;
+    }
 
     @Override
     public void run(final ApplicationArguments args) {

@@ -2,23 +2,28 @@ package project.dailyge.app.core.user.persistence;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.lettuce.core.RedisException;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_GATEWAY;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
 import project.dailyge.app.common.exception.CommonException;
+import static project.dailyge.common.configuration.CompressionHelper.decompressAsObjWithZstd;
 import project.dailyge.core.cache.user.UserCache;
 import project.dailyge.core.cache.user.UserCacheReadRepository;
 
-import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_GATEWAY;
-import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
-import static project.dailyge.common.configuration.CompressionHelper.decompressAsObjWithZstd;
-
 @Repository
-@RequiredArgsConstructor
 public class UserCacheReadDao implements UserCacheReadRepository {
 
     private final RedisTemplate<String, byte[]> redisTemplate;
     private final ObjectMapper objectMapper;
+
+    public UserCacheReadDao(
+        final RedisTemplate<String, byte[]> redisTemplate,
+        final ObjectMapper objectMapper
+    ) {
+        this.redisTemplate = redisTemplate;
+        this.objectMapper = objectMapper;
+    }
 
     @Override
     public UserCache findById(final Long userId) {

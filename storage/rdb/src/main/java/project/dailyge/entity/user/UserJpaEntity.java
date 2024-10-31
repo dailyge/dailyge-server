@@ -5,23 +5,16 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import project.dailyge.entity.BaseEntity;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
-import static lombok.AccessLevel.PROTECTED;
-
-@Getter
-@NoArgsConstructor(access = PROTECTED)
 @Entity(name = "users")
 public class UserJpaEntity extends BaseEntity {
 
     private static final int MAX_NICKNAME_LENGTH = 20;
-    private static final int MAX_EMAIL_LENGTH = 50;
     private static final int MAX_PROFILE_IMAGE_URL_LENGTH = 2000;
     private static final String EMAIL_PATTERN = "^[0-9a-zA-Z](?:[-_.]?[0-9a-zA-Z]){0,39}@gmail\\.com$";
     private static final String OVER_MAX_NICKNAME_LENGTH_ERROR_MESSAGE = "입력 가능한 최대 닉네임 길이를 초과했습니다.";
@@ -48,6 +41,9 @@ public class UserJpaEntity extends BaseEntity {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
+    protected UserJpaEntity() {
+    }
+
     public UserJpaEntity(
         final Long id,
         final String nickname,
@@ -71,7 +67,7 @@ public class UserJpaEntity extends BaseEntity {
         this.nickname = nickname;
         this.email = email;
         this.role = Role.NORMAL;
-        this.createdAt = createdAt;
+        init(createdAt, id, null, null, false);
     }
 
     public UserJpaEntity(
@@ -101,6 +97,30 @@ public class UserJpaEntity extends BaseEntity {
         this.role = Role.NORMAL;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getProfileImageUrl() {
+        return profileImageUrl;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public LocalDateTime getDeletedAt() {
+        return deletedAt;
+    }
+
     private void validate(
         final String nickname,
         final String email,
@@ -125,10 +145,10 @@ public class UserJpaEntity extends BaseEntity {
     }
 
     public void delete() {
-        if (deleted) {
+        if (super.getDeleted()) {
             throw new IllegalArgumentException(USER_ALREADY_DELETED_MESSAGE);
         }
-        this.deleted = true;
+        updateDeletedStatus();
         this.deletedAt = LocalDateTime.now();
     }
 

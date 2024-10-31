@@ -9,6 +9,8 @@ public interface UserEntityReadRepository {
 
     Optional<UserJpaEntity> findActiveUserByEmail(String email);
 
+    Optional<UserJpaEntity> findByNickname(String nickname);
+
     Long findUserIdByEmail(String email);
 
     String findEmailById(Long userId);

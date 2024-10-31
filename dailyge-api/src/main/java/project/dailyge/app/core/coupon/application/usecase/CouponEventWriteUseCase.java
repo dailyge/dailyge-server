@@ -1,6 +1,5 @@
 package project.dailyge.app.core.coupon.application.usecase;
 
-import lombok.RequiredArgsConstructor;
 import project.dailyge.app.common.annotation.ApplicationLayer;
 import project.dailyge.app.core.coupon.persistence.CouponEventParticipant;
 import project.dailyge.app.core.coupon.persistence.CouponInMemoryRepository;
@@ -10,12 +9,19 @@ import project.dailyge.core.cache.coupon.CouponEventWriteService;
 
 import java.util.List;
 
-@RequiredArgsConstructor
 @ApplicationLayer(value = "CouponEventWriteService")
 class CouponEventWriteUseCase implements CouponEventWriteService {
 
     private final CouponEventWriteRepository couponEventWriteRepository;
     private final CouponInMemoryRepository couponInMemoryRepository;
+
+    public CouponEventWriteUseCase(
+        final CouponEventWriteRepository couponEventWriteRepository,
+        final CouponInMemoryRepository couponInMemoryRepository
+    ) {
+        this.couponEventWriteRepository = couponEventWriteRepository;
+        this.couponInMemoryRepository = couponInMemoryRepository;
+    }
 
     @Override
     public void saveBulks() {

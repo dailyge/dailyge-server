@@ -1,9 +1,7 @@
 package project.dailyge.app.core.anniversary.exception;
 
-import lombok.Getter;
 import project.dailyge.app.codeandmessage.CodeAndMessage;
 
-@Getter
 public enum AnniversaryCodeAndMessage implements CodeAndMessage {
     ANNIVERSARY_NOT_FOUND(404, "기념일이 존재하지 않습니다."),
     DUPLICATED_ANNIVERSARY(409, "동일한 기념일이 존재합니다."),
@@ -18,6 +16,14 @@ public enum AnniversaryCodeAndMessage implements CodeAndMessage {
     ) {
         this.code = code;
         this.message = message;
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public String getMessage() {
+        return message;
     }
 
     @Override

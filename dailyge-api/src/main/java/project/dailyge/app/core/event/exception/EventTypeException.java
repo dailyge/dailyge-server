@@ -1,14 +1,13 @@
 package project.dailyge.app.core.event.exception;
 
-import lombok.Getter;
 import project.dailyge.app.common.exception.BusinessException;
+import static project.dailyge.app.core.event.exception.EventCodeAndMessage.EVENT_NOT_FOUND;
+import static project.dailyge.app.core.event.exception.EventCodeAndMessage.EVENT_UN_RESOLVED_EXCEPTION;
+import static project.dailyge.app.core.event.exception.EventCodeAndMessage.INVALID_EVENT;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static project.dailyge.app.core.event.exception.EventCodeAndMessage.*;
-
-@Getter
 public sealed class EventTypeException extends BusinessException {
 
     private static final Map<EventCodeAndMessage, EventTypeException> factory = new HashMap<>();

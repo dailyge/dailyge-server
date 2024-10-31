@@ -1,5 +1,7 @@
 package project.dailyge.entity.monthlygoal;
 
+import project.dailyge.entity.goal.MonthlyGoalJpaEntity;
+
 import java.time.LocalDate;
 
 public final class MonthlyGoalFixture {

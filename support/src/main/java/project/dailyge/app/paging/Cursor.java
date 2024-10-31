@@ -1,10 +1,7 @@
 package project.dailyge.app.paging;
 
-import lombok.Getter;
-
 import java.util.Objects;
 
-@Getter
 public class Cursor {
 
     private final Long index;
@@ -25,24 +22,33 @@ public class Cursor {
         return new Cursor(index, limit);
     }
 
+    public Long getIndex() {
+        return index;
+    }
+
+    public Integer getLimit() {
+        return limit;
+    }
+
     public boolean isNull() {
         return index == null;
     }
 
     @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) {
+    public boolean equals(final Object object) {
+        if (this == object) {
             return true;
         }
-        if (!(obj instanceof Cursor cursor)) {
+        if (object == null || getClass() != object.getClass()) {
             return false;
         }
-        return getIndex().equals(cursor.getIndex()) && getLimit().equals(cursor.getLimit());
+        final Cursor cursor = (Cursor) object;
+        return Objects.equals(index, cursor.index) && Objects.equals(limit, cursor.limit);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getIndex(), getLimit());
+        return Objects.hash(index, limit);
     }
 
     @Override

@@ -1,7 +1,6 @@
 package project.dailyge.app.core.task.presentation;
 
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,13 +15,20 @@ import project.dailyge.app.core.task.presentation.requesst.MonthlyTasksCreateReq
 import project.dailyge.app.core.task.presentation.requesst.TaskCreateRequest;
 import project.dailyge.app.core.task.presentation.response.TaskCreateResponse;
 
-@RequiredArgsConstructor
 @RequestMapping(path = "/api")
 @PresentationLayer(value = "TaskCreateApi")
 public class TaskCreateApi {
 
     private final TaskFacade taskFacade;
     private final TaskWriteService taskWriteService;
+
+    public TaskCreateApi(
+        final TaskFacade taskFacade,
+        final TaskWriteService taskWriteService
+    ) {
+        this.taskFacade = taskFacade;
+        this.taskWriteService = taskWriteService;
+    }
 
     @PostMapping(path = {"/monthly-tasks"})
     public ApiResponse<Void> createMonthlyTasks(

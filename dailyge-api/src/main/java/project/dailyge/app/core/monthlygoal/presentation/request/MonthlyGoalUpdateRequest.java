@@ -3,10 +3,8 @@ package project.dailyge.app.core.monthlygoal.presentation.request;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
 import project.dailyge.app.core.monthlygoal.application.command.MonthlyGoalUpdateCommand;
 
-@Getter
 public class MonthlyGoalUpdateRequest {
 
     @NotNull
@@ -28,6 +26,14 @@ public class MonthlyGoalUpdateRequest {
     ) {
         this.title = title;
         this.content = content;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getContent() {
+        return content;
     }
 
     public MonthlyGoalUpdateCommand toCommand() {

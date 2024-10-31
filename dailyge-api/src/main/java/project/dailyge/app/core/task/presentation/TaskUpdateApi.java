@@ -1,7 +1,6 @@
 package project.dailyge.app.core.task.presentation;
 
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -18,12 +17,15 @@ import project.dailyge.app.core.task.application.command.TaskUpdateCommand;
 import project.dailyge.app.core.task.presentation.requesst.TaskStatusUpdateRequest;
 import project.dailyge.app.core.task.presentation.requesst.TaskUpdateRequest;
 
-@RequiredArgsConstructor
 @RequestMapping(path = {"/api/tasks"})
 @PresentationLayer(value = "TaskUpdateApi")
 public class TaskUpdateApi {
 
     private final TaskWriteService taskWriteService;
+
+    public TaskUpdateApi(final TaskWriteService taskWriteService) {
+        this.taskWriteService = taskWriteService;
+    }
 
     @PutMapping(path = {"/{taskId}"})
     public ApiResponse<Void> update(

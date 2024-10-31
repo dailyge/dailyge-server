@@ -8,25 +8,21 @@ import io.jsonwebtoken.RequiredTypeException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
+import javax.crypto.Cipher;
+import javax.crypto.spec.GCMParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+import org.springframework.stereotype.Component;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_USER_TOKEN;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
+import project.dailyge.app.common.exception.CommonException;
+
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.time.Duration;
 import java.util.Base64;
 import java.util.Date;
-import javax.crypto.Cipher;
-import javax.crypto.spec.GCMParameterSpec;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
-import project.dailyge.app.common.exception.CommonException;
-import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_USER_TOKEN;
-import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
 
-@Slf4j
 @Component
-@RequiredArgsConstructor
 public class TokenProvider {
 
     private static final String ID = "id";
@@ -36,6 +32,14 @@ public class TokenProvider {
 
     private final JwtProperties jwtProperties;
     private final SecretKeyManager secretKeyManager;
+
+    public TokenProvider(
+        final JwtProperties jwtProperties,
+        final SecretKeyManager secretKeyManager
+    ) {
+        this.jwtProperties = jwtProperties;
+        this.secretKeyManager = secretKeyManager;
+    }
 
     public DailygeToken createToken(final Long userId) {
         final String accessToken = generateToken(userId, getExpiry(jwtProperties.getAccessExpiredTime()));

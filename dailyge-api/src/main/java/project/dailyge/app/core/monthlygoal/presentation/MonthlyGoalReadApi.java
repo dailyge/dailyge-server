@@ -1,6 +1,5 @@
 package project.dailyge.app.core.monthlygoal.presentation;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,12 +15,15 @@ import project.dailyge.app.paging.Cursor;
 
 import java.util.List;
 
-@RequiredArgsConstructor
 @RequestMapping(path = "/api/monthly-goals")
 @PresentationLayer(value = "MonthlyGoalReadApi")
 public class MonthlyGoalReadApi {
 
     private final MonthlyGoalReadService monthlyGoalReadService;
+
+    public MonthlyGoalReadApi(final MonthlyGoalReadService monthlyGoalReadService) {
+        this.monthlyGoalReadService = monthlyGoalReadService;
+    }
 
     @GetMapping
     public ApiResponse<List<MonthlyGoalResponse>> findMonthlyGoalsByCursor(

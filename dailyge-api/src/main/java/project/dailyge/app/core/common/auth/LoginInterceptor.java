@@ -6,8 +6,8 @@ import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import static java.nio.charset.StandardCharsets.UTF_8;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -23,15 +23,27 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-@Slf4j
 @Component
-@RequiredArgsConstructor
 public class LoginInterceptor implements HandlerInterceptor {
+
+    private final Logger log = LoggerFactory.getLogger(LoginInterceptor.class);
 
     private final UserCacheReadService userCacheReadService;
     private final TokenProvider tokenProvider;
     private final TokenManager tokenManager;
     private final ObjectMapper objectMapper;
+
+    public LoginInterceptor(
+        final UserCacheReadService userCacheReadService,
+        final TokenProvider tokenProvider,
+        final TokenManager tokenManager,
+        final ObjectMapper objectMapper
+    ) {
+        this.userCacheReadService = userCacheReadService;
+        this.tokenProvider = tokenProvider;
+        this.tokenManager = tokenManager;
+        this.objectMapper = objectMapper;
+    }
 
     @Override
     public boolean preHandle(

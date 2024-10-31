@@ -3,12 +3,10 @@ package project.dailyge.app.core.monthlygoal.presentation.request;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
 import project.dailyge.app.core.monthlygoal.application.command.MonthlyGoalCreateCommand;
 
 import java.time.LocalDate;
 
-@Getter
 public class MonthlyGoalCreateRequest {
 
     @NotNull
@@ -35,6 +33,18 @@ public class MonthlyGoalCreateRequest {
         this.title = title;
         this.content = content;
         this.date = date;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public LocalDate getDate() {
+        return date;
     }
 
     public MonthlyGoalCreateCommand toCommand() {

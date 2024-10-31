@@ -1,6 +1,5 @@
 package project.dailyge.app.core.codeandmessage.application;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import project.dailyge.app.common.annotation.ApplicationLayer;
 import project.dailyge.entity.codeandmessage.CodeAndMessageEntityReadRepository;
@@ -12,12 +11,19 @@ import project.dailyge.entity.codeandmessage.CodeAndMessages;
 
 import java.util.List;
 
-@ApplicationLayer
-@RequiredArgsConstructor
+@ApplicationLayer(value = "CodeAndMessageUseCase")
 class CodeAndMessageUseCase implements CodeAndMessageReadService, CodeAndMessageEntityWriteService {
 
     private final CodeAndMessageEntityReadRepository codeAndMessageReadRepository;
     private final CodeAndMessageEntityWriteRepository codeAndMessageWriteRepository;
+
+    public CodeAndMessageUseCase(
+        final CodeAndMessageEntityReadRepository codeAndMessageReadRepository,
+        final CodeAndMessageEntityWriteRepository codeAndMessageWriteRepository
+    ) {
+        this.codeAndMessageReadRepository = codeAndMessageReadRepository;
+        this.codeAndMessageWriteRepository = codeAndMessageWriteRepository;
+    }
 
     @Override
     public List<CodeAndMessageJpaEntity> findAll() {

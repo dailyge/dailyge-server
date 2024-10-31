@@ -1,6 +1,5 @@
 package project.dailyge.app.core.user.facade;
 
-import lombok.RequiredArgsConstructor;
 import project.dailyge.app.common.annotation.FacadeLayer;
 import project.dailyge.app.common.auth.TokenProvider;
 import project.dailyge.app.core.common.auth.DailygeToken;
@@ -22,7 +21,6 @@ import static project.dailyge.entity.user.Role.NORMAL;
 import project.dailyge.entity.user.UserEvent;
 import static project.dailyge.entity.user.UserEvent.createEvent;
 
-@RequiredArgsConstructor
 @FacadeLayer(value = "UserFacade")
 public class UserFacade {
 
@@ -37,6 +35,28 @@ public class UserFacade {
     private final EventPublisher<TaskEvent> taskEventEventPublisher;
     private final UserCacheReadService userCacheReadService;
     private final UserCacheWriteService userCacheWriteService;
+
+    public UserFacade(
+        final GoogleOAuthManager googleOAuthManager,
+        final UserReadService userReadService,
+        final UserWriteService userWriteService,
+        final TokenProvider tokenProvider,
+        final TokenManager tokenManager,
+        final EventPublisher<UserEvent> userEventPublisher,
+        final EventPublisher<TaskEvent> taskEventEventPublisher,
+        final UserCacheReadService userCacheReadService,
+        final UserCacheWriteService userCacheWriteService
+    ) {
+        this.googleOAuthManager = googleOAuthManager;
+        this.userReadService = userReadService;
+        this.userWriteService = userWriteService;
+        this.tokenProvider = tokenProvider;
+        this.tokenManager = tokenManager;
+        this.userEventPublisher = userEventPublisher;
+        this.taskEventEventPublisher = taskEventEventPublisher;
+        this.userCacheReadService = userCacheReadService;
+        this.userCacheWriteService = userCacheWriteService;
+    }
 
     public DailygeToken login(final String code) {
         final GoogleUserInfoResponse response = googleOAuthManager.getUserInfo(code);

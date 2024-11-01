@@ -8,5 +8,9 @@ import java.util.List;
 public interface NoteReadService {
     NoteJpaEntity findById(DailygeUser dailygeUser, Long noteId);
 
+    NoteJpaEntity findReceivedNoteById(Long userId, Long noteId);
+
+    NoteJpaEntity findSentNoteById(Long userId, Long noteId);
+
     List<NoteJpaEntity> findAll();
 }

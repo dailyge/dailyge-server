@@ -9,13 +9,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 import project.dailyge.entity.BaseEntity;
 
 @Entity(name = "job_posting")
-public class JobPosting extends BaseEntity {
+public class ResumeSubmissionHistoryJpaEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,25 +21,24 @@ public class JobPosting extends BaseEntity {
     @Column(name = "title")
     private String title;
 
-    @Column(name = "required_skills")
-    private String requiredSkills;
-
     @Column(name = "link")
     private String link;
 
-    @JdbcTypeCode(SqlTypes.JSON)
-    @Column(name = "needed_documents", columnDefinition = "json")
-    private List<String> neededDocuments;
-
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
-    private JobPostingStatus status;
+    private ProgressStatus status;
 
-    @Column(name = "applied_date")
-    private LocalDate appliedDate;
+    @Column(name = "submitted_date")
+    private LocalDate submittedDate;
 
     @Column(name = "deadline")
     private LocalDateTime deadline;
+
+    @Column(name = "year")
+    private int year;
+
+    @Column(name = "month")
+    private int month;
 
     @Column(name = "company_id")
     private Long companyId;
@@ -58,28 +54,28 @@ public class JobPosting extends BaseEntity {
         return title;
     }
 
-    public String getRequiredSkills() {
-        return requiredSkills;
-    }
-
     public String getLink() {
         return link;
     }
 
-    public List<String> getNeededDocuments() {
-        return neededDocuments;
-    }
-
-    public JobPostingStatus getStatus() {
+    public ProgressStatus getStatus() {
         return status;
     }
 
-    public LocalDate getAppliedDate() {
-        return appliedDate;
+    public LocalDate getSubmittedDate() {
+        return submittedDate;
     }
 
     public LocalDateTime getDeadline() {
         return deadline;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public int getMonth() {
+        return month;
     }
 
     public Long getCompanyId() {

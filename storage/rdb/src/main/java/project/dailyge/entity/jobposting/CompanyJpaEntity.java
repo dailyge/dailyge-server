@@ -9,8 +9,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import project.dailyge.entity.BaseEntity;
 
-@Entity(name = "company")
-public class Company extends BaseEntity {
+@Entity(name = "companies")
+public class CompanyJpaEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,10 +20,10 @@ public class Company extends BaseEntity {
     private String name;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "company_size")
-    private CompanySize companySize;
+    @Column(name = "company_type")
+    private CompanyType companyType;
 
-    protected Company() {
+    protected CompanyJpaEntity() {
     }
 
     public Long getId() {
@@ -34,7 +34,7 @@ public class Company extends BaseEntity {
         return name;
     }
 
-    public CompanySize getCompanySize() {
-        return companySize;
+    public CompanyType getCompanySize() {
+        return companyType;
     }
 }

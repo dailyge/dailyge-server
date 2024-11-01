@@ -1,8 +1,6 @@
 package project.dailyge.entity.jobposting;
 
-public enum JobPostingStatus {
-    SEARCHING("공고 서치"),
-    PREPARING_DOCUMENTS("서류 준비 중"),
+public enum ProgressStatus {
     SUBMITTED("제출 완료"),
     PREPARING_CODING_TEST("코딩테스트 준비 중"),
     PREPARING_PERSONALITY_TEST("인적성 준비 중"),
@@ -13,11 +11,12 @@ public enum JobPostingStatus {
     CLOSED("공고 마감"),
     DOCUMENT_REJECTED("서류 탈락"),
     CODING_TEST_REJECTED("코딩테스트 탈락"),
+    INTERVIEW_REJECTED("면접 탈락"),
     PERSONALITY_TEST_REJECTED("인적성 탈락");
 
     private final String kr;
 
-    JobPostingStatus(final String kr) {
+    ProgressStatus(final String kr) {
         this.kr = kr;
     }
 

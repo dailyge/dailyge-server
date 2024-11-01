@@ -1,6 +1,6 @@
 package project.dailyge.entity.jobposting;
 
-public enum CompanySize {
+public enum CompanyType {
     STARTUP("스타트업"),
     UNICORN("유니콘 기업"),
     SMALL_ENTERPRISE("중소기업"),
@@ -9,7 +9,7 @@ public enum CompanySize {
 
     private final String kr;
 
-    CompanySize(final String kr) {
+    CompanyType(final String kr) {
         this.kr = kr;
     }
 

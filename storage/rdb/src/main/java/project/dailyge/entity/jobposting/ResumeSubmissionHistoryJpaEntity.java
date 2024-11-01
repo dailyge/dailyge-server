@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import project.dailyge.entity.BaseEntity;
 
-@Entity(name = "job_posting")
+@Entity(name = "resume_submission_histories")
 public class ResumeSubmissionHistoryJpaEntity extends BaseEntity {
 
     @Id

@@ -98,7 +98,6 @@ class NoteUnitTest : DescribeSpec({
                 val note = NoteJpaEntity(
                     title = "긴급 공지",
                     content = "오늘 오후 3시까지 기획안을 제출해 주시기 바랍니다.",
-                    isRead = false,
                     sentAt = fixedSentAt,
                     senderId = 1L,
                     receiverId = 2L
@@ -112,11 +111,12 @@ class NoteUnitTest : DescribeSpec({
                 val note = NoteJpaEntity(
                     title = "긴급 공지",
                     content = "오늘 오후 3시까지 기획안을 제출해 주시기 바랍니다.",
-                    isRead = true,
                     sentAt = fixedSentAt,
                     senderId = 1L,
                     receiverId = 2L
                 )
+
+                note.updateReadStatus(true, fixedReadAt)
 
                 note.readByReceiver(receiver) shouldBe false
                 note.readByReceiver(sender) shouldBe false

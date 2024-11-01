@@ -56,7 +56,7 @@ tasks.register("authOpenApiSpec") {
 
 tasks.test {
     dependsOn("copySubmoduleConfig")
-    mustRunAfter(":storage:rdb:test")
+    mustRunAfter(":storage:rdb:build")
     outputs.dir(snippetsDir)
 }
 

@@ -32,7 +32,7 @@ public class JobPosting extends BaseEntity {
 
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "needed_documents", columnDefinition = "json")
-    private List<NeededDocumentType> neededDocuments;
+    private List<String> neededDocuments;
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
@@ -66,7 +66,7 @@ public class JobPosting extends BaseEntity {
         return link;
     }
 
-    public List<NeededDocumentType> getNeededDocuments() {
+    public List<String> getNeededDocuments() {
         return neededDocuments;
     }
 

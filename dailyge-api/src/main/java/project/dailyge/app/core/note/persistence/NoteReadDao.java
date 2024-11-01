@@ -18,8 +18,20 @@ class NoteReadDao implements NoteEntityReadRepository {
         this.queryFactory = queryFactory;
     }
 
+    @Override
+    public Optional<NoteJpaEntity> findById(final Long noteId) {
+        return Optional.ofNullable(
+            queryFactory.selectFrom(noteJpaEntity)
+                .where(
+                    noteJpaEntity.id.eq(noteId)
+                        .and(noteJpaEntity._senderDeleted.eq(false))
+                )
+                .fetchOne()
+        );
+    }
+
     /**
-     * 받은 쪽지함 삭제
+     * 보낸 쪽지함 삭제
      */
     @Override
     public Optional<NoteJpaEntity> findSentNoteById(
@@ -37,20 +49,8 @@ class NoteReadDao implements NoteEntityReadRepository {
     }
 
     /**
-     * 보낸 쪽지함 삭제
+     * 받은 쪽지함 삭제
      */
-    @Override
-    public Optional<NoteJpaEntity> findById(final Long noteId) {
-        return Optional.ofNullable(
-            queryFactory.selectFrom(noteJpaEntity)
-                .where(
-                    noteJpaEntity.id.eq(noteId)
-                        .and(noteJpaEntity._senderDeleted.eq(false))
-                )
-                .fetchOne()
-        );
-    }
-
     @Override
     public Optional<NoteJpaEntity> findReceivedNoteById(
         final Long userId,

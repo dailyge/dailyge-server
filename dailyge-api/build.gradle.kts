@@ -64,6 +64,7 @@ tasks.named("asciidoctor") {
     dependsOn(tasks.test)
     inputs.dir(snippetsDir)
     outputs.dir(file("$buildDir/docs/asciidoc"))
+    finalizedBy("copyDocument")
 }
 
 tasks.register<Copy>("copyDocument") {

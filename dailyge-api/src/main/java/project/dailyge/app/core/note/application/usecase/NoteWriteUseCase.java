@@ -41,7 +41,7 @@ class NoteWriteUseCase implements NoteWriteService {
         final NoteJpaEntity note
     ) {
         validator.validate(dailygeUser.getId(), note.getReceiverId());
-        final Long newNoteId = noteWriteRepository.save(note);
+        final long newNoteId = noteWriteRepository.save(note);
         final NoteEvent event = new NoteEvent(dailygeUser.getUserId(), newNoteId, createTimeBasedUUID(), CREATE);
         eventPublisher.publishEvent(event);
         return newNoteId;

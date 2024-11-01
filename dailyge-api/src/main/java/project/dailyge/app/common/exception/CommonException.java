@@ -13,6 +13,7 @@ import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_UR
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_USER_ID;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_USER_TOKEN;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.SERVICE_UNAVAILABLE;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.TOO_MANY_REQUEST;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
 
 import java.util.HashMap;
@@ -49,6 +50,7 @@ public sealed class CommonException extends RuntimeException {
         factory.put(INVALID_USER_TOKEN, new UnAuthorizedException(INVALID_USER_TOKEN));
         factory.put(UN_AUTHORIZED, new UnAuthorizedException(UN_AUTHORIZED));
         factory.put(INVALID_URL, new InvalidParameterException(INVALID_URL));
+        factory.put(TOO_MANY_REQUEST, new TooManyRequestException(TOO_MANY_REQUEST));
         factory.put(INTERNAL_SERVER_ERROR, new ExternalServerException(INTERNAL_SERVER_ERROR));
         factory.put(BAD_GATEWAY, new ExternalServerException(BAD_GATEWAY));
         factory.put(SERVICE_UNAVAILABLE, new ExternalServerException(SERVICE_UNAVAILABLE));
@@ -104,6 +106,12 @@ public sealed class CommonException extends RuntimeException {
 
     private static final class UnAuthorizedException extends CommonException {
         private UnAuthorizedException(final CodeAndMessage codeAndMessage) {
+            super(codeAndMessage);
+        }
+    }
+
+    private static final class TooManyRequestException extends CommonException {
+        private TooManyRequestException(final CodeAndMessage codeAndMessage) {
             super(codeAndMessage);
         }
     }

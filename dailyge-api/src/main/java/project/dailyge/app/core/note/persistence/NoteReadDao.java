@@ -28,6 +28,14 @@ class NoteReadDao implements NoteEntityReadRepository {
             .fetchOne());
     }
 
+    /**
+     * Method created for testing purposes; should not be called in a production environment.
+     * <p>
+     * <b>Warning:</b> This method is intended for testing use only and should not be used in production.
+     * </p>
+     *
+     * @return a list of all {@link NoteJpaEntity} entities
+     */
     @Override
     public List<NoteJpaEntity> findAll() {
         return queryFactory.selectFrom(noteJpaEntity)

@@ -52,6 +52,17 @@ class NoteJpaEntity(
         updateCreatedBy(senderId)
     }
 
+    constructor(
+        title: String,
+        content: String,
+        sentAt: LocalDateTime,
+        isRead: Boolean,
+        senderId: Long,
+        receiverId: Long,
+    ) : this(null, title, content, isRead, sentAt, null, senderId, receiverId) {
+        updateCreatedBy(senderId)
+    }
+
     val title: String
         get() = _title
 
@@ -105,8 +116,9 @@ class NoteJpaEntity(
             senderId -> _senderDeleted = true
             receiverId -> _receiverDeleted = true
             else -> return
+        }.apply {
+            _deleted = (_senderDeleted && _receiverDeleted)
+            updateLastModifiedInfo(userId, lastModifiedAt)
         }
-        _deleted = (_senderDeleted && _receiverDeleted)
-        updateLastModifiedInfo(userId, lastModifiedAt)
     }
 }

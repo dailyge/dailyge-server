@@ -5,7 +5,7 @@ public enum JobPostingStatus {
     PREPARING_DOCUMENTS("서류 준비 중"),
     SUBMITTED("제출 완료"),
     PREPARING_CODING_TEST("코딩테스트 준비 중"),
-    PREPARING_PERSONALITY_TEST("인적서 준비 중"),
+    PREPARING_PERSONALITY_TEST("인적성 준비 중"),
     FIRST_INTERVIEW("1차 면접"),
     SECOND_INTERVIEW("2차 면접"),
     THIRD_INTERVIEW("3차 면접"),

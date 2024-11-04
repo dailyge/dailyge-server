@@ -222,7 +222,7 @@ CREATE TABLE IF NOT EXISTS companies
 DROP TABLE IF EXISTS application_histories;
 CREATE TABLE IF NOT EXISTS application_histories
 (
-  id               BIGINT AUTO_INCREMENT PRIMARY KEY                                                                      NOT NULL COMMENT '제출 이력 ID',
+  id               BIGINT AUTO_INCREMENT PRIMARY KEY                                                                      NOT NULL COMMENT '지원 이력 ID',
   deadline         TIMESTAMP                                                                                              NULL COMMENT '공고 마감일',
   link             VARCHAR(255)                                                                                           NULL COMMENT '공고 링크',
   status           ENUM ('BEFORE_SUBMISSION', 'SUBMITTED', 'PREPARING_CODING_TEST', 'PREPARING_PERSONALITY_TEST',
@@ -240,5 +240,5 @@ CREATE TABLE IF NOT EXISTS application_histories
   last_modified_by BIGINT                                                                                                 NULL COMMENT '최종 수정한 사람',
   deleted          BIT                                                                                                    NOT NULL COMMENT '삭제 유무'
 ) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4 COMMENT '제출 이력',
+  DEFAULT CHARSET = utf8mb4 COMMENT '지원 이력',
   COLLATE utf8mb4_general_ci;

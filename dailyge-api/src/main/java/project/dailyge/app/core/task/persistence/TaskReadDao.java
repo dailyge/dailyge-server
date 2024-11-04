@@ -12,8 +12,11 @@ import project.dailyge.entity.task.TaskJpaEntity;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.YearMonth;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -42,7 +45,7 @@ class TaskReadDao implements TaskEntityReadRepository, MonthlyTaskEntityReadRepo
             .from(retrospectJpaEntity)
             .where(
                 retrospectJpaEntity.userId.eq(userId)
-                    .and(retrospectJpaEntity.deleted.eq(false))
+                    .and(retrospectJpaEntity._deleted.eq(false))
             )
             .fetchOne();
     }
@@ -53,7 +56,7 @@ class TaskReadDao implements TaskEntityReadRepository, MonthlyTaskEntityReadRepo
             queryFactory.selectFrom(taskJpaEntity)
                 .where(
                     taskJpaEntity.id.eq(taskId)
-                        .and(taskJpaEntity.deleted.eq(false))
+                        .and(taskJpaEntity._deleted.eq(false))
                 )
                 .fetchFirst()
         );
@@ -70,7 +73,7 @@ class TaskReadDao implements TaskEntityReadRepository, MonthlyTaskEntityReadRepo
                     monthlyTaskJpaEntity.userId.eq(userId)
                         .and(monthlyTaskJpaEntity.year.eq(now.getYear()))
                         .and(monthlyTaskJpaEntity.month.eq(now.getMonthValue()))
-                        .and(monthlyTaskJpaEntity.deleted.eq(false))
+                        .and(monthlyTaskJpaEntity._deleted.eq(false))
                 )
                 .fetchFirst()
         );
@@ -82,7 +85,7 @@ class TaskReadDao implements TaskEntityReadRepository, MonthlyTaskEntityReadRepo
             queryFactory.selectFrom(monthlyTaskJpaEntity)
                 .where(
                     monthlyTaskJpaEntity.id.eq(monthlyTaskId)
-                        .and(monthlyTaskJpaEntity.deleted.eq(false))
+                        .and(monthlyTaskJpaEntity._deleted.eq(false))
                 )
                 .fetchFirst()
         );
@@ -120,7 +123,7 @@ class TaskReadDao implements TaskEntityReadRepository, MonthlyTaskEntityReadRepo
                 taskJpaEntity.monthlyTaskId.in(monthlyTaskIds)
                     .and(taskJpaEntity.userId.eq(userId))
                     .and(taskJpaEntity.date.between(startDate, endDate))
-                    .and(taskJpaEntity.deleted.eq(false))
+                    .and(taskJpaEntity._deleted.eq(false))
             ).fetch();
     }
 
@@ -135,7 +138,7 @@ class TaskReadDao implements TaskEntityReadRepository, MonthlyTaskEntityReadRepo
                 monthlyTaskJpaEntity.userId.eq(userId)
                     .and(monthlyTaskJpaEntity.year.eq(date.getYear()))
                     .and(monthlyTaskJpaEntity.month.eq(date.getMonthValue()))
-                    .and(monthlyTaskJpaEntity.deleted.eq(false))
+                    .and(monthlyTaskJpaEntity._deleted.eq(false))
             )
             .limit(1)
             .fetchOne();
@@ -161,7 +164,7 @@ class TaskReadDao implements TaskEntityReadRepository, MonthlyTaskEntityReadRepo
                 monthlyTaskJpaEntity.year.eq(endYear)
                     .and(monthlyTaskJpaEntity.month.loe(endMonth))
                     .or(monthlyTaskJpaEntity.year.lt(endYear)),
-                monthlyTaskJpaEntity.deleted.eq(false)
+                monthlyTaskJpaEntity._deleted.eq(false)
             )
             .fetch());
     }
@@ -176,7 +179,7 @@ class TaskReadDao implements TaskEntityReadRepository, MonthlyTaskEntityReadRepo
             .where(
                 monthlyTaskJpaEntity.userId.eq(userId)
                     .and(monthlyTaskJpaEntity.year.eq(date.getYear()))
-                    .and(monthlyTaskJpaEntity.deleted.eq(false))
+                    .and(monthlyTaskJpaEntity._deleted.eq(false))
             ).fetchOne();
         if (count == null) {
             return 0;
@@ -195,7 +198,7 @@ class TaskReadDao implements TaskEntityReadRepository, MonthlyTaskEntityReadRepo
                     .and(taskJpaEntity.year.eq(date.getYear()))
                     .and(taskJpaEntity.year.eq(date.getYear()))
                     .and(taskJpaEntity.month.eq(date.getMonthValue()))
-                    .and(taskJpaEntity.deleted.eq(false))
+                    .and(taskJpaEntity._deleted.eq(false))
             ).fetch();
     }
 
@@ -215,5 +218,35 @@ class TaskReadDao implements TaskEntityReadRepository, MonthlyTaskEntityReadRepo
         } catch (DataAccessException ex) {
             throw CommonException.from(ex.getMessage(), DATA_ACCESS_EXCEPTION);
         }
+    }
+
+    @Override
+    public Map<YearMonth, Long> findMonthlyTasksMapByUserIdAndDates(
+        final Long userId,
+        final LocalDate startDate,
+        final LocalDate endDate
+    ) {
+        final int startYear = startDate.getYear();
+        final int startMonth = startDate.getMonthValue();
+        final int endYear = endDate.getYear();
+        final int endMonth = endDate.getMonthValue();
+        final Map<YearMonth, Long> map = new HashMap<>();
+        final List<MonthlyTaskJpaEntity> monthlyTasks = queryFactory.select(monthlyTaskJpaEntity)
+            .from(monthlyTaskJpaEntity)
+            .where(
+                monthlyTaskJpaEntity.userId.eq(userId),
+                monthlyTaskJpaEntity.year.eq(startYear)
+                    .and(monthlyTaskJpaEntity.month.goe(startMonth))
+                    .or(monthlyTaskJpaEntity.year.gt(startYear)),
+                monthlyTaskJpaEntity.year.eq(endYear)
+                    .and(monthlyTaskJpaEntity.month.loe(endMonth))
+                    .or(monthlyTaskJpaEntity.year.lt(endYear)),
+                monthlyTaskJpaEntity._deleted.eq(false)
+            )
+            .fetch();
+        for (final MonthlyTaskJpaEntity monthlyTask : monthlyTasks) {
+            map.put(YearMonth.of(monthlyTask.getYear(), monthlyTask.getMonth()), monthlyTask.getId());
+        }
+        return map;
     }
 }

@@ -203,3 +203,19 @@ CREATE TABLE IF NOT EXISTS holidays
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT ='휴일';
+
+CREATE TABLE IF NOT EXISTS task_labels
+(
+  id               BIGINT AUTO_INCREMENT PRIMARY KEY NOT NULL COMMENT '라벨 ID',
+  `name`           VARCHAR(30)                       NOT NULL COMMENT '라벨 명',
+  description      VARCHAR(100)                      NOT NULL COMMENT '라벨 설명',
+  user_id          BIGINT                            NOT NULL COMMENT '사용자 ID',
+  color            VARCHAR(30)                       NOT NULL COMMENT '할 일 색상',
+  created_at       TIMESTAMP                         NOT NULL COMMENT '생성일',
+  created_by       BIGINT                            NULL COMMENT '생성한 사람',
+  last_modified_at TIMESTAMP                         NOT NULL COMMENT '최종 수정일',
+  last_modified_by BIGINT                            NULL COMMENT '최종 수정한 사람',
+  deleted          BIT                               NOT NULL COMMENT '삭제 유무'
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_general_ci COMMENT ='라벨';

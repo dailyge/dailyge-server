@@ -219,8 +219,8 @@ CREATE TABLE IF NOT EXISTS companies
   DEFAULT CHARSET = utf8mb4 COMMENT '회사',
   COLLATE utf8mb4_general_ci;
 
-DROP TABLE IF EXISTS resume_submission_histories;
-CREATE TABLE IF NOT EXISTS resume_submission_histories
+DROP TABLE IF EXISTS application_histories;
+CREATE TABLE IF NOT EXISTS application_histories
 (
   id               BIGINT AUTO_INCREMENT PRIMARY KEY                                                                      NOT NULL COMMENT '제출 이력 ID',
   deadline         TIMESTAMP                                                                                              NULL COMMENT '공고 마감일',

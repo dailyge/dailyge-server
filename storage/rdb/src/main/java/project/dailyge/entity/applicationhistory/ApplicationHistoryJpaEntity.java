@@ -1,4 +1,4 @@
-package project.dailyge.entity.jobposting;
+package project.dailyge.entity.applicationhistory;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,8 +11,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import project.dailyge.entity.BaseEntity;
 
-@Entity(name = "resume_submission_histories")
-public class ResumeSubmissionHistoryJpaEntity extends BaseEntity {
+@Entity(name = "application_histories")
+public class ApplicationHistoryJpaEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +26,7 @@ public class ResumeSubmissionHistoryJpaEntity extends BaseEntity {
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
-    private ProgressStatus status;
+    private ApplicationStatus status;
 
     @Column(name = "submitted_date")
     private LocalDate submittedDate;
@@ -46,6 +46,31 @@ public class ResumeSubmissionHistoryJpaEntity extends BaseEntity {
     @Column(name = "user_id")
     private Long userId;
 
+    protected ApplicationHistoryJpaEntity() {
+    }
+
+    public ApplicationHistoryJpaEntity(
+        final String title,
+        final String link,
+        final ApplicationStatus status,
+        final LocalDate submittedDate,
+        final LocalDateTime deadline,
+        final int year,
+        final int month,
+        final Long companyId,
+        final Long userId
+    ) {
+        this.title = title;
+        this.link = link;
+        this.status = status;
+        this.submittedDate = submittedDate;
+        this.deadline = deadline;
+        this.year = year;
+        this.month = month;
+        this.companyId = companyId;
+        this.userId = userId;
+    }
+
     public Long getId() {
         return id;
     }
@@ -58,7 +83,7 @@ public class ResumeSubmissionHistoryJpaEntity extends BaseEntity {
         return link;
     }
 
-    public ProgressStatus getStatus() {
+    public ApplicationStatus getStatus() {
         return status;
     }
 

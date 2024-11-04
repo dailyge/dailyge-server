@@ -1,4 +1,4 @@
-package project.dailyge.entity.jobposting;
+package project.dailyge.entity.applicationhistory;
 
 public enum CompanyType {
     STARTUP("스타트업"),

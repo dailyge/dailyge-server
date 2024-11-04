@@ -1,4 +1,4 @@
-package project.dailyge.entity.jobposting;
+package project.dailyge.entity.applicationhistory;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -26,6 +26,14 @@ public class CompanyJpaEntity extends BaseEntity {
     protected CompanyJpaEntity() {
     }
 
+    public CompanyJpaEntity(
+        final String name,
+        final CompanyType companyType
+    ) {
+        this.name = name;
+        this.companyType = companyType;
+    }
+
     public Long getId() {
         return id;
     }
@@ -34,7 +42,7 @@ public class CompanyJpaEntity extends BaseEntity {
         return name;
     }
 
-    public CompanyType getCompanySize() {
+    public CompanyType getCompanyType() {
         return companyType;
     }
 }

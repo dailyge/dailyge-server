@@ -1,6 +1,6 @@
-package project.dailyge.entity.jobposting;
+package project.dailyge.entity.applicationhistory;
 
-public enum ProgressStatus {
+public enum ApplicationStatus {
     BEFORE_SUBMISSION("제출 전"),
     SUBMITTED("제출 완료"),
     PREPARING_CODING_TEST("코딩테스트"),
@@ -17,7 +17,7 @@ public enum ProgressStatus {
 
     private final String kr;
 
-    ProgressStatus(final String kr) {
+    ApplicationStatus(final String kr) {
         this.kr = kr;
     }
 

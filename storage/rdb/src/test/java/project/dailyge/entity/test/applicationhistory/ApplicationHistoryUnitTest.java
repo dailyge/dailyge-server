@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static project.dailyge.entity.applicationhistory.ApplicationStatus.BEFORE_SUBMISSION;
 
 @DisplayName("[UnitTest] ApplicationHistory 단위 테스트")
-public class ApplicationHistoryUnitTest {
+class ApplicationHistoryUnitTest {
 
     @Test
     @DisplayName("올바른 인자가 들어오면 제출 이력이 생성된다.")

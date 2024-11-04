@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static project.dailyge.entity.applicationhistory.CompanyType.STARTUP;
 
 @DisplayName("[UnitTest] Company 단위 테스트")
-public class CompanyUnitTest {
+class CompanyUnitTest {
 
     @Test
     @DisplayName("올바른 인자가 들어오면 회사가 생성된다.")

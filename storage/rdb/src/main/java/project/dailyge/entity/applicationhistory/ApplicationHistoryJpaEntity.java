@@ -7,10 +7,10 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import project.dailyge.entity.BaseEntity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import project.dailyge.entity.BaseEntity;
 
 @Entity(name = "application_histories")
 public class ApplicationHistoryJpaEntity extends BaseEntity {

@@ -43,7 +43,7 @@ class NoteReadDao implements NoteEntityReadRepository {
                 .where(
                     noteJpaEntity.id.eq(noteId)
                         .and(noteJpaEntity.senderId.eq(userId))
-                        .and(noteJpaEntity._deleted.eq(false))
+                        .and(noteJpaEntity._senderDeleted.eq(false))
                 )
                 .fetchOne());
     }

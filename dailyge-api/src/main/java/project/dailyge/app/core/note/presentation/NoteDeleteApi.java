@@ -20,7 +20,7 @@ public class NoteDeleteApi {
         this.noteWriteService = noteWriteService;
     }
 
-    @DeleteMapping(path = "/{noteId}/receiver")
+    @DeleteMapping(path = "/{noteId}/received")
     public ApiResponse<Void> deleteReceivedNote(
         @LoginUser final DailygeUser dailygeUser,
         @PathVariable(value = "noteId") final Long noteId
@@ -29,7 +29,7 @@ public class NoteDeleteApi {
         return ApiResponse.from(NO_CONTENT);
     }
 
-    @DeleteMapping(path = "/{noteId}/sender")
+    @DeleteMapping(path = "/{noteId}/sent")
     public ApiResponse<Void> deleteSentNote(
         @LoginUser final DailygeUser dailygeUser,
         @PathVariable(value = "noteId") final Long noteId

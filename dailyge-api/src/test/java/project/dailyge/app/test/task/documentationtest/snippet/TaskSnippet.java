@@ -24,6 +24,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.queryPar
 import static org.springframework.restdocs.snippet.Attributes.key;
 import static project.dailyge.app.common.SnippetUtils.getAttribute;
 import project.dailyge.app.core.task.presentation.requesst.TaskCreateRequest;
+import project.dailyge.app.core.task.presentation.requesst.TaskLabelCreateRequest;
 import project.dailyge.app.core.task.presentation.requesst.TaskStatusUpdateRequest;
 import project.dailyge.app.core.task.presentation.requesst.TaskUpdateRequest;
 
@@ -83,6 +84,21 @@ public interface TaskSnippet {
 
     FieldDescriptor[] TASK_CREATE_RESPONSE = {
         fieldWithPath("data.taskId").type(NUMBER).description("Task ID"),
+        fieldWithPath("code").type(NUMBER).description("응답 코드"),
+        fieldWithPath("message").type(STRING).description("응답 메시지")
+    };
+
+    FieldDescriptor[] TASK_LABEL_CREATE_REQUEST_FIELDS_DESCRIPTOR = {
+        fieldWithPath("name").description("라벨 명")
+            .attributes(getAttribute(TaskLabelCreateRequest.class, "name")),
+        fieldWithPath("description").description("라벨 설명")
+            .attributes(getAttribute(TaskLabelCreateRequest.class, "description")),
+        fieldWithPath("color").description("색상")
+            .attributes(getAttribute(TaskLabelCreateRequest.class, "color")),
+    };
+
+    FieldDescriptor[] TASK_LABEL_CREATE_RESPONSE_FIELD_DESCRIPTOR = {
+        fieldWithPath("data.taskLabelId").type(NUMBER).description("Task Label ID"),
         fieldWithPath("code").type(NUMBER).description("응답 코드"),
         fieldWithPath("message").type(STRING).description("응답 메시지")
     };
@@ -238,6 +254,8 @@ public interface TaskSnippet {
     RequestFieldsSnippet TASK_CREATE_REQUEST_SNIPPET = requestFields(TASK_CREATE_REQUEST_FIELDS);
     ResponseFieldsSnippet MONTHLY_TASK_CREATE_RESPONSE_SNIPPET = responseFields(MONTHLY_TASK_CREATE_RESPONSE);
     ResponseFieldsSnippet TASK_CREATE_RESPONSE_SNIPPET = responseFields(TASK_CREATE_RESPONSE);
+    RequestFieldsSnippet TASK_LABEL_CREATE_REQUEST_SNIPPET = requestFields(TASK_LABEL_CREATE_REQUEST_FIELDS_DESCRIPTOR);
+    ResponseFieldsSnippet TASK_LABEL_CREATE_RESPONSE_SNIPPET = responseFields(TASK_LABEL_CREATE_RESPONSE_FIELD_DESCRIPTOR);
 
     RequestFieldsSnippet TASK_UPDATE_REQUEST_SNIPPET = requestFields(TASK_UPDATE_REQUEST_FIELDS);
     RequestFieldsSnippet TASK_STATUS_UPDATE_REQUEST_SNIPPET = requestFields(TASK_STATUS_UPDATE_REQUEST_FIELDS);

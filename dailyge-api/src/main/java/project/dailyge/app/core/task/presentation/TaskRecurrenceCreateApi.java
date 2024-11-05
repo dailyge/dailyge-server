@@ -11,6 +11,8 @@ import project.dailyge.app.common.response.ApiResponse;
 import project.dailyge.app.core.common.auth.DailygeUser;
 import project.dailyge.app.core.task.application.TaskRecurrenceWriteService;
 import project.dailyge.app.core.task.presentation.requesst.TaskRecurrenceCreateRequest;
+import project.dailyge.app.core.task.presentation.response.TaskRecurrenceIdResponse;
+import project.dailyge.app.core.task.presentation.validator.TaskRecurrenceClientValidator;
 
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.CREATED;
 
@@ -19,18 +21,26 @@ import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.CREATED;
 @PresentationLayer(value = "TaskRecurrenceCreateApi")
 public class TaskRecurrenceCreateApi {
 
+    private final TaskRecurrenceClientValidator validator;
     private final TaskRecurrenceWriteService taskRecurrenceWriteService;
 
-    public TaskRecurrenceCreateApi(final TaskRecurrenceWriteService taskRecurrenceWriteService) {
+    public TaskRecurrenceCreateApi(
+        final TaskRecurrenceWriteService taskRecurrenceWriteService,
+        final TaskRecurrenceClientValidator validator
+    ) {
         this.taskRecurrenceWriteService = taskRecurrenceWriteService;
+        this.validator = validator;
     }
 
     @PostMapping(path = "/task-recurrences")
-    public ApiResponse<Void> createTaskRecurrences(
+    public ApiResponse<TaskRecurrenceIdResponse> createTaskRecurrences(
         @LoginUser final DailygeUser dailygeUser,
         @Valid @RequestBody final TaskRecurrenceCreateRequest request
     ) {
+        validator.validateStartDateToEndDate(request.getStartDate(), request.getEndDate());
+        validator.validateDayPattern(request.getType(), request.getDatePattern());
         final Long taskRecurrenceId = taskRecurrenceWriteService.save(dailygeUser, request.toCommand());
-        return ApiResponse.from(CREATED);
+        final TaskRecurrenceIdResponse payload = new TaskRecurrenceIdResponse(taskRecurrenceId);
+        return ApiResponse.from(CREATED, payload);
     }
 }

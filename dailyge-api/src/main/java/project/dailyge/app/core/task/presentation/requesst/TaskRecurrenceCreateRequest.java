@@ -53,6 +53,42 @@ public class TaskRecurrenceCreateRequest {
         this.endDate = endDate;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public TaskColor getColor() {
+        return color;
+    }
+
+    public RecurrenceType getType() {
+        return type;
+    }
+
+    public List<Integer> getDatePattern() {
+        return datePattern;
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+            "{\"title\":\"%s\",\"content\":\"%s\",\"color\":\"%s\",\"type\":\"%s\",\"datePattern\":\"%s\",\"startDate\":\"%s\",\"endDate\":\"%s\"}",
+            title, content, color, type, datePattern, startDate, endDate
+        );
+    }
+
     public TaskRecurrenceCreateCommand toCommand() {
         return new TaskRecurrenceCreateCommand(title, content, color, type, datePattern, startDate, endDate);
     }

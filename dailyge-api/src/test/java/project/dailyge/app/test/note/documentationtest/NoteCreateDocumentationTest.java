@@ -45,8 +45,6 @@ class NoteCreateDocumentationTest extends DatabaseTestBase {
     @DisplayName("[RestDocs] 쪽지 전송이 성공하면 201 Created 응답을 받는다.")
     void whenSendNoteThenStatusCodeShouldBe_201_RestDocs() throws JsonProcessingException {
         final LocalDateTime date = LocalDateTime.of(2021, 10, 1, 0, 0, 0);
-        final UserJpaEntity receiver = new UserJpaEntity(300L, "kmularise", "kmularise@gmail.com");
-        userWriteService.save(receiver);
 
         // beatmejy -> kmularise
         final NoteCreateRequest request = new NoteCreateRequest("주간 일정 회의", "주간 일정 회의 신청합니다.", "kmularise", date);
@@ -70,8 +68,6 @@ class NoteCreateDocumentationTest extends DatabaseTestBase {
     @DisplayName("[Swagger] 쪽지 전송이 성공하면 201 Created 응답을 받는다.")
     void whenSendNoteThenStatusCodeShouldBe_201_Swagger() throws JsonProcessingException {
         final LocalDateTime date = LocalDateTime.of(2021, 10, 1, 0, 0, 0);
-        final UserJpaEntity receiver = new UserJpaEntity(300L, "kmularise", "kmularise@gmail.com");
-        userWriteService.save(receiver);
 
         final NoteCreateRequest request = new NoteCreateRequest("주간 일정 회의", "주간 일정 회의 신청합니다.", "kmularise", date);
         final RestDocumentationFilter filter = createNoteFilter(createIdentifier("NoteCreate", 201));
@@ -93,8 +89,6 @@ class NoteCreateDocumentationTest extends DatabaseTestBase {
     @DisplayName("[Swagger] 올바르지 않은 제목 또는 내용을 입력하면 400 Bad Request 응답을 받는다.")
     void whenInvalidParameterThenStatusCodeShouldBe_400_BadRequest() throws JsonProcessingException {
         final LocalDateTime date = LocalDateTime.of(2021, 10, 1, 0, 0, 0);
-        final UserJpaEntity receiver = new UserJpaEntity(300L, "kmularise", "kmularise@gmail.com");
-        userWriteService.save(receiver);
 
         final NoteCreateRequest request = new NoteCreateRequest("", "", "kmularise", date);
         final RestDocumentationFilter filter = createNoteFilter(createIdentifier("NoteCreate", 400));
@@ -116,8 +110,6 @@ class NoteCreateDocumentationTest extends DatabaseTestBase {
     @DisplayName("[Swagger] 일정 기간 동안 너무 많은 쪽지를 전송하면 429 TooManyRequest 응답을 받는다.")
     void whenSendNoteInShortTimeThenStatusCodeShouldBe_429_Swagger() throws JsonProcessingException {
         final LocalDateTime date = LocalDateTime.of(2021, 10, 1, 0, 0, 0);
-        final UserJpaEntity receiver = new UserJpaEntity(300L, "kmularise", "kmularise@gmail.com");
-        userWriteService.save(receiver);
 
         final LocalDateTime sendAt = LocalDateTime.of(2024, 10, 11, 13, 0);
         final NoteCreateCommand command = new NoteCreateCommand(

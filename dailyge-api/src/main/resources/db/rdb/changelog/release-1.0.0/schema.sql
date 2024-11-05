@@ -33,6 +33,7 @@ CREATE TABLE IF NOT EXISTS tasks
     status           ENUM ('TODO', 'IN_PROGRESS', 'DONE') NOT NULL COMMENT '할 일 상태',
     color            varchar(255)                         NOT NULL COMMENT '할 일 색상',
     monthly_task_id  BIGINT                               NOT NULL COMMENT '월간 일정',
+    label_id         BIGINT                               NULL COMMENT '라벨 ID',
     created_at       TIMESTAMP                            NOT NULL COMMENT '생성일',
     created_by       BIGINT                               NULL COMMENT '생성한 사람',
     last_modified_at TIMESTAMP                            NULL COMMENT '최종 수정일',

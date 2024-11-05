@@ -94,11 +94,21 @@ public abstract class DatabaseTestBase {
     @Transactional
     void setUp(final RestDocumentationContextProvider restDocumentation) {
         databaseInitialization.initData();
-        final Long dailygeUserId = persist(createUser(userWriteService.save(EMAIL)));
-        this.dailygeUser = new DailygeUser(dailygeUserId, NORMAL);
-        final Long receivedUserId = persist(new UserJpaEntity(300L, "kmularise", "kmularise@gmail.com"));
-        this.receivedDailygeUser = new DailygeUser(receivedUserId, NORMAL);
+        initBasicUser();
+        initNoteReceivedUser();
         this.specification = initSpecificationConfig(restDocumentation, port);
+    }
+
+    @Transactional
+    public void initBasicUser() {
+        newUser = persist(createUser(userWriteService.save(EMAIL)));
+        this.dailygeUser = new DailygeUser(newUser.getId(), NORMAL);
+    }
+
+    @Transactional
+    public void initNoteReceivedUser() {
+        noteReceivedDailygeUser = persist(new UserJpaEntity(300L, "kmularise", "kmularise@gmail.com"));
+        this.receivedDailygeUser = new DailygeUser(noteReceivedDailygeUser.getId(), NORMAL);
     }
 
     @AfterEach
@@ -122,9 +132,8 @@ public abstract class DatabaseTestBase {
     }
 
     @Transactional
-    protected Long persist(final UserJpaEntity user) {
+    protected UserJpaEntity persist(final UserJpaEntity user) {
         userWriteService.save(user);
-        newUser = user;
 
         final UserCache userCache = new UserCache(
             user.getId(),
@@ -134,6 +143,6 @@ public abstract class DatabaseTestBase {
             user.getRoleAsString()
         );
         userCacheWriteService.save(userCache);
-        return user.getId();
+        return user;
     }
 }

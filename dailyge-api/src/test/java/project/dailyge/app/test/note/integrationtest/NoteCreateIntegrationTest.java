@@ -47,9 +47,6 @@ class NoteCreateIntegrationTest extends DatabaseTestBase {
     private NoteWriteService noteWriteService;
 
     @Autowired
-    private UserWriteService userWriteService;
-
-    @Autowired
     private RateLimiterWriteService rateLimiterWriteService;
 
     @AfterEach
@@ -60,11 +57,9 @@ class NoteCreateIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("일정 시간 동안 한 개의 쪽지만 보낼 수 있다.")
     void whenSendManyNotesThenOnlyOneCanBeSaved() throws InterruptedException {
-        final UserJpaEntity receiver = new UserJpaEntity(300L, "Receiver", "dailyge-receiver@gmail.com");
-        userWriteService.save(receiver);
         final LocalDateTime sentAt = LocalDateTime.of(2024, 10, 11, 13, 0);
         final NoteCreateCommand command = new NoteCreateCommand(
-            "커피챗 신청합니다.", "2024년 10월 11일 13:00", sentAt, "Receiver", dailygeUser.getId()
+            "커피챗 신청합니다.", "2024년 10월 11일 13:00", sentAt, "kmularise", dailygeUser.getId()
         );
         final int numberOfThreads = 10;
         final CountDownLatch latch = new CountDownLatch(numberOfThreads);
@@ -92,11 +87,9 @@ class NoteCreateIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("30초 이내에 여러 쪽지를 보내면 CommonException(TOO_MANY_REQUEST)이 발생한다.")
     void whenMultipleThreadsSaveNotesThenCommonExceptionShouldBeHappen() {
-        final UserJpaEntity receiver = new UserJpaEntity(300L, "Receiver", "dailyge-receiver@gmail.com");
-        userWriteService.save(receiver);
         final LocalDateTime sentAt = LocalDateTime.of(2024, 10, 11, 13, 0);
         final NoteCreateCommand command = new NoteCreateCommand(
-            "커피챗 신청합니다.", "2024년 10월 11일 13:00", sentAt, "Receiver", dailygeUser.getId()
+            "커피챗 신청합니다.", "2024년 10월 11일 13:00", sentAt, "kmularise", dailygeUser.getId()
         );
         noteFacade.save(dailygeUser, command, 30);
         assertThatThrownBy(() -> noteFacade.save(dailygeUser, command, 30))
@@ -107,11 +100,9 @@ class NoteCreateIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("일정 시간 후, 쪽지를 전송하면 CommonException(TOO_MANY_REQUEST)이 발생하지 않는다.")
     void whenSendMessageAfterSpecificSecondsThenExceptionShouldNotBeHappen() {
-        final UserJpaEntity receiver = new UserJpaEntity(300L, "Receiver", "dailyge-receiver@gmail.com");
-        userWriteService.save(receiver);
         final LocalDateTime sentAt = LocalDateTime.of(2024, 10, 11, 13, 0);
         final NoteCreateCommand command = new NoteCreateCommand(
-            "커피챗 신청합니다.", "2024년 10월 11일 13:00", sentAt, "Receiver", dailygeUser.getId()
+            "커피챗 신청합니다.", "2024년 10월 11일 13:00", sentAt, "kmularise", dailygeUser.getId()
         );
         noteFacade.save(dailygeUser, command, 1);
         Awaitility.await()
@@ -125,13 +116,12 @@ class NoteCreateIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("쪽지를 발송하면 쪽지가 저장된다.")
     void whenSendNoteThenIdShouldNotBeNull() {
-        final UserJpaEntity receiver = new UserJpaEntity(300L, "Receiver", "dailyge-receiver@gmail.com");
-        final UserJpaEntity newReceiver = userWriteService.save(receiver);
+        final UserJpaEntity receiver = new UserJpaEntity(3500L, "kmularise", "kmularise@gmail.com");
         final LocalDateTime sentAt = LocalDateTime.of(2024, 10, 11, 13, 0);
 
         final String title = "커피챗 신청합니다.";
         final String content = "2024년 10월 11일 13:00";
-        final NoteJpaEntity newNote = new NoteJpaEntity(title, content, sentAt, dailygeUser.getId(), newReceiver.getId());
+        final NoteJpaEntity newNote = new NoteJpaEntity(title, content, sentAt, dailygeUser.getId(), receiver.getId());
         final Long newNoteId = noteWriteService.save(dailygeUser, newNote);
 
         assertNotNull(newNoteId);
@@ -140,7 +130,7 @@ class NoteCreateIntegrationTest extends DatabaseTestBase {
             () -> assertEquals(content, newNote.getContent()),
             () -> assertEquals(sentAt, newNote.getSentAt()),
             () -> assertEquals(dailygeUser.getId(), newNote.getSenderId()),
-            () -> assertEquals(newReceiver.getId(), newNote.getReceiverId())
+            () -> assertEquals(receiver.getId(), newNote.getReceiverId())
         );
     }
 

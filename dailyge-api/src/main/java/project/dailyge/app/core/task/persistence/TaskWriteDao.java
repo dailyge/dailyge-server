@@ -9,9 +9,11 @@ import project.dailyge.entity.task.TaskEntityWriteRepository;
 import project.dailyge.entity.task.TaskJpaEntity;
 
 import java.util.List;
+import project.dailyge.entity.task.TaskLabelEntityWriteRepository;
+import project.dailyge.entity.task.TaskLabelJpaEntity;
 
 @Repository
-class TaskWriteDao implements TaskEntityWriteRepository, MonthlyTaskEntityWriteRepository {
+class TaskWriteDao implements TaskEntityWriteRepository, MonthlyTaskEntityWriteRepository, TaskLabelEntityWriteRepository {
 
     private final EntityManager entityManager;
 
@@ -40,5 +42,11 @@ class TaskWriteDao implements TaskEntityWriteRepository, MonthlyTaskEntityWriteR
         for (final MonthlyTaskJpaEntity monthlyTask : monthlyTasks) {
             entityManager.persist(monthlyTask);
         }
+    }
+
+    @Override
+    public Long save(final TaskLabelJpaEntity taskLabel) {
+        entityManager.persist(taskLabel);
+        return taskLabel.getId();
     }
 }

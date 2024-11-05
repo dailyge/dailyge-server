@@ -25,4 +25,39 @@ public class TaskLabelJpaEntity extends BaseEntity {
 
     @Column(name = "user_id")
     private Long userId;
+
+    protected TaskLabelJpaEntity() {
+    }
+
+    public TaskLabelJpaEntity(
+        final String name,
+        final String description,
+        final String color,
+        final Long userId
+    ) {
+        this.name = name;
+        this.description = description;
+        this.color = color;
+        this.userId = userId;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
 }

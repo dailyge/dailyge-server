@@ -2,6 +2,7 @@ package project.dailyge.app.core.task.application;
 
 import project.dailyge.app.core.common.auth.DailygeUser;
 import project.dailyge.app.core.task.application.command.TaskCreateCommand;
+import project.dailyge.app.core.task.application.command.TaskLabelCreateCommand;
 import project.dailyge.app.core.task.application.command.TaskStatusUpdateCommand;
 import project.dailyge.app.core.task.application.command.TaskUpdateCommand;
 
@@ -17,4 +18,6 @@ public interface TaskWriteService {
     void updateStatus(DailygeUser dailygeUser, Long taskId, TaskStatusUpdateCommand command);
 
     void delete(DailygeUser dailygeUser, Long taskId);
+
+    Long saveTaskLabel(DailygeUser dailygeUser, TaskLabelCreateCommand command);
 }

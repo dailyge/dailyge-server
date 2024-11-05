@@ -19,25 +19,29 @@ import project.dailyge.entity.task.MonthlyTaskEntityReadRepository;
 import project.dailyge.entity.task.MonthlyTaskJpaEntity;
 import project.dailyge.entity.task.TaskEntityReadRepository;
 import project.dailyge.entity.task.TaskJpaEntity;
+import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.TOO_MANY_TASK_LABELS;
 import static project.dailyge.entity.task.TaskStatus.TODO;
 import static project.dailyge.entity.user.Role.ADMIN;
 import static project.dailyge.entity.user.Role.NORMAL;
 
 import java.time.LocalDate;
 import java.util.Optional;
+import project.dailyge.entity.task.TaskLabelEntityReadRepository;
 
 @DisplayName("[UnitTest] 할 일 검증 단위 테스트")
 class TaskValidatorUnitTest {
 
     private MonthlyTaskEntityReadRepository monthlyTaskReadRepository;
     private TaskEntityReadRepository taskReadRepository;
+    private TaskLabelEntityReadRepository taskLabelEntityReadRepository;
     private TaskValidator validator;
 
     @BeforeEach
     void setUp() {
         monthlyTaskReadRepository = mock(MonthlyTaskEntityReadRepository.class);
         taskReadRepository = mock(TaskEntityReadRepository.class);
-        validator = new TaskValidator(monthlyTaskReadRepository, taskReadRepository);
+        taskLabelEntityReadRepository = mock(TaskLabelEntityReadRepository.class);
+        validator = new TaskValidator(monthlyTaskReadRepository, taskReadRepository, taskLabelEntityReadRepository);
     }
 
     @Test
@@ -128,5 +132,16 @@ class TaskValidatorUnitTest {
             .thenReturn(monthlyTask);
 
         assertDoesNotThrow(() -> validator.validateTaskCreation(dailygeUser.getId(), now));
+    }
+
+    @Test
+    @DisplayName("사용자의 라벨이 5개 이상 등록 되어 있다면, TaskTypeException이 발생한다.")
+    void whenUserHasMore5labelsRegisteredThenTaskTypeExceptionShouldBeHappen() {
+        when(taskLabelEntityReadRepository.countTaskLabel(1L)).thenReturn(5L);
+
+        assertThatThrownBy(() -> validator.validateTaskLabelCreation(1L))
+            .isInstanceOf(RuntimeException.class)
+            .isExactlyInstanceOf(TaskTypeException.from(TOO_MANY_TASK_LABELS).getClass())
+            .hasMessage(TOO_MANY_TASK_LABELS.message());
     }
 }

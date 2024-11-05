@@ -57,6 +57,27 @@ class NoteUnitTest : DescribeSpec({
                 )
                 idNullNote shouldNotBe null
             }
+
+            it("부 생성자로 객체를 생성할 수 있다.") {
+                val newNoteV1 = NoteJpaEntity(
+                    title = "공지사항 전달드립니다",
+                    content = "2024년 11월 6일 부로 새로운 정책이 시행됩니다.",
+                    sentAt = fixedSentAt,
+                    senderId = 1L,
+                    receiverId = 300L
+                )
+                newNoteV1 shouldNotBe null
+
+                val newNoteV2 = NoteJpaEntity(
+                    title = "공지사항 전달드립니다",
+                    content = "2024년 11월 6일 부로 새로운 정책이 시행됩니다.",
+                    sentAt = fixedSentAt,
+                    isRead = false,
+                    senderId = 1L,
+                    receiverId = 300L
+                )
+                newNoteV2 shouldNotBe null
+            }
         }
     }
 

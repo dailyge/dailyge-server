@@ -25,19 +25,18 @@ import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import project.dailyge.app.DailygeApplication;
+import static project.dailyge.app.common.RestAssureConfig.initObjectMapper;
+import static project.dailyge.app.common.RestAssureConfig.initSpecificationConfig;
 import project.dailyge.app.core.common.auth.DailygeUser;
 import project.dailyge.app.core.user.application.UserWriteService;
+import static project.dailyge.app.test.user.fixture.UserFixture.EMAIL;
+import static project.dailyge.app.test.user.fixture.UserFixture.createUser;
 import project.dailyge.core.cache.user.UserCache;
 import project.dailyge.core.cache.user.UserCacheWriteService;
+import static project.dailyge.entity.user.Role.NORMAL;
 import project.dailyge.entity.user.UserJpaEntity;
 
 import java.time.LocalDate;
-
-import static project.dailyge.app.common.RestAssureConfig.initObjectMapper;
-import static project.dailyge.app.common.RestAssureConfig.initSpecificationConfig;
-import static project.dailyge.app.test.user.fixture.UserFixture.EMAIL;
-import static project.dailyge.app.test.user.fixture.UserFixture.createUser;
-import static project.dailyge.entity.user.Role.NORMAL;
 
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs
@@ -51,6 +50,9 @@ public abstract class DatabaseTestBase {
 
     @Value("${jwt.access-token}")
     protected String accessToken;
+
+    @Value("${jwt.receiver-access-token}")
+    protected String noteReceiverAccessToken;
 
     protected static final String IDENTIFIER = "{class_name}/{method_name}";
     protected static final String USER_ID_KEY = "dailyge_user_id";
@@ -73,7 +75,9 @@ public abstract class DatabaseTestBase {
     protected RequestSpecification specification;
     protected ObjectMapper objectMapper;
     protected UserJpaEntity newUser;
+    protected UserJpaEntity noteReceivedDailygeUser;
     protected DailygeUser dailygeUser;
+    protected DailygeUser receivedDailygeUser;
     protected final DailygeUser invalidUser = new DailygeUser(Long.MAX_VALUE, NORMAL);
     protected LocalDate now;
 
@@ -90,7 +94,10 @@ public abstract class DatabaseTestBase {
     @Transactional
     void setUp(final RestDocumentationContextProvider restDocumentation) {
         databaseInitialization.initData();
-        persist(createUser(userWriteService.save(EMAIL)));
+        final Long dailygeUserId = persist(createUser(userWriteService.save(EMAIL)));
+        this.dailygeUser = new DailygeUser(dailygeUserId, NORMAL);
+        final Long receivedUserId = persist(new UserJpaEntity(300L, "kmularise", "kmularise@gmail.com"));
+        this.receivedDailygeUser = new DailygeUser(receivedUserId, NORMAL);
         this.specification = initSpecificationConfig(restDocumentation, port);
     }
 
@@ -100,13 +107,25 @@ public abstract class DatabaseTestBase {
     }
 
     protected Cookie getAccessTokenCookie() {
-        return new Cookie.Builder("Access-Token", accessToken).build();
+        return new Cookie.Builder("Access-Token", accessToken)
+            .build();
+    }
+
+    protected Cookie getNoteReceiverAccessTokenCookie() {
+        return new Cookie.Builder("Access-Token", noteReceiverAccessToken)
+            .build();
+    }
+
+    protected Cookie getCouponCookie() {
+        return new Cookie.Builder("isParticipated", "true")
+            .build();
     }
 
     @Transactional
-    protected void persist(final UserJpaEntity user) {
+    protected Long persist(final UserJpaEntity user) {
         userWriteService.save(user);
         newUser = user;
+
         final UserCache userCache = new UserCache(
             user.getId(),
             user.getNickname(),
@@ -115,11 +134,6 @@ public abstract class DatabaseTestBase {
             user.getRoleAsString()
         );
         userCacheWriteService.save(userCache);
-        dailygeUser = new DailygeUser(user.getId(), user.getRole());
-    }
-
-    protected Cookie getCouponCookie() {
-        return new Cookie.Builder("isParticipated", "true")
-            .build();
+        return user.getId();
     }
 }

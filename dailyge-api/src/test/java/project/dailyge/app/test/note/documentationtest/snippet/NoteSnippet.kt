@@ -7,6 +7,10 @@ import org.springframework.restdocs.payload.PayloadDocumentation.requestFields
 import org.springframework.restdocs.payload.PayloadDocumentation.responseFields
 import org.springframework.restdocs.payload.RequestFieldsSnippet
 import org.springframework.restdocs.payload.ResponseFieldsSnippet
+import org.springframework.restdocs.request.ParameterDescriptor
+import org.springframework.restdocs.request.PathParametersSnippet
+import org.springframework.restdocs.request.RequestDocumentation.parameterWithName
+import org.springframework.restdocs.request.RequestDocumentation.pathParameters
 import project.dailyge.app.common.SnippetUtils.getAttribute
 import project.dailyge.app.core.note.presentation.request.NoteCreateRequest
 
@@ -25,12 +29,16 @@ interface NoteSnippet {
                 .attributes(getAttribute(NoteCreateRequest::class.java, "sendAt"))
         )
 
+        val NOTE_ID_PATH_PARAMETER_DESCRIPTORS: ParameterDescriptor =
+            parameterWithName("noteId").description("Note ID")
+
         val NOTE_CREATE_RESPONSE_FIELDS: List<FieldDescriptor> = listOf(
             fieldWithPath("data.noteId").type(JsonFieldType.NUMBER).description("Note ID"),
             fieldWithPath("code").type(JsonFieldType.NUMBER).description("응답 코드"),
             fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지")
         )
 
+        val NOTE_ID_PATH_VARIABLES_SNIPPET: PathParametersSnippet = pathParameters(NOTE_ID_PATH_PARAMETER_DESCRIPTORS)
         val NOTE_CREATE_REQUEST_SNIPPET: RequestFieldsSnippet = requestFields(NOTE_CREATE_REQUEST_FIELDS)
         val NOTE_CREATE_RESPONSE_SNIPPET: ResponseFieldsSnippet = responseFields(NOTE_CREATE_RESPONSE_FIELDS)
     }

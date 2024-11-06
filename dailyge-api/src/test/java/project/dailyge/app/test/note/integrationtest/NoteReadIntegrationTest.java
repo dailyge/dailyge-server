@@ -19,6 +19,7 @@ import project.dailyge.app.core.note.application.command.NoteCreateCommand;
 import static project.dailyge.app.core.note.exception.NoteCodeAndMessage.NOTE_NOT_FOUND;
 import project.dailyge.app.core.note.exception.NoteTypeException;
 import project.dailyge.app.core.note.facade.NoteFacade;
+import static project.dailyge.app.test.note.fixture.NoteCommandFixture.createNoteCommand;
 import project.dailyge.common.ratelimiter.RateLimiterWriteService;
 import project.dailyge.entity.note.NoteJpaEntity;
 import project.dailyge.entity.user.Role;
@@ -43,12 +44,34 @@ class NoteReadIntegrationTest extends DatabaseTestBase {
     }
 
     @Test
+    @DisplayName("쪽지를 ID로 조회할 때, 올바르지 않은 사용자라면 CommonException(UnAuthorized)이 발생한다.")
+    void whenFindNoteByIdButWithInvalidIdThenCommonExceptionShouldBeHappen() {
+        final LocalDateTime sentAt = LocalDateTime.of(2024, 10, 11, 13, 0);
+        final NoteCreateCommand command = createNoteCommand(dailygeUser, sentAt);
+        final Long newNoteId = noteFacade.save(dailygeUser, command, 30);
+        final DailygeUser invalidDailygeUser = new DailygeUser(Long.MAX_VALUE, Role.NORMAL);
+
+        assertThatThrownBy(() -> noteReadService.findReceivedNoteById(invalidDailygeUser, newNoteId))
+            .isInstanceOf(CommonException.class)
+            .hasMessage(UN_AUTHORIZED.message());
+    }
+
+    @Test
+    @DisplayName("쪽지를 ID로 조회할 때, 올바른 수신자/발신자 라면 쪽지를 조회할 수 있다.")
+    void whenFindNoteByIdThenResultShouldNotBeNull() {
+        final LocalDateTime sentAt = LocalDateTime.of(2024, 10, 11, 13, 0);
+        final NoteCreateCommand command = createNoteCommand(dailygeUser, sentAt);
+        final Long newNoteId = noteFacade.save(dailygeUser, command, 30);
+
+        final NoteJpaEntity findNote = noteReadService.findById(dailygeUser, newNoteId);
+        assertNotNull(findNote);
+    }
+
+    @Test
     @DisplayName("받지 않은 쪽지를 조회하면 NoteTypeException이 발생한다.")
     void whenReadNotReceivedNoteThenNoteTypeExceptionShouldBeHappen() {
         final LocalDateTime sentAt = LocalDateTime.of(2024, 10, 11, 13, 0);
-        final NoteCreateCommand command = new NoteCreateCommand(
-            "커피챗 신청합니다.", "2024년 10월 11일 13:00", sentAt, "kmularise", dailygeUser.getId()
-        );
+        final NoteCreateCommand command = createNoteCommand(dailygeUser, sentAt);
         noteFacade.save(dailygeUser, command, 30);
         final Long invalidNoteId = Long.MAX_VALUE;
 
@@ -61,9 +84,7 @@ class NoteReadIntegrationTest extends DatabaseTestBase {
     @DisplayName("권한이 없는 사용자가 (받은) 쪽지를 조회하면 CommonException이 발생한다.")
     void whenUnAuthorizedUserReadReceivedNoteThenCommonExceptionShouldBeHappen() {
         final LocalDateTime sentAt = LocalDateTime.of(2024, 10, 11, 13, 0);
-        final NoteCreateCommand command = new NoteCreateCommand(
-            "커피챗 신청합니다.", "2024년 10월 11일 13:00", sentAt, "kmularise", dailygeUser.getId()
-        );
+        final NoteCreateCommand command = createNoteCommand(dailygeUser, sentAt);
         final Long newNoteId = noteFacade.save(dailygeUser, command, 30);
         final DailygeUser invalidDailygeUser = new DailygeUser(Long.MAX_VALUE, Role.NORMAL);
 
@@ -76,9 +97,7 @@ class NoteReadIntegrationTest extends DatabaseTestBase {
     @DisplayName("쪽지를 받았다면 (받은 쪽지함에서) 쪽지를 조회할 수 있다.")
     void whenReadReceivedNoteThenResultShouldNotBeNull() {
         final LocalDateTime sentAt = LocalDateTime.of(2024, 10, 11, 13, 0);
-        final NoteCreateCommand command = new NoteCreateCommand(
-            "커피챗 신청합니다.", "2024년 10월 11일 13:00", sentAt, "kmularise", dailygeUser.getId()
-        );
+        final NoteCreateCommand command = createNoteCommand(dailygeUser, sentAt);
         final Long newNoteId = noteFacade.save(dailygeUser, command, 30);
 
         final NoteJpaEntity findNote = noteReadService.findReceivedNoteById(receivedDailygeUser, newNoteId);
@@ -90,9 +109,7 @@ class NoteReadIntegrationTest extends DatabaseTestBase {
     @DisplayName("수신자가 쪽지를 읽었다면, 읽은 상태/시간이 변경된다.")
     void whenReceiverReadNoteThenNoteStatusAndReadAtShouldBeChanged() {
         final LocalDateTime sentAt = LocalDateTime.of(2024, 10, 11, 13, 0);
-        final NoteCreateCommand command = new NoteCreateCommand(
-            "커피챗 신청합니다.", "2024년 10월 11일 13:00", sentAt, "kmularise", dailygeUser.getId()
-        );
+        final NoteCreateCommand command = createNoteCommand(dailygeUser, sentAt);
         final Long newNoteId = noteFacade.save(dailygeUser, command, 30);
 
         noteReadService.findReceivedNoteById(receivedDailygeUser, newNoteId);
@@ -113,9 +130,7 @@ class NoteReadIntegrationTest extends DatabaseTestBase {
     @DisplayName("권한이 없는 사용자가 (보낸) 쪽지를 조회하면 CommonException이 발생한다.")
     void whenUnAuthorizedUserReadSentNoteThenCommonExceptionShouldBeHappen() {
         final LocalDateTime sentAt = LocalDateTime.of(2024, 10, 11, 13, 0);
-        final NoteCreateCommand command = new NoteCreateCommand(
-            "커피챗 신청합니다.", "2024년 10월 11일 13:00", sentAt, "kmularise", dailygeUser.getId()
-        );
+        final NoteCreateCommand command = createNoteCommand(dailygeUser, sentAt);
         final Long newNoteId = noteFacade.save(dailygeUser, command, 30);
         final DailygeUser invalidDailygeUser = new DailygeUser(Long.MAX_VALUE, Role.NORMAL);
 
@@ -128,9 +143,7 @@ class NoteReadIntegrationTest extends DatabaseTestBase {
     @DisplayName("보내지 않은 쪽지를 조회하면 NoteTypeException이 발생한다.")
     void whenReadNotSentNoteThenThenNoteTypeExceptionShouldBeHappen() {
         final LocalDateTime sentAt = LocalDateTime.of(2024, 10, 11, 13, 0);
-        final NoteCreateCommand command = new NoteCreateCommand(
-            "커피챗 신청합니다.", "2024년 10월 11일 13:00", sentAt, "kmularise", dailygeUser.getId()
-        );
+        final NoteCreateCommand command = createNoteCommand(dailygeUser, sentAt);
         noteFacade.save(dailygeUser, command, 30);
         final Long invalidNoteId = Long.MAX_VALUE;
 
@@ -143,9 +156,7 @@ class NoteReadIntegrationTest extends DatabaseTestBase {
     @DisplayName("쪽지를 전송했다면 (보낸 쪽지함에서) 쪽지를 조회할 수 있다.")
     void whenReadSentNoteThenResultShouldNotBeNull() {
         final LocalDateTime sentAt = LocalDateTime.of(2024, 10, 11, 13, 0);
-        final NoteCreateCommand command = new NoteCreateCommand(
-            "커피챗 신청합니다.", "2024년 10월 11일 13:00", sentAt, "kmularise", dailygeUser.getId()
-        );
+        final NoteCreateCommand command = createNoteCommand(dailygeUser, sentAt);
         final Long newNoteId = noteFacade.save(dailygeUser, command, 30);
 
         final NoteJpaEntity findNote = noteReadService.findSentNoteById(dailygeUser, newNoteId);

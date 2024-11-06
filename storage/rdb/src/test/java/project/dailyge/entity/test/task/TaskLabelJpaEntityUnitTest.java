@@ -1,6 +1,5 @@
 package project.dailyge.entity.test.task;
 
-import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import project.dailyge.entity.task.TaskLabelJpaEntity;
@@ -13,7 +12,6 @@ class TaskLabelJpaEntityUnitTest {
     @Test
     @DisplayName("올바른 인자가 들어오면 TaskLabelJpaEntity가 생성된다.")
     void whenValidArgumentsThenTaskTaskLabelJpaEntityShouldBeCreated() {
-        final LocalDateTime now = LocalDateTime.now();
         final TaskLabelJpaEntity newTaskLabel = new TaskLabelJpaEntity(
             "개발",
             "개발 관련 일정",

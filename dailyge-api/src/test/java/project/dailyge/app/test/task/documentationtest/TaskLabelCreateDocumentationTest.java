@@ -18,7 +18,7 @@ import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippe
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.createIdentifier;
 
 @DisplayName("[DocumentationTest] TaskLabel 등록 문서화 테스트")
-class TaskLabelDocumentationTest extends DatabaseTestBase {
+class TaskLabelCreateDocumentationTest extends DatabaseTestBase {
 
     @Autowired
     private TaskWriteService taskWriteService;
@@ -38,7 +38,7 @@ class TaskLabelDocumentationTest extends DatabaseTestBase {
             .cookie(getAccessTokenCookie())
             .body(objectMapper.writeValueAsString(request))
             .when()
-            .post("/api/task-label")
+            .post("/api/task-labels")
             .then()
             .statusCode(201);
     }
@@ -56,7 +56,7 @@ class TaskLabelDocumentationTest extends DatabaseTestBase {
             .cookie(getAccessTokenCookie())
             .body(objectMapper.writeValueAsString(request))
             .when()
-            .post("/api/task-label")
+            .post("/api/task-labels")
             .then()
             .statusCode(201);
     }
@@ -78,7 +78,7 @@ class TaskLabelDocumentationTest extends DatabaseTestBase {
             .cookie(getAccessTokenCookie())
             .body(objectMapper.writeValueAsString(request))
             .when()
-            .post("/api/task-label")
+            .post("/api/task-labels")
             .then()
             .statusCode(400);
     }

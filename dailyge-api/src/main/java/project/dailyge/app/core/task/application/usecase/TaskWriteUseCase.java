@@ -21,7 +21,6 @@ import project.dailyge.entity.task.TaskJpaEntity;
 
 import java.time.LocalDate;
 import java.util.List;
-import project.dailyge.entity.task.TaskLabelEntityReadRepository;
 import project.dailyge.entity.task.TaskLabelEntityWriteRepository;
 import project.dailyge.entity.task.TaskLabelJpaEntity;
 
@@ -33,7 +32,6 @@ class TaskWriteUseCase implements TaskWriteService {
     private final TaskEntityWriteRepository taskWriteRepository;
     private final MonthlyTaskEntityReadRepository monthlyTaskReadRepository;
     private final MonthlyTaskEntityWriteRepository monthlyTaskWriteRepository;
-    private final TaskLabelEntityReadRepository taskLabelEntityReadRepository;
     private final TaskLabelEntityWriteRepository taskLabelEntityWriteRepository;
 
     public TaskWriteUseCase(
@@ -42,7 +40,6 @@ class TaskWriteUseCase implements TaskWriteService {
         final TaskEntityWriteRepository taskWriteRepository,
         final MonthlyTaskEntityReadRepository monthlyTaskReadRepository,
         final MonthlyTaskEntityWriteRepository monthlyTaskWriteRepository,
-        final TaskLabelEntityReadRepository taskLabelEntityReadRepository,
         final TaskLabelEntityWriteRepository taskLabelEntityWriteRepository
     ) {
         this.validator = validator;
@@ -50,7 +47,6 @@ class TaskWriteUseCase implements TaskWriteService {
         this.taskWriteRepository = taskWriteRepository;
         this.monthlyTaskReadRepository = monthlyTaskReadRepository;
         this.monthlyTaskWriteRepository = monthlyTaskWriteRepository;
-        this.taskLabelEntityReadRepository = taskLabelEntityReadRepository;
         this.taskLabelEntityWriteRepository = taskLabelEntityWriteRepository;
     }
 

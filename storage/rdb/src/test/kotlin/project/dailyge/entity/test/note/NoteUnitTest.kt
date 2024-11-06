@@ -124,7 +124,7 @@ class NoteUnitTest : DescribeSpec({
                     receiverId = 2L
                 )
 
-                note.readByReceiver(receiver) shouldBe true
+                note.readByReceiver(receiver) shouldBe false
                 note.readByReceiver(sender) shouldBe false
             }
 
@@ -139,7 +139,7 @@ class NoteUnitTest : DescribeSpec({
 
                 note.updateReadStatus(true, fixedReadAt)
 
-                note.readByReceiver(receiver) shouldBe false
+                note.readByReceiver(receiver) shouldBe true
                 note.readByReceiver(sender) shouldBe false
             }
 

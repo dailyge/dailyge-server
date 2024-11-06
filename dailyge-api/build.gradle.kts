@@ -21,6 +21,11 @@ dependencies {
     implementation(project(":storage:document"))
     implementation(project(":support"))
 
+    kover(project(":storage:common"))
+    kover(project(":storage:rdb"))
+    kover(project(":storage:memory"))
+    kover(project(":storage:document"))
+
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
     implementation(platform("software.amazon.awssdk:bom:2.20.63"))
@@ -56,7 +61,7 @@ tasks.register("authOpenApiSpec") {
 
 tasks.test {
     dependsOn("copySubmoduleConfig")
-    mustRunAfter(":storage:rdb:test")
+    mustRunAfter(":storage:rdb:build")
     outputs.dir(snippetsDir)
 }
 

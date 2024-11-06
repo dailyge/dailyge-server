@@ -1,8 +1,9 @@
 package project.dailyge.entity.applicationhistory;
 
+import static project.dailyge.entity.applicationhistory.ApplicationStatus.BEFORE_SUBMISSION;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import static project.dailyge.entity.applicationhistory.ApplicationStatus.BEFORE_SUBMISSION;
 
 public final class ApplicationHistoryFixture {
 
@@ -15,7 +16,7 @@ public final class ApplicationHistoryFixture {
         "https://recruit.dailyge.com",
         BEFORE_SUBMISSION,
         LocalDate.of(2024, 11, 4),
-        LocalDateTime.of(2024,11,4,0,0,0),
+        LocalDateTime.of(2024, 11, 4, 0, 0, 0),
         2024,
         11,
         1L,

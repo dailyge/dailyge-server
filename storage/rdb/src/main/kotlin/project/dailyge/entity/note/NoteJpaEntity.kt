@@ -36,6 +36,12 @@ class NoteJpaEntity(
     val receiverId: Long,
 ) : BaseEntity() {
 
+    @Column(name = "sender_deleted")
+    private var _senderDeleted: Boolean = false
+
+    @Column(name = "receiver_deleted")
+    private var _receiverDeleted: Boolean = false
+
     constructor(
         title: String,
         content: String,
@@ -43,6 +49,17 @@ class NoteJpaEntity(
         senderId: Long,
         receiverId: Long,
     ) : this(null, title, content, false, sentAt, null, senderId, receiverId) {
+        updateCreatedBy(senderId)
+    }
+
+    constructor(
+        title: String,
+        content: String,
+        sentAt: LocalDateTime,
+        isRead: Boolean,
+        senderId: Long,
+        receiverId: Long,
+    ) : this(null, title, content, isRead, sentAt, null, senderId, receiverId) {
         updateCreatedBy(senderId)
     }
 
@@ -58,6 +75,12 @@ class NoteJpaEntity(
     val readAt: LocalDateTime?
         get() = _readAt
 
+    val senderDeleted: Boolean
+        get() = _senderDeleted
+
+    val receiverDeleted: Boolean
+        get() = _receiverDeleted
+
     fun validateAuth(userId: Long): Boolean {
         return senderId == userId
                 || receiverId == userId
@@ -68,6 +91,14 @@ class NoteJpaEntity(
                 && this.receiverId == receiverId
     }
 
+    fun validateSender(userId: Long): Boolean {
+        return senderId == userId
+    }
+
+    fun validateReceiver(userId: Long): Boolean {
+        return receiverId == userId
+    }
+
     fun updateReadStatus(
         isRead: Boolean,
         readAt: LocalDateTime,
@@ -75,5 +106,19 @@ class NoteJpaEntity(
         this._isRead = isRead
         this._readAt = readAt
         updateLastModifiedInfo(receiverId, readAt)
+    }
+
+    fun delete(
+        userId: Long,
+        lastModifiedAt: LocalDateTime,
+    ) {
+        when (userId) {
+            senderId -> _senderDeleted = true
+            receiverId -> _receiverDeleted = true
+            else -> return
+        }.apply {
+            _deleted = (_senderDeleted && _receiverDeleted)
+            updateLastModifiedInfo(userId, lastModifiedAt)
+        }
     }
 }

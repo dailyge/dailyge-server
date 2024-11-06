@@ -1,10 +1,10 @@
 plugins {
     java
     id("pmd")
-    id("jacoco")
     id("checkstyle")
     id("org.sonarqube")
     kotlin("jvm") apply false
+    id("org.jetbrains.kotlinx.kover")
     id("io.spring.dependency-management")
     id("org.springframework.boot") apply false
     id("com.google.cloud.tools.jib") apply false
@@ -20,6 +20,7 @@ allprojects {
     repositories {
         mavenCentral()
         maven { url = uri("https://repo.spring.io/release") }
+        maven { url = uri("https://maven.pkg.jetbrains.space/public/p/kotlinx/kover/maven") }
     }
 }
 
@@ -35,10 +36,10 @@ sonarqube {
         property("sonar.projectKey", "dailyge_dailyge-server")
         property("sonar.language", "java")
         property("sonar.sourceEncoding", "UTF-8")
-        property("sonar.test.inclusions", "**/*Test.java")
+        property("sonar.test.inclusions", "**/*Test.java,**/*Test.kt")
         property("sonar.scm.forceReloadAll", "true")
         property("sonar.exclusions", exclusions.joinToString(", "))
-        property("sonar.java.coveragePlugin", "jacoco")
+        property("sonar.coverage.jacoco.xmlReportPaths", "${buildDir}/reports/kover/report.xml")
         property(
             "sonar.java.pmd.reportPaths",
             layout.buildDirectory.file("reports/pmd/main.xml").get().asFile.toString()
@@ -53,7 +54,6 @@ sonarqube {
 subprojects {
     apply(plugin = "pmd")
     apply(plugin = "java")
-    apply(plugin = "jacoco")
     apply(plugin = "checkstyle")
     apply(plugin = "application")
     apply(plugin = "java-library")
@@ -63,6 +63,7 @@ subprojects {
     apply(plugin = "org.jetbrains.kotlin.jvm")
     apply(plugin = "org.jetbrains.kotlin.kapt")
     apply(plugin = "com.google.cloud.tools.jib")
+    apply(plugin = "org.jetbrains.kotlinx.kover")
     apply(plugin = "io.spring.dependency-management")
 
     dependencyManagement {
@@ -72,32 +73,30 @@ subprojects {
     }
 
     dependencies {
+        testImplementation("org.jetbrains.kotlin:kotlin-test")
+        testImplementation("io.kotest:kotest-runner-junit5:5.5.5")
+        testImplementation("io.kotest:kotest-assertions-core:5.5.5")
         testImplementation("org.springframework.boot:spring-boot-starter-test")
     }
 
-    tasks.withType<JacocoReport> {
-        dependsOn(tasks.test)
+    tasks.test {
+        useJUnitPlatform()
+        finalizedBy("koverXmlReport")
+    }
+
+    val exclusions = mutableListOf<String>()
+    file("${rootDir}/config/jacoco/exclude-verification.txt").forEachLine {
+        exclusions.add(it)
+    }
+
+    kover {
         reports {
-            xml.required.set(true)
-            html.required.set(true)
-            csv.required.set(false)
-            xml.outputLocation.set(file("$buildDir/reports/jacoco/test/jacocoTestReport.xml"))
-        }
-
-        val exclusions = extractQClass().toMutableSet()
-        file("${rootDir}/config/jacoco/exclude-coverage.txt").forEachLine {
-            exclusions.add(it)
-        }
-        exclusions.add("project/dailyge/app/DailygeApplicationKt.class")
-
-        classDirectories.setFrom(
-            fileTree("$buildDir/classes/java/main") {
-                exclude(exclusions)
-            },
-            fileTree("$buildDir/classes/kotlin/main") {
-                exclude(exclusions)
+            filters {
+                excludes {
+                    classes(*exclusions.toTypedArray())
+                }
             }
-        )
+        }
     }
 
     tasks.named<Checkstyle>("checkstyleMain") {
@@ -112,22 +111,20 @@ subprojects {
         mustRunAfter("compileJava")
     }
 
-    tasks.test {
-        useJUnitPlatform()
-        finalizedBy(tasks.jacocoTestReport)
-        jvmArgs("--add-opens=java.base/java.time=ALL-UNNAMED")
-    }
-
     sonarqube {
         properties {
-            property("sonar.java.binaries", "$buildDir/classes/java/main")
-            if (file("${projectDir}/src/main/java").exists()) {
-                property("sonar.sources", "src/main/java")
-            }
-            if (file("${projectDir}/src/test/java").exists()) {
-                property("sonar.tests", "src/test/java")
-            }
-            property("sonar.coverage.jacoco.xmlReportPaths", "$buildDir/reports/jacoco/test/jacocoTestReport.xml")
+            val javaMainDir = file("$buildDir/classes/java/main")
+            val kotlinMainDir = file("$buildDir/classes/kotlin/main")
+            property("sonar.java.binaries", listOf(javaMainDir, kotlinMainDir).filter { it.exists() }.joinToString(","))
+            property("sonar.sources", listOf("src/main/java", "src/main/kotlin")
+                .filter { file("$projectDir/$it").exists() }
+                .joinToString(",")
+            )
+            property("sonar.tests", listOf("src/test/java", "src/test/kotlin")
+                .filter { file("$projectDir/$it").exists() }
+                .joinToString(",")
+            )
+            property("sonar.coverage.jacoco.xmlReportPaths", "$buildDir/reports/kover/report.xml")
         }
     }
 
@@ -144,16 +141,4 @@ subprojects {
         isIgnoreFailures = false
         ruleSetFiles = files("${rootDir}/config/lint/dailyge-pmd-rules.xml")
     }
-}
-
-fun extractQClass(): List<String> {
-    val qClasses = mutableListOf<String>()
-    for (qPattern in 'A'..'Z') {
-        qClasses.add("**/*Q$qPattern*")
-    }
-    return qClasses
-}
-
-tasks.withType<JavaCompile>().configureEach {
-    options.compilerArgs.add("-proc:none")
 }

@@ -56,7 +56,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./gradlew dailyge-api:build sonar -PskipJib=true
+        run: ./gradlew :dailyge-api:koverXmlReport sonar -PskipJib=true -Dsonar.inclusions=**/dailyge-api/**,**/storage/**
 
   notify_slack:
     runs-on: ubuntu-latest

@@ -65,7 +65,7 @@ class NoteWriteUseCase implements NoteWriteService {
         final DailygeUser dailygeUser,
         final Long noteId
     ) {
-        final NoteJpaEntity findNote = noteReadRepository.findReceivedNoteById(dailygeUser.getId(), noteId)
+        final NoteJpaEntity findNote = noteReadRepository.findReceivedNoteById(noteId)
             .orElseThrow(() -> NoteTypeException.from(NOTE_NOT_FOUND));
         findNote.delete(dailygeUser.getId(), now());
     }
@@ -79,7 +79,7 @@ class NoteWriteUseCase implements NoteWriteService {
         final DailygeUser dailygeUser,
         final Long noteId
     ) {
-        final NoteJpaEntity findNote = noteReadRepository.findSentNoteById(dailygeUser.getId(), noteId)
+        final NoteJpaEntity findNote = noteReadRepository.findSentNoteById(noteId)
             .orElseThrow(() -> NoteTypeException.from(NOTE_NOT_FOUND));
         findNote.delete(dailygeUser.getId(), now());
     }

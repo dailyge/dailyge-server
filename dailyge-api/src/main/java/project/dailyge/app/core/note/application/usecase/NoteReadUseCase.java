@@ -1,6 +1,7 @@
 package project.dailyge.app.core.note.application.usecase;
 
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.transaction.annotation.Transactional;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
 import project.dailyge.app.common.annotation.ApplicationLayer;
 import project.dailyge.app.common.exception.CommonException;
@@ -40,26 +41,46 @@ class NoteReadUseCase implements NoteReadService {
         if (!findNote.validateAuth(dailygeUser.getId())) {
             throw CommonException.from(UN_AUTHORIZED);
         }
-        if (findNote.readByReceiver(dailygeUser.getId())) {
-            final NoteEvent event = new NoteEvent(dailygeUser.getUserId(), noteId, createTimeBasedUUID(), UPDATE);
-            eventPublisher.publishEvent(event);
-        }
         return findNote;
     }
 
     @Override
+    @Transactional(readOnly = true)
     public NoteJpaEntity findReceivedNoteById(
-        final Long userId,
+        final DailygeUser dailygeUser,
         final Long noteId
     ) {
-        return noteReadRepository.findReceivedNoteById(userId, noteId)
+        final NoteJpaEntity findNote = noteReadRepository.findReceivedNoteById(noteId)
             .orElseThrow(() -> NoteTypeException.from(NOTE_NOT_FOUND));
+        if (!findNote.validateReceiver(dailygeUser.getUserId())) {
+            throw CommonException.from(UN_AUTHORIZED);
+        }
+        if (!findNote.readByReceiver(dailygeUser.getId())) {
+            publishReadEvent(dailygeUser, noteId);
+        }
+        return findNote;
+    }
+
+    @Transactional
+    public void publishReadEvent(
+        final DailygeUser dailygeUser,
+        final Long noteId
+    ) {
+        final NoteEvent event = new NoteEvent(dailygeUser.getUserId(), noteId, createTimeBasedUUID(), UPDATE);
+        eventPublisher.publishEvent(event);
     }
 
     @Override
-    public NoteJpaEntity findSentNoteById(Long userId, Long noteId) {
-        return noteReadRepository.findSentNoteById(userId, noteId)
+    public NoteJpaEntity findSentNoteById(
+        final DailygeUser dailygeUser,
+        final Long noteId
+    ) {
+        final NoteJpaEntity findNote = noteReadRepository.findById(noteId)
             .orElseThrow(() -> NoteTypeException.from(NOTE_NOT_FOUND));
+        if (!findNote.validateSender(dailygeUser.getUserId())) {
+            throw CommonException.from(UN_AUTHORIZED);
+        }
+        return findNote;
     }
 
     @Override

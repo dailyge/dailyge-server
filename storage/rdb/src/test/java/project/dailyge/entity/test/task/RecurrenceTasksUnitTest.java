@@ -3,12 +3,14 @@ package project.dailyge.entity.test.task;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import project.dailyge.entity.task.RecurrenceTasks;
 import project.dailyge.entity.task.TaskColor;
 import project.dailyge.entity.task.TaskJpaEntity;
 import project.dailyge.entity.task.TaskRecurrenceJpaEntity;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
@@ -32,8 +34,8 @@ class RecurrenceTasksUnitTest {
 
     @BeforeEach
     void setUp() {
-        startDate = LocalDate.of(2024, 10, 1);
-        endDate = LocalDate.of(2025, 9, 30);
+        startDate = LocalDate.of(2024, 10, 31);
+        endDate = LocalDate.of(2025, 10, 30);
         monthlyTasksMap = createMonthlyTaskMap(startDate, endDate);
         color = TaskColor.GRAY;
     }
@@ -62,13 +64,22 @@ class RecurrenceTasksUnitTest {
         tasks.forEach(task -> assertEquals(monthlyTasksMap.get(YearMonth.of(task.getYear(), task.getMonth())), task.getMonthlyTaskId()));
     }
 
-    @Test
+    @ParameterizedTest
     @DisplayName("Weekly 반복 일정을 올바르게 생성한다.")
-    void whenTaskRecurrenceIsWeeklyThenTaskSizeShouldBeCorrect() {
+    @CsvSource({
+        "1, 52",
+        "2, 52",
+        "3, 52",
+        "4, 53",
+        "5, 52",
+        "6, 52",
+        "7, 52",
+    })
+    void whenTaskRecurrenceIsWeeklyThenTaskSizeShouldBeCorrect(final int dayOfWeek, final int result) {
         final TaskRecurrenceJpaEntity taskRecurrence = new TaskRecurrenceJpaEntity(
             1L,
             WEEKLY,
-            List.of(DayOfWeek.TUESDAY.getValue()),
+            List.of(dayOfWeek),
             "영어",
             "전화 영어 아무때나",
             startDate.atTime(0, 0, 0, 0),
@@ -82,17 +93,18 @@ class RecurrenceTasksUnitTest {
             monthlyTasksMap
         );
         final List<TaskJpaEntity> tasks = recurrenceTasks.create();
-        assertEquals(53, tasks.size());
+        assertEquals(result, tasks.size());
         tasks.forEach(task -> assertEquals(monthlyTasksMap.get(YearMonth.of(task.getYear(), task.getMonth())), task.getMonthlyTaskId()));
     }
 
-    @Test
+    @ParameterizedTest
     @DisplayName("Monthly 반복 일정을 올바르게 생성한다.")
-    void whenTaskRecurrenceIsMonthlyThenTaskSizeShouldBeCorrect() {
+    @ValueSource(ints = {1, 2, 4, 10, 11, 28, 29, 30, 31})
+    void whenTaskRecurrenceIsMonthlyThenTaskSizeShouldBeCorrect(final int monthDay) {
         final TaskRecurrenceJpaEntity taskRecurrence = new TaskRecurrenceJpaEntity(
             1L,
             MONTHLY,
-            List.of(1, 15, 31),
+            List.of(monthDay),
             "제빵 클래스",
             "나만의 빵을 만들자",
             startDate.atTime(0, 0, 0, 0),
@@ -106,7 +118,7 @@ class RecurrenceTasksUnitTest {
             monthlyTasksMap
         );
         final List<TaskJpaEntity> tasks = recurrenceTasks.create();
-        assertEquals(36, tasks.size());
+        assertEquals(12, tasks.size());
         tasks.forEach(task -> assertEquals(monthlyTasksMap.get(YearMonth.of(task.getYear(), task.getMonth())), task.getMonthlyTaskId()));
     }
 
@@ -116,7 +128,7 @@ class RecurrenceTasksUnitTest {
         final TaskRecurrenceJpaEntity taskRecurrence = new TaskRecurrenceJpaEntity(
             1L,
             MONTHLY,
-            List.of(1, 15, 31),
+            List.of(30),
             "제빵 클래스",
             "나만의 빵을 만들자",
             startDate.atTime(0, 0, 0, 0),
@@ -133,7 +145,7 @@ class RecurrenceTasksUnitTest {
         assertThrows(IllegalArgumentException.class, () -> recurrenceTasks.create());
     }
 
-    Map<YearMonth, Long> createMonthlyTaskMap(LocalDate startDate, LocalDate endDate) {
+    private Map<YearMonth, Long> createMonthlyTaskMap(final LocalDate startDate, final LocalDate endDate) {
         final Map<YearMonth, Long> monthlyTaskMap = new HashMap<>();
         YearMonth currentMonth = YearMonth.from(startDate);
         final YearMonth endMonth = YearMonth.from(endDate);

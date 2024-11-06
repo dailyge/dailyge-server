@@ -14,5 +14,9 @@ public interface NoteReadService {
 
     NoteJpaEntity findSentNoteById(Long userId, Long noteId);
 
+    NoteJpaEntity findReceivedNoteById(Long userId, Long noteId);
+
+    NoteJpaEntity findSentNoteById(Long userId, Long noteId);
+
     List<NoteJpaEntity> findAll();
 }

@@ -4,11 +4,8 @@ import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
 
 import static project.dailyge.entity.task.RecurrenceType.DAILY;
 import static project.dailyge.entity.task.RecurrenceType.MONTHLY;
@@ -21,6 +18,12 @@ public record RecurrenceTasks(
     TaskColor color,
     Map<YearMonth, Long> monthlyTaskMap
 ) {
+
+    private static final int FIRST_DAY = 1;
+    private static final int ONE_DAY = 1;
+    private static final int ONE_MONTH = 1;
+    private static final int FIRST_INDEX = 0;
+
     public List<TaskJpaEntity> create() {
         if (DAILY.equals(getRecurrenceType())) {
             final List<LocalDateTime> dailySchedules = generateDailySchedules();
@@ -43,20 +46,32 @@ public record RecurrenceTasks(
 
     private List<TaskJpaEntity> createTasks(final List<LocalDateTime> schedules) {
         for (final LocalDateTime schedule : schedules) {
-            TaskJpaEntity newTask = new TaskJpaEntity(
-                taskRecurrence.getTitle(),
-                taskRecurrence.getContent(),
-                schedule.toLocalDate(),
-                TaskStatus.TODO,
-                color,
-                Optional.ofNullable(monthlyTaskMap.get(YearMonth.of(schedule.getYear(),
-                    schedule.getMonth()))).orElseThrow(() -> new IllegalArgumentException("해당 monthly task가 없습니다.")),
-                userId,
-                taskRecurrence.getId()
-            );
+            final TaskJpaEntity newTask = createTask(schedule);
             tasks.add(newTask);
         }
         return tasks;
+    }
+
+    private TaskJpaEntity createTask(final LocalDateTime schedule) {
+        final Long monthlyTaskId = getMonthlyTaskId(schedule);
+        return new TaskJpaEntity(
+            taskRecurrence.getTitle(),
+            taskRecurrence.getContent(),
+            schedule.toLocalDate(),
+            TaskStatus.TODO,
+            color,
+            monthlyTaskId,
+            userId,
+            taskRecurrence.getId()
+        );
+    }
+
+    private Long getMonthlyTaskId(final LocalDateTime schedule) {
+        final Long monthlyTaskId = monthlyTaskMap.get(YearMonth.of(schedule.getYear(), schedule.getMonth()));
+        if (monthlyTaskId == null) {
+            throw new IllegalArgumentException("해당 monthly task가 없습니다.");
+        }
+        return monthlyTaskId;
     }
 
     private List<LocalDateTime> generateDailySchedules() {
@@ -64,7 +79,7 @@ public record RecurrenceTasks(
         LocalDateTime currentDate = taskRecurrence.getStartDate();
         while (!currentDate.isAfter(taskRecurrence.getEndDate())) {
             dailySchedules.add(currentDate);
-            currentDate = currentDate.plusDays(1);
+            currentDate = currentDate.plusDays(ONE_DAY);
         }
         return dailySchedules;
     }
@@ -73,36 +88,41 @@ public record RecurrenceTasks(
         final List<LocalDateTime> weeklySchedules = new ArrayList<>();
         LocalDateTime currentDate = taskRecurrence.getStartDate();
         while (!currentDate.isAfter(taskRecurrence.getEndDate())) {
-            final DayOfWeek currentDayOfWeek = currentDate.getDayOfWeek();
-            if (taskRecurrence.getDatePattern().contains(currentDayOfWeek.getValue())) {
+            if (matchesDatePattern(currentDate)) {
                 weeklySchedules.add(currentDate);
             }
-            currentDate = currentDate.plusDays(1);
+            currentDate = currentDate.plusDays(ONE_DAY);
         }
         return weeklySchedules;
     }
 
+    private boolean matchesDatePattern(final LocalDateTime currentDate) {
+        final DayOfWeek currentDayOfWeek = currentDate.getDayOfWeek();
+        return taskRecurrence.getDatePattern().contains(currentDayOfWeek.getValue());
+    }
+
     private List<LocalDateTime> generateMonthlySchedules() {
-        LocalDateTime currentDate = taskRecurrence.getStartDate();
-        final Set<LocalDateTime> monthlySchedules = new HashSet<>();
+        LocalDateTime currentDate = taskRecurrence.getStartDate().withDayOfMonth(FIRST_DAY);
+        final List<LocalDateTime> monthlySchedules = new ArrayList<>();
+        final int recurrenceDay = taskRecurrence.getDatePattern().get(FIRST_INDEX);
         while (!currentDate.isAfter(taskRecurrence.getEndDate())) {
-            final YearMonth yearMonth = YearMonth.of(currentDate.getYear(), currentDate.getMonth());
-            int lastDayOfMonth = yearMonth.lengthOfMonth();
-            for (final int day : taskRecurrence.getDatePattern()) {
-                final int scheduleDay = Math.min(day, lastDayOfMonth);
-                final LocalDateTime scheduleDate = LocalDateTime.of(
-                    currentDate.getYear(),
-                    currentDate.getMonth(),
-                    scheduleDay,
-                    currentDate.getHour(),
-                    currentDate.getMinute()
-                );
-                if (!scheduleDate.isBefore(taskRecurrence.getStartDate()) && !scheduleDate.isAfter(taskRecurrence.getEndDate())) {
-                    monthlySchedules.add(scheduleDate);
-                }
+            final int scheduleDay = getMaxDayForMonth(recurrenceDay, currentDate);
+            final LocalDateTime scheduleDate = currentDate.withDayOfMonth(scheduleDay);
+            if (isWithinRange(scheduleDate)) {
+                monthlySchedules.add(scheduleDate);
             }
-            currentDate = currentDate.plusMonths(1).withDayOfMonth(1);
+            currentDate = currentDate.plusMonths(ONE_MONTH);
         }
-        return new ArrayList<>(monthlySchedules);
+        return monthlySchedules;
+    }
+
+    private int getMaxDayForMonth(final int recurrenceDay, final LocalDateTime currentDate) {
+        final YearMonth yearMonth = YearMonth.of(currentDate.getYear(), currentDate.getMonth());
+        final int lastDayOfMonth = yearMonth.lengthOfMonth();
+        return Math.min(recurrenceDay, lastDayOfMonth);
+    }
+
+    private boolean isWithinRange(final LocalDateTime scheduleDate) {
+        return !scheduleDate.isBefore(taskRecurrence.getStartDate()) && !scheduleDate.isAfter(taskRecurrence.getEndDate());
     }
 }

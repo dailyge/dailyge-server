@@ -32,19 +32,6 @@ class NoteReadUseCase implements NoteReadService {
     }
 
     @Override
-    public NoteJpaEntity findById(
-        final DailygeUser dailygeUser,
-        final Long noteId
-    ) {
-        final NoteJpaEntity findNote = noteReadRepository.findById(noteId)
-            .orElseThrow();
-        if (!findNote.validateAuth(dailygeUser.getId())) {
-            throw CommonException.from(UN_AUTHORIZED);
-        }
-        return findNote;
-    }
-
-    @Override
     @Transactional(readOnly = true)
     public NoteJpaEntity findReceivedNoteById(
         final DailygeUser dailygeUser,

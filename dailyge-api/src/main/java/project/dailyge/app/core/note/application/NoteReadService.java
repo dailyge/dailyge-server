@@ -6,8 +6,6 @@ import project.dailyge.entity.note.NoteJpaEntity;
 import java.util.List;
 
 public interface NoteReadService {
-    NoteJpaEntity findById(DailygeUser dailygeUser, Long noteId);
-
     NoteJpaEntity findReceivedNoteById(DailygeUser dailygeUser, Long noteId);
 
     NoteJpaEntity findSentNoteById(DailygeUser dailygeUser, Long noteId);

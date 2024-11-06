@@ -92,10 +92,6 @@ public class TaskEvent extends DomainEvent {
         return getPublishCount() >= maxPublishCount;
     }
 
-    public boolean isType(final EventType eventType) {
-        return this.getCreatedAt().equals(eventType);
-    }
-
     @Override
     public String toString() {
         return String.format(

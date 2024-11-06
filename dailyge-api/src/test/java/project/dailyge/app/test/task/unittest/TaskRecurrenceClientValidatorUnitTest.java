@@ -67,7 +67,7 @@ class TaskRecurrenceClientValidatorUnitTest {
 
     @ParameterizedTest
     @MethodSource("provideInvalidWeeklyDayPatterns")
-    @DisplayName("주간 날짜 패턴이 유효하면 예외를 던진다.")
+    @DisplayName("주간 날짜 패턴이 유효하지 않으면 예외를 던진다.")
     void whenInvalidWeeklyDatePatternThenShouldThrowException(final List<Integer> days) {
         assertThrows(IllegalArgumentException.class, () -> validator.validateDayPattern(WEEKLY, days));
     }
@@ -89,24 +89,24 @@ class TaskRecurrenceClientValidatorUnitTest {
 
     private static Stream<List<Integer>> provideMonthlyDayPatterns() {
         return Stream.of(
-            List.of(1, 10, 31),
+            List.of(1),
             List.of(25),
-            List.of(10, 25, 30)
+            List.of(31)
         );
     }
 
     @ParameterizedTest
-    @MethodSource("provideInvalidWeeklyDayPatterns")
-    @DisplayName("주간 날짜 패턴이 유효하면 예외를 던진다.")
+    @MethodSource("provideInvalidMonthlyDayPatterns")
+    @DisplayName("월간 날짜 패턴이 유효하지 않으면 예외를 던진다.")
     void whenInvalidMonthlyDatePatternThenShouldThrowException(final List<Integer> days) {
-        assertThrows(IllegalArgumentException.class, () -> validator.validateDayPattern(WEEKLY, days));
+        assertThrows(IllegalArgumentException.class, () -> validator.validateDayPattern(MONTHLY, days));
     }
 
     private static Stream<List<Integer>> provideInvalidMonthlyDayPatterns() {
         return Stream.of(
-            List.of(5, 4, 3, 2, 1),
-            List.of(1, 32),
-            List.of(0, 2, 6)
+            List.of(1, 2, 3),
+            List.of(32),
+            List.of(0)
         );
     }
 }

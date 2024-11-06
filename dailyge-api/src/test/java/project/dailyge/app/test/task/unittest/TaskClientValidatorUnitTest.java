@@ -83,6 +83,18 @@ class TaskClientValidatorUnitTest {
         assertThrows(IllegalArgumentException.class, () -> validator.validateOneMonthDifference(startDate, sameMonthEndDate));
     }
 
+    @Test
+    @DisplayName("색상이 16진수에 포함되면, 예외가 발생하지 않는다.")
+    void whenColorIsHexCode_thenDoesNotThrowException() {
+        assertDoesNotThrow(() -> validator.validateHexColorCode("cB09Fa"));
+    }
+
+    @Test
+    @DisplayName("색상이 16진수가 아니라면, 예외가 발생한다.")
+    void whenColorIsNotHexCode_thenThrowIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> validator.validateHexColorCode("HHFFAA"));
+    }
+
     private static IntStream provideAugustDays() {
         return IntStream.rangeClosed(1, 31);
     }

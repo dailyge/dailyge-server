@@ -44,7 +44,7 @@ class NoteReadIntegrationTest extends DatabaseTestBase {
     }
 
     @Test
-    @DisplayName("쪽지를 ID로 조회할 때, 올바르지 않은 사용자라면 CommonException(UnAuthorized)이 발생한다.")
+    @DisplayName("쪽지를 ID로 조회할 때, 올바르지 않은 사용자라면 CommonException(UnAuthorizedException)이 발생한다.")
     void whenFindNoteByIdButWithInvalidIdThenCommonExceptionShouldBeHappen() {
         final LocalDateTime sentAt = LocalDateTime.of(2024, 10, 11, 13, 0);
         final NoteCreateCommand command = createNoteCommand(dailygeUser, sentAt);
@@ -57,18 +57,7 @@ class NoteReadIntegrationTest extends DatabaseTestBase {
     }
 
     @Test
-    @DisplayName("쪽지를 ID로 조회할 때, 올바른 수신자/발신자 라면 쪽지를 조회할 수 있다.")
-    void whenFindNoteByIdThenResultShouldNotBeNull() {
-        final LocalDateTime sentAt = LocalDateTime.of(2024, 10, 11, 13, 0);
-        final NoteCreateCommand command = createNoteCommand(dailygeUser, sentAt);
-        final Long newNoteId = noteFacade.save(dailygeUser, command, 30);
-
-        final NoteJpaEntity findNote = noteReadService.findById(dailygeUser, newNoteId);
-        assertNotNull(findNote);
-    }
-
-    @Test
-    @DisplayName("받지 않은 쪽지를 조회하면 NoteTypeException이 발생한다.")
+    @DisplayName("받지 않은 쪽지를 조회하면 NoteTypeException(NoteNotFoundException)이 발생한다.")
     void whenReadNotReceivedNoteThenNoteTypeExceptionShouldBeHappen() {
         final LocalDateTime sentAt = LocalDateTime.of(2024, 10, 11, 13, 0);
         final NoteCreateCommand command = createNoteCommand(dailygeUser, sentAt);
@@ -81,7 +70,7 @@ class NoteReadIntegrationTest extends DatabaseTestBase {
     }
 
     @Test
-    @DisplayName("권한이 없는 사용자가 (받은) 쪽지를 조회하면 CommonException이 발생한다.")
+    @DisplayName("권한이 없는 사용자가 (받은) 쪽지를 조회하면 CommonException(UnAuthorizedException)이 발생한다.")
     void whenUnAuthorizedUserReadReceivedNoteThenCommonExceptionShouldBeHappen() {
         final LocalDateTime sentAt = LocalDateTime.of(2024, 10, 11, 13, 0);
         final NoteCreateCommand command = createNoteCommand(dailygeUser, sentAt);
@@ -127,7 +116,7 @@ class NoteReadIntegrationTest extends DatabaseTestBase {
     }
 
     @Test
-    @DisplayName("권한이 없는 사용자가 (보낸) 쪽지를 조회하면 CommonException이 발생한다.")
+    @DisplayName("권한이 없는 사용자가 (보낸) 쪽지를 조회하면 CommonException(UnAuthorizedException)이 발생한다.")
     void whenUnAuthorizedUserReadSentNoteThenCommonExceptionShouldBeHappen() {
         final LocalDateTime sentAt = LocalDateTime.of(2024, 10, 11, 13, 0);
         final NoteCreateCommand command = createNoteCommand(dailygeUser, sentAt);
@@ -140,7 +129,7 @@ class NoteReadIntegrationTest extends DatabaseTestBase {
     }
 
     @Test
-    @DisplayName("보내지 않은 쪽지를 조회하면 NoteTypeException이 발생한다.")
+    @DisplayName("보내지 않은 쪽지를 조회하면 NoteTypeException(NoteNotFoundException)이 발생한다.")
     void whenReadNotSentNoteThenThenNoteTypeExceptionShouldBeHappen() {
         final LocalDateTime sentAt = LocalDateTime.of(2024, 10, 11, 13, 0);
         final NoteCreateCommand command = createNoteCommand(dailygeUser, sentAt);

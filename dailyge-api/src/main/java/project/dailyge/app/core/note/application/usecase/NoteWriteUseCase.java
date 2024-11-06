@@ -1,5 +1,6 @@
 package project.dailyge.app.core.note.application.usecase;
 
+import static java.time.LocalDateTime.now;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.transaction.annotation.Transactional;
 import project.dailyge.app.common.annotation.ApplicationLayer;
@@ -53,5 +54,33 @@ class NoteWriteUseCase implements NoteWriteService {
         final NoteJpaEntity findNote = noteReadRepository.findById(event.getNoteId())
             .orElseThrow(() -> NoteTypeException.from(NOTE_NOT_FOUND));
         findNote.updateReadStatus(true, event.getCreatedAt());
+    }
+
+    /**
+     * 받은 쪽지함 삭제.
+     */
+    @Override
+    @Transactional
+    public void deleteReceivedNoteById(
+        final DailygeUser dailygeUser,
+        final Long noteId
+    ) {
+        final NoteJpaEntity findNote = noteReadRepository.findReceivedNoteById(dailygeUser.getId(), noteId)
+            .orElseThrow(() -> NoteTypeException.from(NOTE_NOT_FOUND));
+        findNote.delete(dailygeUser.getId(), now());
+    }
+
+    /**
+     * 보낸 쪽지함 삭제.
+     */
+    @Override
+    @Transactional
+    public void deleteSentNoteById(
+        final DailygeUser dailygeUser,
+        final Long noteId
+    ) {
+        final NoteJpaEntity findNote = noteReadRepository.findSentNoteById(dailygeUser.getId(), noteId)
+            .orElseThrow(() -> NoteTypeException.from(NOTE_NOT_FOUND));
+        findNote.delete(dailygeUser.getId(), now());
     }
 }

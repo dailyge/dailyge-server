@@ -41,6 +41,25 @@ CREATE TABLE IF NOT EXISTS tasks
     deleted          BIT                                  NOT NULL COMMENT '삭제 유무'
 ) engine 'InnoDB' COMMENT '할 일';
 
+DROP TABLE IF EXISTS task_recurrences;
+CREATE TABLE IF NOT EXISTS task_recurrences
+(
+    id               BIGINT AUTO_INCREMENT PRIMARY KEY                        NOT NULL COMMENT '반복 일정 ID',
+    recurrence_type  ENUM ('WEEKLY', 'DAILY', 'WEEKDAY', 'MONTHLY', 'CUSTOM') NOT NULL COMMENT '반복 일정 종류',
+    date_pattern     JSON                                                     NOT NULL COMMENT '반복 날짜 패턴 ([1,2,3,4] or [1,31])',
+    title            VARCHAR(50)                                              NOT NULL COMMENT '제목',
+    content          VARCHAR(1500)                                            NOT NULL COMMENT '내용',
+    start_date       TIMESTAMP                                                NOT NULL COMMENT '시작 날짜',
+    end_date         TIMESTAMP                                                NOT NULL COMMENT '끝나는 날짜',
+    created_at       TIMESTAMP                                                NOT NULL COMMENT '생성일',
+    created_by       BIGINT                                                   NULL COMMENT '생성한 사람',
+    last_modified_at TIMESTAMP                                                NOT NULL COMMENT '최종 수정일',
+    last_modified_by BIGINT                                                   NULL COMMENT '최종 수정한 사람',
+    deleted          BIT                                                      NOT NULL COMMENT '삭제 유무'
+) engine = 'InnoDB'
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_general_ci COMMENT '반복 일정 규칙';
+
 DROP TABLE IF EXISTS users;
 CREATE TABLE IF NOT EXISTS users
 (
@@ -205,11 +224,32 @@ CREATE TABLE IF NOT EXISTS holidays
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT ='휴일';
 
+CREATE TABLE IF NOT EXISTS notes
+(
+    id               BIGINT AUTO_INCREMENT PRIMARY KEY NOT NULL COMMENT '쪽지 ID',
+    title            VARCHAR(50)                       NOT NULL COMMENT '제목',
+    content          VARCHAR(200)                      NOT NULL COMMENT '내용',
+    is_read          BOOLEAN                           NOT NULL DEFAULT FALSE COMMENT '읽음 여부',
+    sent_at          TIMESTAMP                         NOT NULL COMMENT '전송 시간',
+    read_at          TIMESTAMP                         NULL COMMENT '읽은 시간',
+    sender_id        BIGINT                            NOT NULL COMMENT '발신자 ID',
+    receiver_id      BIGINT                            NOT NULL COMMENT '수신자 ID',
+    sender_deleted   BOOLEAN                           NOT NULL DEFAULT FALSE COMMENT '발신자 삭제 여부',
+    receiver_deleted BOOLEAN                           NOT NULL DEFAULT FALSE COMMENT '수신자 삭제 여부',
+    created_by       BIGINT                            NOT NULL COMMENT '생성한 사람',
+    created_date     TIMESTAMP                         NOT NULL COMMENT '생성 일시',
+    last_modified_by BIGINT                            NULL COMMENT '최종 수정한 사람',
+    last_modified_at TIMESTAMP                         NULL COMMENT '최종 수정 일시',
+    deleted          BOOLEAN                           NOT NULL DEFAULT FALSE COMMENT '삭제 여부'
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_general_ci COMMENT '쪽지';
+
 DROP TABLE IF EXISTS companies;
 CREATE TABLE IF NOT EXISTS companies
 (
   id               BIGINT AUTO_INCREMENT PRIMARY KEY                                                        NOT NULL COMMENT '회사 ID',
-  company_type     ENUM ('STARTUP', 'UNICORN', 'SMALL_ENTERPRISE', 'MEDIUM_ENTERPRISE', 'LARGE_ENTERPRISE') NULL COMMNET '회사 유형',
+  company_type     ENUM ('STARTUP', 'UNICORN', 'SMALL_ENTERPRISE', 'MEDIUM_ENTERPRISE', 'LARGE_ENTERPRISE') NULL COMMENT '회사 유형',
   name             VARCHAR(255)                                                                             NOT NULL COMMENT '회사 명',
   created_at       TIMESTAMP                                                                                NOT NULL COMMENT '생성일',
   created_by       BIGINT                                                                                   NULL COMMENT '생성한 사람',

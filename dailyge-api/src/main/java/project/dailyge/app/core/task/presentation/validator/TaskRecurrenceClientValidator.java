@@ -46,7 +46,7 @@ public class TaskRecurrenceClientValidator {
     }
 
     private boolean isMonthlyDayPattern(final List<Integer> dayPattern) {
-        return isSorted(dayPattern) && isBetween(dayPattern, FIRST_DAY, LAST_DAY);
+        return dayPattern != null && dayPattern.size() == 1 && isBetween(dayPattern, FIRST_DAY, LAST_DAY);
     }
 
     private boolean isSorted(final List<Integer> dayPattern) {

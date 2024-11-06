@@ -16,7 +16,7 @@ public record TaskLabelCreateRequest(
     @NotBlank(message = "내용은 공백일 수 없습니다.")
     String description,
 
-    @Length(min = 1, max = 6)
+    @Length(min = 6, max = 6)
     @NotNull(message = "색상을 입력해주세요.")
     String color
 ) {

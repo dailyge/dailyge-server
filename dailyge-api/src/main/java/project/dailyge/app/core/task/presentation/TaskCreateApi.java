@@ -51,7 +51,7 @@ public class TaskCreateApi {
         return ApiResponse.from(CREATED, payload);
     }
 
-    @PostMapping(path = {"/task-label"})
+    @PostMapping(path = {"/task-labels"})
     public ApiResponse<TaskLabelCreateResponse> createTaskLabel(
         @LoginUser final DailygeUser dailygeUser,
         @Valid @RequestBody final TaskLabelCreateRequest request

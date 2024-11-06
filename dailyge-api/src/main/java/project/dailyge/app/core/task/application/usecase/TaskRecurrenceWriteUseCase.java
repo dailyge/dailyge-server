@@ -1,7 +1,7 @@
 package project.dailyge.app.core.task.application.usecase;
 
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import project.dailyge.app.common.annotation.ApplicationLayer;
 import project.dailyge.app.core.common.auth.DailygeUser;
 import project.dailyge.app.core.task.application.TaskRecurrenceWriteService;
 import project.dailyge.app.core.task.application.command.TaskRecurrenceCreateCommand;
@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-@Service
+@ApplicationLayer(value = "TaskRecurrenceWriteUseCase")
 public class TaskRecurrenceWriteUseCase implements TaskRecurrenceWriteService {
 
     private final TaskRecurrenceEntityWriteRepository taskRecurrenceEntityWriteRepository;

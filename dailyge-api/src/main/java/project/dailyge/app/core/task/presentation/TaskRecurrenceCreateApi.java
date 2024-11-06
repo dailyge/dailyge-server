@@ -32,7 +32,7 @@ public class TaskRecurrenceCreateApi {
         this.validator = validator;
     }
 
-    @PostMapping(path = "/task-recurrences")
+    @PostMapping(path = {"/task-recurrences"})
     public ApiResponse<TaskRecurrenceIdResponse> createTaskRecurrences(
         @LoginUser final DailygeUser dailygeUser,
         @Valid @RequestBody final TaskRecurrenceCreateRequest request

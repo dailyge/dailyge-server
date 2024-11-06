@@ -25,6 +25,7 @@ pluginManagement {
                 "com.epages:restdocs-api-spec-mockmvc" -> useVersion(extra["restdocsApiSpecVersion"] as String)
                 "org.liquibase.gradle" -> useVersion(extra["liquibaseVersion"] as String)
                 "org.liquibase:liquibase-core" -> useVersion(extra["liquibaseCoreVersion"] as String)
+                "org.jetbrains.kotlinx.kover" -> useVersion(extra["koverVersion"] as String)
             }
         }
     }

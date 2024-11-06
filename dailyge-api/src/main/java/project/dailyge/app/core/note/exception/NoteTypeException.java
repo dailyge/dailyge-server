@@ -2,6 +2,8 @@ package project.dailyge.app.core.note.exception;
 
 import project.dailyge.app.codeandmessage.CodeAndMessage;
 import project.dailyge.app.common.exception.BusinessException;
+import static project.dailyge.app.core.note.exception.NoteCodeAndMessage.NOTE_NOT_FOUND;
+import static project.dailyge.app.core.note.exception.NoteCodeAndMessage.NOTE_UN_RESOLVED_EXCEPTION;
 import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.TASK_UN_RESOLVED_EXCEPTION;
 
 import java.util.HashMap;
@@ -16,6 +18,8 @@ public sealed class NoteTypeException extends BusinessException {
     }
 
     static {
+        factory.put(NOTE_NOT_FOUND, new NoteNotFoundException(NOTE_NOT_FOUND));
+        factory.put(NOTE_UN_RESOLVED_EXCEPTION, new NoteUnResolvedException(NOTE_UN_RESOLVED_EXCEPTION));
     }
 
     public static NoteTypeException from(final CodeAndMessage codeAndMessage) {
@@ -39,6 +43,12 @@ public sealed class NoteTypeException extends BusinessException {
             return findTaskTypeException;
         }
         return factory.get(TASK_UN_RESOLVED_EXCEPTION);
+    }
+
+    private static final class NoteNotFoundException extends NoteTypeException {
+        private NoteNotFoundException(final CodeAndMessage codeAndMessage) {
+            super(codeAndMessage);
+        }
     }
 
     private static final class NoteUnResolvedException extends NoteTypeException {

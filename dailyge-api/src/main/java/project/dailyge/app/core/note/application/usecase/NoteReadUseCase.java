@@ -6,6 +6,8 @@ import project.dailyge.app.common.annotation.ApplicationLayer;
 import project.dailyge.app.common.exception.CommonException;
 import project.dailyge.app.core.common.auth.DailygeUser;
 import project.dailyge.app.core.note.application.NoteReadService;
+import static project.dailyge.app.core.note.exception.NoteCodeAndMessage.NOTE_NOT_FOUND;
+import project.dailyge.app.core.note.exception.NoteTypeException;
 import static project.dailyge.document.common.UuidGenerator.createTimeBasedUUID;
 import static project.dailyge.entity.common.EventType.UPDATE;
 import project.dailyge.entity.note.NoteEntityReadRepository;
@@ -43,6 +45,21 @@ class NoteReadUseCase implements NoteReadService {
             eventPublisher.publishEvent(event);
         }
         return findNote;
+    }
+
+    @Override
+    public NoteJpaEntity findReceivedNoteById(
+        final Long userId,
+        final Long noteId
+    ) {
+        return noteReadRepository.findReceivedNoteById(userId, noteId)
+            .orElseThrow(() -> NoteTypeException.from(NOTE_NOT_FOUND));
+    }
+
+    @Override
+    public NoteJpaEntity findSentNoteById(Long userId, Long noteId) {
+        return noteReadRepository.findSentNoteById(userId, noteId)
+            .orElseThrow(() -> NoteTypeException.from(NOTE_NOT_FOUND));
     }
 
     @Override

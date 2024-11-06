@@ -97,12 +97,10 @@ class NoteReadIntegrationTest extends DatabaseTestBase {
 
         noteReadService.findReceivedNoteById(receivedDailygeUser, newNoteId);
         await().atMost(3, SECONDS)
-            .until(
-                () -> {
-                    final NoteJpaEntity updatedNote = noteReadService.findReceivedNoteById(receivedDailygeUser, newNoteId);
-                    return updatedNote.isRead() && updatedNote.getReadAt() != null;
-                }
-            );
+            .until(() -> {
+                final NoteJpaEntity updatedNote = noteReadService.findReceivedNoteById(receivedDailygeUser, newNoteId);
+                return updatedNote.isRead() && updatedNote.getReadAt() != null;
+            });
 
         final NoteJpaEntity findNote = noteReadService.findReceivedNoteById(receivedDailygeUser, newNoteId);
         assertAll(

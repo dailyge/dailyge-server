@@ -25,7 +25,7 @@ import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippe
 import static project.dailyge.entity.task.TaskColor.GRAY;
 
 @DisplayName("[DocumentationTest] TaskRecurrence 등록 문서화 테스트")
-public class TaskRecurrenceCreateDocumentationTest extends DatabaseTestBase {
+class TaskRecurrenceCreateDocumentationTest extends DatabaseTestBase {
 
     @Autowired
     private TaskWriteService taskWriteService;

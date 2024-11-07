@@ -20,7 +20,12 @@ import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.common.exception.CommonException;
+import project.dailyge.app.core.user.application.UserWriteService;
+import project.dailyge.app.core.user.exception.UserTypeException;
 import project.dailyge.app.core.user.persistence.UserCacheWriteDao;
+import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
+import static project.dailyge.app.core.user.exception.UserCodeAndMessage.USER_NOT_FOUND;
+import static project.dailyge.app.core.user.exception.UserCodeAndMessage.USER_SERVICE_UNAVAILABLE;
 import static project.dailyge.common.configuration.CompressionHelper.compressAsByteArrayWithZstd;
 import static project.dailyge.common.configuration.CompressionHelper.decompressAsObjWithZstd;
 import project.dailyge.core.cache.user.UserCache;
@@ -31,6 +36,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
+import project.dailyge.entity.user.UserJpaEntity;
 
 @DisplayName("[IntegrationTest] 사용자 캐시 조회 통합 테스트(with Blacklist)")
 class UserCacheReadIntegrationTest extends DatabaseTestBase {
@@ -42,6 +48,9 @@ class UserCacheReadIntegrationTest extends DatabaseTestBase {
 
     @Autowired
     private UserCacheReadService userCacheReadService;
+
+    @Autowired
+    private UserWriteService userWriteService;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -106,17 +115,21 @@ class UserCacheReadIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("블랙 리스트로 등록 돼 있다면, 캐시가 존재하더라도 null을 반환한다.")
     void whenRegisteredAsBlackListThenEvenIfUserCacheExistsThenResultShouldBeNull() {
+        final String nickname = "blacklistDailygeUser";
+        final String email = "blacklistDailygeUser@gmail.com";
+        final UserJpaEntity blacklistUser = userWriteService.save(new UserJpaEntity(null, nickname, email, true));
         final UserCache userCache = new UserCache(
-            1L,
-            "dailyge",
-            "dailyge@gmail.com",
+            blacklistUser.getId(),
+            nickname,
+            email,
             "",
             "NORMAL"
         );
         userCacheWriteDao.save(userCache);
         final String blackListKey = String.format("user:blacklist:%d", userCache.getId());
         redisTemplate.opsForValue().set(blackListKey, compressAsByteArrayWithZstd(userCache, objectMapper));
-        Assertions.assertNull(userCacheReadService.findById(userCache.getId()));
+        assertThrowsExactly(UserTypeException.from(USER_SERVICE_UNAVAILABLE).getClass(),
+            () -> userCacheReadService.findById(userCache.getId()));
     }
 
     @Test
@@ -149,7 +162,7 @@ class UserCacheReadIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("캐시가 존재하지 않으면, null이 반환된다.")
     void whenNormalUserAndCacheNotExistsThenResultShouldBeNull() {
-        Assertions.assertNull(userCacheReadService.findById(Long.MAX_VALUE));
+        assertThrowsExactly(UserTypeException.from(USER_NOT_FOUND).getClass(), () -> userCacheReadService.findById(Long.MAX_VALUE));
     }
 
     @Test

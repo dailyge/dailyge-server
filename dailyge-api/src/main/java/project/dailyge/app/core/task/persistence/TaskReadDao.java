@@ -1,15 +1,6 @@
 package project.dailyge.app.core.task.persistence;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Repository;
-import project.dailyge.app.common.exception.CommonException;
-import project.dailyge.entity.task.MonthlyTaskEntityReadRepository;
-import project.dailyge.entity.task.MonthlyTaskJpaEntity;
-import project.dailyge.entity.task.TaskEntityReadRepository;
-import project.dailyge.entity.task.TaskJpaEntity;
-
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -19,6 +10,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
+import project.dailyge.app.common.exception.CommonException;
+import project.dailyge.entity.task.MonthlyTaskEntityReadRepository;
+import project.dailyge.entity.task.MonthlyTaskJpaEntity;
+import project.dailyge.entity.task.TaskEntityReadRepository;
+import project.dailyge.entity.task.TaskJpaEntity;
+
+import project.dailyge.entity.task.TaskLabelEntityReadRepository;
+import project.dailyge.entity.task.TaskLabelJpaEntity;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.DATA_ACCESS_EXCEPTION;
+import static project.dailyge.entity.retrospect.QRetrospectJpaEntity.retrospectJpaEntity;
+import static project.dailyge.entity.task.QMonthlyTaskJpaEntity.monthlyTaskJpaEntity;
+import static project.dailyge.entity.task.QTaskJpaEntity.taskJpaEntity;
+import static project.dailyge.entity.task.QTaskLabelJpaEntity.taskLabelJpaEntity;
 
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.DATA_ACCESS_EXCEPTION;
 import static project.dailyge.entity.retrospect.QRetrospectJpaEntity.retrospectJpaEntity;
@@ -26,7 +33,7 @@ import static project.dailyge.entity.task.QMonthlyTaskJpaEntity.monthlyTaskJpaEn
 import static project.dailyge.entity.task.QTaskJpaEntity.taskJpaEntity;
 
 @Repository
-class TaskReadDao implements TaskEntityReadRepository, MonthlyTaskEntityReadRepository {
+class TaskReadDao implements TaskEntityReadRepository, MonthlyTaskEntityReadRepository, TaskLabelEntityReadRepository {
 
     private final JdbcTemplate jdbcTemplate;
     private final JPAQueryFactory queryFactory;
@@ -248,5 +255,24 @@ class TaskReadDao implements TaskEntityReadRepository, MonthlyTaskEntityReadRepo
             map.put(YearMonth.of(monthlyTask.getYear(), monthlyTask.getMonth()), monthlyTask.getId());
         }
         return map;
+    }
+
+    @Override
+    public Optional<TaskLabelJpaEntity> findTaskLabelById(final Long id) {
+        return Optional.ofNullable(
+            queryFactory.selectFrom(taskLabelJpaEntity)
+                .where(taskLabelJpaEntity.id.eq(id))
+                .fetchOne()
+        );
+    }
+
+    @Override
+    public long countTaskLabel(final Long userId) {
+        final String sql = "SELECT COUNT(*) FROM task_labels WHERE user_id = ?";
+        try {
+            return jdbcTemplate.queryForObject(sql, Long.class, userId);
+        } catch (DataAccessException ex) {
+            throw CommonException.from(ex.getMessage(), DATA_ACCESS_EXCEPTION);
+        }
     }
 }

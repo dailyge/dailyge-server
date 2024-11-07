@@ -13,7 +13,9 @@ import project.dailyge.app.core.task.application.TaskWriteService;
 import project.dailyge.app.core.task.facade.TaskFacade;
 import project.dailyge.app.core.task.presentation.requesst.MonthlyTasksCreateRequest;
 import project.dailyge.app.core.task.presentation.requesst.TaskCreateRequest;
+import project.dailyge.app.core.task.presentation.requesst.TaskLabelCreateRequest;
 import project.dailyge.app.core.task.presentation.response.TaskCreateResponse;
+import project.dailyge.app.core.task.presentation.response.TaskLabelCreateResponse;
 
 @RequestMapping(path = "/api")
 @PresentationLayer(value = "TaskCreateApi")
@@ -46,6 +48,16 @@ public class TaskCreateApi {
     ) {
         final Long newTaskId = taskWriteService.save(dailygeUser, request.toCommand());
         final TaskCreateResponse payload = new TaskCreateResponse(newTaskId);
+        return ApiResponse.from(CREATED, payload);
+    }
+
+    @PostMapping(path = {"/task-labels"})
+    public ApiResponse<TaskLabelCreateResponse> createTaskLabel(
+        @LoginUser final DailygeUser dailygeUser,
+        @Valid @RequestBody final TaskLabelCreateRequest request
+    ) {
+        final Long newTaskLabelId = taskWriteService.saveTaskLabel(dailygeUser, request.toCommand());
+        final TaskLabelCreateResponse payload = new TaskLabelCreateResponse(newTaskLabelId);
         return ApiResponse.from(CREATED, payload);
     }
 }

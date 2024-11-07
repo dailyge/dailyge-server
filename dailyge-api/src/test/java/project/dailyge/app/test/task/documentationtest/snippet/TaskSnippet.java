@@ -9,10 +9,10 @@ import org.springframework.restdocs.request.ParameterDescriptor;
 import org.springframework.restdocs.request.PathParametersSnippet;
 import org.springframework.restdocs.request.QueryParametersSnippet;
 import project.dailyge.app.core.task.presentation.requesst.TaskCreateRequest;
+import project.dailyge.app.core.task.presentation.requesst.TaskLabelCreateRequest;
 import project.dailyge.app.core.task.presentation.requesst.TaskRecurrenceCreateRequest;
 import project.dailyge.app.core.task.presentation.requesst.TaskStatusUpdateRequest;
 import project.dailyge.app.core.task.presentation.requesst.TaskUpdateRequest;
-
 import static java.sql.JDBCType.ARRAY;
 import static javax.xml.xpath.XPathEvaluationResult.XPathResultType.NUMBER;
 import static javax.xml.xpath.XPathEvaluationResult.XPathResultType.STRING;
@@ -102,6 +102,21 @@ public interface TaskSnippet {
 
     FieldDescriptor[] TASK_CREATE_RESPONSE = {
         fieldWithPath("data.taskId").type(NUMBER).description("Task ID"),
+        fieldWithPath("code").type(NUMBER).description("응답 코드"),
+        fieldWithPath("message").type(STRING).description("응답 메시지")
+    };
+
+    FieldDescriptor[] TASK_LABEL_CREATE_REQUEST_FIELDS_DESCRIPTOR = {
+        fieldWithPath("name").description("라벨 명")
+            .attributes(getAttribute(TaskLabelCreateRequest.class, "name")),
+        fieldWithPath("description").description("라벨 설명")
+            .attributes(getAttribute(TaskLabelCreateRequest.class, "description")),
+        fieldWithPath("color").description("색상")
+            .attributes(getAttribute(TaskLabelCreateRequest.class, "color")),
+    };
+
+    FieldDescriptor[] TASK_LABEL_CREATE_RESPONSE_FIELD_DESCRIPTOR = {
+        fieldWithPath("data.taskLabelId").type(NUMBER).description("Task Label ID"),
         fieldWithPath("code").type(NUMBER).description("응답 코드"),
         fieldWithPath("message").type(STRING).description("응답 메시지")
     };
@@ -261,10 +276,13 @@ public interface TaskSnippet {
 
     RequestFieldsSnippet MONTHLY_TASK_CREATE_REQUEST_SNIPPET = requestFields(MONTHLY_TASK_CREATE_REQUEST_FIELDS);
     RequestFieldsSnippet TASK_CREATE_REQUEST_SNIPPET = requestFields(TASK_CREATE_REQUEST_FIELDS);
-    RequestFieldsSnippet TASK_RECURRENCE_CREATE_REQUEST_SNIPPET = requestFields(TASK_RECURRENCE_CREATE_REQUEST_FIELDS);
+
     ResponseFieldsSnippet MONTHLY_TASK_CREATE_RESPONSE_SNIPPET = responseFields(MONTHLY_TASK_CREATE_RESPONSE);
     ResponseFieldsSnippet TASK_CREATE_RESPONSE_SNIPPET = responseFields(TASK_CREATE_RESPONSE);
+    RequestFieldsSnippet TASK_RECURRENCE_CREATE_REQUEST_SNIPPET = requestFields(TASK_RECURRENCE_CREATE_REQUEST_FIELDS);
     ResponseFieldsSnippet TASK_RECURRENCE_CREATE_RESPONSE_SNIPPET = responseFields(TASK_RECURRENCE_CREATE_RESPONSE);
+    RequestFieldsSnippet TASK_LABEL_CREATE_REQUEST_SNIPPET = requestFields(TASK_LABEL_CREATE_REQUEST_FIELDS_DESCRIPTOR);
+    ResponseFieldsSnippet TASK_LABEL_CREATE_RESPONSE_SNIPPET = responseFields(TASK_LABEL_CREATE_RESPONSE_FIELD_DESCRIPTOR);
 
     RequestFieldsSnippet TASK_UPDATE_REQUEST_SNIPPET = requestFields(TASK_UPDATE_REQUEST_FIELDS);
     RequestFieldsSnippet TASK_STATUS_UPDATE_REQUEST_SNIPPET = requestFields(TASK_STATUS_UPDATE_REQUEST_FIELDS);
@@ -276,12 +294,15 @@ public interface TaskSnippet {
     QueryParametersSnippet DATE_SEARCH_QUERY_PARAMETER_SNIPPET = queryParameters(TASKS_SEARCH_DATE_QUERY_PARAMETER_DESCRIPTORS);
     PathParametersSnippet TASK_PATH_PARAMETER_SNIPPET = pathParameters(TASK_ID_PATH_PARAMETER_DESCRIPTORS);
     QueryParametersSnippet TASK_DATE_REQUEST_PARAMETER_SNIPPET = queryParameters(DATE_QUERY_PARAMETER_DESCRIPTORS);
-    QueryParametersSnippet WEEKLY_TASKS_STATISTIC_REQUEST_PARAMETER_SNIPPET = queryParameters(WEEKLY_TASKS_STATISTIC_DATE_QUERY_PARAMETER_DESCRIPTORS);
+    QueryParametersSnippet WEEKLY_TASKS_STATISTIC_REQUEST_PARAMETER_SNIPPET = queryParameters(
+        WEEKLY_TASKS_STATISTIC_DATE_QUERY_PARAMETER_DESCRIPTORS);
     ResponseFieldsSnippet TASK_DETAIL_SEARCH_RESPONSE_SNIPPET = responseFields(TASK_DETAIL_SEARCH_RESPONSE_FIELD_DESCRIPTOR);
     ResponseFieldsSnippet WEEKLY_TASKS_STATISTIC_RESPONSE_SNIPPET = responseFields(WEEKLY_TASKS_STATISTIC_RESPONSE_FIELD_DESCRIPTOR);
-    QueryParametersSnippet MONTHLY_TASKS_STATISTIC_REQUEST_PARAMETER_SNIPPET = queryParameters(MONTHLY_TASKS_STATISTIC_DATE_QUERY_PARAMETER_DESCRIPTORS);
+    QueryParametersSnippet MONTHLY_TASKS_STATISTIC_REQUEST_PARAMETER_SNIPPET = queryParameters(
+        MONTHLY_TASKS_STATISTIC_DATE_QUERY_PARAMETER_DESCRIPTORS);
     ResponseFieldsSnippet MONTHLY_TASKS_STATISTIC_RESPONSE_SNIPPET = responseFields(MONTHLY_TASKS_STATISTIC_RESPONSE_FIELD_DESCRIPTOR);
-    QueryParametersSnippet MONTHLY_WEEK_TASKS_STATISTIC_REQUEST_PARAMETER_SNIPPET = queryParameters(MONTHLY_WEEK_TASKS_STATISTIC_DATE_QUERY_PARAMETER_DESCRIPTORS);
+    QueryParametersSnippet MONTHLY_WEEK_TASKS_STATISTIC_REQUEST_PARAMETER_SNIPPET = queryParameters(
+        MONTHLY_WEEK_TASKS_STATISTIC_DATE_QUERY_PARAMETER_DESCRIPTORS);
     ResponseFieldsSnippet MONTHLY_WEEK_TASKS_STATISTIC_RESPONSE_SNIPPET = responseFields(MONTHLY_WEEK_TASKS_STATISTIC_RESPONSE_FIELD_DESCRIPTOR);
 
     // TaskStatusRead Response Snippet

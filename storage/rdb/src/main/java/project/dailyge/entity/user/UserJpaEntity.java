@@ -53,7 +53,7 @@ public class UserJpaEntity extends BaseEntity {
         final String nickname,
         final String email
     ) {
-        validate(nickname, email);
+        validate(nickname, email, "");
         this.id = id;
         this.nickname = nickname;
         this.email = email;
@@ -80,7 +80,7 @@ public class UserJpaEntity extends BaseEntity {
         final String email,
         final Role role
     ) {
-        validate(nickname, email);
+        validate(nickname, email, "");
         this.id = id;
         this.nickname = nickname;
         this.email = email;

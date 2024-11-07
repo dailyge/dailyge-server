@@ -1,6 +1,8 @@
 package project.dailyge.entity.task;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -16,4 +18,6 @@ public interface MonthlyTaskEntityReadRepository {
     Set<Long> findMonthlyTasksByUserIdAndDates(Long userId, LocalDate startDate, LocalDate endDate);
 
     long countMonthlyTask(Long userId, LocalDate date);
+
+    Map<YearMonth, Long> findMonthlyTasksMapByUserIdAndDates(Long userId, LocalDate startDate, LocalDate endDate);
 }

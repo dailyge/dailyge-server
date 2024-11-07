@@ -1,6 +1,7 @@
 package project.dailyge.app.core.note.application.usecase;
 
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.transaction.annotation.Transactional;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
 import project.dailyge.app.common.annotation.ApplicationLayer;
 import project.dailyge.app.common.exception.CommonException;
@@ -31,13 +32,14 @@ class NoteReadUseCase implements NoteReadService {
     }
 
     @Override
-    public NoteJpaEntity findById(
+    @Transactional(readOnly = true)
+    public NoteJpaEntity findReceivedNoteById(
         final DailygeUser dailygeUser,
         final Long noteId
     ) {
-        final NoteJpaEntity findNote = noteReadRepository.findById(noteId)
-            .orElseThrow();
-        if (!findNote.validateAuth(dailygeUser.getId())) {
+        final NoteJpaEntity findNote = noteReadRepository.findReceivedNoteById(noteId)
+            .orElseThrow(() -> NoteTypeException.from(NOTE_NOT_FOUND));
+        if (!findNote.validateReceiver(dailygeUser.getUserId())) {
             throw CommonException.from(UN_AUTHORIZED);
         }
         if (findNote.readByReceiver(dailygeUser.getId())) {
@@ -48,18 +50,16 @@ class NoteReadUseCase implements NoteReadService {
     }
 
     @Override
-    public NoteJpaEntity findReceivedNoteById(
-        final Long userId,
+    public NoteJpaEntity findSentNoteById(
+        final DailygeUser dailygeUser,
         final Long noteId
     ) {
-        return noteReadRepository.findReceivedNoteById(userId, noteId)
+        final NoteJpaEntity findNote = noteReadRepository.findById(noteId)
             .orElseThrow(() -> NoteTypeException.from(NOTE_NOT_FOUND));
-    }
-
-    @Override
-    public NoteJpaEntity findSentNoteById(Long userId, Long noteId) {
-        return noteReadRepository.findSentNoteById(userId, noteId)
-            .orElseThrow(() -> NoteTypeException.from(NOTE_NOT_FOUND));
+        if (!findNote.validateSender(dailygeUser.getUserId())) {
+            throw CommonException.from(UN_AUTHORIZED);
+        }
+        return findNote;
     }
 
     @Override

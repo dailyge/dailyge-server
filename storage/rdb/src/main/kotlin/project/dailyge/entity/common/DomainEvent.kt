@@ -10,6 +10,10 @@ abstract class DomainEvent(
     val publishCount: Int = 0,
     val createdAt: LocalDateTime,
 ) {
+    fun isType(eventType: EventType): Boolean {
+        return this.eventType == eventType
+    }
+
     companion object {
         const val INVALID_PUBLISHER_ID_ERROR_MESSAGE = "올바른 Publisher Id를 입력해주세요."
         const val INVALID_EVENT_ID_ERROR_MESSAGE = "올바른 Event Id를 입력해주세요."

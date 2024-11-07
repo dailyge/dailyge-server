@@ -30,8 +30,11 @@ public class UserWriteUseCase implements UserWriteService {
 
     @Override
     @Transactional
-    public Long save(final String email) {
-        return userWriteRepository.save(email);
+    public Long save(
+        final String email,
+        final String nickname
+    ) {
+        return userWriteRepository.save(email, nickname);
     }
 
     @Override

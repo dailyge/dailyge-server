@@ -28,8 +28,11 @@ public class UserWriteDao implements UserEntityWriteRepository {
     }
 
     @Override
-    public Long save(final String email) {
-        final UserJpaEntity newUser = new UserJpaEntity(null, email, email);
+    public Long save(
+        final String email,
+        final String nickname
+    ) {
+        final UserJpaEntity newUser = new UserJpaEntity(null, nickname, email);
         entityManager.persist(newUser);
         return newUser.getId();
     }
@@ -45,8 +48,8 @@ public class UserWriteDao implements UserEntityWriteRepository {
         final String email,
         final String nickname
     ) {
-        final String sql = "INSERT INTO users (id, nickname, email, created_at, deleted, user_role, profile_image_url) "
-            + "VALUES (:id, :nickname, :email, :created_at, :deleted, :user_role, :profile_image_url)";
+        final String sql = "INSERT INTO users (id, nickname, email, created_at, deleted, user_role, profile_image_url, is_blacklist ) "
+            + "VALUES (:id, :nickname, :email, :created_at, :deleted, :user_role, :profile_image_url, :is_blacklist)";
         final Map<String, Object> parameters = new HashMap<>();
         parameters.put("id", userId);
         parameters.put("nickname", nickname);
@@ -55,6 +58,7 @@ public class UserWriteDao implements UserEntityWriteRepository {
         parameters.put("deleted", 0);
         parameters.put("user_role", "NORMAL");
         parameters.put("profile_image_url", "");
+        parameters.put("is_blacklist", false);
         jdbcTemplate.update(sql, new MapSqlParameterSource(parameters));
         return new UserJpaEntity(userId, nickname, email, Role.NORMAL);
     }

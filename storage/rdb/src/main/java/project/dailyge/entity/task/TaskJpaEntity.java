@@ -63,9 +63,6 @@ public class TaskJpaEntity extends BaseEntity {
     @Column(name = "task_recurrence_id")
     private Long taskRecurrenceId;
 
-    @Column(name = "task_recurrence_id")
-    private Long taskRecurrenceId;
-
     protected TaskJpaEntity() {
     }
 

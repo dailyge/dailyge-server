@@ -66,7 +66,7 @@ public class UserJpaEntity extends BaseEntity {
         final String email,
         final LocalDateTime createdAt
     ) {
-        validate(nickname, email);
+        validate(nickname, email, profileImageUrl);
         this.id = id;
         this.nickname = nickname;
         this.email = email;
@@ -130,20 +130,9 @@ public class UserJpaEntity extends BaseEntity {
         final String email,
         final String profileImageUrl
     ) {
-        if (MAX_PROFILE_IMAGE_URL_LENGTH < profileImageUrl.length()) {
-            throw new IllegalArgumentException(OVER_MAX_PROFILE_IMAGE_URL_ERROR_MESSAGE);
-        }
-        validate(nickname, email);
-    }
-
-    private void validate(
-        final String nickname,
-        final String email
-    ) {
         validateNickname(nickname);
-        if (!Pattern.matches(EMAIL_PATTERN, email)) {
-            throw new IllegalArgumentException(INVALID_EMAIL_ERROR_MESSAGE);
-        }
+        validateEmail(email);
+        validateProfile(profileImageUrl);
     }
 
     public void updateNickname(final String nickname) {
@@ -155,13 +144,24 @@ public class UserJpaEntity extends BaseEntity {
         if (MAX_NICKNAME_LENGTH < nickname.length()) {
             throw new IllegalArgumentException(OVER_MAX_NICKNAME_LENGTH_ERROR_MESSAGE);
         }
-        if (!isValidNickname(nickname)) {
+        if (!NICKNAME_PATTERN.matcher(nickname).matches()) {
             throw new IllegalArgumentException("올바른 닉네임을 입력해주세요.");
         }
     }
 
-    private boolean isValidNickname(final String nickname) {
-        return NICKNAME_PATTERN.matcher(nickname).matches();
+    private void validateEmail(final String email) {
+        if (!Pattern.matches(EMAIL_PATTERN, email)) {
+            throw new IllegalArgumentException(INVALID_EMAIL_ERROR_MESSAGE);
+        }
+    }
+
+    private void validateProfile(final String profileImageUrl) {
+        if (profileImageUrl == null || profileImageUrl.isBlank()) {
+            return;
+        }
+        if (MAX_PROFILE_IMAGE_URL_LENGTH < profileImageUrl.length()) {
+            throw new IllegalArgumentException(OVER_MAX_PROFILE_IMAGE_URL_ERROR_MESSAGE);
+        }
     }
 
     public void delete() {

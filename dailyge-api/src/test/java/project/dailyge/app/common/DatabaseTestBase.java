@@ -31,6 +31,7 @@ import project.dailyge.app.core.common.auth.DailygeUser;
 import project.dailyge.app.core.user.application.UserWriteService;
 import project.dailyge.app.core.user.persistence.UserWriteDao;
 import static project.dailyge.app.test.user.fixture.UserFixture.EMAIL;
+import static project.dailyge.app.test.user.fixture.UserFixture.NICKNAME;
 import static project.dailyge.app.test.user.fixture.UserFixture.createUser;
 import project.dailyge.core.cache.user.UserCache;
 import project.dailyge.core.cache.user.UserCacheWriteService;
@@ -105,7 +106,7 @@ public abstract class DatabaseTestBase {
 
     @Transactional
     public void initBasicUser() {
-        newUser = persist(createUser(null, EMAIL, EMAIL));
+        newUser = persist(createUser(null, NICKNAME, EMAIL));
         this.dailygeUser = new DailygeUser(newUser.getId(), NORMAL);
     }
 

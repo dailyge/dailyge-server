@@ -30,7 +30,7 @@ public class UserUpdateApi {
         @Valid @RequestBody final UserUpdateRequest request
     ) {
         dailygeUser.validateAuth(userId);
-        userFacade.updateUser(userId, request.toCommand());
+        userFacade.update(dailygeUser, request.toCommand());
         return ApiResponse.from(OK);
     }
 }

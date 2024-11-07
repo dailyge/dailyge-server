@@ -1,4 +1,4 @@
-package project.dailyge.app.core.user.application.usecase;
+package project.dailyge.app.core.user.external.cache;
 
 import project.dailyge.app.common.annotation.ExternalLayer;
 import project.dailyge.core.cache.user.UserCache;

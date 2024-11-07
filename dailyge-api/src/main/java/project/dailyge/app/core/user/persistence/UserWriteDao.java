@@ -1,62 +1,62 @@
 package project.dailyge.app.core.user.persistence;
 
 import jakarta.persistence.EntityManager;
-import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.DATA_ACCESS_EXCEPTION;
-import project.dailyge.app.common.exception.CommonException;
+import project.dailyge.entity.user.Role;
 import project.dailyge.entity.user.UserEntityWriteRepository;
 import project.dailyge.entity.user.UserJpaEntity;
 
-import java.sql.PreparedStatement;
-import java.sql.Statement;
+import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.Map;
 
 @Repository
 public class UserWriteDao implements UserEntityWriteRepository {
 
-    private static final String USER_SAVE_FAILED_MESSAGE = "사용자 Sequence를 저장하지 못했습니다.";
     private final EntityManager entityManager;
-    private final JdbcTemplate jdbcTemplate;
+    private final NamedParameterJdbcTemplate jdbcTemplate;
 
     public UserWriteDao(
         final EntityManager entityManager,
-        final JdbcTemplate jdbcTemplate
+        final NamedParameterJdbcTemplate namedParameterJdbcTemplate
     ) {
         this.entityManager = entityManager;
-        this.jdbcTemplate = jdbcTemplate;
+        this.jdbcTemplate = namedParameterJdbcTemplate;
     }
 
     @Override
     public Long save(final String email) {
-        final String sql = "INSERT INTO user_sequence (email, executed) VALUES (?, ?)";
-        final KeyHolder keyHolder = new GeneratedKeyHolder();
-
-        try {
-            jdbcTemplate.update(connection -> {
-                final PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-                ps.setString(1, email);
-                ps.setBoolean(2, false);
-                return ps;
-            }, keyHolder);
-
-            final Number number = keyHolder.getKey();
-            if (number == null) {
-                throw CommonException.from(USER_SAVE_FAILED_MESSAGE, DATA_ACCESS_EXCEPTION);
-            }
-            return number.longValue();
-        } catch (DataAccessException ex) {
-            throw CommonException.from(ex.getMessage(), DATA_ACCESS_EXCEPTION);
-        }
+        final UserJpaEntity newUser = new UserJpaEntity(null, email, email);
+        entityManager.persist(newUser);
+        return newUser.getId();
     }
 
     @Override
     public UserJpaEntity save(final UserJpaEntity user) {
         entityManager.persist(user);
         return user;
+    }
+
+    public UserJpaEntity insertUser(
+        final Long userId,
+        final String email,
+        final String nickname
+    ) {
+        final String sql = "INSERT INTO users (id, nickname, email, created_at, deleted, user_role, profile_image_url) " +
+            "VALUES (:id, :nickname, :email, :created_at, :deleted, :user_role, :profile_image_url)";
+        final Map<String, Object> parameters = new HashMap<>();
+        parameters.put("id", userId);
+        parameters.put("nickname", nickname);
+        parameters.put("email", email);
+        parameters.put("created_at", new Timestamp(System.currentTimeMillis()));
+        parameters.put("deleted", 0);
+        parameters.put("user_role", "NORMAL");
+        parameters.put("profile_image_url", "");
+        jdbcTemplate.update(sql, new MapSqlParameterSource(parameters));
+        return new UserJpaEntity(userId, nickname, email, Role.NORMAL);
     }
 
     /**

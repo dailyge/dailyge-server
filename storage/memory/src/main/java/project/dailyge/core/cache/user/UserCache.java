@@ -41,6 +41,9 @@ public class UserCache implements Serializable {
     }
 
     public String getProfileImageUrl() {
+        if (profileImageUrl == null) {
+            return "";
+        }
         return profileImageUrl;
     }
 

@@ -5,7 +5,7 @@ import project.dailyge.app.core.user.application.command.UserUpdateCommand;
 import project.dailyge.entity.user.UserJpaEntity;
 
 public interface UserWriteService {
-    Long save(String email);
+    Long save(String email, String nickname);
 
     UserJpaEntity save(UserJpaEntity user);
 

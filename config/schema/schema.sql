@@ -49,6 +49,7 @@ CREATE TABLE IF NOT EXISTS users
     nickname          VARCHAR(20)              NOT NULL COMMENT '닉네임',
     profile_image_url VARCHAR(2000)            NULL COMMENT '사용자 이미지',
     user_role         ENUM ('NORMAL', 'ADMIN') NOT NULL COMMENT '사용자 권한',
+    is_blacklist      BOOLEAN                  NULL COMMNET '블랙리스트 여부',
     created_at        TIMESTAMP                NOT NULL COMMENT '생성일',
     created_by        BIGINT                   NULL COMMENT '생성한 사람',
     last_modified_at  TIMESTAMP                NULL COMMENT '최종 수정일',

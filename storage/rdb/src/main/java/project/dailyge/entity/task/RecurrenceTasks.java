@@ -116,13 +116,17 @@ public record RecurrenceTasks(
         return monthlySchedules;
     }
 
-    private int getMaxDayForMonth(final int recurrenceDay, final LocalDateTime currentDate) {
+    private int getMaxDayForMonth(
+        final int recurrenceDay,
+        final LocalDateTime currentDate
+    ) {
         final YearMonth yearMonth = YearMonth.of(currentDate.getYear(), currentDate.getMonth());
         final int lastDayOfMonth = yearMonth.lengthOfMonth();
         return Math.min(recurrenceDay, lastDayOfMonth);
     }
 
     private boolean isWithinRange(final LocalDateTime scheduleDate) {
-        return !scheduleDate.isBefore(taskRecurrence.getStartDate()) && !scheduleDate.isAfter(taskRecurrence.getEndDate());
+        return !scheduleDate.isBefore(taskRecurrence.getStartDate())
+            && !scheduleDate.isAfter(taskRecurrence.getEndDate());
     }
 }

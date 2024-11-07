@@ -1,8 +1,9 @@
 package project.dailyge.entity.applicationhistory;
 
+import static project.dailyge.entity.applicationhistory.ApplicationStatus.BEFORE_SUBMISSION;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import static project.dailyge.entity.applicationhistory.ApplicationStatus.BEFORE_SUBMISSION;
 
 public final class ApplicationHistoryFixture {
 

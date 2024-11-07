@@ -18,6 +18,7 @@ import project.dailyge.entity.task.MonthlyTaskEntityReadRepository;
 import project.dailyge.entity.task.MonthlyTaskJpaEntity;
 import project.dailyge.entity.task.TaskEntityReadRepository;
 import project.dailyge.entity.task.TaskJpaEntity;
+
 import project.dailyge.entity.task.TaskLabelEntityReadRepository;
 import project.dailyge.entity.task.TaskLabelJpaEntity;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.DATA_ACCESS_EXCEPTION;
@@ -25,6 +26,11 @@ import static project.dailyge.entity.retrospect.QRetrospectJpaEntity.retrospectJ
 import static project.dailyge.entity.task.QMonthlyTaskJpaEntity.monthlyTaskJpaEntity;
 import static project.dailyge.entity.task.QTaskJpaEntity.taskJpaEntity;
 import static project.dailyge.entity.task.QTaskLabelJpaEntity.taskLabelJpaEntity;
+
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.DATA_ACCESS_EXCEPTION;
+import static project.dailyge.entity.retrospect.QRetrospectJpaEntity.retrospectJpaEntity;
+import static project.dailyge.entity.task.QMonthlyTaskJpaEntity.monthlyTaskJpaEntity;
+import static project.dailyge.entity.task.QTaskJpaEntity.taskJpaEntity;
 
 @Repository
 class TaskReadDao implements TaskEntityReadRepository, MonthlyTaskEntityReadRepository, TaskLabelEntityReadRepository {

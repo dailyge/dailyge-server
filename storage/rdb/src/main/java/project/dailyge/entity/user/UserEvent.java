@@ -88,10 +88,6 @@ public class UserEvent extends DomainEvent {
         return getPublishCount() >= maxPublishCount;
     }
 
-    public boolean isType(final EventType eventType) {
-        return getEventType().equals(eventType);
-    }
-
     @Override
     public String toString() {
         return String.format(

@@ -93,7 +93,7 @@ tasks.withType<JavaCompile>().configureEach {
 }
 
 tasks.named("jib") {
-    dependsOn("copySubmoduleConfig", "openapi3", "copyDocument")
+    dependsOn("copySubmoduleConfig", "openapi3")
     finalizedBy("authOpenApiSpec")
     enabled = true
 }

@@ -29,7 +29,9 @@ import static project.dailyge.app.common.RestAssureConfig.initObjectMapper;
 import static project.dailyge.app.common.RestAssureConfig.initSpecificationConfig;
 import project.dailyge.app.core.common.auth.DailygeUser;
 import project.dailyge.app.core.user.application.UserWriteService;
+import project.dailyge.app.core.user.persistence.UserWriteDao;
 import static project.dailyge.app.test.user.fixture.UserFixture.EMAIL;
+import static project.dailyge.app.test.user.fixture.UserFixture.NICKNAME;
 import static project.dailyge.app.test.user.fixture.UserFixture.createUser;
 import project.dailyge.core.cache.user.UserCache;
 import project.dailyge.core.cache.user.UserCacheWriteService;
@@ -70,6 +72,9 @@ public abstract class DatabaseTestBase {
     private UserWriteService userWriteService;
 
     @Autowired
+    private UserWriteDao userWriteDao;
+
+    @Autowired
     private UserCacheWriteService userCacheWriteService;
 
     protected RequestSpecification specification;
@@ -101,13 +106,13 @@ public abstract class DatabaseTestBase {
 
     @Transactional
     public void initBasicUser() {
-        newUser = persist(createUser(userWriteService.save(EMAIL)));
+        newUser = persist(createUser(null, NICKNAME, EMAIL));
         this.dailygeUser = new DailygeUser(newUser.getId(), NORMAL);
     }
 
     @Transactional
     public void initNoteReceivedUser() {
-        noteReceivedDailygeUser = persist(new UserJpaEntity(300L, "kmularise", "kmularise@gmail.com"));
+        noteReceivedDailygeUser = save(new UserJpaEntity(300L, "kmularise", "kmularise@gmail.com"));
         this.receivedDailygeUser = new DailygeUser(noteReceivedDailygeUser.getId(), NORMAL);
     }
 
@@ -134,9 +139,22 @@ public abstract class DatabaseTestBase {
     @Transactional
     protected UserJpaEntity persist(final UserJpaEntity user) {
         userWriteService.save(user);
-
         final UserCache userCache = new UserCache(
             user.getId(),
+            user.getNickname(),
+            user.getEmail(),
+            user.getProfileImageUrl(),
+            user.getRoleAsString()
+        );
+        userCacheWriteService.save(userCache);
+        return user;
+    }
+
+    @Transactional
+    protected UserJpaEntity save(final UserJpaEntity user) {
+        final UserJpaEntity newUser = userWriteDao.insertUser(user.getId(), user.getEmail(), user.getNickname());
+        final UserCache userCache = new UserCache(
+            newUser.getId(),
             user.getNickname(),
             user.getEmail(),
             user.getProfileImageUrl(),

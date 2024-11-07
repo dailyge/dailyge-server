@@ -2,7 +2,9 @@ package project.dailyge.app.core.user.application.usecase;
 
 import org.springframework.transaction.annotation.Transactional;
 import project.dailyge.app.common.annotation.ApplicationLayer;
+import project.dailyge.app.core.common.auth.DailygeUser;
 import project.dailyge.app.core.user.application.UserWriteService;
+import project.dailyge.app.core.user.application.command.UserUpdateCommand;
 import static project.dailyge.app.core.user.exception.UserCodeAndMessage.DUPLICATED_EMAIL;
 import static project.dailyge.app.core.user.exception.UserCodeAndMessage.USER_NOT_FOUND;
 import project.dailyge.app.core.user.exception.UserTypeException;
@@ -40,6 +42,17 @@ public class UserWriteUseCase implements UserWriteService {
             throw UserTypeException.from(DUPLICATED_EMAIL);
         }
         return userWriteRepository.save(user);
+    }
+
+    @Override
+    @Transactional
+    public void update(
+        final DailygeUser dailygeUser,
+        final UserUpdateCommand command
+    ) {
+        final UserJpaEntity findUser = userReadRepository.findActiveUserById(dailygeUser.getUserId())
+            .orElseThrow(() -> UserTypeException.from(USER_NOT_FOUND));
+        findUser.updateNickname(command.nickname());
     }
 
     @Override

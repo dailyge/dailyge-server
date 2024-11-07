@@ -1,11 +1,11 @@
-package project.dailyge.app.core.user.application.usecase;
+package project.dailyge.app.core.user.external.cache;
 
 import project.dailyge.app.common.annotation.ApplicationLayer;
 import project.dailyge.core.cache.user.UserCache;
 import project.dailyge.core.cache.user.UserCacheWriteRepository;
 import project.dailyge.core.cache.user.UserCacheWriteService;
 
-@ApplicationLayer(value = "UserCacheWriteService")
+@ApplicationLayer(value = "UserCacheWriteUseCase")
 public class UserCacheWriteUseCase implements UserCacheWriteService {
 
     private final UserCacheWriteRepository userWriteRepository;
@@ -17,11 +17,6 @@ public class UserCacheWriteUseCase implements UserCacheWriteService {
     @Override
     public void save(final UserCache userCache) {
         userWriteRepository.save(userCache);
-    }
-
-    @Override
-    public void refreshExpirationDate(final Long userId) {
-        userWriteRepository.refreshExpirationDate(userId);
     }
 
     @Override

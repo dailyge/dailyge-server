@@ -3,6 +3,7 @@ package project.dailyge.app.core.user.facade;
 import project.dailyge.app.common.annotation.FacadeLayer;
 import project.dailyge.app.common.auth.TokenProvider;
 import project.dailyge.app.core.common.auth.DailygeToken;
+import project.dailyge.app.core.common.auth.DailygeUser;
 import project.dailyge.app.core.user.application.UserReadService;
 import project.dailyge.app.core.user.application.UserWriteService;
 import project.dailyge.app.core.user.application.command.UserUpdateCommand;
@@ -120,25 +121,19 @@ public class UserFacade {
         userCacheWriteService.save(userCache);
     }
 
-    public void updateCache(
-        final Long userId,
-        final String nickname
+    public void update(
+        final DailygeUser dailygeUser,
+        final UserUpdateCommand command
     ) {
-        final UserCache userCache = userCacheReadService.findById(userId);
+        userWriteService.update(dailygeUser, command);
+        final UserCache userCache = userCacheReadService.findById(dailygeUser.getUserId());
         final UserCache updateUserCache = new UserCache(
-            userId,
-            nickname != null ? nickname : userCache.getNickname(),
+            dailygeUser.getUserId(),
+            command.nickname() != null ? command.nickname() : userCache.getNickname(),
             userCache.getEmail(),
             userCache.getProfileImageUrl(),
             userCache.getRole()
         );
         userCacheWriteService.save(updateUserCache);
-    }
-
-    public void updateUser(
-        final Long userId,
-        final UserUpdateCommand command
-    ) {
-        updateCache(userId, command.nickname());
     }
 }

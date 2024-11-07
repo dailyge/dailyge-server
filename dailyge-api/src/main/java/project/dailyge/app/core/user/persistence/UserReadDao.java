@@ -68,7 +68,7 @@ public class UserReadDao implements UserEntityReadRepository {
 
     @Override
     public Long findUserIdByEmail(final String email) {
-        final String sql = "SELECT id FROM user_sequence WHERE email = ?";
+        final String sql = "SELECT id FROM users WHERE email = ?";
         try {
             return jdbcTemplate.queryForObject(sql, Long.class, email);
         } catch (DataAccessException ex) {
@@ -78,7 +78,7 @@ public class UserReadDao implements UserEntityReadRepository {
 
     @Override
     public String findEmailById(final Long userId) {
-        final String sql = "SELECT email FROM user_sequence WHERE id = ?";
+        final String sql = "SELECT email FROM users WHERE id = ?";
         try {
             return jdbcTemplate.queryForObject(sql, String.class, userId);
         } catch (DataAccessException ex) {

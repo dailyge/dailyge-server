@@ -51,3 +51,6 @@ index.html
 
 ### .xml ###
 *.xml
+
+### .env ###
+.env

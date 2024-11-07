@@ -5,21 +5,21 @@ if (env != null && (skipJib != null && skipJib == "false")) {
     def ecrUri = env == "prod" ? System.getenv("PROD_ECR_URI") : System.getenv("DEV_ECR_URI")
     def port = env == "prod" ? "8080" : "8081"
     def profile = env == "prod" ? "prod" : "dev"
-    def label = "dailyge-api-${profile}"
+    def label = "dailyge-api-${profile}".toString()
     def imageTag = System.getenv("IMAGE_TAG")
     jib {
         from {
             image = "openjdk:17-jdk-slim"
         }
         to {
-            image = "${ecrUri}:${imageTag}"
+            image = "${ecrUri}:${imageTag}".toString()
             credHelper = "ecr-login"
         }
         container {
             ports = [port]
             labels = [server: label]
             jvmFlags = [
-                    "-Dspring.profiles.active=${profile}",
+                    "-Dspring.profiles.active=${profile}".toString(),
                     "-Dfile.encoding=UTF-8",
                     "-Dlog4j2.formatMsgNoLookups=true",
                     "-XX:+PrintFlagsFinal",

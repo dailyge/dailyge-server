@@ -9,8 +9,8 @@ public final class UserFixture {
     }
 
     public static final long ID = 1L;
-    public static final String NICKNAME = "test";
-    public static final String EMAIL = "test@gmail.com";
+    public static final String NICKNAME = "dailyge";
+    public static final String EMAIL = "dailyge@gmail.com";
     public static final String PROFILE_IMAGE_URL = "https://shorturl.at/VbXmh";
     public static final UserJpaEntity user = new UserJpaEntity(
         ID,

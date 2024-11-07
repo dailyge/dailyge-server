@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
-
 @Entity(name = "task_recurrences")
 public class TaskRecurrenceJpaEntity extends BaseEntity {
 
@@ -56,6 +55,22 @@ public class TaskRecurrenceJpaEntity extends BaseEntity {
         final LocalDateTime endDate
     ) {
         this.id = id;
+        this.recurrenceType = recurrenceType;
+        this.datePattern = datePattern;
+        this.title = title;
+        this.content = content;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
+    public TaskRecurrenceJpaEntity(
+        final RecurrenceType recurrenceType,
+        final List<Integer> datePattern,
+        final String title,
+        final String content,
+        final LocalDateTime startDate,
+        final LocalDateTime endDate
+    ) {
         this.recurrenceType = recurrenceType;
         this.datePattern = datePattern;
         this.title = title;

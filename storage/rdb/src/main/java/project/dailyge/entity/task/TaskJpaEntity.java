@@ -60,6 +60,9 @@ public class TaskJpaEntity extends BaseEntity {
     @Column(name = "task_label_id")
     private Long taskLabelId;
 
+    @Column(name = "task_recurrence_id")
+    private Long taskRecurrenceId;
+
     protected TaskJpaEntity() {
     }
 
@@ -72,6 +75,7 @@ public class TaskJpaEntity extends BaseEntity {
     ) {
         this(title, content, date, status, null, null, userId);
     }
+
 
     public TaskJpaEntity(
         final String title,
@@ -96,6 +100,30 @@ public class TaskJpaEntity extends BaseEntity {
     }
 
     public TaskJpaEntity(
+        final String title,
+        final String content,
+        final LocalDate date,
+        final TaskStatus status,
+        final TaskColor color,
+        final Long monthlyTaskId,
+        final Long userId,
+        final Long taskRecurrenceId
+    ) {
+        validate(title, content, date);
+        this.title = title;
+        this.content = content;
+        this.status = status;
+        this.date = date;
+        this.year = date.getYear();
+        this.month = date.getMonthValue();
+        this.color = color;
+        this.monthlyTaskId = monthlyTaskId;
+        this.userId = userId;
+        this.taskRecurrenceId = taskRecurrenceId;
+        init(LocalDateTime.now(), userId, null, null, false);
+    }
+
+    public TaskJpaEntity(
         final Long id,
         final String title,
         final String content,
@@ -103,6 +131,7 @@ public class TaskJpaEntity extends BaseEntity {
         final TaskStatus status,
         final Long monthlyTaskId,
         final Long userId,
+        final Long taskRecurrenceId,
         final LocalDateTime createdAt,
         final Long createdBy,
         final LocalDateTime lastModifiedAt,
@@ -119,6 +148,7 @@ public class TaskJpaEntity extends BaseEntity {
         this.status = status;
         this.monthlyTaskId = monthlyTaskId;
         this.userId = userId;
+        this.taskRecurrenceId = taskRecurrenceId;
         init(createdAt, createdBy, lastModifiedAt, lastModifiedBy, deleted);
     }
 

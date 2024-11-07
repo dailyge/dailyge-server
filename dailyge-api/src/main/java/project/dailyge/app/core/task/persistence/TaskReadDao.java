@@ -3,8 +3,11 @@ package project.dailyge.app.core.task.persistence;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.YearMonth;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import org.springframework.dao.DataAccessException;
@@ -216,6 +219,36 @@ class TaskReadDao implements TaskEntityReadRepository, MonthlyTaskEntityReadRepo
         } catch (DataAccessException ex) {
             throw CommonException.from(ex.getMessage(), DATA_ACCESS_EXCEPTION);
         }
+    }
+
+    @Override
+    public Map<YearMonth, Long> findMonthlyTasksMapByUserIdAndDates(
+        final Long userId,
+        final LocalDate startDate,
+        final LocalDate endDate
+    ) {
+        final int startYear = startDate.getYear();
+        final int startMonth = startDate.getMonthValue();
+        final int endYear = endDate.getYear();
+        final int endMonth = endDate.getMonthValue();
+        final Map<YearMonth, Long> map = new HashMap<>();
+        final List<MonthlyTaskJpaEntity> monthlyTasks = queryFactory.select(monthlyTaskJpaEntity)
+            .from(monthlyTaskJpaEntity)
+            .where(
+                monthlyTaskJpaEntity.userId.eq(userId),
+                monthlyTaskJpaEntity.year.eq(startYear)
+                    .and(monthlyTaskJpaEntity.month.goe(startMonth))
+                    .or(monthlyTaskJpaEntity.year.gt(startYear)),
+                monthlyTaskJpaEntity.year.eq(endYear)
+                    .and(monthlyTaskJpaEntity.month.loe(endMonth))
+                    .or(monthlyTaskJpaEntity.year.lt(endYear)),
+                monthlyTaskJpaEntity._deleted.eq(false)
+            )
+            .fetch();
+        for (final MonthlyTaskJpaEntity monthlyTask : monthlyTasks) {
+            map.put(YearMonth.of(monthlyTask.getYear(), monthlyTask.getMonth()), monthlyTask.getId());
+        }
+        return map;
     }
 
     @Override

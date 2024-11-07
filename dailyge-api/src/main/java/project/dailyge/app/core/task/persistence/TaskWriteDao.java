@@ -49,4 +49,11 @@ class TaskWriteDao implements TaskEntityWriteRepository, MonthlyTaskEntityWriteR
         entityManager.persist(taskLabel);
         return taskLabel.getId();
     }
+
+    @Override
+    public void saveBulks(final List<TaskJpaEntity> tasks) {
+        for (final TaskJpaEntity task : tasks) {
+            entityManager.persist(task);
+        }
+    }
 }

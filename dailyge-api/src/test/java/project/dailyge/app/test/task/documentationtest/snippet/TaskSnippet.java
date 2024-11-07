@@ -1,31 +1,33 @@
 package project.dailyge.app.test.task.documentationtest.snippet;
 
-import static java.sql.JDBCType.ARRAY;
-import static javax.xml.xpath.XPathEvaluationResult.XPathResultType.NUMBER;
-import static javax.xml.xpath.XPathEvaluationResult.XPathResultType.STRING;
 import org.springframework.restdocs.cookies.CookieDescriptor;
-import static org.springframework.restdocs.cookies.CookieDocumentation.cookieWithName;
-import static org.springframework.restdocs.cookies.CookieDocumentation.requestCookies;
 import org.springframework.restdocs.cookies.RequestCookiesSnippet;
 import org.springframework.restdocs.payload.FieldDescriptor;
-import static org.springframework.restdocs.payload.JsonFieldType.NULL;
-import static org.springframework.restdocs.payload.JsonFieldType.OBJECT;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.restdocs.request.ParameterDescriptor;
 import org.springframework.restdocs.request.PathParametersSnippet;
 import org.springframework.restdocs.request.QueryParametersSnippet;
+import project.dailyge.app.core.task.presentation.requesst.TaskCreateRequest;
+import project.dailyge.app.core.task.presentation.requesst.TaskRecurrenceCreateRequest;
+import project.dailyge.app.core.task.presentation.requesst.TaskStatusUpdateRequest;
+import project.dailyge.app.core.task.presentation.requesst.TaskUpdateRequest;
+
+import static java.sql.JDBCType.ARRAY;
+import static javax.xml.xpath.XPathEvaluationResult.XPathResultType.NUMBER;
+import static javax.xml.xpath.XPathEvaluationResult.XPathResultType.STRING;
+import static org.springframework.restdocs.cookies.CookieDocumentation.cookieWithName;
+import static org.springframework.restdocs.cookies.CookieDocumentation.requestCookies;
+import static org.springframework.restdocs.payload.JsonFieldType.NULL;
+import static org.springframework.restdocs.payload.JsonFieldType.OBJECT;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.restdocs.snippet.Attributes.key;
 import static project.dailyge.app.common.SnippetUtils.getAttribute;
-import project.dailyge.app.core.task.presentation.requesst.TaskCreateRequest;
-import project.dailyge.app.core.task.presentation.requesst.TaskStatusUpdateRequest;
-import project.dailyge.app.core.task.presentation.requesst.TaskUpdateRequest;
 
 public interface TaskSnippet {
 
@@ -53,6 +55,23 @@ public interface TaskSnippet {
             .attributes(getAttribute(TaskCreateRequest.class, "date")),
         fieldWithPath("color").description("색상")
             .attributes(getAttribute(TaskCreateRequest.class, "color")),
+    };
+
+    FieldDescriptor[] TASK_RECURRENCE_CREATE_REQUEST_FIELDS = {
+        fieldWithPath("title").description("제목")
+            .attributes(getAttribute(TaskRecurrenceCreateRequest.class, "title")),
+        fieldWithPath("content").description("내용")
+            .attributes(getAttribute(TaskRecurrenceCreateRequest.class, "content")),
+        fieldWithPath("type").description("반복 유형")
+            .attributes(getAttribute(TaskRecurrenceCreateRequest.class, "type")),
+        fieldWithPath("color").description("색상")
+            .attributes(getAttribute(TaskRecurrenceCreateRequest.class, "color")),
+        fieldWithPath("datePattern").description("반복 날짜 패턴 : 주간 - 월요일 (1) ~ 금요일(7), 월간 - 1일에서 31일")
+            .attributes(getAttribute(TaskRecurrenceCreateRequest.class, "datePattern")),
+        fieldWithPath("startDate").description("시작 날짜")
+            .attributes(getAttribute(TaskRecurrenceCreateRequest.class, "startDate")),
+        fieldWithPath("endDate").description("종료 날짜")
+            .attributes(getAttribute(TaskRecurrenceCreateRequest.class, "endDate"))
     };
 
     FieldDescriptor[] TASK_UPDATE_REQUEST_FIELDS = {
@@ -83,6 +102,12 @@ public interface TaskSnippet {
 
     FieldDescriptor[] TASK_CREATE_RESPONSE = {
         fieldWithPath("data.taskId").type(NUMBER).description("Task ID"),
+        fieldWithPath("code").type(NUMBER).description("응답 코드"),
+        fieldWithPath("message").type(STRING).description("응답 메시지")
+    };
+
+    FieldDescriptor[] TASK_RECURRENCE_CREATE_RESPONSE = {
+        fieldWithPath("data.taskRecurrenceId").type(NUMBER).description("TaskRecurrence ID"),
         fieldWithPath("code").type(NUMBER).description("응답 코드"),
         fieldWithPath("message").type(STRING).description("응답 메시지")
     };
@@ -236,8 +261,10 @@ public interface TaskSnippet {
 
     RequestFieldsSnippet MONTHLY_TASK_CREATE_REQUEST_SNIPPET = requestFields(MONTHLY_TASK_CREATE_REQUEST_FIELDS);
     RequestFieldsSnippet TASK_CREATE_REQUEST_SNIPPET = requestFields(TASK_CREATE_REQUEST_FIELDS);
+    RequestFieldsSnippet TASK_RECURRENCE_CREATE_REQUEST_SNIPPET = requestFields(TASK_RECURRENCE_CREATE_REQUEST_FIELDS);
     ResponseFieldsSnippet MONTHLY_TASK_CREATE_RESPONSE_SNIPPET = responseFields(MONTHLY_TASK_CREATE_RESPONSE);
     ResponseFieldsSnippet TASK_CREATE_RESPONSE_SNIPPET = responseFields(TASK_CREATE_RESPONSE);
+    ResponseFieldsSnippet TASK_RECURRENCE_CREATE_RESPONSE_SNIPPET = responseFields(TASK_RECURRENCE_CREATE_RESPONSE);
 
     RequestFieldsSnippet TASK_UPDATE_REQUEST_SNIPPET = requestFields(TASK_UPDATE_REQUEST_FIELDS);
     RequestFieldsSnippet TASK_STATUS_UPDATE_REQUEST_SNIPPET = requestFields(TASK_STATUS_UPDATE_REQUEST_FIELDS);

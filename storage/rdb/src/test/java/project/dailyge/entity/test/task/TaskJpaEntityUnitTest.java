@@ -1,5 +1,15 @@
 package project.dailyge.entity.test.task;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import project.dailyge.entity.task.TaskColor;
+import project.dailyge.entity.task.TaskJpaEntity;
+import project.dailyge.entity.task.TaskStatus;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -7,16 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import project.dailyge.entity.task.TaskColor;
-import project.dailyge.entity.task.TaskJpaEntity;
-import project.dailyge.entity.task.TaskStatus;
 import static project.dailyge.entity.task.TaskStatus.TODO;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @DisplayName("[UnitTest] 할 일 엔티티 테스트")
 class TaskJpaEntityUnitTest {
@@ -32,8 +33,9 @@ class TaskJpaEntityUnitTest {
             "프로젝트 진행 상황 점검",
             LocalDate.now().plusDays(10),
             TaskStatus.TODO,
-            null,
             1L,
+            1L,
+            null,
             now,
             1L,
             now,
@@ -52,8 +54,9 @@ class TaskJpaEntityUnitTest {
             "프로젝트 진행 상황 점검",
             LocalDate.now().plusDays(10),
             TaskStatus.TODO,
-            null,
             1L,
+            1L,
+            null,
             now,
             1L,
             now,
@@ -206,6 +209,7 @@ class TaskJpaEntityUnitTest {
             TODO,
             monthlyTaskId,
             1L,
+            null,
             now,
             1L,
             now,
@@ -228,6 +232,7 @@ class TaskJpaEntityUnitTest {
             TODO,
             1L,
             1L,
+            null,
             now,
             1L,
             now,
@@ -282,6 +287,7 @@ class TaskJpaEntityUnitTest {
             TODO,
             1L,
             1L,
+            null,
             LocalDateTime.now(),
             1L,
             LocalDateTime.now(),
@@ -297,6 +303,7 @@ class TaskJpaEntityUnitTest {
             TODO,
             1L,
             1L,
+            null,
             LocalDateTime.now(),
             1L,
             LocalDateTime.now(),
@@ -318,6 +325,7 @@ class TaskJpaEntityUnitTest {
             TODO,
             1L,
             1L,
+            null,
             LocalDateTime.now(),
             1L,
             LocalDateTime.now(),
@@ -333,6 +341,7 @@ class TaskJpaEntityUnitTest {
             TODO,
             1L,
             1L,
+            null,
             LocalDateTime.now(),
             1L,
             LocalDateTime.now(),
@@ -354,6 +363,7 @@ class TaskJpaEntityUnitTest {
             TODO,
             1L,
             1L,
+            null,
             LocalDateTime.now(),
             1L,
             LocalDateTime.now(),

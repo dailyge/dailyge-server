@@ -21,7 +21,7 @@ class UserCreateIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("사용자 등록이 정상적으로 성공하면, 사용자 ID는 NULL이 아니다.")
     void whenUserSaveSuccessThenUserIdShouldBeNotNull() {
-        final UserJpaEntity saveUser = userWriteService.save(createUser(2L, "dailyges", "dailyges@gmail.com"));
+        final UserJpaEntity saveUser = userWriteService.save(createUser(null, "dailyges", "dailyges@gmail.com"));
 
         Assertions.assertNotNull(saveUser.getId());
     }

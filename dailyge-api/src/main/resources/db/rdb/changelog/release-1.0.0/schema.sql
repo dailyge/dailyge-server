@@ -250,7 +250,7 @@ CREATE TABLE IF NOT EXISTS task_labels
   `name`           VARCHAR(30)                       NOT NULL COMMENT '라벨 명',
   description      VARCHAR(100)                      NOT NULL COMMENT '라벨 설명',
   user_id          BIGINT                            NOT NULL COMMENT '사용자 ID',
-  color            VARCHAR(30)                       NOT NULL COMMENT '할 일 색상',
+  color            VARCHAR(30)                       NULL COMMENT '할 일 색상',
   created_at       TIMESTAMP                         NOT NULL COMMENT '생성일',
   created_by       BIGINT                            NULL COMMENT '생성한 사람',
   last_modified_at TIMESTAMP                         NOT NULL COMMENT '최종 수정일',

@@ -45,8 +45,8 @@ public class UserWriteDao implements UserEntityWriteRepository {
         final String email,
         final String nickname
     ) {
-        final String sql = "INSERT INTO users (id, nickname, email, created_at, deleted, user_role, profile_image_url) " +
-            "VALUES (:id, :nickname, :email, :created_at, :deleted, :user_role, :profile_image_url)";
+        final String sql = "INSERT INTO users (id, nickname, email, created_at, deleted, user_role, profile_image_url) "
+            + "VALUES (:id, :nickname, :email, :created_at, :deleted, :user_role, :profile_image_url)";
         final Map<String, Object> parameters = new HashMap<>();
         parameters.put("id", userId);
         parameters.put("nickname", nickname);

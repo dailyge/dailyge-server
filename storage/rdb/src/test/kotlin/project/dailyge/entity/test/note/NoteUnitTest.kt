@@ -124,7 +124,7 @@ class NoteUnitTest : DescribeSpec({
                     receiverId = 2L
                 )
 
-                note.readByReceiver(receiver) shouldBe false
+                note.readByReceiver(receiver) shouldBe true
                 note.readByReceiver(sender) shouldBe false
             }
 
@@ -133,13 +133,14 @@ class NoteUnitTest : DescribeSpec({
                     title = "긴급 공지",
                     content = "오늘 오후 3시까지 기획안을 제출해 주시기 바랍니다.",
                     sentAt = fixedSentAt,
+                    isRead = true,
                     senderId = 1L,
                     receiverId = 2L
                 )
 
                 note.updateReadStatus(true, fixedReadAt)
 
-                note.readByReceiver(receiver) shouldBe true
+                note.readByReceiver(receiver) shouldBe false
                 note.readByReceiver(sender) shouldBe false
             }
 

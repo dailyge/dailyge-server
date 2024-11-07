@@ -9,7 +9,6 @@ import org.springframework.restdocs.restassured.RestDocumentationFilter;
 import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.core.task.application.TaskWriteService;
 import project.dailyge.app.core.task.presentation.requesst.TaskRecurrenceCreateRequest;
-import project.dailyge.entity.task.RecurrenceType;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -22,6 +21,7 @@ import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippe
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASK_RECURRENCE_CREATE_REQUEST_SNIPPET;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASK_RECURRENCE_CREATE_RESPONSE_SNIPPET;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.createIdentifier;
+import static project.dailyge.entity.task.RecurrenceType.WEEKLY;
 import static project.dailyge.entity.task.TaskColor.GRAY;
 
 @DisplayName("[DocumentationTest] TaskRecurrence 등록 문서화 테스트")
@@ -42,7 +42,7 @@ class TaskRecurrenceCreateDocumentationTest extends DatabaseTestBase {
             "수영",
             "오전 8시 반",
             GRAY,
-            RecurrenceType.WEEKLY,
+            WEEKLY,
             List.of(1, 3, 5),
             LocalDate.now(),
             LocalDate.now().plusMonths(6)
@@ -71,7 +71,7 @@ class TaskRecurrenceCreateDocumentationTest extends DatabaseTestBase {
             "수영",
             "오전 8시 반",
             GRAY,
-            RecurrenceType.WEEKLY,
+            WEEKLY,
             List.of(1, 3, 5),
             LocalDate.now(),
             LocalDate.now().plusMonths(6)
@@ -93,12 +93,13 @@ class TaskRecurrenceCreateDocumentationTest extends DatabaseTestBase {
     @Test
     @DisplayName("[Swagger] 올바르지 않은 파라미터로 TaskRecurrence를 등록하면 400 Bad Request 응답을 받는다.")
     void whenInvalidParameterThenStatusCodeShouldBe400Swagger() throws JsonProcessingException {
+        final int invalidWeekDay = 8;
         final TaskRecurrenceCreateRequest request = new TaskRecurrenceCreateRequest(
             "수영",
             "오전 8시 반",
             GRAY,
-            RecurrenceType.WEEKLY,
-            List.of(8),
+            WEEKLY,
+            List.of(invalidWeekDay),
             LocalDate.now(),
             LocalDate.now().plusMonths(6)
         );

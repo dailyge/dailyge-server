@@ -44,7 +44,7 @@ class TaskRecurrenceClientValidatorUnitTest {
 
     @Test
     @DisplayName("endDate가 startDate보다 이후일 경우 예외가 발생하지 않는다.")
-    void whenEndDateIsAfterOrEqualStartDatethenNoException() {
+    void whenEndDateIsAfterOrEqualStartDateThenNoException() {
         final LocalDate startDate = LocalDate.of(2024, 8, 24);
         final LocalDate endDate = LocalDate.of(2025, 8, 24);
         assertDoesNotThrow(() -> validator.validateStartDateToEndDate(startDate, endDate));

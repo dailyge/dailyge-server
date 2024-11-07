@@ -42,6 +42,9 @@ public class UserJpaEntity extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @Column(name = "is_blacklist")
+    private boolean isBlacklist;
+
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
@@ -51,13 +54,23 @@ public class UserJpaEntity extends BaseEntity {
     public UserJpaEntity(
         final Long id,
         final String nickname,
-        final String email
+        final String email,
+        final boolean isBlacklist
     ) {
         validate(nickname, email, "");
         this.id = id;
         this.nickname = nickname;
         this.email = email;
         this.role = Role.NORMAL;
+        this.isBlacklist = isBlacklist;
+    }
+
+    public UserJpaEntity(
+        final Long id,
+        final String nickname,
+        final String email
+    ) {
+        this(id, nickname, email, false);
     }
 
     public UserJpaEntity(
@@ -71,6 +84,7 @@ public class UserJpaEntity extends BaseEntity {
         this.nickname = nickname;
         this.email = email;
         this.role = Role.NORMAL;
+        this.isBlacklist = false;
         init(createdAt, id, null, null, false);
     }
 
@@ -85,6 +99,7 @@ public class UserJpaEntity extends BaseEntity {
         this.nickname = nickname;
         this.email = email;
         this.role = role;
+        this.isBlacklist = false;
     }
 
     public UserJpaEntity(
@@ -99,6 +114,7 @@ public class UserJpaEntity extends BaseEntity {
         this.email = email;
         this.profileImageUrl = profileImageUrl;
         this.role = Role.NORMAL;
+        this.isBlacklist = false;
     }
 
     public Long getId() {
@@ -195,6 +211,15 @@ public class UserJpaEntity extends BaseEntity {
     public String getUserAlreadyDeletedMessage() {
         return USER_ALREADY_DELETED_MESSAGE;
     }
+
+    public boolean isBlacklist() {
+        return isBlacklist;
+    }
+
+    public boolean getBlacklist() {
+        return isBlacklist;
+    }
+
 
     @Override
     public boolean equals(final Object obj) {

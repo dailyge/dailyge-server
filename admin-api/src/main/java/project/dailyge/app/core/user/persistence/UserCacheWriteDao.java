@@ -41,11 +41,6 @@ public class UserCacheWriteDao implements UserCacheWriteRepository {
     }
 
     @Override
-    public void refreshExpirationDate(final Long userId) {
-        executeRedisCommand(() -> redisTemplate.expire(getKey(userId), ofDays(CACHE_DURATION)));
-    }
-
-    @Override
     public void delete(final Long userId) {
         executeRedisCommand(() -> redisTemplate.delete(getKey(userId)));
     }

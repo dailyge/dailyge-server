@@ -42,7 +42,7 @@ class NoteReadUseCase implements NoteReadService {
         if (!findNote.validateReceiver(dailygeUser.getUserId())) {
             throw CommonException.from(UN_AUTHORIZED);
         }
-        if (!findNote.readByReceiver(dailygeUser.getId())) {
+        if (findNote.readByReceiver(dailygeUser.getId())) {
             final NoteEvent event = new NoteEvent(dailygeUser.getUserId(), noteId, createTimeBasedUUID(), UPDATE);
             eventPublisher.publishEvent(event);
         }

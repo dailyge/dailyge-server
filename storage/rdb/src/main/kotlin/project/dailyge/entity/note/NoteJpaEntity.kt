@@ -87,7 +87,7 @@ class NoteJpaEntity(
     }
 
     fun readByReceiver(receiverId: Long): Boolean {
-        return isRead
+        return !isRead
                 && this.receiverId == receiverId
     }
 

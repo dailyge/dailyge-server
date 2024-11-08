@@ -32,22 +32,6 @@ public class TaskValidator {
         this.taskLabelEntityReadRepository = taskLabelEntityReadRepository;
     }
 
-    public TaskValidator(
-        final MonthlyTaskEntityReadRepository monthlyTaskReadRepository,
-        final TaskEntityReadRepository taskReadRepository
-    ) {
-        this.monthlyTaskReadRepository = monthlyTaskReadRepository;
-        this.taskReadRepository = taskReadRepository;
-    }
-
-    public TaskValidator(
-        final MonthlyTaskEntityReadRepository monthlyTaskReadRepository,
-        final TaskEntityReadRepository taskReadRepository
-    ) {
-        this.monthlyTaskReadRepository = monthlyTaskReadRepository;
-        this.taskReadRepository = taskReadRepository;
-    }
-
     public void validateAuth(
         final DailygeUser dailygeUser,
         final TaskJpaEntity findTask

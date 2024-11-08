@@ -1,18 +1,17 @@
 package project.dailyge.entity.test.user;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
-import project.dailyge.entity.user.UserJpaEntity;
-
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+import project.dailyge.entity.user.UserJpaEntity;
 
 @DisplayName("[UnitTest] UserJPAEntity 단위 테스트")
 class UserJpaEntityUnitTest {
@@ -77,6 +76,62 @@ class UserJpaEntityUnitTest {
         assertThatThrownBy(() -> new UserJpaEntity(1L, NICKNAME, notCompliantEmail))
             .isExactlyInstanceOf(IllegalArgumentException.class)
             .hasMessage(user.getInvalidEmailErrorMessage());
+    }
+
+    @Test
+    @DisplayName("닉네임이 빈 문자열일 경우 IllegalArgumentException이 발생한다.")
+    void whenNicknameIsEmptyThenIllegalArgumentExceptionShouldBeHappen() {
+        assertThatThrownBy(() -> new UserJpaEntity(1L, "", EMAIL))
+            .isExactlyInstanceOf(IllegalArgumentException.class)
+            .hasMessage("올바른 닉네임을 입력해주세요.");
+    }
+
+    @ParameterizedTest
+    @DisplayName("닉네임이 허용 길이 초과일 경우 IllegalArgumentException이 발생한다.")
+    @ValueSource(strings = {"abcdefghijklmnopqrstu", "123456789012345678901", "niㄹffffffckname_too_long"})
+    void whenNicknameExceedsMaxLengthThenIllegalArgumentExceptionShouldBeHappen(final String nickname) {
+        assertThatThrownBy(() -> new UserJpaEntity(1L, nickname, EMAIL))
+            .isExactlyInstanceOf(IllegalArgumentException.class)
+            .hasMessage("입력 가능한 최대 닉네임 길이를 초과했습니다.");
+    }
+
+    @ParameterizedTest
+    @DisplayName("닉네임에 허용되지 않는 특수 문자가 포함될 경우 IllegalArgumentException이 발생한다.")
+    @ValueSource(strings = {"nick*name", "user@name", "hello!", "name$", "with space"})
+    void whenNicknameContainsInvalidCharactersThenIllegalArgumentExceptionShouldBeHappen(final String nickname) {
+        assertThatThrownBy(() -> new UserJpaEntity(1L, nickname, EMAIL))
+            .isExactlyInstanceOf(IllegalArgumentException.class)
+            .hasMessage("올바른 닉네임을 입력해주세요.");
+    }
+
+    @ParameterizedTest
+    @DisplayName("닉네임이 허용 가능한 형식일 경우 정상적으로 인스턴스가 생성된다.")
+    @ValueSource(strings = {"validNickname", "nickname123", "NICK_name", "name-with-dash"})
+    void whenNicknameIsValidThenEntityShouldBeCreatedSuccessfully(final String nickname) {
+        final UserJpaEntity user = new UserJpaEntity(1L, nickname, EMAIL);
+
+        assertNotNull(user);
+        assertEquals(nickname, user.getNickname());
+    }
+
+    @ParameterizedTest
+    @DisplayName("닉네임이 한 글자일 경우에도 정상적으로 인스턴스가 생성된다.")
+    @ValueSource(strings = {"acdc", "ef3B", "fas1", "f_ff", "33f-"})
+    void whenNicknameIsSingleCharacterThenEntityShouldBeCreatedSuccessfully(final String nickname) {
+        final UserJpaEntity user = new UserJpaEntity(1L, nickname, EMAIL);
+
+        assertNotNull(user);
+        assertEquals(nickname, user.getNickname());
+    }
+
+    @Test
+    @DisplayName("닉네임이 최대 허용 길이인 20자일 경우 정상적으로 인스턴스가 생성된다.")
+    void whenNicknameIsMaxLengthThenEntityShouldBeCreatedSuccessfully() {
+        String maxLengthNickname = "12345678901234567890";
+        UserJpaEntity user = new UserJpaEntity(1L, maxLengthNickname, EMAIL);
+
+        assertNotNull(user);
+        assertEquals(maxLengthNickname, user.getNickname());
     }
 
     @Test

@@ -1,6 +1,5 @@
 package project.dailyge.app.core.event.persistence;
 
-import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -8,7 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
-@NoArgsConstructor
 public class LocalEventCache {
 
     private final Map<Long, EventCache> cacheMap = new HashMap<>();

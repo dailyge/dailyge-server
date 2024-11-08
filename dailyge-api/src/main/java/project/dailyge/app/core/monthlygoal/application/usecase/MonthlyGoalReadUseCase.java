@@ -1,6 +1,5 @@
 package project.dailyge.app.core.monthlygoal.application.usecase;
 
-import lombok.RequiredArgsConstructor;
 import project.dailyge.app.common.annotation.ApplicationLayer;
 import project.dailyge.app.core.common.auth.DailygeUser;
 import project.dailyge.app.core.monthlygoal.application.MonthlyGoalReadService;
@@ -9,18 +8,27 @@ import static project.dailyge.app.core.monthlygoal.exception.MonthlyGoalCodeAndM
 import project.dailyge.app.core.monthlygoal.exception.MonthlyGoalTypeException;
 import project.dailyge.app.core.monthlygoal.persistence.MonthlyGoalReadDao;
 import project.dailyge.app.paging.Cursor;
-import project.dailyge.entity.monthlygoal.MonthlyGoalEntityReadRepository;
-import project.dailyge.entity.monthlygoal.MonthlyGoalJpaEntity;
+import project.dailyge.entity.goal.MonthlyGoalEntityReadRepository;
+import project.dailyge.entity.goal.MonthlyGoalJpaEntity;
 
 import java.util.List;
 
-@RequiredArgsConstructor
-@ApplicationLayer(value = "MonthlyGoalReadService")
+@ApplicationLayer(value = "MonthlyGoalReadUseCase")
 public class MonthlyGoalReadUseCase implements MonthlyGoalReadService {
 
     private final MonthlyGoalValidator validator;
     private final MonthlyGoalReadDao monthlyGoalReadDao;
     private final MonthlyGoalEntityReadRepository monthlyGoalReadRepository;
+
+    public MonthlyGoalReadUseCase(
+        final MonthlyGoalValidator validator,
+        final MonthlyGoalReadDao monthlyGoalReadDao,
+        final MonthlyGoalEntityReadRepository monthlyGoalReadRepository
+    ) {
+        this.validator = validator;
+        this.monthlyGoalReadDao = monthlyGoalReadDao;
+        this.monthlyGoalReadRepository = monthlyGoalReadRepository;
+    }
 
     @Override
     public MonthlyGoalJpaEntity findById(final Long monthlyGoalId) {

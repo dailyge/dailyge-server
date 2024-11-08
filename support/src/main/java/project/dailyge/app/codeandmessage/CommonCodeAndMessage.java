@@ -11,6 +11,7 @@ public enum CommonCodeAndMessage implements CodeAndMessage {
     INVALID_USER_TOKEN(403, "유효하지 않는 사용자 토큰입니다."),
     UN_AUTHORIZED(403, "권한이 존재하지 않습니다."),
     INVALID_URL(404, "올바르지 않은 URL 입니다."),
+    TOO_MANY_REQUEST(429, "한 번에 너무 많은 요청을 보낼 수 없습니다."),
     INTERNAL_SERVER_ERROR(500, "서버 내부 오류입니다."),
     DATA_ACCESS_EXCEPTION(500, "데이터베이스와 통신하는 과정에서 오류가 발생했습니다"),
     COMMON_UN_RESOLVED_EXCEPTION(500, "정의되지 않은 공통 오류입니다."),

@@ -5,16 +5,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import project.dailyge.entity.BaseEntity;
 
 import java.time.LocalDateTime;
 
-import static lombok.AccessLevel.PROTECTED;
-
-@Getter
-@NoArgsConstructor(access = PROTECTED)
 @Entity(name = "retrospects")
 public class RetrospectJpaEntity extends BaseEntity {
 
@@ -36,6 +30,9 @@ public class RetrospectJpaEntity extends BaseEntity {
 
     @Column(name = "user_id")
     private Long userId;
+
+    protected RetrospectJpaEntity() {
+    }
 
     public RetrospectJpaEntity(
         final String title,
@@ -67,6 +64,30 @@ public class RetrospectJpaEntity extends BaseEntity {
         this.userId = userId;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public boolean isPublic() {
+        return isPublic;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
     public void update(
         final String title,
         final String content,
@@ -80,6 +101,6 @@ public class RetrospectJpaEntity extends BaseEntity {
     }
 
     public void delete() {
-        this.deleted = true;
+        updateDeletedStatus();
     }
 }

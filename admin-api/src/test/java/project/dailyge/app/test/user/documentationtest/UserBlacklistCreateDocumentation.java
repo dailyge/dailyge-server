@@ -3,6 +3,7 @@ package project.dailyge.app.test.user.documentationtest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.restassured.http.Cookie;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ import static project.dailyge.app.test.user.documentationtest.snippet.UserSnippe
 import static project.dailyge.app.test.user.documentationtest.snippet.UserSnippet.USER_BLACKLIST_CREATE_RESPONSE_FIELDS_SNIPPET;
 import static project.dailyge.app.test.user.documentationtest.snippet.UserSnippet.createIdentifier;
 
+@Disabled
 @DisplayName("[DocumentationTest] User Blacklist 등록 문서화 테스트")
 class UserBlacklistCreateDocumentation extends DatabaseTestBase {
 

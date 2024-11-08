@@ -3,27 +3,31 @@ package project.dailyge.app.core.common.web;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
+import static jakarta.servlet.http.HttpServletResponse.SC_OK;
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.OK;
 import project.dailyge.app.common.response.ApiResponse;
 import project.dailyge.app.core.coupon.presentation.response.CouponParticipationResponse;
 import project.dailyge.app.core.coupon.presentation.validator.CouponClientValidator;
 
 import java.io.IOException;
 
-import static jakarta.servlet.http.HttpServletResponse.SC_OK;
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.OK;
-
 @Component
-@RequiredArgsConstructor
 public class CouponApplyInterceptor implements HandlerInterceptor {
 
     private final CouponClientValidator couponClientValidator;
     private final ObjectMapper objectMapper;
 
+    public CouponApplyInterceptor(
+        final CouponClientValidator couponClientValidator,
+        final ObjectMapper objectMapper
+    ) {
+        this.couponClientValidator = couponClientValidator;
+        this.objectMapper = objectMapper;
+    }
 
     @Override
     public boolean preHandle(

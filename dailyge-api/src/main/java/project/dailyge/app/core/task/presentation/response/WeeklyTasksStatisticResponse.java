@@ -1,7 +1,6 @@
 package project.dailyge.app.core.task.presentation.response;
 
 import static java.util.Collections.emptyList;
-import lombok.Getter;
 import project.dailyge.entity.task.TaskJpaEntity;
 import project.dailyge.entity.task.Tasks;
 
@@ -12,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-@Getter
 public class WeeklyTasksStatisticResponse {
 
     private String startDate;
@@ -40,6 +38,22 @@ public class WeeklyTasksStatisticResponse {
             final List<TaskJpaEntity> tasks = tasksGroupByDateMap.getOrDefault(date, emptyList());
             statistics.put(date, new TaskAchievementRateResponse(tasks));
         }
+        return statistics;
+    }
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public Set<String> getKeys() {
+        return keys;
+    }
+
+    public Map<String, TaskAchievementRateResponse> getStatistics() {
         return statistics;
     }
 }

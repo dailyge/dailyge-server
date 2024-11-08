@@ -2,19 +2,13 @@ package project.dailyge.entity.notice;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import static jakarta.persistence.EnumType.STRING;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import project.dailyge.entity.BaseEntity;
 
-import static jakarta.persistence.EnumType.STRING;
-import static lombok.AccessLevel.PROTECTED;
-
-@Getter
-@NoArgsConstructor(access = PROTECTED)
 @Entity(name = "notice")
 public class NoticeJpaEntity extends BaseEntity {
 
@@ -34,6 +28,9 @@ public class NoticeJpaEntity extends BaseEntity {
 
     @Column(name = "user_id")
     private Long userId;
+
+    protected NoticeJpaEntity() {
+    }
 
     public NoticeJpaEntity(
         final Long id,
@@ -59,5 +56,25 @@ public class NoticeJpaEntity extends BaseEntity {
         this.content = content;
         this.noticeType = noticeType;
         this.userId = userId;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public NoticeType getNoticeType() {
+        return noticeType;
+    }
+
+    public Long getUserId() {
+        return userId;
     }
 }

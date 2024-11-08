@@ -7,8 +7,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 import project.dailyge.entity.BaseEntity;
@@ -17,10 +15,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
-import static lombok.AccessLevel.PROTECTED;
-
-@Getter
-@NoArgsConstructor(access = PROTECTED)
 @Entity(name = "task_recurrences")
 public class TaskRecurrenceJpaEntity extends BaseEntity {
 
@@ -48,6 +42,9 @@ public class TaskRecurrenceJpaEntity extends BaseEntity {
     @Column(name = "end_date")
     private LocalDateTime endDate;
 
+    protected TaskRecurrenceJpaEntity() {
+    }
+
     public TaskRecurrenceJpaEntity(
         final Long id,
         final RecurrenceType recurrenceType,
@@ -64,6 +61,50 @@ public class TaskRecurrenceJpaEntity extends BaseEntity {
         this.content = content;
         this.startDate = startDate;
         this.endDate = endDate;
+    }
+
+    public TaskRecurrenceJpaEntity(
+        final RecurrenceType recurrenceType,
+        final List<Integer> datePattern,
+        final String title,
+        final String content,
+        final LocalDateTime startDate,
+        final LocalDateTime endDate
+    ) {
+        this.recurrenceType = recurrenceType;
+        this.datePattern = datePattern;
+        this.title = title;
+        this.content = content;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public RecurrenceType getRecurrenceType() {
+        return recurrenceType;
+    }
+
+    public List<Integer> getDatePattern() {
+        return datePattern;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public LocalDateTime getStartDate() {
+        return startDate;
+    }
+
+    public LocalDateTime getEndDate() {
+        return endDate;
     }
 
     @Override

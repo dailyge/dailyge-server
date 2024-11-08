@@ -1,9 +1,7 @@
 package project.dailyge.app.core.weeklygoal.exception;
 
-import lombok.Getter;
 import project.dailyge.app.codeandmessage.CodeAndMessage;
 
-@Getter
 public enum WeeklyGoalCodeAndMessage implements CodeAndMessage {
 
     WEEKLY_GOAL_NOT_FOUND(404, "주간 목표를 찾을 수 없습니다."),
@@ -18,6 +16,14 @@ public enum WeeklyGoalCodeAndMessage implements CodeAndMessage {
     ) {
         this.code = code;
         this.message = message;
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public String getMessage() {
+        return message;
     }
 
     @Override

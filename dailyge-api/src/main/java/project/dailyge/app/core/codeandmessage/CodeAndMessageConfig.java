@@ -50,11 +50,11 @@ public class CodeAndMessageConfig {
         final String domain,
         final CodeAndMessage codeAndMessage
     ) {
-        return CodeAndMessageJpaEntity.builder()
-            .domain(domain)
-            .name(codeAndMessage.toString())
-            .code(codeAndMessage.code())
-            .message(codeAndMessage.message())
-            .build();
+        return CodeAndMessageJpaEntity.Companion.create(
+            domain,
+            codeAndMessage.toString(),
+            codeAndMessage.code(),
+            codeAndMessage.message()
+        );
     }
 }

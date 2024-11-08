@@ -33,12 +33,32 @@ CREATE TABLE IF NOT EXISTS tasks
     status           ENUM ('TODO', 'IN_PROGRESS', 'DONE') NOT NULL COMMENT '할 일 상태',
     color            varchar(255)                         NOT NULL COMMENT '할 일 색상',
     monthly_task_id  BIGINT                               NOT NULL COMMENT '월간 일정',
+    label_id         BIGINT                               NULL COMMENT '라벨 ID',
     created_at       TIMESTAMP                            NOT NULL COMMENT '생성일',
     created_by       BIGINT                               NULL COMMENT '생성한 사람',
     last_modified_at TIMESTAMP                            NULL COMMENT '최종 수정일',
     last_modified_by BIGINT                               NULL COMMENT '최종 수정한 사람',
     deleted          BIT                                  NOT NULL COMMENT '삭제 유무'
 ) engine 'InnoDB' COMMENT '할 일';
+
+DROP TABLE IF EXISTS task_recurrences;
+CREATE TABLE IF NOT EXISTS task_recurrences
+(
+    id               BIGINT AUTO_INCREMENT PRIMARY KEY                        NOT NULL COMMENT '반복 일정 ID',
+    recurrence_type  ENUM ('WEEKLY', 'DAILY', 'WEEKDAY', 'MONTHLY', 'CUSTOM') NOT NULL COMMENT '반복 일정 종류',
+    date_pattern     JSON                                                     NOT NULL COMMENT '반복 날짜 패턴 ([1,2,3,4] or [1,31])',
+    title            VARCHAR(50)                                              NOT NULL COMMENT '제목',
+    content          VARCHAR(1500)                                            NOT NULL COMMENT '내용',
+    start_date       TIMESTAMP                                                NOT NULL COMMENT '시작 날짜',
+    end_date         TIMESTAMP                                                NOT NULL COMMENT '끝나는 날짜',
+    created_at       TIMESTAMP                                                NOT NULL COMMENT '생성일',
+    created_by       BIGINT                                                   NULL COMMENT '생성한 사람',
+    last_modified_at TIMESTAMP                                                NOT NULL COMMENT '최종 수정일',
+    last_modified_by BIGINT                                                   NULL COMMENT '최종 수정한 사람',
+    deleted          BIT                                                      NOT NULL COMMENT '삭제 유무'
+) engine = 'InnoDB'
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_general_ci COMMENT '반복 일정 규칙';
 
 DROP TABLE IF EXISTS users;
 CREATE TABLE IF NOT EXISTS users
@@ -48,6 +68,7 @@ CREATE TABLE IF NOT EXISTS users
     nickname          VARCHAR(20)              NOT NULL COMMENT '닉네임',
     profile_image_url VARCHAR(2000)            NULL COMMENT '사용자 이미지',
     user_role         ENUM ('NORMAL', 'ADMIN') NOT NULL COMMENT '사용자 권한',
+    is_blacklist      BOOLEAN                  NULL COMMNET '블랙리스트 여부',
     created_at        TIMESTAMP                NOT NULL COMMENT '생성일',
     created_by        BIGINT                   NULL COMMENT '생성한 사람',
     last_modified_at  TIMESTAMP                NULL COMMENT '최종 수정일',
@@ -203,3 +224,79 @@ CREATE TABLE IF NOT EXISTS holidays
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT ='휴일';
+
+CREATE TABLE IF NOT EXISTS notes
+(
+    id               BIGINT AUTO_INCREMENT PRIMARY KEY NOT NULL COMMENT '쪽지 ID',
+    title            VARCHAR(50)                       NOT NULL COMMENT '제목',
+    content          VARCHAR(200)                      NOT NULL COMMENT '내용',
+    is_read          BOOLEAN                           NOT NULL DEFAULT FALSE COMMENT '읽음 여부',
+    sent_at          TIMESTAMP                         NOT NULL COMMENT '전송 시간',
+    read_at          TIMESTAMP                         NULL COMMENT '읽은 시간',
+    sender_id        BIGINT                            NOT NULL COMMENT '발신자 ID',
+    receiver_id      BIGINT                            NOT NULL COMMENT '수신자 ID',
+    sender_deleted   BOOLEAN                           NOT NULL DEFAULT FALSE COMMENT '발신자 삭제 여부',
+    receiver_deleted BOOLEAN                           NOT NULL DEFAULT FALSE COMMENT '수신자 삭제 여부',
+    created_by       BIGINT                            NOT NULL COMMENT '생성한 사람',
+    created_date     TIMESTAMP                         NOT NULL COMMENT '생성 일시',
+    last_modified_by BIGINT                            NULL COMMENT '최종 수정한 사람',
+    last_modified_at TIMESTAMP                         NULL COMMENT '최종 수정 일시',
+    deleted          BOOLEAN                           NOT NULL DEFAULT FALSE COMMENT '삭제 여부'
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_general_ci COMMENT '쪽지';
+
+DROP TABLE IF EXISTS companies;
+CREATE TABLE IF NOT EXISTS companies
+(
+  id               BIGINT AUTO_INCREMENT PRIMARY KEY                                                        NOT NULL COMMENT '회사 ID',
+  company_type     ENUM ('STARTUP', 'UNICORN', 'SMALL_ENTERPRISE', 'MEDIUM_ENTERPRISE', 'LARGE_ENTERPRISE') NULL COMMENT '회사 유형',
+  name             VARCHAR(255)                                                                             NOT NULL COMMENT '회사 명',
+  created_at       TIMESTAMP                                                                                NOT NULL COMMENT '생성일',
+  created_by       BIGINT                                                                                   NULL COMMENT '생성한 사람',
+  last_modified_at TIMESTAMP                                                                                NOT NULL COMMENT '최종 수정일',
+  last_modified_by BIGINT                                                                                   NULL COMMENT '최종 수정한 사람',
+  deleted          BIT                                                                                      NOT NULL COMMENT '삭제 유무'
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4 COMMENT '회사',
+  COLLATE utf8mb4_general_ci;
+
+DROP TABLE IF EXISTS application_histories;
+CREATE TABLE IF NOT EXISTS application_histories
+(
+  id               BIGINT AUTO_INCREMENT PRIMARY KEY                                                                      NOT NULL COMMENT '지원 이력 ID',
+  deadline         TIMESTAMP                                                                                              NULL COMMENT '공고 마감일',
+  link             VARCHAR(255)                                                                                           NULL COMMENT '공고 링크',
+  status           ENUM ('BEFORE_SUBMISSION', 'SUBMITTED', 'PREPARING_CODING_TEST', 'PREPARING_PERSONALITY_TEST',
+                          'FIRST_INTERVIEW', 'SECOND_INTERVIEW', 'THIRD_INTERVIEW', 'FINAL_INTERVIEW', 'CLOSED',
+                          'DOCUMENT_REJECTED', 'CODING_TEST_REJECTED', 'INTERVIEW_REJECTED', 'PERSONALITY_TEST_REJECTED') NULL COMMENT '진행 상태',
+  submitted_date   DATE                                                                                                   NULL COMMENT '제출일',
+  title            VARCHAR(255)                                                                                           NOT NULL COMMENT '제목',
+  year             INT                                                                                                    NULL COMMENT '공고 연도',
+  month            INT                                                                                                    NULL COMMENT '공고 월',
+  company_id       BIGINT                                                                                                 NOT NULL COMMENT '회사 ID',
+  user_id          BIGINT                                                                                                 NOT NULL COMMENT '사용자 ID',
+  created_at       TIMESTAMP                                                                                              NOT NULL COMMENT '생성일',
+  created_by       BIGINT                                                                                                 NULL COMMENT '생성한 사람',
+  last_modified_at TIMESTAMP                                                                                              NOT NULL COMMENT '최종 수정일',
+  last_modified_by BIGINT                                                                                                 NULL COMMENT '최종 수정한 사람',
+  deleted          BIT                                                                                                    NOT NULL COMMENT '삭제 유무'
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4 COMMENT '지원 이력',
+  COLLATE utf8mb4_general_ci;
+
+CREATE TABLE IF NOT EXISTS task_labels
+(
+  id               BIGINT AUTO_INCREMENT PRIMARY KEY NOT NULL COMMENT '라벨 ID',
+  `name`           VARCHAR(30)                       NOT NULL COMMENT '라벨 명',
+  description      VARCHAR(100)                      NOT NULL COMMENT '라벨 설명',
+  user_id          BIGINT                            NOT NULL COMMENT '사용자 ID',
+  color            VARCHAR(30)                       NULL COMMENT '할 일 색상',
+  created_at       TIMESTAMP                         NOT NULL COMMENT '생성일',
+  created_by       BIGINT                            NULL COMMENT '생성한 사람',
+  last_modified_at TIMESTAMP                         NOT NULL COMMENT '최종 수정일',
+  last_modified_by BIGINT                            NULL COMMENT '최종 수정한 사람',
+  deleted          BIT                               NOT NULL COMMENT '삭제 유무'
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_general_ci COMMENT ='라벨';

@@ -1,8 +1,5 @@
 package project.dailyge.app.core.anniversary.presentation.response;
 
-import lombok.Getter;
-
-@Getter
 public class AnniversaryCreateResponse {
 
     private Long anniversaryId;
@@ -12,6 +9,10 @@ public class AnniversaryCreateResponse {
 
     public AnniversaryCreateResponse(final Long anniversaryId) {
         this.anniversaryId = anniversaryId;
+    }
+
+    public Long getAnniversaryId() {
+        return anniversaryId;
     }
 
     @Override

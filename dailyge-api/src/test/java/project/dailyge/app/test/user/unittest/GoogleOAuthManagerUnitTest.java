@@ -51,7 +51,6 @@ class GoogleOAuthManagerUnitTest {
             () -> assertNotNull(mockUserInfo.getEmail()),
             () -> assertNotNull(mockUserInfo.getPicture()),
             () -> assertTrue(mockUserInfo.isVerifiedEmail()),
-            () -> assertEquals(mockUserInfo.getName(), mockUserInfo.getEmail()),
             () -> assertEquals("https://shorturl.at/dejs2", mockUserInfo.getPicture())
         );
     }

@@ -1,11 +1,9 @@
 package project.dailyge.app.core.task.presentation.response;
 
-import lombok.Getter;
 import project.dailyge.entity.task.TaskColor;
 import project.dailyge.entity.task.TaskJpaEntity;
 import project.dailyge.entity.task.TaskStatus;
 
-@Getter
 public class TaskDetailResponse {
 
     private final Long taskId;
@@ -40,6 +38,58 @@ public class TaskDetailResponse {
 
     public static TaskDetailResponse from(final TaskJpaEntity taskDocument) {
         return new TaskDetailResponse(taskDocument);
+    }
+
+    public Long getTaskId() {
+        return taskId;
+    }
+
+    public Long getMonthlyTaskId() {
+        return monthlyTaskId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public int getMonth() {
+        return month;
+    }
+
+    public int getDay() {
+        return day;
+    }
+
+    public int getWeekOfMonth() {
+        return weekOfMonth;
+    }
+
+    public TaskStatus getStatus() {
+        return status;
+    }
+
+    public TaskColor getColor() {
+        return color;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public String getLastModifiedAt() {
+        return lastModifiedAt;
     }
 
     @Override

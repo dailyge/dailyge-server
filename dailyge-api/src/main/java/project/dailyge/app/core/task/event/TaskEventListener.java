@@ -1,6 +1,5 @@
 package project.dailyge.app.core.task.event;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import project.dailyge.app.common.annotation.EventLayer;
@@ -13,12 +12,21 @@ import project.dailyge.entity.task.TaskEvent;
 import static project.dailyge.entity.task.TaskEvent.createEventWithIncreasedPublishCount;
 
 @EventLayer(value = "TaskEventListener")
-@RequiredArgsConstructor
 public class TaskEventListener {
 
     private final TaskFacade taskFacade;
     private final EventPublisher<TaskEvent> taskEventPublisher;
     private final EventDocumentWriteRepository eventWriteRepository;
+
+    public TaskEventListener(
+        final TaskFacade taskFacade,
+        final EventPublisher<TaskEvent> taskEventPublisher,
+        final EventDocumentWriteRepository eventWriteRepository
+    ) {
+        this.taskFacade = taskFacade;
+        this.taskEventPublisher = taskEventPublisher;
+        this.eventWriteRepository = eventWriteRepository;
+    }
 
     @Async
     @EventListener

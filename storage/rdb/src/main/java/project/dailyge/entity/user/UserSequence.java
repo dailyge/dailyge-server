@@ -5,9 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.Getter;
 
-@Getter
 @Entity(name = "user_sequence")
 public class UserSequence {
 
@@ -35,6 +33,18 @@ public class UserSequence {
 
     public static UserSequence createNewSequence() {
         return new UserSequence();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public boolean isExecuted() {
+        return executed;
     }
 
     public void changeExecuted() {

@@ -1,6 +1,5 @@
 package project.dailyge.document.event;
 
-import lombok.Getter;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import project.dailyge.document.DocumentBaseEntity;
@@ -8,7 +7,6 @@ import project.dailyge.document.DocumentBaseEntity;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-@Getter
 @Document(collection = "events")
 public class EventDocument extends DocumentBaseEntity {
 
@@ -42,6 +40,22 @@ public class EventDocument extends DocumentBaseEntity {
         this.domain = domain;
         this.eventType = eventType;
         this.createdAt = createdAt;
+    }
+
+    public String getEventId() {
+        return eventId;
+    }
+
+    public Long getPublisher() {
+        return publisher;
+    }
+
+    public String getDomain() {
+        return domain;
+    }
+
+    public String getEventType() {
+        return eventType;
     }
 
     @Override

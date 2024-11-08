@@ -2,7 +2,6 @@ package project.dailyge.app.core.codeandmessage.persistence;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import project.dailyge.entity.codeandmessage.CodeAndMessageEntityReadRepository;
 import project.dailyge.entity.codeandmessage.CodeAndMessageEntityWriteRepository;
@@ -12,11 +11,18 @@ import static project.dailyge.entity.codeandmessage.QCodeAndMessageJpaEntity.cod
 import java.util.List;
 
 @Repository
-@RequiredArgsConstructor
 class CodeAndMessageDao implements CodeAndMessageEntityReadRepository, CodeAndMessageEntityWriteRepository {
 
     private final EntityManager entityManager;
     private final JPAQueryFactory queryFactory;
+
+    public CodeAndMessageDao(
+        final EntityManager entityManager,
+        final JPAQueryFactory queryFactory
+    ) {
+        this.entityManager = entityManager;
+        this.queryFactory = queryFactory;
+    }
 
     @Override
     public List<CodeAndMessageJpaEntity> findAll() {

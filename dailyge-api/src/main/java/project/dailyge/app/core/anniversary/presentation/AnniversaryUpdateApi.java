@@ -1,7 +1,6 @@
 package project.dailyge.app.core.anniversary.presentation;
 
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,12 +14,15 @@ import project.dailyge.app.core.anniversary.presentation.request.AnniversaryUpda
 import project.dailyge.app.core.anniversary.presentation.response.AnniversaryCreateResponse;
 import project.dailyge.app.core.common.auth.DailygeUser;
 
-@RequiredArgsConstructor
 @RequestMapping(path = "/api/anniversaries")
 @PresentationLayer(value = "AnniversaryUpdateApi")
 public class AnniversaryUpdateApi {
 
     private final AnniversaryFacade anniversaryFacade;
+
+    public AnniversaryUpdateApi(final AnniversaryFacade anniversaryFacade) {
+        this.anniversaryFacade = anniversaryFacade;
+    }
 
     @PutMapping(path = "/{anniversaryId}")
     public ApiResponse<AnniversaryCreateResponse> updateAnniversary(

@@ -1,8 +1,5 @@
 package project.dailyge.app.core.task.presentation.response;
 
-import lombok.Getter;
-
-@Getter
 public class TaskCreateResponse {
 
     private Long taskId;
@@ -12,6 +9,10 @@ public class TaskCreateResponse {
 
     public TaskCreateResponse(final Long taskId) {
         this.taskId = taskId;
+    }
+
+    public Long getTaskId() {
+        return taskId;
     }
 
     @Override

@@ -47,7 +47,7 @@ class AnniversarySaveIntegrationTest extends DatabaseTestBase {
         final AnniversaryJpaEntity findAnniversary = anniversaryReadService.findById(newAnniversaryId);
         assertAll(
             () -> assertEquals(name, findAnniversary.getName()),
-            () -> assertEquals(remind, findAnniversary.isRemind()),
+            () -> assertEquals(remind, findAnniversary.getRemind()),
             () -> assertEquals(now.toLocalDate(), findAnniversary.getDate().toLocalDate())
         );
     }

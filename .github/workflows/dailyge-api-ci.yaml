@@ -2,7 +2,7 @@ name: Dailyge-Api Static Analysis
 
 on:
   pull_request:
-    branches: [ dev, main ]
+    branches: [ dev, prod ]
     paths:
       - dailyge-api/**
       - storage/**
@@ -44,7 +44,7 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', 'gradle.properties', 'settings.gradle', 'build.gradle', '**/build.gradle') }}
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', '**/build.gradle') }}
           restore-keys: |
             ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
             ${{ runner.os }}-gradle-
@@ -52,11 +52,11 @@ jobs:
       - name: Run Static Analysis
         run: ./gradlew pmdMain pmdTest checkstyleMain checkstyleTest
         
-      - name: Build and analyze
+      - name: Test and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./gradlew test sonar -PskipJib=true --info --stacktrace --no-daemon
+        run: ./gradlew :dailyge-api:koverXmlReport sonar -PskipJib=true -Dsonar.inclusions=**/dailyge-api/**,**/storage/**
 
   notify_slack:
     runs-on: ubuntu-latest
@@ -71,11 +71,10 @@ jobs:
           color: "good"
           text: |
             :white_check_mark: *정적 분석을 성공적으로 완료했습니다.*
-            *Contributor:* ${{ github.actor }}
+            *Requestor:* ${{ github.actor }}
             *Reviewers:* ${{ join(github.event.pull_request.requested_reviewers.*.login, ', ') }}
-            *PR:* <${{ github.event.pull_request.html_url }}|PR>
+            *Link:* <${{ github.event.pull_request.html_url }}|PR>
             *Env:* ${{ env.ENV }}
-            *Sonarqube:* <${{ secrets.SONAR_HOST_URL }}|정적 분석지표>
           username: "PR_Bot"
           icon_emoji: ":robot_face:"
           channel: "pr"
@@ -90,12 +89,10 @@ jobs:
           color: "danger"
           text: |
             :x: *정적 분석에 실패했습니다.*
-            *Contributor:* ${{ github.actor }}
+            *Requestor:* ${{ github.actor }}
             *Reviewers:* ${{ join(github.event.pull_request.requested_reviewers.*.login, ', ') }}
-            *PR:* <${{ github.event.pull_request.html_url }}|PR>
+            *Link:* <${{ github.event.pull_request.html_url }}|PR>
             *Env:* ${{ env.ENV }}
-            *Sonarqube:* <${{ secrets.SONAR_HOST_URL }}|정적 분석지표>
-            *Description:* PR 채널을 확인해주세요.
           username: "PR_Bot"
           icon_emoji: ":robot_face:"
           channel: "pr"
@@ -110,11 +107,8 @@ jobs:
           color: "warning"
           text: |
             :warning: *정적 분석이 취소되었습니다.*
-            *Contributor:* ${{ github.actor }}
+            *Requestor:* ${{ github.actor }}
             *Reviewers:* ${{ join(github.event.pull_request.requested_reviewers.*.login, ', ') }}
-            *PR:* <${{ github.event.pull_request.html_url }}|PR>
+            *Link:* <${{ github.event.pull_request.html_url }}|PR>
             *Env:* ${{ env.ENV }}
-            *Sonarqube:* <${{ secrets.SONAR_HOST_URL }}|정적 분석지표>
-            *Description:* PR 채널을 확인해주세요.
           username: "PR_Bot"
-

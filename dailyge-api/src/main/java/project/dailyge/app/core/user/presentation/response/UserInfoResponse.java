@@ -1,9 +1,7 @@
 package project.dailyge.app.core.user.presentation.response;
 
-import lombok.Getter;
 import project.dailyge.core.cache.user.UserCache;
 
-@Getter
 public class UserInfoResponse {
 
     private final Long userId;
@@ -16,6 +14,22 @@ public class UserInfoResponse {
         this.nickname = user.getNickname();
         this.email = user.getEmail();
         this.profileImageUrl = user.getProfileImageUrl();
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getProfileImageUrl() {
+        return profileImageUrl;
     }
 
     @Override

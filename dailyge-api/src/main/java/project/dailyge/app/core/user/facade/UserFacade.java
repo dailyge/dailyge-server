@@ -1,9 +1,9 @@
 package project.dailyge.app.core.user.facade;
 
-import lombok.RequiredArgsConstructor;
 import project.dailyge.app.common.annotation.FacadeLayer;
 import project.dailyge.app.common.auth.TokenProvider;
 import project.dailyge.app.core.common.auth.DailygeToken;
+import project.dailyge.app.core.common.auth.DailygeUser;
 import project.dailyge.app.core.user.application.UserReadService;
 import project.dailyge.app.core.user.application.UserWriteService;
 import project.dailyge.app.core.user.application.command.UserUpdateCommand;
@@ -22,7 +22,6 @@ import static project.dailyge.entity.user.Role.NORMAL;
 import project.dailyge.entity.user.UserEvent;
 import static project.dailyge.entity.user.UserEvent.createEvent;
 
-@RequiredArgsConstructor
 @FacadeLayer(value = "UserFacade")
 public class UserFacade {
 
@@ -38,6 +37,28 @@ public class UserFacade {
     private final UserCacheReadService userCacheReadService;
     private final UserCacheWriteService userCacheWriteService;
 
+    public UserFacade(
+        final GoogleOAuthManager googleOAuthManager,
+        final UserReadService userReadService,
+        final UserWriteService userWriteService,
+        final TokenProvider tokenProvider,
+        final TokenManager tokenManager,
+        final EventPublisher<UserEvent> userEventPublisher,
+        final EventPublisher<TaskEvent> taskEventEventPublisher,
+        final UserCacheReadService userCacheReadService,
+        final UserCacheWriteService userCacheWriteService
+    ) {
+        this.googleOAuthManager = googleOAuthManager;
+        this.userReadService = userReadService;
+        this.userWriteService = userWriteService;
+        this.tokenProvider = tokenProvider;
+        this.tokenManager = tokenManager;
+        this.userEventPublisher = userEventPublisher;
+        this.taskEventEventPublisher = taskEventEventPublisher;
+        this.userCacheReadService = userCacheReadService;
+        this.userCacheWriteService = userCacheWriteService;
+    }
+
     public DailygeToken login(final String code) {
         final GoogleUserInfoResponse response = googleOAuthManager.getUserInfo(code);
         final Long findUserId = userReadService.findUserIdByEmail(response.getEmail());
@@ -52,7 +73,7 @@ public class UserFacade {
         final GoogleUserInfoResponse response
     ) {
         if (userId == null) {
-            final Long newUserId = userWriteService.save(response.getEmail());
+            final Long newUserId = userWriteService.save(response.getEmail(), response.getName());
             final TaskEvent taskEvent = TaskEvent.createEvent(newUserId, createTimeBasedUUID(), CREATE);
             final UserEvent userEvent = createEvent(newUserId, createTimeBasedUUID(), CREATE);
             executeEvent(userEvent, taskEvent);
@@ -100,25 +121,19 @@ public class UserFacade {
         userCacheWriteService.save(userCache);
     }
 
-    public void updateCache(
-        final Long userId,
-        final String nickname
+    public void update(
+        final DailygeUser dailygeUser,
+        final UserUpdateCommand command
     ) {
-        final UserCache userCache = userCacheReadService.findById(userId);
+        userWriteService.update(dailygeUser, command);
+        final UserCache userCache = userCacheReadService.findById(dailygeUser.getUserId());
         final UserCache updateUserCache = new UserCache(
-            userId,
-            nickname != null ? nickname : userCache.getNickname(),
+            dailygeUser.getUserId(),
+            command.nickname() != null ? command.nickname() : userCache.getNickname(),
             userCache.getEmail(),
             userCache.getProfileImageUrl(),
             userCache.getRole()
         );
         userCacheWriteService.save(updateUserCache);
-    }
-
-    public void updateUser(
-        final Long userId,
-        final UserUpdateCommand command
-    ) {
-        updateCache(userId, command.nickname());
     }
 }

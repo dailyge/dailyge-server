@@ -1,6 +1,5 @@
 package project.dailyge.app.core.task.application.usecase;
 
-import lombok.RequiredArgsConstructor;
 import project.dailyge.app.common.annotation.ApplicationLayer;
 import project.dailyge.app.core.common.auth.DailygeUser;
 import project.dailyge.app.core.task.application.TaskReadService;
@@ -18,12 +17,19 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-@RequiredArgsConstructor
 @ApplicationLayer(value = "TaskReadUseCase")
 class TaskReadUseCase implements TaskReadService {
 
     private final TaskEntityReadRepository taskReadRepository;
     private final MonthlyTaskEntityReadRepository monthlyTaskReadRepository;
+
+    public TaskReadUseCase(
+        final TaskEntityReadRepository taskReadRepository,
+        final MonthlyTaskEntityReadRepository monthlyTaskReadRepository
+    ) {
+        this.taskReadRepository = taskReadRepository;
+        this.monthlyTaskReadRepository = monthlyTaskReadRepository;
+    }
 
     @Override
     public Long findMonthlyTaskId(

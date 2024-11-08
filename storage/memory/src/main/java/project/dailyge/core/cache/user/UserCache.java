@@ -1,11 +1,8 @@
 package project.dailyge.core.cache.user;
 
-import lombok.Getter;
-
 import java.io.Serializable;
 import java.util.Objects;
 
-@Getter
 public class UserCache implements Serializable {
 
     private Long id;
@@ -29,6 +26,29 @@ public class UserCache implements Serializable {
         this.email = email;
         this.profileImageUrl = profileImageUrl;
         this.role = role;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getProfileImageUrl() {
+        if (profileImageUrl == null) {
+            return "";
+        }
+        return profileImageUrl;
+    }
+
+    public String getRole() {
+        return role;
     }
 
     @Override

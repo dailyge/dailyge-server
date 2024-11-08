@@ -1,6 +1,5 @@
 package project.dailyge.app.core.anniversary.application.usecase;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
 import project.dailyge.app.common.annotation.ApplicationLayer;
@@ -16,12 +15,19 @@ import project.dailyge.entity.anniversary.AnniversaryEntityReadRepository;
 import project.dailyge.entity.anniversary.AnniversaryEntityWriteRepository;
 import project.dailyge.entity.anniversary.AnniversaryJpaEntity;
 
-@RequiredArgsConstructor
 @ApplicationLayer(value = "AnniversaryWriteUseCase")
 class AnniversaryWriteUseCase implements AnniversaryWriteService {
 
     private final AnniversaryEntityReadRepository anniversaryEntityReadRepository;
     private final AnniversaryEntityWriteRepository anniversaryEntityWriteRepository;
+
+    public AnniversaryWriteUseCase(
+        final AnniversaryEntityReadRepository anniversaryEntityReadRepository,
+        final AnniversaryEntityWriteRepository anniversaryEntityWriteRepository
+    ) {
+        this.anniversaryEntityReadRepository = anniversaryEntityReadRepository;
+        this.anniversaryEntityWriteRepository = anniversaryEntityWriteRepository;
+    }
 
     @Override
     @Transactional

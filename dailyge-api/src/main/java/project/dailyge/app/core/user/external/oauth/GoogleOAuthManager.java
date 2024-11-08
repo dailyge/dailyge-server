@@ -57,11 +57,11 @@ public class GoogleOAuthManager {
 
     private GoogleUserInfoResponse returnRandomMockUserInfo() {
         final String firstUuid = UUID.randomUUID().toString().substring(0, 7).replace("-", "");
-        final String secondUuid = UUID.randomUUID().toString().replace("-", "");
+        final String secondUuid = UUID.randomUUID().toString().substring(0, 13).replace("-", "");
         final String email = firstUuid + secondUuid;
         final String emailFormat = email + "@gmail.com";
         final String imageUrl = "https://shorturl.at/dejs2";
-        return new GoogleUserInfoResponse(secondUuid, emailFormat, emailFormat, imageUrl, true);
+        return new GoogleUserInfoResponse(secondUuid, email, emailFormat, imageUrl, true);
     }
 
     private GoogleUserInfoResponse returnLocalMockUserInfo() {

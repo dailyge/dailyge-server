@@ -4,12 +4,10 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import lombok.Getter;
 import project.dailyge.entity.task.TaskJpaEntity;
 import project.dailyge.entity.task.Tasks;
 import static java.util.Collections.emptyList;
 
-@Getter
 public class MonthlyWeekTasksStatisticResponse {
 
     private LocalDate startDate;
@@ -42,5 +40,21 @@ public class MonthlyWeekTasksStatisticResponse {
             monthlyStatisticGroup.put(week, new MonthlyWeeksRateResponse(beforeMonthTask));
         }
         return monthlyStatisticGroup;
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    public Map<Integer, MonthlyWeeksRateResponse> getBeforeMonthlyStatistic() {
+        return beforeMonthlyStatistic;
+    }
+
+    public Map<Integer, MonthlyWeeksRateResponse> getCurrentMonthlyStatistic() {
+        return currentMonthlyStatistic;
     }
 }

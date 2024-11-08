@@ -10,8 +10,8 @@ import project.dailyge.app.core.weeklygoal.application.WeeklyGoalWriteService;
 import project.dailyge.app.core.weeklygoal.application.command.WeeklyGoalCreateCommand;
 import project.dailyge.app.core.weeklygoal.application.command.WeeklyGoalUpdateCommand;
 import project.dailyge.app.core.weeklygoal.exception.WeeklyGoalTypeException;
-import project.dailyge.entity.weeklygoal.WeeklyGoalEntityReadRepository;
-import project.dailyge.entity.weeklygoal.WeeklyGoalJpaEntity;
+import project.dailyge.entity.goal.WeeklyGoalEntityReadRepository;
+import project.dailyge.entity.goal.WeeklyGoalJpaEntity;
 
 import java.time.LocalDate;
 

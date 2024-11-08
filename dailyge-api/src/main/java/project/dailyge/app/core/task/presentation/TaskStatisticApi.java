@@ -1,6 +1,5 @@
 package project.dailyge.app.core.task.presentation;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,13 +17,20 @@ import project.dailyge.entity.task.Tasks;
 
 import java.time.LocalDate;
 
-@RequiredArgsConstructor
 @RequestMapping(path = {"/api/tasks/statistic"})
 @PresentationLayer(value = "TaskStatisticApi")
 public class TaskStatisticApi {
 
     private final TaskClientValidator validator;
     private final TaskReadService taskReadService;
+
+    public TaskStatisticApi(
+        final TaskClientValidator validator,
+        final TaskReadService taskReadService
+    ) {
+        this.validator = validator;
+        this.taskReadService = taskReadService;
+    }
 
     @GetMapping(path = {"/weekly"})
     public ApiResponse<WeeklyTasksStatisticResponse> findWeeklyTasksStatisticByUserIdAndDate(

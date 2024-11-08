@@ -1,6 +1,5 @@
 package project.dailyge.app.core.anniversary.application.usecase;
 
-import lombok.RequiredArgsConstructor;
 import project.dailyge.app.common.annotation.ApplicationLayer;
 import project.dailyge.app.core.anniversary.application.AnniversaryReadService;
 import static project.dailyge.app.core.anniversary.exception.AnniversaryCodeAndMessage.ANNIVERSARY_NOT_FOUND;
@@ -12,11 +11,14 @@ import project.dailyge.entity.anniversary.AnniversaryJpaEntity;
 import java.time.LocalDate;
 import java.util.List;
 
-@RequiredArgsConstructor
 @ApplicationLayer(value = "AnniversaryReadUseCase")
 class AnniversaryReadUseCase implements AnniversaryReadService {
 
     private final AnniversaryEntityReadRepository anniversaryEntityReadRepository;
+
+    public AnniversaryReadUseCase(final AnniversaryEntityReadRepository anniversaryEntityReadRepository) {
+        this.anniversaryEntityReadRepository = anniversaryEntityReadRepository;
+    }
 
     @Override
     public AnniversaryJpaEntity findById(final Long anniversaryId) {

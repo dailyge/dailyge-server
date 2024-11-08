@@ -1,12 +1,11 @@
 package project.dailyge.app.core.task.presentation.response;
 
-import java.util.List;
-import lombok.Getter;
 import project.dailyge.entity.task.TaskJpaEntity;
 import project.dailyge.entity.task.TaskStatus;
 import static project.dailyge.entity.task.Tasks.calculatePercentage;
 
-@Getter
+import java.util.List;
+
 public class MonthlyWeeksRateResponse {
 
     private double successRate;
@@ -24,5 +23,13 @@ public class MonthlyWeeksRateResponse {
         final double weekSuccessRate = calculatePercentage(weekTasks, TaskStatus.DONE);
         this.successRate = weekSuccessRate;
         this.failedRate = 100.0 - weekSuccessRate;
+    }
+
+    public double getSuccessRate() {
+        return successRate;
+    }
+
+    public double getFailedRate() {
+        return failedRate;
     }
 }

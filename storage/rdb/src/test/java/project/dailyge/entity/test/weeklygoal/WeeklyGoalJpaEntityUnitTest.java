@@ -1,18 +1,17 @@
 package project.dailyge.entity.test.weeklygoal;
 
+import static java.time.LocalDateTime.now;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import project.dailyge.entity.weeklygoal.WeeklyGoalFixture;
-import project.dailyge.entity.weeklygoal.WeeklyGoalJpaEntity;
-
-import static java.time.LocalDateTime.now;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import project.dailyge.entity.goal.WeeklyGoalJpaEntity;
 
 @DisplayName("[UnitTest] 주간 목표 엔티티 테스트")
 class WeeklyGoalJpaEntityUnitTest {

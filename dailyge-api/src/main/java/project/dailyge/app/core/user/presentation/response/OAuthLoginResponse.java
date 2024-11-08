@@ -1,13 +1,16 @@
 package project.dailyge.app.core.user.presentation.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
-@Getter
-@AllArgsConstructor
 public class OAuthLoginResponse {
 
-    private String accessToken;
+    private final String accessToken;
+
+    public OAuthLoginResponse(final String accessToken) {
+        this.accessToken = accessToken;
+    }
+
+    public String getAccessToken() {
+        return accessToken;
+    }
 
     @Override
     public String toString() {

@@ -1,6 +1,5 @@
 package project.dailyge.app.core.emoji.exception;
 
-import lombok.Getter;
 import project.dailyge.app.codeandmessage.CodeAndMessage;
 import project.dailyge.app.common.exception.BusinessException;
 import static project.dailyge.app.core.emoji.exception.EmojiCodeAndMessage.EMOJI_NOT_FOUND;
@@ -9,7 +8,6 @@ import static project.dailyge.app.core.emoji.exception.EmojiCodeAndMessage.EMOJI
 import java.util.HashMap;
 import java.util.Map;
 
-@Getter
 public sealed class EmojiTypeException extends BusinessException {
 
     private static final Map<CodeAndMessage, EmojiTypeException> factory = new HashMap<>();

@@ -1,13 +1,11 @@
 package project.dailyge.document.log;
 
-import lombok.Getter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.time.LocalDateTime;
 
-@Getter
 @Document(collection = "system_logs")
 public class SystemLogDocument {
 
@@ -31,5 +29,21 @@ public class SystemLogDocument {
         this.time = time;
         this.level = level;
         this.systemLog = systemLog;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public LocalDateTime getTime() {
+        return time;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public String getSystemLog() {
+        return systemLog;
     }
 }

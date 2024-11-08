@@ -1,6 +1,5 @@
 package project.dailyge.app.core.anniversary.presentation;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,13 +15,20 @@ import project.dailyge.app.core.common.auth.DailygeUser;
 import java.time.LocalDate;
 import java.util.List;
 
-@RequiredArgsConstructor
 @RequestMapping(path = "/api/anniversaries")
 @PresentationLayer(value = "AnniversaryReadApi")
 public class AnniversaryReadApi {
 
     private final AnniversaryClientValidator validator;
     private final AnniversaryReadService anniversaryReadService;
+
+    public AnniversaryReadApi(
+        final AnniversaryClientValidator validator,
+        final AnniversaryReadService anniversaryReadService
+    ) {
+        this.validator = validator;
+        this.anniversaryReadService = anniversaryReadService;
+    }
 
     @GetMapping
     public ApiResponse<List<AnniversaryResponse>> searchAnniversaries(

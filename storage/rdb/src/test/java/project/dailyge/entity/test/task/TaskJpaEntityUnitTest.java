@@ -1,5 +1,15 @@
 package project.dailyge.entity.test.task;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import project.dailyge.entity.task.TaskColor;
+import project.dailyge.entity.task.TaskJpaEntity;
+import project.dailyge.entity.task.TaskStatus;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -7,16 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import project.dailyge.entity.task.TaskColor;
-import project.dailyge.entity.task.TaskJpaEntity;
-import project.dailyge.entity.task.TaskStatus;
 import static project.dailyge.entity.task.TaskStatus.TODO;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @DisplayName("[UnitTest] 할 일 엔티티 테스트")
 class TaskJpaEntityUnitTest {
@@ -26,38 +27,42 @@ class TaskJpaEntityUnitTest {
     @BeforeEach
     void setUp() {
         final LocalDateTime now = LocalDateTime.now();
-        task = TaskJpaEntity.builder()
-            .id(1L)
-            .title("프로젝트 관리")
-            .content("프로젝트 진행 상황 점검")
-            .date(LocalDate.now().plusDays(10))
-            .status(TODO)
-            .userId(1L)
-            .createdAt(now)
-            .createdBy(1L)
-            .lastModifiedAt(now)
-            .lastModifiedBy(1L)
-            .deleted(false)
-            .build();
+        task = new TaskJpaEntity(
+            1L,
+            "프로젝트 관리",
+            "프로젝트 진행 상황 점검",
+            LocalDate.now().plusDays(10),
+            TaskStatus.TODO,
+            1L,
+            1L,
+            null,
+            now,
+            1L,
+            now,
+            1L,
+            false
+        );
     }
 
     @Test
     @DisplayName("올바른 인자가 들어오면 할 일이 생성된다.")
     void taskCreateTest() {
         final LocalDateTime now = LocalDateTime.now();
-        final TaskJpaEntity newTask = TaskJpaEntity.builder()
-            .id(1L)
-            .title("프로젝트 관리")
-            .content("프로젝트 진행 상황 점검")
-            .date(LocalDate.now().plusDays(10))
-            .status(TODO)
-            .userId(1L)
-            .createdAt(now)
-            .createdBy(1L)
-            .lastModifiedAt(now)
-            .lastModifiedBy(1L)
-            .deleted(false)
-            .build();
+        final TaskJpaEntity newTask = new TaskJpaEntity(
+            1L,
+            "프로젝트 관리",
+            "프로젝트 진행 상황 점검",
+            LocalDate.now().plusDays(10),
+            TaskStatus.TODO,
+            1L,
+            1L,
+            null,
+            now,
+            1L,
+            now,
+            1L,
+            false
+        );
 
         assertAll(
             () -> assertThat(newTask.getId()).isEqualTo(1L),
@@ -78,15 +83,13 @@ class TaskJpaEntityUnitTest {
     @DisplayName("올바른 일정이 생성되면 예외가 발생하지 않는다.")
     void whenValidTaskThenShouldNotThrow() {
         final LocalDate futureDate = LocalDate.now().plusMonths(6);
-        assertThatCode(() -> TaskJpaEntity.builder()
-            .title("유효한 제목")
-            .content("유효한 내용")
-            .date(futureDate)
-            .status(TODO)
-            .userId(1L)
-            .deleted(false)
-            .build())
-            .doesNotThrowAnyException();
+        assertThatCode(() -> new TaskJpaEntity(
+            "유효한 제목",
+            "유효한 내용",
+            futureDate,
+            TODO,
+            1L
+        )).doesNotThrowAnyException();
     }
 
     @Test
@@ -96,15 +99,14 @@ class TaskJpaEntityUnitTest {
         final LocalDate futureDate = LocalDate.now().plusDays(10);
 
         assertThatThrownBy(() ->
-            TaskJpaEntity.builder()
-                .title(longTitle)
-                .content("내용")
-                .date(futureDate)
-                .status(TODO)
-                .userId(1L)
-                .build()
-        ).isInstanceOf(RuntimeException.class)
-            .isExactlyInstanceOf(IllegalArgumentException.class)
+            new TaskJpaEntity(
+                longTitle,
+                "내용",
+                futureDate,
+                TODO,
+                1L
+            )
+        ).isInstanceOf(IllegalArgumentException.class)
             .hasMessage(task.getOverMaxTitleLengthErrorMessage());
     }
 
@@ -115,15 +117,14 @@ class TaskJpaEntityUnitTest {
         final LocalDate futureDate = LocalDate.now().plusDays(10);
 
         assertThatThrownBy(() ->
-            TaskJpaEntity.builder()
-                .title("제목")
-                .content(longContent)
-                .date(futureDate)
-                .status(TODO)
-                .userId(1L)
-                .build()
-        ).isInstanceOf(RuntimeException.class)
-            .isExactlyInstanceOf(IllegalArgumentException.class)
+            new TaskJpaEntity(
+                "제목",
+                longContent,
+                futureDate,
+                TODO,
+                1L
+            )
+        ).isInstanceOf(IllegalArgumentException.class)
             .hasMessageContaining(task.getOverMaxContentLengthErrorMessage());
     }
 
@@ -133,14 +134,14 @@ class TaskJpaEntityUnitTest {
         final LocalDate pastDate = LocalDate.now().minusYears(6);
 
         assertThatThrownBy(() ->
-            TaskJpaEntity.builder()
-                .title("제목")
-                .content("내용")
-                .date(pastDate)
-                .status(TODO)
-                .userId(1L)
-                .build()
-        ).isInstanceOf(RuntimeException.class)
+            new TaskJpaEntity(
+                "제목",
+                "내용",
+                pastDate,
+                TODO,
+                1L
+            )
+        ).isInstanceOf(IllegalArgumentException.class)
             .hasMessageContaining(task.getDateErrorMessage());
     }
 
@@ -151,14 +152,14 @@ class TaskJpaEntityUnitTest {
         final LocalDate beyondOneYearDate = now.plusYears(5).plusDays(1);
 
         assertThatThrownBy(() ->
-            TaskJpaEntity.builder()
-                .title("제목")
-                .content("내용")
-                .date(beyondOneYearDate)
-                .status(TODO)
-                .userId(1L)
-                .build()
-        ).isInstanceOf(RuntimeException.class)
+            new TaskJpaEntity(
+                "제목",
+                "내용",
+                beyondOneYearDate,
+                TODO,
+                1L
+            )
+        ).isInstanceOf(IllegalArgumentException.class)
             .hasMessageContaining(task.getDateErrorMessage());
     }
 
@@ -198,42 +199,46 @@ class TaskJpaEntityUnitTest {
     @DisplayName("monthlyTaskId 값으로 결과를 판단한다.")
     void whenSameMonthlyTaskIdThenResultShouldBeTrue() {
         final LocalDateTime now = LocalDateTime.now();
-        final TaskJpaEntity newTask = TaskJpaEntity.builder()
-            .id(1L)
-            .title("프로젝트 관리")
-            .content("프로젝트 진행 상황 점검")
-            .date(LocalDate.now().plusDays(10))
-            .status(TODO)
-            .monthlyTaskId(1L)
-            .userId(1L)
-            .createdAt(now)
-            .createdBy(1L)
-            .lastModifiedAt(now)
-            .lastModifiedBy(1L)
-            .deleted(false)
-            .build();
+        final Long monthlyTaskId = (long) now.getMonthValue();
+        final LocalDate localDate = now.toLocalDate();
+        final TaskJpaEntity newTask = new TaskJpaEntity(
+            1L,
+            "제목",
+            "내용",
+            LocalDate.now().plusDays(10),
+            TODO,
+            monthlyTaskId,
+            1L,
+            null,
+            now,
+            1L,
+            now,
+            1L,
+            false
+        );
 
-        assertTrue(newTask.isValidMonthlyTask(1L));
-        assertFalse(newTask.isValidMonthlyTask(2L));
+        assertTrue(newTask.isSameMonth(localDate));
     }
 
     @Test
     @DisplayName("할 일이 삭제되었다면, deleted 칼럼이 true가 된다.")
     void whenDeleteTaskThenDeleteStatusShouldBeTrue() {
         final LocalDateTime now = LocalDateTime.now();
-        final TaskJpaEntity newTask = TaskJpaEntity.builder()
-            .id(1L)
-            .title("프로젝트 관리")
-            .content("프로젝트 진행 상황 점검")
-            .date(LocalDate.now().plusDays(10))
-            .status(TODO)
-            .userId(1L)
-            .createdAt(now)
-            .createdBy(1L)
-            .lastModifiedAt(now)
-            .lastModifiedBy(1L)
-            .deleted(false)
-            .build();
+        final TaskJpaEntity newTask = new TaskJpaEntity(
+            1L,
+            "제목",
+            "내용",
+            LocalDate.now().plusDays(10),
+            TODO,
+            1L,
+            1L,
+            null,
+            now,
+            1L,
+            now,
+            1L,
+            false
+        );
 
         newTask.delete();
 
@@ -244,15 +249,13 @@ class TaskJpaEntityUnitTest {
     @DisplayName("Task와 동일한 달인 경우, True를 반환한다.")
     void whenSameMonthTaskThenResultShouldBeTrue() {
         final LocalDate now = LocalDate.of(2024, 10, 5);
-        final TaskJpaEntity newTask = TaskJpaEntity.builder()
-            .id(1L)
-            .title("프로젝트 관리")
-            .content("프로젝트 진행 상황 점검")
-            .date(now.plusDays(10))
-            .status(TODO)
-            .userId(1L)
-            .deleted(false)
-            .build();
+        final TaskJpaEntity newTask = new TaskJpaEntity(
+            "프로젝트 관리",
+            "프로젝트 진행 상황 점검",
+            now.plusDays(10),
+            TODO,
+            1L
+        );
 
         assertTrue(newTask.isSameMonth(now));
     }
@@ -262,15 +265,13 @@ class TaskJpaEntityUnitTest {
     void whenDifferentMonthTaskThenResultShouldBeFalse() {
         final LocalDate now = LocalDate.of(2024, 10, 5);
         final LocalDate differentMonth = LocalDate.of(2024, 11, 5);
-        final TaskJpaEntity newTask = TaskJpaEntity.builder()
-            .id(1L)
-            .title("프로젝트 관리")
-            .content("프로젝트 진행 상황 점검")
-            .date(now)
-            .status(TODO)
-            .userId(1L)
-            .deleted(false)
-            .build();
+        final TaskJpaEntity newTask = new TaskJpaEntity(
+            "프로젝트 관리",
+            "프로젝트 진행 상황 점검",
+            now,
+            TODO,
+            1L
+        );
 
         assertFalse(newTask.isSameMonth(differentMonth));
     }
@@ -278,33 +279,37 @@ class TaskJpaEntityUnitTest {
     @Test
     @DisplayName("ID가 같다면 같은 객체로 여긴다.")
     void whenIdIsSameThenInstanceAreSameObj() {
-        final TaskJpaEntity expectedTask = TaskJpaEntity.builder()
-            .id(1L)
-            .title("제목")
-            .content("내용")
-            .date(LocalDate.now().plusDays(10))
-            .status(TODO)
-            .userId(1L)
-            .createdAt(LocalDateTime.now())
-            .createdBy(1L)
-            .lastModifiedAt(LocalDateTime.now())
-            .lastModifiedBy(1L)
-            .deleted(false)
-            .build();
+        final TaskJpaEntity expectedTask = new TaskJpaEntity(
+            1L,
+            "제목",
+            "내용",
+            LocalDate.now().plusDays(10),
+            TODO,
+            1L,
+            1L,
+            null,
+            LocalDateTime.now(),
+            1L,
+            LocalDateTime.now(),
+            1L,
+            false
+        );
 
-        final TaskJpaEntity newTask = TaskJpaEntity.builder()
-            .id(1L)
-            .title("제목")
-            .content("내용")
-            .date(LocalDate.now().plusDays(10))
-            .status(TODO)
-            .userId(1L)
-            .createdAt(LocalDateTime.now())
-            .createdBy(1L)
-            .lastModifiedAt(LocalDateTime.now())
-            .lastModifiedBy(1L)
-            .deleted(false)
-            .build();
+        final TaskJpaEntity newTask = new TaskJpaEntity(
+            1L,
+            "제목",
+            "내용",
+            LocalDate.now().plusDays(10),
+            TODO,
+            1L,
+            1L,
+            null,
+            LocalDateTime.now(),
+            1L,
+            LocalDateTime.now(),
+            1L,
+            false
+        );
 
         assertThat(newTask).isEqualTo(expectedTask);
     }
@@ -312,33 +317,37 @@ class TaskJpaEntityUnitTest {
     @Test
     @DisplayName("ID가 다르면 다른 객체로 여긴다.")
     void whenIdIsDifferentThenInstancesAreDifferent() {
-        final TaskJpaEntity newTask = TaskJpaEntity.builder()
-            .id(1L)
-            .title("제목")
-            .content("내용")
-            .date(LocalDate.now().plusDays(10))
-            .status(TODO)
-            .userId(1L)
-            .createdAt(LocalDateTime.now())
-            .createdBy(1L)
-            .lastModifiedAt(LocalDateTime.now())
-            .lastModifiedBy(1L)
-            .deleted(false)
-            .build();
+        final TaskJpaEntity newTask = new TaskJpaEntity(
+            1L,
+            "제목",
+            "내용",
+            LocalDate.now().plusDays(10),
+            TODO,
+            1L,
+            1L,
+            null,
+            LocalDateTime.now(),
+            1L,
+            LocalDateTime.now(),
+            1L,
+            false
+        );
 
-        final TaskJpaEntity differentTask = TaskJpaEntity.builder()
-            .id(2L)
-            .title("제목")
-            .content("내용")
-            .date(LocalDate.now().plusDays(10))
-            .status(TODO)
-            .userId(1L)
-            .createdAt(LocalDateTime.now())
-            .createdBy(1L)
-            .lastModifiedAt(LocalDateTime.now())
-            .lastModifiedBy(1L)
-            .deleted(false)
-            .build();
+        final TaskJpaEntity differentTask = new TaskJpaEntity(
+            2L,
+            "제목",
+            "내용",
+            LocalDate.now().plusDays(10),
+            TODO,
+            1L,
+            1L,
+            null,
+            LocalDateTime.now(),
+            1L,
+            LocalDateTime.now(),
+            1L,
+            false
+        );
 
         assertThat(newTask).isNotEqualTo(differentTask);
     }
@@ -346,19 +355,21 @@ class TaskJpaEntityUnitTest {
     @Test
     @DisplayName("ID가 같다면 해시코드가 동일하다.")
     void whenIdIsSameThenHashcodeIsSame() {
-        final TaskJpaEntity newTask = TaskJpaEntity.builder()
-            .id(1L)
-            .title("제목")
-            .content("내용")
-            .date(LocalDate.now().plusDays(10))
-            .status(TODO)
-            .userId(1L)
-            .createdAt(LocalDateTime.now())
-            .createdBy(1L)
-            .lastModifiedAt(LocalDateTime.now())
-            .lastModifiedBy(1L)
-            .deleted(false)
-            .build();
+        final TaskJpaEntity newTask = new TaskJpaEntity(
+            1L,
+            "제목",
+            "내용",
+            LocalDate.now().plusDays(10),
+            TODO,
+            1L,
+            1L,
+            null,
+            LocalDateTime.now(),
+            1L,
+            LocalDateTime.now(),
+            1L,
+            false
+        );
         final int expected = newTask.hashCode();
         final int hashcode = newTask.hashCode();
 

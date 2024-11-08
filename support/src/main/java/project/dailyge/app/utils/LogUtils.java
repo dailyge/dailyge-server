@@ -3,7 +3,6 @@ package project.dailyge.app.utils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -103,12 +102,19 @@ public final class LogUtils {
         return visitor;
     }
 
-    @Getter
     public static class Visitor {
         private Long userId;
         private final String role = "GUEST";
 
         public Visitor() {
+        }
+
+        public Long getUserId() {
+            return userId;
+        }
+
+        public String getRole() {
+            return role;
         }
 
         @Override

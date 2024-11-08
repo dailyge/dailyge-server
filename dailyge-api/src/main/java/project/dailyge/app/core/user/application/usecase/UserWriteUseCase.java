@@ -1,9 +1,10 @@
 package project.dailyge.app.core.user.application.usecase;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import project.dailyge.app.common.annotation.ApplicationLayer;
+import project.dailyge.app.core.common.auth.DailygeUser;
 import project.dailyge.app.core.user.application.UserWriteService;
+import project.dailyge.app.core.user.application.command.UserUpdateCommand;
 import static project.dailyge.app.core.user.exception.UserCodeAndMessage.DUPLICATED_EMAIL;
 import static project.dailyge.app.core.user.exception.UserCodeAndMessage.USER_NOT_FOUND;
 import project.dailyge.app.core.user.exception.UserTypeException;
@@ -13,17 +14,27 @@ import project.dailyge.entity.user.UserJpaEntity;
 
 import java.util.Optional;
 
-@RequiredArgsConstructor
 @ApplicationLayer(value = "UserWriteService")
 public class UserWriteUseCase implements UserWriteService {
 
     private final UserEntityReadRepository userReadRepository;
     private final UserEntityWriteRepository userWriteRepository;
 
+    public UserWriteUseCase(
+        final UserEntityReadRepository userReadRepository,
+        final UserEntityWriteRepository userWriteRepository
+    ) {
+        this.userReadRepository = userReadRepository;
+        this.userWriteRepository = userWriteRepository;
+    }
+
     @Override
     @Transactional
-    public Long save(final String email) {
-        return userWriteRepository.save(email);
+    public Long save(
+        final String email,
+        final String nickname
+    ) {
+        return userWriteRepository.save(email, nickname);
     }
 
     @Override
@@ -34,6 +45,17 @@ public class UserWriteUseCase implements UserWriteService {
             throw UserTypeException.from(DUPLICATED_EMAIL);
         }
         return userWriteRepository.save(user);
+    }
+
+    @Override
+    @Transactional
+    public void update(
+        final DailygeUser dailygeUser,
+        final UserUpdateCommand command
+    ) {
+        final UserJpaEntity findUser = userReadRepository.findActiveUserById(dailygeUser.getUserId())
+            .orElseThrow(() -> UserTypeException.from(USER_NOT_FOUND));
+        findUser.updateNickname(command.nickname());
     }
 
     @Override

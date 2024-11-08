@@ -1,7 +1,6 @@
 package project.dailyge.app.core.coupon.application.scheduler;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
-import lombok.RequiredArgsConstructor;
 import project.dailyge.app.codeandmessage.CommonCodeAndMessage;
 import project.dailyge.app.common.annotation.ApplicationLayer;
 import project.dailyge.app.common.exception.CommonException;
@@ -11,7 +10,6 @@ import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 
-@RequiredArgsConstructor
 @ApplicationLayer(value = "CouponBulkScheduler")
 public class CouponBulkScheduler {
 

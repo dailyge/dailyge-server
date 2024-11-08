@@ -1,11 +1,10 @@
 package project.dailyge.app.common.auth;
 
-import java.util.Objects;
-import lombok.Getter;
 import project.dailyge.entity.user.Role;
 import static project.dailyge.entity.user.Role.ADMIN;
 
-@Getter
+import java.util.Objects;
+
 public class DailygeUser {
 
     private final Long userId;
@@ -17,6 +16,14 @@ public class DailygeUser {
     ) {
         this.userId = userId;
         this.role = role;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public Role getRole() {
+        return role;
     }
 
     public boolean isAdmin() {

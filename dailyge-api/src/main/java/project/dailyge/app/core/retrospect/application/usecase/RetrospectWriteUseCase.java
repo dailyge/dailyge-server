@@ -1,6 +1,5 @@
 package project.dailyge.app.core.retrospect.application.usecase;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
 import project.dailyge.app.common.annotation.ApplicationLayer;
@@ -15,12 +14,19 @@ import project.dailyge.entity.retrospect.RetrospectEntityReadRepository;
 import project.dailyge.entity.retrospect.RetrospectEntityWriteRepository;
 import project.dailyge.entity.retrospect.RetrospectJpaEntity;
 
-@RequiredArgsConstructor
 @ApplicationLayer("RetrospectWriteUseCase")
 class RetrospectWriteUseCase implements RetrospectWriteService {
 
     private final RetrospectEntityWriteRepository retrospectEntityWriteRepository;
     private final RetrospectEntityReadRepository retrospectEntityReadRepository;
+
+    public RetrospectWriteUseCase(
+        final RetrospectEntityWriteRepository retrospectEntityWriteRepository,
+        final RetrospectEntityReadRepository retrospectEntityReadRepository
+    ) {
+        this.retrospectEntityWriteRepository = retrospectEntityWriteRepository;
+        this.retrospectEntityReadRepository = retrospectEntityReadRepository;
+    }
 
     @Override
     @Transactional

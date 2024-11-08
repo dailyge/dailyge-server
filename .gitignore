@@ -1,8 +1,10 @@
 .gradle
+.kotlin
 build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
+/src/../*FixedDirectory*
 
 ### STS ###
 .apt_generated
@@ -49,3 +51,6 @@ index.html
 
 ### .xml ###
 *.xml
+
+### .env ###
+.env

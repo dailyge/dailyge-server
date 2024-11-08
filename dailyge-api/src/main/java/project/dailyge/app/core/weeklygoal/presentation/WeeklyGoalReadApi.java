@@ -1,10 +1,10 @@
 package project.dailyge.app.core.weeklygoal.presentation;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.OK;
 import project.dailyge.app.common.annotation.CursorPageable;
 import project.dailyge.app.common.annotation.LoginUser;
 import project.dailyge.app.common.annotation.PresentationLayer;
@@ -18,15 +18,20 @@ import project.dailyge.app.paging.Cursor;
 import java.time.LocalDate;
 import java.util.List;
 
-import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.OK;
-
-@RequiredArgsConstructor
 @RequestMapping(path = "/api/weekly-goals")
 @PresentationLayer(value = "WeeklyGoalReadApi")
 public class WeeklyGoalReadApi {
 
     private final WeeklyGoalClientValidator validator;
     private final WeeklyGoalReadService weeklyGoalReadService;
+
+    public WeeklyGoalReadApi(
+        final WeeklyGoalClientValidator validator,
+        final WeeklyGoalReadService weeklyGoalReadService
+    ) {
+        this.validator = validator;
+        this.weeklyGoalReadService = weeklyGoalReadService;
+    }
 
     @GetMapping
     public ApiResponse<List<WeeklyGoalResponse>> findWeeklyGoalsByCursor(

@@ -1,15 +1,5 @@
 package project.dailyge.app.test.user.integrationtest;
 
-import java.util.Optional;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import project.dailyge.app.common.DatabaseTestBase;
-import project.dailyge.app.common.exception.CommonException;
-import project.dailyge.app.core.user.application.UserReadService;
-import project.dailyge.app.core.user.application.UserWriteService;
-import project.dailyge.app.core.user.exception.UserTypeException;
-import project.dailyge.entity.user.UserJpaEntity;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -17,10 +7,21 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.*;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_USER_ID;
+import project.dailyge.app.common.DatabaseTestBase;
+import project.dailyge.app.common.exception.CommonException;
+import project.dailyge.app.core.user.application.UserReadService;
+import project.dailyge.app.core.user.application.UserWriteService;
 import static project.dailyge.app.core.user.exception.UserCodeAndMessage.USER_NOT_FOUND;
+import project.dailyge.app.core.user.exception.UserTypeException;
 import static project.dailyge.app.test.user.fixture.UserFixture.createUser;
-import static project.dailyge.app.test.user.integrationtest.TokenManagerIntegrationTest.*;
+import static project.dailyge.app.test.user.integrationtest.TokenManagerIntegrationTest.DETAIL_MESSAGE;
+import project.dailyge.entity.user.UserJpaEntity;
+
+import java.util.Optional;
 
 @DisplayName("[IntegrationTest] 사용자 조회 통합 테스트")
 class UserReadIntegrationTest extends DatabaseTestBase {
@@ -38,7 +39,7 @@ class UserReadIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("등록된 사용자를 조회하면, Null이 아니다.")
     void whenFindUserThenUserShouldBeNotNull() {
-        final UserJpaEntity user = userWriteService.save(createUser(2L, NAME, EMAIL));
+        final UserJpaEntity user = userWriteService.save(createUser(null, NAME, EMAIL));
         final UserJpaEntity findUser = userReadService.findById(user.getId());
 
         assertNotNull(findUser);
@@ -56,7 +57,7 @@ class UserReadIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("사용자를 조회하면, Null이 아니다.")
     void whenActiveUserFindThenUserShouldBeNotNull() {
-        final UserJpaEntity saveUser = userWriteService.save(createUser(2L, NAME, EMAIL));
+        final UserJpaEntity saveUser = userWriteService.save(createUser(null, NAME, EMAIL));
         final UserJpaEntity findUser = userReadService.findActiveUserById(saveUser.getId());
 
         assertNotNull(findUser);
@@ -83,7 +84,7 @@ class UserReadIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("이메일로 사용자를 조회 시, 값이 존재한다.")
     void whenFindUserByRegisteredEmailThenResultShouldBeTrue() {
-        final UserJpaEntity user = userWriteService.save(createUser(2L, NAME, EMAIL));
+        final UserJpaEntity user = userWriteService.save(createUser(null, NAME, EMAIL));
         final Optional<UserJpaEntity> findUser = userReadService.findActiveUserByEmail(user.getEmail());
 
         assertTrue(findUser.isPresent());
@@ -100,10 +101,10 @@ class UserReadIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("동일한 이메일로 재 가입 시, 삭제 되지 않은 정보만 검색된다.")
     void whenFindUserReRegisteredBySameEmailThenActiveUserShouldBeOne() {
-        final UserJpaEntity deleteUser = userWriteService.save(createUser(2L, NAME, EMAIL));
+        final UserJpaEntity deleteUser = userWriteService.save(createUser(null, NAME, EMAIL));
         userWriteService.delete(deleteUser.getId());
 
-        final UserJpaEntity activeUser = userWriteService.save(createUser(3L, NAME, EMAIL));
+        final UserJpaEntity activeUser = userWriteService.save(createUser(null, NAME, EMAIL));
         final Optional<UserJpaEntity> findUser = userReadService.findActiveUserByEmail(EMAIL);
 
         assertAll(
@@ -116,7 +117,7 @@ class UserReadIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("사용자가 존재할 경우, true 를 반환한다.")
     void whenUserExistentUserThenResultShouldBeTrue() {
-        final UserJpaEntity user = userWriteService.save(createUser(2L, NAME, EMAIL));
+        final UserJpaEntity user = userWriteService.save(createUser(null, NAME, EMAIL));
 
         assertTrue(userReadService.existsById(user.getId()));
     }

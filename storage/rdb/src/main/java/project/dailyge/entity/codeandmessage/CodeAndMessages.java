@@ -1,13 +1,10 @@
 package project.dailyge.entity.codeandmessage;
 
-import lombok.Getter;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Getter
 public final class CodeAndMessages {
 
     private static final String DELIMITER = ":";
@@ -31,6 +28,10 @@ public final class CodeAndMessages {
 
     private String getKey(final CodeAndMessageJpaEntity entity) {
         return entity.getDomain() + DELIMITER + entity.getName();
+    }
+
+    public List<CodeAndMessageJpaEntity> getCodeAndMessages() {
+        return codeAndMessages;
     }
 
     public void updateAll(final List<CodeAndMessageJpaEntity> codeAndMessages) {

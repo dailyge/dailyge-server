@@ -7,17 +7,12 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import project.dailyge.entity.BaseEntity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-@Getter
-@NoArgsConstructor
 @Entity(name = "tasks")
 public class TaskJpaEntity extends BaseEntity {
 
@@ -52,18 +47,24 @@ public class TaskJpaEntity extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private TaskStatus status;
 
+    @Column(name = "color")
+    @Enumerated(EnumType.STRING)
+    private TaskColor color;
+
     @Column(name = "user_id")
     private Long userId;
 
     @Column(name = "monthly_task_id")
     private Long monthlyTaskId;
 
-    @Column(name = "color")
-    @Enumerated(EnumType.STRING)
-    private TaskColor color;
+    @Column(name = "task_label_id")
+    private Long taskLabelId;
 
     @Column(name = "task_recurrence_id")
     private Long taskRecurrenceId;
+
+    protected TaskJpaEntity() {
+    }
 
     public TaskJpaEntity(
         final String title,
@@ -75,6 +76,7 @@ public class TaskJpaEntity extends BaseEntity {
         this(title, content, date, status, null, null, userId);
     }
 
+
     public TaskJpaEntity(
         final String title,
         final String content,
@@ -84,7 +86,17 @@ public class TaskJpaEntity extends BaseEntity {
         final Long monthlyTaskId,
         final Long userId
     ) {
-        this(title, content, date, status, color, monthlyTaskId, userId, null);
+        validate(title, content, date);
+        this.title = title;
+        this.content = content;
+        this.status = status;
+        this.date = date;
+        this.year = date.getYear();
+        this.month = date.getMonthValue();
+        this.color = color;
+        this.monthlyTaskId = monthlyTaskId;
+        this.userId = userId;
+        init(LocalDateTime.now(), userId, null, null, false);
     }
 
     public TaskJpaEntity(
@@ -107,12 +119,10 @@ public class TaskJpaEntity extends BaseEntity {
         this.color = color;
         this.monthlyTaskId = monthlyTaskId;
         this.userId = userId;
-        this.createdBy = userId;
-        this.createdAt = LocalDateTime.now();
         this.taskRecurrenceId = taskRecurrenceId;
+        init(LocalDateTime.now(), userId, null, null, false);
     }
 
-    @Builder
     public TaskJpaEntity(
         final Long id,
         final String title,
@@ -121,6 +131,7 @@ public class TaskJpaEntity extends BaseEntity {
         final TaskStatus status,
         final Long monthlyTaskId,
         final Long userId,
+        final Long taskRecurrenceId,
         final LocalDateTime createdAt,
         final Long createdBy,
         final LocalDateTime lastModifiedAt,
@@ -137,11 +148,8 @@ public class TaskJpaEntity extends BaseEntity {
         this.status = status;
         this.monthlyTaskId = monthlyTaskId;
         this.userId = userId;
-        this.createdAt = createdAt;
-        this.createdBy = createdBy;
-        this.lastModifiedAt = lastModifiedAt;
-        this.lastModifiedBy = lastModifiedBy;
-        this.deleted = deleted;
+        this.taskRecurrenceId = taskRecurrenceId;
+        init(createdAt, createdBy, lastModifiedAt, lastModifiedBy, deleted);
     }
 
     private void validate(
@@ -162,6 +170,46 @@ public class TaskJpaEntity extends BaseEntity {
         if (date.isBefore(dateBeforeFiveYears) || date.isAfter(dateAfterFiveYears)) {
             throw new IllegalArgumentException(DATE_BETWEEN_BEFORE_OR_AFTER_ERROR_MESSAGE);
         }
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public int getMonth() {
+        return month;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public TaskStatus getStatus() {
+        return status;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public Long getMonthlyTaskId() {
+        return monthlyTaskId;
+    }
+
+    public TaskColor getColor() {
+        return color;
     }
 
     public String getOverMaxTitleLengthErrorMessage() {
@@ -211,11 +259,7 @@ public class TaskJpaEntity extends BaseEntity {
     }
 
     public void delete() {
-        this.deleted = true;
-    }
-
-    public boolean isValidMonthlyTask(final Long monthlyTaskId) {
-        return getId().equals(monthlyTaskId);
+        updateDeletedStatus();
     }
 
     public boolean isSameMonth(final LocalDate otherDate) {

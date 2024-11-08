@@ -5,14 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import project.dailyge.entity.BaseEntity;
 
-import static lombok.AccessLevel.PROTECTED;
-
-@Getter
-@NoArgsConstructor(access = PROTECTED)
 @Entity(name = "monthly_tasks")
 public class MonthlyTaskJpaEntity extends BaseEntity {
 
@@ -28,6 +22,9 @@ public class MonthlyTaskJpaEntity extends BaseEntity {
 
     @Column(name = "user_id")
     private Long userId;
+
+    protected MonthlyTaskJpaEntity() {
+    }
 
     public MonthlyTaskJpaEntity(
         final Long id,
@@ -64,5 +61,21 @@ public class MonthlyTaskJpaEntity extends BaseEntity {
         final Long userId
     ) {
         this(null, year, month, userId);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public int getMonth() {
+        return month;
+    }
+
+    public Long getUserId() {
+        return userId;
     }
 }

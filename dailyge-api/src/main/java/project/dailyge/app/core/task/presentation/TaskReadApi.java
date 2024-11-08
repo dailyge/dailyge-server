@@ -1,6 +1,5 @@
 package project.dailyge.app.core.task.presentation;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,13 +22,20 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
-@RequiredArgsConstructor
 @RequestMapping(path = {"/api"})
 @PresentationLayer(value = "TaskReadApi")
 public class TaskReadApi {
 
     private final TaskClientValidator validator;
     private final TaskReadService taskReadService;
+
+    public TaskReadApi(
+        final TaskClientValidator validator,
+        final TaskReadService taskReadService
+    ) {
+        this.validator = validator;
+        this.taskReadService = taskReadService;
+    }
 
     @GetMapping(path = {"/monthly-tasks/id"})
     public ApiResponse<MonthlyTaskIdResponse> findMonthlyTaskId(

@@ -1,8 +1,5 @@
 package project.dailyge.app.paging;
 
-import lombok.Getter;
-
-@Getter
 public class CustomPageable {
 
     private final int pageNumber;
@@ -21,6 +18,14 @@ public class CustomPageable {
         final int limit
     ) {
         return new CustomPageable(page, limit);
+    }
+
+    public int getPageNumber() {
+        return pageNumber;
+    }
+
+    public int getPageSize() {
+        return pageSize;
     }
 
     public int getOffset() {

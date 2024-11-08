@@ -1,7 +1,6 @@
 package project.dailyge.app.core.anniversary.persistence;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import project.dailyge.entity.anniversary.AnniversaryEntityReadRepository;
 import project.dailyge.entity.anniversary.AnniversaryJpaEntity;
@@ -13,17 +12,20 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-@RequiredArgsConstructor
 class AnniversaryEntityReadDao implements AnniversaryEntityReadRepository {
 
     private final JPAQueryFactory queryFactory;
+
+    public AnniversaryEntityReadDao(final JPAQueryFactory queryFactory) {
+        this.queryFactory = queryFactory;
+    }
 
     @Override
     public Optional<AnniversaryJpaEntity> findById(final Long anniversaryId) {
         return Optional.ofNullable(
             queryFactory.selectFrom(anniversaryJpaEntity)
                 .where(anniversaryJpaEntity.id.eq(anniversaryId)
-                    .and(anniversaryJpaEntity.deleted.eq(false))
+                    .and(anniversaryJpaEntity._deleted.eq(false))
                 )
                 .fetchOne()
         );
@@ -36,9 +38,9 @@ class AnniversaryEntityReadDao implements AnniversaryEntityReadRepository {
     ) {
         final Integer findAnniversary = queryFactory.selectOne()
             .from(anniversaryJpaEntity)
-            .where(anniversaryJpaEntity.name.eq(name)
-                .and(anniversaryJpaEntity.date.eq(date))
-                .and(anniversaryJpaEntity.deleted.eq(false))
+            .where(anniversaryJpaEntity._name.eq(name)
+                .and(anniversaryJpaEntity._date.eq(date))
+                .and(anniversaryJpaEntity._deleted.eq(false))
             ).fetchFirst();
         return findAnniversary != null;
     }
@@ -51,7 +53,7 @@ class AnniversaryEntityReadDao implements AnniversaryEntityReadRepository {
     ) {
         return queryFactory.selectFrom(anniversaryJpaEntity)
             .where(anniversaryJpaEntity.userId.eq(userId)
-                .and(anniversaryJpaEntity.date.between(convertLocalDateTime(startDate), convertLocalDateTime(endDate)))
+                .and(anniversaryJpaEntity._date.between(convertLocalDateTime(startDate), convertLocalDateTime(endDate)))
             )
             .fetch();
     }

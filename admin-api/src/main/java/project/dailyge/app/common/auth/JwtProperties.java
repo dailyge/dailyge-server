@@ -1,13 +1,9 @@
 package project.dailyge.app.common.auth;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-@Getter
 @Component
-@NoArgsConstructor
 public class JwtProperties {
 
     @Value("${jwt.secret-key}")
@@ -24,6 +20,9 @@ public class JwtProperties {
 
     @Value("${jwt.refresh-expired-time}")
     private int refreshExpiredTime;
+
+    private JwtProperties() {
+    }
 
     public JwtProperties(
         final String secretKey,
@@ -45,5 +44,25 @@ public class JwtProperties {
 
     public byte[] getSaltBytes() {
         return salt.getBytes();
+    }
+
+    public String getSecretKey() {
+        return secretKey;
+    }
+
+    public String getPayloadSecretKey() {
+        return payloadSecretKey;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public int getAccessExpiredTime() {
+        return accessExpiredTime;
+    }
+
+    public int getRefreshExpiredTime() {
+        return refreshExpiredTime;
     }
 }

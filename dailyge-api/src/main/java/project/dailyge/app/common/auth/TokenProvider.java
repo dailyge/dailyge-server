@@ -11,8 +11,6 @@ import io.jsonwebtoken.UnsupportedJwtException;
 import javax.crypto.Cipher;
 import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_PARAMETERS;
@@ -20,7 +18,6 @@ import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INVALID_US
 import project.dailyge.app.common.exception.CommonException;
 import project.dailyge.app.core.common.auth.DailygeToken;
 import project.dailyge.app.core.common.auth.JwtProperties;
-import project.dailyge.app.core.common.auth.SecretKeyManager;
 
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
@@ -28,9 +25,7 @@ import java.time.Duration;
 import java.util.Base64;
 import java.util.Date;
 
-@Slf4j
 @Component
-@RequiredArgsConstructor
 public class TokenProvider {
 
     private static final String ID = "id";
@@ -39,6 +34,14 @@ public class TokenProvider {
     private static final int IV_SIZE = 12;
     private final JwtProperties jwtProperties;
     private final SecretKeyManager secretKeyManager;
+
+    public TokenProvider(
+        final JwtProperties jwtProperties,
+        final SecretKeyManager secretKeyManager
+    ) {
+        this.jwtProperties = jwtProperties;
+        this.secretKeyManager = secretKeyManager;
+    }
 
     public DailygeToken createToken(final Long userId) {
         final String accessToken = generateToken(userId, getExpiry(jwtProperties.getAccessExpiredTime()));

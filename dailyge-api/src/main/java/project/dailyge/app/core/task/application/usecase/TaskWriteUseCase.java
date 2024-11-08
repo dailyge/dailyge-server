@@ -1,11 +1,11 @@
 package project.dailyge.app.core.task.application.usecase;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import project.dailyge.app.common.annotation.ApplicationLayer;
 import project.dailyge.app.core.common.auth.DailygeUser;
 import project.dailyge.app.core.task.application.TaskWriteService;
 import project.dailyge.app.core.task.application.command.TaskCreateCommand;
+import project.dailyge.app.core.task.application.command.TaskLabelCreateCommand;
 import project.dailyge.app.core.task.application.command.TaskStatusUpdateCommand;
 import project.dailyge.app.core.task.application.command.TaskUpdateCommand;
 import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.MONTHLY_TASK_NOT_FOUND;
@@ -21,8 +21,9 @@ import project.dailyge.entity.task.TaskJpaEntity;
 
 import java.time.LocalDate;
 import java.util.List;
+import project.dailyge.entity.task.TaskLabelEntityWriteRepository;
+import project.dailyge.entity.task.TaskLabelJpaEntity;
 
-@RequiredArgsConstructor
 @ApplicationLayer(value = "TaskWriteUseCase")
 class TaskWriteUseCase implements TaskWriteService {
 
@@ -31,6 +32,23 @@ class TaskWriteUseCase implements TaskWriteService {
     private final TaskEntityWriteRepository taskWriteRepository;
     private final MonthlyTaskEntityReadRepository monthlyTaskReadRepository;
     private final MonthlyTaskEntityWriteRepository monthlyTaskWriteRepository;
+    private final TaskLabelEntityWriteRepository taskLabelEntityWriteRepository;
+
+    public TaskWriteUseCase(
+        final TaskValidator validator,
+        final TaskEntityReadRepository taskReadRepository,
+        final TaskEntityWriteRepository taskWriteRepository,
+        final MonthlyTaskEntityReadRepository monthlyTaskReadRepository,
+        final MonthlyTaskEntityWriteRepository monthlyTaskWriteRepository,
+        final TaskLabelEntityWriteRepository taskLabelEntityWriteRepository
+    ) {
+        this.validator = validator;
+        this.taskReadRepository = taskReadRepository;
+        this.taskWriteRepository = taskWriteRepository;
+        this.monthlyTaskReadRepository = monthlyTaskReadRepository;
+        this.monthlyTaskWriteRepository = monthlyTaskWriteRepository;
+        this.taskLabelEntityWriteRepository = taskLabelEntityWriteRepository;
+    }
 
     @Override
     @Transactional
@@ -92,6 +110,17 @@ class TaskWriteUseCase implements TaskWriteService {
             .orElseThrow(() -> TaskTypeException.from(TASK_NOT_FOUND));
         dailygeUser.validateAuth(findTask.getUserId());
         findTask.delete();
+    }
+
+    @Override
+    @Transactional
+    public Long saveTaskLabel(
+        final DailygeUser dailygeUser,
+        final TaskLabelCreateCommand command
+    ) {
+        validator.validateTaskLabelCreation(dailygeUser.getUserId());
+        final TaskLabelJpaEntity taskLabel = command.toEntity(dailygeUser);
+        return taskLabelEntityWriteRepository.save(taskLabel);
     }
 
     private MonthlyTaskJpaEntity findMonthlyTaskById(

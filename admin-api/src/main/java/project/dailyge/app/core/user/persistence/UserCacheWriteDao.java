@@ -2,26 +2,31 @@ package project.dailyge.app.core.user.persistence;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.lettuce.core.RedisException;
-import lombok.RequiredArgsConstructor;
+import static java.time.Duration.ofDays;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_GATEWAY;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
 import project.dailyge.app.common.exception.CommonException;
+import static project.dailyge.common.configuration.CompressionHelper.compressAsByteArrayWithZstd;
 import project.dailyge.core.cache.user.UserCache;
 import project.dailyge.core.cache.user.UserCacheWriteRepository;
 
-import static java.time.Duration.ofDays;
-import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_GATEWAY;
-import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
-import static project.dailyge.common.configuration.CompressionHelper.compressAsByteArrayWithZstd;
-
 @Repository
-@RequiredArgsConstructor
 public class UserCacheWriteDao implements UserCacheWriteRepository {
 
-    private static final long CACHE_DURATION = 90;
+    private static final long CACHE_DURATION = 14;
 
     private final RedisTemplate<String, byte[]> redisTemplate;
     private final ObjectMapper objectMapper;
+
+    public UserCacheWriteDao(
+        final RedisTemplate<String, byte[]> redisTemplate,
+        final ObjectMapper objectMapper
+    ) {
+        this.redisTemplate = redisTemplate;
+        this.objectMapper = objectMapper;
+    }
 
     @Override
     public void save(final UserCache userCache) {
@@ -33,11 +38,6 @@ public class UserCacheWriteDao implements UserCacheWriteRepository {
                 ofDays(CACHE_DURATION)
             )
         );
-    }
-
-    @Override
-    public void refreshExpirationDate(final Long userId) {
-        executeRedisCommand(() -> redisTemplate.expire(getKey(userId), ofDays(CACHE_DURATION)));
     }
 
     @Override

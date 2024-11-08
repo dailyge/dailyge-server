@@ -1,21 +1,22 @@
 package project.dailyge.app.core.user.external.oauth;
 
 import io.lettuce.core.RedisException;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_GATEWAY;
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
 import project.dailyge.app.common.annotation.ExternalLayer;
 import project.dailyge.app.common.exception.CommonException;
 
 import java.util.function.Supplier;
 
-import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.BAD_GATEWAY;
-import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.INTERNAL_SERVER_ERROR;
-
-@RequiredArgsConstructor
 @ExternalLayer(value = "TokenManager")
 public class TokenManager {
 
     private final RedisTemplate<String, String> redisTemplate;
+
+    public TokenManager(final RedisTemplate<String, String> redisTemplate) {
+        this.redisTemplate = redisTemplate;
+    }
 
     public void saveRefreshToken(
         final Long userId,

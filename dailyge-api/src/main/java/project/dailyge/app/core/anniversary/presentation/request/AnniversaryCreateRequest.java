@@ -3,12 +3,10 @@ package project.dailyge.app.core.anniversary.presentation.request;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
 import project.dailyge.app.core.anniversary.application.command.AnniversaryCreateCommand;
 
 import java.time.LocalDate;
 
-@Getter
 public class AnniversaryCreateRequest {
 
     @NotBlank
@@ -34,6 +32,22 @@ public class AnniversaryCreateRequest {
         this.date = date;
         this.remind = remind;
         this.emojiId = emojiId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public boolean isRemind() {
+        return remind;
+    }
+
+    public Long getEmojiId() {
+        return emojiId;
     }
 
     public AnniversaryCreateCommand toCommand() {

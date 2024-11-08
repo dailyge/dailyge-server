@@ -15,10 +15,10 @@ import project.dailyge.entity.BaseEntity;
 @Entity(name = "users")
 public class UserJpaEntity extends BaseEntity {
 
-    private static final int MAX_NICKNAME_LENGTH = 20;
+    private static final int MAX_NICKNAME_LENGTH = 24;
     private static final int MAX_PROFILE_IMAGE_URL_LENGTH = 2000;
-    private static final String EMAIL_PATTERN = "^[0-9a-zA-Z](?:[-_.]?[0-9a-zA-Z]){0,39}@gmail\\.com$";
-    private static final Pattern NICKNAME_PATTERN = Pattern.compile("^[a-zA-Z0-9가-힣_-]{3,20}$");
+    private static final Pattern EMAIL_PATTERN = Pattern.compile("^[0-9a-zA-Z]+(?:[._-]?[0-9a-zA-Z]+)*@gmail\\.com$");
+    private static final Pattern NICKNAME_PATTERN = Pattern.compile("^[a-zA-Z0-9가-힣._-]{3,24}$");
     private static final String OVER_MAX_NICKNAME_LENGTH_ERROR_MESSAGE = "입력 가능한 최대 닉네임 길이를 초과했습니다.";
     private static final String INVALID_EMAIL_ERROR_MESSAGE = "유효하지 않는 이메일 형식입니다.";
     private static final String OVER_MAX_PROFILE_IMAGE_URL_ERROR_MESSAGE = "입력 가능한 최대 URL 길이를 초과했습니다.";
@@ -150,7 +150,7 @@ public class UserJpaEntity extends BaseEntity {
     }
 
     private void validateEmail(final String email) {
-        if (!Pattern.matches(EMAIL_PATTERN, email)) {
+        if (!EMAIL_PATTERN.matcher(email).matches()) {
             throw new IllegalArgumentException(INVALID_EMAIL_ERROR_MESSAGE);
         }
     }

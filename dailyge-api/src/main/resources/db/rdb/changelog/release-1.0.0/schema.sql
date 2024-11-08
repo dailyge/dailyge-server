@@ -33,6 +33,7 @@ CREATE TABLE IF NOT EXISTS tasks
     status           ENUM ('TODO', 'IN_PROGRESS', 'DONE') NOT NULL COMMENT '할 일 상태',
     color            varchar(255)                         NOT NULL COMMENT '할 일 색상',
     monthly_task_id  BIGINT                               NOT NULL COMMENT '월간 일정',
+    label_id         BIGINT                               NULL COMMENT '라벨 ID',
     created_at       TIMESTAMP                            NOT NULL COMMENT '생성일',
     created_by       BIGINT                               NULL COMMENT '생성한 사람',
     last_modified_at TIMESTAMP                            NULL COMMENT '최종 수정일',
@@ -67,6 +68,7 @@ CREATE TABLE IF NOT EXISTS users
     nickname          VARCHAR(20)              NOT NULL COMMENT '닉네임',
     profile_image_url VARCHAR(2000)            NULL COMMENT '사용자 이미지',
     user_role         ENUM ('NORMAL', 'ADMIN') NOT NULL COMMENT '사용자 권한',
+    is_blacklist      BOOLEAN                  NULL COMMNET '블랙리스트 여부',
     created_at        TIMESTAMP                NOT NULL COMMENT '생성일',
     created_by        BIGINT                   NULL COMMENT '생성한 사람',
     last_modified_at  TIMESTAMP                NULL COMMENT '최종 수정일',
@@ -282,3 +284,19 @@ CREATE TABLE IF NOT EXISTS application_histories
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4 COMMENT '지원 이력',
   COLLATE utf8mb4_general_ci;
+
+CREATE TABLE IF NOT EXISTS task_labels
+(
+  id               BIGINT AUTO_INCREMENT PRIMARY KEY NOT NULL COMMENT '라벨 ID',
+  `name`           VARCHAR(30)                       NOT NULL COMMENT '라벨 명',
+  description      VARCHAR(100)                      NOT NULL COMMENT '라벨 설명',
+  user_id          BIGINT                            NOT NULL COMMENT '사용자 ID',
+  color            VARCHAR(30)                       NULL COMMENT '할 일 색상',
+  created_at       TIMESTAMP                         NOT NULL COMMENT '생성일',
+  created_by       BIGINT                            NULL COMMENT '생성한 사람',
+  last_modified_at TIMESTAMP                         NOT NULL COMMENT '최종 수정일',
+  last_modified_by BIGINT                            NULL COMMENT '최종 수정한 사람',
+  deleted          BIT                               NOT NULL COMMENT '삭제 유무'
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_general_ci COMMENT ='라벨';

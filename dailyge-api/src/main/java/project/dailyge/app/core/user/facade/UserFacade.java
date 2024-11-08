@@ -73,7 +73,7 @@ public class UserFacade {
         final GoogleUserInfoResponse response
     ) {
         if (userId == null) {
-            final Long newUserId = userWriteService.save(response.getEmail());
+            final Long newUserId = userWriteService.save(response.getEmail(), response.getName());
             final TaskEvent taskEvent = TaskEvent.createEvent(newUserId, createTimeBasedUUID(), CREATE);
             final UserEvent userEvent = createEvent(newUserId, createTimeBasedUUID(), CREATE);
             executeEvent(userEvent, taskEvent);

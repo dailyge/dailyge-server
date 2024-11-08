@@ -47,15 +47,18 @@ public class TaskJpaEntity extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private TaskStatus status;
 
+    @Column(name = "color")
+    @Enumerated(EnumType.STRING)
+    private TaskColor color;
+
     @Column(name = "user_id")
     private Long userId;
 
     @Column(name = "monthly_task_id")
     private Long monthlyTaskId;
 
-    @Column(name = "color")
-    @Enumerated(EnumType.STRING)
-    private TaskColor color;
+    @Column(name = "task_label_id")
+    private Long taskLabelId;
 
     @Column(name = "task_recurrence_id")
     private Long taskRecurrenceId;

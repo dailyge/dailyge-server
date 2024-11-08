@@ -3,6 +3,7 @@ package project.dailyge.app.test.task.integrationtest;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.core.task.application.TaskWriteService;
 import project.dailyge.app.core.task.application.command.TaskCreateCommand;
+import project.dailyge.app.core.task.application.command.TaskLabelCreateCommand;
 import project.dailyge.app.core.task.facade.TaskFacade;
 import static project.dailyge.app.test.task.fixture.TaskCommandFixture.createTaskCreationCommand;
 import project.dailyge.entity.task.MonthlyTaskEntityReadRepository;
@@ -79,5 +81,14 @@ class TaskSaveIntegrationTest extends DatabaseTestBase {
         countDownLatch.await(10, SECONDS);
         final long count = monthlyTaskReadRepository.countMonthlyTask(dailygeUser.getUserId(), date);
         assertEquals(12, count);
+    }
+
+    @Test
+    @DisplayName("라벨을 저장하면, ID가 Null이 아니다.")
+    void whenSaveTaskLabelThenTaskLabelIdShouldNotNotBeNull() {
+        final TaskLabelCreateCommand command = new TaskLabelCreateCommand("개발", "개발 관련 일정", "01153E");
+        final Long taskLabelId = taskWriteService.saveTaskLabel(dailygeUser, command);
+
+        Assertions.assertNotNull(taskLabelId);
     }
 }

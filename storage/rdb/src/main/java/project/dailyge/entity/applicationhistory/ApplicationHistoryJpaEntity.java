@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import project.dailyge.entity.BaseEntity;
 
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 

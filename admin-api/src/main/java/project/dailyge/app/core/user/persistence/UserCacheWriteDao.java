@@ -15,7 +15,7 @@ import project.dailyge.core.cache.user.UserCacheWriteRepository;
 @Repository
 public class UserCacheWriteDao implements UserCacheWriteRepository {
 
-    private static final long CACHE_DURATION = 90;
+    private static final long CACHE_DURATION = 14;
 
     private final RedisTemplate<String, byte[]> redisTemplate;
     private final ObjectMapper objectMapper;

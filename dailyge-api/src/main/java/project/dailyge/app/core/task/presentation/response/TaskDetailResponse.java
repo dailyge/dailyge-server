@@ -17,7 +17,6 @@ public class TaskDetailResponse {
     private final TaskStatus status;
     private final TaskColor color;
     private final Long userId;
-    private final Long taskRecurrenceId;
     private final String createdAt;
     private final String lastModifiedAt;
 
@@ -33,7 +32,6 @@ public class TaskDetailResponse {
         this.status = task.getStatus();
         this.color = task.getColor();
         this.userId = task.getUserId();
-        this.taskRecurrenceId = task.getTaskRecurrenceId();
         this.createdAt = task.getCreatedAtAsString();
         this.lastModifiedAt = task.getLastModifiedAtAsString();
     }
@@ -94,15 +92,13 @@ public class TaskDetailResponse {
         return lastModifiedAt;
     }
 
-    public Long getTaskRecurrenceId() {
-        return taskRecurrenceId;
-    }
-
     @Override
     public String toString() {
         return String.format(
-            "{\"taskId\":\"%s\",\"monthlyTaskId\":\"%s\",\"title\":\"%s\",\"content\":\"%s\",\"year\":\"%s\",\"month\":\"%s\",\"day\":\"%s\",\"weekOfMonth\":\"%s\",\"status\":\"%s\",\"color\":\"%s\",\"userId\":\"%s\",\"taskRecurrenceId\":\"%s\",\"createdAt\":\"%s\",\"lastModifiedAt\":\"%s\"}",
-            taskId, monthlyTaskId, title, content, year, month, day, weekOfMonth, status, color, userId, taskRecurrenceId, createdAt, lastModifiedAt
+            "{\"id\":\"%s\",\"monthlyTaskId\":\"%s\",\"title\":\"%s\",\"content\":\"%s\",\"year\":%d,\"month\":%d,"
+                + "\"day\":%d,\"weekOfMonth\":%d,\"status\":\"%s\", \"color\":\"%s\", \"userId\":%d,"
+                + "\"createdAt\":\"%s\",\"lastModifiedAt\":\"%s\"}",
+            taskId, monthlyTaskId, title, content, year, month, day, weekOfMonth, status, color, userId, createdAt, lastModifiedAt
         );
     }
 }

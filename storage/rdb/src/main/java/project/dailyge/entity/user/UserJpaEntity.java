@@ -7,11 +7,10 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import project.dailyge.entity.BaseEntity;
-
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.regex.Pattern;
+import project.dailyge.entity.BaseEntity;
 
 @Entity(name = "users")
 public class UserJpaEntity extends BaseEntity {
@@ -71,21 +70,6 @@ public class UserJpaEntity extends BaseEntity {
         final String email
     ) {
         this(id, nickname, email, false);
-    }
-
-    public UserJpaEntity(
-        final Long id,
-        final String nickname,
-        final String email,
-        final LocalDateTime createdAt
-    ) {
-        validate(nickname, email, profileImageUrl);
-        this.id = id;
-        this.nickname = nickname;
-        this.email = email;
-        this.role = Role.NORMAL;
-        this.isBlacklist = false;
-        init(createdAt, id, null, null, false);
     }
 
     public UserJpaEntity(
@@ -215,11 +199,6 @@ public class UserJpaEntity extends BaseEntity {
     public boolean isBlacklist() {
         return isBlacklist;
     }
-
-    public boolean getBlacklist() {
-        return isBlacklist;
-    }
-
 
     @Override
     public boolean equals(final Object obj) {

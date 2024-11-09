@@ -75,7 +75,7 @@ class UserReadIntegrationTest extends DatabaseTestBase {
             .isInstanceOf(UserTypeException.class)
             .hasMessage(USER_SERVICE_UNAVAILABLE.message());
     }
-    
+
     @Test
     @DisplayName("사용자 조회 시 없다면, UserNotFoundException이 발생한다.")
     void whenFindNonActiveUserThenUserNotFoundExceptionShouldBeHappen() {

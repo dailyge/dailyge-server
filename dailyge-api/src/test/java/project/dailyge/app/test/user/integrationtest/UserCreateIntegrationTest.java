@@ -56,7 +56,7 @@ class UserCreateIntegrationTest extends DatabaseTestBase {
             .isInstanceOf(UserTypeException.class)
             .hasMessage(DUPLICATED_EMAIL.message());
     }
-    
+
     @Test
     @DisplayName("최초 로그인 시, 사용자가 회원가입된다.")
     void whenFirstLoginThenUserIsShouldBeRegister() throws JsonProcessingException {

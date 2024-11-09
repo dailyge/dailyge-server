@@ -52,9 +52,6 @@ public class GoogleOAuthManager {
             final GoogleAuthorizationResponse response = getAccessToken(code);
             return getUserInfo(response);
         }
-        if ("test".equals(env)) {
-            return returnTestMockUserInfo(code);
-        }
         return returnLocalMockUserInfo();
     }
 
@@ -73,13 +70,6 @@ public class GoogleOAuthManager {
         final String email = name + "@gmail.com";
         final String imageUrl = "https://shorturl.at/dejs2";
         return new GoogleUserInfoResponse(uuid, name, email, imageUrl, true);
-    }
-
-    private GoogleUserInfoResponse returnTestMockUserInfo(final String code) {
-        final String uuid = UUID.randomUUID().toString().substring(0, 7).replace("-", "");
-        final String email = code + "@gmail.com";
-        final String imageUrl = "https://shorturl.at/dejs2";
-        return new GoogleUserInfoResponse(uuid, code, email, imageUrl, true);
     }
 
     private GoogleAuthorizationResponse getAccessToken(final String code) {

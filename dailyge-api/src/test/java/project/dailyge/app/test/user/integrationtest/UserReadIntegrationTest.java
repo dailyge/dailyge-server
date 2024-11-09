@@ -64,8 +64,20 @@ class UserReadIntegrationTest extends DatabaseTestBase {
     }
 
     @Test
-    @DisplayName("사용자 조회 시 없다면, UserActiveNotFoundException이 발생한다.")
-    void whenFindNonActiveUserThenUserActiveNotFoundExceptionShouldBeHappen() {
+    @DisplayName("블랙리스트 사용자 조회 시, UserServiceUnAvailableException이 발생한다.")
+    void whenFindBlacklistUserThenUserServiceUnAvailableExceptionShouldBeHappen() {
+        final UserJpaEntity blacklistUser = new UserJpaEntity(null, "blacklistUser", "blacklistUser@gmail.com", true);
+        final UserJpaEntity saveBlacklistUser = userWriteService.save(blacklistUser);
+
+        assertThatThrownBy(() -> userReadService.findAuthorizedUserById(saveBlacklistUser.getId()))
+            .isExactlyInstanceOf(UserTypeException.from(USER_NOT_FOUND).getClass())
+            .isInstanceOf(UserTypeException.class)
+            .hasMessage(USER_NOT_FOUND.message());
+    }
+    
+    @Test
+    @DisplayName("사용자 조회 시 없다면, UserNotFoundException이 발생한다.")
+    void whenFindNonActiveUserThenUserNotFoundExceptionShouldBeHappen() {
         assertThatThrownBy(() -> userReadService.findById(Long.MAX_VALUE))
             .isExactlyInstanceOf(UserTypeException.from(USER_NOT_FOUND).getClass())
             .isInstanceOf(UserTypeException.class)

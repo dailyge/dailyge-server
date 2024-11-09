@@ -10,7 +10,7 @@ Dailyge로 일정 관리를 간편하게! <br>
 성실한 하루의 연속이 큰 변화를 가져옵니다. 🏃
 
 [![Release](https://img.shields.io/badge/-📆_Web_Service-blue)](https://www.dailyge.com/) [![Release](https://img.shields.io/badge/-📚_API_Docs-brightgreen)](https://api-docs.dailyge.com/) <br/>
-[![Release](https://img.shields.io/badge/%E2%9C%A8%20release-v1.0.6-brightgreen)](https://github.com/dailyge/dailyge-server/releases/tag/v1.0.6)
+[![Release](https://img.shields.io/badge/%E2%9C%A8%20release-v1.0.9-brightgreen)](https://github.com/dailyge/dailyge-server/releases/tag/v1.0.9)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=dailyge_dailyge-server&metric=coverage)](https://sonarcloud.io/summary/new_code?id=dailyge_dailyge-server)
 
 </div>

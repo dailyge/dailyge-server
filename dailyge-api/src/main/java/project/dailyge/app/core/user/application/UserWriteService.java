@@ -11,7 +11,5 @@ public interface UserWriteService {
 
     void update(DailygeUser dailygeUser, UserUpdateCommand command);
 
-    UserJpaEntity upsert(UserJpaEntity user);
-
     void delete(Long userId);
 }

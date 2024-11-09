@@ -17,6 +17,7 @@ import project.dailyge.app.core.user.application.UserReadService;
 import project.dailyge.app.core.user.application.UserWriteService;
 import static project.dailyge.app.core.user.exception.UserCodeAndMessage.USER_NOT_FOUND;
 import project.dailyge.app.core.user.exception.UserTypeException;
+import static project.dailyge.app.core.user.exception.UserCodeAndMessage.USER_SERVICE_UNAVAILABLE;
 import static project.dailyge.app.test.user.fixture.UserFixture.createUser;
 import static project.dailyge.app.test.user.integrationtest.TokenManagerIntegrationTest.DETAIL_MESSAGE;
 import project.dailyge.entity.user.UserJpaEntity;
@@ -64,8 +65,20 @@ class UserReadIntegrationTest extends DatabaseTestBase {
     }
 
     @Test
-    @DisplayName("사용자 조회 시 없다면, UserActiveNotFoundException이 발생한다.")
-    void whenFindNonActiveUserThenUserActiveNotFoundExceptionShouldBeHappen() {
+    @DisplayName("블랙리스트 사용자 조회 시, UserServiceUnAvailableException이 발생한다.")
+    void whenFindBlacklistUserThenUserServiceUnAvailableExceptionShouldBeHappen() {
+        final UserJpaEntity blacklistUser = new UserJpaEntity(null, "blacklistUser", "blacklistUser@gmail.com", true);
+        final UserJpaEntity saveBlacklistUser = userWriteService.save(blacklistUser);
+
+        assertThatThrownBy(() -> userReadService.findActiveUserById(saveBlacklistUser.getId()))
+            .isExactlyInstanceOf(UserTypeException.from(USER_SERVICE_UNAVAILABLE).getClass())
+            .isInstanceOf(UserTypeException.class)
+            .hasMessage(USER_SERVICE_UNAVAILABLE.message());
+    }
+
+    @Test
+    @DisplayName("사용자 조회 시 없다면, UserNotFoundException이 발생한다.")
+    void whenFindNonActiveUserThenUserNotFoundExceptionShouldBeHappen() {
         assertThatThrownBy(() -> userReadService.findById(Long.MAX_VALUE))
             .isExactlyInstanceOf(UserTypeException.from(USER_NOT_FOUND).getClass())
             .isInstanceOf(UserTypeException.class)

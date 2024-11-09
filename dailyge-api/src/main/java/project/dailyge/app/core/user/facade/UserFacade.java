@@ -1,5 +1,6 @@
 package project.dailyge.app.core.user.facade;
 
+import java.util.Optional;
 import project.dailyge.app.common.annotation.FacadeLayer;
 import project.dailyge.app.common.auth.TokenProvider;
 import project.dailyge.app.core.common.auth.DailygeToken;
@@ -7,19 +8,22 @@ import project.dailyge.app.core.common.auth.DailygeUser;
 import project.dailyge.app.core.user.application.UserReadService;
 import project.dailyge.app.core.user.application.UserWriteService;
 import project.dailyge.app.core.user.application.command.UserUpdateCommand;
+import project.dailyge.app.core.user.exception.UserTypeException;
 import project.dailyge.app.core.user.external.oauth.GoogleOAuthManager;
 import project.dailyge.app.core.user.external.oauth.TokenManager;
 import project.dailyge.app.core.user.external.response.GoogleUserInfoResponse;
 import project.dailyge.core.cache.user.UserCache;
 import project.dailyge.core.cache.user.UserCacheReadService;
 import project.dailyge.core.cache.user.UserCacheWriteService;
-import static project.dailyge.document.common.UuidGenerator.createTimeBasedUUID;
 import project.dailyge.entity.common.EventPublisher;
+import project.dailyge.entity.task.TaskEvent;
+import project.dailyge.entity.user.UserEvent;
+import project.dailyge.entity.user.UserJpaEntity;
+import static project.dailyge.app.core.user.exception.UserCodeAndMessage.USER_SERVICE_UNAVAILABLE;
+import static project.dailyge.document.common.UuidGenerator.createTimeBasedUUID;
 import static project.dailyge.entity.common.EventType.CREATE;
 import static project.dailyge.entity.common.EventType.UPDATE;
-import project.dailyge.entity.task.TaskEvent;
 import static project.dailyge.entity.user.Role.NORMAL;
-import project.dailyge.entity.user.UserEvent;
 import static project.dailyge.entity.user.UserEvent.createEvent;
 
 @FacadeLayer(value = "UserFacade")
@@ -61,27 +65,31 @@ public class UserFacade {
 
     public DailygeToken login(final String code) {
         final GoogleUserInfoResponse response = googleOAuthManager.getUserInfo(code);
-        final Long findUserId = userReadService.findUserIdByEmail(response.getEmail());
-        final Long userId = publishEvent(findUserId, response);
+        final Optional<UserJpaEntity> findUser = userReadService.findActiveUserByEmail(response.getEmail());
+        final Long userId = publishEvent(findUser, response);
         final DailygeToken token = tokenProvider.createToken(userId);
         tokenManager.saveRefreshToken(userId, token.refreshToken());
         return token;
     }
 
     private Long publishEvent(
-        final Long userId,
+        final Optional<UserJpaEntity> user,
         final GoogleUserInfoResponse response
     ) {
-        if (userId == null) {
-            final Long newUserId = userWriteService.save(response.getEmail(), response.getName());
-            final TaskEvent taskEvent = TaskEvent.createEvent(newUserId, createTimeBasedUUID(), CREATE);
-            final UserEvent userEvent = createEvent(newUserId, createTimeBasedUUID(), CREATE);
-            executeEvent(userEvent, taskEvent);
-            return newUserId;
+        if (user.isPresent()) {
+            final UserJpaEntity existingUser = user.get();
+            if (existingUser.isBlacklist()) {
+                throw UserTypeException.from(USER_SERVICE_UNAVAILABLE);
+            }
+            final UserEvent userEvent = createEvent(existingUser.getId(), createTimeBasedUUID(), UPDATE);
+            userEventPublisher.publishInternalEvent(userEvent);
+            return existingUser.getId();
         }
-        final UserEvent userEvent = createEvent(userId, createTimeBasedUUID(), UPDATE);
-        userEventPublisher.publishInternalEvent(userEvent);
-        return userId;
+        final Long newUserId = userWriteService.save(response.getEmail(), response.getName());
+        final TaskEvent taskEvent = TaskEvent.createEvent(newUserId, createTimeBasedUUID(), CREATE);
+        final UserEvent userEvent = createEvent(newUserId, createTimeBasedUUID(), CREATE);
+        executeEvent(userEvent, taskEvent);
+        return newUserId;
     }
 
     private void executeEvent(

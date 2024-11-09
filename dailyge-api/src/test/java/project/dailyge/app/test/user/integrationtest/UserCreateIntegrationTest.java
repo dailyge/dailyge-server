@@ -12,10 +12,8 @@ import project.dailyge.app.core.user.exception.UserTypeException;
 import project.dailyge.app.core.user.facade.UserFacade;
 import project.dailyge.entity.user.UserJpaEntity;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static project.dailyge.app.core.user.exception.UserCodeAndMessage.DUPLICATED_EMAIL;
-import static project.dailyge.app.core.user.exception.UserCodeAndMessage.USER_SERVICE_UNAVAILABLE;
 import static project.dailyge.app.test.user.fixture.UserFixture.createUser;
 
 @DisplayName("[IntegrationTest] 사용자 저장 통합 테스트")
@@ -48,17 +46,6 @@ class UserCreateIntegrationTest extends DatabaseTestBase {
             .isExactlyInstanceOf(UserTypeException.from(DUPLICATED_EMAIL).getClass())
             .isInstanceOf(UserTypeException.class)
             .hasMessage(DUPLICATED_EMAIL.message());
-    }
-
-    @Test
-    @DisplayName("정상 등록된 사용자가 로그인 시, 예외가 발생하지 않는다.")
-    void whenLoginNormalUserThenShouldNotThrow() {
-        final String name = "dailyges";
-        final String email = "dailyges@gmail.com";
-        final UserJpaEntity registeredUser = new UserJpaEntity(null, name, email, false);
-        userWriteService.save(registeredUser);
-
-        assertDoesNotThrow(() -> userFacade.login(name));
     }
 
     @Test

@@ -23,13 +23,10 @@ import static project.dailyge.app.core.user.exception.UserCodeAndMessage.USER_SE
 import static project.dailyge.document.common.UuidGenerator.createTimeBasedUUID;
 import static project.dailyge.entity.common.EventType.CREATE;
 import static project.dailyge.entity.common.EventType.UPDATE;
-import static project.dailyge.entity.user.Role.NORMAL;
 import static project.dailyge.entity.user.UserEvent.createEvent;
 
 @FacadeLayer(value = "UserFacade")
 public class UserFacade {
-
-    private static final String FIXED_IMAGE_URL = "https://shorturl.at/dejs2";
 
     private final GoogleOAuthManager googleOAuthManager;
     private final UserReadService userReadService;
@@ -122,9 +119,9 @@ public class UserFacade {
     }
 
     private void saveCache(final Long userId) {
-        final String findEmail = userReadService.findEmailByUserId(userId);
+        final UserJpaEntity findUser = userReadService.findActiveUserById(userId);
         final UserCache userCache = new UserCache(
-            userId, findEmail, findEmail, FIXED_IMAGE_URL, NORMAL.name()
+            userId, findUser.getNickname(), findUser.getEmail(), findUser.getProfileImageUrl(), findUser.getRoleAsString()
         );
         userCacheWriteService.save(userCache);
     }

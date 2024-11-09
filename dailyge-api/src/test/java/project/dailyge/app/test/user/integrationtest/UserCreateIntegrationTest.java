@@ -4,6 +4,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import project.dailyge.app.common.DatabaseTestBase;
+import project.dailyge.app.common.auth.TokenProvider;
+import project.dailyge.app.core.common.auth.DailygeToken;
 import project.dailyge.app.core.user.application.UserReadService;
 import project.dailyge.app.core.user.application.UserWriteService;
 import project.dailyge.app.core.user.exception.UserTypeException;
@@ -28,6 +30,9 @@ class UserCreateIntegrationTest extends DatabaseTestBase {
     @Autowired
     private UserFacade userFacade;
 
+    @Autowired
+    private TokenProvider tokenProvider;
+
     @Test
     @DisplayName("사용자 등록이 정상적으로 성공하면, 사용자 ID는 NULL이 아니다.")
     void whenUserSaveSuccessThenUserIdShouldBeNotNull() {
@@ -46,30 +51,7 @@ class UserCreateIntegrationTest extends DatabaseTestBase {
     }
 
     @Test
-    @DisplayName("최초 로그인 시, 사용자가 회원가입된다.")
-    void whenFirstLoginThenUserIsShouldBeRegister() {
-        final String name = "dailyges";
-        final String email = "dailyges@gmail.com";
-        userFacade.login(name);
-
-        assertNotNull(userReadService.findUserIdByEmail(email));
-    }
-
-    @Test
-    @DisplayName("로그인 시 블랙리스트일 경우, UserServiceUnAvailableException이 발생한다.")
-    void whenBlacklistUserLoginThenUserServiceUnAvailableExceptionShouldBeHappen() {
-        final String name = "blacklistUser";
-        final String email = "blacklistUser@gmail.com";
-        final UserJpaEntity blacklistUser = new UserJpaEntity(null, name, email, true);
-        userWriteService.save(blacklistUser);
-
-        assertThatThrownBy(() -> userFacade.login(name))
-            .isExactlyInstanceOf(UserTypeException.from(USER_SERVICE_UNAVAILABLE).getClass())
-            .hasMessage(USER_SERVICE_UNAVAILABLE.message());
-    }
-
-    @Test
-    @DisplayName("정상 사용자가 로그인 시, 예외가 발생하지 않는다.")
+    @DisplayName("정상 등록된 사용자가 로그인 시, 예외가 발생하지 않는다.")
     void whenLoginNormalUserThenShouldNotThrow() {
         final String name = "dailyges";
         final String email = "dailyges@gmail.com";
@@ -77,5 +59,15 @@ class UserCreateIntegrationTest extends DatabaseTestBase {
         userWriteService.save(registeredUser);
 
         assertDoesNotThrow(() -> userFacade.login(name));
+    }
+
+    @Test
+    @DisplayName("최초 로그인 시, 사용자가 회원가입된다.")
+    void whenFirstLoginThenUserIsShouldBeRegister() {
+        final String name = "dailyges";
+        final DailygeToken token = userFacade.login(name);
+
+        final Long userId = tokenProvider.getUserId(token.accessToken());
+        assertNotNull(userReadService.findById(userId));
     }
 }

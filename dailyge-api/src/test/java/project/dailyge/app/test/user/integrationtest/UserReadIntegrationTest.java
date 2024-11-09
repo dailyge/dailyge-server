@@ -17,6 +17,7 @@ import project.dailyge.app.core.user.application.UserReadService;
 import project.dailyge.app.core.user.application.UserWriteService;
 import static project.dailyge.app.core.user.exception.UserCodeAndMessage.USER_NOT_FOUND;
 import project.dailyge.app.core.user.exception.UserTypeException;
+import static project.dailyge.app.core.user.exception.UserCodeAndMessage.USER_SERVICE_UNAVAILABLE;
 import static project.dailyge.app.test.user.fixture.UserFixture.createUser;
 import static project.dailyge.app.test.user.integrationtest.TokenManagerIntegrationTest.DETAIL_MESSAGE;
 import project.dailyge.entity.user.UserJpaEntity;
@@ -69,10 +70,10 @@ class UserReadIntegrationTest extends DatabaseTestBase {
         final UserJpaEntity blacklistUser = new UserJpaEntity(null, "blacklistUser", "blacklistUser@gmail.com", true);
         final UserJpaEntity saveBlacklistUser = userWriteService.save(blacklistUser);
 
-        assertThatThrownBy(() -> userReadService.findAuthorizedUserById(saveBlacklistUser.getId()))
-            .isExactlyInstanceOf(UserTypeException.from(USER_NOT_FOUND).getClass())
+        assertThatThrownBy(() -> userReadService.findActiveUserById(saveBlacklistUser.getId()))
+            .isExactlyInstanceOf(UserTypeException.from(USER_SERVICE_UNAVAILABLE).getClass())
             .isInstanceOf(UserTypeException.class)
-            .hasMessage(USER_NOT_FOUND.message());
+            .hasMessage(USER_SERVICE_UNAVAILABLE.message());
     }
     
     @Test

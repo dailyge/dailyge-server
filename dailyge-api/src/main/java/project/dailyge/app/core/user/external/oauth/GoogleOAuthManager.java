@@ -66,9 +66,10 @@ public class GoogleOAuthManager {
 
     private GoogleUserInfoResponse returnLocalMockUserInfo() {
         final String uuid = UUID.randomUUID().toString().substring(0, 7).replace("-", "");
-        final String email = "dailyge" + "@gmail.com";
+        final String name = "dailyge";
+        final String email = name + "@gmail.com";
         final String imageUrl = "https://shorturl.at/dejs2";
-        return new GoogleUserInfoResponse(uuid, email, email, imageUrl, true);
+        return new GoogleUserInfoResponse(uuid, name, email, imageUrl, true);
     }
 
     private GoogleAuthorizationResponse getAccessToken(final String code) {

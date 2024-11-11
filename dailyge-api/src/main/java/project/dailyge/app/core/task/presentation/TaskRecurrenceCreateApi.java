@@ -39,7 +39,7 @@ public class TaskRecurrenceCreateApi {
     ) {
         validator.validateStartDateToEndDate(request.getStartDate(), request.getEndDate());
         validator.validateDayPattern(request.getType(), request.getDatePattern());
-        final Long taskRecurrenceId = taskRecurrenceWriteService.save(dailygeUser, request.toCommand());
+        final Long taskRecurrenceId = taskRecurrenceWriteService.save(dailygeUser, request.toCommand(dailygeUser.getUserId()));
         final TaskRecurrenceIdResponse payload = new TaskRecurrenceIdResponse(taskRecurrenceId);
         return ApiResponse.from(CREATED, payload);
     }

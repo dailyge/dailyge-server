@@ -14,7 +14,8 @@ public record TaskRecurrenceCreateCommand(
     RecurrenceType type,
     List<Integer> datePattern,
     LocalDate startDate,
-    LocalDate endDate
+    LocalDate endDate,
+    Long userId
 ) {
     public TaskRecurrenceJpaEntity toEntity() {
         return new TaskRecurrenceJpaEntity(
@@ -23,7 +24,8 @@ public record TaskRecurrenceCreateCommand(
             title,
             content,
             startDate.atTime(0, 0, 0, 0),
-            endDate.atTime(0, 0, 0, 0)
+            endDate.atTime(0, 0, 0, 0),
+            userId
         );
     }
 }

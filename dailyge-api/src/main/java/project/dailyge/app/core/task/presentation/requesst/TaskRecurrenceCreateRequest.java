@@ -42,7 +42,8 @@ public class TaskRecurrenceCreateRequest {
         final RecurrenceType type,
         final List<Integer> dayPattern,
         final LocalDate startDate,
-        final LocalDate endDate
+        final LocalDate endDate,
+        final Long userId
     ) {
         this.title = title;
         this.content = content;
@@ -89,7 +90,7 @@ public class TaskRecurrenceCreateRequest {
         );
     }
 
-    public TaskRecurrenceCreateCommand toCommand() {
-        return new TaskRecurrenceCreateCommand(title, content, color, type, datePattern, startDate, endDate);
+    public TaskRecurrenceCreateCommand toCommand(final Long userId) {
+        return new TaskRecurrenceCreateCommand(title, content, color, type, datePattern, startDate, endDate, userId);
     }
 }

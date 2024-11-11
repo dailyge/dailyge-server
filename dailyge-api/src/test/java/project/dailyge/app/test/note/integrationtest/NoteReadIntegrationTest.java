@@ -123,7 +123,7 @@ class NoteReadIntegrationTest extends DatabaseTestBase {
         final Long newNoteId = noteFacade.save(dailygeUser, command, 30);
         final DailygeUser invalidDailygeUser = new DailygeUser(Long.MAX_VALUE, Role.NORMAL);
 
-        assertThatThrownBy(() -> noteReadService.findSentNoteById(invalidDailygeUser, newNoteId))
+        assertThatThrownBy(() -> noteReadService.findSentNotesById(invalidDailygeUser, newNoteId))
             .isInstanceOf(CommonException.class)
             .hasMessage(UN_AUTHORIZED.message());
     }
@@ -136,7 +136,7 @@ class NoteReadIntegrationTest extends DatabaseTestBase {
         noteFacade.save(dailygeUser, command, 30);
         final Long invalidNoteId = Long.MAX_VALUE;
 
-        assertThatThrownBy(() -> noteReadService.findSentNoteById(dailygeUser, invalidNoteId))
+        assertThatThrownBy(() -> noteReadService.findSentNotesById(dailygeUser, invalidNoteId))
             .isInstanceOf(NoteTypeException.class)
             .hasMessage(NOTE_NOT_FOUND.message());
     }
@@ -148,7 +148,7 @@ class NoteReadIntegrationTest extends DatabaseTestBase {
         final NoteCreateCommand command = createNoteCommand(dailygeUser, sentAt);
         final Long newNoteId = noteFacade.save(dailygeUser, command, 30);
 
-        final NoteJpaEntity findNote = noteReadService.findSentNoteById(dailygeUser, newNoteId);
+        final NoteJpaEntity findNote = noteReadService.findSentNotesById(dailygeUser, newNoteId);
         assertNotNull(findNote);
     }
 }

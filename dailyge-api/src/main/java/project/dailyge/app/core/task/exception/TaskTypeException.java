@@ -2,15 +2,17 @@ package project.dailyge.app.core.task.exception;
 
 import project.dailyge.app.codeandmessage.CodeAndMessage;
 import project.dailyge.app.common.exception.BusinessException;
-import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.MONTHLY_TASK_EXISTS;
-import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.MONTHLY_TASK_NOT_FOUND;
-import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.TASK_NOT_FOUND;
-import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.TASK_UN_RESOLVED_EXCEPTION;
-import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.TOO_MANY_TASKS;
-import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.TOO_MANY_TASK_LABELS;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.MONTHLY_TASK_EXISTS;
+import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.MONTHLY_TASK_NOT_FOUND;
+import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.TASK_NOT_FOUND;
+import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.TASK_RECURRENCE_NOT_FOUND;
+import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.TASK_UN_RESOLVED_EXCEPTION;
+import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.TOO_MANY_TASKS;
+import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.TOO_MANY_TASK_LABELS;
 
 public sealed class TaskTypeException extends BusinessException {
 
@@ -25,6 +27,7 @@ public sealed class TaskTypeException extends BusinessException {
         factory.put(TOO_MANY_TASK_LABELS, new TooManyTaskLabelsException(TOO_MANY_TASK_LABELS));
         factory.put(MONTHLY_TASK_NOT_FOUND, new MonthlyPlanNotExistsException(MONTHLY_TASK_NOT_FOUND));
         factory.put(TASK_NOT_FOUND, new TaskNotFoundException(TASK_NOT_FOUND));
+        factory.put(TASK_RECURRENCE_NOT_FOUND, new TaskRecurrenceNotFoundException(TASK_RECURRENCE_NOT_FOUND));
         factory.put(MONTHLY_TASK_EXISTS, new MonthlyPlanExistsException(MONTHLY_TASK_EXISTS));
         factory.put(TASK_UN_RESOLVED_EXCEPTION, new TaskUnResolvedException(TASK_UN_RESOLVED_EXCEPTION));
     }
@@ -89,6 +92,12 @@ public sealed class TaskTypeException extends BusinessException {
 
     private static final class TaskUnResolvedException extends TaskTypeException {
         private TaskUnResolvedException(final CodeAndMessage codeAndMessage) {
+            super(codeAndMessage);
+        }
+    }
+
+    private static final class TaskRecurrenceNotFoundException extends TaskTypeException {
+        private TaskRecurrenceNotFoundException(CodeAndMessage codeAndMessage) {
             super(codeAndMessage);
         }
     }

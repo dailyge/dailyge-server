@@ -8,6 +8,7 @@ public enum TaskCodeAndMessage implements CodeAndMessage {
     TOO_MANY_TASK_LABELS(400, "등록 가능한 라벨 개수를 초과했습니다."),
     MONTHLY_TASK_NOT_FOUND(404, "월간 일정표가 존재하지 않습니다."),
     TASK_NOT_FOUND(404, "일정을 찾을 수 없습니다."),
+    TASK_RECURRENCE_NOT_FOUND(404, "반복 일정을 찾을 수 없습니다."),
     MONTHLY_TASK_EXISTS(409, "올 해 월간 일정표가 존재합니다. 새로운 일정표를 생성할 수 없습니다."),
     TASK_UN_RESOLVED_EXCEPTION(500, "작업이 실패했습니다. 진행중인 작업을 확인해주세요.");
 

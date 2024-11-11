@@ -42,8 +42,7 @@ public class TaskRecurrenceCreateRequest {
         final RecurrenceType type,
         final List<Integer> dayPattern,
         final LocalDate startDate,
-        final LocalDate endDate,
-        final Long userId
+        final LocalDate endDate
     ) {
         this.title = title;
         this.content = content;

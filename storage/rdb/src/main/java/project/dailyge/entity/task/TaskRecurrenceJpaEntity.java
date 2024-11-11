@@ -110,12 +110,28 @@ public class TaskRecurrenceJpaEntity extends BaseEntity {
         return startDate;
     }
 
+    public String getStartDateAsString() {
+        return startDate.toString();
+    }
+
     public LocalDateTime getEndDate() {
         return endDate;
     }
 
+    public String getEndDateAsString() {
+        return endDate.toString();
+    }
+
     public Long getUserId() {
         return userId;
+    }
+
+    public void update(
+        final String title,
+        final String content
+    ) {
+        this.title = title;
+        this.content = content;
     }
 
     @Override

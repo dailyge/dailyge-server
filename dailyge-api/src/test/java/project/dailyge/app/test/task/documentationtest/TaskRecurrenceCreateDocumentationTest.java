@@ -45,8 +45,7 @@ class TaskRecurrenceCreateDocumentationTest extends DatabaseTestBase {
             WEEKLY,
             List.of(1, 3, 5),
             LocalDate.now(),
-            LocalDate.now().plusMonths(6),
-            dailygeUser.getUserId()
+            LocalDate.now().plusMonths(6)
         );
 
         given(this.specification)
@@ -75,8 +74,7 @@ class TaskRecurrenceCreateDocumentationTest extends DatabaseTestBase {
             WEEKLY,
             List.of(1, 3, 5),
             LocalDate.now(),
-            LocalDate.now().plusMonths(6),
-            dailygeUser.getUserId()
+            LocalDate.now().plusMonths(6)
         );
         final RestDocumentationFilter filter = createTaskRecurrenceFilter(createIdentifier("TaskRecurrenceCreate", 201));
 
@@ -103,8 +101,7 @@ class TaskRecurrenceCreateDocumentationTest extends DatabaseTestBase {
             WEEKLY,
             List.of(invalidWeekDay),
             LocalDate.now(),
-            LocalDate.now().plusMonths(6),
-            dailygeUser.getUserId()
+            LocalDate.now().plusMonths(6)
         );
         final RestDocumentationFilter filter = createTaskRecurrenceFilter(createIdentifier("TaskRecurrenceCreate", 400));
 

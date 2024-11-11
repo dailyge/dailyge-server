@@ -50,7 +50,8 @@ class RecurrenceTasksUnitTest {
             "수영",
             "오전 8:30 일정",
             startDate.atTime(0, 0, 0, 0),
-            endDate.atTime(0, 0, 0, 0)
+            endDate.atTime(0, 0, 0, 0),
+            1L
         );
         final RecurrenceTasks recurrenceTasks = new RecurrenceTasks(
             taskRecurrence,
@@ -83,7 +84,8 @@ class RecurrenceTasksUnitTest {
             "영어",
             "전화 영어 아무때나",
             startDate.atTime(0, 0, 0, 0),
-            endDate.atTime(0, 0, 0, 0)
+            endDate.atTime(0, 0, 0, 0),
+            1L
         );
         final RecurrenceTasks recurrenceTasks = new RecurrenceTasks(
             taskRecurrence,
@@ -108,7 +110,8 @@ class RecurrenceTasksUnitTest {
             "제빵 클래스",
             "나만의 빵을 만들자",
             startDate.atTime(0, 0, 0, 0),
-            endDate.atTime(0, 0, 0, 0)
+            endDate.atTime(0, 0, 0, 0),
+            1L
         );
         final RecurrenceTasks recurrenceTasks = new RecurrenceTasks(
             taskRecurrence,
@@ -132,7 +135,8 @@ class RecurrenceTasksUnitTest {
             "제빵 클래스",
             "나만의 빵을 만들자",
             startDate.atTime(0, 0, 0, 0),
-            endDate.atTime(0, 0, 0, 0)
+            endDate.atTime(0, 0, 0, 0),
+            1L
         );
         Map<YearMonth, Long> invalidMonthlyTasksMap = new HashMap<>();
         final RecurrenceTasks recurrenceTasks = new RecurrenceTasks(

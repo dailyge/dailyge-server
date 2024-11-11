@@ -46,7 +46,8 @@ class TaskRecurrenceCreateIntegrationTest extends DatabaseTestBase {
             RecurrenceType.WEEKLY,
             List.of(1, 3, 5),
             startDate,
-            endDate
+            endDate,
+            dailygeUser.getUserId()
         );
         final Long taskRecurrenceId = taskRecurrenceWriteService.save(dailygeUser, taskRecurrenceCreateCommand);
         assertNotNull(taskRecurrenceId);

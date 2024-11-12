@@ -28,8 +28,8 @@ class DailygeTokenUnitTest {
             () -> assertTrue(accessTokenCookie.contains("Access-Token=accessTokenValue")),
             () -> assertTrue(accessTokenCookie.contains("Max-Age=1800")),
             () -> assertTrue(accessTokenCookie.contains("Path=/")),
-            () -> assertFalse(accessTokenCookie.contains("Secure")),
-            () -> assertFalse(accessTokenCookie.contains("HttpOnly")),
+            () -> assertTrue(accessTokenCookie.contains("Secure")),
+            () -> assertTrue(accessTokenCookie.contains("HttpOnly")),
             () -> assertTrue(accessTokenCookie.contains("Domain=.dailyge.com"))
         );
     }
@@ -43,8 +43,8 @@ class DailygeTokenUnitTest {
             () -> assertTrue(refreshTokenCookie.contains("Refresh-Token=refreshTokenValue")),
             () -> assertTrue(refreshTokenCookie.contains("Max-Age=2592000")),
             () -> assertTrue(refreshTokenCookie.contains("Path=/")),
-            () -> assertFalse(refreshTokenCookie.contains("Secure")),
-            () -> assertFalse(refreshTokenCookie.contains("HttpOnly")),
+            () -> assertTrue(refreshTokenCookie.contains("Secure")),
+            () -> assertTrue(refreshTokenCookie.contains("HttpOnly")),
             () -> assertTrue(refreshTokenCookie.contains("Domain=.dailyge.com"))
         );
     }

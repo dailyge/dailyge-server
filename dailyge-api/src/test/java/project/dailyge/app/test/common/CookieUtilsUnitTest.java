@@ -75,8 +75,8 @@ class CookieUtilsUnitTest {
             () -> assertTrue(cookieString.contains("Max-Age=86400")),
             () -> assertTrue(cookieString.contains("Domain=.dailyge.com")),
             () -> assertTrue(cookieString.contains("Path=" + COOKIE_PATH)),
-            () -> assertFalse(cookieString.contains("Secure")),
-            () -> assertFalse(cookieString.contains("HttpOnly"))
+            () -> assertTrue(cookieString.contains("Secure")),
+            () -> assertTrue(cookieString.contains("HttpOnly"))
         );
     }
 

@@ -21,11 +21,14 @@ import project.dailyge.entity.user.UserEvent;
 import project.dailyge.entity.user.UserJpaEntity;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static project.dailyge.app.core.user.exception.UserCodeAndMessage.USER_SERVICE_UNAVAILABLE;
 import static project.dailyge.app.test.user.fixture.UserFixture.EMAIL;
 import static project.dailyge.app.test.user.fixture.UserFixture.NICKNAME;
+import static project.dailyge.app.test.user.fixture.UserFixture.user;
 
 @DisplayName("[IntegrationTest] Login 통합 테스트")
 class LoginIntegrationTest extends DatabaseTestBase {
@@ -100,5 +103,14 @@ class LoginIntegrationTest extends DatabaseTestBase {
         when(mockGoogleOAuthManager.getUserInfo(CODE)).thenReturn(response);
 
         assertDoesNotThrow(() -> userFacade.login(CODE));
+    }
+
+    @Test
+    @DisplayName("사용자가 로그아웃하면, 캐시가 삭제된다.")
+    void whenUserLogoutThenUserCacheShouldBeNull() {
+        userFacade.logout(1L);
+
+        assertNull(tokenManager.getRefreshToken(user.getId()));
+        assertFalse(userCacheReadService.existsById(dailygeUser.getUserId()));
     }
 }

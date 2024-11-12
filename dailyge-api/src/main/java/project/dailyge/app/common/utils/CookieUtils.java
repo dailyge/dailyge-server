@@ -23,8 +23,8 @@ public final class CookieUtils {
             final ResponseCookie cookie = ResponseCookie.from(name, value)
                 .domain(ROOT_DOMAIN)
                 .path(path)
-                .httpOnly(false)
-                .secure(false)
+                .httpOnly(true)
+                .secure(true)
                 .maxAge(maxAge)
                 .build();
             return cookie.toString();

@@ -17,8 +17,8 @@ import static project.dailyge.app.common.CommonSnippet.COOKIE_HEADER_DESCRIPTORS
 
 public class TaskRecurrenceCreateSnippet implements TaskSnippet {
 
-    private static final String SUMMARY = "Task 생성 API";
-    private static final String DESCRIPTION = "Task를 생성합니다.";
+    private static final String SUMMARY = "반복 일정 생성 API";
+    private static final String DESCRIPTION = "반복일정을 생성합니다.";
 
     private TaskRecurrenceCreateSnippet() {
         throw new AssertionError("올바른 방식으로 생성자를 호출해주세요.");

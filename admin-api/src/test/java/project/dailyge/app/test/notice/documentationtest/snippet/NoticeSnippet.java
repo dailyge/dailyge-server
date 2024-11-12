@@ -21,7 +21,7 @@ public interface NoticeSnippet {
     String tag = "notice";
 
     CookieDescriptor[] NOTICE_ACCESS_TOKEN_COOKIE_DESCRIPTOR = {
-        cookieWithName("Access-Token").description("사용자 토큰 쿠키")
+        cookieWithName("dg_sess").description("사용자 토큰 쿠키")
     };
 
     RequestCookiesSnippet NOTICE_ACCESS_TOKEN_COOKIE_SNIPPET = requestCookies(NOTICE_ACCESS_TOKEN_COOKIE_DESCRIPTOR);

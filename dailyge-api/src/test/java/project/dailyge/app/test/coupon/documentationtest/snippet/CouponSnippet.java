@@ -11,7 +11,7 @@ public interface CouponSnippet {
     String TAG = "Coupon";
     String identifier = "{class_name}/{method_name}/";
     CookieDescriptor[] COUPON_TOKEN_COOKIE_DESCRIPTORS = {
-        cookieWithName("Access-Token").description("인증 토큰")
+        cookieWithName("dg_sess").description("인증 토큰")
     };
 
     FieldDescriptor[] COUPON_CREATE_RESPONSE_FIELDS = {

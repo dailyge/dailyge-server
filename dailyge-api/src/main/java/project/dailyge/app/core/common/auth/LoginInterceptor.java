@@ -56,7 +56,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             if (!cookies.isLoggedIn()) {
                 return true;
             }
-            final String accessToken = cookies.getValueByKey("Access-Token");
+            final String accessToken = cookies.getValueByKey("dg_sess");
             final Long userId = tokenProvider.getUserId(accessToken);
             if (!userCacheReadService.existsById(userId)) {
                 return true;
@@ -85,7 +85,7 @@ public class LoginInterceptor implements HandlerInterceptor {
                 return true;
             }
             final Cookies cookies = new Cookies(request.getCookies());
-            final String refreshToken = cookies.getValueByKey("Refresh-Token");
+            final String refreshToken = cookies.getValueByKey("dg_res");
             if (!tokenManager.getRefreshToken(userId).equals(refreshToken)) {
                 return true;
             }
@@ -107,7 +107,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         final Map<String, String> bodyMap = new HashMap<>();
         final String referer = request.getHeader("referer");
         bodyMap.put("url", referer == null ? "/" : referer);
-        response.addCookie(createCookie("Access-Token", accessToken, "/", 900));
+        response.addCookie(createCookie("dg_sess", accessToken, "/", 900));
         response.setStatus(BAD_REQUEST.code());
         response.setContentType(APPLICATION_JSON_VALUE);
         response.setCharacterEncoding(UTF_8.name());

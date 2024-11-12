@@ -20,8 +20,6 @@ import static project.dailyge.app.test.user.documentationtest.snippet.UserUpdate
 @DisplayName("[DocumentationTest] 유저 수정 API 문서화 테스트")
 class UserUpdateDocumentationTest extends DatabaseTestBase {
 
-    private static final String ACCESS_TOKEN = "Access-Token";
-    private static final String REFRESH_TOKEN = "Refresh-Token";
     private UserUpdateRequest request;
 
     @BeforeEach

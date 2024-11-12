@@ -18,8 +18,8 @@ import static project.dailyge.app.test.user.documentationtest.snippet.UserSnippe
 @DisplayName("[DocumentationTest] 유저 삭제 API 문서화 테스트")
 class UserDeleteDocumentationTest extends DatabaseTestBase {
 
-    private static final String ACCESS_TOKEN = "Access-Token";
-    private static final String REFRESH_TOKEN = "Refresh-Token";
+    private static final String ACCESS_TOKEN = "dg_sess";
+    private static final String REFRESH_TOKEN = "dg_res";
 
     @Autowired
     private UserWriteService userWriteService;

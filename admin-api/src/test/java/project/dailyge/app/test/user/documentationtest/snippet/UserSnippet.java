@@ -26,7 +26,7 @@ public interface UserSnippet {
     String tag = "user";
 
     CookieDescriptor[] USER_BLACKLIST_ACCESS_TOKEN_COOKIE_DESCRIPTOR = {
-        cookieWithName("Access-Token").description("사용자 토큰 쿠키")
+        cookieWithName("dg_sess").description("사용자 토큰 쿠키")
     };
 
     RequestCookiesSnippet USER_BLACKLIST_ACCESS_TOKEN_COOKIE_SNIPPET = requestCookies(USER_BLACKLIST_ACCESS_TOKEN_COOKIE_DESCRIPTOR);

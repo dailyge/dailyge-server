@@ -57,7 +57,7 @@ class AuthArgumentResolverTest {
         final UserJpaEntity user = UserFixture.createUser(1L);
         final DailygeToken token = tokenProvider.createToken(user.getId());
         final Cookie[] cookies = new Cookie[1];
-        cookies[0] = new Cookie("Access-Token", token.accessToken());
+        cookies[0] = new Cookie("dg_sess", token.accessToken());
         when(request.getCookies()).thenReturn(cookies);
         when(userCacheReadService.findById(user.getId()))
             .thenReturn(new UserCache(
@@ -88,7 +88,7 @@ class AuthArgumentResolverTest {
         final UserJpaEntity expectedUser = UserFixture.createUser(validUserId);
         final DailygeToken token = tokenProvider.createToken(expectedUser.getId());
         final Cookie[] cookies = new Cookie[1];
-        cookies[0] = new Cookie("Access-Token", token.accessToken());
+        cookies[0] = new Cookie("dg_sess", token.accessToken());
         when(request.getCookies()).thenReturn(cookies);
         when(userCacheReadService.findById(validUserId))
             .thenReturn(new UserCache(

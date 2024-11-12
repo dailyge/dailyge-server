@@ -11,8 +11,10 @@ import org.springframework.restdocs.request.QueryParametersSnippet;
 import project.dailyge.app.core.task.presentation.requesst.TaskCreateRequest;
 import project.dailyge.app.core.task.presentation.requesst.TaskLabelCreateRequest;
 import project.dailyge.app.core.task.presentation.requesst.TaskRecurrenceCreateRequest;
+import project.dailyge.app.core.task.presentation.requesst.TaskRecurrenceUpdateRequest;
 import project.dailyge.app.core.task.presentation.requesst.TaskStatusUpdateRequest;
 import project.dailyge.app.core.task.presentation.requesst.TaskUpdateRequest;
+
 import static java.sql.JDBCType.ARRAY;
 import static javax.xml.xpath.XPathEvaluationResult.XPathResultType.NUMBER;
 import static javax.xml.xpath.XPathEvaluationResult.XPathResultType.STRING;
@@ -85,6 +87,15 @@ public interface TaskSnippet {
             .attributes(getAttribute(TaskUpdateRequest.class, "status")),
         fieldWithPath("color").description("색상")
             .attributes(getAttribute(TaskUpdateRequest.class, "color")),
+    };
+
+    FieldDescriptor[] TASK_RECURRENCE_UPDATE_REQUEST_FIELDS = {
+        fieldWithPath("title").description("제목")
+            .attributes(getAttribute(TaskRecurrenceUpdateRequest.class, "title")),
+        fieldWithPath("content").description("내용")
+            .attributes(getAttribute(TaskRecurrenceUpdateRequest.class, "content")),
+        fieldWithPath("color").description("색상")
+            .attributes(getAttribute(TaskRecurrenceUpdateRequest.class, "color")),
     };
 
     FieldDescriptor[] TASK_STATUS_UPDATE_REQUEST_FIELDS = {
@@ -288,6 +299,7 @@ public interface TaskSnippet {
     RequestFieldsSnippet TASK_STATUS_UPDATE_REQUEST_SNIPPET = requestFields(TASK_STATUS_UPDATE_REQUEST_FIELDS);
     ResponseFieldsSnippet TASK_UPDATE_RESPONSE_SNIPPET = responseFields(TASK_UPDATE_RESPONSE_FIELD_DESCRIPTOR);
     ResponseFieldsSnippet TASK_STATUS_UPDATE_RESPONSE_SNIPPET = responseFields(TASK_STATUS_UPDATE_RESPONSE);
+    RequestFieldsSnippet TASK_RECURRENCE_UPDATE_REQUEST_SNIPPET = requestFields(TASK_RECURRENCE_UPDATE_REQUEST_FIELDS);
     ResponseFieldsSnippet TASKS_SEARCH_RESPONSE_SNIPPET = responseFields(MONTHLY_TASK_READ_RESPONSE_FIELD_DESCRIPTOR);
 
     // Search

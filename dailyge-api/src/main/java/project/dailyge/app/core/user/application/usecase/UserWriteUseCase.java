@@ -60,20 +60,6 @@ public class UserWriteUseCase implements UserWriteService {
 
     @Override
     @Transactional
-    public UserJpaEntity upsert(final UserJpaEntity newUser) {
-        final Optional<UserJpaEntity> findUser = userReadRepository.findActiveUserByEmail(newUser.getEmail());
-        if (findUser.isEmpty()) {
-            return userWriteRepository.save(newUser);
-        }
-        final UserJpaEntity user = findUser.get();
-        if (newUser.getProfileImageUrl() != null) {
-            user.profileImageInit(newUser.getProfileImageUrl());
-        }
-        return userWriteRepository.save(user);
-    }
-
-    @Override
-    @Transactional
     public void delete(final Long userId) {
         final UserJpaEntity findUser = userReadRepository.findActiveUserById(userId)
             .orElseThrow(() -> UserTypeException.from(USER_NOT_FOUND));

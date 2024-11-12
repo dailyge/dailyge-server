@@ -1,18 +1,19 @@
 package project.dailyge.entity.test.user;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import project.dailyge.entity.user.UserJpaEntity;
-
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 @DisplayName("[UnitTest] UserJPAEntity 단위 테스트")
 class UserJpaEntityUnitTest {
@@ -35,7 +36,8 @@ class UserJpaEntityUnitTest {
             () -> assertNotNull(user),
             () -> assertEquals(NICKNAME, user.getNickname()),
             () -> assertEquals(EMAIL, user.getEmail()),
-            () -> assertEquals(PROFILE_IMAGE_URL, user.getProfileImageUrl())
+            () -> assertEquals(PROFILE_IMAGE_URL, user.getProfileImageUrl()),
+            () -> assertFalse(user.isBlacklist())
         );
     }
 
@@ -46,7 +48,8 @@ class UserJpaEntityUnitTest {
         assertAll(
             () -> assertEquals(NICKNAME, userWithoutProfile.getNickname()),
             () -> assertEquals(EMAIL, userWithoutProfile.getEmail()),
-            () -> assertNull(userWithoutProfile.getProfileImageUrl())
+            () -> assertNull(userWithoutProfile.getProfileImageUrl()),
+            () -> assertFalse(user.isBlacklist())
         );
     }
 
@@ -165,10 +168,27 @@ class UserJpaEntityUnitTest {
     }
 
     @Test
+    @DisplayName("Role을 스트링으로 변환 시, 정상적으로 성공한다.")
+    void whenConvertingRoleToStringThenResultShouldBeCorrectly() {
+        final UserJpaEntity newUser = new UserJpaEntity(1L, NICKNAME, EMAIL, NORMAL);
+
+        assertEquals(NORMAL.name(), newUser.getRoleAsString());
+    }
+
+    @Test
     @DisplayName("사용자 ID가 같다면, 동일한 객체이다.")
     void whenUserIdSameThenInstanceShouldBeSame() {
         final UserJpaEntity userWithId1 = new UserJpaEntity(1L, NICKNAME, EMAIL);
         final UserJpaEntity anotherUserWithId1 = new UserJpaEntity(1L, NICKNAME, EMAIL);
+
+        assertEquals(userWithId1, anotherUserWithId1);
+    }
+
+    @Test
+    @DisplayName("객체가 같다면, 동일한 객체이다.")
+    void whenUserSameThenInstanceShouldBeSame() {
+        final UserJpaEntity userWithId1 = new UserJpaEntity(1L, NICKNAME, EMAIL);
+        final UserJpaEntity anotherUserWithId1 = userWithId1;
 
         assertEquals(userWithId1, anotherUserWithId1);
     }
@@ -180,6 +200,14 @@ class UserJpaEntityUnitTest {
         final UserJpaEntity userWithId2 = new UserJpaEntity(2L, NICKNAME, EMAIL);
 
         assertNotEquals(userWithId1, userWithId2);
+    }
+
+    @Test
+    @DisplayName("Null값과 비교하면, 다른 객체이다.")
+    void whenUserIsNullThenInstanceShouldBeDifferent() {
+        final UserJpaEntity userWithId1 = new UserJpaEntity(1L, NICKNAME, EMAIL);
+
+        assertNotEquals(userWithId1, null);
     }
 
     @Test

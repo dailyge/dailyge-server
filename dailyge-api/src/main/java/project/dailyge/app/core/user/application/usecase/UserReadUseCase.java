@@ -5,6 +5,7 @@ import project.dailyge.app.common.annotation.ApplicationLayer;
 import project.dailyge.app.common.exception.CommonException;
 import project.dailyge.app.core.user.application.UserReadService;
 import static project.dailyge.app.core.user.exception.UserCodeAndMessage.USER_NOT_FOUND;
+import static project.dailyge.app.core.user.exception.UserCodeAndMessage.USER_SERVICE_UNAVAILABLE;
 import project.dailyge.app.core.user.exception.UserTypeException;
 import project.dailyge.entity.user.UserEntityReadRepository;
 import project.dailyge.entity.user.UserJpaEntity;
@@ -28,8 +29,12 @@ class UserReadUseCase implements UserReadService {
 
     @Override
     public UserJpaEntity findActiveUserById(final Long userId) {
-        return userReadRepository.findActiveUserById(userId)
+        final UserJpaEntity findUser = userReadRepository.findActiveUserById(userId)
             .orElseThrow(() -> UserTypeException.from(USER_NOT_FOUND));
+        if (findUser.isBlacklist()) {
+            throw UserTypeException.from(USER_SERVICE_UNAVAILABLE);
+        }
+        return findUser;
     }
 
     @Override

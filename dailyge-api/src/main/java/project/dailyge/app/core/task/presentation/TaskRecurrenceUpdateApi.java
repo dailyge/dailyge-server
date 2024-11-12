@@ -1,7 +1,9 @@
 package project.dailyge.app.core.task.presentation;
 
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import project.dailyge.app.common.annotation.LoginUser;
 import project.dailyge.app.common.annotation.PresentationLayer;
@@ -25,8 +27,8 @@ public class TaskRecurrenceUpdateApi {
     @PutMapping(path = {"/{taskRecurrenceId}"})
     public ApiResponse<Void> updateTaskRecurrence(
         @LoginUser final DailygeUser dailygeUser,
-        @PathVariable final Long taskRecurrenceId,
-        final TaskRecurrenceUpdateRequest request
+        @PathVariable(name = "taskRecurrenceId") final Long taskRecurrenceId,
+        @Valid @RequestBody final TaskRecurrenceUpdateRequest request
     ) {
         taskRecurrenceWriteService.update(dailygeUser, taskRecurrenceId, request.toCommand());
         return ApiResponse.from(OK);

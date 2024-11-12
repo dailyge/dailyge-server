@@ -10,5 +10,13 @@ public interface NoteEntityReadRepository {
 
     Optional<NoteJpaEntity> findSentNoteById(Long noteId);
 
+    List<NoteJpaEntity> findSentNotesById(Long userId, Integer size);
+
+    List<NoteJpaEntity> findSentNotesById(Long userId, Long index, Integer size);
+
+    List<NoteJpaEntity> findReceivedNotesById(Long userId, Integer size);
+
+    List<NoteJpaEntity> findReceivedNotesById(Long userId, Long index, Integer size);
+
     List<NoteJpaEntity> findAll();
 }

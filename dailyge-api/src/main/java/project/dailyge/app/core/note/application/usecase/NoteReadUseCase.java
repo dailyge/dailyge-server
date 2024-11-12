@@ -9,6 +9,7 @@ import project.dailyge.app.core.common.auth.DailygeUser;
 import project.dailyge.app.core.note.application.NoteReadService;
 import static project.dailyge.app.core.note.exception.NoteCodeAndMessage.NOTE_NOT_FOUND;
 import project.dailyge.app.core.note.exception.NoteTypeException;
+import project.dailyge.app.paging.Cursor;
 import static project.dailyge.document.common.UuidGenerator.createTimeBasedUUID;
 import static project.dailyge.entity.common.EventType.UPDATE;
 import project.dailyge.entity.note.NoteEntityReadRepository;
@@ -50,7 +51,7 @@ class NoteReadUseCase implements NoteReadService {
     }
 
     @Override
-    public NoteJpaEntity findSentNoteById(
+    public NoteJpaEntity findSentNotesById(
         final DailygeUser dailygeUser,
         final Long noteId
     ) {
@@ -60,6 +61,29 @@ class NoteReadUseCase implements NoteReadService {
             throw CommonException.from(UN_AUTHORIZED);
         }
         return findNote;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<NoteJpaEntity> findSentNotesById(
+        final DailygeUser dailygeUser,
+        final Cursor cursor
+    ) {
+        if (cursor.isNull()) {
+            return noteReadRepository.findSentNotesById(dailygeUser.getUserId(), cursor.getLimit());
+        }
+        return noteReadRepository.findSentNotesById(dailygeUser.getUserId(), cursor.getIndex(), cursor.getLimit());
+    }
+
+    @Override
+    public List<NoteJpaEntity> findReceivedNotesById(
+        final DailygeUser dailygeUser,
+        final Cursor cursor
+    ) {
+        if (cursor.isNull()) {
+            return noteReadRepository.findReceivedNotesById(dailygeUser.getUserId(), cursor.getLimit());
+        }
+        return noteReadRepository.findReceivedNotesById(dailygeUser.getUserId(), cursor.getIndex(), cursor.getLimit());
     }
 
     @Override

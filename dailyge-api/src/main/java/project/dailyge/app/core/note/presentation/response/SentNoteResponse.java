@@ -7,6 +7,7 @@ public class SentNoteResponse {
     private Long noteId;
     private String title;
     private String content;
+    private String sentAt;
     private boolean read;
 
     private SentNoteResponse() {
@@ -16,6 +17,7 @@ public class SentNoteResponse {
         this.noteId = note.getId();
         this.title = note.getTitle();
         this.content = note.getContent();
+        this.sentAt = note.getSentAtAsString();
         this.read = note.isRead();
     }
 
@@ -29,6 +31,10 @@ public class SentNoteResponse {
 
     public String getContent() {
         return content;
+    }
+
+    public String getSentAt() {
+        return sentAt;
     }
 
     public boolean isRead() {

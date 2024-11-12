@@ -33,6 +33,7 @@ class NoteUnitTest : DescribeSpec({
                 note.senderDeleted shouldBe false
                 note.receiverDeleted shouldBe false
                 note.sentAt shouldBe fixedSentAt
+                note.sentAtAsString shouldNotBe null
                 note.readAt shouldBe null
             }
 

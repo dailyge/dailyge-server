@@ -66,10 +66,10 @@ class NoteReadDao implements NoteEntityReadRepository {
         return queryFactory.selectFrom(noteJpaEntity)
             .where(
                 noteJpaEntity.senderId.eq(userId)
-                    .and(noteJpaEntity.senderId.lt(userId))
                     .and(noteJpaEntity._senderDeleted.eq(false))
             )
             .limit(size + 1)
+            .orderBy(noteJpaEntity.id.desc())
             .fetch();
     }
 
@@ -82,10 +82,11 @@ class NoteReadDao implements NoteEntityReadRepository {
         return queryFactory.selectFrom(noteJpaEntity)
             .where(
                 noteJpaEntity.senderId.eq(userId)
-                    .and(noteJpaEntity.senderId.lt(index))
+                    .and(noteJpaEntity.id.lt(index))
                     .and(noteJpaEntity._senderDeleted.eq(false))
             )
             .limit(size + 1)
+            .orderBy(noteJpaEntity.id.desc())
             .fetch();
     }
 
@@ -96,11 +97,11 @@ class NoteReadDao implements NoteEntityReadRepository {
     ) {
         return queryFactory.selectFrom(noteJpaEntity)
             .where(
-                noteJpaEntity.senderId.eq(userId)
-                    .and(noteJpaEntity.receiverId.lt(userId))
+                noteJpaEntity.receiverId.eq(userId)
                     .and(noteJpaEntity._receiverDeleted.eq(false))
             )
             .limit(size + 1)
+            .orderBy(noteJpaEntity.id.desc())
             .fetch();
     }
 
@@ -112,11 +113,12 @@ class NoteReadDao implements NoteEntityReadRepository {
     ) {
         return queryFactory.selectFrom(noteJpaEntity)
             .where(
-                noteJpaEntity.senderId.eq(userId)
-                    .and(noteJpaEntity.receiverId.lt(index))
+                noteJpaEntity.receiverId.eq(userId)
+                    .and(noteJpaEntity.id.lt(index))
                     .and(noteJpaEntity._receiverDeleted.eq(false))
             )
             .limit(size + 1)
+            .orderBy(noteJpaEntity.id.desc())
             .fetch();
     }
 

@@ -16,6 +16,8 @@ import project.dailyge.app.core.note.presentation.response.SentNoteResponse;
 import project.dailyge.app.paging.Cursor;
 import project.dailyge.entity.note.NoteJpaEntity;
 
+import java.util.List;
+
 @RequestMapping(path = "/api/notes")
 @PresentationLayer(value = "NoteReadApi")
 public class NoteReadApi {
@@ -37,11 +39,14 @@ public class NoteReadApi {
     }
 
     @GetMapping(path = "/sent")
-    public ApiResponse<CursorPagingResponse<NoteJpaEntity>> findSentNotesById(
+    public ApiResponse<CursorPagingResponse<SentNoteResponse>> findSentNotesById(
         @LoginUser final DailygeUser dailygeUser,
         @CursorPageable final Cursor cursor
     ) {
-        final CursorPagingResponse<NoteJpaEntity> payload = noteReadService.findSentNotesById(dailygeUser, cursor);
+        final List<SentNoteResponse> findNotes = noteReadService.findSentNotesById(dailygeUser, cursor).stream()
+            .map(SentNoteResponse::new)
+            .toList();
+        final CursorPagingResponse<SentNoteResponse> payload = new CursorPagingResponse<>(findNotes, cursor.getLimit());
         return ApiResponse.from(OK, payload);
     }
 
@@ -56,11 +61,14 @@ public class NoteReadApi {
     }
 
     @GetMapping(path = "/received")
-    public ApiResponse<CursorPagingResponse<NoteJpaEntity>> findReceivedNotesById(
+    public ApiResponse<CursorPagingResponse<ReceivedNoteResponse>> findReceivedNotesById(
         @LoginUser final DailygeUser dailygeUser,
         @CursorPageable final Cursor cursor
     ) {
-        final CursorPagingResponse<NoteJpaEntity> payload = noteReadService.findReceivedNotesById(dailygeUser, cursor);
+        final List<ReceivedNoteResponse> findNotes = noteReadService.findReceivedNotesById(dailygeUser, cursor).stream()
+            .map(ReceivedNoteResponse::new)
+            .toList();
+        final CursorPagingResponse<ReceivedNoteResponse> payload = new CursorPagingResponse<>(findNotes, cursor.getLimit());
         return ApiResponse.from(OK, payload);
     }
 }

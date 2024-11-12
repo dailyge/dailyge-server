@@ -2,7 +2,6 @@ package project.dailyge.app.core.note.application.usecase;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.transaction.annotation.Transactional;
-import project.dailyge.api.CursorPagingResponse;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
 import project.dailyge.app.common.annotation.ApplicationLayer;
 import project.dailyge.app.common.exception.CommonException;
@@ -65,29 +64,26 @@ class NoteReadUseCase implements NoteReadService {
     }
 
     @Override
-    public CursorPagingResponse<NoteJpaEntity> findSentNotesById(
+    @Transactional(readOnly = true)
+    public List<NoteJpaEntity> findSentNotesById(
         final DailygeUser dailygeUser,
         final Cursor cursor
     ) {
         if (cursor.isNull()) {
-            final List<NoteJpaEntity> findNotes = noteReadRepository.findSentNotesById(dailygeUser.getUserId(), cursor.getLimit());
-            return new CursorPagingResponse<>(findNotes, cursor.getLimit());
+            return noteReadRepository.findSentNotesById(dailygeUser.getUserId(), cursor.getLimit());
         }
-        final List<NoteJpaEntity> findNotes = noteReadRepository.findSentNotesById(dailygeUser.getUserId(), cursor.getIndex(), cursor.getLimit());
-        return new CursorPagingResponse<>(findNotes, cursor.getLimit());
+        return noteReadRepository.findSentNotesById(dailygeUser.getUserId(), cursor.getIndex(), cursor.getLimit());
     }
 
     @Override
-    public CursorPagingResponse<NoteJpaEntity> findReceivedNotesById(
+    public List<NoteJpaEntity> findReceivedNotesById(
         final DailygeUser dailygeUser,
         final Cursor cursor
     ) {
         if (cursor.isNull()) {
-            final List<NoteJpaEntity> findNotes = noteReadRepository.findReceivedNotesById(dailygeUser.getUserId(), cursor.getLimit());
-            return new CursorPagingResponse<>(findNotes, cursor.getLimit());
+            return noteReadRepository.findReceivedNotesById(dailygeUser.getUserId(), cursor.getLimit());
         }
-        final List<NoteJpaEntity> findNotes = noteReadRepository.findReceivedNotesById(dailygeUser.getUserId(), cursor.getIndex(), cursor.getLimit());
-        return new CursorPagingResponse<>(findNotes, cursor.getLimit());
+        return noteReadRepository.findReceivedNotesById(dailygeUser.getUserId(), cursor.getIndex(), cursor.getLimit());
     }
 
     @Override

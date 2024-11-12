@@ -7,12 +7,12 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static project.dailyge.entity.user.Role.NORMAL;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import static project.dailyge.entity.user.Role.NORMAL;
 import project.dailyge.entity.user.UserJpaEntity;
 
 @DisplayName("[UnitTest] UserJPAEntity 단위 테스트")
@@ -56,7 +56,7 @@ class UserJpaEntityUnitTest {
     @Test
     @DisplayName("허용 가능한 닉네임 길이를 초과하면, IllegalArgumentException이 발생한다.")
     void whenMaxLengthOverNicknameThenIllegalArgumentExceptionShouldBeHappen() {
-        final String overLengthNickname = "n".repeat(21);
+        final String overLengthNickname = "n".repeat(25);
 
         assertThatThrownBy(() -> new UserJpaEntity(1L, overLengthNickname, EMAIL))
             .isExactlyInstanceOf(IllegalArgumentException.class)
@@ -92,7 +92,9 @@ class UserJpaEntityUnitTest {
 
     @ParameterizedTest
     @DisplayName("닉네임이 허용 길이 초과일 경우 IllegalArgumentException이 발생한다.")
-    @ValueSource(strings = {"abcdefghijklmnopqrstu", "123456789012345678901", "niㄹffffffckname_too_long"})
+    @ValueSource(strings = {
+        "abcdefghijklmnopqrstsadfdasfadsfasfsfu", "1sfadsfasfsf23456789012345678901", "niㄹffsfadsfasfsfsfadsfasfsfffffckname_too_long"}
+    )
     void whenNicknameExceedsMaxLengthThenIllegalArgumentExceptionShouldBeHappen(final String nickname) {
         assertThatThrownBy(() -> new UserJpaEntity(1L, nickname, EMAIL))
             .isExactlyInstanceOf(IllegalArgumentException.class)

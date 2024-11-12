@@ -7,11 +7,11 @@ import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import project.dailyge.api.CursorPagingResponse;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
 import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.common.exception.CommonException;
@@ -22,12 +22,14 @@ import static project.dailyge.app.core.note.exception.NoteCodeAndMessage.NOTE_NO
 import project.dailyge.app.core.note.exception.NoteTypeException;
 import project.dailyge.app.core.note.facade.NoteFacade;
 import project.dailyge.app.paging.Cursor;
+import static project.dailyge.app.paging.Cursor.createCursor;
 import static project.dailyge.app.test.note.fixture.NoteCommandFixture.createNoteCommand;
 import project.dailyge.common.ratelimiter.RateLimiterWriteService;
 import project.dailyge.entity.note.NoteJpaEntity;
 import project.dailyge.entity.user.Role;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @DisplayName("[IntegrationTest] 쪽지 조회 통합 테스트")
 class NoteReadIntegrationTest extends DatabaseTestBase {
@@ -161,18 +163,18 @@ class NoteReadIntegrationTest extends DatabaseTestBase {
         final LocalDateTime sentAt = LocalDateTime.of(2024, 10, 11, 13, 0);
         final NoteCreateCommand command = createNoteCommand(dailygeUser, sentAt);
         noteFacade.save(dailygeUser, command, 30);
-        final Cursor cursor = Cursor.createCursor(null, 10);
+        final Cursor cursor = createCursor(null, 10);
 
-        final CursorPagingResponse<NoteJpaEntity> findNote = noteReadService.findSentNotesById(dailygeUser, cursor);
-        assertTrue(findNote.getSize() > 0);
+        final List<NoteJpaEntity> findNote = noteReadService.findSentNotesById(dailygeUser, cursor);
+        assertFalse(findNote.isEmpty());
     }
 
     @Test
     @DisplayName("Cursor로 보낸 쪽지를 조회할 때, 쪽지가 존재하지 않으면 size가 0이다.")
     void whenSearchSentNotesWithCursorThenResultSizeShouldBeOver0() {
-        final Cursor cursor = Cursor.createCursor(null, 10);
-        final CursorPagingResponse<NoteJpaEntity> findNote = noteReadService.findSentNotesById(dailygeUser, cursor);
-        assertEquals(0, findNote.getTotalCount());
+        final Cursor cursor = createCursor(null, 10);
+        final List<NoteJpaEntity> findNote = noteReadService.findSentNotesById(dailygeUser, cursor);
+        assertEquals(0, findNote.size());
     }
 
     @Test
@@ -181,10 +183,10 @@ class NoteReadIntegrationTest extends DatabaseTestBase {
         final LocalDateTime sentAt = LocalDateTime.of(2024, 10, 11, 13, 0);
         final NoteCreateCommand command = createNoteCommand(dailygeUser, sentAt);
         final Long newNoteId = noteFacade.save(dailygeUser, command, 30);
-        final Cursor cursor = Cursor.createCursor(newNoteId + 1, 10);
+        final Cursor cursor = createCursor(newNoteId + 1, 10);
 
-        final CursorPagingResponse<NoteJpaEntity> findNote = noteReadService.findSentNotesById(dailygeUser, cursor);
-        assertTrue(findNote.getSize() > 0);
+        final List<NoteJpaEntity> findNote = noteReadService.findSentNotesById(dailygeUser, cursor);
+        assertFalse(findNote.isEmpty());
     }
 
     @Test
@@ -193,10 +195,10 @@ class NoteReadIntegrationTest extends DatabaseTestBase {
         final LocalDateTime sentAt = LocalDateTime.of(2024, 10, 11, 13, 0);
         final NoteCreateCommand command = createNoteCommand(dailygeUser, sentAt);
         noteFacade.save(dailygeUser, command, 30);
-        final Cursor cursor = Cursor.createCursor(null, 10);
+        final Cursor cursor = createCursor(null, 10);
 
-        final CursorPagingResponse<NoteJpaEntity> findNote = noteReadService.findReceivedNotesById(receivedDailygeUser, cursor);
-        assertTrue(findNote.getSize() > 0);
+        final List<NoteJpaEntity> findNote = noteReadService.findReceivedNotesById(receivedDailygeUser, cursor);
+        assertFalse(findNote.isEmpty());
     }
 
     @Test
@@ -205,17 +207,17 @@ class NoteReadIntegrationTest extends DatabaseTestBase {
         final LocalDateTime sentAt = LocalDateTime.of(2024, 10, 11, 13, 0);
         final NoteCreateCommand command = createNoteCommand(dailygeUser, sentAt);
         final Long newNoteId = noteFacade.save(dailygeUser, command, 30);
-        final Cursor cursor = Cursor.createCursor(newNoteId + 1, 10);
+        final Cursor cursor = createCursor(newNoteId + 1, 10);
 
-        final CursorPagingResponse<NoteJpaEntity> findNote = noteReadService.findReceivedNotesById(receivedDailygeUser, cursor);
-        assertTrue(findNote.getSize() > 0);
+        final List<NoteJpaEntity> findNote = noteReadService.findReceivedNotesById(receivedDailygeUser, cursor);
+        assertFalse(findNote.isEmpty());
     }
 
     @Test
     @DisplayName("Cursor로 받은 쪽지를 조회할 때, 쪽지가 존재하지 않으면 size가 0이다.")
     void whenSearchReceivedNotesWithCursorThenResultSizeShouldBeOver0() {
-        final Cursor cursor = Cursor.createCursor(null, 10);
-        final CursorPagingResponse<NoteJpaEntity> findNote = noteReadService.findSentNotesById(dailygeUser, cursor);
-        assertEquals(0, findNote.getTotalCount());
+        final Cursor cursor = createCursor(null, 10);
+        final List<NoteJpaEntity> findNote = noteReadService.findSentNotesById(dailygeUser, cursor);
+        assertEquals(0, findNote.size());
     }
 }

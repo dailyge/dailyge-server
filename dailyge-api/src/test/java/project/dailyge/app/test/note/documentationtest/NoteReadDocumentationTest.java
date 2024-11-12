@@ -12,6 +12,8 @@ import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.core.note.facade.NoteFacade;
 import project.dailyge.app.core.note.presentation.request.NoteCreateRequest;
 import static project.dailyge.app.test.note.documentationtest.snippet.NoteReadSnippet.createReceivedNoteDetailReadFilter;
+import static project.dailyge.app.test.note.documentationtest.snippet.NoteReadSnippet.createReceivedNotesReadFilter;
+import static project.dailyge.app.test.note.documentationtest.snippet.NoteReadSnippet.createSentNotesReadFilter;
 import project.dailyge.app.test.note.documentationtest.snippet.NoteSnippet;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.createIdentifier;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.identifier;
@@ -154,5 +156,87 @@ class NoteReadDocumentationTest extends DatabaseTestBase {
             .get("/api/notes/{noteId}/received", invalidNoteId)
             .then()
             .statusCode(404);
+    }
+
+    @Test
+    @DisplayName("[RestDocs] 발신자가 보낸 쪽지 목록을 조회하면 200 OK 응답을 받는다.")
+    void whenSenderReadSentNotesThenStatusCodeShouldBe_200_OK_RestDocs() {
+        final LocalDateTime date = LocalDateTime.of(2021, 10, 1, 0, 0, 0);
+        final NoteCreateRequest request = new NoteCreateRequest("주간 일정 회의", "주간 일정 회의 신청합니다.", "kmularise", date);
+        noteFacade.save(dailygeUser, request.toCommand(dailygeUser), 30);
+
+        given(this.specification)
+            .filter(document(identifier,
+                ACCESS_TOKEN_COOKIE_SNIPPET,
+                NoteSnippet.Companion.getNOTE_CURSOR_REQUEST_PARAMETER_SNIPPET(),
+                NoteSnippet.Companion.getSENT_NOTE_RESPONSE_SNIPPET()
+            ))
+            .when()
+            .cookie(getAccessTokenCookie())
+            .param("size", 10)
+            .param("index", 2)
+            .get("/api/notes/sent")
+            .then()
+            .statusCode(200);
+    }
+
+    @Test
+    @DisplayName("[Swagger] 발신자가 보낸 쪽지 목록을 조회하면 200 OK 응답을 받는다.")
+    void whenSenderReadSentNotesThenStatusCodeShouldBe_200_OK_Swagger() {
+        final LocalDateTime date = LocalDateTime.of(2021, 10, 1, 0, 0, 0);
+        final NoteCreateRequest request = new NoteCreateRequest("주간 일정 회의", "주간 일정 회의 신청합니다.", "kmularise", date);
+        noteFacade.save(dailygeUser, request.toCommand(dailygeUser), 30);
+
+        final RestDocumentationFilter filter = createSentNotesReadFilter(createIdentifier("SentNotesRead", 200));
+        given(this.specification)
+            .filter(filter)
+            .when()
+            .cookie(getAccessTokenCookie())
+            .param("size", 10)
+            .param("index", 2)
+            .get("/api/notes/sent")
+            .then()
+            .statusCode(200);
+    }
+
+    @Test
+    @DisplayName("[RestDocs] 수신자가 받은 쪽지 목록을 조회하면 200 OK 응답을 받는다.")
+    void whenReceiverReadReceivedNotesThenStatusCodeShouldBe_200_OK_RestDocs() {
+        final LocalDateTime date = LocalDateTime.of(2021, 10, 1, 0, 0, 0);
+        final NoteCreateRequest request = new NoteCreateRequest("주간 일정 회의", "주간 일정 회의 신청합니다.", "kmularise", date);
+        noteFacade.save(dailygeUser, request.toCommand(dailygeUser), 30);
+
+        given(this.specification)
+            .filter(document(identifier,
+                ACCESS_TOKEN_COOKIE_SNIPPET,
+                NoteSnippet.Companion.getNOTE_CURSOR_REQUEST_PARAMETER_SNIPPET(),
+                NoteSnippet.Companion.getRECEIVED_NOTE_RESPONSE_SNIPPET()
+            ))
+            .when()
+            .cookie(getNoteReceiverAccessTokenCookie())
+            .param("size", 10)
+            .param("index", 2)
+            .get("/api/notes/received")
+            .then()
+            .statusCode(200);
+    }
+
+    @Test
+    @DisplayName("[Swagger] 수신자가 받은 쪽지 목록을 조회하면 200 OK 응답을 받는다.")
+    void whenReceiverReadReceivedNotesThenStatusCodeShouldBe_200_OK_Swagger() {
+        final LocalDateTime date = LocalDateTime.of(2021, 10, 1, 0, 0, 0);
+        final NoteCreateRequest request = new NoteCreateRequest("주간 일정 회의", "주간 일정 회의 신청합니다.", "kmularise", date);
+        noteFacade.save(dailygeUser, request.toCommand(dailygeUser), 30);
+        final RestDocumentationFilter filter = createReceivedNotesReadFilter(createIdentifier("ReceivedNotesRead", 200));
+
+        given(this.specification)
+            .filter(filter)
+            .when()
+            .cookie(getNoteReceiverAccessTokenCookie())
+            .param("size", 10)
+            .param("index", 2)
+            .get("/api/notes/received")
+            .then()
+            .statusCode(200);
     }
 }

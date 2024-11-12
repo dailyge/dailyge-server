@@ -9,8 +9,8 @@ public record DailygeToken(
     int refreshTokenMaxAge
 ) {
 
-    private static final String ACCESS_TOKEN = "Access-Token";
-    private static final String REFRESH_TOKEN = "Refresh-Token";
+    private static final String ACCESS_TOKEN = "dg_sess";
+    private static final String REFRESH_TOKEN = "dg_res";
 
     public String getAccessTokenCookie(final String env) {
         return createResponseCookie(ACCESS_TOKEN, accessToken, "/", accessTokenMaxAge, true, env);

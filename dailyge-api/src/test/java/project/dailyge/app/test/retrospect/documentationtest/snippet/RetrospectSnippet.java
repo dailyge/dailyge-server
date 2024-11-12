@@ -30,7 +30,7 @@ public interface RetrospectSnippet {
     String identifier = "{class_name}/{method_name}/";
 
     CookieDescriptor[] TOKEN_COOKIE_DESCRIPTORS = {
-        cookieWithName("Access-Token").description("인증 토큰")
+        cookieWithName("dg_sess").description("인증 토큰")
     };
 
     ParameterDescriptor[] RETROSPECT_ID_PATH_PARAMETER_DESCRIPTORS = {

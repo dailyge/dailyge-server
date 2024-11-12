@@ -88,7 +88,7 @@ public abstract class DatabaseTestBase {
     }
 
     protected Cookie getAccessTokenCookie() {
-        return new Cookie.Builder("Access-Token", accessToken).build();
+        return new Cookie.Builder("dg_sess", accessToken).build();
     }
 
     protected UserJpaEntity persist(final UserJpaEntity user) {

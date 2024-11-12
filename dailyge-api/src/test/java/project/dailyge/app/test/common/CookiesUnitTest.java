@@ -15,7 +15,7 @@ class CookiesUnitTest {
 
     private static final String KEY = "dailyge";
     private static final String VALUE = "good";
-    private static final String LOGGED_IN = "Logged-In";
+    private static final String LOGGED_IN = "logged_in";
     private Cookie[] cookie;
 
     @BeforeEach
@@ -60,7 +60,7 @@ class CookiesUnitTest {
     }
 
     @Test
-    @DisplayName("Logged-In이 비어있는 요청은, false를 반환한다.")
+    @DisplayName("logged_in이 비어있는 요청은, false를 반환한다.")
     void whenLoggedInIsEmptyThenResultShouldBeFalse() {
         final Cookie[] emtpyCookie = new Cookie[0];
         final Cookies cookies = new Cookies(emtpyCookie);

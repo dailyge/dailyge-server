@@ -14,13 +14,13 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 public interface CommonSnippet {
 
     CookieDescriptor[] TOKEN_COOKIE_DESCRIPTORS = {
-        cookieWithName("Access-Token").description("인증 토큰")
+        cookieWithName("dg_sess").description("인증 토큰")
     };
 
     RequestCookiesSnippet ACCESS_TOKEN_COOKIE_SNIPPET = requestCookies(TOKEN_COOKIE_DESCRIPTORS);
 
     HeaderDescriptor[] COOKIE_HEADER_DESCRIPTORS = {
-        headerWithName("Cookie").description("Access-Token=인증 토큰")
+        headerWithName("Cookie").description("dg_sess=인증 토큰")
     };
 
     FieldDescriptor[] ERROR_RESPONSE = {

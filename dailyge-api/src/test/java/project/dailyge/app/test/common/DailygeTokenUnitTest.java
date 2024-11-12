@@ -25,7 +25,7 @@ class DailygeTokenUnitTest {
         final DailygeToken token = new DailygeToken(ACCESS_TOKEN_VALUE, REFRESH_TOKEN_VALUE, ACCESS_TOKEN_MAX_AGE, REFRESH_TOKEN_MAX_AGE);
         final String accessTokenCookie = token.getAccessTokenCookie(ENV_PROD);
         assertAll(
-            () -> assertTrue(accessTokenCookie.contains("Access-Token=accessTokenValue")),
+            () -> assertTrue(accessTokenCookie.contains("dg_sess=accessTokenValue")),
             () -> assertTrue(accessTokenCookie.contains("Max-Age=1800")),
             () -> assertTrue(accessTokenCookie.contains("Path=/")),
             () -> assertTrue(accessTokenCookie.contains("Secure")),
@@ -40,7 +40,7 @@ class DailygeTokenUnitTest {
         final DailygeToken token = new DailygeToken(ACCESS_TOKEN_VALUE, REFRESH_TOKEN_VALUE, ACCESS_TOKEN_MAX_AGE, REFRESH_TOKEN_MAX_AGE);
         final String refreshTokenCookie = token.getRefreshTokenCookie(ENV_PROD);
         assertAll(
-            () -> assertTrue(refreshTokenCookie.contains("Refresh-Token=refreshTokenValue")),
+            () -> assertTrue(refreshTokenCookie.contains("dg_res=refreshTokenValue")),
             () -> assertTrue(refreshTokenCookie.contains("Max-Age=2592000")),
             () -> assertTrue(refreshTokenCookie.contains("Path=/")),
             () -> assertTrue(refreshTokenCookie.contains("Secure")),
@@ -55,7 +55,7 @@ class DailygeTokenUnitTest {
         final DailygeToken token = new DailygeToken(ACCESS_TOKEN_VALUE, REFRESH_TOKEN_VALUE, ACCESS_TOKEN_MAX_AGE, REFRESH_TOKEN_MAX_AGE);
         final String accessTokenCookie = token.getAccessTokenCookie(ENV_LOCAL);
         assertAll(
-            () -> assertTrue(accessTokenCookie.contains("Access-Token=accessTokenValue")),
+            () -> assertTrue(accessTokenCookie.contains("dg_sess=accessTokenValue")),
             () -> assertTrue(accessTokenCookie.contains("Max-Age=1800")),
             () -> assertTrue(accessTokenCookie.contains("Path=/")),
             () -> assertFalse(accessTokenCookie.contains("Domain=")),
@@ -70,7 +70,7 @@ class DailygeTokenUnitTest {
         final DailygeToken token = new DailygeToken(ACCESS_TOKEN_VALUE, REFRESH_TOKEN_VALUE, ACCESS_TOKEN_MAX_AGE, REFRESH_TOKEN_MAX_AGE);
         final String refreshTokenCookie = token.getRefreshTokenCookie(ENV_LOCAL);
         assertAll(
-            () -> assertTrue(refreshTokenCookie.contains("Refresh-Token=refreshTokenValue")),
+            () -> assertTrue(refreshTokenCookie.contains("dg_res=refreshTokenValue")),
             () -> assertTrue(refreshTokenCookie.contains("Max-Age=2592000")),
             () -> assertTrue(refreshTokenCookie.contains("Path=/")),
             () -> assertFalse(refreshTokenCookie.contains("Domain=")),
@@ -94,8 +94,8 @@ class DailygeTokenUnitTest {
         final String accessTokenCookie = token.getAccessTokenCookie(ENV_PROD);
         final String refreshTokenCookie = token.getRefreshTokenCookie(ENV_PROD);
         assertAll(
-            () -> assertTrue(accessTokenCookie.contains("Access-Token=")),
-            () -> assertTrue(refreshTokenCookie.contains("Refresh-Token="))
+            () -> assertTrue(accessTokenCookie.contains("dg_sess=")),
+            () -> assertTrue(refreshTokenCookie.contains("dg_res="))
         );
     }
 

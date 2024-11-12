@@ -49,7 +49,7 @@ class NoticeCreateDocumentation extends DatabaseTestBase {
         userCacheWriteService.save(adminUser);
         token = tokenProvider.createToken(ADMIN_ID);
         request = new NoticeCreateRequest("공지사항 제목", CONTENT, UPDATE);
-        adminCookie = new Cookie.Builder("Access-Token", token.accessToken()).build();
+        adminCookie = new Cookie.Builder("dg_sess", token.accessToken()).build();
     }
 
     @Test

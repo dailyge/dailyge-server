@@ -77,7 +77,7 @@ class UserReadDocumentationTest extends DatabaseTestBase {
         given(this.specification)
             .filter(filter)
             .contentType(APPLICATION_JSON_VALUE)
-            .cookie("Access-Token", "ABCD")
+            .cookie("dg_sess", "ABCD")
             .when()
             .get("/api/users/{userId}", Long.MAX_VALUE)
             .then()

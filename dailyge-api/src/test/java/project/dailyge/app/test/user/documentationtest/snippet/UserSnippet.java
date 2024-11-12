@@ -25,7 +25,7 @@ public interface UserSnippet {
     String TAG = "User";
 
     CookieDescriptor[] USER_ACCESS_TOKEN_COOKIE_DESCRIPTOR = {
-        cookieWithName("Access-Token").description("사용자 토큰 쿠키")
+        cookieWithName("dg_sess").description("사용자 토큰 쿠키")
     };
 
     RequestCookiesSnippet USER_ACCESS_TOKEN_COOKIE_SNIPPET = requestCookies(USER_ACCESS_TOKEN_COOKIE_DESCRIPTOR);
@@ -62,9 +62,9 @@ public interface UserSnippet {
     };
 
     CookieDescriptor[] USER_DELETE_RESPONSE_COOKIE_DESCRIPTOR = {
-        cookieWithName("Access-Token").description("만료 된 인증 토큰"),
-        cookieWithName("Refresh-Token").description("만료 된 리프레시 토큰"),
-        cookieWithName("Logged-In").description("로그인 여부")
+        cookieWithName("dg_sess").description("만료 된 인증 토큰"),
+        cookieWithName("dg_res").description("만료 된 리프레시 토큰"),
+        cookieWithName("logged_in").description("로그인 여부")
     };
 
     FieldDescriptor[] LOGIN_PAGE_FIELD_DESCRIPTOR = {
@@ -74,9 +74,9 @@ public interface UserSnippet {
     };
 
     CookieDescriptor[] LOGOUT_RESPONSE_COOKIE_DESCRIPTOR = {
-        cookieWithName("Access-Token").description("만료 된 인증 토큰"),
-        cookieWithName("Refresh-Token").description("만료 된 리프레시 토큰"),
-        cookieWithName("Logged-In").description("로그인 여부")
+        cookieWithName("dg_sess").description("만료 된 인증 토큰"),
+        cookieWithName("dg_res").description("만료 된 리프레시 토큰"),
+        cookieWithName("logged_in").description("로그인 여부")
     };
 
     FieldDescriptor[] RESPONSE_STATUS = {

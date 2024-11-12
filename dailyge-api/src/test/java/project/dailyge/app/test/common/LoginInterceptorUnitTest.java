@@ -71,8 +71,8 @@ class LoginInterceptorUnitTest {
         final DailygeToken token = tokenProvider.createToken(user.getId());
 
         final Cookie[] cookies = new Cookie[2];
-        cookies[0] = new Cookie("Logged-In", "yes");
-        cookies[1] = new Cookie("Access-Token", token.accessToken());
+        cookies[0] = new Cookie("logged_in", "yes");
+        cookies[1] = new Cookie("dg_sess", token.accessToken());
         when(request.getCookies()).thenReturn(cookies);
         when(userCacheReadService.existsById(user.getId())).thenReturn(true);
 
@@ -88,9 +88,9 @@ class LoginInterceptorUnitTest {
         final TokenProvider expiredTokenProvider = new TokenProvider(expiredJwtProperties, secretKeyManager);
         final DailygeToken expiredToken = expiredTokenProvider.createToken(user.getId());
         final Cookie[] cookies = new Cookie[3];
-        cookies[0] = new Cookie("Logged-In", "yes");
-        cookies[1] = new Cookie("Refresh-Token", token.refreshToken());
-        cookies[2] = new Cookie("Access-Token", expiredToken.accessToken());
+        cookies[0] = new Cookie("logged_in", "yes");
+        cookies[1] = new Cookie("dg_res", token.refreshToken());
+        cookies[2] = new Cookie("dg_sess", expiredToken.accessToken());
 
         when(request.getCookies()).thenReturn(cookies);
         when(userCacheReadService.existsById(user.getId()))
@@ -107,7 +107,7 @@ class LoginInterceptorUnitTest {
             .thenReturn(token.refreshToken());
 
         final boolean result = loginInterceptor.preHandle(request, response, null);
-        final Cookie accessTokencookie = response.getCookie("Access-Token");
+        final Cookie accessTokencookie = response.getCookie("dg_sess");
 
         assertFalse(result);
         assertNotEquals(cookies[1].getValue(), accessTokencookie.getValue());
@@ -120,9 +120,9 @@ class LoginInterceptorUnitTest {
         final UserJpaEntity user = createUser(1L);
         final DailygeToken expiredToken = expiredTokenProvider.createToken(user.getId());
         final Cookie[] cookies = new Cookie[3];
-        cookies[0] = new Cookie("Logged-In", "yes");
-        cookies[1] = new Cookie("Refresh-Token", expiredToken.refreshToken());
-        cookies[2] = new Cookie("Access-Token", expiredToken.accessToken());
+        cookies[0] = new Cookie("logged_in", "yes");
+        cookies[1] = new Cookie("dg_res", expiredToken.refreshToken());
+        cookies[2] = new Cookie("dg_sess", expiredToken.accessToken());
         when(request.getCookies()).thenReturn(cookies);
 
         assertTrue(loginInterceptor.preHandle(request, response, null));
@@ -135,7 +135,7 @@ class LoginInterceptorUnitTest {
         final DailygeToken token = tokenProvider.createToken(user.getId());
 
         final Cookie[] cookies = new Cookie[1];
-        cookies[0] = new Cookie("Access-Token", token.accessToken());
+        cookies[0] = new Cookie("dg_sess", token.accessToken());
         when(request.getCookies()).thenReturn(cookies);
         when(userCacheReadService.existsById(user.getId())).thenReturn(true);
 

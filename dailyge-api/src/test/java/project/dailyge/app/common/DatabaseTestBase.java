@@ -122,12 +122,12 @@ public abstract class DatabaseTestBase {
     }
 
     protected Cookie getAccessTokenCookie() {
-        return new Cookie.Builder("Access-Token", accessToken)
+        return new Cookie.Builder("dg_sess", accessToken)
             .build();
     }
 
     protected Cookie getNoteReceiverAccessTokenCookie() {
-        return new Cookie.Builder("Access-Token", noteReceiverAccessToken)
+        return new Cookie.Builder("dg_sess", noteReceiverAccessToken)
             .build();
     }
 

@@ -59,7 +59,7 @@ class NoteDeleteIntegrationTest extends DatabaseTestBase {
 
         // then: 발신자가 쪽지 조회
         assertDoesNotThrow(() ->
-            noteReadService.findSentNoteById(dailygeUser, newNoteId)
+            noteReadService.findSentNotesById(dailygeUser, newNoteId)
         );
     }
 
@@ -75,7 +75,7 @@ class NoteDeleteIntegrationTest extends DatabaseTestBase {
         noteWriteService.deleteSentNoteById(dailygeUser, newNoteId);
 
         // then: 발신자가 삭제된 쪽지 조회
-        assertThatThrownBy(() -> noteReadService.findSentNoteById(dailygeUser, newNoteId))
+        assertThatThrownBy(() -> noteReadService.findSentNotesById(dailygeUser, newNoteId))
             .isInstanceOf(NoteTypeException.class)
             .hasMessage(NOTE_NOT_FOUND.message());
     }

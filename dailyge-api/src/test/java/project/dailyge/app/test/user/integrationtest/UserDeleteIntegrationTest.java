@@ -11,6 +11,7 @@ import project.dailyge.app.core.user.application.UserWriteService;
 import static project.dailyge.app.core.user.exception.UserCodeAndMessage.USER_NOT_FOUND;
 import project.dailyge.app.core.user.exception.UserTypeException;
 import static project.dailyge.app.test.user.fixture.UserFixture.createUser;
+import project.dailyge.app.core.user.facade.UserFacade;
 import project.dailyge.entity.user.UserJpaEntity;
 
 @DisplayName("[IntegrationTest] 사용자 삭제 통합 테스트")
@@ -22,10 +23,13 @@ class UserDeleteIntegrationTest extends DatabaseTestBase {
     @Autowired
     private UserWriteService userWriteService;
 
+    @Autowired
+    private UserFacade userFacade;
+
     @Test
     @DisplayName("존재하는 사용자를 삭제하면, deleted true로 논리삭제 된다.")
     void whenDeleteAnExistingUserThenUserShouldDeletedBeTrue() {
-        userWriteService.delete(dailygeUser.getId());
+        userFacade.delete(dailygeUser.getId());
         final UserJpaEntity findUser = userReadService.findById(dailygeUser.getId());
 
         assertTrue(findUser.getDeleted());
@@ -46,7 +50,7 @@ class UserDeleteIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("존재하지 않는 사용자를 삭제하면, UserNotFoundException이 발생한다.")
     void whenDeleteNonExistentUserThenUserNotFoundExceptionShouldBeHappen() {
-        assertThatThrownBy(() -> userWriteService.delete(999L))
+        assertThatThrownBy(() -> userFacade.delete(999L))
             .isExactlyInstanceOf(UserTypeException.from(USER_NOT_FOUND).getClass())
             .isInstanceOf(UserTypeException.class)
             .hasMessage(USER_NOT_FOUND.message());

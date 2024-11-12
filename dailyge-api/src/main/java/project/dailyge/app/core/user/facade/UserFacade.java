@@ -98,12 +98,12 @@ public class UserFacade {
     }
 
     public void logout(final Long userId) {
+        userCacheWriteService.delete(userId);
         tokenManager.deleteRefreshToken(userId);
     }
 
     public void delete(final Long userId) {
         userWriteService.delete(userId);
-        userCacheWriteService.delete(userId);
         logout(userId);
     }
 

@@ -76,7 +76,7 @@ class CookieUtilsUnitTest {
             () -> assertTrue(cookieString.contains("Domain=.dailyge.com")),
             () -> assertTrue(cookieString.contains("Path=" + COOKIE_PATH)),
             () -> assertTrue(cookieString.contains("Secure")),
-            () -> assertFalse(cookieString.contains("HttpOnly"))
+            () -> assertTrue(cookieString.contains("HttpOnly"))
         );
     }
 

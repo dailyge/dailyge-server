@@ -12,7 +12,6 @@ import project.dailyge.app.core.task.application.TaskWriteService;
 import project.dailyge.app.core.task.application.command.TaskRecurrenceCreateCommand;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -20,10 +19,9 @@ import static org.springframework.restdocs.restassured.RestAssuredRestDocumentat
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskRecurrenceReadSnippet.createTaskRecurrenceFilter;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.TASK_ACCESS_TOKEN_COOKIE_SNIPPET;
 import static project.dailyge.app.test.task.documentationtest.snippet.TaskSnippet.createIdentifier;
-import static project.dailyge.entity.task.RecurrenceType.WEEKLY;
-import static project.dailyge.entity.task.TaskColor.GRAY;
+import static project.dailyge.app.test.task.fixture.TaskRecurrenceCommandFixture.createTaskRecurrenceCreateCommand;
 
-@DisplayName("[DocumentationTest] TaskRecurrence 등록 문서화 테스트")
+@DisplayName("[DocumentationTest] TaskRecurrence 조회 문서화 테스트")
 class TaskRecurrenceReadDocumentationTest extends DatabaseTestBase {
 
     @Autowired
@@ -43,7 +41,7 @@ class TaskRecurrenceReadDocumentationTest extends DatabaseTestBase {
         nowDate = LocalDate.now();
         startDate = nowDate.minusMonths(3);
         endDate = startDate.plusMonths(6);
-        createCommand = getCreateCommand();
+        createCommand = createTaskRecurrenceCreateCommand(startDate, endDate, dailygeUser);
         taskRecurrenceWriteService.save(dailygeUser, createCommand);
     }
 
@@ -65,7 +63,7 @@ class TaskRecurrenceReadDocumentationTest extends DatabaseTestBase {
 
     @Test
     @DisplayName("[Swagger] 사용자의 반복일정을 등록하면 200 Created 응답을 받는다.")
-    void whenRegisterRecurrenceTaskThenStatusCodeShouldBe201Swagger() throws JsonProcessingException {
+    void whenReadRecurrenceTasksThenStatusCodeShouldBe200Swagger() throws JsonProcessingException {
         final RestDocumentationFilter filter = createTaskRecurrenceFilter(createIdentifier("TaskRecurrenceRead", 200));
         given(this.specification)
             .relaxedHTTPSValidation()
@@ -76,18 +74,5 @@ class TaskRecurrenceReadDocumentationTest extends DatabaseTestBase {
             .get("/api/task-recurrences")
             .then()
             .statusCode(200);
-    }
-
-    private TaskRecurrenceCreateCommand getCreateCommand() {
-        return new TaskRecurrenceCreateCommand(
-            "수영",
-            "오전 7시 반",
-            GRAY,
-            WEEKLY,
-            List.of(1, 3, 5),
-            startDate,
-            endDate,
-            dailygeUser.getUserId()
-        );
     }
 }

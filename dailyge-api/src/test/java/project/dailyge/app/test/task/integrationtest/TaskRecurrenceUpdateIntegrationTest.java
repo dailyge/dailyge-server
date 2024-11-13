@@ -23,8 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
 import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.TASK_RECURRENCE_NOT_FOUND;
-import static project.dailyge.entity.task.RecurrenceType.WEEKLY;
-import static project.dailyge.entity.task.TaskColor.GRAY;
+import static project.dailyge.app.test.task.fixture.TaskRecurrenceCommandFixture.createTaskRecurrenceCreateCommand;
 import static project.dailyge.entity.task.TaskColor.RED;
 
 @DisplayName("[IntegrationTest] 반복 일정 업데이트 통합 테스트")
@@ -51,7 +50,7 @@ class TaskRecurrenceUpdateIntegrationTest extends DatabaseTestBase {
         startDate = nowDate.minusMonths(3);
         endDate = startDate.plusMonths(6);
         taskWriteService.saveAll(dailygeUser, startDate);
-        createCommand = getCreateCommand();
+        createCommand = createTaskRecurrenceCreateCommand(startDate, endDate, dailygeUser);
         updateCommand = getUpdateCommand();
     }
 
@@ -101,19 +100,6 @@ class TaskRecurrenceUpdateIntegrationTest extends DatabaseTestBase {
             taskRecurrenceWriteService.update(dailygeUser, invalidId, updateCommand))
             .isInstanceOf(TaskTypeException.class)
             .hasMessage(TASK_RECURRENCE_NOT_FOUND.message());
-    }
-
-    private TaskRecurrenceCreateCommand getCreateCommand() {
-        return new TaskRecurrenceCreateCommand(
-            "수영",
-            "오전 7시 반",
-            GRAY,
-            WEEKLY,
-            List.of(1, 3, 5),
-            startDate,
-            endDate,
-            dailygeUser.getUserId()
-        );
     }
 
     private TaskRecurrenceUpdateCommand getUpdateCommand() {

@@ -20,6 +20,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static project.dailyge.app.paging.Cursor.createCursor;
+import static project.dailyge.app.test.task.fixture.TaskRecurrenceCommandFixture.createTaskRecurrenceCreateCommand;
 import static project.dailyge.entity.user.Role.NORMAL;
 
 @DisplayName("[IntegrationTest] 반복 일정 조회 통합 테스트")
@@ -56,16 +57,7 @@ class TaskRecurrenceReadIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("index가 존재하면, 그 뒤의 데이터를 읽어온다.")
     void whenIndexExistsThenAfterIndexDataShouldBeReturned() {
-        final TaskRecurrenceCreateCommand taskRecurrenceCreateCommand = new TaskRecurrenceCreateCommand(
-            "수영",
-            "오전 7시 반",
-            TaskColor.GRAY,
-            RecurrenceType.WEEKLY,
-            List.of(1, 3, 5),
-            LocalDate.now(),
-            LocalDate.now().plusDays(7),
-            dailygeUser.getUserId()
-        );
+        final TaskRecurrenceCreateCommand taskRecurrenceCreateCommand = createTaskRecurrenceCreateCommand(LocalDate.now(), LocalDate.now().plusDays(7), dailygeUser);
         final Long taskRecurrenceId = taskRecurrenceWriteService.save(dailygeUser, taskRecurrenceCreateCommand);
         final Cursor cursor = createCursor(taskRecurrenceId, 5);
         saveBulks(dailygeUser, 1);

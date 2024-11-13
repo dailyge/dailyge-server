@@ -8,13 +8,11 @@ import project.dailyge.app.common.DatabaseTestBase;
 import project.dailyge.app.core.task.application.TaskRecurrenceWriteService;
 import project.dailyge.app.core.task.application.TaskWriteService;
 import project.dailyge.app.core.task.application.command.TaskRecurrenceCreateCommand;
-import project.dailyge.entity.task.RecurrenceType;
-import project.dailyge.entity.task.TaskColor;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static project.dailyge.app.test.task.fixture.TaskRecurrenceCommandFixture.createTaskRecurrenceCreateCommand;
 
 @DisplayName("[IntegrationTest] 반복 일정 생성 통합 테스트")
 class TaskRecurrenceCreateIntegrationTest extends DatabaseTestBase {
@@ -39,16 +37,7 @@ class TaskRecurrenceCreateIntegrationTest extends DatabaseTestBase {
     @Test
     @DisplayName("반복 일정이 저장되면, Id가 Null이 아니다.")
     void whenCreateTaskRecurrenceThenIdShouldNotBeNull() {
-        taskRecurrenceCreateCommand = new TaskRecurrenceCreateCommand(
-            "수영",
-            "오전 7시 반",
-            TaskColor.GRAY,
-            RecurrenceType.WEEKLY,
-            List.of(1, 3, 5),
-            startDate,
-            endDate,
-            dailygeUser.getUserId()
-        );
+        taskRecurrenceCreateCommand = createTaskRecurrenceCreateCommand(startDate, endDate, dailygeUser);
         final Long taskRecurrenceId = taskRecurrenceWriteService.save(dailygeUser, taskRecurrenceCreateCommand);
         assertNotNull(taskRecurrenceId);
     }

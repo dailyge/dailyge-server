@@ -29,7 +29,8 @@ class TaskRecurrenceJpaEntityUnitTest {
             "수영",
             "자유형 배우기",
             now,
-            now.plusMonths(3)
+            now.plusMonths(3),
+            1L
         );
     }
 
@@ -44,7 +45,8 @@ class TaskRecurrenceJpaEntityUnitTest {
             "수영",
             "자유형 배우기",
             now,
-            now.plusMonths(3)
+            now.plusMonths(3),
+            1L
         );
         assertAll(
             () -> assertThat(newTaskRecurrence.getId()).isEqualTo(1L),
@@ -68,7 +70,8 @@ class TaskRecurrenceJpaEntityUnitTest {
             "수영",
             "자유형 배우기",
             now,
-            now.plusMonths(3)
+            now.plusMonths(3),
+            1L
         );
         assertEquals(taskRecurrence, newTaskRecurrence);
     }
@@ -84,7 +87,8 @@ class TaskRecurrenceJpaEntityUnitTest {
             "수영",
             "자유형 배우기",
             now,
-            now.plusMonths(3)
+            now.plusMonths(3),
+            1L
         );
         assertNotEquals(taskRecurrence, newTaskRecurrence);
     }
@@ -100,7 +104,8 @@ class TaskRecurrenceJpaEntityUnitTest {
             "수영",
             "자유형 배우기",
             now,
-            now.plusMonths(3)
+            now.plusMonths(3),
+            1L
         );
         assertEquals(taskRecurrence.hashCode(), newTaskRecurrence.hashCode());
     }
@@ -116,7 +121,8 @@ class TaskRecurrenceJpaEntityUnitTest {
             "수영",
             "자유형 배우기",
             now,
-            now.plusMonths(3)
+            now.plusMonths(3),
+            1L
         );
         assertNotEquals(taskRecurrence.hashCode(), newTaskRecurrence.hashCode());
     }

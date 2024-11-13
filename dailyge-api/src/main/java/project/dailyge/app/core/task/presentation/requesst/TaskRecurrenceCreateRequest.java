@@ -89,7 +89,7 @@ public class TaskRecurrenceCreateRequest {
         );
     }
 
-    public TaskRecurrenceCreateCommand toCommand() {
-        return new TaskRecurrenceCreateCommand(title, content, color, type, datePattern, startDate, endDate);
+    public TaskRecurrenceCreateCommand toCommand(final Long userId) {
+        return new TaskRecurrenceCreateCommand(title, content, color, type, datePattern, startDate, endDate, userId);
     }
 }

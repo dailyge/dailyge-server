@@ -15,12 +15,12 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static project.dailyge.app.common.CommonSnippet.COOKIE_HEADER_DESCRIPTORS;
 
-public class TaskRecurrenceCreateSnippet implements TaskSnippet {
+public class TaskRecurrenceUpdateSnippet implements TaskSnippet {
 
-    private static final String SUMMARY = "반복 일정 생성 API";
-    private static final String DESCRIPTION = "반복일정을 생성합니다.";
+    private static final String SUMMARY = "반복 일정 수정 API";
+    private static final String DESCRIPTION = "반복 일정 정보를 수정합니다.";
 
-    private TaskRecurrenceCreateSnippet() {
+    private TaskRecurrenceUpdateSnippet() {
         throw new AssertionError("올바른 방식으로 생성자를 호출해주세요.");
     }
 
@@ -29,8 +29,7 @@ public class TaskRecurrenceCreateSnippet implements TaskSnippet {
             identifier,
             ResourceSnippetParameters.builder()
                 .requestHeaders(COOKIE_HEADER_DESCRIPTORS)
-                .requestFields(TASK_RECURRENCE_CREATE_REQUEST_FIELDS)
-                .responseFields(TASK_RECURRENCE_CREATE_RESPONSE)
+                .requestFields(TASK_RECURRENCE_UPDATE_REQUEST_FIELDS)
                 .tag(TAG)
                 .summary(SUMMARY)
                 .privateResource(false)
@@ -41,8 +40,7 @@ public class TaskRecurrenceCreateSnippet implements TaskSnippet {
             snippets -> {
                 List.of(
                     requestCookies(TASK_TOKEN_COOKIE_DESCRIPTORS),
-                    requestFields(Arrays.stream(TASK_RECURRENCE_CREATE_REQUEST_FIELDS).toList()),
-                    responseFields(Arrays.stream(TASK_RECURRENCE_CREATE_RESPONSE).toList()),
+                    requestFields(Arrays.stream(TASK_RECURRENCE_UPDATE_REQUEST_FIELDS).toList()),
                     responseFields(Arrays.stream(ERROR_RESPONSE).toList())
                 );
             }

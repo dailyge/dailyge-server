@@ -239,6 +239,10 @@ public class TaskJpaEntity extends BaseEntity {
         return date.getDayOfWeek().getValue();
     }
 
+    public Long getTaskRecurrenceId() {
+        return taskRecurrenceId;
+    }
+
     public void update(
         final String title,
         final String content,

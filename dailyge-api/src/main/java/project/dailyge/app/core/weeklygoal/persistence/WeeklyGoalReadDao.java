@@ -1,16 +1,17 @@
 package project.dailyge.app.core.weeklygoal.persistence;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import static java.util.Optional.ofNullable;
 import org.springframework.stereotype.Repository;
 import project.dailyge.app.paging.Cursor;
-import static project.dailyge.entity.goal.QWeeklyGoalJpaEntity.weeklyGoalJpaEntity;
 import project.dailyge.entity.goal.WeeklyGoalEntityReadRepository;
 import project.dailyge.entity.goal.WeeklyGoalJpaEntity;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+
+import static java.util.Optional.ofNullable;
+import static project.dailyge.entity.goal.QWeeklyGoalJpaEntity.weeklyGoalJpaEntity;
 
 @Repository
 public class WeeklyGoalReadDao implements WeeklyGoalEntityReadRepository {
@@ -58,7 +59,8 @@ public class WeeklyGoalReadDao implements WeeklyGoalEntityReadRepository {
     ) {
         return queryFactory.selectFrom(weeklyGoalJpaEntity)
             .where(
-                weeklyGoalJpaEntity.id.gt(index)
+                weeklyGoalJpaEntity.userId.eq(userId)
+                    .and(weeklyGoalJpaEntity.id.gt(index))
                     .and(weeklyGoalJpaEntity.weekStartDate.eq(weekStartDate))
                     .and(weeklyGoalJpaEntity._deleted.eq(false))
             )

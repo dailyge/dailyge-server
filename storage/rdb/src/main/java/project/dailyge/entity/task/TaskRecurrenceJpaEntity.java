@@ -42,6 +42,9 @@ public class TaskRecurrenceJpaEntity extends BaseEntity {
     @Column(name = "end_date")
     private LocalDateTime endDate;
 
+    @Column(name = "user_id")
+    private Long userId;
+
     protected TaskRecurrenceJpaEntity() {
     }
 
@@ -52,7 +55,8 @@ public class TaskRecurrenceJpaEntity extends BaseEntity {
         final String title,
         final String content,
         final LocalDateTime startDate,
-        final LocalDateTime endDate
+        final LocalDateTime endDate,
+        final Long userId
     ) {
         this.id = id;
         this.recurrenceType = recurrenceType;
@@ -61,6 +65,7 @@ public class TaskRecurrenceJpaEntity extends BaseEntity {
         this.content = content;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.userId = userId;
     }
 
     public TaskRecurrenceJpaEntity(
@@ -69,7 +74,8 @@ public class TaskRecurrenceJpaEntity extends BaseEntity {
         final String title,
         final String content,
         final LocalDateTime startDate,
-        final LocalDateTime endDate
+        final LocalDateTime endDate,
+        final Long userId
     ) {
         this.recurrenceType = recurrenceType;
         this.datePattern = datePattern;
@@ -77,6 +83,7 @@ public class TaskRecurrenceJpaEntity extends BaseEntity {
         this.content = content;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.userId = userId;
     }
 
     public Long getId() {
@@ -103,8 +110,28 @@ public class TaskRecurrenceJpaEntity extends BaseEntity {
         return startDate;
     }
 
+    public String getStartDateAsString() {
+        return startDate.toString();
+    }
+
     public LocalDateTime getEndDate() {
         return endDate;
+    }
+
+    public String getEndDateAsString() {
+        return endDate.toString();
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void update(
+        final String title,
+        final String content
+    ) {
+        this.title = title;
+        this.content = content;
     }
 
     @Override

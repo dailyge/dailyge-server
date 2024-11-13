@@ -58,14 +58,70 @@ class NoteReadDao implements NoteEntityReadRepository {
                 .fetchOne());
     }
 
-    /**
-     * Method created for testing purposes; should not be called in a production environment.
-     * <p>
-     * <b>Warning:</b> This method is intended for testing use only and should not be used in production.
-     * </p>
-     *
-     * @return a list of all {@link NoteJpaEntity} entities
-     */
+    @Override
+    public List<NoteJpaEntity> findSentNotesById(
+        final Long userId,
+        final Integer size
+    ) {
+        return queryFactory.selectFrom(noteJpaEntity)
+            .where(
+                noteJpaEntity.senderId.eq(userId)
+                    .and(noteJpaEntity._senderDeleted.eq(false))
+            )
+            .limit(size + 1)
+            .orderBy(noteJpaEntity.id.desc())
+            .fetch();
+    }
+
+    @Override
+    public List<NoteJpaEntity> findSentNotesById(
+        final Long userId,
+        final Long index,
+        final Integer size
+    ) {
+        return queryFactory.selectFrom(noteJpaEntity)
+            .where(
+                noteJpaEntity.senderId.eq(userId)
+                    .and(noteJpaEntity.id.lt(index))
+                    .and(noteJpaEntity._senderDeleted.eq(false))
+            )
+            .limit(size + 1)
+            .orderBy(noteJpaEntity.id.desc())
+            .fetch();
+    }
+
+    @Override
+    public List<NoteJpaEntity> findReceivedNotesById(
+        final Long userId,
+        final Integer size
+    ) {
+        return queryFactory.selectFrom(noteJpaEntity)
+            .where(
+                noteJpaEntity.receiverId.eq(userId)
+                    .and(noteJpaEntity._receiverDeleted.eq(false))
+            )
+            .limit(size + 1)
+            .orderBy(noteJpaEntity.id.desc())
+            .fetch();
+    }
+
+    @Override
+    public List<NoteJpaEntity> findReceivedNotesById(
+        final Long userId,
+        final Long index,
+        final Integer size
+    ) {
+        return queryFactory.selectFrom(noteJpaEntity)
+            .where(
+                noteJpaEntity.receiverId.eq(userId)
+                    .and(noteJpaEntity.id.lt(index))
+                    .and(noteJpaEntity._receiverDeleted.eq(false))
+            )
+            .limit(size + 1)
+            .orderBy(noteJpaEntity.id.desc())
+            .fetch();
+    }
+
     @Override
     public List<NoteJpaEntity> findAll() {
         return queryFactory.selectFrom(noteJpaEntity)

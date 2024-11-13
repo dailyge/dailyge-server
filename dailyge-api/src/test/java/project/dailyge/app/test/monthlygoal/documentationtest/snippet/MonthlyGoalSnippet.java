@@ -27,7 +27,7 @@ public interface MonthlyGoalSnippet {
     String identifier = "{class_name}/{method_name}/";
 
     CookieDescriptor[] MONTHLY_GOAL_TOKEN_COOKIE_DESCRIPTORS = {
-        cookieWithName("Access-Token").description("인증 토큰")
+        cookieWithName("dg_sess").description("인증 토큰")
     };
 
     RequestCookiesSnippet MONTHLY_GOAL_ACCESS_TOKEN_COOKIE_SNIPPET = requestCookies(MONTHLY_GOAL_TOKEN_COOKIE_DESCRIPTORS);

@@ -14,7 +14,7 @@ fun addAuthOption(content: String): String {
             JsonObject().apply {
                 addProperty("type", "apiKey")
                 addProperty("in", "cookie")
-                addProperty("name", "Access-Token")
+                addProperty("name", "dg_sess")
             }
         )
     }

@@ -45,7 +45,7 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
         final HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
         try {
             final Cookies cookies = new Cookies(request.getCookies());
-            final String accessToken = cookies.getValueByKey("Access-Token");
+            final String accessToken = cookies.getValueByKey("dg_sess");
             final Long userId = tokenProvider.getUserId(accessToken);
             if (userId == null) {
                 throw CommonException.from(UN_AUTHORIZED);

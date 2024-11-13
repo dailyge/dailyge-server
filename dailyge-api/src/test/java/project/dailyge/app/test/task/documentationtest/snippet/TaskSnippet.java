@@ -37,7 +37,7 @@ public interface TaskSnippet {
     String identifier = "{class_name}/{method_name}/";
 
     CookieDescriptor[] TASK_TOKEN_COOKIE_DESCRIPTORS = {
-        cookieWithName("Access-Token").description("인증 토큰")
+        cookieWithName("dg_sess").description("인증 토큰")
     };
 
     RequestCookiesSnippet TASK_ACCESS_TOKEN_COOKIE_SNIPPET = requestCookies(TASK_TOKEN_COOKIE_DESCRIPTORS);

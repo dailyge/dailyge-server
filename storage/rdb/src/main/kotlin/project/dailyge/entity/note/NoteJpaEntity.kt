@@ -72,6 +72,8 @@ class NoteJpaEntity(
     val isRead: Boolean
         get() = _isRead
 
+    val sentAtAsString: String = sentAt.toString()
+
     val readAt: LocalDateTime?
         get() = _readAt
 

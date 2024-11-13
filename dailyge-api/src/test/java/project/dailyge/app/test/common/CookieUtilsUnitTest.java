@@ -16,7 +16,7 @@ import static project.dailyge.app.common.utils.CookieUtils.createResponseCookie;
 @DisplayName("[UnitTest] CookieUtils 단위 테스트")
 class CookieUtilsUnitTest {
 
-    private static final String REFRESH_TOKEN = "Refresh-Token";
+    private static final String REFRESH_TOKEN = "dg_res";
     private static final String COOKIE_PATH = "/app";
     private static final long MAX_AGE = 86_400L;
     private static final String COOKIE_VALUE = "testValue";
@@ -41,7 +41,7 @@ class CookieUtilsUnitTest {
     void whenClearResponseCookieThenCorrectlyGenerated() {
         final String cookieString = CookieUtils.clearResponseCookie(REFRESH_TOKEN, true);
         assertAll(
-            () -> assertTrue(cookieString.contains("Refresh-Token=")),
+            () -> assertTrue(cookieString.contains("dg_res")),
             () -> assertTrue(cookieString.contains("Max-Age=0")),
             () -> assertTrue(cookieString.contains("Domain=.dailyge.com")),
             () -> assertTrue(cookieString.contains("Path=/")),
@@ -57,7 +57,7 @@ class CookieUtilsUnitTest {
             REFRESH_TOKEN, COOKIE_VALUE, COOKIE_PATH, MAX_AGE, true, "local"
         );
         assertAll(
-            () -> assertTrue(cookieString.contains("Refresh-Token=testValue")),
+            () -> assertTrue(cookieString.contains("dg_res=testValue")),
             () -> assertTrue(cookieString.contains("Max-Age=86400")),
             () -> assertTrue(cookieString.contains("Path=" + COOKIE_PATH)),
             () -> assertFalse(cookieString.contains("Domain="))
@@ -71,12 +71,12 @@ class CookieUtilsUnitTest {
             REFRESH_TOKEN, COOKIE_VALUE, COOKIE_PATH, MAX_AGE, true, "prod"
         );
         assertAll(
-            () -> assertTrue(cookieString.contains("Refresh-Token=testValue")),
+            () -> assertTrue(cookieString.contains("dg_res=testValue")),
             () -> assertTrue(cookieString.contains("Max-Age=86400")),
             () -> assertTrue(cookieString.contains("Domain=.dailyge.com")),
             () -> assertTrue(cookieString.contains("Path=" + COOKIE_PATH)),
-            () -> assertFalse(cookieString.contains("Secure")),
-            () -> assertFalse(cookieString.contains("HttpOnly"))
+            () -> assertTrue(cookieString.contains("Secure")),
+            () -> assertTrue(cookieString.contains("HttpOnly"))
         );
     }
 

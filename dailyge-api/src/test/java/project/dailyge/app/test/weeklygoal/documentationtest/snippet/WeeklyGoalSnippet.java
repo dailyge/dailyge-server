@@ -28,7 +28,7 @@ public interface WeeklyGoalSnippet {
     String identifier = "{class_name}/{method_name}/";
 
     CookieDescriptor[] WEEKLY_GOAL_TOKEN_COOKIE_DESCRIPTORS = {
-        cookieWithName("Access-Token").description("인증 토큰")
+        cookieWithName("dg_sess").description("인증 토큰")
     };
 
     RequestCookiesSnippet WEEKLY_GOAL_ACCESS_TOKEN_COOKIE_SNIPPET = requestCookies(WEEKLY_GOAL_TOKEN_COOKIE_DESCRIPTORS);

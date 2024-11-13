@@ -16,8 +16,8 @@ import project.dailyge.app.core.task.presentation.validator.TaskRecurrenceClient
 
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.CREATED;
 
-@RequestMapping(path = {"/api"})
 @RestController
+@RequestMapping(path = {"/api/task-recurrences"})
 @PresentationLayer(value = "TaskRecurrenceCreateApi")
 public class TaskRecurrenceCreateApi {
 
@@ -32,7 +32,7 @@ public class TaskRecurrenceCreateApi {
         this.validator = validator;
     }
 
-    @PostMapping(path = {"/task-recurrences"})
+    @PostMapping()
     public ApiResponse<TaskRecurrenceIdResponse> createTaskRecurrences(
         @LoginUser final DailygeUser dailygeUser,
         @Valid @RequestBody final TaskRecurrenceCreateRequest request

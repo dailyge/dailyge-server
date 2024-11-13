@@ -16,8 +16,8 @@ import java.util.List;
 
 import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.OK;
 
-@RequestMapping(path = {"/api"})
 @RestController
+@RequestMapping(path = {"/api/task-recurrences"})
 @PresentationLayer(value = "TaskRecurrenceReadApi")
 public class TaskRecurrenceReadApi {
 
@@ -27,7 +27,7 @@ public class TaskRecurrenceReadApi {
         this.taskRecurrenceReadService = taskRecurrenceReadService;
     }
 
-    @GetMapping(path = {"/task-recurrences"})
+    @GetMapping()
     public ApiResponse<List<TaskRecurrenceDetailResponse>> findTaskRecurrencesByCursor(
         @LoginUser final DailygeUser dailygeUser,
         @CursorPageable final Cursor cursor

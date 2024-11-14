@@ -1,18 +1,17 @@
 package project.dailyge.entity.test.user;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
-import project.dailyge.entity.user.UserJpaEntity;
-
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+import project.dailyge.entity.user.UserJpaEntity;
 
 @DisplayName("[UnitTest] UserJPAEntity 단위 테스트")
 class UserJpaEntityUnitTest {
@@ -98,11 +97,18 @@ class UserJpaEntityUnitTest {
 
     @ParameterizedTest
     @DisplayName("닉네임에 허용되지 않는 특수 문자가 포함될 경우 IllegalArgumentException이 발생한다.")
-    @ValueSource(strings = {"nick*name", "user@name", "hello!", "name$", "with space"})
+    @ValueSource(strings = {"nick*name", "user@name", "hello!", "name$"})
     void whenNicknameContainsInvalidCharactersThenIllegalArgumentExceptionShouldBeHappen(final String nickname) {
         assertThatThrownBy(() -> new UserJpaEntity(1L, nickname, EMAIL))
             .isExactlyInstanceOf(IllegalArgumentException.class)
             .hasMessage("올바른 닉네임을 입력해주세요.");
+    }
+
+    @ParameterizedTest
+    @DisplayName("닉네임에 공백이 있어도 ")
+    @ValueSource(strings = {"nickname Jung", "user af", "hello Jung Jung"})
+    void whenNicknameContainsSpaceThenResultShouldBeOk(final String nickname) {
+        assertNotNull(new UserJpaEntity(1L, nickname, EMAIL));
     }
 
     @ParameterizedTest

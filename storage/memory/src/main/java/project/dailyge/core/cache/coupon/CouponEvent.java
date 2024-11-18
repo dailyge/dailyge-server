@@ -1,9 +1,14 @@
 package project.dailyge.core.cache.coupon;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 
 public class CouponEvent implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     private Long userId;
     private Long timestamp;
 

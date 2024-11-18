@@ -149,4 +149,8 @@ public class TaskRecurrenceJpaEntity extends BaseEntity {
     public int hashCode() {
         return Objects.hash(getId());
     }
+
+    public void delete() {
+        updateDeletedStatus();
+    }
 }

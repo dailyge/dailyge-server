@@ -8,21 +8,22 @@ import project.dailyge.app.core.task.application.command.TaskCreateCommand;
 import project.dailyge.app.core.task.application.command.TaskLabelCreateCommand;
 import project.dailyge.app.core.task.application.command.TaskStatusUpdateCommand;
 import project.dailyge.app.core.task.application.command.TaskUpdateCommand;
-import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.MONTHLY_TASK_NOT_FOUND;
-import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.TASK_NOT_FOUND;
 import project.dailyge.app.core.task.exception.TaskTypeException;
 import project.dailyge.entity.task.MonthlyTaskEntityReadRepository;
 import project.dailyge.entity.task.MonthlyTaskEntityWriteRepository;
 import project.dailyge.entity.task.MonthlyTaskJpaEntity;
-import static project.dailyge.entity.task.MonthlyTasks.createMonthlyTasks;
 import project.dailyge.entity.task.TaskEntityReadRepository;
 import project.dailyge.entity.task.TaskEntityWriteRepository;
 import project.dailyge.entity.task.TaskJpaEntity;
+import project.dailyge.entity.task.TaskLabelEntityWriteRepository;
+import project.dailyge.entity.task.TaskLabelJpaEntity;
 
 import java.time.LocalDate;
 import java.util.List;
-import project.dailyge.entity.task.TaskLabelEntityWriteRepository;
-import project.dailyge.entity.task.TaskLabelJpaEntity;
+
+import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.MONTHLY_TASK_NOT_FOUND;
+import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.TASK_NOT_FOUND;
+import static project.dailyge.entity.task.MonthlyTasks.createMonthlyTasks;
 
 @ApplicationLayer(value = "TaskWriteUseCase")
 class TaskWriteUseCase implements TaskWriteService {
@@ -48,20 +49,6 @@ class TaskWriteUseCase implements TaskWriteService {
         this.monthlyTaskReadRepository = monthlyTaskReadRepository;
         this.monthlyTaskWriteRepository = monthlyTaskWriteRepository;
         this.taskLabelEntityWriteRepository = taskLabelEntityWriteRepository;
-    }
-
-    public TaskWriteUseCase(
-        final TaskValidator validator,
-        final TaskEntityReadRepository taskReadRepository,
-        final TaskEntityWriteRepository taskWriteRepository,
-        final MonthlyTaskEntityReadRepository monthlyTaskReadRepository,
-        final MonthlyTaskEntityWriteRepository monthlyTaskWriteRepository
-    ) {
-        this.validator = validator;
-        this.taskReadRepository = taskReadRepository;
-        this.taskWriteRepository = taskWriteRepository;
-        this.monthlyTaskReadRepository = monthlyTaskReadRepository;
-        this.monthlyTaskWriteRepository = monthlyTaskWriteRepository;
     }
 
     @Override

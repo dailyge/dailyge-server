@@ -12,6 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static project.dailyge.entity.task.RecurrenceType.WEEKLY;
 
 @DisplayName("[UnitTest] 반복 일정 엔티티 테스트")
@@ -125,5 +126,24 @@ class TaskRecurrenceJpaEntityUnitTest {
             1L
         );
         assertNotEquals(taskRecurrence.hashCode(), newTaskRecurrence.hashCode());
+    }
+
+    @Test
+    @DisplayName("TaskRecurrence 엔티티를 업데이트하면 TaskRecurrence 값이 바뀌어야 한다.")
+    void whenUpdateThenTaskRecurrenceValueShouldBeChanged() {
+        final String newTitle = "새로운 제목";
+        final String newContent = "새로운 내용";
+        taskRecurrence.update(newTitle, newContent);
+        assertAll(
+            () -> assertEquals(newTitle, taskRecurrence.getTitle()),
+            () -> assertEquals(newContent, taskRecurrence.getContent())
+        );
+    }
+
+    @Test
+    @DisplayName("TaskRecurrence 엔티티를 삭제하면 삭제 상태가 true여야 한다.")
+    void whenDeleteThenDeletedStatusShouldBeTrue() {
+        taskRecurrence.delete();
+        assertTrue(taskRecurrence.getDeleted());
     }
 }

@@ -6,7 +6,6 @@ import project.dailyge.app.core.common.auth.DailygeUser;
 import project.dailyge.app.core.task.application.TaskRecurrenceWriteService;
 import project.dailyge.app.core.task.application.command.TaskRecurrenceCreateCommand;
 import project.dailyge.app.core.task.application.command.TaskRecurrenceUpdateCommand;
-import project.dailyge.app.core.task.exception.TaskCodeAndMessage;
 import project.dailyge.app.core.task.exception.TaskTypeException;
 import project.dailyge.entity.task.MonthlyTaskEntityReadRepository;
 import project.dailyge.entity.task.RecurrenceTasks;
@@ -21,6 +20,8 @@ import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.TASK_RECURRENCE_NOT_FOUND;
 
 @ApplicationLayer(value = "TaskRecurrenceWriteUseCase")
 public class TaskRecurrenceWriteUseCase implements TaskRecurrenceWriteService {
@@ -72,10 +73,24 @@ public class TaskRecurrenceWriteUseCase implements TaskRecurrenceWriteService {
         final TaskRecurrenceUpdateCommand command
     ) {
         final TaskRecurrenceJpaEntity findTaskRecurrence = taskRecurrenceEntityReadRepository.findById(taskRecurrenceId)
-            .orElseThrow(() -> TaskTypeException.from(TaskCodeAndMessage.TASK_RECURRENCE_NOT_FOUND));
+            .orElseThrow(() -> TaskTypeException.from(TASK_RECURRENCE_NOT_FOUND));
         dailygeUser.validateAuth(findTaskRecurrence.getUserId());
         findTaskRecurrence.update(command.title(), command.content());
         final List<TaskJpaEntity> tasks = taskRecurrenceEntityReadRepository.findTasksAfterStartDateById(taskRecurrenceId, LocalDateTime.now().toLocalDate());
         tasks.stream().forEach(task -> task.update(command.title(), command.content(), task.getDate(), task.getStatus(), task.getMonthlyTaskId(), command.color()));
+    }
+
+    @Override
+    @Transactional
+    public void delete(
+        final DailygeUser dailygeUser,
+        final Long taskRecurrenceId
+    ) {
+        final TaskRecurrenceJpaEntity findTaskRecurrence = taskRecurrenceEntityReadRepository.findById(taskRecurrenceId)
+            .orElseThrow(() -> TaskTypeException.from(TASK_RECURRENCE_NOT_FOUND));
+        dailygeUser.validateAuth(findTaskRecurrence.getUserId());
+        findTaskRecurrence.delete();
+        final List<TaskJpaEntity> tasks = taskRecurrenceEntityReadRepository.findTasksAfterStartDateById(taskRecurrenceId, LocalDateTime.now().toLocalDate());
+        tasks.stream().forEach(task -> task.delete());
     }
 }

@@ -8,4 +8,6 @@ public interface TaskRecurrenceWriteService {
     Long save(DailygeUser dailygeUser, TaskRecurrenceCreateCommand command);
 
     void update(DailygeUser dailygeUser, Long taskRecurrenceId, TaskRecurrenceUpdateCommand command);
+
+    void delete(DailygeUser dailygeUser, Long taskRecurrenceId);
 }

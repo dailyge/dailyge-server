@@ -15,9 +15,5 @@ public interface NoteReadService {
 
     List<NoteJpaEntity> findReceivedNotesById(DailygeUser dailygeUser, Cursor cursor);
 
-    NoteJpaEntity findReceivedNoteById(Long userId, Long noteId);
-
-    NoteJpaEntity findSentNoteById(Long userId, Long noteId);
-
     List<NoteJpaEntity> findAll();
 }

@@ -1,19 +1,20 @@
 package project.dailyge.app.core.task.application.usecase;
 
 import org.springframework.stereotype.Component;
-import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
 import project.dailyge.app.common.exception.CommonException;
 import project.dailyge.app.core.common.auth.DailygeUser;
-import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.MONTHLY_TASK_EXISTS;
-import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.TOO_MANY_TASKS;
-import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.TOO_MANY_TASK_LABELS;
 import project.dailyge.app.core.task.exception.TaskTypeException;
 import project.dailyge.entity.task.MonthlyTaskEntityReadRepository;
 import project.dailyge.entity.task.TaskEntityReadRepository;
 import project.dailyge.entity.task.TaskJpaEntity;
+import project.dailyge.entity.task.TaskLabelEntityReadRepository;
 
 import java.time.LocalDate;
-import project.dailyge.entity.task.TaskLabelEntityReadRepository;
+
+import static project.dailyge.app.codeandmessage.CommonCodeAndMessage.UN_AUTHORIZED;
+import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.MONTHLY_TASK_EXISTS;
+import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.TOO_MANY_TASKS;
+import static project.dailyge.app.core.task.exception.TaskCodeAndMessage.TOO_MANY_TASK_LABELS;
 
 @Component
 public class TaskValidator {
@@ -30,14 +31,6 @@ public class TaskValidator {
         this.monthlyTaskReadRepository = monthlyTaskReadRepository;
         this.taskReadRepository = taskReadRepository;
         this.taskLabelEntityReadRepository = taskLabelEntityReadRepository;
-    }
-
-    public TaskValidator(
-        final MonthlyTaskEntityReadRepository monthlyTaskReadRepository,
-        final TaskEntityReadRepository taskReadRepository
-    ) {
-        this.monthlyTaskReadRepository = monthlyTaskReadRepository;
-        this.taskReadRepository = taskReadRepository;
     }
 
     public void validateAuth(

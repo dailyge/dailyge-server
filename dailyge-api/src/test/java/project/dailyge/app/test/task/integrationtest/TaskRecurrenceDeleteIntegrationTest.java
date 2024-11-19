@@ -60,11 +60,9 @@ class TaskRecurrenceDeleteIntegrationTest extends DatabaseTestBase {
         final List<TaskJpaEntity> beforeTasks = taskRecurrenceEntityReadRepository.findTaskBeforeStartDateById(taskRecurrenceId, nowDate);
         assertTrue(taskRecurrence.getDeleted());
         for (final TaskJpaEntity task : afterTasks) {
-            System.out.println("tsask.getDate() = " + task.getDate());
             assertTrue(task.getDeleted());
         }
         for (final TaskJpaEntity task : beforeTasks) {
-            System.out.println("task.getDate() = " + task.getDate());
             assertFalse(task.getDeleted());
         }
     }

@@ -11,7 +11,6 @@ import static org.springframework.restdocs.cookies.CookieDocumentation.requestCo
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static project.dailyge.app.common.CommonSnippet.COOKIE_HEADER_DESCRIPTORS;
 
@@ -40,7 +39,6 @@ public class TaskRecurrenceDeleteSnippet implements TaskSnippet {
             snippets -> {
                 List.of(
                     requestCookies(TASK_TOKEN_COOKIE_DESCRIPTORS),
-                    requestFields(Arrays.stream(TASK_RECURRENCE_UPDATE_REQUEST_FIELDS).toList()),
                     responseFields(Arrays.stream(ERROR_RESPONSE).toList())
                 );
             }

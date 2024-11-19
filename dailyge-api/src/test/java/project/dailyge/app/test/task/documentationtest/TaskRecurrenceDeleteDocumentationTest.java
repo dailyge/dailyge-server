@@ -47,7 +47,7 @@ class TaskRecurrenceDeleteDocumentationTest extends DatabaseTestBase {
     }
 
     @Test
-    @DisplayName("[RestDocs] 반복일정을 업데이트하면 204 OK 응답을 받는다.")
+    @DisplayName("[RestDocs] 반복일정을 삭제하면 204 OK 응답을 받는다.")
     void whenDeleteRecurrenceTaskThenStatusCodeShouldBe204RestDocs() {
         final Long taskRecurrenceId = taskRecurrenceWriteService.save(dailygeUser, createCommand);
         given(this.specification)
@@ -65,7 +65,7 @@ class TaskRecurrenceDeleteDocumentationTest extends DatabaseTestBase {
     }
 
     @Test
-    @DisplayName("[Swagger] 반복일정을 업데이트하면 204 OK 응답을 받는다.")
+    @DisplayName("[Swagger] 반복일정을 삭제하면 204 OK 응답을 받는다.")
     void whenDeleteRecurrenceTaskThenStatusCodeShouldBe204Swagger() throws JsonProcessingException {
         final Long taskRecurrenceId = taskRecurrenceWriteService.save(dailygeUser, createCommand);
         final RestDocumentationFilter filter = createTaskRecurrenceFilter(createIdentifier("TaskRecurrenceDelete", 204));
@@ -82,7 +82,7 @@ class TaskRecurrenceDeleteDocumentationTest extends DatabaseTestBase {
     }
 
     @Test
-    @DisplayName("[Swagger] 올바르지 않은 파라미터로 TaskRecurrence를 등록하면 400 Bad Request 응답을 받는다.")
+    @DisplayName("[Swagger] 유효하지 않은 id로 TaskRecurrence를 삭제하면 404 Bad Request 응답을 받는다.")
     void whenInvalidParameterThenStatusCodeShouldBe400Swagger() throws JsonProcessingException {
         final Long invalidTaskRecurrenceId = -1L;
         final TaskRecurrenceUpdateRequest request = new TaskRecurrenceUpdateRequest(
@@ -90,7 +90,7 @@ class TaskRecurrenceDeleteDocumentationTest extends DatabaseTestBase {
             "오전 7시 반",
             null
         );
-        final RestDocumentationFilter filter = createTaskRecurrenceFilter(createIdentifier("TaskRecurrenceDelete", 201));
+        final RestDocumentationFilter filter = createTaskRecurrenceFilter(createIdentifier("TaskRecurrenceDelete", 404));
 
         given(this.specification)
             .relaxedHTTPSValidation()
@@ -99,8 +99,8 @@ class TaskRecurrenceDeleteDocumentationTest extends DatabaseTestBase {
             .cookie(getAccessTokenCookie())
             .body(objectMapper.writeValueAsString(request))
             .when()
-            .put("/api/task-recurrences/{taskRecurrenceId}", invalidTaskRecurrenceId)
+            .delete("/api/task-recurrences/{taskRecurrenceId}", invalidTaskRecurrenceId)
             .then()
-            .statusCode(400);
+            .statusCode(404);
     }
 }

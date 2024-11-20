@@ -104,4 +104,19 @@ public class TaskRecurrenceReadDao implements TaskRecurrenceEntityReadRepository
             )
             .fetch();
     }
+
+    /**
+     * 테스트 용 메소드
+     */
+    @Override
+    public Optional<TaskRecurrenceJpaEntity> findByIdAndDeleted(Long taskRecurrenceId) {
+        return Optional.ofNullable(
+            queryFactory.selectFrom(taskRecurrenceJpaEntity)
+                .where(
+                    taskRecurrenceJpaEntity.id.eq(taskRecurrenceId)
+                        .and(taskRecurrenceJpaEntity._deleted.eq(true))
+                )
+                .fetchFirst()
+        );
+    }
 }

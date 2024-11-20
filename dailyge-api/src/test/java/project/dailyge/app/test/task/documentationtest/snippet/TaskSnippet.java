@@ -178,6 +178,10 @@ public interface TaskSnippet {
         parameterWithName("taskId").description("Task ID")
     };
 
+    ParameterDescriptor[] TASK_RECURRENCE_ID_PATH_PARAMETER_DESCRIPTORS = {
+        parameterWithName("taskRecurrenceId").description("TaskRecurrenc ID")
+    };
+
     FieldDescriptor[] MONTHLY_TASK_ID_READ_RESPONSE_FIELD_DESCRIPTOR = {
         fieldWithPath("data.monthlyTaskId").type(NUMBER).description("MonthlyTask ID"),
         fieldWithPath("code").type(NUMBER).description("응답 코드"),
@@ -305,6 +309,7 @@ public interface TaskSnippet {
     // Search
     QueryParametersSnippet DATE_SEARCH_QUERY_PARAMETER_SNIPPET = queryParameters(TASKS_SEARCH_DATE_QUERY_PARAMETER_DESCRIPTORS);
     PathParametersSnippet TASK_PATH_PARAMETER_SNIPPET = pathParameters(TASK_ID_PATH_PARAMETER_DESCRIPTORS);
+    PathParametersSnippet TASK_RECURRENCE_PATH_PARAMETER_SNIPPET = pathParameters(TASK_RECURRENCE_ID_PATH_PARAMETER_DESCRIPTORS);
     QueryParametersSnippet TASK_DATE_REQUEST_PARAMETER_SNIPPET = queryParameters(DATE_QUERY_PARAMETER_DESCRIPTORS);
     QueryParametersSnippet WEEKLY_TASKS_STATISTIC_REQUEST_PARAMETER_SNIPPET = queryParameters(
         WEEKLY_TASKS_STATISTIC_DATE_QUERY_PARAMETER_DESCRIPTORS);

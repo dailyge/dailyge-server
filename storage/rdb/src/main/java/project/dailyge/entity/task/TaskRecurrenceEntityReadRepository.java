@@ -14,4 +14,6 @@ public interface TaskRecurrenceEntityReadRepository {
     List<TaskJpaEntity> findTasksAfterStartDateById(Long taskRecurrenceId, LocalDate startDate);
 
     List<TaskJpaEntity> findTaskBeforeStartDateById(Long taskRecurrenceId, LocalDate startDate);
+
+    Optional<TaskRecurrenceJpaEntity> findByIdAndDeleted(Long taskRecurrenceId);
 }

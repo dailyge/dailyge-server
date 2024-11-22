@@ -45,6 +45,10 @@ Dailyge는 일정을 체계적으로 관리하고 하루를 효과적으로 계�
 
 ![image](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fk453J%2FbtsJCKTOa26%2Fkf8atALK9P75qjb1YnE5c1%2Fimg.png)
 
+![image](https://github.com/user-attachments/assets/123c8d5d-9119-4741-8517-2830d4a44110)
+
+![image](https://github.com/user-attachments/assets/290cb262-6321-4949-b6b2-e6bc39527f77)
+
 <br/><br/><br/><br/><br/><br/><br/>
 
 # 2. Contents.
@@ -55,13 +59,16 @@ Dailyge는 일정을 체계적으로 관리하고 하루를 효과적으로 계�
 - [JWT 토큰을 파싱할 때, 어떤 예외가 발생할 수 있을까?](https://github.com/dailyge/dailyge-server/discussions/35)
 - [JWT 토큰이 탈취 당한경우, 어떻게 해야 할까?](https://github.com/dailyge/dailyge-server/discussions/114)
 - [JWT 토큰의 필드를 암호화하면 어떤 이점이 있고, 어떤 알고리즘이 사용될까?](https://github.com/dailyge/dailyge-server/discussions/122)
+- [CBC와 GCM는 어떠한 차이가 있고 성능에도 차이가 존재할까?](https://github.com/dailyge/dailyge-server/discussions/181)
 - [도메인 간 쿠키가 공유되지 않을 때, 어떻게 해야 할까?](https://github.com/dailyge/dailyge-server/discussions/105)
 - [데이터 압축하면 어떤 이점이 있을까? (feat.레디스)](https://github.com/dailyge/dailyge-server/discussions/86)
 - [부하 테스트를 할 때, 톰캣의 어떤 설정들을 고려해야 할까?](https://github.com/dailyge/dailyge-server/discussions/84)
 - [부하 테스트 과정에서 어떤 지표들을 모니터링 해야 할까?](https://github.com/dailyge/dailyge-server/discussions/82)
 - [선착순 쿠폰 당첨자를 선정할 때, 응답 속도를 어떻게 빠르게 할 수 있을까?](https://github.com/dailyge/dailyge-server/discussions/117)
+- [쿠폰 이벤트 참여 API 부하테스트](https://github.com/dailyge/dailyge-server/discussions/190)
 - [Redis Bitmap 구조로 Redis 메모리 절약하기](https://github.com/dailyge/dailyge-server/discussions/137)
 - [레디스 호출 횟수를 줄여 조회 성능을 높여보자. (feat. LuaScript)](https://github.com/dailyge/dailyge-server/discussions/157)
+- [애플리케이션과 데이터베이스의 Timezone을 어떤 방식으로 관리하는 것이 좋을까?](https://github.com/dailyge/dailyge-server/discussions/177)
 
 <br/><br/><br/><br/><br/><br/><br/>
 
@@ -100,7 +107,7 @@ Application), RDB 이며, 일부 자원들은 설치형으로 사용하고 있�
 ## 👬 Collaboration.
 
 협업 툴은 이슈 트래킹을 위해 Jira/Confluencer를, 자동화 툴은 Zapier와 AWS EventBridge, Lambda, SNS/SQS를 사용하고 있습니다. 팀원 간 커뮤니케이션은 Slack으로
-이루어지며, 또한 CICD 과정에서 발생한 리포트, AWS 비용 결과도 Slack으로 보고 받고 있습니다. 팀원 간 코드 컨벤션 관리 및 코드 스멜 제거를 위해 CheckStlye, PMD, SonarCloud와
+이루어지며, 또한 CI/CD 과정에서 발생한 리포트, AWS 비용 결과도 Slack으로 보고 받고 있습니다. 팀원 간 코드 컨벤션 관리 및 코드 스멜 제거를 위해 CheckStyle, PMD, SonarCloud와
 같은 정적 코드 분석 툴을 사용하고 있습니다.
 
 ![image](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fb7h7Xw%2FbtsJniCWIXE%2FhKO3sUXR9X4Oq4E30LXu00%2Fimg.png)
